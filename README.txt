@@ -16,3 +16,4 @@ External pages
 
 Visit our FanPage: http://www.facebook.com/BLStreamPatronage
 Program page: http://blstream.com/student
+GitHub page: http://blstream.github.com/UrbanGame/
