@@ -4,7 +4,7 @@
 
 Urban games are nowadays a very popular phenomena in a field of social events. They are becoming bigger and bigger in scale, attracting large groups of new players. Together with Patronage participants we would like to create a common framework, that would facilitate performing them. Mobile application, giving unique flexibility and new, inspiring possibilities, supported by a server, allowing results tracking, will altogether bring fresh quality to location-based gaming. We strongly believe that program participants, being guided and mentored by our specialists, benefiting from their experience and knowledge and using cutting-edge technologies will take the opportunity to stun modern urban gaming community!
 
-Available under Apache 2.0. The project is made under Patronage program, Wroclaw 2013 edition.
+Available under Apache License 2.0. The project is made under Patronage program, Wroclaw 2013 edition.
 
 What is Patronage?
 ==================
