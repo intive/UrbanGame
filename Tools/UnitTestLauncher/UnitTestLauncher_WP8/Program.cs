@@ -1,4 +1,21 @@
-﻿using Microsoft.SmartDevice.Connectivity;
+﻿/*
+ * Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+ * http://blstream.github.com/UrbanGame/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+using Microsoft.SmartDevice.Connectivity;
 using Microsoft.SmartDevice.Connectivity.Interface;
 using Microsoft.SmartDevice.MultiTargeting.Connectivity;
 using System;
@@ -13,7 +30,7 @@ using System.Threading.Tasks;
 
 namespace UnitTestLauncher
 {
-    // Code taken from: http://stackoverflow.com/questions/13420733/connect-to-windows-phone-8-using-console-application
+    // Code base from: http://stackoverflow.com/questions/13420733/connect-to-windows-phone-8-using-console-application
     class Program
     {
         static readonly string UNIT_TESTS_DONE_REMOTE_FILE = "UnitTestDone.txt";
@@ -24,7 +41,7 @@ namespace UnitTestLauncher
         static void PrintUsage()
         {
             Console.WriteLine(AppDomain.CurrentDomain.FriendlyName + " \"device_name\" unitTestFile appId timeoutInSeconds appIconpath appXapPath");
-            Console.WriteLine(AppDomain.CurrentDomain.FriendlyName + " \"Emulator WXGA\" UnitTestResult.txt {1aa2091e-a043-493f-9af1-a4c3e4245529} 15 ..\\PlanetSaver\\PlanetSaverTests\\Bin\\Debug\\ApplicationIcon.png ..\\PlanetSaver\\PlanetSaverTests\\Bin\\Debug\\PlanetSaverTests.xap");
+            Console.WriteLine(AppDomain.CurrentDomain.FriendlyName + " \"Emulator WXGA\" UnitTestResult.txt {1aa2091e-a043-493f-9af1-a4c3e4245529} 15 ..\\UrbanGame\\UrbanGameTests\\Bin\\Debug\\ApplicationIcon.png ..\\UrbanGame\\UrbanGameTests\\Bin\\Debug\\UrbanGameTests.xap");
             Console.WriteLine("  Where device name can be: ");
             Console.WriteLine("    Device");
             Console.WriteLine("    Emulator WVGA 512MB");
