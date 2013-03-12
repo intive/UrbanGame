@@ -1,0 +1,22 @@
+UrbanGame
+Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+http://blstream.github.com/UrbanGame/
+
+This software was developed by contributors of Patronage 2013 Program - Wroc³aw Edition.
+
+This product uses NUnit (UrbanGame/packages/NUnit.2.6.2):
+  Copyright © 2002-2012 Charlie Poole
+  Copyright © 2002-2004 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov
+  Copyright © 2000-2002 Philip A. Craig
+
+This product uses SpecFlow (UrbanGame/packages/SpecFlow.1.9.0):
+  Copyright (c) 2009, TechTalk
+
+This product uses TechTalk components (external):
+  Copyright © TechTalk 2011
+
+This product uses Microsoft components (external):
+  Copyright © 2011 Microsoft Corporation
+
+This product uses Caliburn components (external/caliburn):
+  Copyright (c) 2010 Blue Spire Consulting, Inc.
