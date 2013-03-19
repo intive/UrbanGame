@@ -17,3 +17,10 @@ External pages
 Visit our FanPage: http://www.facebook.com/BLStreamPatronage
 Program page: http://blstream.com/student
 GitHub page: http://blstream.github.com/UrbanGame/
+
+Branch info
+===========
+This is master branch that contains common/shared files.
+For Windows Phone platform, check "windows_phone" branch.
+For Android platform, check "android" branch.
+For Web platform, check "web" branch.
