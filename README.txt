@@ -17,3 +17,7 @@ External pages
 Visit our FanPage: http://www.facebook.com/BLStreamPatronage
 Program page: http://blstream.com/student
 GitHub page: http://blstream.github.com/UrbanGame/
+
+Branch info
+===========
+This is Android branch. Please check other branches if you are interesting in other platforms.
