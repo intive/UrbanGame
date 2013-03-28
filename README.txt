@@ -11,7 +11,7 @@ tests on emulator, start command prompt and type:
 Windows Phone 8 version:
 
 > set BUILD_NUMBER=100
-> build_vs2012.cmd
+> build_vs2012_WP8.cmd
 
 Windows Phone 7 version:
 
