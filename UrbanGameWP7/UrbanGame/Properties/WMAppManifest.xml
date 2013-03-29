@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
-  <App xmlns="" ProductID="{6dbcb28d-4eb5-42a1-a734-9295c9c5297a}" Title="UrbanGame" RuntimeType="Silverlight" Version="1.0.0.100" Genre="apps.normal" Author="UrbanGame author" Description="Sample description" Publisher="UrbanGame">
+  <App xmlns="" ProductID="{6dbcb28d-4eb5-42a1-a734-9295c9c5297a}" Title="UrbanGame" RuntimeType="Silverlight" Version="1.0.0.100" Genre="apps.normal" Author="UrbanGame author" Description="Sample description" Publisher="UrbanGame" BitsPerPixel="16">
     <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_GAMERSERVICES" />
@@ -19,7 +19,7 @@
       <Capability Name="ID_CAP_APPOINTMENTS" />
     </Capabilities>
     <Tasks>
-      <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
+      <DefaultTask Name="_default" NavigationPage="Views\MainView.xaml" />
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="UrbanGameToken" TaskName="_default">
