@@ -58,6 +58,10 @@
     </Reference>
     <Reference Include="Microsoft.Phone" />
     <Reference Include="Microsoft.Phone.Interop" />
+    <Reference Include="system.data.linq" />
+    <Reference Include="System.Threading.Tasks.WP71">
+      <HintPath>..\packages\System.Threading.Tasks.3.0.2-beta2\lib\sl4-wp71\System.Threading.Tasks.WP71.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -74,6 +78,11 @@
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Storage\BusinessTypeMapper.cs" />
+    <Compile Include="Storage\Repository.cs" />
+    <Compile Include="Storage\UnitOfWork.cs" />
+    <Compile Include="Storage\EntityBase.cs" />
+    <Compile Include="Storage\UrbanGameDataContext.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
@@ -102,6 +111,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SplashScreenImage.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{E7C6CD32-71A2-4CAC-9FC7-4F4E90ADFA9D}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
