@@ -79,6 +79,8 @@
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage\BusinessTypeMapper.cs" />
+    <Compile Include="Storage\Game.cs" />
+    <Compile Include="Storage\IGame.cs" />
     <Compile Include="Storage\Repository.cs" />
     <Compile Include="Storage\UnitOfWork.cs" />
     <Compile Include="Storage\EntityBase.cs" />
