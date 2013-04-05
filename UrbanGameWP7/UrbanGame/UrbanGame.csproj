@@ -85,6 +85,9 @@
     <Compile Include="Storage\UnitOfWork.cs" />
     <Compile Include="Storage\EntityBase.cs" />
     <Compile Include="Storage\UrbanGameDataContext.cs" />
+    <Compile Include="Tombstoning\TombstoningContainer.cs" />
+    <Compile Include="Tombstoning\TombstoningVariables.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
@@ -120,6 +123,7 @@
       <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
