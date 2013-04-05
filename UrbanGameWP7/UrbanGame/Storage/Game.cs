@@ -218,10 +218,10 @@ namespace UrbanGame.Storage
 
         #region NumberOfTasks
 
-        private byte _numberOfTasks;
+        private int _numberOfTasks;
 
         [Column]
-        public byte NumberOfTasks
+        public int NumberOfTasks
         {
             get
             {
@@ -241,10 +241,10 @@ namespace UrbanGame.Storage
 
         #region NumberOfCompletedTasks
 
-        private byte _numberOfCompletedTasks;
+        private int _numberOfCompletedTasks;
 
         [Column]
-        public byte NumberOfCompletedTasks
+        public int NumberOfCompletedTasks
         {
             get
             {

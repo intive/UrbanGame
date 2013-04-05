@@ -25,9 +25,9 @@ namespace UrbanGame.Storage
 
         int MaxPoints { get; set; }
 
-        byte NumberOfTasks { get; set; }
+        int NumberOfTasks { get; set; }
 
-        byte NumberOfCompletedTasks { get; set; }
+        int NumberOfCompletedTasks { get; set; }
 
         int NumberOfPlayers { get; set; }
 

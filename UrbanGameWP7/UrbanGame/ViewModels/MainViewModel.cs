@@ -9,8 +9,8 @@ namespace UrbanGame.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        public MainViewModel(INavigationService navigationService, Func<IUnitOfWork> dataContextLocator)
-            : base(navigationService, dataContextLocator)
+        public MainViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
+            : base(navigationService, unitOfWorkLocator)
         {
         }
     }

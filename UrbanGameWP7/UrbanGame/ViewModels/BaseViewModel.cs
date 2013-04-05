@@ -10,13 +10,13 @@ namespace UrbanGame.ViewModels
     public class BaseViewModel : Screen
     {
         protected INavigationService _navigationService;
-        protected Func<IUnitOfWork> _dataContextLocator;
+        protected Func<IUnitOfWork> _unitOfWorkLocator;
         bool _creating = true;
 
-        public BaseViewModel(INavigationService navigationService, Func<IUnitOfWork> dataContextLocator)
+        public BaseViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
         {
             _navigationService = navigationService;
-            _dataContextLocator = dataContextLocator;
+            _unitOfWorkLocator = unitOfWorkLocator;
         }
 
         protected override void OnActivate()
