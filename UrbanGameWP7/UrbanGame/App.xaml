@@ -5,11 +5,13 @@
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:local="clr-namespace:UrbanGame"
-    xmlns:localization="clr-namespace:UrbanGame.Localization">
+    xmlns:localization="clr-namespace:UrbanGame.Localization"
+    xmlns:conv="clr-namespace:UrbanGame.Converters">
 
     <!--Application Resources-->
     <Application.Resources>        
         <local:AppBootstrapper x:Key="bootstrapper"/>
         <localization:LocalizedStrings x:Key="LocalizedStrings" />
+        <conv:TimeLeftConverter x:Key="TimeLeftConverter" />
     </Application.Resources>
 </Application>

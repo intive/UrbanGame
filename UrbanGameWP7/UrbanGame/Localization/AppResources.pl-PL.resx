@@ -117,4 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ByOperator" xml:space="preserve">
+    <value>od</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>zakończono</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>dni</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>SZCZEGÓŁY</value>
+  </data>
+  <data name="GameTimeLeft" xml:space="preserve">
+    <value>pozostało:</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>graj</value>
+  </data>
+  <data name="Players" xml:space="preserve">
+    <value>graczy</value>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>RANKING</value>
+  </data>
 </root>
