@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 
-namespace UrbanGame.Common
+namespace UrbanGame.Storage
 {
 
     /// <summary>

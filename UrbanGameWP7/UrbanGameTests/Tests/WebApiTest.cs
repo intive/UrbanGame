@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UrbanGame.Common;
+using UrbanGame.Storage;
 using WebService;
 
 namespace UrbanGameTests.Tests

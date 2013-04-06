@@ -13,7 +13,7 @@ using System.IO.IsolatedStorage;
 using System.Collections.ObjectModel;
 
 
-namespace UrbanGame.Common
+namespace UrbanGame.Storage
 {
     public class UrbanGameDataContext : DataContext
     {

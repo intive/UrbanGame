@@ -4,7 +4,7 @@ using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
 using Common;
-namespace UrbanGame.Common
+namespace UrbanGame.Storage
 {
     [Table]
     public class Game : EntityBase, IGame
