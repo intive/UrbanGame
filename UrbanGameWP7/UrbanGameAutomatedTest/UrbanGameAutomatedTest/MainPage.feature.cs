@@ -19,8 +19,8 @@ namespace UrbanGameAutomatedTest
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.8.1.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Addition")]
-    public partial class AdditionFeature
+    [NUnit.Framework.DescriptionAttribute("My app is running")]
+    public partial class MyAppIsRunningFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -32,8 +32,7 @@ namespace UrbanGameAutomatedTest
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Addition", "In order to avoid silly mistakes\r\nAs a math idiot\r\nI want to be told the sum of t" +
-                    "wo numbers", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "My app is running", "In want to be able to run application", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -66,18 +65,16 @@ namespace UrbanGameAutomatedTest
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Basic run 5")]
+        [NUnit.Framework.DescriptionAttribute("Basic Test")]
         [NUnit.Framework.CategoryAttribute("mytag")]
-        public virtual void BasicRun5()
+        public virtual void BasicTest()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Basic run 5", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Basic Test", new string[] {
                         "mytag"});
-#line 7
+#line 5
 this.ScenarioSetup(scenarioInfo);
-#line 8
+#line 6
  testRunner.Given("my app is clean installed and running");
-#line 9
- testRunner.Then("take a picture");
 #line hidden
             this.ScenarioCleanup();
         }

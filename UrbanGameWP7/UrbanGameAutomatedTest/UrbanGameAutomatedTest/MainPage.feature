@@ -1,9 +1,6 @@
-﻿Feature: Addition
-	In order to avoid silly mistakes
-	As a math idiot
-	I want to be told the sum of two numbers
+﻿Feature: My app is running
+	In want to be able to run application
 
 @mytag
-Scenario: Basic run 5
+Scenario: Basic Test
 	Given my app is clean installed and running
-	Then take a picture
