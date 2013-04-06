@@ -24,6 +24,9 @@ namespace UrbanGame
         {
             // Standard Silverlight initialization
             InitializeComponent();
+            #if AUTOMATION
+            WindowsPhoneTestFramework.Client.AutomationClient.Automation.Instance.Initialise();
+            #endif
         }
     }
 }
