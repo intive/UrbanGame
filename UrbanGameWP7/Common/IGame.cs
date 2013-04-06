@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace UrbanGame.Storage
+namespace Common
 {
+    /// <summary>
+    /// Represents a game
+    /// </summary>
     public interface IGame
     {
         long Id { get; set; }

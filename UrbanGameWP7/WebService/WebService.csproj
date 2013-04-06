@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E7C6CD32-71A2-4CAC-9FC7-4F4E90ADFA9D}</ProjectGuid>
+    <ProjectGuid>{2890C315-043A-4F80-90B5-5618C7FAD3E4}</ProjectGuid>
     <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common</RootNamespace>
-    <AssemblyName>Common</AssemblyName>
+    <RootNamespace>WebService</RootNamespace>
+    <AssemblyName>WebService</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
@@ -49,17 +49,15 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameChangedEventHandler.cs" />
-    <Compile Include="GameEventArgs.cs" />
-    <Compile Include="IGame.cs" />
-    <Compile Include="IGameDetails.cs" />
-    <Compile Include="IGameWebService.cs" />
-    <Compile Include="IRepository.cs" />
-    <Compile Include="ISolution.cs" />
-    <Compile Include="ITask.cs" />
-    <Compile Include="ITaskDetails.cs" />
-    <Compile Include="IUnitOfWork.cs" />
+    <Compile Include="GameWebServiceMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskMock.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{E7C6CD32-71A2-4CAC-9FC7-4F4E90ADFA9D}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />

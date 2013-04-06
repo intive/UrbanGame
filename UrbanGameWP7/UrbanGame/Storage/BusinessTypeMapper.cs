@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-namespace UrbanGame.Storage
+namespace UrbanGame.Common
 {
     /// <summary>
     /// Mapper is responsible for finding entity type that implement given business interface

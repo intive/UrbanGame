@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
-
-namespace UrbanGame.Storage
+using Common;
+namespace UrbanGame.Common
 {
     [Table]
     public class Game : EntityBase, IGame

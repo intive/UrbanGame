@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 
-namespace UrbanGame.Storage
+namespace UrbanGame.Common
 {
 
     public class EntityBase : INotifyPropertyChanged, INotifyPropertyChanging

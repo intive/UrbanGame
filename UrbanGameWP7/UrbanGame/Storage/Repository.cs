@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Data.Linq;
 using Common;
 
-namespace UrbanGame.Storage
+namespace UrbanGame.Common
 {
     /// <summary>
     /// Generic repository implementation consuming Linq to sql 
