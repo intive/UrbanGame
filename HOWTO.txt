@@ -1,0 +1,10 @@
+In order to run this project Play framework must be installed on your local machine.
+You can find instructions how to do it on
+http://www.playframework.com/documentation/1.0.1/install
+
+After having the installation finished you can run the project by using command "play run" in command line,
+preceded by entering application directory.
+
+You should be now able to see the application after entering url "localhost:9000/" on your web browser.
+
+To test the application you can use command "play test" in similiar way to running the app.
