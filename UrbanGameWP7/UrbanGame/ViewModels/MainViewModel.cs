@@ -13,5 +13,10 @@ namespace UrbanGame.ViewModels
             : base(navigationService, unitOfWorkLocator)
         {
         }
+
+        public void ShowDetails()
+        {
+            _navigationService.UriFor<GameDetailsViewModel>().Navigate();
+        }
     }
 }
