@@ -10,7 +10,7 @@ namespace Common
     /// </summary>
     public interface IGame
     {
-        long Id { get; set; }
+        int Id { get; set; }
 
         string Name { get; set; }
 

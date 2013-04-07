@@ -11,10 +11,10 @@ namespace UrbanGame.Storage
     {        
         #region Id
 
-        private long _id;
+        private int _id;
 
         [Column(IsPrimaryKey = true, IsDbGenerated = true, CanBeNull = false, AutoSync = AutoSync.OnInsert)]
-        public long Id
+        public int Id
         {
             get
             {

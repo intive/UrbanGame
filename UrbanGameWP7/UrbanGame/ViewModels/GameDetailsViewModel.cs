@@ -22,6 +22,12 @@ namespace UrbanGame.ViewModels
             Description = "sadsa sad ads  adsa dssa sad  asas asd as a sas as as  asas  asdas as ads as d";
         }
 
+        #region navigation properties
+
+        public int GameId { get; set; }
+
+        #endregion
+
         #region bindable properties
 
         #region GameName

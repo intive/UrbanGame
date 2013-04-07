@@ -103,6 +103,7 @@
     <Compile Include="Tombstoning\TombstoningVariables.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsViewModel.cs" />
+    <Compile Include="ViewModels\GamesListViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\GameDetailsView.xaml.cs">
       <DependentUpon>GameDetailsView.xaml</DependentUpon>
@@ -144,6 +145,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{E7C6CD32-71A2-4CAC-9FC7-4F4E90ADFA9D}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebService\WebService.csproj">
+      <Project>{2890C315-043A-4F80-90B5-5618C7FAD3E4}</Project>
+      <Name>WebService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
