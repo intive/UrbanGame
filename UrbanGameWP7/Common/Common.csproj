@@ -52,7 +52,6 @@
     <Compile Include="GameChangedEventHandler.cs" />
     <Compile Include="GameEventArgs.cs" />
     <Compile Include="IGame.cs" />
-    <Compile Include="IGameDetails.cs" />
     <Compile Include="IGameWebService.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="ISolution.cs" />

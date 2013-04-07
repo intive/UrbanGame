@@ -12,7 +12,7 @@ namespace Common
     {
 
         /// <summary>
-        /// Method returns an array of existing games
+        /// Method returns an array of existing games(partially filled)
         /// </summary>
         /// <returns>Array of IGame</returns>
         IGame[] GetGames();
@@ -25,11 +25,11 @@ namespace Common
         bool SingUpToTheGame(int gid);
 
         /// <summary>
-        /// Returns game details
+        /// Returns completely filled in IGame
         /// </summary>
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <returns></returns>
-        IGameDetails GetGameInfo(int gid);
+        IGame GetGameInfo(int gid);
 
         /// <summary>
         /// Method returns an array of game's tasks

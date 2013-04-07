@@ -88,7 +88,7 @@ namespace WebService
         #endregion
 
         #region GetGameInfo
-        public IGameDetails GetGameInfo(int gid)
+        public IGame GetGameInfo(int gid)
         {
             throw new NotImplementedException();
         }
