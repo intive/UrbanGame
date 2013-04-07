@@ -71,7 +71,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\SampleTests.cs" />
+    <Compile Include="Tests\WebApiTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -97,9 +97,17 @@
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{E7C6CD32-71A2-4CAC-9FC7-4F4E90ADFA9D}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UrbanGame\UrbanGame.csproj">
       <Project>{6DBCB28D-4EB5-42A1-A734-9295C9C5297A}</Project>
       <Name>UrbanGame</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebService\WebService.csproj">
+      <Project>{2890C315-043A-4F80-90B5-5618C7FAD3E4}</Project>
+      <Name>WebService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
