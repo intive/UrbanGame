@@ -11,17 +11,25 @@ namespace UrbanGame.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if ((DateTime)value < DateTime.Now)
-                return AppResources.Completed;
+            if ((string)parameter == "start")
+            {
+                if ((DateTime)value < DateTime.Now)
+                    return AppResources.Started;
+            }
+            else
+            {
+                if ((DateTime)value < DateTime.Now)
+                    return AppResources.Completed;
+            }
 
             TimeSpan timeLeft = (DateTime)value - DateTime.Now;
             if (timeLeft.Days > 0)
             {
-                return timeLeft.Days + " " + AppResources.Days + " " + timeLeft.Hours + "h";
+                return timeLeft.Days + " " + (timeLeft.Days == 1 ? AppResources.Day : AppResources.Days) + " " + timeLeft.Hours + " h";
             }
             else
             {
-                return timeLeft.Hours + ":" + timeLeft.Minutes;
+                return timeLeft.Hours + " h " + timeLeft.Minutes + " m";
             }
         }
 

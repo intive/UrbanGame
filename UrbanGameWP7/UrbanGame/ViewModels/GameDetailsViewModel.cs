@@ -16,10 +16,13 @@ namespace UrbanGame.ViewModels
             GameName = "Hydrozagadka";
             OperatorName = "CAFETERIA";
             OperatorLogo = "/ApplicationIcon.png";
+            GameStart = DateTime.Now.AddHours(3).AddMinutes(23);
             GameEnd = DateTime.Now.AddDays(2).AddHours(5);
             NumberOfPlayers = 24;
             MaxPlayers = 50;
             Description = "sadsa sad ads  adsa dssa sad  asas asd as a sas as as  asas  asdas as ads as d";
+            Difficulty = 1;
+            Prizes = "1st Bicycle\n2nd Bicycle\n3rd Bicycle\n4-8th Bicycle bicycle bicycle";
         }
 
         #region navigation properties
@@ -88,6 +91,27 @@ namespace UrbanGame.ViewModels
                 {
                     _operatorLogo = value;
                     NotifyOfPropertyChange(() => OperatorLogo);
+                }
+            }
+        }
+        #endregion
+
+        #region GameStart
+
+        private DateTime _gameStart;
+
+        public DateTime GameStart
+        {
+            get
+            {
+                return _gameStart;
+            }
+            set
+            {
+                if (_gameStart != value)
+                {
+                    _gameStart = value;
+                    NotifyOfPropertyChange(() => GameStart);
                 }
             }
         }
@@ -172,6 +196,48 @@ namespace UrbanGame.ViewModels
                 {
                     _description = value;
                     NotifyOfPropertyChange(() => Description);
+                }
+            }
+        }
+        #endregion
+
+        #region Difficulty
+
+        private byte _difficulty;
+
+        public byte Difficulty
+        {
+            get
+            {
+                return _difficulty;
+            }
+            set
+            {
+                if (_difficulty != value)
+                {
+                    _difficulty = value;
+                    NotifyOfPropertyChange(() => Difficulty);
+                }
+            }
+        }
+        #endregion
+
+        #region Prizes
+
+        private string _prizes;
+
+        public string Prizes
+        {
+            get
+            {
+                return _prizes;
+            }
+            set
+            {
+                if (_prizes != value)
+                {
+                    _prizes = value;
+                    NotifyOfPropertyChange(() => Prizes);
                 }
             }
         }

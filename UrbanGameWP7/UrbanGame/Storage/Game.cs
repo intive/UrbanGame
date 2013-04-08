@@ -170,6 +170,29 @@ namespace UrbanGame.Storage
         }
         #endregion
 
+        #region Difficulty
+
+        private byte _difficulty;
+
+        [Column]
+        public byte Difficulty
+        {
+            get
+            {
+                return _difficulty;
+            }
+            set
+            {
+                if (_difficulty != value)
+                {
+                    NotifyPropertyChanging("Difficulty");
+                    _difficulty = value;
+                    NotifyPropertyChanged("Difficulty");
+                }
+            }
+        }
+        #endregion
+
         #region Points
 
         private int _points;

@@ -13,5 +13,6 @@
         <local:AppBootstrapper x:Key="bootstrapper"/>
         <localization:LocalizedStrings x:Key="LocalizedStrings" />
         <conv:TimeLeftConverter x:Key="TimeLeftConverter" />
+        <conv:DifficultyConverter x:Key="DifficultyConverter" />
     </Application.Resources>
 </Application>

@@ -24,6 +24,8 @@ namespace Common
 
         bool Joined { get; set; }
 
+        byte Difficulty { get; set; }
+
         int Points { get; set; }
 
         int MaxPoints { get; set; }

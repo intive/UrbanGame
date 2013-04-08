@@ -16,10 +16,9 @@ namespace UrbanGame.ViewModels
         {
             DownloadedGames = new BindableCollection<IGame>();
             AllGames = new BindableCollection<IGame>();
-            PopularGames = new BindableCollection<IGame>();
-            PrivateGames = new BindableCollection<IGame>();
-            RecommendedGames = new BindableCollection<IGame>();
-            CloseGames = new BindableCollection<IGame>();
+            UserActiveGames = new BindableCollection<IGame>();
+            UserPreviousGames = new BindableCollection<IGame>();
+            NearbyGames = new BindableCollection<IGame>();
 
             //temporarily mock object
             _gameWebService = new GameWebServiceMock();
@@ -34,11 +33,11 @@ namespace UrbanGame.ViewModels
             {
                 IGame game = _gameWebService.GetGameInfo(e.Id);
 
+                updateGame(DownloadedGames, e.Id, game);
                 updateGame(AllGames, e.Id, game);
-                updateGame(PopularGames, e.Id, game);
-                updateGame(PrivateGames, e.Id, game);
-                updateGame(RecommendedGames, e.Id, game);
-                updateGame(CloseGames, e.Id, game);
+                updateGame(UserActiveGames, e.Id, game);
+                updateGame(UserPreviousGames, e.Id, game);
+                updateGame(NearbyGames, e.Id, game);
             });
             
         }
@@ -111,106 +110,64 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
-        #region CloseGames
+        #region UserActiveGames
 
-        private BindableCollection<IGame> _closeGames;
+        private BindableCollection<IGame> _userActiveGames;
 
-        public BindableCollection<IGame> CloseGames
+        public BindableCollection<IGame> UserActiveGames
         {
             get
             {
-                return _closeGames;
+                return _userActiveGames;
             }
             set
             {
-                if (_closeGames != value)
+                if (_userActiveGames != value)
                 {
-                    _closeGames = value;
-                    NotifyOfPropertyChange(() => CloseGames);
+                    _userActiveGames = value;
+                    NotifyOfPropertyChange(() => UserActiveGames);
                 }
             }
         }
         #endregion
 
-        #region UserGames
+        #region UserPreviousGames
 
-        private BindableCollection<IGame> _userGames;
+        private BindableCollection<IGame> _userPreviousGames;
 
-        public BindableCollection<IGame> UserGames
+        public BindableCollection<IGame> UserPreviousGames
         {
             get
             {
-                return _userGames;
+                return _userPreviousGames;
             }
             set
             {
-                if (_userGames != value)
+                if (_userPreviousGames != value)
                 {
-                    _userGames = value;
-                    NotifyOfPropertyChange(() => UserGames);
+                    _userPreviousGames = value;
+                    NotifyOfPropertyChange(() => UserPreviousGames);
                 }
             }
         }
         #endregion
 
-        #region RecommendedGames
+        #region NearbyGames
 
-        private BindableCollection<IGame> _recommendedGames;
+        private BindableCollection<IGame> _nearbyGames;
 
-        public BindableCollection<IGame> RecommendedGames
+        public BindableCollection<IGame> NearbyGames
         {
             get
             {
-                return _recommendedGames;
+                return _nearbyGames;
             }
             set
             {
-                if (_recommendedGames != value)
+                if (_nearbyGames != value)
                 {
-                    _recommendedGames = value;
-                    NotifyOfPropertyChange(() => RecommendedGames);
-                }
-            }
-        }
-        #endregion
-
-        #region PopularGames
-
-        private BindableCollection<IGame> _popularGames;
-
-        public BindableCollection<IGame> PopularGames
-        {
-            get
-            {
-                return _popularGames;
-            }
-            set
-            {
-                if (_popularGames != value)
-                {
-                    _popularGames = value;
-                    NotifyOfPropertyChange(() => PopularGames);
-                }
-            }
-        }
-        #endregion
-
-        #region PrivateGames
-
-        private BindableCollection<IGame> _privateGames;
-
-        public BindableCollection<IGame> PrivateGames
-        {
-            get
-            {
-                return _privateGames;
-            }
-            set
-            {
-                if (_privateGames != value)
-                {
-                    _privateGames = value;
-                    NotifyOfPropertyChange(() => PrivateGames);
+                    _nearbyGames = value;
+                    NotifyOfPropertyChange(() => NearbyGames);
                 }
             }
         }
@@ -252,10 +209,9 @@ namespace UrbanGame.ViewModels
                                 AllGames = new BindableCollection<IGame>(DownloadedGames.Where(g => g.Name.ToLower().Contains(searchPhrase.ToLower())));
 
                             //TODO: replace it with correct conditions or implement dedicated method to receive that collections
-                            //PopularGames = new BindableCollection<IGame>(AllGames.Where(g => g.NumberOfPlayers > 20));
-                            //PrivateGames = new BindableCollection<IGame>(AllGames.Where(g => ));
-                            //RecommendedGames = new BindableCollection<IGame>(AllGames.Where(g => ));
-                            //CloseGames = new BindableCollection<IGame>(AllGames.Where(g => ));
+                            //UserActiveGames = new BindableCollection<IGame>(AllGames.Where(g => g.NumberOfPlayers > 20));
+                            //UserPreviousGames = new BindableCollection<IGame>(AllGames.Where(g => ));
+                            //UserNearbyGames = new BindableCollection<IGame>(AllGames.Where(g => ));
                         }
                     }                    
                 });

@@ -80,6 +80,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
+    <Compile Include="Converters\DifficultyConverter.cs" />
     <Compile Include="Converters\TimeLeftConverter.cs" />
     <Compile Include="Localization\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>
