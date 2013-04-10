@@ -1,8 +1,10 @@
 ﻿using Common;
 using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Linq;
 using System.Text;
+using UrbanGame.Storage;
 
 namespace WebService
 {
@@ -19,6 +21,7 @@ namespace WebService
         }
         #endregion
 
+        #region Containers
         #region ListOfGames
         /// <summary>
         /// Game's containter
@@ -39,6 +42,7 @@ namespace WebService
             get;
             private set;
         }
+        #endregion
         #endregion
 
         #region ChangeGame
@@ -129,14 +133,60 @@ namespace WebService
         }
         #endregion
 
+        #region GameChanged
+        public event GameChangedEventHandler GameChanged;
+        #endregion
+
         #region Authorize
-        public bool Authorize(string username)
+        public bool Authorize(string username, string password)
         {
-            throw new NotImplementedException();
+            return "username".Equals(username);
         }
         #endregion
 
+        #region isAuthorize
+        public bool isAuthorize
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+        #endregion
 
-        public event GameChangedEventHandler GameChanged;
+        #region GamesUserPlays
+        public IGame[] GamesUserPlays()
+        {
+            return new IGame[] {
+                new Game(){Name = "M For The Mission", GameState = GameState.Joined, Id = 1, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(2).AddHours(13), Rank = 4},
+            new Game(){Name = "Thanks For All That Fish", GameState = GameState.Joined, Id = 2, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(5), Rank = null},
+            new Game(){Name = "Pontifex", GameState = GameState.Joined, Id = 3, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(8), Rank = 8}};
+        }
+        #endregion
+
+        #region NearestGames
+        public IGame[] NearestGames(GeoCoordinate coordinate)
+        {
+            return new IGame[] {
+                new Game(){Name = "Hydromystery", Operator = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 4, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None, Difficulty = GameDifficulty.Easy, Description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010."},
+            new Game(){Name = "North & South", Operator = "Infogrames", NumberOfPlayers = 23, Id = 5, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(12), GameState = GameState.None},
+            new Game(){Name = "Ultimate Quest",  Operator = "JCVD", NumberOfPlayers = 23,Id = 6, Logo = "/ApplicationIcon.png",  GameEnd = DateTime.Now.AddDays(10), GameState = GameState.None},
+            new Game(){Name = "Galaxy Quest",  Operator = "NSEA", NumberOfPlayers = 23,Id = 7, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameState = GameState.None},
+            new Game(){Name = "The Quest for NETTs",  Operator = "Ron Jeremy", NumberOfPlayers = 23,Id = 8, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8), GameState = GameState.None}};
+        }
+        #endregion
+
+        #region GamesUserPlayed
+        public IGame[] GamesUserPlayed()
+        {
+            return new IGame[] {
+                new Game(){Name = "Wilqu!", Id = 9, Logo = "/ApplicationIcon.png", GameState = GameState.Ended, Rank = 4},
+            new Game(){Name = "Torghal", Id = 10, Logo = "/ApplicationIcon.png", GameState = GameState.Withdraw, Rank = null}};
+        }
+        #endregion
     }
 }

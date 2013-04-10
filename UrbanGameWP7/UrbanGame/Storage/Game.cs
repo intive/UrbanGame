@@ -4,6 +4,8 @@ using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
 using Common;
+using System.Device.Location;
+
 namespace UrbanGame.Storage
 {
     [Table]
@@ -303,6 +305,121 @@ namespace UrbanGame.Storage
                     NotifyPropertyChanging("NumberOfSlots");
                     _numberOfSlots = value;
                     NotifyPropertyChanged("NumberOfSlots");
+                }
+            }
+        }
+        #endregion
+
+        #region GameLocalization
+
+        private GeoCoordinate _gameLocalization;
+
+        [Column]
+        public GeoCoordinate GameLocalization
+        {
+            get
+            {
+                return _gameLocalization;
+            }
+            set
+            {
+                if (_gameLocalization != value)
+                {
+                    NotifyPropertyChanging("GameLocalization");
+                    _gameLocalization = value;
+                    NotifyPropertyChanged("GameLocalization");
+                }
+            }
+        }
+        #endregion
+
+        #region GameState
+
+        private GameState _gameState;
+
+        [Column]
+        public GameState GameState
+        {
+            get
+            {
+                return _gameState;
+            }
+            set
+            {
+                if (_gameState != value)
+                {
+                    NotifyPropertyChanging("GameState");
+                    _gameState = value;
+                    NotifyPropertyChanged("GameState");
+                }
+            }
+        }
+        #endregion
+
+        #region Rank
+
+        private int? _rank;
+
+        [Column]
+        public int? Rank
+        {
+            get
+            {
+                return _rank;
+            }
+            set
+            {
+                if (_rank != value)
+                {
+                    NotifyPropertyChanging("Rank");
+                    _rank = value;
+                    NotifyPropertyChanged("Rank");
+                }
+            }
+        }
+        #endregion
+
+        #region Difficulty
+
+        private GameDifficulty _difficulty;
+
+        [Column]
+        public GameDifficulty Difficulty
+        {
+            get
+            {
+                return _difficulty;
+            }
+            set
+            {
+                if (_difficulty != value)
+                {
+                    NotifyPropertyChanging("GameDifficulty");
+                    _difficulty = value;
+                    NotifyPropertyChanged("GameDifficulty");
+                }
+            }
+        }
+        #endregion
+
+        #region Description
+
+        private string _description;
+
+        [Column]
+        public string Description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                if (_description != value)
+                {
+                    NotifyPropertyChanging("Description");
+                    _description = value;
+                    NotifyPropertyChanged("Description");
                 }
             }
         }
