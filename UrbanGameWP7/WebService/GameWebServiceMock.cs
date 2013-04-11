@@ -138,28 +138,32 @@ namespace WebService
         #endregion
 
         #region Authorize
-        public bool Authorize(string username, string password)
+        public AuthorizeState Authorize(string username, string password)
         {
-            return "username".Equals(username);
+            IsAuthorized = true;
+            return AuthorizeState.Success;
         }
         #endregion
 
-        #region isAuthorize
-        public bool isAuthorize
+        #region IsAuthorized
+
+        private bool _isAuthorized;
+
+        public bool IsAuthorized
         {
             get
             {
-                throw new NotImplementedException();
+                return _isAuthorized;
             }
             set
             {
-                throw new NotImplementedException();
+                _isAuthorized = value;
             }
         }
         #endregion
 
-        #region GamesUserPlays
-        public IGame[] GamesUserPlays()
+        #region UsersActiveGames
+        public IGame[] UsersActiveGames()
         {
             return new IGame[] {
                 new Game(){Name = "M For The Mission", GameState = GameState.Joined, Id = 1, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(2).AddHours(13), Rank = 4},
@@ -168,20 +172,20 @@ namespace WebService
         }
         #endregion
 
-        #region NearestGames
-        public IGame[] NearestGames(GeoCoordinate coordinate)
+        #region UserNearbyGames
+        public IGame[] UserNearbyGames(GeoCoordinate coordinate)
         {
             return new IGame[] {
                 new Game(){Name = "Hydromystery", Operator = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 4, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None, Difficulty = GameDifficulty.Easy, Description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010."},
             new Game(){Name = "North & South", Operator = "Infogrames", NumberOfPlayers = 23, Id = 5, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(12), GameState = GameState.None},
             new Game(){Name = "Ultimate Quest",  Operator = "JCVD", NumberOfPlayers = 23,Id = 6, Logo = "/ApplicationIcon.png",  GameEnd = DateTime.Now.AddDays(10), GameState = GameState.None},
             new Game(){Name = "Galaxy Quest",  Operator = "NSEA", NumberOfPlayers = 23,Id = 7, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameState = GameState.None},
-            new Game(){Name = "The Quest for NETTs",  Operator = "Ron Jeremy", NumberOfPlayers = 23,Id = 8, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8), GameState = GameState.None}};
+            new Game(){Name = "The Quest for NEETs",  Operator = "Ron Jeremy", NumberOfPlayers = 23,Id = 8, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8), GameState = GameState.None}};
         }
         #endregion
 
-        #region GamesUserPlayed
-        public IGame[] GamesUserPlayed()
+        #region UsersInactiveGames
+        public IGame[] UsersInactiveGames()
         {
             return new IGame[] {
                 new Game(){Name = "Wilqu!", Id = 9, Logo = "/ApplicationIcon.png", GameState = GameState.Ended, Rank = 4},

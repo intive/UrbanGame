@@ -75,40 +75,35 @@ namespace Common
         /// </summary>
         /// <param name="username">Username</param>
         /// <returns>a bool</returns>
-        bool Authorize(string username, string password);
+        AuthorizeState Authorize(string username, string password);
 
         /// <summary>
         /// Shows that user is authorize
         /// </summary>
-        bool isAuthorize
-        {
-            get;
-            set;
-        }
+        bool IsAuthorized { get; set; }
 
         /// <summary>
         /// Method returns array of games in which user plays(only needed fields filled in)
         /// </summary>
         /// <returns></returns>
-        IGame[] GamesUserPlays();
+        IGame[] UsersActiveGames();
 
         /// <summary>
         /// Method returns array of the nearest games(only needed fields filled in)
         /// </summary>
         /// <returns></returns>
-        IGame[] NearestGames(GeoCoordinate coordinate);
+        IGame[] UserNearbyGames(GeoCoordinate coordinate);
 
         /// <summary>
         /// Method returns array of games in which user played(only needed fields filled in)
         /// </summary>
         /// <returns></returns>
-        IGame[] GamesUserPlayed();
+        IGame[] UsersInactiveGames();
 
         /// <summary>
         /// Event fire when a game changes
         /// </summary>
         event GameChangedEventHandler GameChanged;
-
 
     }
 }

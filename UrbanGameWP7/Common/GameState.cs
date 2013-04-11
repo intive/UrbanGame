@@ -7,10 +7,10 @@ namespace Common
 {
     public enum GameState
     {
+        None,
         Joined,
         Won,
         Ended,
-        Withdraw,
-        None
+        Withdraw
     }
 }

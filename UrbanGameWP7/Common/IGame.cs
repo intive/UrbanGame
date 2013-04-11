@@ -23,8 +23,6 @@ namespace Common
 
         DateTime GameEnd { get; set; }
 
-        bool Joined { get; set; }
-
         int Points { get; set; }
 
         int MaxPoints { get; set; }

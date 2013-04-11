@@ -149,29 +149,6 @@ namespace UrbanGame.Storage
         }
         #endregion
 
-        #region Joined
-
-        private bool _joined;
-
-        [Column]
-        public bool Joined
-        {
-            get
-            {
-                return _joined;
-            }
-            set
-            {
-                if (_joined != value)
-                {
-                    NotifyPropertyChanging("Joined");
-                    _joined = value;
-                    NotifyPropertyChanged("Joined");
-                }
-            }
-        }
-        #endregion
-
         #region Points
 
         private int _points;
