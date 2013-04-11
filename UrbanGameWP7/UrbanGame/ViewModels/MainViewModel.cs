@@ -12,6 +12,7 @@ namespace UrbanGame.ViewModels
         public MainViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
             : base(navigationService, unitOfWorkLocator)
         {
+            
         }
 
         public void ShowDetails()
