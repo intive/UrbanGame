@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebService;
+using System.Device.Location;
+using UrbanGame.Storage;
 
 namespace UrbanGame.ViewModels
 {
@@ -14,39 +16,35 @@ namespace UrbanGame.ViewModels
         public GamesListViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
             : base(navigationService, unitOfWorkLocator)
         {
-            DownloadedGames = new BindableCollection<IGame>();
-            AllGames = new BindableCollection<IGame>();
             UserActiveGames = new BindableCollection<IGame>();
-            UserPreviousGames = new BindableCollection<IGame>();
-            NearbyGames = new BindableCollection<IGame>();
+            UserInactiveGames = new BindableCollection<IGame>();
+            NearestGames = new BindableCollection<IGame>();
+
+            IsRefreshing = false;
 
             //temporarily mock object
             _gameWebService = new GameWebServiceMock();
-            _gameWebService.GameChanged += gameWebService_GameChanged;
+            _gameWebService.GameChanged += GameWebService_GameChanged;
         }
 
-        #region WebService events
+        #region private
 
-        void gameWebService_GameChanged(object sender, GameEventArgs e)
+        IGameWebService _gameWebService;
+
+        void GameWebService_GameChanged(object sender, GameEventArgs e)
         {
             Task.Run(() =>
             {
                 IGame game = _gameWebService.GetGameInfo(e.Id);
 
-                updateGame(DownloadedGames, e.Id, game);
-                updateGame(AllGames, e.Id, game);
-                updateGame(UserActiveGames, e.Id, game);
-                updateGame(UserPreviousGames, e.Id, game);
-                updateGame(NearbyGames, e.Id, game);
+                UpdateGame(UserActiveGames, e.Id, game);
+                UpdateGame(UserInactiveGames, e.Id, game);
+                UpdateGame(NearestGames, e.Id, game);
             });
-            
+
         }
 
-        #endregion
-
-        #region private methods
-
-        void updateGame(BindableCollection<IGame> games, int gid, IGame newGame)
+        void UpdateGame(BindableCollection<IGame> games, int gid, IGame newGame)
         {
             for (int i = 0; i < games.Count; i++)
                 if (games[i].Id == gid)
@@ -58,57 +56,7 @@ namespace UrbanGame.ViewModels
 
         #endregion
 
-        #region private fields
-
-        IGameWebService _gameWebService;
-        string _currentSearchPhrase;
-        object _syncRoot = new object();
-
-        #endregion
-
         #region bindable properties
-
-        #region DownloadedGames
-
-        private BindableCollection<IGame> _downloadedGames;
-
-        public BindableCollection<IGame> DownloadedGames
-        {
-            get
-            {
-                return _downloadedGames;
-            }
-            set
-            {
-                if (_downloadedGames != value)
-                {
-                    _downloadedGames = value;
-					NotifyOfPropertyChange(() => DownloadedGames);
-                }
-            }
-        }
-        #endregion
-
-        #region AllGames
-
-        private BindableCollection<IGame> _allGames;
-
-        public BindableCollection<IGame> AllGames
-        {
-            get
-            {
-                return _allGames;
-            }
-            set
-            {
-                if (_allGames != value)
-                {
-                    _allGames = value;
-                    NotifyOfPropertyChange(() => AllGames);
-                }
-            }
-        }
-        #endregion
 
         #region UserActiveGames
 
@@ -131,43 +79,127 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
-        #region UserPreviousGames
+        #region UserInactiveGames
 
-        private BindableCollection<IGame> _userPreviousGames;
+        private BindableCollection<IGame> _userInactiveGames;
 
-        public BindableCollection<IGame> UserPreviousGames
+        public BindableCollection<IGame> UserInactiveGames
         {
             get
             {
-                return _userPreviousGames;
+                return _userInactiveGames;
             }
             set
             {
-                if (_userPreviousGames != value)
+                if (_userInactiveGames != value)
                 {
-                    _userPreviousGames = value;
-                    NotifyOfPropertyChange(() => UserPreviousGames);
+                    _userInactiveGames = value;
+                    NotifyOfPropertyChange(() => UserInactiveGames);
                 }
             }
         }
         #endregion
 
-        #region NearbyGames
+        #region NearestGames
 
-        private BindableCollection<IGame> _nearbyGames;
+        private BindableCollection<IGame> _nearestGames;
 
-        public BindableCollection<IGame> NearbyGames
+        public BindableCollection<IGame> NearestGames
         {
             get
             {
-                return _nearbyGames;
+                return _nearestGames;
             }
             set
             {
-                if (_nearbyGames != value)
+                if (_nearestGames != value)
                 {
-                    _nearbyGames = value;
-                    NotifyOfPropertyChange(() => NearbyGames);
+                    _nearestGames = value;
+                    NotifyOfPropertyChange(() => NearestGames);
+                }
+            }
+        }
+        #endregion
+
+        #region IsRefreshing
+
+        private bool _isRefreshing;
+
+        public bool IsRefreshing
+        {
+            get
+            {
+                return _isRefreshing;
+            }
+            set
+            {
+                if (_isRefreshing != value)
+                {
+                    _isRefreshing = value;
+                    NotifyOfPropertyChange(() => IsRefreshing);
+                }
+            }
+        }
+        #endregion
+
+        #region UserAvatar
+
+        private string _userAvatar;
+
+        public string UserAvatar
+        {
+            get
+            {
+                return _userAvatar;
+            }
+            set
+            {
+                if (_userAvatar != value)
+                {
+                    _userAvatar = value;
+                    NotifyOfPropertyChange(() => UserAvatar);
+                }
+            }
+        }
+        #endregion
+
+        #region UserName
+
+        private string _userName;
+
+        public string UserName
+        {
+            get
+            {
+                return _userName;
+            }
+            set
+            {
+                if (_userName != value)
+                {
+                    _userName = value;
+                    NotifyOfPropertyChange(() => UserName);
+                }
+            }
+        }
+        #endregion
+
+        #region UserMail
+
+        private string _userMail;
+
+        public string UserMail
+        {
+            get
+            {
+                return _userMail;
+            }
+            set
+            {
+                if (_userMail != value)
+                {
+                    _userMail = value;
+                    NotifyOfPropertyChange(() => UserMail);
                 }
             }
         }
@@ -180,46 +212,69 @@ namespace UrbanGame.ViewModels
         protected override void OnActivate()
         {
             base.OnActivate();
-            RefreshGames();
+            RefreshUserGames();
+            RefreshNearestGames();
         }
 
         #endregion
 
         #region operations
 
-        public void RefreshGames(string searchPhrase = "")
-        {         
+        public void RefreshUserGames()
+        {
             Task.Run(() =>
+            {
+                UserActiveGames = null;
+                UserInactiveGames = null;
+
+                if (_gameWebService.IsAuthorized)
+                {   
+                    IQueryable<Game> games = _unitOfWorkLocator().GetRepository<Game>().All();
+
+                    UserActiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Joined)
+                                                                         .OrderBy(g => g.GameEnd)
+                                                                         .Cast<IGame>()
+                                                                         .AsEnumerable());
+
+                    UserInactiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Ended || 
+                                                                                       g.GameState == GameState.Won || 
+                                                                                       g.GameState == GameState.Withdraw)
+                                                                           .OrderByDescending(g => g.GameStart)
+                                                                           .Cast<IGame>()
+                                                                           .AsEnumerable());                   
+                }                   
+            });
+        }
+
+        public void RefreshNearestGames()
+        {
+            if (IsRefreshing) 
+                return;
+            else
+                IsRefreshing = true;
+
+            Task.Run(() =>
+            {
+                try
                 {
-                    lock (_syncRoot)
-                    {
-                        DownloadedGames.Clear();
-                        _currentSearchPhrase = searchPhrase;
-                    }
-
-                    DownloadedGames = new BindableCollection<IGame>(_gameWebService.GetGames().OrderBy(g => g.GameEnd)); 
-
-                    lock (_syncRoot)
-                    {
-                        if (searchPhrase == _currentSearchPhrase)
-                        {
-                            if (String.IsNullOrEmpty(searchPhrase))
-                                AllGames = DownloadedGames;
-                            else
-                                AllGames = new BindableCollection<IGame>(DownloadedGames.Where(g => g.Name.ToLower().Contains(searchPhrase.ToLower())));
-
-                            //TODO: replace it with correct conditions or implement dedicated method to receive that collections
-                            //UserActiveGames = new BindableCollection<IGame>(AllGames.Where(g => g.NumberOfPlayers > 20));
-                            //UserPreviousGames = new BindableCollection<IGame>(AllGames.Where(g => ));
-                            //UserNearbyGames = new BindableCollection<IGame>(AllGames.Where(g => ));
-                        }
-                    }                    
-                });
+                    NearestGames = null;
+                    NearestGames = new BindableCollection<IGame>(_gameWebService.UserNearbyGames(new GeoCoordinate()).OrderBy(g => g.GameEnd));
+                }
+                finally
+                {
+                    IsRefreshing = false;                        
+                }
+            });
         }
 
         public void ShowDetails(int gid)
-        {
+        {            
             _navigationService.UriFor<GameDetailsViewModel>().WithParam(g => g.GameId, gid).Navigate();
+        }
+
+        public void Logout()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

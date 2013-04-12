@@ -61,15 +61,6 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to about.
-        /// </summary>
-        public static string About {
-            get {
-                return ResourceManager.GetString("About", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to by.
         /// </summary>
         public static string ByOperator {
@@ -106,7 +97,7 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Difficulty:.
+        ///   Looks up a localized string similar to difficulty:.
         /// </summary>
         public static string Difficulty {
             get {
@@ -124,7 +115,7 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to End:.
+        ///   Looks up a localized string similar to end:.
         /// </summary>
         public static string GameEnd {
             get {
@@ -133,11 +124,29 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start:.
+        ///   Looks up a localized string similar to start:.
         /// </summary>
         public static string GameStart {
             get {
                 return ResourceManager.GetString("GameStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to complete tasks first.
+        /// </summary>
+        public static string GameTypeCompleteFirst {
+            get {
+                return ResourceManager.GetString("GameTypeCompleteFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to gather as many points as possible.
+        /// </summary>
+        public static string GameTypeHighestScore {
+            get {
+                return ResourceManager.GetString("GameTypeHighestScore", resourceCulture);
             }
         }
         
@@ -151,6 +160,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Join in.
+        /// </summary>
+        public static string JoinIn {
+            get {
+                return ResourceManager.GetString("JoinIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to medium.
         /// </summary>
         public static string Medium {
@@ -160,11 +178,11 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to play.
+        ///   Looks up a localized string similar to overview.
         /// </summary>
-        public static string Play {
+        public static string Overview {
             get {
-                return ResourceManager.GetString("Play", resourceCulture);
+                return ResourceManager.GetString("Overview", resourceCulture);
             }
         }
         

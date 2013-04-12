@@ -149,6 +149,29 @@ namespace UrbanGame.Storage
         }
         #endregion
 
+        #region GameType
+
+        private GameType _gameType;
+
+        [Column]
+        public GameType GameType
+        {
+            get
+            {
+                return _gameType;
+            }
+            set
+            {
+                if (_gameType != value)
+                {
+                    NotifyPropertyChanging("GameType");
+                    _gameType = value;
+                    NotifyPropertyChanged("GameType");
+                }
+            }
+        }
+        #endregion
+
         #region Points
 
         private int _points;

@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="About" xml:space="preserve">
-    <value>about</value>
-  </data>
   <data name="ByOperator" xml:space="preserve">
     <value>by</value>
   </data>
@@ -133,25 +130,34 @@
     <value>days</value>
   </data>
   <data name="Difficulty" xml:space="preserve">
-    <value>Difficulty:</value>
+    <value>difficulty:</value>
   </data>
   <data name="Easy" xml:space="preserve">
     <value>easy</value>
   </data>
   <data name="GameEnd" xml:space="preserve">
-    <value>End:</value>
+    <value>end:</value>
   </data>
   <data name="GameStart" xml:space="preserve">
-    <value>Start:</value>
+    <value>start:</value>
+  </data>
+  <data name="GameTypeCompleteFirst" xml:space="preserve">
+    <value>complete tasks first</value>
+  </data>
+  <data name="GameTypeHighestScore" xml:space="preserve">
+    <value>gather as many points as possible</value>
   </data>
   <data name="Hard" xml:space="preserve">
     <value>hard</value>
   </data>
+  <data name="JoinIn" xml:space="preserve">
+    <value>Join in</value>
+  </data>
   <data name="Medium" xml:space="preserve">
     <value>medium</value>
   </data>
-  <data name="Play" xml:space="preserve">
-    <value>play</value>
+  <data name="Overview" xml:space="preserve">
+    <value>overview</value>
   </data>
   <data name="Players" xml:space="preserve">
     <value>players:</value>

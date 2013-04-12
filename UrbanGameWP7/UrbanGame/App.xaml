@@ -12,7 +12,8 @@
     <Application.Resources>        
         <local:AppBootstrapper x:Key="bootstrapper"/>
         <localization:LocalizedStrings x:Key="LocalizedStrings" />
-        <conv:TimeLeftConverter x:Key="TimeLeftConverter" />
+        <conv:GameStartEndConverter x:Key="GameStartEndConverter" />
         <conv:DifficultyConverter x:Key="DifficultyConverter" />
+        <conv:GameTypeConverter x:Key="GameTypeConverter" />
     </Application.Resources>
 </Application>

@@ -20,8 +20,9 @@ namespace UrbanGame.ViewModels
             GameEnd = DateTime.Now.AddDays(2).AddHours(5);
             NumberOfPlayers = 24;
             MaxPlayers = 50;
+            GameType = GameType.HighestScore;
             Description = "sadsa sad ads  adsa dssa sad  asas asd as a sas as as  asas  asdas as ads as d";
-            Difficulty = 1;
+            Difficulty = GameDifficulty.Medium;
             Prizes = "1st Bicycle\n2nd Bicycle\n3rd Bicycle\n4-8th Bicycle bicycle bicycle";
         }
 
@@ -138,6 +139,27 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
+        #region GameType
+
+        private GameType _gameType;
+
+        public GameType GameType
+        {
+            get
+            {
+                return _gameType;
+            }
+            set
+            {
+                if (_gameType != value)
+                {
+                    _gameType = value;
+                    NotifyOfPropertyChange(() => GameType);
+                }
+            }
+        }
+        #endregion
+
         #region NumberOfPlayers
 
         private int _numberOfPlayers;
@@ -203,9 +225,9 @@ namespace UrbanGame.ViewModels
 
         #region Difficulty
 
-        private byte _difficulty;
+        private GameDifficulty _difficulty;
 
-        public byte Difficulty
+        public GameDifficulty Difficulty
         {
             get
             {

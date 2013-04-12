@@ -22,16 +22,16 @@
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
                     <ContentPresenter>
-                        <TextBlock Text="{Binding}" FontSize="{StaticResource PhoneFontSizeExtraExtraLarge}" Margin="0,8,15,-10" />
+                        <TextBlock Text="{Binding}" FontSize="60" Margin="0,8,15,-10" />
                     </ContentPresenter>
                 </DataTemplate>
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.Title>
-                <TextBlock Text="{Binding GameName}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="0,15,15,0" />
+                <TextBlock Text="urban games" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,15,15,0" />
             </controls:Pivot.Title>
 
             <!--Pivot item one-->
-            <controls:PivotItem Header="{Binding Path=AppResources.About, Source={StaticResource LocalizedStrings}}">
+            <controls:PivotItem Header="{Binding Path=AppResources.Overview, Source={StaticResource LocalizedStrings}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -51,7 +51,7 @@
                             </Style>
                         </Grid.Resources>
                         
-                        <Image Width="100" Height="100" Margin="0,10,10,0" Source="{Binding OperatorLogo}" VerticalAlignment="Top" />
+                        <Image Width="130" Height="130" Margin="0,10,24,0" Source="{Binding OperatorLogo}" VerticalAlignment="Top" />
                         
                         <StackPanel Grid.Column="1" Orientation="Vertical">
                             <TextBlock Text="{Binding GameName}" FontSize="{StaticResource PhoneFontSizeLarge}" />
@@ -63,14 +63,7 @@
                                 <Image Width="30" Height="30" Margin="20,0,0,0" Source="{Binding OperatorLogo}" VerticalAlignment="Top" />
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                                <TextBlock Text="{Binding Path=AppResources.Players, Source={StaticResource LocalizedStrings}}" Margin="0,0,8,0" />
-                                <TextBlock Text="{Binding NumberOfPlayers}"/>
-                                <TextBlock Text="/"/>
-                                <TextBlock Text="{Binding MaxPlayers}" Margin="0,0,10,0"/>
-                            </StackPanel>
-
-                            <Grid Margin="0,15,0,0">
+                            <Grid Margin="0,5,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
@@ -79,21 +72,33 @@
                                     <RowDefinition />
                                     <RowDefinition />
                                     <RowDefinition />
-                                </Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>                                
+                                <Grid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Margin" Value="0,0,0,5" />
+                                    </Style>
+                                </Grid.Resources>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Path=AppResources.GameStart, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" />
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding GameStart, Converter={StaticResource TimeLeftConverter}, ConverterParameter=start}" TextAlignment="Right" />
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Path=AppResources.GameEnd, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" />
-                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding GameEnd, Converter={StaticResource TimeLeftConverter}}" TextAlignment="Right" />
-                                <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Path=AppResources.Difficulty, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" />
-                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Difficulty, Converter={StaticResource DifficultyConverter}}" TextAlignment="Right" />
-                             </Grid>                            
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Path=AppResources.Players, Source={StaticResource LocalizedStrings}}" />
+                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding NumberOfPlayers}" /> <TextBlock Text="/"/> <TextBlock Text="{Binding MaxPlayers}"/>
+                                </StackPanel>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Path=AppResources.GameStart, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" />
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding GameStart, Converter={StaticResource GameStartEndConverter}, ConverterParameter=start}" TextAlignment="Right" />
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Path=AppResources.GameEnd, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" />
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding GameEnd, Converter={StaticResource GameStartEndConverter}}" TextAlignment="Right" />
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding Path=AppResources.Difficulty, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" />
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Difficulty, Converter={StaticResource DifficultyConverter}}" TextAlignment="Right" />
+                                <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding GameType, Converter={StaticResource GameTypeConverter}}" />
+                            </Grid>                            
                          </StackPanel>
                     </Grid>
                     
                     
                     <!-- DESCRIPTION -->
-                    <ScrollViewer Grid.Row="1" Margin="0,20,0,0">
+                    <ScrollViewer Grid.Row="1" Margin="0,45,0,0">
                         <TextBlock Text="{Binding Description}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                     </ScrollViewer>
                  </Grid>

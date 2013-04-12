@@ -117,14 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="About" xml:space="preserve">
-    <value>o grze</value>
-  </data>
   <data name="ByOperator" xml:space="preserve">
     <value>od</value>
   </data>
   <data name="Completed" xml:space="preserve">
     <value>zakończono</value>
+  </data>
+  <data name="CompleteFirstGameTypeCompleteFiGameTypeCompleteFirst" xml:space="preserve">
+    <value>ukończ zadania jako pierwszy</value>
   </data>
   <data name="Day" xml:space="preserve">
     <value>dzień</value>
@@ -133,25 +133,31 @@
     <value>dni</value>
   </data>
   <data name="Difficulty" xml:space="preserve">
-    <value>Trudność:</value>
+    <value>poziom trudności:</value>
   </data>
   <data name="Easy" xml:space="preserve">
     <value>łatwe</value>
   </data>
   <data name="GameEnd" xml:space="preserve">
-    <value>Zakończenie:</value>
+    <value>zakończenie:</value>
   </data>
   <data name="GameStart" xml:space="preserve">
-    <value>Rozpoczęcie:</value>
+    <value>rozpoczęcie:</value>
+  </data>
+  <data name="GameTypeHighestScore" xml:space="preserve">
+    <value>zdobądź jak najwięcej punktów</value>
   </data>
   <data name="Hard" xml:space="preserve">
     <value>trudne</value>
   </data>
+  <data name="JoinIn" xml:space="preserve">
+    <value>Dołącz</value>
+  </data>
   <data name="Medium" xml:space="preserve">
     <value>średnie</value>
   </data>
-  <data name="Play" xml:space="preserve">
-    <value>graj</value>
+  <data name="Overview" xml:space="preserve">
+    <value>o grze</value>
   </data>
   <data name="Players" xml:space="preserve">
     <value>graczy:</value>
