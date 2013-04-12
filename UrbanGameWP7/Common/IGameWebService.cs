@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Device.Location;
 
 namespace Common
 {
@@ -12,7 +13,7 @@ namespace Common
     {
 
         /// <summary>
-        /// Method returns an array of existing games(partially filled)
+        /// Method returns an array of existing games(partially filled in)
         /// </summary>
         /// <returns>Array of IGame</returns>
         IGame[] GetGames();
@@ -74,11 +75,35 @@ namespace Common
         /// </summary>
         /// <param name="username">Username</param>
         /// <returns>a bool</returns>
-        bool Authorize(string username);
+        AuthorizeState Authorize(string username, string password);
+
+        /// <summary>
+        /// Shows that user is authorize
+        /// </summary>
+        bool IsAuthorized { get; set; }
+
+        /// <summary>
+        /// Method returns array of games in which user plays(only needed fields filled in)
+        /// </summary>
+        /// <returns></returns>
+        IGame[] UsersActiveGames();
+
+        /// <summary>
+        /// Method returns array of the nearest games(only needed fields filled in)
+        /// </summary>
+        /// <returns></returns>
+        IGame[] UserNearbyGames(GeoCoordinate coordinate);
+
+        /// <summary>
+        /// Method returns array of games in which user played(only needed fields filled in)
+        /// </summary>
+        /// <returns></returns>
+        IGame[] UsersInactiveGames();
 
         /// <summary>
         /// Event fire when a game changes
         /// </summary>
         event GameChangedEventHandler GameChanged;
+
     }
 }

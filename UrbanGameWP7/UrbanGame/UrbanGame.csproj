@@ -59,6 +59,7 @@
     <Reference Include="Microsoft.Phone.Controls, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Interop" />
     <Reference Include="system.data.linq" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Threading.Tasks.WP71">
       <HintPath>..\packages\System.Threading.Tasks.3.0.2-beta2\lib\sl4-wp71\System.Threading.Tasks.WP71.dll</HintPath>
     </Reference>

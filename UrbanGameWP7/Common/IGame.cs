@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Linq;
 using System.Text;
 
@@ -22,10 +23,6 @@ namespace Common
 
         DateTime GameEnd { get; set; }
 
-        bool Joined { get; set; }
-
-        byte Difficulty { get; set; }
-
         int Points { get; set; }
 
         int MaxPoints { get; set; }
@@ -37,5 +34,21 @@ namespace Common
         int NumberOfPlayers { get; set; }
 
         int NumberOfSlots { get; set; }
+
+        /// <summary>
+        /// Field shows that user won, joined, ended, withdraw, etc. the game
+        /// </summary>
+        GameState GameState { get; set; }
+
+        /// <summary>
+        /// User's rank in that game
+        /// </summary>
+        int? Rank { get; set; } 
+
+        GeoCoordinate GameLocalization { get; set; }
+
+        GameDifficulty Difficulty { get; set; }
+
+        string Description { get; set; }
     }
 }
