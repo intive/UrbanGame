@@ -15,9 +15,11 @@ namespace Common
 
         string Name { get; set; }
 
-        string Operator { get; set; }
+        string OperatorName { get; set; }
 
-        string Logo { get; set; }
+        string OperatorLogo { get; set; }
+
+        string GameLogo { get; set; }
 
         DateTime GameStart { get; set; }
 
@@ -52,5 +54,7 @@ namespace Common
         GameDifficulty Difficulty { get; set; }
 
         string Description { get; set; }
+
+        string Prizes { get; set; }
     }
 }
