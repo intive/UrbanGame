@@ -7,7 +7,7 @@ namespace Common
 {
     public enum GameType
     {
-        HighestScore,
-        CompleteFirst
+        Quiz,
+        Race
     }
 }

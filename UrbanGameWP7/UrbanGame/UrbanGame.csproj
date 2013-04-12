@@ -159,6 +159,7 @@
     <EmbeddedResource Include="Localization\AppResources.pl-PL.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.pl-PL.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Localization\AppResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -123,9 +123,6 @@
   <data name="Completed" xml:space="preserve">
     <value>zakończono</value>
   </data>
-  <data name="CompleteFirstGameTypeCompleteFiGameTypeCompleteFirst" xml:space="preserve">
-    <value>ukończ zadania jako pierwszy</value>
-  </data>
   <data name="Day" xml:space="preserve">
     <value>dzień</value>
   </data>
@@ -144,7 +141,10 @@
   <data name="GameStart" xml:space="preserve">
     <value>rozpoczęcie:</value>
   </data>
-  <data name="GameTypeHighestScore" xml:space="preserve">
+  <data name="GameTypeRace" xml:space="preserve">
+    <value>ukończ zadania jako pierwszy</value>
+  </data>
+  <data name="GameTypeQuiz" xml:space="preserve">
     <value>zdobądź jak najwięcej punktów</value>
   </data>
   <data name="Hard" xml:space="preserve">

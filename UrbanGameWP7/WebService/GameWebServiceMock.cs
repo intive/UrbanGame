@@ -166,9 +166,9 @@ namespace WebService
         {
             return null;
             //return new IGame[] {
-            //    new Game(){Name = "M For The Mission", GameType = GameType.CompleteFirst, GameState = GameState.Joined, Id = 1, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(2).AddHours(13), Rank = 4},
-            //new Game(){Name = "Thanks For All That Fish", GameType = GameType.HighestScore, GameState = GameState.Joined, Id = 2, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(5), Rank = null},
-            //new Game(){Name = "Pontifex", GameType = GameType.CompleteFirst, GameState = GameState.Joined, Id = 3, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(8), Rank = 8}};
+            //    new Game(){Name = "M For The Mission", GameType = GameType.Race, GameState = GameState.Joined, Id = 1, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(2).AddHours(13), Rank = 4},
+            //new Game(){Name = "Thanks For All That Fish", GameType = GameType.Quiz, GameState = GameState.Joined, Id = 2, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(5), Rank = null},
+            //new Game(){Name = "Pontifex", GameType = GameType.Race, GameState = GameState.Joined, Id = 3, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(8), Rank = 8}};
         }
         #endregion
 
@@ -177,11 +177,11 @@ namespace WebService
         {
             return null;
             //return new IGame[] {
-            //    new Game(){Name = "Hydromystery", GameType = GameType.HighestScore, Operator = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 4, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None, Difficulty = GameDifficulty.Easy, Description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010."},
-            //new Game(){Name = "North & South", GameType = GameType.CompleteFirst, Operator = "Infogrames", NumberOfPlayers = 23, Id = 5, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(12), GameState = GameState.None},
-            //new Game(){Name = "Ultimate Quest", GameType = GameType.HighestScore,  Operator = "JCVD", NumberOfPlayers = 23,Id = 6, Logo = "/ApplicationIcon.png",  GameEnd = DateTime.Now.AddDays(10), GameState = GameState.None},
-            //new Game(){Name = "Galaxy Quest", GameType = GameType.CompleteFirst,  Operator = "NSEA", NumberOfPlayers = 23,Id = 7, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameState = GameState.None},
-            //new Game(){Name = "The Quest for NEETs", GameType = GameType.CompleteFirst,  Operator = "Ron Jeremy", NumberOfPlayers = 23,Id = 8, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8), GameState = GameState.None}};
+            //    new Game(){Name = "Hydromystery", GameType = GameType.Quiz, Operator = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 4, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None, Difficulty = GameDifficulty.Easy, Description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010."},
+            //new Game(){Name = "North & South", GameType = GameType.Race, Operator = "Infogrames", NumberOfPlayers = 23, Id = 5, Logo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(12), GameState = GameState.None},
+            //new Game(){Name = "Ultimate Quest", GameType = GameType.Quiz,  Operator = "JCVD", NumberOfPlayers = 23,Id = 6, Logo = "/ApplicationIcon.png",  GameEnd = DateTime.Now.AddDays(10), GameState = GameState.None},
+            //new Game(){Name = "Galaxy Quest", GameType = GameType.Race,  Operator = "NSEA", NumberOfPlayers = 23,Id = 7, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameState = GameState.None},
+            //new Game(){Name = "The Quest for NEETs", GameType = GameType.Race,  Operator = "Ron Jeremy", NumberOfPlayers = 23,Id = 8, Logo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8), GameState = GameState.None}};
         }
         #endregion
 
@@ -190,8 +190,8 @@ namespace WebService
         {
             return null;
             //return new IGame[] {
-            //    new Game(){Name = "Wilqu!", GameType = GameType.HighestScore, Id = 9, Logo = "/ApplicationIcon.png", GameState = GameState.Ended, Rank = 4},
-            //new Game(){Name = "Torghal", GameType = GameType.CompleteFirst, Id = 10, Logo = "/ApplicationIcon.png", GameState = GameState.Withdraw, Rank = null}};
+            //    new Game(){Name = "Wilqu!", GameType = GameType.Quiz, Id = 9, Logo = "/ApplicationIcon.png", GameState = GameState.Ended, Rank = 4},
+            //new Game(){Name = "Torghal", GameType = GameType.Race, Id = 10, Logo = "/ApplicationIcon.png", GameState = GameState.Withdraw, Rank = null}};
         }
         #endregion
     }

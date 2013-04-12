@@ -14,8 +14,8 @@ namespace UrbanGame.Converters
         {         
             switch ((GameType)value)
             {
-                case GameType.HighestScore: return AppResources.GameTypeHighestScore;
-                case GameType.CompleteFirst: return AppResources.GameTypeCompleteFirst;
+                case GameType.Quiz: return AppResources.GameTypeQuiz;
+                case GameType.Race: return AppResources.GameTypeRace;
                 default: return "";
             }
         }
