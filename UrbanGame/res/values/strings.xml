@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">UrbanGameMock</string>
+
+    <!-- UrbanGameMockActivity -->
+    <string name="button_games">Games</string>
+    <string name="button_tasks">Tasks</string>
+
+    <!-- GamesListActivity (StartActivity) -->
+    <string name="label_tasks">Tasks:</string>
+    <string name="label_points">Points:</string>
+    <string name="label_timeLeft">Time left:</string>
+    <string name="label_joined">Joined</string>
+    <string name="label_notJoined">Not joined</string>
+    <string name="label_freeSlots">Free slots:</string>
+    <string name="label_players">Players:</string>
+    <string name="label_daysLeft">Days left:</string>
+    <string name="label_hoursLeft">Hours left:</string>
+    <string name="label_minutesLeft">Minutes left:</string>
+
+    <!-- ActionBar -->
+    <string name="menu_search_hint">Filter games</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_feedback">Send feedback</string>
+    <string name="menu_login">Login</string>
+    <string name="menu_messages">Messages</string>
+    <string name="menu_more">More</string>
+    <string name="menu_alert">Alert</string>
+
+    <!-- GamesDetailsActivity -->
+    <string name="label_winners">Winners:</string>
+    <string name="label_start">Start:</string>
+    <string name="label_end">End:</string>
+    <string name="label_difficulty">Difficulty:</string>
+    <string name="button_leave">Leave</string>
+    <string name="button_join">Join</string>
+    <string name="header_prizes">Prizes</string>
+    <string name="header_description">Description</string>
+    <string name="header_details">Details</string>
+
+    <!-- ActiveGameActivity -->
+    <string name="tab_game_gameInfo">Game info</string>
+    <string name="tab_game_tasks">Tasks</string>
+    <string name="tab_game_ranking">Ranking</string>
+
+    <!-- ActiveTaskActivity -->
+    <string name="tab_task_description">Description</string>
+    <string name="tab_task_answer">Answer</string>
+
+    <!-- Content descriptions -->
+    <string name="contentDescription_gameLogo">Game logo</string>
+    <string name="contentDescription_operatorLogo">Operator logo</string>
+    <string name="contentDescription_prize">Prize</string>
+
+</resources>

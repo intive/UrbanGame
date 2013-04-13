@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/view_margin"
+    tools:ignore="HardcodedText" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutWrapperBasic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/ImageViewGameLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/view_margin"
+            android:contentDescription="@string/contentDescription_gameLogo"
+            android:src="@drawable/ic_launcher_big" />
+
+        <TextView
+            android:id="@+id/textViewGameName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ImageViewGameLogo"
+            android:text="Krasnale Wrocławskie"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewOperatorLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageViewOperatorLogo"
+            android:layout_toRightOf="@+id/ImageViewGameLogo"
+            android:text="http://www.blstream.com/" />
+
+        <ImageView
+            android:id="@+id/imageViewGameLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/contentDescription_prize"
+            android:src="@drawable/mock_prize" />
+
+        <TextView
+            android:id="@+id/textViewOperatorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewGameName"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/imageViewOperatorLogo"
+            android:text="Operator" />
+
+        <ImageView
+            android:id="@+id/imageViewOperatorLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewGameName"
+            android:layout_marginBottom="@dimen/view_margin"
+            android:layout_marginRight="@dimen/view_margin"
+            android:layout_marginTop="@dimen/view_margin"
+            android:layout_toRightOf="@+id/ImageViewGameLogo"
+            android:contentDescription="@string/contentDescription_operatorLogo"
+            android:src="@drawable/mock_logo_operator" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutWrapperStats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayoutWrapperBasic" >
+
+        <TextView
+            android:id="@+id/textViewTasksItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/view_margin"
+            android:text="@string/label_tasks" />
+
+        <TextView
+            android:id="@+id/textViewNumberOfCompletedTasks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewTasksItem"
+            android:layout_toRightOf="@+id/textViewTasksItem"
+            android:text="4" />
+
+        <TextView
+            android:id="@+id/textViewDivider1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewTasksItem"
+            android:layout_toRightOf="@+id/textViewNumberOfCompletedTasks"
+            android:text="/" />
+
+        <TextView
+            android:id="@+id/textViewNumberOfTotalTasks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewTasksItem"
+            android:layout_toRightOf="@+id/textViewDivider1"
+            android:text="20" />
+
+        <TextView
+            android:id="@+id/textViewPointsItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewTasksItem"
+            android:layout_marginRight="@dimen/view_margin"
+            android:text="@string/label_points" />
+
+        <TextView
+            android:id="@+id/textViewNumberOfPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewPointsItem"
+            android:layout_toRightOf="@+id/textViewPointsItem"
+            android:text="25" />
+
+        <TextView
+            android:id="@+id/textViewDivider2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewPointsItem"
+            android:layout_toRightOf="@+id/textViewNumberOfPoints"
+            android:text="/" />
+
+        <TextView
+            android:id="@+id/textViewNumberOfTotalPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewPointsItem"
+            android:layout_toRightOf="@+id/textViewDivider2"
+            android:text="50" />
+
+        <TextView
+            android:id="@+id/textViewFreeSlots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewPointsItem"
+            android:layout_marginRight="@dimen/view_margin"
+            android:text="@string/label_freeSlots"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/textViewNumberOfFreeSlots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewFreeSlots"
+            android:layout_toRightOf="@+id/textViewFreeSlots"
+            android:text="5"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/textViewPlayers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewFreeSlots"
+            android:layout_marginRight="@dimen/view_margin"
+            android:text="@string/label_players" />
+
+        <TextView
+            android:id="@+id/textViewNumberOfPlayers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewPlayers"
+            android:layout_toRightOf="@+id/textViewPlayers"
+            android:text="5" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutWrapperTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayoutWrapperBasic"
+        android:layout_toRightOf="@+id/relativeLayoutWrapperStats" >
+
+        <TextView
+            android:id="@+id/textViewDaysLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewNumberOfDaysLeft"
+            android:layout_marginRight="@dimen/view_margin"
+            android:layout_toLeftOf="@+id/textViewNumberOfDaysLeft"
+            android:text="@string/label_daysLeft" />
+
+        <TextView
+            android:id="@+id/textViewNumberOfDaysLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="333" />
+
+        <TextView
+            android:id="@+id/textViewHoursLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewNumberOfHoursLeft"
+            android:layout_marginRight="@dimen/view_margin"
+            android:layout_toLeftOf="@+id/textViewNumberOfHoursLeft"
+            android:text="@string/label_hoursLeft" />
+
+        <TextView
+            android:id="@+id/textViewNumberOfHoursLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textViewNumberOfDaysLeft"
+            android:text="444" />
+
+        <TextView
+            android:id="@+id/textViewMinutesLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewNumberOfMinutesLeft"
+            android:layout_marginRight="@dimen/view_margin"
+            android:layout_toLeftOf="@+id/textViewNumberOfMinutesLeft"
+            android:text="@string/label_minutesLeft" />
+
+        <TextView
+            android:id="@+id/textViewNumberOfMinutesLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textViewNumberOfHoursLeft"
+            android:text="555" />
+
+        <TextView
+            android:id="@+id/textViewJoinedItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textViewNumberOfMinutesLeft"
+            android:text="@string/label_joined"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </RelativeLayout>
+
+</RelativeLayout>

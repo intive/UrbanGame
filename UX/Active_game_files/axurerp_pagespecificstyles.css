@@ -1,0 +1,7652 @@
+﻿body {
+    margin: 0px;
+}
+
+div {
+    background-repeat: no-repeat;
+}
+
+.raw_image {
+    width: 100%;
+    height: 100%;
+}
+
+.preload {
+    display: none;
+}
+#main_container {
+}
+
+.form_sketch {
+    border-color: transparent;
+    background-color: transparent;
+}
+
+.u0 {
+    position:absolute;
+    left:478px;
+    top:404px;
+    width:280px;
+    height:120px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u1_normal {
+    background-image: url('../Active_game_files/u1_normal.png');
+}
+
+.u1_container {
+    position:absolute;
+    left:512px;
+    top:399px;
+    width:32px;
+    height:32px;
+}
+
+#u1_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:32px;
+    height:32px;
+}
+
+.u2 {
+    position:absolute;
+    left:2px;
+    top:8px;
+    width:28px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u3_normal {
+    background-image: url('../Active_game_files/u3_normal.png');
+}
+
+.u3_container {
+    position:absolute;
+    left:531px;
+    top:217px;
+    width:32px;
+    height:32px;
+}
+
+#u3_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:32px;
+    height:32px;
+}
+
+.u4 {
+    position:absolute;
+    left:2px;
+    top:8px;
+    width:28px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u5_normal {
+    background-image: url('../Active_game_files/u5_normal.png');
+}
+
+.u5_container {
+    position:absolute;
+    left:557px;
+    top:217px;
+    width:32px;
+    height:32px;
+}
+
+#u5_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:32px;
+    height:32px;
+}
+
+.u6 {
+    position:absolute;
+    left:2px;
+    top:8px;
+    width:28px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u7 {
+    position:absolute;
+    left:478px;
+    top:222px;
+    width:280px;
+    height:48px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u8 {
+    position:absolute;
+    left:478px;
+    top:126px;
+    width:280px;
+    height:72px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u9 {
+    position:absolute;
+    left:478px;
+    top:550px;
+    width:280px;
+    height:144px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u10_normal {
+    background-image: url('../Active_game_files/u10_normal.png');
+}
+
+.u10_container {
+    position:absolute;
+    left:21px;
+    top:163px;
+    width:384px;
+    height:523px;
+}
+
+#u10_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:529px;
+}
+
+.u11 {
+    position:absolute;
+    left:2px;
+    top:254px;
+    width:380px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u12_normal {
+    background-image: url('../Left_Chrome__Main__files/u0_normal.png');
+}
+
+.u12_container {
+    position:absolute;
+    left:21px;
+    top:119px;
+    width:384px;
+    height:566px;
+}
+
+#u12_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:572px;
+}
+
+.u13 {
+    position:absolute;
+    left:2px;
+    top:275px;
+    width:380px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u14 {
+    position:absolute;
+    left:21px;
+    top:119px;
+    width:385px;
+    height:569px;
+    overflow:hidden;
+}
+
+#pd0u14 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:385px;
+    height:569px;
+    
+}
+
+.u15_normal {
+    background-image: url('../Left_Chrome__Main__files/u3_normal.png');
+}
+
+.u15_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:384px;
+    height:568px;
+}
+
+#u15_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:574px;
+}
+
+.u16 {
+    position:absolute;
+    left:2px;
+    top:276px;
+    width:380px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u17_container {
+    position:absolute;
+    left:128px;
+    top:220px;
+    width:128px;
+    height:128px;
+}
+
+#u17_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:128px;
+    height:128px;
+}
+
+.u18 {
+    position:absolute;
+    left:2px;
+    top:56px;
+    width:124px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u20_normal {
+    background-image: url('../Left_Chrome__Main__files/u8_normal.png');
+}
+
+.u20_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:428px;
+    height:830px;
+}
+
+#u20_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:428px;
+    height:830px;
+}
+
+.u21 {
+    position:absolute;
+    left:2px;
+    top:407px;
+    width:424px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u22_normal {
+    background-image: url('../Left_Chrome__Main__files/u10_normal.png');
+}
+
+.u22_container {
+    position:absolute;
+    left:21px;
+    top:687px;
+    width:385px;
+    height:48px;
+}
+
+#u22_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:385px;
+    height:48px;
+}
+
+.u23 {
+    position:absolute;
+    left:2px;
+    top:16px;
+    width:381px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u24 {
+    position:absolute;
+    left:21px;
+    top:474px;
+    width:385px;
+    height:214px;
+    overflow:hidden;
+}
+
+#pd0u24 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:385px;
+    height:214px;
+    
+}
+
+.u25_normal {
+    background-image: url('../Left_Chrome__Main__files/u13_normal.png');
+}
+
+.u25_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:384px;
+    height:213px;
+}
+
+#u25_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:219px;
+}
+
+.u26 {
+    position:absolute;
+    left:2px;
+    top:98px;
+    width:380px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u27_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u27_container {
+    position:absolute;
+    left:10px;
+    top:9px;
+    width:29px;
+    height:37px;
+}
+
+#u27_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u28 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u29_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u29_container {
+    position:absolute;
+    left:47px;
+    top:9px;
+    width:29px;
+    height:37px;
+}
+
+#u29_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u30 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u31_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u31_container {
+    position:absolute;
+    left:85px;
+    top:9px;
+    width:29px;
+    height:37px;
+}
+
+#u31_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u32 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u33_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u33_container {
+    position:absolute;
+    left:121px;
+    top:9px;
+    width:29px;
+    height:37px;
+}
+
+#u33_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u34 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u35_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u35_container {
+    position:absolute;
+    left:159px;
+    top:9px;
+    width:29px;
+    height:37px;
+}
+
+#u35_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u36 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u37_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u37_container {
+    position:absolute;
+    left:196px;
+    top:9px;
+    width:29px;
+    height:37px;
+}
+
+#u37_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u38 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u39_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u39_container {
+    position:absolute;
+    left:233px;
+    top:9px;
+    width:29px;
+    height:37px;
+}
+
+#u39_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u40 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u41_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u41_container {
+    position:absolute;
+    left:271px;
+    top:9px;
+    width:29px;
+    height:37px;
+}
+
+#u41_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u42 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u43_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u43_container {
+    position:absolute;
+    left:308px;
+    top:9px;
+    width:29px;
+    height:37px;
+}
+
+#u43_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u44 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u45_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u45_container {
+    position:absolute;
+    left:345px;
+    top:9px;
+    width:29px;
+    height:37px;
+}
+
+#u45_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u46 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u47_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u47_container {
+    position:absolute;
+    left:29px;
+    top:59px;
+    width:29px;
+    height:37px;
+}
+
+#u47_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u48 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u49_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u49_container {
+    position:absolute;
+    left:66px;
+    top:59px;
+    width:29px;
+    height:37px;
+}
+
+#u49_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u50 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u51_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u51_container {
+    position:absolute;
+    left:102px;
+    top:59px;
+    width:29px;
+    height:37px;
+}
+
+#u51_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u52 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u53_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u53_container {
+    position:absolute;
+    left:140px;
+    top:59px;
+    width:29px;
+    height:37px;
+}
+
+#u53_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u54 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u55_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u55_container {
+    position:absolute;
+    left:177px;
+    top:59px;
+    width:29px;
+    height:37px;
+}
+
+#u55_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u56 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u57_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u57_container {
+    position:absolute;
+    left:215px;
+    top:59px;
+    width:29px;
+    height:37px;
+}
+
+#u57_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u58 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u59_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u59_container {
+    position:absolute;
+    left:252px;
+    top:59px;
+    width:29px;
+    height:37px;
+}
+
+#u59_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u60 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u61_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u61_container {
+    position:absolute;
+    left:289px;
+    top:59px;
+    width:29px;
+    height:37px;
+}
+
+#u61_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u62 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u63_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u63_container {
+    position:absolute;
+    left:326px;
+    top:59px;
+    width:29px;
+    height:37px;
+}
+
+#u63_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u64 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u65_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u65_container {
+    position:absolute;
+    left:66px;
+    top:110px;
+    width:29px;
+    height:37px;
+}
+
+#u65_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u66 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u67_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u67_container {
+    position:absolute;
+    left:102px;
+    top:110px;
+    width:29px;
+    height:37px;
+}
+
+#u67_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u68 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u69_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u69_container {
+    position:absolute;
+    left:140px;
+    top:110px;
+    width:29px;
+    height:37px;
+}
+
+#u69_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u70 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u71_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u71_container {
+    position:absolute;
+    left:177px;
+    top:110px;
+    width:29px;
+    height:37px;
+}
+
+#u71_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u72 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u73_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u73_container {
+    position:absolute;
+    left:215px;
+    top:110px;
+    width:29px;
+    height:37px;
+}
+
+#u73_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u74 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u75_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u75_container {
+    position:absolute;
+    left:252px;
+    top:110px;
+    width:29px;
+    height:37px;
+}
+
+#u75_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u76 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u77_normal {
+    background-image: url('../Left_Chrome__Main__files/u15_normal.png');
+}
+
+.u77_container {
+    position:absolute;
+    left:289px;
+    top:110px;
+    width:29px;
+    height:37px;
+}
+
+#u77_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u78 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u79_normal {
+    background-image: url('../Left_Chrome__Main__files/u67_normal.png');
+}
+
+.u79_container {
+    position:absolute;
+    left:10px;
+    top:110px;
+    width:45px;
+    height:37px;
+}
+
+#u79_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:51px;
+    height:43px;
+}
+
+.u80 {
+    position:absolute;
+    left:2px;
+    top:10px;
+    width:41px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u81_normal {
+    background-image: url('../Left_Chrome__Main__files/u69_normal.png');
+}
+
+.u81_container {
+    position:absolute;
+    left:22px;
+    top:119px;
+    width:22px;
+    height:13px;
+}
+
+#u81_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:28px;
+    height:19px;
+}
+
+.u82 {
+    position:absolute;
+    left:2px;
+    top:-2px;
+    width:18px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u83_normal {
+    background-image: url('../Left_Chrome__Main__files/u71_normal.png');
+}
+
+.u83_container {
+    position:absolute;
+    left:28px;
+    top:131px;
+    width:9px;
+    height:7px;
+}
+
+#u83_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:15px;
+    height:13px;
+}
+
+.u84 {
+    position:absolute;
+    left:2px;
+    top:-4px;
+    width:5px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u85_normal {
+    background-image: url('../Left_Chrome__Main__files/u67_normal.png');
+}
+
+.u85_container {
+    position:absolute;
+    left:326px;
+    top:110px;
+    width:45px;
+    height:37px;
+}
+
+#u85_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:51px;
+    height:43px;
+}
+
+.u86 {
+    position:absolute;
+    left:2px;
+    top:10px;
+    width:41px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u87_normal {
+    background-image: url('../Left_Chrome__Main__files/u75_normal.png');
+}
+
+.u87_container {
+    position:absolute;
+    left:335px;
+    top:120px;
+    width:27px;
+    height:16px;
+}
+
+#u87_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:33px;
+    height:22px;
+}
+
+.u88 {
+    position:absolute;
+    left:7px;
+    top:0px;
+    width:18px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u89_normal {
+    background-image: url('../Left_Chrome__Main__files/u67_normal.png');
+}
+
+.u89_container {
+    position:absolute;
+    left:326px;
+    top:162px;
+    width:45px;
+    height:37px;
+}
+
+#u89_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:51px;
+    height:43px;
+}
+
+.u90 {
+    position:absolute;
+    left:2px;
+    top:10px;
+    width:41px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u91_normal {
+    background-image: url('../Left_Chrome__Main__files/u79_normal.png');
+}
+
+.u91_container {
+    position:absolute;
+    left:335px;
+    top:174px;
+    width:11px;
+    height:14px;
+}
+
+#u91_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:17px;
+    height:20px;
+}
+
+.u92 {
+    position:absolute;
+    left:7px;
+    top:-1px;
+    width:2px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u93_normal {
+    background-image: url('../Left_Chrome__Main__files/u81_normal.png');
+}
+
+.u93_container {
+    position:absolute;
+    left:102px;
+    top:162px;
+    width:177px;
+    height:37px;
+}
+
+#u93_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:183px;
+    height:43px;
+}
+
+.u94 {
+    position:absolute;
+    left:2px;
+    top:10px;
+    width:173px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u95_normal {
+    background-image: url('../Left_Chrome__Main__files/u83_normal.png');
+}
+
+.u95_container {
+    position:absolute;
+    left:289px;
+    top:162px;
+    width:29px;
+    height:37px;
+}
+
+#u95_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u96 {
+    position:absolute;
+    left:2px;
+    top:6px;
+    width:25px;
+    height:24px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u97_line {
+    background-image: url('../Left_Chrome__Main__files/u85_line.png');
+}
+
+.u97_line {
+    position:absolute;
+    left:0px;
+    top:3px;
+    width:16px;
+    height:5px;
+}
+
+.u97 {
+    position:absolute;
+    left:346px;
+    top:176px;
+    width:16px;
+    height:10px;
+    
+}
+
+.u98_line {
+    background-image: url('../Left_Chrome__Main__files/u86_line.png');
+}
+
+.u98_line {
+    position:absolute;
+    left:3px;
+    top:0px;
+    width:5px;
+    height:6px;
+}
+
+.u98 {
+    position:absolute;
+    left:356px;
+    top:174px;
+    width:10px;
+    height:6px;
+    
+}
+
+.u99_normal {
+    background-image: url('../Left_Chrome__Main__files/u83_normal.png');
+}
+
+.u99_container {
+    position:absolute;
+    left:66px;
+    top:162px;
+    width:29px;
+    height:37px;
+}
+
+#u99_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:35px;
+    height:43px;
+}
+
+.u100 {
+    position:absolute;
+    left:2px;
+    top:10px;
+    width:25px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u101_normal {
+    background-image: url('../Left_Chrome__Main__files/u67_normal.png');
+}
+
+.u101_container {
+    position:absolute;
+    left:10px;
+    top:162px;
+    width:45px;
+    height:37px;
+}
+
+#u101_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:51px;
+    height:43px;
+}
+
+.u102 {
+    position:absolute;
+    left:2px;
+    top:10px;
+    width:41px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u103_normal {
+    background-image: url('../Left_Chrome__Main__files/u91_normal.png');
+}
+
+.u103_container {
+    position:absolute;
+    left:73px;
+    top:173px;
+    width:14px;
+    height:14px;
+}
+
+#u103_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:20px;
+    height:20px;
+}
+
+.u104 {
+    position:absolute;
+    left:2px;
+    top:-1px;
+    width:10px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u105_normal {
+    background-image: url('../Left_Chrome__Main__files/u93_normal.png');
+}
+
+.u105_container {
+    position:absolute;
+    left:72px;
+    top:170px;
+    width:15px;
+    height:10px;
+}
+
+#u105_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:21px;
+    height:16px;
+}
+
+.u106 {
+    position:absolute;
+    left:2px;
+    top:-3px;
+    width:11px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u107_normal {
+    background-image: url('../Left_Chrome__Main__files/u95_normal.png');
+}
+
+.u107_container {
+    position:absolute;
+    left:77px;
+    top:169px;
+    width:6px;
+    height:14px;
+}
+
+#u107_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:12px;
+    height:20px;
+}
+
+.u108 {
+    position:absolute;
+    left:2px;
+    top:-1px;
+    width:2px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u109_line {
+    background-image: url('../Left_Chrome__Main__files/u97_line.png');
+}
+
+.u109_line {
+    position:absolute;
+    left:4px;
+    top:0px;
+    width:3px;
+    height:5px;
+}
+
+.u109 {
+    position:absolute;
+    left:76px;
+    top:187px;
+    width:10px;
+    height:5px;
+    
+}
+
+#u110 {
+    position:absolute;
+    left:10px;
+    top:110px;
+    width:45px;
+    height:35px;
+    ;
+    ;
+    ;
+    background-image: url('../resources/images/transparent.gif');
+    overflow:hidden;
+}
+
+#u111 {
+    position:absolute;
+    left:69px;
+    top:690px;
+    width:67px;
+    height:43px;
+    ;
+    ;
+    ;
+    background-image: url('../resources/images/transparent.gif');
+    overflow:hidden;
+}
+
+#u112 {
+    position:absolute;
+    left:179px;
+    top:690px;
+    width:67px;
+    height:43px;
+    ;
+    ;
+    ;
+    background-image: url('../resources/images/transparent.gif');
+    overflow:hidden;
+}
+
+#u113 {
+    position:absolute;
+    left:292px;
+    top:690px;
+    width:67px;
+    height:43px;
+    ;
+    ;
+    ;
+    background-image: url('../resources/images/transparent.gif');
+    overflow:hidden;
+}
+
+.u114_normal {
+    background-image: url('../Left_Chrome__Main__files/u102_normal.png');
+}
+
+.u114_container {
+    position:absolute;
+    left:21px;
+    top:93px;
+    width:384px;
+    height:26px;
+}
+
+#u114_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:32px;
+}
+
+.u115 {
+    position:absolute;
+    left:5px;
+    top:5px;
+    width:374px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u116_normal {
+    background-image: url('../Left_Chrome__Main__files/u104_normal.png');
+}
+
+.u116_container {
+    position:absolute;
+    left:323px;
+    top:95px;
+    width:36px;
+    height:22px;
+}
+
+#u116_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:36px;
+    height:22px;
+}
+
+.u117 {
+    position:absolute;
+    left:2px;
+    top:3px;
+    width:32px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u118 {
+    position:absolute;
+    left:21px;
+    top:430px;
+    width:385px;
+    height:45px;
+    overflow:hidden;
+}
+
+#pd0u118 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:385px;
+    height:45px;
+    
+}
+
+.u119_normal {
+    background-image: url('../Left_Chrome__Main__files/u107_normal.png');
+}
+
+.u119_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:192px;
+    height:44px;
+}
+
+#u119_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:198px;
+    height:50px;
+}
+
+.u120 {
+    position:absolute;
+    left:2px;
+    top:11px;
+    width:188px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u121_normal {
+    background-image: url('../Left_Chrome__Main__files/u109_normal.png');
+}
+
+.u121_container {
+    position:absolute;
+    left:192px;
+    top:0px;
+    width:192px;
+    height:44px;
+}
+
+#u121_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:198px;
+    height:50px;
+}
+
+.u122 {
+    position:absolute;
+    left:2px;
+    top:11px;
+    width:188px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u123 {
+    position:absolute;
+    left:69px;
+    top:686px;
+    width:68px;
+    height:51px;
+    overflow:hidden;
+}
+
+#pd0u123 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:68px;
+    height:51px;
+    
+}
+
+#u124 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:67px;
+    height:50px;
+    ;
+    ;
+    ;
+    background-image: url('../resources/images/transparent.gif');
+    overflow:hidden;
+}
+
+#u126 {
+    position:absolute;
+    left:21px;
+    top:119px;
+    width:385px;
+    height:568px;
+    overflow:hidden;
+}
+
+#pd0u126 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:385px;
+    height:568px;
+    
+}
+
+.u127_normal {
+    background-image: url('../Active_game_files/u127_normal.png');
+}
+
+.u127_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:384px;
+    height:567px;
+}
+
+#u127_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:573px;
+}
+
+.u128 {
+    position:absolute;
+    left:2px;
+    top:276px;
+    width:380px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u129_normal {
+    background-image: url('../Active_game_files/u129_normal.png');
+}
+
+.u129_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:384px;
+    height:27px;
+}
+
+#u129_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:33px;
+}
+
+.u130 {
+    position:absolute;
+    left:8px;
+    top:6px;
+    width:368px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u131_normal {
+    background-image: url('../Active_game_files/u131_normal.png');
+}
+
+.u131_container {
+    position:absolute;
+    left:0px;
+    top:26px;
+    width:62px;
+    height:62px;
+}
+
+#u131_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:68px;
+    height:68px;
+}
+
+.u132 {
+    position:absolute;
+    left:2px;
+    top:23px;
+    width:58px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u133_normal {
+    background-image: url('../Active_game_files/u133_normal.png');
+}
+
+.u133_container {
+    position:absolute;
+    left:62px;
+    top:26px;
+    width:322px;
+    height:62px;
+}
+
+#u133_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:328px;
+    height:68px;
+}
+
+.u134 {
+    position:absolute;
+    left:2px;
+    top:23px;
+    width:318px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u135_normal {
+    background-image: url('../Active_game_files/u135_normal.png');
+}
+
+.u135_container {
+    position:absolute;
+    left:9px;
+    top:35px;
+    width:44px;
+    height:44px;
+}
+
+#u135_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:50px;
+    height:50px;
+}
+
+.u136 {
+    position:absolute;
+    left:2px;
+    top:1px;
+    width:40px;
+    height:42px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u137 {
+    position:absolute;
+    left:70px;
+    top:37px;
+    width:230px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u138 {
+    position:absolute;
+    left:70px;
+    top:59px;
+    width:230px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u139_normal {
+    background-image: url('../Active_game_files/u139_normal.png');
+}
+
+.u139_container {
+    position:absolute;
+    left:354px;
+    top:61px;
+    width:14px;
+    height:14px;
+}
+
+#u139_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:20px;
+    height:20px;
+}
+
+.u140 {
+    position:absolute;
+    left:2px;
+    top:-1px;
+    width:10px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u141 {
+    position:absolute;
+    left:310px;
+    top:59px;
+    width:40px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u142 {
+    position:absolute;
+    left:292px;
+    top:37px;
+    width:76px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u143_normal {
+    background-image: url('../Active_game_files/u143_normal.png');
+}
+
+.u143_container {
+    position:absolute;
+    left:0px;
+    top:549px;
+    width:384px;
+    height:18px;
+}
+
+#u143_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:24px;
+}
+
+.u144 {
+    position:absolute;
+    left:8px;
+    top:1px;
+    width:368px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u145_normal {
+    background-image: url('../Active_game_files/u145_normal.png');
+}
+
+.u145_container {
+    position:absolute;
+    left:176px;
+    top:555px;
+    width:5px;
+    height:5px;
+}
+
+#u145_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:11px;
+    height:11px;
+}
+
+.u146 {
+    position:absolute;
+    left:8px;
+    top:-6px;
+    width:1px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u147_normal {
+    background-image: url('../Active_game_files/u145_normal.png');
+}
+
+.u147_container {
+    position:absolute;
+    left:190px;
+    top:555px;
+    width:5px;
+    height:5px;
+}
+
+#u147_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:11px;
+    height:11px;
+}
+
+.u148 {
+    position:absolute;
+    left:8px;
+    top:-6px;
+    width:1px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u149_normal {
+    background-image: url('../Active_game_files/u145_normal.png');
+}
+
+.u149_container {
+    position:absolute;
+    left:203px;
+    top:555px;
+    width:5px;
+    height:5px;
+}
+
+#u149_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:11px;
+    height:11px;
+}
+
+.u150 {
+    position:absolute;
+    left:8px;
+    top:-6px;
+    width:1px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u151 {
+    position:absolute;
+    left:0px;
+    top:549px;
+    width:384px;
+    height:18px;
+    ;
+    ;
+    ;
+    background-image: url('../resources/images/transparent.gif');
+    overflow:hidden;
+}
+
+#u152 {
+    position:absolute;
+    left:0px;
+    top:26px;
+    width:384px;
+    height:62px;
+    ;
+    ;
+    ;
+    background-image: url('../resources/images/transparent.gif');
+    overflow:hidden;
+}
+
+.u153_normal {
+    background-image: url('../Active_game_files/u153_normal.png');
+}
+
+.u153_container {
+    position:absolute;
+    left:28px;
+    top:97px;
+    width:18px;
+    height:18px;
+}
+
+#u153_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:24px;
+    height:24px;
+}
+
+.u154 {
+    position:absolute;
+    left:2px;
+    top:1px;
+    width:14px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u155 {
+    position:absolute;
+    left:21px;
+    top:93px;
+    width:384px;
+    height:26px;
+    ;
+    ;
+    ;
+    background-image: url('../resources/images/transparent.gif');
+    overflow:hidden;
+}
+
+#u156 {
+    position:absolute;
+    left:21px;
+    top:119px;
+    width:385px;
+    height:45px;
+    overflow:hidden;
+}
+
+#pd1u156 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:385px;
+    height:45px;
+    
+}
+
+.u157_normal {
+    background-image: url('../Active_game_files/u157_normal.png');
+}
+
+.u157_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:384px;
+    height:44px;
+}
+
+#u157_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:50px;
+}
+
+.u158 {
+    position:absolute;
+    left:2px;
+    top:14px;
+    width:380px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u159_normal {
+    background-image: url('../Active_game_files/u159_normal.png');
+}
+
+.u159_container {
+    position:absolute;
+    left:0px;
+    top:40px;
+    width:384px;
+    height:4px;
+}
+
+#u159_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:10px;
+}
+
+.u160 {
+    position:absolute;
+    left:2px;
+    top:-6px;
+    width:380px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u161_line {
+    background-image: url('../Active_game_files/u161_line.png');
+}
+
+.u161_line {
+    position:absolute;
+    left:4px;
+    top:0px;
+    width:3px;
+    height:24px;
+}
+
+.u161 {
+    position:absolute;
+    left:50px;
+    top:8px;
+    width:10px;
+    height:24px;
+    
+}
+
+.u162_normal {
+    background-image: url('../Active_game_files/u162_normal.png');
+}
+
+.u162_container {
+    position:absolute;
+    left:8px;
+    top:5px;
+    width:32px;
+    height:32px;
+}
+
+#u162_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:32px;
+    height:32px;
+}
+
+.u163 {
+    position:absolute;
+    left:2px;
+    top:8px;
+    width:28px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u164_normal {
+    background-image: url('../Active_game_files/u164_normal.png');
+}
+
+.u164_container {
+    position:absolute;
+    left:340px;
+    top:5px;
+    width:32px;
+    height:32px;
+}
+
+#u164_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:32px;
+    height:32px;
+}
+
+.u165 {
+    position:absolute;
+    left:2px;
+    top:8px;
+    width:28px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u166_normal {
+    background-image: url('../Active_game_files/u166_normal.png');
+}
+
+.u166_container {
+    position:absolute;
+    left:240px;
+    top:5px;
+    width:32px;
+    height:32px;
+}
+
+#u166_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:32px;
+    height:32px;
+}
+
+.u167 {
+    position:absolute;
+    left:2px;
+    top:8px;
+    width:28px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u168_normal {
+    background-image: url('../Active_game_files/u168_normal.png');
+}
+
+.u168_container {
+    position:absolute;
+    left:290px;
+    top:5px;
+    width:32px;
+    height:32px;
+}
+
+#u168_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:32px;
+    height:32px;
+}
+
+.u169 {
+    position:absolute;
+    left:2px;
+    top:8px;
+    width:28px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#pd0u156 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:385px;
+    height:45px;
+    
+}
+
+.u170_normal {
+    background-image: url('../Active_game_files/u170_normal.png');
+}
+
+.u170_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:384px;
+    height:41px;
+}
+
+#u170_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:47px;
+}
+
+.u171 {
+    position:absolute;
+    left:2px;
+    top:12px;
+    width:380px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u172_normal {
+    background-image: url('../Active_game_files/u172_normal.png');
+}
+
+.u172_container {
+    position:absolute;
+    left:0px;
+    top:41px;
+    width:384px;
+    height:3px;
+}
+
+#u172_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:9px;
+}
+
+.u173 {
+    position:absolute;
+    left:2px;
+    top:-6px;
+    width:380px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u174_normal {
+    background-image: url('../Active_game_files/u174_normal.png');
+}
+
+.u174_container {
+    position:absolute;
+    left:24px;
+    top:6px;
+    width:30px;
+    height:30px;
+}
+
+#u174_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:36px;
+    height:36px;
+}
+
+.u175 {
+    position:absolute;
+    left:2px;
+    top:7px;
+    width:26px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u176 {
+    position:absolute;
+    left:70px;
+    top:12px;
+    width:169px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u177 {
+    position:absolute;
+    left:-5px;
+    top:5px;
+    width:33px;
+    height:33px;
+    overflow:hidden;
+}
+
+#pd0u177 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:33px;
+    height:33px;
+    
+}
+
+.u178_normal {
+    background-image: url('../Active_game_files/u178_normal.png');
+}
+
+.u178_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:32px;
+    height:32px;
+}
+
+#u178_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:32px;
+    height:32px;
+}
+
+.u179 {
+    position:absolute;
+    left:2px;
+    top:8px;
+    width:28px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u180_normal {
+    background-image: url('../Active_game_files/u180_normal.png');
+}
+
+.u180_container {
+    position:absolute;
+    left:360px;
+    top:9px;
+    width:6px;
+    height:6px;
+}
+
+#u180_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:12px;
+    height:12px;
+}
+
+.u181 {
+    position:absolute;
+    left:2px;
+    top:-5px;
+    width:2px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u182_normal {
+    background-image: url('../Active_game_files/u180_normal.png');
+}
+
+.u182_container {
+    position:absolute;
+    left:360px;
+    top:19px;
+    width:6px;
+    height:6px;
+}
+
+#u182_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:12px;
+    height:12px;
+}
+
+.u183 {
+    position:absolute;
+    left:2px;
+    top:-5px;
+    width:2px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u184_normal {
+    background-image: url('../Active_game_files/u180_normal.png');
+}
+
+.u184_container {
+    position:absolute;
+    left:360px;
+    top:29px;
+    width:6px;
+    height:6px;
+}
+
+#u184_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:12px;
+    height:12px;
+}
+
+.u185 {
+    position:absolute;
+    left:2px;
+    top:-5px;
+    width:2px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u186_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u186_container {
+    position:absolute;
+    left:360px;
+    top:9px;
+    width:6px;
+    height:26px;
+}
+
+#u186_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:12px;
+    height:32px;
+}
+
+.u187 {
+    position:absolute;
+    left:2px;
+    top:5px;
+    width:2px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u188_normal {
+    background-image: url('../Messages_icon_files/u188_normal.png');
+}
+
+.u188_container {
+    position:absolute;
+    left:298px;
+    top:6px;
+    width:32px;
+    height:32px;
+}
+
+#u188_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:32px;
+    height:32px;
+}
+
+.u189 {
+    position:absolute;
+    left:2px;
+    top:8px;
+    width:28px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u191 {
+    position:absolute;
+    left:94px;
+    top:433px;
+    width:312px;
+    height:211px;
+    overflow:hidden;
+}
+
+#pd0u191 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:312px;
+    height:211px;
+    
+}
+
+.u192_normal {
+    background-image: url('../Active_game_files/u192_normal.png');
+}
+
+.u192_container {
+    position:absolute;
+    left:0px;
+    top:10px;
+    width:10px;
+    height:200px;
+}
+
+#u192_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:16px;
+    height:206px;
+}
+
+.u193 {
+    position:absolute;
+    left:2px;
+    top:92px;
+    width:6px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u194_mouseDown {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_mouseDown.png');
+}
+
+.u194_disabled {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u194_normal {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u194_container {
+    position:absolute;
+    left:11px;
+    top:10px;
+    width:300px;
+    height:50px;
+}
+
+#u194_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:306px;
+    height:56px;
+}
+
+.u195 {
+    position:absolute;
+    left:20px;
+    top:14px;
+    width:260px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u196_mouseDown {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_mouseDown.png');
+}
+
+.u196_disabled {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u196_normal {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u196_container {
+    position:absolute;
+    left:11px;
+    top:60px;
+    width:300px;
+    height:50px;
+}
+
+#u196_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:306px;
+    height:56px;
+}
+
+.u197 {
+    position:absolute;
+    left:20px;
+    top:14px;
+    width:260px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u198_mouseDown {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_mouseDown.png');
+}
+
+.u198_disabled {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u198_normal {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u198_container {
+    position:absolute;
+    left:11px;
+    top:110px;
+    width:300px;
+    height:50px;
+}
+
+#u198_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:306px;
+    height:56px;
+}
+
+.u199 {
+    position:absolute;
+    left:20px;
+    top:14px;
+    width:260px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u200_mouseDown {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_mouseDown.png');
+}
+
+.u200_disabled {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u200_normal {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u200_container {
+    position:absolute;
+    left:11px;
+    top:160px;
+    width:300px;
+    height:50px;
+}
+
+#u200_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:306px;
+    height:56px;
+}
+
+.u201 {
+    position:absolute;
+    left:20px;
+    top:14px;
+    width:260px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u202_normal {
+    background-image: url('../Active_game_files/u202_normal.png');
+}
+
+.u202_container {
+    position:absolute;
+    left:11px;
+    top:0px;
+    width:300px;
+    height:10px;
+}
+
+#u202_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:306px;
+    height:16px;
+}
+
+.u203 {
+    position:absolute;
+    left:2px;
+    top:-3px;
+    width:296px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u204 {
+    position:absolute;
+    left:60px;
+    top:161px;
+    width:301px;
+    height:111px;
+    overflow:hidden;
+}
+
+#pd0u204 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:301px;
+    height:111px;
+    
+}
+
+.u205_normal {
+    background-image: url('../Active_game_files/u205_normal.png');
+}
+
+.u205_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:10px;
+    height:100px;
+}
+
+#u205_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:16px;
+    height:106px;
+}
+
+.u206 {
+    position:absolute;
+    left:2px;
+    top:42px;
+    width:6px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u207_normal {
+    background-image: url('../Active_game_files/u207_normal.png');
+}
+
+.u207_container {
+    position:absolute;
+    left:290px;
+    top:0px;
+    width:10px;
+    height:100px;
+}
+
+#u207_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:16px;
+    height:106px;
+}
+
+.u208 {
+    position:absolute;
+    left:2px;
+    top:42px;
+    width:6px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u209_normal {
+    background-image: url('../Active_game_files/u209_normal.png');
+}
+
+.u209_container {
+    position:absolute;
+    left:11px;
+    top:100px;
+    width:280px;
+    height:10px;
+}
+
+#u209_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:286px;
+    height:16px;
+}
+
+.u210 {
+    position:absolute;
+    left:2px;
+    top:-3px;
+    width:276px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u211_mouseDown {
+    background-image: url('../Active_game_files/Menu_Item_1_u211_mouseDown.png');
+}
+
+.u211_disabled {
+    background-image: url('../Active_game_files/Menu_Item_1_u211_disabled.png');
+}
+
+.u211_normal {
+    background-image: url('../Active_game_files/Menu_Item_1_u211_disabled.png');
+}
+
+.u211_container {
+    position:absolute;
+    left:11px;
+    top:0px;
+    width:279px;
+    height:50px;
+}
+
+#u211_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:285px;
+    height:56px;
+}
+
+.u212 {
+    position:absolute;
+    left:20px;
+    top:14px;
+    width:239px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u213_mouseDown {
+    background-image: url('../Active_game_files/Menu_Item_1_u211_mouseDown.png');
+}
+
+.u213_disabled {
+    background-image: url('../Active_game_files/Menu_Item_1_u211_disabled.png');
+}
+
+.u213_normal {
+    background-image: url('../Active_game_files/Menu_Item_1_u211_disabled.png');
+}
+
+.u213_container {
+    position:absolute;
+    left:11px;
+    top:50px;
+    width:279px;
+    height:50px;
+}
+
+#u213_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:285px;
+    height:56px;
+}
+
+.u214 {
+    position:absolute;
+    left:20px;
+    top:14px;
+    width:239px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u215_normal {
+    background-image: url('../Right_Chrome_files/u268_normal.png');
+}
+
+.u215_container {
+    position:absolute;
+    left:406px;
+    top:0px;
+    width:22px;
+    height:830px;
+}
+
+#u215_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:22px;
+    height:830px;
+}
+
+.u216 {
+    position:absolute;
+    left:2px;
+    top:407px;
+    width:18px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u218_selected {
+    background-image: url('../Active_game_files/Tab_1_Label_u218_selected.png');
+}
+
+.u218_normal {
+    background-image: url('../Active_game_files/Tab_1_Label_u218_normal.png');
+}
+
+.u218_container {
+    position:absolute;
+    left:21px;
+    top:163px;
+    width:128px;
+    height:50px;
+}
+
+#u218_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:134px;
+    height:56px;
+}
+
+.u219 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:124px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u220_normal {
+    background-image: url('../Active_game_files/Tab_1_Label_u218_normal.png');
+}
+
+.u220_container {
+    position:absolute;
+    left:149px;
+    top:163px;
+    width:128px;
+    height:50px;
+}
+
+#u220_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:134px;
+    height:56px;
+}
+
+.u221 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:124px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u222_normal {
+    background-image: url('../Active_game_files/Tab_1_Label_u218_normal.png');
+}
+
+.u222_container {
+    position:absolute;
+    left:277px;
+    top:163px;
+    width:128px;
+    height:50px;
+}
+
+#u222_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:134px;
+    height:56px;
+}
+
+.u223 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:124px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u224_line {
+    background-image: url('../Active_game_files/u224_line.png');
+}
+
+.u224_line {
+    position:absolute;
+    left:4px;
+    top:0px;
+    width:3px;
+    height:24px;
+}
+
+.u224 {
+    position:absolute;
+    left:143px;
+    top:176px;
+    width:10px;
+    height:24px;
+    
+}
+
+.u225_line {
+    background-image: url('../Active_game_files/u225_line.png');
+}
+
+.u225_line {
+    position:absolute;
+    left:4px;
+    top:0px;
+    width:3px;
+    height:24px;
+}
+
+.u225 {
+    position:absolute;
+    left:271px;
+    top:176px;
+    width:10px;
+    height:24px;
+    
+}
+
+#u226 {
+    position:absolute;
+    left:21px;
+    top:208px;
+    width:129px;
+    height:6px;
+    overflow:hidden;
+}
+
+#pd0u226 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:129px;
+    height:6px;
+    
+}
+
+.u227_normal {
+    background-image: url('../Active_game_files/u227_normal.png');
+}
+
+.u227_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:145px;
+    height:5px;
+}
+
+#u227_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:151px;
+    height:11px;
+}
+
+.u228 {
+    position:absolute;
+    left:2px;
+    top:-6px;
+    width:141px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u229 {
+    position:absolute;
+    left:149px;
+    top:208px;
+    width:129px;
+    height:6px;
+    overflow:hidden;
+}
+
+#pd0u229 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:129px;
+    height:6px;
+    
+}
+
+.u230_normal {
+    background-image: url('../Active_game_files/u230_normal.png');
+}
+
+.u230_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:144px;
+    height:5px;
+}
+
+#u230_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:150px;
+    height:11px;
+}
+
+.u231 {
+    position:absolute;
+    left:2px;
+    top:-6px;
+    width:140px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u232 {
+    position:absolute;
+    left:277px;
+    top:208px;
+    width:129px;
+    height:6px;
+    overflow:hidden;
+}
+
+#pd0u232 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:129px;
+    height:6px;
+    
+}
+
+.u233_normal {
+    background-image: url('../Active_game_files/u230_normal.png');
+}
+
+.u233_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:144px;
+    height:5px;
+}
+
+#u233_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:150px;
+    height:11px;
+}
+
+.u234 {
+    position:absolute;
+    left:2px;
+    top:-6px;
+    width:140px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u235 {
+    position:absolute;
+    left:21px;
+    top:163px;
+    width:128px;
+    height:50px;
+    ;
+    ;
+    ;
+    background-image: url('../resources/images/transparent.gif');
+    overflow:hidden;
+}
+
+#u236 {
+    position:absolute;
+    left:149px;
+    top:163px;
+    width:128px;
+    height:50px;
+    ;
+    ;
+    ;
+    background-image: url('../resources/images/transparent.gif');
+    overflow:hidden;
+}
+
+#u237 {
+    position:absolute;
+    left:277px;
+    top:163px;
+    width:128px;
+    height:50px;
+    ;
+    ;
+    ;
+    background-image: url('../resources/images/transparent.gif');
+    overflow:hidden;
+}
+
+#u238 {
+    position:absolute;
+    left:21px;
+    top:213px;
+    width:385px;
+    height:474px;
+    overflow:hidden;
+}
+
+#pd2u238 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:385px;
+    height:474px;
+    
+}
+
+#u239 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:405px;
+    height:430px;
+    overflow:hidden;
+}
+
+#pd0u239 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:405px;
+    height:430px;
+    overflow:auto;
+    -webkit-overflow-scrolling: touch;
+    overflow-x:hidden;
+    -ms-overflow-x:hidden;
+}
+
+.u240_line {
+    background-image: url('../Active_game_files/u240_line.png');
+}
+
+.u240_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u240 {
+    position:absolute;
+    left:0px;
+    top:56px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u241_mouseDown {
+    background-image: url('../Active_game_files/u241_mouseDown.png');
+}
+
+.u241_selected {
+    background-image: url('../Active_game_files/u241_selected.png');
+}
+
+.u241_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u241_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u241_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:391px;
+    height:60px;
+}
+
+#u241_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:397px;
+    height:66px;
+}
+
+.u242 {
+    position:absolute;
+    left:10px;
+    top:3px;
+    width:371px;
+    height:54px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u243_normal {
+    background-image: url('../Active_game_files/u243_normal.png');
+}
+
+.u243_container {
+    position:absolute;
+    left:25px;
+    top:6px;
+    width:50px;
+    height:50px;
+}
+
+#u243_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u244 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u245_mouseDown {
+    background-image: url('../Active_game_files/u245_mouseDown.png');
+}
+
+.u245_selected {
+    background-image: url('../Active_game_files/u245_selected.png');
+}
+
+.u245_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u245_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u245_container {
+    position:absolute;
+    left:-7px;
+    top:0px;
+    width:40px;
+    height:60px;
+}
+
+#u245_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:46px;
+    height:66px;
+}
+
+.u246 {
+    position:absolute;
+    left:10px;
+    top:22px;
+    width:20px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u247_line {
+    background-image: url('../Active_game_files/u247_line.png');
+}
+
+.u247_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u247 {
+    position:absolute;
+    left:0px;
+    top:116px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u248_mouseDown {
+    background-image: url('../Active_game_files/u241_mouseDown.png');
+}
+
+.u248_selected {
+    background-image: url('../Active_game_files/u241_selected.png');
+}
+
+.u248_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u248_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u248_container {
+    position:absolute;
+    left:0px;
+    top:60px;
+    width:391px;
+    height:60px;
+}
+
+#u248_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:397px;
+    height:66px;
+}
+
+.u249 {
+    position:absolute;
+    left:10px;
+    top:3px;
+    width:371px;
+    height:54px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u250_normal {
+    background-image: url('../Active_game_files/u243_normal.png');
+}
+
+.u250_container {
+    position:absolute;
+    left:25px;
+    top:66px;
+    width:50px;
+    height:50px;
+}
+
+#u250_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u251 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u252_mouseDown {
+    background-image: url('../Active_game_files/u245_mouseDown.png');
+}
+
+.u252_selected {
+    background-image: url('../Active_game_files/u245_selected.png');
+}
+
+.u252_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u252_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u252_container {
+    position:absolute;
+    left:-7px;
+    top:60px;
+    width:40px;
+    height:60px;
+}
+
+#u252_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:46px;
+    height:66px;
+}
+
+.u253 {
+    position:absolute;
+    left:10px;
+    top:22px;
+    width:20px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u254_line {
+    background-image: url('../Active_game_files/u254_line.png');
+}
+
+.u254_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u254 {
+    position:absolute;
+    left:0px;
+    top:176px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u255_mouseDown {
+    background-image: url('../Active_game_files/u241_mouseDown.png');
+}
+
+.u255_selected {
+    background-image: url('../Active_game_files/u241_selected.png');
+}
+
+.u255_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u255_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u255_container {
+    position:absolute;
+    left:0px;
+    top:120px;
+    width:391px;
+    height:60px;
+}
+
+#u255_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:397px;
+    height:66px;
+}
+
+.u256 {
+    position:absolute;
+    left:10px;
+    top:3px;
+    width:371px;
+    height:54px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u257_normal {
+    background-image: url('../Active_game_files/u243_normal.png');
+}
+
+.u257_container {
+    position:absolute;
+    left:25px;
+    top:126px;
+    width:50px;
+    height:50px;
+}
+
+#u257_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u258 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u259_mouseDown {
+    background-image: url('../Active_game_files/u245_mouseDown.png');
+}
+
+.u259_selected {
+    background-image: url('../Active_game_files/u245_selected.png');
+}
+
+.u259_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u259_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u259_container {
+    position:absolute;
+    left:-7px;
+    top:120px;
+    width:40px;
+    height:60px;
+}
+
+#u259_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:46px;
+    height:66px;
+}
+
+.u260 {
+    position:absolute;
+    left:10px;
+    top:22px;
+    width:20px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u261_line {
+    background-image: url('../Active_game_files/u261_line.png');
+}
+
+.u261_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u261 {
+    position:absolute;
+    left:0px;
+    top:236px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u262_mouseDown {
+    background-image: url('../Active_game_files/u241_mouseDown.png');
+}
+
+.u262_selected {
+    background-image: url('../Active_game_files/u241_selected.png');
+}
+
+.u262_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u262_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u262_container {
+    position:absolute;
+    left:0px;
+    top:180px;
+    width:391px;
+    height:60px;
+}
+
+#u262_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:397px;
+    height:66px;
+}
+
+.u263 {
+    position:absolute;
+    left:10px;
+    top:3px;
+    width:371px;
+    height:54px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u264_normal {
+    background-image: url('../Active_game_files/u243_normal.png');
+}
+
+.u264_container {
+    position:absolute;
+    left:25px;
+    top:186px;
+    width:50px;
+    height:50px;
+}
+
+#u264_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u265 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u266_mouseDown {
+    background-image: url('../Active_game_files/u245_mouseDown.png');
+}
+
+.u266_selected {
+    background-image: url('../Active_game_files/u245_selected.png');
+}
+
+.u266_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u266_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u266_container {
+    position:absolute;
+    left:-7px;
+    top:180px;
+    width:40px;
+    height:60px;
+}
+
+#u266_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:46px;
+    height:66px;
+}
+
+.u267 {
+    position:absolute;
+    left:10px;
+    top:22px;
+    width:20px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u268_line {
+    background-image: url('../Active_game_files/u268_line.png');
+}
+
+.u268_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u268 {
+    position:absolute;
+    left:0px;
+    top:296px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u269_mouseDown {
+    background-image: url('../Active_game_files/u241_mouseDown.png');
+}
+
+.u269_selected {
+    background-image: url('../Active_game_files/u241_selected.png');
+}
+
+.u269_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u269_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u269_container {
+    position:absolute;
+    left:0px;
+    top:240px;
+    width:391px;
+    height:60px;
+}
+
+#u269_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:397px;
+    height:66px;
+}
+
+.u270 {
+    position:absolute;
+    left:10px;
+    top:3px;
+    width:371px;
+    height:54px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u271_normal {
+    background-image: url('../Active_game_files/u243_normal.png');
+}
+
+.u271_container {
+    position:absolute;
+    left:25px;
+    top:246px;
+    width:50px;
+    height:50px;
+}
+
+#u271_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u272 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u273_mouseDown {
+    background-image: url('../Active_game_files/u245_mouseDown.png');
+}
+
+.u273_selected {
+    background-image: url('../Active_game_files/u245_selected.png');
+}
+
+.u273_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u273_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u273_container {
+    position:absolute;
+    left:-7px;
+    top:240px;
+    width:40px;
+    height:60px;
+}
+
+#u273_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:46px;
+    height:66px;
+}
+
+.u274 {
+    position:absolute;
+    left:10px;
+    top:22px;
+    width:20px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u275_line {
+    background-image: url('../Active_game_files/u275_line.png');
+}
+
+.u275_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u275 {
+    position:absolute;
+    left:0px;
+    top:356px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u276_mouseDown {
+    background-image: url('../Active_game_files/u241_mouseDown.png');
+}
+
+.u276_selected {
+    background-image: url('../Active_game_files/u241_selected.png');
+}
+
+.u276_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u276_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u276_container {
+    position:absolute;
+    left:0px;
+    top:300px;
+    width:391px;
+    height:60px;
+}
+
+#u276_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:397px;
+    height:66px;
+}
+
+.u277 {
+    position:absolute;
+    left:10px;
+    top:3px;
+    width:371px;
+    height:54px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u278_normal {
+    background-image: url('../Active_game_files/u243_normal.png');
+}
+
+.u278_container {
+    position:absolute;
+    left:25px;
+    top:306px;
+    width:50px;
+    height:50px;
+}
+
+#u278_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u279 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u280_mouseDown {
+    background-image: url('../Active_game_files/u245_mouseDown.png');
+}
+
+.u280_selected {
+    background-image: url('../Active_game_files/u245_selected.png');
+}
+
+.u280_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u280_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u280_container {
+    position:absolute;
+    left:-7px;
+    top:300px;
+    width:40px;
+    height:60px;
+}
+
+#u280_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:46px;
+    height:66px;
+}
+
+.u281 {
+    position:absolute;
+    left:10px;
+    top:22px;
+    width:20px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u282_line {
+    background-image: url('../Active_game_files/u282_line.png');
+}
+
+.u282_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u282 {
+    position:absolute;
+    left:0px;
+    top:416px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u283_mouseDown {
+    background-image: url('../Active_game_files/u241_mouseDown.png');
+}
+
+.u283_selected {
+    background-image: url('../Active_game_files/u241_selected.png');
+}
+
+.u283_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u283_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u283_container {
+    position:absolute;
+    left:0px;
+    top:360px;
+    width:391px;
+    height:60px;
+}
+
+#u283_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:397px;
+    height:66px;
+}
+
+.u284 {
+    position:absolute;
+    left:10px;
+    top:3px;
+    width:371px;
+    height:54px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u285_normal {
+    background-image: url('../Active_game_files/u243_normal.png');
+}
+
+.u285_container {
+    position:absolute;
+    left:25px;
+    top:366px;
+    width:50px;
+    height:50px;
+}
+
+#u285_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u286 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u287_mouseDown {
+    background-image: url('../Active_game_files/u245_mouseDown.png');
+}
+
+.u287_selected {
+    background-image: url('../Active_game_files/u245_selected.png');
+}
+
+.u287_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u287_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u287_container {
+    position:absolute;
+    left:-7px;
+    top:360px;
+    width:40px;
+    height:60px;
+}
+
+#u287_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:46px;
+    height:66px;
+}
+
+.u288 {
+    position:absolute;
+    left:10px;
+    top:22px;
+    width:20px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u289_line {
+    background-image: url('../Active_game_files/u289_line.png');
+}
+
+.u289_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u289 {
+    position:absolute;
+    left:0px;
+    top:476px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u290_mouseDown {
+    background-image: url('../Active_game_files/u241_mouseDown.png');
+}
+
+.u290_selected {
+    background-image: url('../Active_game_files/u241_selected.png');
+}
+
+.u290_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u290_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u290_container {
+    position:absolute;
+    left:0px;
+    top:420px;
+    width:391px;
+    height:60px;
+}
+
+#u290_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:397px;
+    height:66px;
+}
+
+.u291 {
+    position:absolute;
+    left:10px;
+    top:3px;
+    width:371px;
+    height:54px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u292_normal {
+    background-image: url('../Active_game_files/u243_normal.png');
+}
+
+.u292_container {
+    position:absolute;
+    left:25px;
+    top:426px;
+    width:50px;
+    height:50px;
+}
+
+#u292_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u293 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u294_mouseDown {
+    background-image: url('../Active_game_files/u245_mouseDown.png');
+}
+
+.u294_selected {
+    background-image: url('../Active_game_files/u245_selected.png');
+}
+
+.u294_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u294_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u294_container {
+    position:absolute;
+    left:-7px;
+    top:420px;
+    width:40px;
+    height:60px;
+}
+
+#u294_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:46px;
+    height:66px;
+}
+
+.u295 {
+    position:absolute;
+    left:10px;
+    top:22px;
+    width:20px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u296_line {
+    background-image: url('../Active_game_files/u296_line.png');
+}
+
+.u296_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u296 {
+    position:absolute;
+    left:0px;
+    top:536px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u297_mouseDown {
+    background-image: url('../Active_game_files/u241_mouseDown.png');
+}
+
+.u297_selected {
+    background-image: url('../Active_game_files/u241_selected.png');
+}
+
+.u297_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u297_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u297_container {
+    position:absolute;
+    left:0px;
+    top:480px;
+    width:391px;
+    height:60px;
+}
+
+#u297_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:397px;
+    height:66px;
+}
+
+.u298 {
+    position:absolute;
+    left:10px;
+    top:3px;
+    width:371px;
+    height:54px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u299_normal {
+    background-image: url('../Active_game_files/u243_normal.png');
+}
+
+.u299_container {
+    position:absolute;
+    left:25px;
+    top:486px;
+    width:50px;
+    height:50px;
+}
+
+#u299_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u300 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u301_mouseDown {
+    background-image: url('../Active_game_files/u245_mouseDown.png');
+}
+
+.u301_selected {
+    background-image: url('../Active_game_files/u245_selected.png');
+}
+
+.u301_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u301_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u301_container {
+    position:absolute;
+    left:-7px;
+    top:480px;
+    width:40px;
+    height:60px;
+}
+
+#u301_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:46px;
+    height:66px;
+}
+
+.u302 {
+    position:absolute;
+    left:10px;
+    top:22px;
+    width:20px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u303_line {
+    background-image: url('../Active_game_files/u303_line.png');
+}
+
+.u303_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u303 {
+    position:absolute;
+    left:0px;
+    top:596px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u304_mouseDown {
+    background-image: url('../Active_game_files/u241_mouseDown.png');
+}
+
+.u304_selected {
+    background-image: url('../Active_game_files/u241_selected.png');
+}
+
+.u304_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u304_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u304_container {
+    position:absolute;
+    left:0px;
+    top:540px;
+    width:391px;
+    height:60px;
+}
+
+#u304_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:397px;
+    height:66px;
+}
+
+.u305 {
+    position:absolute;
+    left:10px;
+    top:3px;
+    width:371px;
+    height:54px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u306_normal {
+    background-image: url('../Active_game_files/u243_normal.png');
+}
+
+.u306_container {
+    position:absolute;
+    left:25px;
+    top:546px;
+    width:50px;
+    height:50px;
+}
+
+#u306_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u307 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u308_mouseDown {
+    background-image: url('../Active_game_files/u245_mouseDown.png');
+}
+
+.u308_selected {
+    background-image: url('../Active_game_files/u245_selected.png');
+}
+
+.u308_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u308_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u308_container {
+    position:absolute;
+    left:-7px;
+    top:540px;
+    width:40px;
+    height:60px;
+}
+
+#u308_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:46px;
+    height:66px;
+}
+
+.u309 {
+    position:absolute;
+    left:10px;
+    top:22px;
+    width:20px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u310_container {
+    position:absolute;
+    left:130px;
+    top:610px;
+    width:32px;
+    height:32px;
+}
+
+#u310_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:32px;
+    height:32px;
+}
+
+.u311 {
+    position:absolute;
+    left:2px;
+    top:8px;
+    width:28px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u312 {
+    position:absolute;
+    left:167px;
+    top:615px;
+    width:86px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#pd1u238 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:385px;
+    height:474px;
+    
+}
+
+#u314 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:405px;
+    height:430px;
+    overflow:hidden;
+}
+
+#pd0u314 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:405px;
+    height:430px;
+    overflow:auto;
+    -webkit-overflow-scrolling: touch;
+    overflow-x:hidden;
+    -ms-overflow-x:hidden;
+}
+
+.u315_line {
+    background-image: url('../Active_game_files/u315_line.png');
+}
+
+.u315_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u315 {
+    position:absolute;
+    left:0px;
+    top:178px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u316 {
+    position:absolute;
+    left:10px;
+    top:95px;
+    width:364px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u317_line {
+    background-image: url('../Active_game_files/u317_line.png');
+}
+
+.u317_line {
+    position:absolute;
+    left:0px;
+    top:3px;
+    width:384px;
+    height:5px;
+}
+
+.u317 {
+    position:absolute;
+    left:0px;
+    top:112px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u318_line {
+    background-image: url('../Active_task_files/u318_line.png');
+}
+
+.u318_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u318 {
+    position:absolute;
+    left:0px;
+    top:297px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u319_normal {
+    background-image: url('../Active_task_files/u319_normal.png');
+}
+
+.u319_container {
+    position:absolute;
+    left:10px;
+    top:247px;
+    width:50px;
+    height:50px;
+}
+
+#u319_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u320 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u321_mouseDown {
+    background-image: url('../Active_task_files/u321_mouseDown.png');
+}
+
+.u321_selected {
+    background-image: url('../Active_task_files/u321_selected.png');
+}
+
+.u321_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u321_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u321_container {
+    position:absolute;
+    left:0px;
+    top:242px;
+    width:384px;
+    height:60px;
+}
+
+#u321_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:66px;
+}
+
+.u322 {
+    position:absolute;
+    left:10px;
+    top:11px;
+    width:364px;
+    height:38px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u323_mouseDown {
+    background-image: url('../Active_task_files/u323_mouseDown.png');
+}
+
+.u323_selected {
+    background-image: url('../Active_task_files/u323_selected.png');
+}
+
+.u323_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u323_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u323_container {
+    position:absolute;
+    left:217px;
+    top:248px;
+    width:143px;
+    height:54px;
+}
+
+#u323_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:149px;
+    height:60px;
+}
+
+.u324 {
+    position:absolute;
+    left:10px;
+    top:11px;
+    width:123px;
+    height:32px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u326 {
+    position:absolute;
+    left:10px;
+    top:365px;
+    width:364px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u327_line {
+    background-image: url('../Active_game_files/u327_line.png');
+}
+
+.u327_line {
+    position:absolute;
+    left:0px;
+    top:3px;
+    width:384px;
+    height:5px;
+}
+
+.u327 {
+    position:absolute;
+    left:0px;
+    top:382px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u328_line {
+    background-image: url('../Inactive_task_1_files/u328_line.png');
+}
+
+.u328_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u328 {
+    position:absolute;
+    left:0px;
+    top:447px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u329_normal {
+    background-image: url('../Inactive_task_1_files/u329_normal.png');
+}
+
+.u329_container {
+    position:absolute;
+    left:10px;
+    top:397px;
+    width:50px;
+    height:50px;
+}
+
+#u329_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u330 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u331_mouseDown {
+    background-image: url('../Inactive_task_1_files/u331_mouseDown.png');
+}
+
+.u331_selected {
+    background-image: url('../Inactive_task_1_files/u331_selected.png');
+}
+
+.u331_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u331_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u331_container {
+    position:absolute;
+    left:0px;
+    top:392px;
+    width:384px;
+    height:60px;
+}
+
+#u331_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:66px;
+}
+
+.u332 {
+    position:absolute;
+    left:10px;
+    top:11px;
+    width:364px;
+    height:38px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u333_mouseDown {
+    background-image: url('../Inactive_task_1_files/u333_mouseDown.png');
+}
+
+.u333_selected {
+    background-image: url('../Inactive_task_1_files/u333_selected.png');
+}
+
+.u333_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u333_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u333_container {
+    position:absolute;
+    left:217px;
+    top:398px;
+    width:143px;
+    height:54px;
+}
+
+#u333_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:149px;
+    height:60px;
+}
+
+.u334 {
+    position:absolute;
+    left:10px;
+    top:11px;
+    width:123px;
+    height:32px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u336 {
+    position:absolute;
+    left:10px;
+    top:528px;
+    width:364px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u337_line {
+    background-image: url('../Active_game_files/u337_line.png');
+}
+
+.u337_line {
+    position:absolute;
+    left:0px;
+    top:3px;
+    width:384px;
+    height:5px;
+}
+
+.u337 {
+    position:absolute;
+    left:0px;
+    top:545px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u338 {
+    position:absolute;
+    left:10px;
+    top:624px;
+    width:364px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u339_line {
+    background-image: url('../Active_game_files/u339_line.png');
+}
+
+.u339_line {
+    position:absolute;
+    left:0px;
+    top:3px;
+    width:384px;
+    height:5px;
+}
+
+.u339 {
+    position:absolute;
+    left:0px;
+    top:641px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u340_line {
+    background-image: url('../Finished_task_1_files/u340_line.png');
+}
+
+.u340_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u340 {
+    position:absolute;
+    left:0px;
+    top:604px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u341_normal {
+    background-image: url('../Finished_task_1_files/u341_normal.png');
+}
+
+.u341_container {
+    position:absolute;
+    left:10px;
+    top:554px;
+    width:50px;
+    height:50px;
+}
+
+#u341_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u342 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u343_mouseDown {
+    background-image: url('../Finished_task_1_files/u343_mouseDown.png');
+}
+
+.u343_selected {
+    background-image: url('../Finished_task_1_files/u343_selected.png');
+}
+
+.u343_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u343_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u343_container {
+    position:absolute;
+    left:0px;
+    top:549px;
+    width:384px;
+    height:60px;
+}
+
+#u343_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:66px;
+}
+
+.u344 {
+    position:absolute;
+    left:10px;
+    top:11px;
+    width:364px;
+    height:38px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u345_mouseDown {
+    background-image: url('../Finished_task_1_files/u345_mouseDown.png');
+}
+
+.u345_selected {
+    background-image: url('../Finished_task_1_files/u345_selected.png');
+}
+
+.u345_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u345_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u345_container {
+    position:absolute;
+    left:217px;
+    top:555px;
+    width:143px;
+    height:54px;
+}
+
+#u345_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:149px;
+    height:60px;
+}
+
+.u346 {
+    position:absolute;
+    left:10px;
+    top:11px;
+    width:123px;
+    height:32px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u348_line {
+    background-image: url('../Calceled_task_files/u348_line.png');
+}
+
+.u348_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u348 {
+    position:absolute;
+    left:0px;
+    top:706px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u349_normal {
+    background-image: url('../Calceled_task_files/u349_normal.png');
+}
+
+.u349_container {
+    position:absolute;
+    left:10px;
+    top:656px;
+    width:50px;
+    height:50px;
+}
+
+#u349_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:56px;
+    height:56px;
+}
+
+.u350 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u351_mouseDown {
+    background-image: url('../Calceled_task_files/u351_mouseDown.png');
+}
+
+.u351_selected {
+    background-image: url('../Calceled_task_files/u351_selected.png');
+}
+
+.u351_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u351_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u351_container {
+    position:absolute;
+    left:0px;
+    top:651px;
+    width:384px;
+    height:60px;
+}
+
+#u351_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:66px;
+}
+
+.u352 {
+    position:absolute;
+    left:10px;
+    top:19px;
+    width:364px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u354 {
+    position:absolute;
+    left:10px;
+    top:307px;
+    width:374px;
+    height:48px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u355_line {
+    background-image: url('../Active_game_files/u355_line.png');
+}
+
+.u355_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u355 {
+    position:absolute;
+    left:0px;
+    top:85px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u356_normal {
+    background-image: url('../Active_game_files/u356_normal.png');
+}
+
+.u356_container {
+    position:absolute;
+    left:10px;
+    top:5px;
+    width:80px;
+    height:80px;
+}
+
+#u356_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:86px;
+    height:86px;
+}
+
+.u357 {
+    position:absolute;
+    left:2px;
+    top:32px;
+    width:76px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u358_mouseDown {
+    background-image: url('../Active_game_files/u358_mouseDown.png');
+}
+
+.u358_selected {
+    background-image: url('../Active_game_files/u358_selected.png');
+}
+
+.u358_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u358_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u358_container {
+    position:absolute;
+    left:264px;
+    top:0px;
+    width:120px;
+    height:90px;
+}
+
+#u358_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:126px;
+    height:96px;
+}
+
+.u359 {
+    position:absolute;
+    left:10px;
+    top:10px;
+    width:100px;
+    height:70px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u360_mouseDown {
+    background-image: url('../Active_game_files/u360_mouseDown.png');
+}
+
+.u360_selected {
+    background-image: url('../Active_game_files/u360_selected.png');
+}
+
+.u360_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u360_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u360_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:384px;
+    height:90px;
+}
+
+#u360_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:96px;
+}
+
+.u361 {
+    position:absolute;
+    left:10px;
+    top:10px;
+    width:364px;
+    height:70px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u362_line {
+    background-image: url('../Active_game_files/u362_line.png');
+}
+
+.u362_line {
+    position:absolute;
+    left:0px;
+    top:3px;
+    width:384px;
+    height:5px;
+}
+
+.u362 {
+    position:absolute;
+    left:0px;
+    top:85px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u363_normal {
+    background-image: url('../Active_game_files/u363_normal.png');
+}
+
+.u363_container {
+    position:absolute;
+    left:10px;
+    top:458px;
+    width:50px;
+    height:50px;
+}
+
+#u363_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:50px;
+    height:50px;
+}
+
+.u364 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u365_line {
+    background-image: url('../Active_game_files/u365_line.png');
+}
+
+.u365_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u365 {
+    position:absolute;
+    left:0px;
+    top:508px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u366_mouseDown {
+    background-image: url('../Active_game_files/u366_mouseDown.png');
+}
+
+.u366_selected {
+    background-image: url('../Active_game_files/u366_selected.png');
+}
+
+.u366_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u366_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u366_container {
+    position:absolute;
+    left:0px;
+    top:452px;
+    width:384px;
+    height:60px;
+}
+
+#u366_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:66px;
+}
+
+.u367 {
+    position:absolute;
+    left:10px;
+    top:11px;
+    width:364px;
+    height:38px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u368_line {
+    background-image: url('../Active_game_files/u368_line.png');
+}
+
+.u368_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u368 {
+    position:absolute;
+    left:0px;
+    top:238px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u369_normal {
+    background-image: url('../Active_game_files/u369_normal.png');
+}
+
+.u369_container {
+    position:absolute;
+    left:10px;
+    top:188px;
+    width:50px;
+    height:50px;
+}
+
+#u369_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:50px;
+    height:50px;
+}
+
+.u370 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u371_mouseDown {
+    background-image: url('../Active_game_files/u366_mouseDown.png');
+}
+
+.u371_selected {
+    background-image: url('../Active_game_files/u366_selected.png');
+}
+
+.u371_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u371_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u371_container {
+    position:absolute;
+    left:0px;
+    top:182px;
+    width:384px;
+    height:60px;
+}
+
+#u371_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:66px;
+}
+
+.u372 {
+    position:absolute;
+    left:10px;
+    top:11px;
+    width:364px;
+    height:38px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u373_normal {
+    background-image: url('../Active_game_files/u373_normal.png');
+}
+
+.u373_container {
+    position:absolute;
+    left:359px;
+    top:203px;
+    width:25px;
+    height:25px;
+}
+
+#u373_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:25px;
+    height:25px;
+}
+
+.u374 {
+    position:absolute;
+    left:2px;
+    top:4px;
+    width:21px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u375_mouseDown {
+    background-image: url('../Active_game_files/u375_mouseDown.png');
+}
+
+.u375_selected {
+    background-image: url('../Active_game_files/u375_selected.png');
+}
+
+.u375_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u375_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u375_container {
+    position:absolute;
+    left:217px;
+    top:188px;
+    width:143px;
+    height:54px;
+}
+
+#u375_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:149px;
+    height:60px;
+}
+
+.u376 {
+    position:absolute;
+    left:10px;
+    top:11px;
+    width:123px;
+    height:32px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u377_normal {
+    background-image: url('../Active_game_files/u377_normal.png');
+}
+
+.u377_container {
+    position:absolute;
+    left:10px;
+    top:128px;
+    width:50px;
+    height:50px;
+}
+
+#u377_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:50px;
+    height:50px;
+}
+
+.u378 {
+    position:absolute;
+    left:2px;
+    top:17px;
+    width:46px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u379_mouseDown {
+    background-image: url('../Active_game_files/u366_mouseDown.png');
+}
+
+.u379_selected {
+    background-image: url('../Active_game_files/u366_selected.png');
+}
+
+.u379_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u379_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u379_container {
+    position:absolute;
+    left:0px;
+    top:122px;
+    width:384px;
+    height:60px;
+}
+
+#u379_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:66px;
+}
+
+.u380 {
+    position:absolute;
+    left:10px;
+    top:11px;
+    width:364px;
+    height:38px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u381_mouseDown {
+    background-image: url('../Active_game_files/u375_mouseDown.png');
+}
+
+.u381_selected {
+    background-image: url('../Active_game_files/u375_selected.png');
+}
+
+.u381_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u381_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u381_container {
+    position:absolute;
+    left:217px;
+    top:128px;
+    width:143px;
+    height:54px;
+}
+
+#u381_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:149px;
+    height:60px;
+}
+
+.u382 {
+    position:absolute;
+    left:10px;
+    top:11px;
+    width:123px;
+    height:32px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#pd0u238 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:385px;
+    height:474px;
+    
+}
+
+#u383 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:405px;
+    height:430px;
+    overflow:hidden;
+}
+
+#pd0u383 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:405px;
+    height:430px;
+    overflow:auto;
+    -webkit-overflow-scrolling: touch;
+    overflow-x:hidden;
+    -ms-overflow-x:hidden;
+}
+
+.u384 {
+    position:absolute;
+    left:10px;
+    top:95px;
+    width:374px;
+    height:80px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u385 {
+    position:absolute;
+    left:96px;
+    top:95px;
+    width:294px;
+    height:80px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u386 {
+    position:absolute;
+    left:10px;
+    top:185px;
+    width:364px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u387_line {
+    background-image: url('../Active_game_files/u387_line.png');
+}
+
+.u387_line {
+    position:absolute;
+    left:0px;
+    top:3px;
+    width:384px;
+    height:5px;
+}
+
+.u387 {
+    position:absolute;
+    left:0px;
+    top:202px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u388 {
+    position:absolute;
+    left:10px;
+    top:212px;
+    width:374px;
+    height:48px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u389 {
+    position:absolute;
+    left:10px;
+    top:270px;
+    width:364px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u390_line {
+    background-image: url('../Active_game_files/u390_line.png');
+}
+
+.u390_line {
+    position:absolute;
+    left:0px;
+    top:3px;
+    width:384px;
+    height:5px;
+}
+
+.u390 {
+    position:absolute;
+    left:0px;
+    top:287px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u391 {
+    position:absolute;
+    left:10px;
+    top:297px;
+    width:374px;
+    height:224px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u392_line {
+    background-image: url('../Active_game_files/u392_line.png');
+}
+
+.u392_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:384px;
+    height:3px;
+}
+
+.u392 {
+    position:absolute;
+    left:0px;
+    top:85px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u393_normal {
+    background-image: url('../Active_game_files/u356_normal.png');
+}
+
+.u393_container {
+    position:absolute;
+    left:10px;
+    top:5px;
+    width:80px;
+    height:80px;
+}
+
+#u393_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:86px;
+    height:86px;
+}
+
+.u394 {
+    position:absolute;
+    left:2px;
+    top:32px;
+    width:76px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u395_mouseDown {
+    background-image: url('../Active_game_files/u360_mouseDown.png');
+}
+
+.u395_selected {
+    background-image: url('../Active_game_files/u360_selected.png');
+}
+
+.u395_disabled {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u395_normal {
+    background-image: url('../resources/images/transparent.gif');
+}
+
+.u395_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:384px;
+    height:90px;
+}
+
+#u395_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:390px;
+    height:96px;
+}
+
+.u396 {
+    position:absolute;
+    left:10px;
+    top:10px;
+    width:364px;
+    height:70px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u397_line {
+    background-image: url('../Active_game_files/u397_line.png');
+}
+
+.u397_line {
+    position:absolute;
+    left:0px;
+    top:3px;
+    width:384px;
+    height:5px;
+}
+
+.u397 {
+    position:absolute;
+    left:0px;
+    top:85px;
+    width:384px;
+    height:10px;
+    
+}
+
+.u398_line {
+    background-image: url('../Active_game_files/u398_line.png');
+}
+
+.u398_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:120px;
+    height:3px;
+}
+
+.u398 {
+    position:absolute;
+    left:259px;
+    top:79px;
+    width:120px;
+    height:10px;
+    
+}
+
+.u399_line {
+    background-image: url('../Active_game_files/u399_line.png');
+}
+
+.u399_line {
+    position:absolute;
+    left:0px;
+    top:4px;
+    width:118px;
+    height:3px;
+}
+
+.u399 {
+    position:absolute;
+    left:260px;
+    top:81px;
+    width:118px;
+    height:10px;
+    
+}
+
+.u400_mouseDown {
+    background-image: url('../Active_game_files/u400_mouseDown.png');
+}
+
+.u400_disabled {
+    background-image: url('../Active_game_files/u400_disabled.png');
+}
+
+.u400_normal {
+    background-image: url('../Active_game_files/u400_normal.png');
+}
+
+.u400_container {
+    position:absolute;
+    left:259px;
+    top:45px;
+    width:120px;
+    height:38px;
+}
+
+#u400_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:126px;
+    height:44px;
+}
+
+.u401 {
+    position:absolute;
+    left:2px;
+    top:8px;
+    width:116px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u402_normal {
+    background-image: url('../Active_game_files/u402_normal.png');
+}
+
+.u402_container {
+    position:absolute;
+    left:110px;
+    top:158px;
+    width:16px;
+    height:16px;
+}
+
+#u402_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:16px;
+    height:16px;
+}
+
+.u403 {
+    position:absolute;
+    left:2px;
+    top:0px;
+    width:12px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u404_normal {
+    background-image: url('../Active_game_files/u404_normal.png');
+}
+
+.u404_container {
+    position:absolute;
+    left:124px;
+    top:158px;
+    width:16px;
+    height:16px;
+}
+
+#u404_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:16px;
+    height:16px;
+}
+
+.u405 {
+    position:absolute;
+    left:2px;
+    top:0px;
+    width:12px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u406_normal {
+    background-image: url('../Active_game_files/u402_normal.png');
+}
+
+.u406_container {
+    position:absolute;
+    left:96px;
+    top:158px;
+    width:16px;
+    height:16px;
+}
+
+#u406_img {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:16px;
+    height:16px;
+}
+
+.u407 {
+    position:absolute;
+    left:2px;
+    top:0px;
+    width:12px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u408_normal {
+    background-image: url('../Active_game_files/u408_normal.png');
+}
+
+.u408_container {
+    position:absolute;
+    left:100px;
+    top:32px;
+    width:16px;
+    height:16px;
+}
+
+#u408_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:22px;
+    height:22px;
+}
+
+.u409 {
+    position:absolute;
+    left:2px;
+    top:0px;
+    width:12px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+#u410 {
+    position:absolute;
+    left:94px;
+    top:164px;
+    width:312px;
+    height:211px;
+    overflow:hidden;
+}
+
+#pd0u410 {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:312px;
+    height:211px;
+    
+}
+
+.u411_normal {
+    background-image: url('../Active_game_files/u192_normal.png');
+}
+
+.u411_container {
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:10px;
+    height:200px;
+}
+
+#u411_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:16px;
+    height:206px;
+}
+
+.u412 {
+    position:absolute;
+    left:2px;
+    top:92px;
+    width:6px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u413_normal {
+    background-image: url('../Active_game_files/u413_normal.png');
+}
+
+.u413_container {
+    position:absolute;
+    left:10px;
+    top:200px;
+    width:301px;
+    height:10px;
+}
+
+#u413_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:307px;
+    height:16px;
+}
+
+.u414 {
+    position:absolute;
+    left:2px;
+    top:-3px;
+    width:297px;
+    height:16px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u415_mouseDown {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_mouseDown.png');
+}
+
+.u415_disabled {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u415_normal {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u415_container {
+    position:absolute;
+    left:11px;
+    top:0px;
+    width:300px;
+    height:50px;
+}
+
+#u415_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:306px;
+    height:56px;
+}
+
+.u416 {
+    position:absolute;
+    left:20px;
+    top:14px;
+    width:260px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u417_mouseDown {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_mouseDown.png');
+}
+
+.u417_disabled {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u417_normal {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u417_container {
+    position:absolute;
+    left:11px;
+    top:50px;
+    width:300px;
+    height:50px;
+}
+
+#u417_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:306px;
+    height:56px;
+}
+
+.u418 {
+    position:absolute;
+    left:20px;
+    top:14px;
+    width:260px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u419_mouseDown {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_mouseDown.png');
+}
+
+.u419_disabled {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u419_normal {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u419_container {
+    position:absolute;
+    left:11px;
+    top:100px;
+    width:300px;
+    height:50px;
+}
+
+#u419_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:306px;
+    height:56px;
+}
+
+.u420 {
+    position:absolute;
+    left:20px;
+    top:14px;
+    width:260px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
+.u421_mouseDown {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_mouseDown.png');
+}
+
+.u421_disabled {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u421_normal {
+    background-image: url('../Active_game_files/Menu_Item_1_u194_disabled.png');
+}
+
+.u421_container {
+    position:absolute;
+    left:11px;
+    top:150px;
+    width:300px;
+    height:50px;
+}
+
+#u421_img {
+    position:absolute;
+    left:-3px;
+    top:-3px;
+    width:306px;
+    height:56px;
+}
+
+.u422 {
+    position:absolute;
+    left:20px;
+    top:14px;
+    width:260px;
+    height:22px;
+    ;
+    ;
+    ;
+    font-family:Arial;
+    text-align:left;
+    word-wrap:break-word;
+}
+
