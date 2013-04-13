@@ -123,22 +123,52 @@
   <data name="Completed" xml:space="preserve">
     <value>completed</value>
   </data>
+  <data name="Day" xml:space="preserve">
+    <value>day</value>
+  </data>
   <data name="Days" xml:space="preserve">
     <value>days</value>
   </data>
-  <data name="Details" xml:space="preserve">
-    <value>DETAILS</value>
+  <data name="Difficulty" xml:space="preserve">
+    <value>difficulty:</value>
   </data>
-  <data name="GameTimeLeft" xml:space="preserve">
-    <value>time left:</value>
+  <data name="Easy" xml:space="preserve">
+    <value>easy</value>
   </data>
-  <data name="Play" xml:space="preserve">
-    <value>play</value>
+  <data name="GameEnd" xml:space="preserve">
+    <value>end:</value>
+  </data>
+  <data name="GameStart" xml:space="preserve">
+    <value>start:</value>
+  </data>
+  <data name="GameTypeQuiz" xml:space="preserve">
+    <value>gather as many points as possible</value>
+  </data>
+  <data name="GameTypeRace" xml:space="preserve">
+    <value>complete all tasks first</value>
+  </data>
+  <data name="Hard" xml:space="preserve">
+    <value>hard</value>
+  </data>
+  <data name="JoinIn" xml:space="preserve">
+    <value>Join in</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>medium</value>
+  </data>
+  <data name="Overview" xml:space="preserve">
+    <value>overview</value>
   </data>
   <data name="Players" xml:space="preserve">
-    <value>players</value>
+    <value>players:</value>
   </data>
-  <data name="Ranking" xml:space="preserve">
-    <value>RANKING</value>
+  <data name="Prizes" xml:space="preserve">
+    <value>prizes</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>started</value>
+  </data>
+  <data name="Undefinied" xml:space="preserve">
+    <value>undefinied</value>
   </data>
 </root>

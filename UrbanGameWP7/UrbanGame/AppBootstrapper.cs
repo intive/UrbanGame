@@ -17,6 +17,7 @@ namespace UrbanGame
             container.RegisterPhoneServices();
             container.PerRequest<MainViewModel>();
             container.PerRequest<GameDetailsViewModel>();
+            container.PerRequest<GamesListViewModel>();
         }
 
         protected override object GetInstance(Type service, string key)

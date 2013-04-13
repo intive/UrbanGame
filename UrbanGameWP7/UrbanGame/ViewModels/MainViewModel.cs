@@ -17,7 +17,7 @@ namespace UrbanGame.ViewModels
 
         public void ShowDetails()
         {
-            _navigationService.UriFor<GameDetailsViewModel>().Navigate();
+            _navigationService.UriFor<GameDetailsViewModel>().WithParam(g => g.GameId, 1).Navigate();
         }
     }
 }

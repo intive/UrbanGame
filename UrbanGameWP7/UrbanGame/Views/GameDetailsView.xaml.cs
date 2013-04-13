@@ -35,7 +35,7 @@ namespace UrbanGame.Views
             ApplicationBar.Buttons.Add(new AppBarButton()
                                         {
                                             IconUri = new Uri("/Images/appbar.check.png", UriKind.Relative),
-                                            Text = AppResources.Play,
+                                            Text = AppResources.JoinIn,
                                             Message = "JoinGame()"
                                         });
         }                

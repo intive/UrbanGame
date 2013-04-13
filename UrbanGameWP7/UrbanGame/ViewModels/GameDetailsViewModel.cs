@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using UrbanGame.Storage;
+using WebService;
 
 namespace UrbanGame.ViewModels
 {
@@ -12,160 +15,73 @@ namespace UrbanGame.ViewModels
         public GameDetailsViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
             : base(navigationService, unitOfWorkLocator)
         {
-            //GUI Test Data - will be removed later
-            GameName = "Hydrozagadka";
-            OperatorName = "CAFETERIA";
-            OperatorLogo = "/ApplicationIcon.png";
-            GameEnd = DateTime.Now.AddDays(2).AddHours(5);
-            NumberOfPlayers = 24;
-            MaxPlayers = 50;
-            Description = "sadsa sad ads  adsa dssa sad  asas asd as a sas as as  asas  asdas as ads as d";
+            //temporarily mock object
+            _gameWebService = new GameWebServiceMock();
+            _gameWebService.GameChanged += GameWebService_GameChanged;
         }
+
+        #region navigation properties
+
+        public int GameId { get; set; }
+
+        #endregion
+
+        #region private
+
+        IGameWebService _gameWebService;
+
+        void GameWebService_GameChanged(object sender, GameEventArgs e)
+        {
+            if (e.Id == GameId)
+                RefreshGame();
+        }
+
+        void RefreshGame()
+        {
+            Task.Run(() =>
+            {                
+                if (_gameWebService.IsAuthorized)
+                {
+                    IQueryable<Game> games = _unitOfWorkLocator().GetRepository<Game>().All();
+                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
+                }
+                else
+                {
+                    Game = _gameWebService.GetGameInfo(GameId);
+                }                
+            });
+        }
+
+        #endregion        
+
+        #region lifecycle
+
+        protected override void OnActivate()
+        {
+            base.OnActivate();
+            RefreshGame();
+        }
+
+        #endregion
 
         #region bindable properties
 
-        #region GameName
+        #region Game
 
-        private string _gameName;
+        private IGame _game;
 
-        public string GameName
+        public IGame Game
         {
             get
             {
-                return _gameName;
+                return _game;
             }
             set
             {
-                if (_gameName != value)
-                {                    
-                    _gameName = value;
-                    NotifyOfPropertyChange(() => GameName);
-                }
-            }
-        }
-        #endregion
-
-        #region OperatorName
-
-        private string _operatorName;
-
-        public string OperatorName
-        {
-            get
-            {
-                return _operatorName;
-            }
-            set
-            {
-                if (_operatorName != value)
+                if (_game != value)
                 {
-                    _operatorName = value;
-                    NotifyOfPropertyChange(() => OperatorName);
-                }
-            }
-        }
-        #endregion
-
-        #region OperatorLogo
-
-        private string _operatorLogo;
-
-        public string OperatorLogo
-        {
-            get
-            {
-                return _operatorLogo;
-            }
-            set
-            {
-                if (_operatorLogo != value)
-                {
-                    _operatorLogo = value;
-                    NotifyOfPropertyChange(() => OperatorLogo);
-                }
-            }
-        }
-        #endregion
-
-        #region GameEnd
-
-        private DateTime _gameEnd;
-
-        public DateTime GameEnd
-        {
-            get
-            {
-                return _gameEnd;
-            }
-            set
-            {
-                if (_gameEnd != value)
-                {
-                    _gameEnd = value;
-                    NotifyOfPropertyChange(() => GameEnd);
-                }
-            }
-        }
-        #endregion
-
-        #region NumberOfPlayers
-
-        private int _numberOfPlayers;
-
-        public int NumberOfPlayers
-        {
-            get
-            {
-                return _numberOfPlayers;
-            }
-            set
-            {
-                if (_numberOfPlayers != value)
-                {
-                    _numberOfPlayers = value;
-                    NotifyOfPropertyChange(() => NumberOfPlayers);
-                }
-            }
-        }
-        #endregion
-
-        #region MaxPlayers
-
-        private int _maxPlayers;
-
-        public int MaxPlayers
-        {
-            get
-            {
-                return _maxPlayers;
-            }
-            set
-            {
-                if (_maxPlayers != value)
-                {
-                    _maxPlayers = value;
-                    NotifyOfPropertyChange(() => MaxPlayers);
-                }
-            }
-        }
-        #endregion
-
-        #region Description
-
-        private string _description;
-
-        public string Description
-        {
-            get
-            {
-                return _description;
-            }
-            set
-            {
-                if (_description != value)
-                {
-                    _description = value;
-                    NotifyOfPropertyChange(() => Description);
+                    _game = value;
+                    NotifyOfPropertyChange(() => Game);
                 }
             }
         }

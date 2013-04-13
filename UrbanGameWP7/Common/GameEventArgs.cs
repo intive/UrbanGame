@@ -8,8 +8,8 @@ namespace Common
     /// <summary>
     /// Used with GameChangedEventHandler
     /// </summary>
-    public class GameEventArgs:EventArgs
+    public class GameEventArgs : EventArgs
     {
-
+        public int Id { get; set; }
     }
 }

@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
 using Common;
 using System.Device.Location;
 
-namespace UrbanGame.Storage
+namespace WebService.BOMock
 {
-    [Table]
-    public class Game : EntityBase, IGame
+    public class GameMock : BOBase, IGame
     {        
         #region Id
 
         private int _id;
 
-        [Column(IsPrimaryKey = true, IsDbGenerated = true, CanBeNull = false, AutoSync = AutoSync.OnInsert)]
         public int Id
         {
             get
@@ -38,7 +35,6 @@ namespace UrbanGame.Storage
 
         private string _name;
 
-        [Column]
         public string Name
         {
             get
@@ -61,7 +57,6 @@ namespace UrbanGame.Storage
 
         private string _operatorName;
 
-        [Column]
         public string OperatorName
         {
             get
@@ -84,7 +79,6 @@ namespace UrbanGame.Storage
 
         private string _operatorLogo;
 
-        [Column]
         public string OperatorLogo
         {
             get
@@ -107,7 +101,6 @@ namespace UrbanGame.Storage
 
         private string _gameLogo;
 
-        [Column]
         public string GameLogo
         {
             get
@@ -130,7 +123,6 @@ namespace UrbanGame.Storage
 
         private DateTime _gameStart;
 
-        [Column]
         public DateTime GameStart
         {
             get
@@ -153,7 +145,6 @@ namespace UrbanGame.Storage
 
         private DateTime _gameEnd;
 
-        [Column]
         public DateTime GameEnd
         {
             get
@@ -176,7 +167,6 @@ namespace UrbanGame.Storage
 
         private GameType _gameType;
 
-        [Column]
         public GameType GameType
         {
             get
@@ -199,7 +189,6 @@ namespace UrbanGame.Storage
 
         private int _points;
 
-        [Column]
         public int Points
         {
             get
@@ -222,7 +211,6 @@ namespace UrbanGame.Storage
 
         private int _maxPoints;
 
-        [Column]
         public int MaxPoints
         {
             get
@@ -245,7 +233,6 @@ namespace UrbanGame.Storage
 
         private int _numberOfTasks;
 
-        [Column]
         public int NumberOfTasks
         {
             get
@@ -268,7 +255,6 @@ namespace UrbanGame.Storage
 
         private int _numberOfCompletedTasks;
 
-        [Column]
         public int NumberOfCompletedTasks
         {
             get
@@ -291,7 +277,6 @@ namespace UrbanGame.Storage
 
         private int _numberOfPlayers;
 
-        [Column]
         public int NumberOfPlayers
         {
             get
@@ -314,7 +299,6 @@ namespace UrbanGame.Storage
 
         private int _numberOfSlots;
 
-        [Column]
         public int NumberOfSlots
         {
             get
@@ -337,7 +321,6 @@ namespace UrbanGame.Storage
 
         private GeoCoordinate _gameLocalization;
 
-        [Column]
         public GeoCoordinate GameLocalization
         {
             get
@@ -360,7 +343,6 @@ namespace UrbanGame.Storage
 
         private GameState _gameState;
 
-        [Column]
         public GameState GameState
         {
             get
@@ -383,7 +365,6 @@ namespace UrbanGame.Storage
 
         private int? _rank;
 
-        [Column]
         public int? Rank
         {
             get
@@ -406,7 +387,6 @@ namespace UrbanGame.Storage
 
         private GameDifficulty _difficulty;
 
-        [Column]
         public GameDifficulty Difficulty
         {
             get
@@ -429,7 +409,6 @@ namespace UrbanGame.Storage
 
         private string _description;
 
-        [Column]
         public string Description
         {
             get
@@ -452,7 +431,6 @@ namespace UrbanGame.Storage
 
         private string _prizes;
 
-        [Column]
         public string Prizes
         {
             get

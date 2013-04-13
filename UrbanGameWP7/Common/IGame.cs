@@ -11,17 +11,21 @@ namespace Common
     /// </summary>
     public interface IGame
     {
-        long Id { get; set; }
+        int Id { get; set; }
 
         string Name { get; set; }
 
-        string Operator { get; set; }
+        string OperatorName { get; set; }
 
-        string Logo { get; set; }
+        string OperatorLogo { get; set; }
+
+        string GameLogo { get; set; }
 
         DateTime GameStart { get; set; }
 
         DateTime GameEnd { get; set; }
+
+        GameType GameType { get; set; }
 
         int Points { get; set; }
 
@@ -50,5 +54,7 @@ namespace Common
         GameDifficulty Difficulty { get; set; }
 
         string Description { get; set; }
+
+        string Prizes { get; set; }
     }
 }
