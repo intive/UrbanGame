@@ -1,0 +1,127 @@
+package com.blstream.urbangame;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
+import com.actionbarsherlock.widget.SearchView;
+import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
+
+public class MainActivity extends SherlockListActivity {
+	
+	@Override public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setSupportProgressBarVisibility(true);
+		
+		mockData();
+	}
+	
+	/************************
+	 ***** START MOCKING ****
+	 ************************/
+	
+	private void mockData() {
+		ArrayList<HashMap<String, String>> data = getMockData();
+		
+		SimpleAdapter simpleAdapter = new SimpleAdapter(MainActivity.this, data, R.layout.list_item_game,
+			new String[] { "game_name", "operator_name", "operator_link", "days_left", "hours_left", "minutes_left",
+				"has_joined", "accomplished_tasks", "total_tasks", "accomplished_points", "total_points",
+				"current_players_number", "free_slots" }, new int[] { R.id.textViewGameName, R.id.textViewOperatorName,
+				R.id.textViewOperatorLink, R.id.textViewNumberOfDaysLeft, R.id.textViewNumberOfHoursLeft,
+				R.id.textViewNumberOfMinutesLeft, R.id.textViewJoinedItem, R.id.textViewNumberOfCompletedTasks,
+				R.id.textViewNumberOfTotalTasks, R.id.textViewNumberOfPoints, R.id.textViewNumberOfTotalPoints,
+				R.id.textViewNumberOfPlayers, R.id.textViewNumberOfFreeSlots });
+		
+		setListAdapter(simpleAdapter);
+	}
+	
+	public ArrayList<HashMap<String, String>> getMockData() {
+		ArrayList<HashMap<String, String>> listOfMap = new ArrayList<HashMap<String, String>>();
+		HashMap<String, String> map = null;
+		Random random = new Random();
+		
+		for (int i = 0; i < 10; i++) {
+			map = new HashMap<String, String>();
+			map.put("game_name", "Krasnale Wrocławskie");
+			map.put("operator_name", "BLStream");
+			map.put("operator_link", "http://www.blstream.com/");
+			map.put("days_left", String.valueOf(random.nextInt(50)));
+			map.put("hours_left", String.valueOf(random.nextInt(50)));
+			map.put("minutes_left", String.valueOf(random.nextInt(50)));
+			map.put("has_joined", random.nextBoolean() ? "joined" : "not joined");
+			map.put("accomplished_tasks", String.valueOf(random.nextInt(50)));
+			map.put("total_tasks", String.valueOf(random.nextInt(50)));
+			map.put("accomplished_points", String.valueOf(random.nextInt(50)));
+			map.put("total_points", String.valueOf(random.nextInt(50)));
+			map.put("current_players_number", String.valueOf(random.nextInt(50)));
+			map.put("free_slots", String.valueOf(random.nextInt(50)));
+			listOfMap.add(map);
+		}
+		
+		return listOfMap;
+	}
+	
+	/************************
+	 ****** END MOCKING *****
+	 ************************/
+	
+	@Override protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		Intent intent = new Intent(MainActivity.this, GameDetailsActivity.class);
+		startActivity(intent);
+	}
+	
+	@Override public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater menuInflater = getSupportMenuInflater();
+		menuInflater.inflate(R.menu.top_bar_games_list, menu);
+		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
+		configureSearchAction(menu);
+		return true;
+	}
+	
+	private void configureSearchAction(Menu menu) {
+		final MenuItem moreItem = menu.findItem(R.id.menu_more);
+		final MenuItem loginItem = menu.findItem(R.id.menu_login);
+		
+		MenuItem searchItem = menu.findItem(R.id.menu_search);
+		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
+			@Override public boolean onMenuItemActionExpand(MenuItem item) {
+				moreItem.setVisible(false);
+				loginItem.setVisible(false);
+				return true;
+			}
+			
+			@Override public boolean onMenuItemActionCollapse(MenuItem item) {
+				moreItem.setVisible(true);
+				loginItem.setVisible(true);
+				return true;
+			}
+		});
+		
+		SearchView searchView = (SearchView) searchItem.getActionView();
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+			@Override public boolean onQueryTextSubmit(String query) {
+				return true;
+			}
+			
+			@Override public boolean onQueryTextChange(String newText) {
+				return true;
+			}
+		});
+	}
+	
+	@Override public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		return super.onMenuItemSelected(featureId, item);
+	}
+}
