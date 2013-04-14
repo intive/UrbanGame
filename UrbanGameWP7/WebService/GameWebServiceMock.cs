@@ -8,7 +8,7 @@ using WebService.BOMock;
 
 namespace WebService
 {
-    public class GameWebServiceMock:IGameWebService
+    public class GameWebServiceMock : IGameWebService
     {
         #region GameWebServiceMock
         /// <summary>
@@ -57,22 +57,7 @@ namespace WebService
                 if (g.Id == gid)
                 {
                     g.NumberOfCompletedTasks = 1;
-                    OnGameChanged(new GameEventArgs());
                 }
-            }
-        }
-        #endregion
-
-        #region OnGameChanged
-        /// <summary>
-        /// Method fire GameChanged
-        /// </summary>
-        /// <param name="e">GameEventArgs</param>
-        private void OnGameChanged(GameEventArgs e)
-        {
-            if (GameChanged != null)
-            {
-                GameChanged(this, e);
             }
         }
         #endregion
@@ -145,10 +130,6 @@ namespace WebService
         {
             throw new NotImplementedException();
         }
-        #endregion
-
-        #region GameChanged
-        public event GameChangedEventHandler GameChanged;
         #endregion
 
         #region Authorize

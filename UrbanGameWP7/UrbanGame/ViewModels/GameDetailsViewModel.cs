@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UrbanGame.Storage;
-using WebService;
 
 namespace UrbanGame.ViewModels
 {
@@ -15,9 +14,7 @@ namespace UrbanGame.ViewModels
         public GameDetailsViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
             : base(navigationService, unitOfWorkLocator)
         {
-            //temporarily mock object
-            _gameWebService = new GameWebServiceMock();
-            _gameWebService.GameChanged += GameWebService_GameChanged;
+            _gameEventAggregator.GetEvent<GameEventArgs>().Subscribe(GameChanged);
         }
 
         #region navigation properties
@@ -28,9 +25,7 @@ namespace UrbanGame.ViewModels
 
         #region private
 
-        IGameWebService _gameWebService;
-
-        void GameWebService_GameChanged(object sender, GameEventArgs e)
+        void GameChanged(GameEventArgs e)
         {
             if (e.Id == GameId)
                 RefreshGame();

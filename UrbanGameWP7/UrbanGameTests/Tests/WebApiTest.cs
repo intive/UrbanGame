@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using UrbanGame.Storage;
 using WebService;
+using WebService.BOMock;
 
 namespace UrbanGameTests.Tests
 {
@@ -67,11 +68,9 @@ namespace UrbanGameTests.Tests
             var ggwsm = GetGameWebServiceMock();
             var games = new IGame[] { new Game() { Id = 1 }, new Game() { Id = 2 }, new Game() { Id = 3 }, new Game() { Id = 4 }, new Game() { Id = 5 } };
             ggwsm.ListOfGames.AddRange(games);
-            bool flag = false;
-            ggwsm.GameChanged += delegate(object o, GameEventArgs e) { flag = true; };
             ggwsm.ChangeGame(1);
             var result = ggwsm.GetGames();
-            Assert.IsTrue(flag && result[0].NumberOfCompletedTasks == 1);
+            Assert.IsTrue(result[0].NumberOfCompletedTasks == 1);
         }
         #endregion
     }

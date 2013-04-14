@@ -100,10 +100,5 @@ namespace Common
         /// <returns></returns>
         IGame[] UsersInactiveGames();
 
-        /// <summary>
-        /// Event fire when a game changes
-        /// </summary>
-        event GameChangedEventHandler GameChanged;
-
     }
 }

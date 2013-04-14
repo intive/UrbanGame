@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebService;
 using System.Device.Location;
 using UrbanGame.Storage;
 
@@ -22,16 +21,12 @@ namespace UrbanGame.ViewModels
 
             IsRefreshing = false;
 
-            //temporarily mock object
-            _gameWebService = new GameWebServiceMock();
-            _gameWebService.GameChanged += GameWebService_GameChanged;
+            _gameEventAggregator.GetEvent<GameEventArgs>().Subscribe(GameChanged);
         }
 
         #region private
 
-        IGameWebService _gameWebService;
-
-        void GameWebService_GameChanged(object sender, GameEventArgs e)
+        void GameChanged(GameEventArgs e)
         {
             Task.Run(() =>
             {
