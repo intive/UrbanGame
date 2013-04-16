@@ -32,10 +32,6 @@ object ApplicationBuild extends Build {
       appJsLibDir <+= baseDirectory( _ / "public" / "javascripts" / "lib"),
       jasmineTestDir <+= baseDirectory( _ / "test" / "assets"),
       jasmineConfFile <+= baseDirectory( _ / "test" / "assets" / "test.dependencies.js"),
-      // appJsDir <+= baseDirectory / "target/scala-2.10/resource_managed/main/public/javascripts",
-      // appJsLibDir <+= baseDirectory / "public/javascripts/lib",
-      // jasmineTestDir <+= baseDirectory / "test/assets",
-      // jasmineConfFile <+= baseDirectory / "test/assets/test.dependencies.js",
       // link jasmine to the standard 'sbt test' action. Now when running 'test' jasmine tests will be run
       // and after that other Play tests will be executed.
       (test in Test) <<= (test in Test) dependsOn (jasmine)
