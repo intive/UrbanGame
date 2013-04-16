@@ -51,11 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizeState.cs" />
+    <Compile Include="GameChangedEvent.cs" />
     <Compile Include="GameType.cs" />
     <Compile Include="GameDifficulty.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="IGame.cs" />
-    <Compile Include="IGameChangeNotifier.cs" />
+    <Compile Include="IGameChangesManager.cs" />
     <Compile Include="IGameWebService.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="ISolution.cs" />

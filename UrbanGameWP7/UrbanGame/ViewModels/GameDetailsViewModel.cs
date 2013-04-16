@@ -9,20 +9,19 @@ using UrbanGame.Storage;
 
 namespace UrbanGame.ViewModels
 {
-    public class GameDetailsViewModel : BaseViewModel, IHandle<IGame>
+    public class GameDetailsViewModel : BaseViewModel, IHandle<GameChangedEvent>
     {
         public GameDetailsViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
                                     IGameWebService gameWebService, IEventAggregator gameEventAggregator)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
         {
-            gameEventAggregator.Subscribe(this);
         }
 
-        #region IHandle<IGame>
-        public void Handle(IGame game)
+        #region IHandle<GameChangedEvent>
+        public void Handle(GameChangedEvent game)
         {
             if (game.Id == GameId)
-                Game = game;
+                Task.Run(() =>  Game = _gameWebService.GetGameInfo(game.Id));
         }
         #endregion
 

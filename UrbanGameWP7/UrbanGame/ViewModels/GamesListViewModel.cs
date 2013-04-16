@@ -10,14 +10,12 @@ using UrbanGame.Storage;
 
 namespace UrbanGame.ViewModels
 {
-    public class GamesListViewModel : BaseViewModel, IHandle<IGame>
+    public class GamesListViewModel : BaseViewModel, IHandle<GameChangedEvent>
     {
         public GamesListViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
                                   IGameWebService gameWebService, IEventAggregator gameEventAggregator)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
-        {
-            gameEventAggregator.Subscribe(this);
-            
+        {            
             UserActiveGames = new BindableCollection<IGame>();
             UserInactiveGames = new BindableCollection<IGame>();
             NearestGames = new BindableCollection<IGame>();
@@ -25,12 +23,17 @@ namespace UrbanGame.ViewModels
             IsRefreshing = false;
         }
 
-        #region IHandle<IGame>
-        public void Handle(IGame game)
+        #region IHandle<GameChangedEvent>
+        public void Handle(GameChangedEvent e)
         {
-            UpdateGame(UserActiveGames, game);
-            UpdateGame(UserInactiveGames, game);
-            UpdateGame(NearestGames, game);
+            Task.Run(() =>
+                {
+                    IGame game = _gameWebService.GetGameInfo(e.Id);
+
+                    UpdateGame(UserActiveGames, game);
+                    UpdateGame(UserInactiveGames, game);
+                    UpdateGame(NearestGames, game);
+                });
         }
         #endregion
 
@@ -221,18 +224,16 @@ namespace UrbanGame.ViewModels
 
                 if (_gameWebService.IsAuthorized)
                 {   
-                    IQueryable<Game> games = _unitOfWorkLocator().GetRepository<Game>().All();
+                    IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
 
                     UserActiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Joined)
                                                                          .OrderBy(g => g.GameEnd)
-                                                                         .Cast<IGame>()
                                                                          .AsEnumerable());
 
                     UserInactiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Ended || 
                                                                                        g.GameState == GameState.Won || 
                                                                                        g.GameState == GameState.Withdraw)
                                                                            .OrderByDescending(g => g.GameStart)
-                                                                           .Cast<IGame>()
                                                                            .AsEnumerable());                   
                 }                   
             });

@@ -47,9 +47,11 @@ namespace Common
         /// <summary>
         /// User's rank in that game
         /// </summary>
-        int? Rank { get; set; } 
+        int? Rank { get; set; }
 
-        GeoCoordinate GameLocalization { get; set; }
+        double GameLatitude { get; set; }
+
+        double GameLongitude { get; set; }
 
         GameDifficulty Difficulty { get; set; }
 

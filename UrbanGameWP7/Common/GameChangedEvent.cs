@@ -5,7 +5,8 @@ using System.Text;
 
 namespace Common
 {
-    public interface IGameChangeNotifier
+    public class GameChangedEvent
     {
+        public int Id { get; set; }
     }
 }

@@ -5,18 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UrbanGame.Storage;
 using WebService;
 
 namespace UrbanGameTests.Tests
 {
     [TestClass]
-    public class GameChangeNotifierTest
+    public class GameChangesManagerTest
     {
         #region NotificationTest
-        class HandlerClass : IHandle<IGame>
+        class HandlerClass : IHandle<GameChangedEvent>
         {
             public bool handled = false;
-            public void Handle(IGame message)
+            public void Handle(GameChangedEvent message)
             {
                 handled = true;
             }
@@ -31,8 +32,9 @@ namespace UrbanGameTests.Tests
             HandlerClass handler = new HandlerClass();
             aggregator.Subscribe(handler);
 
-            IGameChangeNotifier notifier = new GameChangeNotifierMock(webService, aggregator, 1000);
-            System.Threading.Thread.Sleep(1500);
+            IGameChangesManager notifier = 
+                new GameChangesManager(webService, aggregator, () => new UnitOfWork(new UrbanGameDataContext()));
+            System.Threading.Thread.Sleep(6500);
 
             Assert.IsTrue(handler.handled);
         }

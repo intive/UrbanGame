@@ -13,18 +13,20 @@ namespace UrbanGame.ViewModels
         protected INavigationService _navigationService;
         protected Func<IUnitOfWork> _unitOfWorkLocator;
         protected IGameWebService _gameWebService;
-        protected IEventAggregator _gameEventAggregator;
-        protected IGameChangeNotifier _gameChangeNotifier;
+        protected IEventAggregator _eventAggregator;
         bool _creating = true;
 
         public BaseViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                             IGameWebService gameWebService, IEventAggregator gameEventAggregator)
+                             IGameWebService gameWebService, IEventAggregator eventAggregator)
         {
+            eventAggregator.Subscribe(this);
+
             _navigationService = navigationService;
             _unitOfWorkLocator = unitOfWorkLocator;
             _gameWebService = gameWebService;
-            _gameEventAggregator = gameEventAggregator;
-            _gameChangeNotifier = new GameChangeNotifierMock(gameWebService, gameEventAggregator);
+            _eventAggregator = eventAggregator;
+            if (App.GameChangesManager == null)
+                App.GameChangesManager = IoC.Get<IGameChangesManager>();
         }
 
         protected override void OnActivate()
