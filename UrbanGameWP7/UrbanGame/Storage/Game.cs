@@ -15,7 +15,7 @@ namespace UrbanGame.Storage
 
         private int _id;
 
-        [Column(IsPrimaryKey = true, IsDbGenerated = true, CanBeNull = false, AutoSync = AutoSync.OnInsert)]
+        [Column(IsPrimaryKey = true)]
         public int Id
         {
             get
@@ -333,24 +333,47 @@ namespace UrbanGame.Storage
         }
         #endregion
 
-        #region GameLocalization
+        #region GameLatitude
 
-        private GeoCoordinate _gameLocalization;
+        private double _gameLatitude;
 
         [Column]
-        public GeoCoordinate GameLocalization
+        public double GameLatitude
         {
             get
             {
-                return _gameLocalization;
+                return _gameLatitude;
             }
             set
             {
-                if (_gameLocalization != value)
+                if (_gameLatitude != value)
                 {
-                    NotifyPropertyChanging("GameLocalization");
-                    _gameLocalization = value;
-                    NotifyPropertyChanged("GameLocalization");
+                    NotifyPropertyChanging("GameLatitude");
+                    _gameLatitude = value;
+                    NotifyPropertyChanged("GameLatitude");
+                }
+            }
+        }
+        #endregion
+
+        #region GameLongitude
+
+        private double _gameLongitude;
+
+        [Column]
+        public double GameLongitude
+        {
+            get
+            {
+                return _gameLongitude;
+            }
+            set
+            {
+                if (_gameLongitude != value)
+                {
+                    NotifyPropertyChanging("GameLongitude");
+                    _gameLongitude = value;
+                    NotifyPropertyChanged("GameLongitude");
                 }
             }
         }

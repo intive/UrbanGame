@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Common;
 
 namespace UrbanGame
 {
@@ -26,7 +27,9 @@ namespace UrbanGame
             InitializeComponent();
             #if AUTOMATION
             WindowsPhoneTestFramework.Client.AutomationClient.Automation.Instance.Initialise();
-            #endif
+            #endif    
         }
+
+        public static IGameChangesManager GameChangesManager;
     }
 }

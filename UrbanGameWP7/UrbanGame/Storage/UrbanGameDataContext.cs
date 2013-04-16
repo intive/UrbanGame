@@ -24,5 +24,7 @@ namespace UrbanGame.Storage
             if (!DatabaseExists())
                 CreateDatabase();
         }
+
+        public Table<Game> Game;
     }
 }

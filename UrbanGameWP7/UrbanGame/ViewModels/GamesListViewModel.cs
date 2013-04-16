@@ -5,49 +5,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebService;
 using System.Device.Location;
 using UrbanGame.Storage;
 
 namespace UrbanGame.ViewModels
 {
-    public class GamesListViewModel : BaseViewModel
+    public class GamesListViewModel : BaseViewModel, IHandle<GameChangedEvent>
     {
-        public GamesListViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
-            : base(navigationService, unitOfWorkLocator)
-        {
+        public GamesListViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
+                                  IGameWebService gameWebService, IEventAggregator gameEventAggregator)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
+        {            
             UserActiveGames = new BindableCollection<IGame>();
             UserInactiveGames = new BindableCollection<IGame>();
             NearestGames = new BindableCollection<IGame>();
 
             IsRefreshing = false;
-
-            //temporarily mock object
-            _gameWebService = new GameWebServiceMock();
-            _gameWebService.GameChanged += GameWebService_GameChanged;
         }
+
+        #region IHandle<GameChangedEvent>
+        public void Handle(GameChangedEvent e)
+        {
+            Task.Run(() =>
+                {
+                    IGame game = _gameWebService.GetGameInfo(e.Id);
+
+                    UpdateGame(UserActiveGames, game);
+                    UpdateGame(UserInactiveGames, game);
+                    UpdateGame(NearestGames, game);
+                });
+        }
+        #endregion
 
         #region private
 
-        IGameWebService _gameWebService;
-
-        void GameWebService_GameChanged(object sender, GameEventArgs e)
-        {
-            Task.Run(() =>
-            {
-                IGame game = _gameWebService.GetGameInfo(e.Id);
-
-                UpdateGame(UserActiveGames, e.Id, game);
-                UpdateGame(UserInactiveGames, e.Id, game);
-                UpdateGame(NearestGames, e.Id, game);
-            });
-
-        }
-
-        void UpdateGame(BindableCollection<IGame> games, int gid, IGame newGame)
+        void UpdateGame(BindableCollection<IGame> games, IGame newGame)
         {
             for (int i = 0; i < games.Count; i++)
-                if (games[i].Id == gid)
+                if (games[i].Id == newGame.Id)
                 {
                     games[i] = newGame;
                     break;
@@ -229,18 +224,16 @@ namespace UrbanGame.ViewModels
 
                 if (_gameWebService.IsAuthorized)
                 {   
-                    IQueryable<Game> games = _unitOfWorkLocator().GetRepository<Game>().All();
+                    IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
 
                     UserActiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Joined)
                                                                          .OrderBy(g => g.GameEnd)
-                                                                         .Cast<IGame>()
                                                                          .AsEnumerable());
 
                     UserInactiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Ended || 
                                                                                        g.GameState == GameState.Won || 
                                                                                        g.GameState == GameState.Withdraw)
                                                                            .OrderByDescending(g => g.GameStart)
-                                                                           .Cast<IGame>()
                                                                            .AsEnumerable());                   
                 }                   
             });

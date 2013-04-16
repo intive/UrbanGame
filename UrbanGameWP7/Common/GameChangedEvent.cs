@@ -5,10 +5,7 @@ using System.Text;
 
 namespace Common
 {
-    /// <summary>
-    /// Used with GameChangedEventHandler
-    /// </summary>
-    public class GameEventArgs : EventArgs
+    public class GameChangedEvent
     {
         public int Id { get; set; }
     }

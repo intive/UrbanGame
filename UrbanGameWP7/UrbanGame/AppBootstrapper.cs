@@ -6,6 +6,10 @@ using Caliburn.Micro;
 using UrbanGame.ViewModels;
 using System.Windows;
 using Microsoft.Phone.Shell;
+using Common;
+using WebService;
+using UrbanGame.Storage;
+
 namespace UrbanGame
 {
     public class AppBootstrapper : PhoneBootstrapper
@@ -18,6 +22,10 @@ namespace UrbanGame
             container.PerRequest<MainViewModel>();
             container.PerRequest<GameDetailsViewModel>();
             container.PerRequest<GamesListViewModel>();
+            container.PerRequest<UrbanGameDataContext>();
+            container.PerRequest<IUnitOfWork, UnitOfWork>();
+            container.Singleton<IGameWebService, GameWebServiceMock>();
+            container.Singleton<IGameChangesManager, GameChangesManager>();            
         }
 
         protected override object GetInstance(Type service, string key)
@@ -48,7 +56,7 @@ namespace UrbanGame
             if (!e.IsApplicationInstancePreserved)
             {
                 Resurecting = true;
-            }
+            }            
             base.OnActivate(sender, e);
         }
 

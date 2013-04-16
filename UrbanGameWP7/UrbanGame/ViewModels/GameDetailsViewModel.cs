@@ -6,19 +6,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UrbanGame.Storage;
-using WebService;
 
 namespace UrbanGame.ViewModels
 {
-    public class GameDetailsViewModel : BaseViewModel
+    public class GameDetailsViewModel : BaseViewModel, IHandle<GameChangedEvent>
     {
-        public GameDetailsViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
-            : base(navigationService, unitOfWorkLocator)
+        public GameDetailsViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
+                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
         {
-            //temporarily mock object
-            _gameWebService = new GameWebServiceMock();
-            _gameWebService.GameChanged += GameWebService_GameChanged;
         }
+
+        #region IHandle<GameChangedEvent>
+        public void Handle(GameChangedEvent game)
+        {
+            if (game.Id == GameId)
+                RefreshGame();
+        }
+        #endregion
 
         #region navigation properties
 
@@ -27,14 +32,6 @@ namespace UrbanGame.ViewModels
         #endregion
 
         #region private
-
-        IGameWebService _gameWebService;
-
-        void GameWebService_GameChanged(object sender, GameEventArgs e)
-        {
-            if (e.Id == GameId)
-                RefreshGame();
-        }
 
         void RefreshGame()
         {

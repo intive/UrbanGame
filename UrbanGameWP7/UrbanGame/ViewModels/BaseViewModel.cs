@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WebService;
 
 namespace UrbanGame.ViewModels
 {
@@ -11,12 +12,21 @@ namespace UrbanGame.ViewModels
     {
         protected INavigationService _navigationService;
         protected Func<IUnitOfWork> _unitOfWorkLocator;
+        protected IGameWebService _gameWebService;
+        protected IEventAggregator _eventAggregator;
         bool _creating = true;
 
-        public BaseViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
+        public BaseViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
+                             IGameWebService gameWebService, IEventAggregator eventAggregator)
         {
+            eventAggregator.Subscribe(this);
+
             _navigationService = navigationService;
             _unitOfWorkLocator = unitOfWorkLocator;
+            _gameWebService = gameWebService;
+            _eventAggregator = eventAggregator;
+            if (App.GameChangesManager == null)
+                App.GameChangesManager = IoC.Get<IGameChangesManager>();
         }
 
         protected override void OnActivate()
