@@ -149,10 +149,6 @@
       <Project>{E7C6CD32-71A2-4CAC-9FC7-4F4E90ADFA9D}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EventAggregator\EventAggregator.csproj">
-      <Project>{07240B76-A3B9-4495-96AD-030987E64791}</Project>
-      <Name>EventAggregator</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WebService\WebService.csproj">
       <Project>{2890C315-043A-4F80-90B5-5618C7FAD3E4}</Project>
       <Name>WebService</Name>

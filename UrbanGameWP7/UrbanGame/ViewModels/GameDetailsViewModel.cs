@@ -9,13 +9,22 @@ using UrbanGame.Storage;
 
 namespace UrbanGame.ViewModels
 {
-    public class GameDetailsViewModel : BaseViewModel
+    public class GameDetailsViewModel : BaseViewModel, IHandle<IGame>
     {
-        public GameDetailsViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
-            : base(navigationService, unitOfWorkLocator)
+        public GameDetailsViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
+                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
         {
-            _gameEventAggregator.GetEvent<GameEventArgs>().Subscribe(GameChanged);
+            gameEventAggregator.Subscribe(this);
         }
+
+        #region IHandle<IGame>
+        public void Handle(IGame game)
+        {
+            if (game.Id == GameId)
+                Game = game;
+        }
+        #endregion
 
         #region navigation properties
 
@@ -24,12 +33,6 @@ namespace UrbanGame.ViewModels
         #endregion
 
         #region private
-
-        void GameChanged(GameEventArgs e)
-        {
-            if (e.Id == GameId)
-                RefreshGame();
-        }
 
         void RefreshGame()
         {

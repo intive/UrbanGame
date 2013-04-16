@@ -10,39 +10,36 @@ using UrbanGame.Storage;
 
 namespace UrbanGame.ViewModels
 {
-    public class GamesListViewModel : BaseViewModel
+    public class GamesListViewModel : BaseViewModel, IHandle<IGame>
     {
-        public GamesListViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
-            : base(navigationService, unitOfWorkLocator)
+        public GamesListViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
+                                  IGameWebService gameWebService, IEventAggregator gameEventAggregator)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
         {
+            gameEventAggregator.Subscribe(this);
+            
             UserActiveGames = new BindableCollection<IGame>();
             UserInactiveGames = new BindableCollection<IGame>();
             NearestGames = new BindableCollection<IGame>();
 
             IsRefreshing = false;
-
-            _gameEventAggregator.GetEvent<GameEventArgs>().Subscribe(GameChanged);
         }
+
+        #region IHandle<IGame>
+        public void Handle(IGame game)
+        {
+            UpdateGame(UserActiveGames, game);
+            UpdateGame(UserInactiveGames, game);
+            UpdateGame(NearestGames, game);
+        }
+        #endregion
 
         #region private
 
-        void GameChanged(GameEventArgs e)
-        {
-            Task.Run(() =>
-            {
-                IGame game = _gameWebService.GetGameInfo(e.Id);
-
-                UpdateGame(UserActiveGames, e.Id, game);
-                UpdateGame(UserInactiveGames, e.Id, game);
-                UpdateGame(NearestGames, e.Id, game);
-            });
-
-        }
-
-        void UpdateGame(BindableCollection<IGame> games, int gid, IGame newGame)
+        void UpdateGame(BindableCollection<IGame> games, IGame newGame)
         {
             for (int i = 0; i < games.Count; i++)
-                if (games[i].Id == gid)
+                if (games[i].Id == newGame.Id)
                 {
                     games[i] = newGame;
                     break;

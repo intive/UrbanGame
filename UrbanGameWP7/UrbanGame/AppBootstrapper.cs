@@ -6,8 +6,8 @@ using Caliburn.Micro;
 using UrbanGame.ViewModels;
 using System.Windows;
 using Microsoft.Phone.Shell;
-using GameChangeListener;
 using Common;
+using WebService;
 
 namespace UrbanGame
 {
@@ -21,10 +21,7 @@ namespace UrbanGame
             container.PerRequest<MainViewModel>();
             container.PerRequest<GameDetailsViewModel>();
             container.PerRequest<GamesListViewModel>();
-
-            GameEventAggregator gameEventAgg = new GameEventAggregator();
-            gameEventAgg.RegisterEvent<GameEventArgs>();
-            container.Instance<GameEventAggregator>(gameEventAgg);
+            container.Singleton<IGameWebService, GameWebServiceMock>();
         }
 
         protected override object GetInstance(Type service, string key)

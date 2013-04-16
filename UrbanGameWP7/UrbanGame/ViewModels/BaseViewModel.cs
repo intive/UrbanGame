@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using Common;
-using GameChangeListener;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +12,19 @@ namespace UrbanGame.ViewModels
     {
         protected INavigationService _navigationService;
         protected Func<IUnitOfWork> _unitOfWorkLocator;
-        protected GameEventAggregator _gameEventAggregator;
         protected IGameWebService _gameWebService;
+        protected IEventAggregator _gameEventAggregator;
+        protected IGameChangeNotifier _gameChangeNotifier;
         bool _creating = true;
 
-        public BaseViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
+        public BaseViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
+                             IGameWebService gameWebService, IEventAggregator gameEventAggregator)
         {
             _navigationService = navigationService;
             _unitOfWorkLocator = unitOfWorkLocator;
-            _gameEventAggregator = IoC.Get<GameEventAggregator>();
-            _gameWebService = new GameWebServiceMock();
+            _gameWebService = gameWebService;
+            _gameEventAggregator = gameEventAggregator;
+            _gameChangeNotifier = new GameChangeNotifierMock(gameWebService, gameEventAggregator);
         }
 
         protected override void OnActivate()

@@ -53,9 +53,9 @@
     <Compile Include="AuthorizeState.cs" />
     <Compile Include="GameType.cs" />
     <Compile Include="GameDifficulty.cs" />
-    <Compile Include="GameEventArgs.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="IGame.cs" />
+    <Compile Include="IGameChangeNotifier.cs" />
     <Compile Include="IGameWebService.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="ISolution.cs" />

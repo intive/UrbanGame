@@ -81,6 +81,7 @@ namespace WebService
         {
             return new GameMock()
             {
+                Id = gid,
                 Name = "Hydrozagadka",
                 OperatorName = "CAFETERIA",
                 OperatorLogo = "/ApplicationIcon.png",
