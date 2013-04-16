@@ -15,7 +15,6 @@
             android:id="@+id/imageViewGameLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/view_margin"
             android:contentDescription="@string/contentDescription_gameLogo"
             android:src="@drawable/ic_launcher_big" />
@@ -33,71 +32,27 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/textViewPointsItem"
+            android:layout_alignBottom="@+id/imageViewGameLogo"
             android:layout_alignParentRight="true"
             android:text="@string/button_join" />
-
-        <TextView
-            android:id="@+id/textViewJoinedDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/buttonJoinLeaveGame"
-            android:layout_alignParentRight="true"
-            android:text="@string/label_notJoined"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/textViewTasksDetails"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/imageViewOperatorLogo"
-            android:layout_marginRight="@dimen/view_margin"
-            android:layout_marginTop="@dimen/view_margin"
-            android:layout_toRightOf="@+id/imageViewGameLogo"
-            android:text="@string/label_tasks" />
-
-        <TextView
-            android:id="@+id/textViewPointsItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textViewTasksDetails"
-            android:layout_marginRight="@dimen/view_margin"
-            android:layout_toRightOf="@+id/imageViewGameLogo"
-            android:text="@string/label_points" />
-
-        <TextView
-            android:id="@+id/textViewPoints"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/textViewPointsItem"
-            android:layout_toRightOf="@+id/textViewPointsItem"
-            android:text="20/20" />
-
-        <TextView
-            android:id="@+id/textViewTasks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/textViewTasksDetails"
-            android:layout_alignLeft="@+id/textViewPoints"
-            android:text="10/10" />
 
         <ImageView
             android:id="@+id/imageViewOperatorLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewGameName"
-            android:layout_centerVertical="true"
             android:layout_marginBottom="@dimen/view_margin"
             android:layout_marginRight="@dimen/view_margin"
             android:layout_marginTop="@dimen/view_margin"
             android:layout_toRightOf="@+id/imageViewGameLogo"
+            android:contentDescription="@string/contentDescription_operatorLogo"
             android:src="@drawable/mock_logo_operator" />
 
         <TextView
-            android:id="@+id/textViewGameSubname"
+            android:id="@+id/textViewOperatorName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_below="@+id/textViewGameName"
             android:layout_toRightOf="@+id/imageViewOperatorLogo"
             android:text="Operator" />
     </RelativeLayout>

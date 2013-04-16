@@ -19,3 +19,6 @@ proguard-project.txt
 # Eclipse project files
 .settings/
 .metadata/
+
+# Other folders not revelant to project
+UX/
