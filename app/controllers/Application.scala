@@ -19,9 +19,14 @@ import play.api.mvc._
 
 object Application extends Controller {
   
-  def index = Action {
-    Ok(views.html.index())
-  }
-  def dummyTestFunction(left: Int,right: Int):Int=left+right
+	def index = Action {
+		Ok(Scalate("index").render('title -> "Urban Game"))
+  	}
+
+  	def createnewgame = Action {
+  		Ok(Scalate("createnewgame").render('title -> "Urban Game - Create new game"))
+  	}
+
+  	def dummyTestFunction(left: Int,right: Int):Int=left+right
   
 }
