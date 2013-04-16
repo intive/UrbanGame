@@ -25,6 +25,8 @@ namespace UrbanGame.ViewModels
             _unitOfWorkLocator = unitOfWorkLocator;
             _gameWebService = gameWebService;
             _eventAggregator = eventAggregator;
+
+            //needs to be commented before running test project
             if (App.GameChangesManager == null)
                 App.GameChangesManager = IoC.Get<IGameChangesManager>();
         }

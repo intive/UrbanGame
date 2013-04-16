@@ -37,7 +37,9 @@ namespace WebService
 
                     if (toUpdate != null)
                     {
-                        toUpdate.Description = newGame.Description;
+                        //for tests, until it works as mock-up
+                        toUpdate.Description = DateTime.Now.ToLongTimeString() + " " + newGame.Description; 
+
                         toUpdate.Difficulty = newGame.Difficulty;
                         toUpdate.GameEnd = newGame.GameEnd;
                         toUpdate.GameLongitude = newGame.GameLongitude;
