@@ -21,7 +21,7 @@ namespace UrbanGame.ViewModels
         public void Handle(GameChangedEvent game)
         {
             if (game.Id == GameId)
-                Task.Run(() =>  Game = _gameWebService.GetGameInfo(game.Id));
+                RefreshGame();
         }
         #endregion
 
