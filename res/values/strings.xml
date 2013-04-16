@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">WebServerInterface</string>
-    <string name="buttonGet">Send GET request</string>
+    <string name="app_name">WebServerHelper</string>
+    <string name="buttonGet">GET single game</string>
     <string name="textViewGameID">GameID: </string>
+    <string name="buttonGetList">GET list of games</string>
+    <string name="textViewGamesIDs">GamesIDs: </string>
+    
     <string name="menu_settings">Settings</string>
     <string name="clearInfo">Clear Info</string> 
+    
+    <string name="WebServerHelperScheme">http</string>  
+    <string name="WebServerHelperAuthority">blstream.com</string>  
+    <string name="WebServerHelperGamePath">/urbangame/games</string>     
+    
     
  
 </resources>
