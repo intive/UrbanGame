@@ -1,6 +1,3 @@
-%ul.nav.nav-pills.nav-stacked(ng-controller="MenuCtrl")
-	%li(ng-repeat="item in menuitems")
-		%a(href="{{item.href}}") {{item.name}}
 /
 	*Copyright 2013 BLStream, BLStream's Patronage Program Contributors
 	* 		 http://blstream.github.com/UrbanGame/
@@ -15,4 +12,7 @@
 	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	* See the License for the specific language governing permissions and
 	* limitations under the License.
-	*
+
+%ul.nav.nav-pills.nav-stacked(ng-controller="MenuCtrl")
+	%li(ng-repeat="item in menuitems")
+		%a(href="{{item.href}}") {{item.name}}
