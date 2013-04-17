@@ -1,11 +1,3 @@
-
-@main("Welcome to Patronage!") {
-    
-    UrbanGame application will be available here soon.
-    
-}
-
-@{
 /**Copyright 2013 BLStream, BLStream's Patronage Program Contributors
  * 		 http://blstream.github.com/UrbanGame/
  * 
@@ -20,4 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-}
+describe('Controllers', function() {
+    describe('MenuCtrl', function() {
+        it('should list 3 items', function() {
+            var scope = {}, ctrl = new MenuCtrl(scope);
+            expect(scope.menuitems.length).toBe(3);
+        });
+    });
+});
