@@ -1,0 +1,46 @@
+/
+	*Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+	* 		 http://blstream.github.com/UrbanGame/
+	* 
+	* Licensed under the Apache License, Version 2.0 (the "License");
+	* you may not use this file except in compliance with the License.
+	* You may obtain a copy of the License at
+	* 		 http://www.apache.org/licenses/LICENSE-2.0
+	* 
+	* Unless required by applicable law or agreed to in writing, software
+	* distributed under the License is distributed on an "AS IS" BASIS,
+	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	* See the License for the specific language governing permissions and
+	* limitations under the License.
+	
+- attributes("scripts") = capture
+	%script(src={uri("/assets/javascripts/controllers.js")} type="text/javascript")
+
+.span3
+	-render("submodules/menu.scaml")
+.span9
+	.row
+		.wizard(ng-controller="NewGameCtrl")
+			%form.form-horizontal
+				%ul.nav.nav-tabs
+					%li(ng-repeat="step in steps" ng-class="{active: $index==getCurrentStepIndex()}")
+						%a(title="Step" href="javascript:void(0);" ng-click="goToStep($index)") {{step}}
+				%div{"ng-switch on"=>"selection"}
+					%div(ng-switch-when="Start")
+						CREATING NEW GAME
+					%div(ng-switch-when="1")
+						Step 1
+					%div(ng-switch-when="2")
+						Step 2
+					%div(ng-switch-when="3")
+						Step 3
+					%div(ng-switch-when="Finish")
+						FINISH
+				.clearfix
+				%ul.pager.pull-right
+					%li(ng-class="{disabled: !hasPreviousStep()}")
+						%a(href="javascript:void(0);" ng-click="decrementStep()") &larr; Previous Step
+					%li(ng-class="{disabled: !hasNextStep()}")
+						%a(href="javascript:void(0);" ng-click="incrementStep()") Next Step &rarr;
+				.clearfix
+	*
