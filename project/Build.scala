@@ -31,5 +31,4 @@ object ApplicationBuild extends Build {
       jasmineConfFile <+= baseDirectory( _ / "test" / "assets" / "test.dependencies.js"),
       (test in Test) <<= (test in Test) dependsOn (jasmine)
     )
-
 }

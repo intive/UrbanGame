@@ -49,13 +49,6 @@ object Scalate {
     def apply(template: String, myformat: String = format) = Template(template + "." + myformat)
 
     case class Template(name: String) {
-
-        //def render(args: Map[String, Any] = Map.empty): ScalateContent = {
-            //ScalateContent{
-                //scalateEngine.layout(name, args)
-            //}
-        //}
-
         def render(args: (Symbol, Any)*) = {
             ScalateContent{
                 scalateEngine.layout(name, args.map {
