@@ -27,15 +27,15 @@
 						%a(title="Step" href="javascript:void(0);" ng-click="goToStep($index)") {{step}}
 				%div.wizbody{"ng-switch on"=>"selection"}
 					%div(ng-switch-when="Start")
-						=Messages("newgame.startmsg")
+						= Messages("newgame.startmsg")
 					%div(ng-switch-when="1")
-						-Messages("newgame.step1msg")
+						= Messages("newgame.step1msg")
 					%div(ng-switch-when="2")
-						-Messages("newgame.step2msg")
+						= Messages("newgame.step2msg")
 					%div(ng-switch-when="3")
-						-Messages("newgame.step3msg")
+						= Messages("newgame.step3msg")
 					%div(ng-switch-when="Finish")
-						-Messages("newgame.stepfinishmsg")
+						= Messages("newgame.stepfinishmsg")
 				.clearfix
 				%ul.pager.pull-right
 					%li(ng-class="{disabled: !hasPreviousStep()}")

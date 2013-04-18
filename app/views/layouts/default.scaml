@@ -45,9 +45,9 @@
                 %h3.pull-left.logo LOGO
                 .pull-right.loginform
                     %form.navbar-form.pull-right
-                        %input.span2(type="text" placeholder="Login")
-                        %input.span2(type="text" placeholder="Password")
-                        %input.btn(type="submit" value="Login")
+                        %input.span2(type="text" placeholder={Messages("login.login")})
+                        %input.span2(type="text" placeholder={Messages("login.password")})
+                        %input.btn(type="submit" value={Messages("login.login")})
             .row.navig
                 %ul.nav
                     NAVIGATION
