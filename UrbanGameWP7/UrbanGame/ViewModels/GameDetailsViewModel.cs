@@ -31,36 +31,6 @@ namespace UrbanGame.ViewModels
 
         #endregion
 
-        #region private
-
-        void RefreshGame()
-        {
-            Task.Run(() =>
-            {                
-                if (_gameWebService.IsAuthorized)
-                {
-                    IQueryable<Game> games = _unitOfWorkLocator().GetRepository<Game>().All();
-                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
-                }
-                else
-                {
-                    Game = _gameWebService.GetGameInfo(GameId);
-                }                
-            });
-        }
-
-        #endregion        
-
-        #region lifecycle
-
-        protected override void OnActivate()
-        {
-            base.OnActivate();
-            RefreshGame();
-        }
-
-        #endregion
-
         #region bindable properties
 
         #region Game
@@ -85,5 +55,35 @@ namespace UrbanGame.ViewModels
         #endregion
 
         #endregion
+
+        #region lifecycle
+
+        protected override void OnActivate()
+        {
+            base.OnActivate();
+            RefreshGame();
+        }
+
+        #endregion
+
+        #region operations
+
+        public void RefreshGame()
+        {
+            Task.Run(() =>
+            {
+                if (_gameWebService.IsAuthorized)
+                {
+                    IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
+                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
+                }
+                else
+                {
+                    Game = _gameWebService.GetGameInfo(GameId);
+                }
+            });
+        }
+
+        #endregion        
     }
 }

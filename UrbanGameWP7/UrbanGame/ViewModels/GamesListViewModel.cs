@@ -219,8 +219,8 @@ namespace UrbanGame.ViewModels
         {
             Task.Run(() =>
             {
-                UserActiveGames = null;
-                UserInactiveGames = null;
+                UserActiveGames.Clear();
+                UserInactiveGames.Clear();
 
                 if (_gameWebService.IsAuthorized)
                 {   
@@ -250,7 +250,7 @@ namespace UrbanGame.ViewModels
             {
                 try
                 {
-                    NearestGames = null;
+                    NearestGames.Clear();
                     NearestGames = new BindableCollection<IGame>(_gameWebService.UserNearbyGames(new GeoCoordinate()).OrderBy(g => g.GameEnd));
                 }
                 finally
