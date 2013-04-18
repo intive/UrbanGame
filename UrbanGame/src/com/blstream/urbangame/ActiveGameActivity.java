@@ -9,8 +9,8 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.blstream.urbangame.fragments.GameInfoFragment;
 import com.blstream.urbangame.fragments.GameRankingFragment;
-import com.blstream.urbangame.fragments.TabManager;
 import com.blstream.urbangame.fragments.GameTasksFragment;
+import com.blstream.urbangame.fragments.TabManager;
 
 public class ActiveGameActivity extends SherlockFragmentActivity {
 	private final String TAB_LAST_SELECTED = "tab";
@@ -25,9 +25,7 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 		
 		setUpTabHost();
 		
-		if (savedInstanceState != null) {
-			tabHost.setCurrentTabByTag(savedInstanceState.getString(TAB_LAST_SELECTED));
-		}
+		if (savedInstanceState != null) tabHost.setCurrentTabByTag(savedInstanceState.getString(TAB_LAST_SELECTED));
 	}
 	
 	private void setUpTabHost() {
@@ -70,5 +68,4 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 		}
 		return true;
 	}
-	
 }
