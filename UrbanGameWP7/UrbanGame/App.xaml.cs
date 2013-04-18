@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Common;
+using Caliburn.Micro;
 
 namespace UrbanGame
 {
@@ -28,7 +29,16 @@ namespace UrbanGame
             #if AUTOMATION
             WindowsPhoneTestFramework.Client.AutomationClient.Automation.Instance.Initialise();
             #endif    
+            this.Startup += App_Startup;
         }
+
+        void App_Startup(object sender, StartupEventArgs e)
+        {
+            this.Startup -= App_Startup;
+            App.GameChangesManager = IoC.Get<IGameChangesManager>();
+        }
+
+        
 
         public static IGameChangesManager GameChangesManager;
     }
