@@ -71,6 +71,8 @@
             <TextView
                 android:id="@+id/TextViewDetails"
                 style="@style/styleHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/header_details" />
 
             <RelativeLayout
@@ -163,21 +165,21 @@
 
             <LinearLayout
                 android:id="@+id/linearLayoutWrapperDifficulty"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:padding="@dimen/view_margin" >
 
                 <TextView
                     android:id="@+id/textViewDifficulty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/view_margin"
                     android:text="@string/label_difficulty" />
 
                 <RatingBar
                     android:id="@+id/ratingBarDifficulty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    style="@style/styleCustomRatingBar" />
             </LinearLayout>
 
             <TextView
