@@ -12,30 +12,30 @@
 	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	* See the License for the specific language governing permissions and
 	* limitations under the License.
+
+-import play.api.i18n.Messages
 	
 - attributes("scripts") = capture
 	%script(src={uri("/assets/javascripts/controllers.js")} type="text/javascript")
 
-.span3
-	-render("submodules/menu.scaml")
-.span9
+.span12
 	.row
 		.wizard(ng-controller="NewGameCtrl")
 			%form.form-horizontal
 				%ul.nav.nav-tabs
 					%li(ng-repeat="step in steps" ng-class="{active: $index==getCurrentStepIndex()}")
 						%a(title="Step" href="javascript:void(0);" ng-click="goToStep($index)") {{step}}
-				%div{"ng-switch on"=>"selection"}
+				%div.wizbody{"ng-switch on"=>"selection"}
 					%div(ng-switch-when="Start")
-						CREATING NEW GAME
+						=Messages("newgame.startmsg")
 					%div(ng-switch-when="1")
-						Step 1
+						-Messages("newgame.step1msg")
 					%div(ng-switch-when="2")
-						Step 2
+						-Messages("newgame.step2msg")
 					%div(ng-switch-when="3")
-						Step 3
+						-Messages("newgame.step3msg")
 					%div(ng-switch-when="Finish")
-						FINISH
+						-Messages("newgame.stepfinishmsg")
 				.clearfix
 				%ul.pager.pull-right
 					%li(ng-class="{disabled: !hasPreviousStep()}")
@@ -43,4 +43,3 @@
 					%li(ng-class="{disabled: !hasNextStep()}")
 						%a(href="javascript:void(0);" ng-click="incrementStep()") Next Step &rarr;
 				.clearfix
-	*
