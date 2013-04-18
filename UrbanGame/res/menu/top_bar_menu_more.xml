@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_more"
+        android:icon="@drawable/abs__ic_menu_moreoverflow_holo_light"
+        android:showAsAction="always"
+        android:title="@string/menu_more">
+        <menu>
+            <item
+                android:id="@+id/menu_refresh"
+                android:showAsAction="always|withText"
+                android:title="@string/menu_refresh"/>
+            <item
+                android:id="@+id/menu_settings"
+                android:showAsAction="always|withText"
+                android:title="@string/menu_settings"/>
+            <item
+                android:id="@+id/menu_help"
+                android:showAsAction="always|withText"
+                android:title="@string/menu_help"/>
+            <item
+                android:id="@+id/menu_feedback"
+                android:showAsAction="always|withText"
+                android:title="@string/menu_feedback"/>
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/view_margin"
+    android:padding="@dimen/view_margin"
+    tools:ignore="HardcodedText" >
+
+    <ImageView
+        android:id="@+id/imageViewGameLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/view_margin"
+        android:contentDescription="@string/contentDescription_gameLogo"
+        android:src="@drawable/ic_launcher_big" />
+
+    <TextView
+        android:id="@+id/textViewGameName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/imageViewGameLogo"
+        android:text="Krasnale Wrocławskie"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/imageViewGamePrize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/contentDescription_prize"
+        android:src="@drawable/mock_prize" />
+
+    <ImageView
+        android:id="@+id/imageViewOperatorLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewGameName"
+        android:layout_marginBottom="@dimen/view_margin"
+        android:layout_marginRight="@dimen/view_margin"
+        android:layout_marginTop="@dimen/view_margin"
+        android:layout_toRightOf="@+id/imageViewGameLogo"
+        android:contentDescription="@string/contentDescription_operatorLogo"
+        android:src="@drawable/mock_logo_operator" />
+
+    <TextView
+        android:id="@+id/textViewOperatorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageViewOperatorLogo"
+        android:layout_toRightOf="@+id/imageViewOperatorLogo"
+        android:text="Operator" />
+
+    <TextView
+        android:id="@+id/textViewNumberOfTotalPlayers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textViewOperatorName"
+        android:layout_alignParentRight="true"
+        android:text="12" />
+
+    <TextView
+        android:id="@+id/textViewDivider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textViewNumberOfTotalPlayers"
+        android:layout_toLeftOf="@+id/textViewNumberOfTotalPlayers"
+        android:text="/" />
+
+    <TextView
+        android:id="@+id/textViewNumberOfCurrentPlayers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textViewDivider"
+        android:layout_toLeftOf="@+id/textViewDivider"
+        android:text="1" />
+
+    <TextView
+        android:id="@+id/textViewPlayers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textViewNumberOfCurrentPlayers"
+        android:layout_marginRight="@dimen/view_margin"
+        android:layout_toLeftOf="@+id/textViewNumberOfCurrentPlayers"
+        android:text="@string/label_players" />
+
+    <TextView
+        android:id="@+id/textViewLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageViewOperatorLogo"
+        android:layout_below="@+id/imageViewOperatorLogo"
+        android:text="Wroclaw" />
+
+    <TextView
+        android:id="@+id/textViewStartTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textViewLocation"
+        android:layout_alignParentRight="true"
+        android:text="Mon, Apr 1, 2013 9:00 AM" />
+
+</RelativeLayout>
