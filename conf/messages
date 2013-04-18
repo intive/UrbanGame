@@ -1,0 +1,6 @@
+newgame.stepstartmsg = "Start"
+newgame.stepfinishmsg = "Finish"
+newgame.step1msg = "Step 1"
+newgame.step2msg = "Step 2"
+newgame.step3msg = "Step 3"
+newgame.startmsg = "Create new game"
