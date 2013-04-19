@@ -20,4 +20,11 @@ GitHub page: http://blstream.github.com/UrbanGame/
 
 Branch info
 ===========
+<<<<<<< HEAD
 This is Android branch. Please check other branches if you are interesting in other platforms.
+=======
+This is master branch that contains common/shared files.
+For Windows Phone platform, check "windows_phone" branch.
+For Android platform, check "android" branch.
+For Web platform, check "web" branch.
+>>>>>>> upstream/master
