@@ -33,6 +33,7 @@
         android:orientation="horizontal">
         
         <Button
+            android:id="@+id/buttonRegister"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -40,6 +41,7 @@
             android:onClick="onRegisterButtonClicked"/>
         
         <Button
+            android:id="@+id/buttonLogIn"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
