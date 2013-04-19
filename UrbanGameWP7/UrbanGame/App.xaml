@@ -15,5 +15,7 @@
         <conv:GameStartEndConverter x:Key="GameStartEndConverter" />
         <conv:DifficultyConverter x:Key="DifficultyConverter" />
         <conv:GameTypeConverter x:Key="GameTypeConverter" />
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <conv:OpositeBoolToVisibilityConverter x:Key="OpositeBoolToVisibilityConverter" />
     </Application.Resources>
 </Application>

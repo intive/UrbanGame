@@ -117,6 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>about</value>
+  </data>
+  <data name="AboutText1" xml:space="preserve">
+    <value>What is urban game? That's great What is urban game? That's great question, well it's something!
+                               well it's something!</value>
+  </data>
+  <data name="AboutText2" xml:space="preserve">
+    <value>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultricies turpis et augue pretium nec rhoncus odio congue. Duis faucibus accumsan eros sed volutpat. Nulla lorem urna, adipiscing non euismod non, egestas sit amet ligula. Maecenas condimentum tellus lacus, ornare mattis lacus.</value>
+  </data>
   <data name="ByOperator" xml:space="preserve">
     <value>by</value>
   </data>
@@ -153,8 +163,35 @@
   <data name="JoinIn" xml:space="preserve">
     <value>Join in</value>
   </data>
+  <data name="JoinOneGame" xml:space="preserve">
+    <value>Please, choose one and join into.</value>
+  </data>
+  <data name="JoinOrLogIn" xml:space="preserve">
+    <value>Join to the Urban Game or Log in!</value>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
   <data name="Medium" xml:space="preserve">
     <value>medium</value>
+  </data>
+  <data name="MyAccount" xml:space="preserve">
+    <value>my account</value>
+  </data>
+  <data name="MyGames" xml:space="preserve">
+    <value>my games</value>
+  </data>
+  <data name="MyPreviousGames" xml:space="preserve">
+    <value>my previous games</value>
+  </data>
+  <data name="Nearby" xml:space="preserve">
+    <value>nearby</value>
+  </data>
+  <data name="NoGamesPlaying" xml:space="preserve">
+    <value>Apparently you don't play in any game.</value>
   </data>
   <data name="Overview" xml:space="preserve">
     <value>overview</value>
@@ -164,6 +201,12 @@
   </data>
   <data name="Prizes" xml:space="preserve">
     <value>prizes</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="Started" xml:space="preserve">
     <value>started</value>

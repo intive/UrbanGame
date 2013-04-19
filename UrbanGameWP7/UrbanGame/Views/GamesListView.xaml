@@ -1,0 +1,197 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="UrbanGame.Views.GamesListView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="False">
+
+    <Grid x:Name="LayoutRoot">
+        <controls:Panorama Title="urban games" cal:Message.Attach="[Event SelectionChanged]=[Action ChangeAppbarButtons($eventArgs)]">
+            <controls:PanoramaItem x:Name="MyGames" Header="{Binding Path=AppResources.MyGames, Source={StaticResource LocalizedStrings}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <ListBox ItemsSource="{Binding UserActiveGames}" VerticalAlignment="Top" Grid.Row="0" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="{Binding GameLogo}" Grid.Column="0" Width="100" Height="100" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]"/>
+                                    <StackPanel Grid.Column="1" Orientation="Vertical">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="{Binding GameName}" Grid.Row="0"/>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                                <TextBlock Text="current rank: " />
+                                                <TextBlock Text="{Binding rank}" />
+                                                <TextBlock Text=", " />
+                                                <TextBlock Text="{Binding Path=AppResources.GameTimeLeft, Source={StaticResource LocalizedStrings}}" TextAlignment="Right"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock Text="{Binding Path=AppResources.NoGamesPalying, Source={StaticResource LocalizedStrings}}" Grid.Row="0" TextWrapping="Wrap" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
+                    <TextBlock Text="{Binding Path=AppResources.JoinOneGame, Source={StaticResource LocalizedStrings}}" Grid.Row="1" TextWrapping="Wrap" Margin="0,15,0,0" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
+                </Grid>
+            </controls:PanoramaItem>
+
+            <controls:PanoramaItem x:Name="Nearby" Header="{Binding Path=AppResources.Nearby, Source={StaticResource LocalizedStrings}}">
+                <Grid>
+                    <ListBox ItemsSource="{Binding NearestGames}" VerticalAlignment="Top" Grid.Row="0">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="{Binding OperatorLogo}" Grid.Column="0" Width="100" Height="100" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]"/>
+                                    <StackPanel Grid.Column="1" Orientation="Vertical">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="{Binding GameName}" Grid.Row="0"/>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                <TextBlock Text="{Binding OperatorName}" Margin="0,0,10,0"/>
+                                                <Image Source="{Binding OperatorLogo}" Width="30" Height="30" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{Binding Path=AppResources.Players, Source={StaticResource LocalizedStrings}}" Grid.Column="0" />
+                                                    <TextBlock Text=": " Grid.Column="1" />
+                                                    <TextBlock Text="{Binding NumberOfPlayers}" Grid.Column="2" />
+                                                    <TextBlock Text="/" Grid.Column="3" />
+                                                    <TextBlock Text="{Binding NumberOfSlots}" Grid.Column="4" />
+                                                    <TextBlock Text="{Binding Path=AppResources.GameTimeLeft, Source={StaticResource LocalizedStrings}}" TextAlignment="Right" Grid.Column="5" />
+                                                </Grid>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </controls:PanoramaItem>
+
+            <controls:PanoramaItem x:Name="MyAccount" Header="{Binding Path=AppResources.MyAccount, Source={StaticResource LocalizedStrings}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding Path=AppResources.JoinOrLogIn, Source={StaticResource LocalizedStrings}}" Grid.Row="0" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="{Binding UserImage}" Height="130" Width="130" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <StackPanel Grid.Column="1" Orientation="Vertical" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding UserName}" Grid.Row="0" Grid.Column="1" />
+                                <TextBlock Text="{Binding UserMail}" Grid.Row="1" Grid.Column="1" />
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock Text="{Binding Path=AppResources.MyPreviousGame, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <ListBox Grid.Row="2" ItemsSource="{Binding UserInactiveGames}" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="{Binding GameLogo}" Width="100" Height="100" Grid.Column="0"/>
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="{Binding GameName}" Grid.Row="0"/>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                                <TextBlock Text="{Binding GameState}"/>
+                                                <TextBlock Text=", rank: "/>
+                                                <TextBlock Text="{Binding Rank}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </controls:PanoramaItem>
+
+            <controls:PanoramaItem x:Name="About" Header="{Binding Path=AppResources.About, Source={StaticResource LocalizedStrings}}">
+                <Grid>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=AppResources.AboutText1, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding Path=AppResources.AboutText2, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Margin="0,15,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </controls:PanoramaItem>
+        </controls:Panorama>
+    </Grid>
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+</phone:PhoneApplicationPage>

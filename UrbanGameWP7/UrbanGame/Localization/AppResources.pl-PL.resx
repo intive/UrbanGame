@@ -171,4 +171,46 @@
   <data name="Undefinied" xml:space="preserve">
     <value>nieokreślone</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>o grze</value>
+  </data>
+  <data name="AboutText1" xml:space="preserve">
+    <value>Co to jest urban game? To świetne pytanie, tak więc to jest coś!</value>
+  </data>
+  <data name="AboutText2" xml:space="preserve">
+    <value>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultricies turpis et augue pretium nec rhoncus odio congue. Duis faucibus accumsan eros sed volutpat. Nulla lorem urna, adipiscing non euismod non, egestas sit amet ligula. Maecenas condimentum tellus lacus, ornare mattis lacus.</value>
+  </data>
+  <data name="MyAccount" xml:space="preserve">
+    <value>moje konto</value>
+  </data>
+  <data name="MyGames" xml:space="preserve">
+    <value>moje gry</value>
+  </data>
+  <data name="Nearby" xml:space="preserve">
+    <value>w pobliżu</value>
+  </data>
+  <data name="JoinOneGame" xml:space="preserve">
+    <value>Proszę, wybierz jedną i dołącz.</value>
+  </data>
+  <data name="JoinOrLogIn" xml:space="preserve">
+    <value>Dołącz do Urban Game lub Zaloguj się!</value>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Zaloguj</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Wyloguj</value>
+  </data>
+  <data name="MyPreviousGame" xml:space="preserve">
+    <value>moje poprzednie gry</value>
+  </data>
+  <data name="NoGamesPlaying" xml:space="preserve">
+    <value>Najwyraźniej nie grasz w żadną grę.</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Odśwież</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Szukaj</value>
+  </data>
 </root>

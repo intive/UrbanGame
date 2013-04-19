@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
 using Common;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +27,47 @@ namespace UrbanGame.ViewModels
             _unitOfWorkLocator = unitOfWorkLocator;
             _gameWebService = gameWebService;
             _eventAggregator = eventAggregator;
-                
+
+        }
+
+        public IApplicationBar GetAppBar()
+        {
+            var rootPage = ((PhoneApplicationFrame)(App.Current.RootVisual)).Content as PhoneApplicationPage;
+
+            return rootPage.ApplicationBar;
+        }
+
+        public void AddButtonItem(AppBarButton item, System.Action callback)
+        {
+            item.Click += (ea, obj) => { callback(); };
+
+            GetAppBar().Buttons.Add(item);
+        }
+
+        public void AddMenuItem(AppBarMenuItem item, System.Action callback)
+        {
+            item.Click += (ea, obj) => { callback(); };
+
+            GetAppBar().MenuItems.Add(item);
+        }
+
+        public void RemoveButtonItem(string ItemMessage)
+        {
+            var appbarButtons = GetAppBar().Buttons;
+            AppBarButton toRemove = null;
+
+            foreach (AppBarButton button in appbarButtons)
+            {
+                if (button.Message == ItemMessage)
+                {
+                    toRemove = button;
+                    break;
+                }
+            }
+            if (toRemove != null)
+            {
+                appbarButtons.Remove(toRemove);
+            }
         }
 
         protected override void OnActivate()

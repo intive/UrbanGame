@@ -19,7 +19,6 @@ namespace UrbanGame
         {
             container = new PhoneContainer(RootFrame);
             container.RegisterPhoneServices();
-            container.PerRequest<MainViewModel>();
             container.PerRequest<GameDetailsViewModel>();
             container.PerRequest<GamesListViewModel>();
             container.PerRequest<UrbanGameDataContext>();
