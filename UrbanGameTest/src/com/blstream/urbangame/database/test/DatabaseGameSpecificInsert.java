@@ -1,33 +1,30 @@
 package com.blstream.urbangame.database.test;
 
 import android.test.AndroidTestCase;
-import android.test.IsolatedContext;
 
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 
 public class DatabaseGameSpecificInsert extends AndroidTestCase {
-
+	
 	private DatabaseInterface database;
-	private IsolatedContext isolatedContext;
 	private PlayerGameSpecific playerSpecific;
-
+	
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-
-		if (isolatedContext == null)
-			isolatedContext = new IsolatedContext(null, mContext);
-		if (database == null)
-			database = new Database(isolatedContext);
+		
+		if (database == null) {
+			database = new Database(mContext);
+		}
 		playerSpecific = new PlayerGameSpecific(12, "em@em.em", 2L, PlayerGameSpecific.GAME_ACTIVE);
 	}
-
+	
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		isolatedContext.deleteDatabase(Database.DATABASE_NAME);
+		mContext.deleteDatabase(Database.DATABASE_NAME);
 		database = null;
 	}
 	
@@ -38,13 +35,14 @@ public class DatabaseGameSpecificInsert extends AndroidTestCase {
 		boolean ok = database.insertUserGameSpecific(playerSpecific);
 		assertTrue(ok);
 	}
-
+	
 	// allowed
 	public void testInsertNullState() {
 		playerSpecific.setState(null);
 		boolean ok = database.insertUserGameSpecific(playerSpecific);
 		assertTrue(ok);
 	}
+	
 	/* ------------------------ NULL VALUES END ------------------------ */
 	
 	/* ------------------------ WRONG VALUES END ------------------------ */
@@ -58,6 +56,7 @@ public class DatabaseGameSpecificInsert extends AndroidTestCase {
 		ok = database.insertUserGameSpecific(playerSpecific);
 		assertFalse(ok);
 	}
+	
 	/* ------------------------ WRONG VALUES END ------------------------ */
 	
 	/* ------------------------ NORMAL VALUES ------------------------ */
