@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText" >
+
+    <ImageView
+        android:id="@+id/imageViewTaskLogo"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="false"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/contentDescription_taskLogo"
+        android:paddingRight="15dp"
+        android:src="@drawable/mock_task_image" />
+
+    <ImageView
+        android:id="@+id/imageViewNewTaskIndicator"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="false"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/contentDescription_newTaskIndicator"
+        android:paddingLeft="7dp"
+        android:src="@drawable/mock_new_task_indicator" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutWrapperBasicTaskInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="false"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/RelativeLayoutWrapperTaskDetails"
+        android:layout_toRightOf="@+id/imageViewTaskLogo"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textViewTaskTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hunt for gnomes"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewTasksTimeLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2 days, 6 hours left" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayoutWrapperTaskDetails"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/imageViewNewTaskIndicator"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textViewTaskPointsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/label_points2" />
+
+        <TextView
+            android:id="@+id/textViewMaximalTaskPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewTaskPointsLabel"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/textViewTaskPointsLabel"
+            android:text="10" />
+
+        <TextView
+            android:id="@+id/textViewTaskPointsDivider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewTaskPointsLabel"
+            android:layout_toLeftOf="@+id/textViewMaximalTaskPoints"
+            android:text="@string/slash" />
+
+        <TextView
+            android:id="@+id/textViewTaskPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textViewTaskPointsLabel"
+            android:layout_toLeftOf="@+id/textViewTaskPointsDivider"
+            android:text="3" />
+
+        <TextView
+            android:id="@+id/textViewTaskRepeatable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textViewTaskPointsLabel"
+            android:text="non-repeatable" />
+    </RelativeLayout>
+
+</RelativeLayout>

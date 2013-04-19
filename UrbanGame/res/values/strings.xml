@@ -18,7 +18,9 @@
     <string name="label_daysLeft">Days left:</string>
     <string name="label_hoursLeft">Hours left:</string>
     <string name="label_minutesLeft">Minutes left:</string>
-
+    <!-- TasksListActivity -->
+    <string name="label_points2">" pts"</string>
+    <string name="slash">/</string>
     <!-- ActionBar -->
     <string name="menu_search_hint">Filter games</string>
     <string name="menu_search">Search</string>
@@ -55,5 +57,7 @@
     <string name="contentDescription_gameLogo">Game logo</string>
     <string name="contentDescription_operatorLogo">Operator logo</string>
     <string name="contentDescription_prize">Prize</string>
+    <string name="contentDescription_taskLogo">Task Logo</string>
+    <string name="contentDescription_newTaskIndicator">New Task Indicator</string>
 
 </resources>
