@@ -55,6 +55,9 @@
     <string name="contentDescription_gameLogo">Game logo</string>
     <string name="contentDescription_operatorLogo">Operator logo</string>
     <string name="contentDescription_prize">Prize</string>
+    <string name="contentDescription_taskTypeIcon">Task type icon</string>
+    <string name="contentDescription_dividerHorizontalLine">Divider - horizontal line</string>
+    <string name="contentDescription_taskImage">Image associated with this task</string>
     
     <!-- Logging in-->
     <string name="hint_email">E-mail</string>
