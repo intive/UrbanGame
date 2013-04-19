@@ -34,7 +34,7 @@ namespace UrbanGameTests.Tests
 
             IGameChangesManager notifier = 
                 new GameChangesManager(webService, aggregator, () => new UnitOfWork(new UrbanGameDataContext()));
-            System.Threading.Thread.Sleep(6500);
+            System.Threading.Thread.Sleep(8000);
 
             Assert.IsTrue(handler.handled);
         }
