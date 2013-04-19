@@ -61,6 +61,34 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to about.
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is urban game? That&apos;s great What is urban game? That&apos;s great question, well it&apos;s something!
+        ///                               well it&apos;s something!.
+        /// </summary>
+        public static string AboutText1 {
+            get {
+                return ResourceManager.GetString("AboutText1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultricies turpis et augue pretium nec rhoncus odio congue. Duis faucibus accumsan eros sed volutpat. Nulla lorem urna, adipiscing non euismod non, egestas sit amet ligula. Maecenas condimentum tellus lacus, ornare mattis lacus..
+        /// </summary>
+        public static string AboutText2 {
+            get {
+                return ResourceManager.GetString("AboutText2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to by.
         /// </summary>
         public static string ByOperator {
@@ -169,11 +197,92 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please, choose one and join into..
+        /// </summary>
+        public static string JoinOneGame {
+            get {
+                return ResourceManager.GetString("JoinOneGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Join to the Urban Game or Log in!.
+        /// </summary>
+        public static string JoinOrLogIn {
+            get {
+                return ResourceManager.GetString("JoinOrLogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in.
+        /// </summary>
+        public static string LogIn {
+            get {
+                return ResourceManager.GetString("LogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logout.
+        /// </summary>
+        public static string Logout {
+            get {
+                return ResourceManager.GetString("Logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to medium.
         /// </summary>
         public static string Medium {
             get {
                 return ResourceManager.GetString("Medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to my account.
+        /// </summary>
+        public static string MyAccount {
+            get {
+                return ResourceManager.GetString("MyAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to my games.
+        /// </summary>
+        public static string MyGames {
+            get {
+                return ResourceManager.GetString("MyGames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to my previous games.
+        /// </summary>
+        public static string MyPreviousGames {
+            get {
+                return ResourceManager.GetString("MyPreviousGames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to nearby.
+        /// </summary>
+        public static string Nearby {
+            get {
+                return ResourceManager.GetString("Nearby", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apparently you don&apos;t play in any game..
+        /// </summary>
+        public static string NoGamesPlaying {
+            get {
+                return ResourceManager.GetString("NoGamesPlaying", resourceCulture);
             }
         }
         
@@ -201,6 +310,24 @@ namespace UrbanGame.Localization {
         public static string Prizes {
             get {
                 return ResourceManager.GetString("Prizes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string Refresh {
+            get {
+                return ResourceManager.GetString("Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         

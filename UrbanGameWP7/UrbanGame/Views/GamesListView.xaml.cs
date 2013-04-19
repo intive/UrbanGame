@@ -10,9 +10,9 @@ using Microsoft.Phone.Shell;
 
 namespace UrbanGame.Views
 {
-    public partial class MainView : PhoneApplicationPage
+    public partial class GamesListView : PhoneApplicationPage
     {
-        public MainView()
+        public GamesListView()
         {
             InitializeComponent();
         }
