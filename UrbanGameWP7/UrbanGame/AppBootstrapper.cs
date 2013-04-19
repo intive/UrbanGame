@@ -38,6 +38,12 @@ namespace UrbanGame
             return container.GetAllInstances(service);
         }
 
+        protected override void OnStartup(object sender, StartupEventArgs e)
+        {
+            base.OnStartup(sender, e);
+            App.GameChangesManager = IoC.Get<IGameChangesManager>();
+        }
+
         protected override void BuildUp(object instance)
         {
             container.BuildUp(instance);
