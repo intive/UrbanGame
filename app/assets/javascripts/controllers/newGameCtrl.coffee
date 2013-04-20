@@ -34,7 +34,7 @@ app.controller 'newGameCtrl', ['$scope', '$location', ($scope, $location) ->
         true if ((index > $scope.getCurrentStepIndex()+1) || ($scope.form.$invalid && index > $scope.getCurrentStepIndex()))
 
     $scope.isLast = ->
-        !$scope.hasNextStep
+        !$scope.hasNextStep()
         
     $scope.goToStep = (index) ->
             $scope.selection = $scope.steps[index] if ( !_.isUndefined($scope.steps[index]) )
