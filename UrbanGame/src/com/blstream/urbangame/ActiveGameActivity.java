@@ -18,14 +18,17 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 	private TabHost tabHost;
 	private TabManager tabManager;
 	
-	@Override public void onCreate(Bundle savedInstanceState) {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabhost_layout);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		setUpTabHost();
 		
-		if (savedInstanceState != null) tabHost.setCurrentTabByTag(savedInstanceState.getString(TAB_LAST_SELECTED));
+		if (savedInstanceState != null) {
+			tabHost.setCurrentTabByTag(savedInstanceState.getString(TAB_LAST_SELECTED));
+		}
 	}
 	
 	private void setUpTabHost() {
@@ -47,19 +50,22 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 		tabManager.addTab(tabHost.newTabSpec(tagRanking).setIndicator(tagRanking), GameRankingFragment.class);
 	}
 	
-	@Override protected void onSaveInstanceState(Bundle outState) {
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putString(TAB_LAST_SELECTED, tabHost.getCurrentTabTag());
 	}
 	
-	@Override public boolean onCreateOptionsMenu(Menu menu) {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_message, menu);
 		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
 		return true;
 	}
 	
-	@Override public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		int itemId = item.getItemId();
 		switch (itemId) {
 			case android.R.id.home:
