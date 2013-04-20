@@ -323,10 +323,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			&& game.getOperatorName() != null
 			&& game.getPlayers() != null
 			&& game.getPlayers().intValue() >= 0
-			&& game.getMaxPlayers() != null
-			&& game.getMaxPlayers().intValue() >= 0
-			&& game.getPlayers() <= game.getMaxPlayers()
-			&& game.getMaxPlayers() != null
+			&& (game.getMaxPlayers() == null || (game.getMaxPlayers() != null && game.getMaxPlayers().intValue() >= 0 && game
+				.getPlayers() <= game.getMaxPlayers()))
 			&& game.getLocation() != null
 			&& game.getDetailsLink() != null
 			&& (game.getStartDate() != null && game.getStartDate().after(new GregorianCalendar(2012, 12, 31).getTime()))
