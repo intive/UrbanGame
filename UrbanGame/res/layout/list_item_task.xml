@@ -24,7 +24,7 @@
         android:layout_centerHorizontal="false"
         android:layout_centerVertical="true"
         android:contentDescription="@string/contentDescription_newTaskIndicator"
-        android:src="@drawable/mock_new_task_indicator" />
+        android:src="@drawable/new_task_indicator" />
 
     <TextView
         android:id="@+id/textViewTaskTitle"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/textViewTaskRepeatable"
         android:layout_toRightOf="@id/imageViewTaskLogo"
-        android:text="Hunt for gnomes"
+        android:text="Hunt "
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_alignLeft="@id/textViewTaskTitle"
         android:layout_below="@+id/textViewTaskTitle"
         android:layout_toLeftOf="@+id/textViewTaskRepeatable"
-        android:text="2 days, 6 hours left" />
+        android:text="2 days, 6 " />
 
     <TextView
         android:id="@+id/textViewTaskRepeatable"
