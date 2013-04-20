@@ -101,18 +101,18 @@ public class DatabaseGamesInsertTest extends AndroidTestCase {
 		assertFalse(done);
 	}
 	
-	// inserting null number of max players - not allowed
+	// inserting null number of max players - allowed
 	public void testNullNumberOfMaxPlayers() {
 		game.setMaxPlayers(null);
 		boolean done = database.insertGameInfo(game);
-		assertFalse(done);
+		assertTrue(done);
 	}
 	
-	// SHORT inserting null number of max players - not allowed
+	// SHORT inserting null number of max players - allowed
 	public void testNullNumberOfMaxPlayersSHORT() {
 		gameShort.setMaxPlayers(null);
 		boolean done = database.insertGameShortInfo(gameShort);
-		assertFalse(done);
+		assertTrue(done);
 	}
 	
 	// inserting null start date - not allowed
