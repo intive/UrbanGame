@@ -20,7 +20,8 @@ import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
 public class MainActivity extends SherlockListActivity {
 	
-	@Override public void onCreate(Bundle savedInstanceState) {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setSupportProgressBarVisibility(true);
 		
@@ -65,13 +66,15 @@ public class MainActivity extends SherlockListActivity {
 	 ****** END MOCKING *****
 	 ************************/
 	
-	@Override protected void onListItemClick(ListView l, View v, int position, long id) {
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		Intent intent = new Intent(MainActivity.this, GameDetailsActivity.class);
 		startActivity(intent);
 	}
 	
-	@Override public boolean onCreateOptionsMenu(Menu menu) {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_games_list, menu);
 		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
@@ -85,13 +88,15 @@ public class MainActivity extends SherlockListActivity {
 		
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
-			@Override public boolean onMenuItemActionExpand(MenuItem item) {
+			@Override
+			public boolean onMenuItemActionExpand(MenuItem item) {
 				moreItem.setVisible(false);
 				loginItem.setVisible(false);
 				return true;
 			}
 			
-			@Override public boolean onMenuItemActionCollapse(MenuItem item) {
+			@Override
+			public boolean onMenuItemActionCollapse(MenuItem item) {
 				moreItem.setVisible(true);
 				loginItem.setVisible(true);
 				return true;
@@ -100,17 +105,20 @@ public class MainActivity extends SherlockListActivity {
 		
 		SearchView searchView = (SearchView) searchItem.getActionView();
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
-			@Override public boolean onQueryTextSubmit(String query) {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
 				return true;
 			}
 			
-			@Override public boolean onQueryTextChange(String newText) {
+			@Override
+			public boolean onQueryTextChange(String newText) {
 				return true;
 			}
 		});
 	}
 	
-	@Override public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		return super.onMenuItemSelected(featureId, item);
 	}
 }

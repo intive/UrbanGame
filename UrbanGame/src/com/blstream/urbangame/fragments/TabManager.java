@@ -54,7 +54,8 @@ public class TabManager implements TabHost.OnTabChangeListener {
 			this.context = context;
 		}
 		
-		@Override public View createTabContent(String tag) {
+		@Override
+		public View createTabContent(String tag) {
 			View v = new View(context);
 			v.setMinimumWidth(0);
 			v.setMinimumHeight(0);
@@ -81,7 +82,8 @@ public class TabManager implements TabHost.OnTabChangeListener {
 		tabHost.addTab(tabSpec);
 	}
 	
-	@Override public void onTabChanged(String tabId) {
+	@Override
+	public void onTabChanged(String tabId) {
 		TabInfo newTabInfo = tabsMap.get(tabId);
 		if (lastTabInfo != newTabInfo) { // if tab is being switched
 			FragmentTransaction ft = fragmentManager.beginTransaction();
