@@ -41,6 +41,10 @@
     <string name="header_prizes">Prizes</string>
     <string name="header_description">Description</string>
     <string name="header_details">Details</string>
+    <string name="dialog_join_title">Join to the game</string>
+    <string name="dialog_join_message">Are you sure?</string>
+    <string name="dialog_join_positive_button">Yes</string>
+    <string name="dialog_join_negative_button">No</string>  
 
     <!-- ActiveGameActivity -->
     <string name="tab_game_gameInfo">Game info</string>
