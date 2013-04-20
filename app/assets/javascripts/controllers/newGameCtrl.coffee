@@ -12,9 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 ###
+
 app = angular.module('web', ['ui'])
 
-NewGameCtrl = ($scope, $location) ->
+app.controller 'newGameCtrl', ['$scope', '$location', ($scope, $location) ->
 
     $scope.steps = [
         'Start',
@@ -28,9 +29,15 @@ NewGameCtrl = ($scope, $location) ->
 
     $scope.getCurrentStepIndex = ->
         _.indexOf($scope.steps, $scope.selection)
+
+    $scope.isDisabled = (index) ->
+        true if ((index > $scope.getCurrentStepIndex()+1) || ($scope.form.$invalid && index > $scope.getCurrentStepIndex()))
+
+    $scope.isLast = ->
+        !$scope.hasNextStep
         
     $scope.goToStep = (index) ->
-        $scope.selection = $scope.steps[index] if ( !_.isUndefined($scope.steps[index]) )
+            $scope.selection = $scope.steps[index] if ( !_.isUndefined($scope.steps[index]) )
 
     $scope.hasNextStep = ->
         stepIndex = $scope.getCurrentStepIndex()
@@ -56,10 +63,23 @@ NewGameCtrl = ($scope, $location) ->
             $scope.selection = $scope.steps[previousStep]
         ) if ( $scope.hasPreviousStep() )
 
-MenuCtrl = ($scope) ->
+    $scope.saveit = ->
+        alert "Here this project will be saved"
 
-    $scope.menuitems = [
-        {name: "Page1", href: "/"}
-        {name: "Page2", href: "/"}
-        {name: "Page3", href: "/"}
-    ]
+    $scope.publishit = ->
+        $scope.save()
+        alert "and published too"
+
+    $scope.master = {}
+
+    $scope.update = (user) ->
+        $scope.master = angular.copy(user)
+
+    $scope.reset = ->
+        $scope.user = angular.copy($scope.master)
+
+    $scope.isUnchanged = (user) ->
+        angular.equals(user, $scope.master)
+        
+    $scope.reset()
+]
