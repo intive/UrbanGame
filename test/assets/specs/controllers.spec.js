@@ -22,7 +22,7 @@ describe('Controllers', function() {
     describe('newGameCtrl', function() {
         it('should list 5 steps', function() {
             var scope = {}, ctrl = new newGameCtrl(scope);
-            expect(scope.steps.length).toBe(5);
+            expect(scope.steps.length).toBe(4);
         });
     });
 });
