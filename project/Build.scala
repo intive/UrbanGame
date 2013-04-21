@@ -24,10 +24,10 @@ object ApplicationBuild extends Build {
   )
   .settings(
       // Jasmine configuration, overridden as we don't follow the default project structure sbt-jasmine expects
-      appJsDir <+= baseDirectory( _ / "target" / "scala-2.10" / "resource_managed" / "main" / "public" / "javascripts"),
-      appJsLibDir <+= baseDirectory( _ / "public" / "javascripts" / "lib"),
-      jasmineTestDir <+= baseDirectory( _ / "test" / "assets"),
-      jasmineConfFile <+= baseDirectory( _ / "test" / "assets" / "test.dependencies.js"),
+      appJsDir <+= baseDirectory { src => src / "target" / "scala-2.10" / "resource_managed" / "main" / "public" / "javascripts" },
+      appJsLibDir <+= baseDirectory { src => src / "public" / "javascripts" / "lib" },
+      jasmineTestDir <+= baseDirectory { src => src / "test" / "assets" },
+      jasmineConfFile <+= baseDirectory { src => src / "test" / "assets" / "test.dependencies.js" },
       (test in Test) <<= (test in Test) dependsOn (jasmine)
     )
 }
