@@ -30,10 +30,8 @@
 				%div.wizbody{"ng-switch on"=>"selection"}
 					%div(ng-switch-when="Start")
 						= Messages("newgame.startmsg")
-					%div(ng-switch-when="1")
-						
-						%input(type="text" ng-model="user.name" name="uName" required)
-						%input(type="email" ng-model="user.email" name="uEmail" required)
+					%div.row(ng-switch-when="1")
+						-render(assets/views/submodules/step1form.scaml)
 					%div(ng-switch-when="2")
 						= Messages("newgame.step2msg")
 						-#.form-vertical(ng-form="stepform2" class="css-form")

@@ -5,7 +5,12 @@ login.password = Password
 
 newgame.stepstartmsg = Start
 newgame.stepfinishmsg = Finish
-newgame.step1msg = Step 1
+newgame.step1title = Step 1
+newgame.step1subtitle = Make your game easy to find. Complete the identity data of your game.
 newgame.step2msg = Step 2
 newgame.step3msg = Step 3
 newgame.startmsg = Create new game
+
+newgame.gamenamelabel = game name:*
+
+newgame.tooltipgamename = tooltip1test
