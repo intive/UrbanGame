@@ -1,4 +1,8 @@
 .container-narrow{margin:0 auto;max-width:940px;}
-.masthead{margin-bottom:20px;}
-.navig{margin-bottom:20px;}
-.wizard div{height:200px;}
+.masthead{margin-bottom:30px;}
+.navbar .nav,.navbar .nav>li{float:none;display:inline-block;*display:inline;*zoom:1;vertical-align:top;margin:0px;}
+.navbarmy{overflow:visible;margin:0px;}.navbarmy ul{margin-bottom:-1px;}.navbarmy ul li{background-color:white;}
+.navbar-inner{text-align:center;}
+.nav-steps{min-width:940px;}
+.myheader{background-color:#cccccc;}.myheader .navbar{margin-bottom:0px;}
+.loginform{margin:5px 10px;}

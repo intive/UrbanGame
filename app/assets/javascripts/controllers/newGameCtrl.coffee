@@ -18,11 +18,10 @@ app = angular.module('web', ['ui'])
 app.controller 'newGameCtrl', ['$scope', '$location', ($scope, $location) ->
 
     $scope.steps = [
-        'Start',
-        '1',
-        '2',
-        '3',
-        'Finish'
+        {no: 1, name: 'Data'},
+        {no: 2, name: 'Tasks'},
+        {no: 3, name: 'Skin'},
+        {no: 4, name: 'Publish'}
     ]
     
     $scope.selection = $scope.steps[0]
