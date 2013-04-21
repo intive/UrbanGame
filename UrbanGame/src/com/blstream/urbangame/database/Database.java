@@ -66,7 +66,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED = "UGSGameActiveObserved";
 	
 	// tables creation strings
-	private static final String GAMES = "CREATE TABLE " + GAMES_TABLE_NAME + " (" + GAMES_KEY_ID
+	private static final String CREATE_GAMES_TABLE = "CREATE TABLE " + GAMES_TABLE_NAME + " (" + GAMES_KEY_ID
 		+ " INTEGER PRIMARY KEY, " + GAMES_KEY_VERSION + " REAL, " + GAMES_KEY_TITLE + " TEXT, "
 		+ GAMES_KEY_DESCRIPTION + " TEXT, " + GAMES_KEY_GAME_ICON + " TEXT, " + GAMES_KEY_OPERATOR_ICON + " TEXT, "
 		+ GAMES_KEY_OPERATOR_NAME + " TEXT, " + GAMES_KEY_NUMBER_OF_PLAYERS + " INTEGER, "
@@ -75,12 +75,12 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		+ " INTEGER, " + GAMES_KEY_COMMENTS + " TEXT, " + GAMES_KEY_REWARD + " TEXT, " + GAMES_KEY_PRIZE_INFO
 		+ " TEXT, " + GAMES_KEY_DETAILS_LINK + " TEXT" + ")";
 	
-	private static final String USER = "CREATE TABLE " + USER_TABLE_NAME + " (" + USER_KEY_EMAIL
+	private static final String CREATE_USER_TABLE = "CREATE TABLE " + USER_TABLE_NAME + " (" + USER_KEY_EMAIL
 		+ " TEXT PRIMARY KEY, " + USER_KEY_PASSWORD + " TEXT, " + USER_KEY_DISPLAY_NAME + " TEXT," + USER_KEY_AVATAR
 		+ " TEXT" + ")";
 	
-	private static final String USER_GAMES_SPECIFIC = "CREATE TABLE " + USER_GAMES_SPECIFIC_TABLE_NAME + " ("
-		+ USER_GAMES_SPECIFIC_KEY_EMAIL + " TEXT, " + USER_GAMES_SPECIFIC_KEY_GAME_ID + " INTEGER, "
+	private static final String CREATE_USER_GAMES_SPECIFIC_TABLE = "CREATE TABLE " + USER_GAMES_SPECIFIC_TABLE_NAME
+		+ " (" + USER_GAMES_SPECIFIC_KEY_EMAIL + " TEXT, " + USER_GAMES_SPECIFIC_KEY_GAME_ID + " INTEGER, "
 		+ USER_GAMES_SPECIFIC_KEY_RANK + " INTEGER, " + USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED + " INTEGER, "
 		+ "PRIMARY KEY (" + USER_GAMES_SPECIFIC_KEY_EMAIL + ", " + USER_GAMES_SPECIFIC_KEY_GAME_ID + ")"
 		+ " FOREIGN KEY (" + USER_GAMES_SPECIFIC_KEY_EMAIL + ") " + "REFERENCES " + USER_TABLE_NAME + " ("
@@ -97,9 +97,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("PRAGMA key = " + DATABASE_PASS);
-		db.execSQL(GAMES);
-		db.execSQL(USER);
-		db.execSQL(USER_GAMES_SPECIFIC);
+		db.execSQL(CREATE_GAMES_TABLE);
+		db.execSQL(CREATE_USER_TABLE);
+		db.execSQL(CREATE_USER_GAMES_SPECIFIC_TABLE);
 	}
 	
 	@Override
@@ -288,7 +288,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 				+ "" }) == 1;
 		}
 		db.close();
-		return isDataOk && updateOK;
+		return updateOK;
 	}
 	
 	@Override
@@ -306,7 +306,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 				.longValue() + "" }) == 1;
 		}
 		db.close();
-		return isDataOk && isUpdateOk;
+		return isUpdateOk;
 	}
 	
 	@Override
@@ -377,41 +377,36 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		return ret;
 	}
 	
-	// indexes from getAllGamesShortInfo select
-	// 0 GAMES_KEY_ID,
-	// 1 GAMES_KEY_TITLE,
-	// 2 GAMES_KEY_GAME_ICON,
-	// 3 GAMES_KEY_OPERATOR_ICON,
-	// 4 GAMES_KEY_OPERATOR_NAME,
-	// 5 GAMES_KEY_NUMBER_OF_PLAYERS,
-	// 6 GAMES_KEY_NUMBER_OF_MAX_PLAYERS,
-	// 7 GAMES_KEY_CITY_NAME,
-	// 8 GAMES_KEY_START_DATE,
-	// 9 GAMES_KEY_END_DATE,
-	// 10 GAMES_KEY_REWARD,
-	// 11 GAMES_DETAILS_LINK
 	private UrbanGameShortInfo gameShortInfoFromCursor(Cursor cursor) {
-		UrbanGameShortInfo game = new UrbanGameShortInfo(cursor.getLong(0), cursor.getString(1), cursor.getString(4),
-			cursor.getInt(5), cursor.getInt(6), longToDate(cursor.getLong(8)), longToDate(cursor.getLong(9)),
-			stringToBoolean(cursor.getString(10)), cursor.getString(7), cursor.getString(2), cursor.getString(3),
-			cursor.getString(11));
+		UrbanGameShortInfo game = new UrbanGameShortInfo(cursor.getLong(GamesFields.ID.value),
+			cursor.getString(GamesFields.TITLE.value), cursor.getString(GamesFields.OPERATOR_NAME.value),
+			cursor.getInt(GamesFields.NUMBER_OF_PLAYERS.value), cursor.getInt(GamesFields.NUMBER_OF_MAX_PLAYERS.value),
+			longToDate(cursor.getLong(GamesFields.START_DATE.value)),
+			longToDate(cursor.getLong(GamesFields.END_DATE.value)),
+			stringToBoolean(cursor.getString(GamesFields.REWARD.value)), cursor.getString(GamesFields.CITY_NAME.value),
+			cursor.getString(GamesFields.ICON.value), cursor.getString(GamesFields.OPERATOR_ICON.value),
+			cursor.getString(GamesFields.DETAILS_LINK.value));
 		return game;
 	}
 	
-	// indexes from getGameInfo select
-	// 12 GAMES_KEY_VERSION,
-	// 13 GAMES_KEY_WINNING_STRATEGY,
-	// 14 GAMES_KEY_DIFFICULTY,
-	// 15 GAMES_KEY_PRIZE_INFO,
-	// 16 GAMES_KEY_DESCRIPTION,
-	// 17 GAMES_KEY_COMMENTS
 	private void setRestOfDataForGameInfo(UrbanGame game, Cursor cursor) {
-		game.setGameVersion(cursor.getDouble(12));
-		game.setWinningStrategy(cursor.getString(13));
-		game.setDifficulty(cursor.getInt(14));
-		game.setPrizesInfo(cursor.getString(15));
-		game.setDescription(cursor.getString(16));
-		game.setComments(cursor.getString(17));
+		game.setGameVersion(cursor.getDouble(GamesFields.VERSION.value));
+		game.setWinningStrategy(cursor.getString(GamesFields.WINNING_STRATEGY.value));
+		game.setDifficulty(cursor.getInt(GamesFields.DIFFICULTY.value));
+		game.setPrizesInfo(cursor.getString(GamesFields.PRIZE_INFO.value));
+		game.setDescription(cursor.getString(GamesFields.DESCRIPTION.value));
+		game.setComments(cursor.getString(GamesFields.COMMENTS.value));
+	}
+	
+	private enum GamesFields {
+		ID(0), TITLE(1), ICON(2), OPERATOR_ICON(3), OPERATOR_NAME(4), NUMBER_OF_PLAYERS(5), NUMBER_OF_MAX_PLAYERS(6), CITY_NAME(
+			7), START_DATE(8), END_DATE(9), REWARD(10), DETAILS_LINK(11), VERSION(12), WINNING_STRATEGY(13), DIFFICULTY(
+			14), PRIZE_INFO(15), DESCRIPTION(16), COMMENTS(17);
+		int value;
+		
+		private GamesFields(int x) {
+			value = x;
+		}
 	}
 	
 	private void putUrbanGameShortInfoInValues(UrbanGameShortInfo game, ContentValues values) {
@@ -545,7 +540,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			updateOK = db.update(USER_TABLE_NAME, values, USER_KEY_EMAIL + "=?", new String[] { player.getEmail() }) == 1;
 		}
 		db.close();
-		return isDataOk && updateOK;
+		return updateOK;
 	}
 	
 	@Override
@@ -627,7 +622,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 				playerGameSpecific.getGameID().longValue() + "" }) == 1;
 		}
 		db.close();
-		return isDataOk && updateOK;
+		return updateOK;
 	}
 	
 	@Override
