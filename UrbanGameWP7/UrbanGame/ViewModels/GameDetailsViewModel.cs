@@ -71,13 +71,60 @@ namespace UrbanGame.ViewModels
 
         #region lifecycle
 
+        protected override void OnCreated()
+        {
+            base.OnCreated();
+            AddMenuItem(new AppBarMenuItem() { Text = Localization.AppResources.LogIn }, LogoutOrLogin);
+        }
+
         protected override void OnActivate()
         {
             base.OnActivate();
-            /*this line should be deleted(helps to simulate that user is logged in)*/
-            _gameWebService.Authorize("ffsdfsf", "fsfdf");
-
             RefreshGame();
+            SetAppBarContent();
+        }
+
+        #endregion
+
+        #region operations
+
+        public void ToogleMenuItemText()
+        {
+            var appbarButtons = GetAppBar().MenuItems;
+            foreach (AppBarMenuItem button in appbarButtons)
+            {
+                if (button.Text == Localization.AppResources.LogIn)
+                {
+                    button.Text = Localization.AppResources.Logout;
+                    break;
+                }
+                else
+                {
+                    button.Text = Localization.AppResources.LogIn;
+                    break;
+                }
+            }
+        }
+
+        public void LogoutOrLogin()
+        {
+            ToogleMenuItemText();
+            if (!_gameWebService.IsAuthorized)
+            {
+                //to do
+                _gameWebService.Authorize("aaaaaaaaa", "fsffasfasf");
+                SetAppBarContent();
+            }
+            else
+            {
+                //to do implement login logout
+                _gameWebService.IsAuthorized = false;
+                SetAppBarContent();
+            }
+        }
+
+        private void SetAppBarContent()
+        {
             RemoveButtonItem(Localization.AppResources.JoinIn);
             RemoveButtonItem(Localization.AppResources.Leave);
             if (_gameWebService.IsAuthorized)
@@ -86,16 +133,12 @@ namespace UrbanGame.ViewModels
                 {
                     AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbarSearch.png", UriKind.Relative), Text = Localization.AppResources.Leave, Message = Localization.AppResources.Leave }, Leave);
                 }
-                else if (Game.GameState == GameState.None)
+                else
                 {
                     AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbar.check.png", UriKind.Relative), Text = Localization.AppResources.JoinIn, Message = Localization.AppResources.JoinIn }, JoinIn);
                 }
             }
         }
-
-        #endregion
-
-        #region operations
 
         public void RefreshGame()
         {
@@ -112,36 +155,24 @@ namespace UrbanGame.ViewModels
 
         public void JoinIn()
         {
-            if(MessageBox.Show("join in","join in",MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            if (MessageBox.Show("join in", "join in", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
                 {
+
+
+                    if (uow.GetRepository<IGame>().All().ToArray<IGame>().Count() > 0)
+                    {
+                        var gameToDelete = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
+                        uow.GetRepository<IGame>().MarkForDeletion(gameToDelete);
+                    }
                     var games = uow.GetRepository<IGame>();
-                    Game.GameState = GameState.Joined;
-
-                    /*require a change*/
-                    games.MarkForAdd(new UrbanGame.Storage.Game() {
-                        Id = GameId,
-                        Name = "Hydrozagadka",
-                        OperatorName = "CAFETERIA",
-                        OperatorLogo = "/ApplicationIcon.png",
-                        GameLogo = "/ApplicationIcon.png",
-                        GameStart = DateTime.Now.AddHours(3).AddMinutes(23),
-                        GameEnd = DateTime.Now.AddDays(2).AddHours(5),
-                        GameState = Common.GameState.Joined,
-                        NumberOfPlayers = 24,
-                        NumberOfSlots = 50,
-                        GameType = GameType.Quiz,
-                        Description = DateTime.Now.ToLongTimeString() + "\nsadsa sad ads  adsa dssa sad  asas asd as a sas as as  asas  asdas as ads as d",
-                        Difficulty = GameDifficulty.Medium,
-                        Prizes = "1st Bicycle\n2nd Bicycle\n3rd Bicycle\n4-8th Bicycle bicycle bicycle"
-                    });
-
+                    games.MarkForAdd(CreateInstance(GameState.Joined, uow));
                     uow.Commit();
-                    NotifyOfPropertyChange(() => IsJoined);
                 }
-                RemoveButtonItem(Localization.AppResources.JoinIn);
-                AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbarSearch.png", UriKind.Relative), Text = Localization.AppResources.Leave, Message = Localization.AppResources.Leave }, Leave);
+                RefreshGame();
+                NotifyOfPropertyChange(() => IsJoined);
+                SetAppBarContent();
             }
         }
 
@@ -151,16 +182,35 @@ namespace UrbanGame.ViewModels
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
                 {
-                    Game.GameState = Common.GameState.None;
                     var gameToDelete = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
                     uow.GetRepository<IGame>().MarkForDeletion(gameToDelete);
+                    uow.GetRepository<IGame>().MarkForAdd(CreateInstance(GameState.Inactive, uow));
                     uow.Commit();
-                    Game.GameState = GameState.None;
-                    NotifyOfPropertyChange(() => IsJoined);
                 }
-                AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbar.check.png", UriKind.Relative), Text = Localization.AppResources.JoinIn, Message = Localization.AppResources.JoinIn }, JoinIn);
-                RemoveButtonItem(Localization.AppResources.Leave);
+                RefreshGame();
+                NotifyOfPropertyChange(() => IsJoined);
+                SetAppBarContent();
             }
+        }
+
+        public IGame CreateInstance(GameState state, IUnitOfWork uow)
+        {
+            var newGame = uow.GetRepository<IGame>().CreateInstance();
+            newGame.Id = GameId;
+            newGame.Name = "Hydrozagadka";
+            newGame.OperatorName = "CAFETERIA";
+            newGame.OperatorLogo = "/ApplicationIcon.png";
+            newGame.GameLogo = "/ApplicationIcon.png";
+            newGame.GameStart = DateTime.Now.AddHours(3).AddMinutes(23);
+            newGame.GameEnd = DateTime.Now.AddDays(2).AddHours(5);
+            newGame.GameState = state;
+            newGame.NumberOfPlayers = 24;
+            newGame.NumberOfSlots = 50;
+            newGame.GameType = GameType.Quiz;
+            newGame.Description = DateTime.Now.ToLongTimeString() + "\nsadsa sad ads  adsa dssa sad  asas asd as a sas as as  asas  asdas as ads as d";
+            newGame.Difficulty = GameDifficulty.Medium;
+            newGame.Prizes = "1st Bicycle\n2nd Bicycle\n3rd Bicycle\n4-8th Bicycle bicycle bicycle";
+            return newGame;
         }
 
         #endregion
