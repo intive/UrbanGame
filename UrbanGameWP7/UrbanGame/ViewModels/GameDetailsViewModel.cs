@@ -74,10 +74,12 @@ namespace UrbanGame.ViewModels
         protected override void OnActivate()
         {
             base.OnActivate();
+            /*this line should be deleted(helps to simulate that user is logged in)*/
+            _gameWebService.Authorize("ffsdfsf", "fsfdf");
+
             RefreshGame();
             RemoveButtonItem(Localization.AppResources.JoinIn);
             RemoveButtonItem(Localization.AppResources.Leave);
-            _gameWebService.Authorize("ffsdfsf", "fsfdf");//this line should be deleted
             if (_gameWebService.IsAuthorized)
             {
                 if (Game.GameState == GameState.Joined)
@@ -116,7 +118,25 @@ namespace UrbanGame.ViewModels
                 {
                     var games = uow.GetRepository<IGame>();
                     Game.GameState = GameState.Joined;
-                    games.MarkForAdd(new UrbanGame.Storage.Game() { Id = Game.Id });
+
+                    /*require a change*/
+                    games.MarkForAdd(new UrbanGame.Storage.Game() {
+                        Id = GameId,
+                        Name = "Hydrozagadka",
+                        OperatorName = "CAFETERIA",
+                        OperatorLogo = "/ApplicationIcon.png",
+                        GameLogo = "/ApplicationIcon.png",
+                        GameStart = DateTime.Now.AddHours(3).AddMinutes(23),
+                        GameEnd = DateTime.Now.AddDays(2).AddHours(5),
+                        GameState = Common.GameState.Joined,
+                        NumberOfPlayers = 24,
+                        NumberOfSlots = 50,
+                        GameType = GameType.Quiz,
+                        Description = DateTime.Now.ToLongTimeString() + "\nsadsa sad ads  adsa dssa sad  asas asd as a sas as as  asas  asdas as ads as d",
+                        Difficulty = GameDifficulty.Medium,
+                        Prizes = "1st Bicycle\n2nd Bicycle\n3rd Bicycle\n4-8th Bicycle bicycle bicycle"
+                    });
+
                     uow.Commit();
                     NotifyOfPropertyChange(() => IsJoined);
                 }
@@ -131,6 +151,7 @@ namespace UrbanGame.ViewModels
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
                 {
+                    Game.GameState = Common.GameState.None;
                     var gameToDelete = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
                     uow.GetRepository<IGame>().MarkForDeletion(gameToDelete);
                     uow.Commit();
