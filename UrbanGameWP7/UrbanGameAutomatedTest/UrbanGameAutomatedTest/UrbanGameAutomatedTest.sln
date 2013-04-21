@@ -1,7 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrbanGameAutomatedTest", "UrbanGameAutomatedTest\UrbanGameAutomatedTest\UrbanGameAutomatedTest.csproj", "{3519C30A-1DAA-4FB5-A576-9BBA8566D825}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrbanGameAutomatedTest", "UrbanGameAutomatedTest.csproj", "{3519C30A-1DAA-4FB5-A576-9BBA8566D825}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0719F28E-63C3-47BA-A3AD-88AF4C4A209E}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
