@@ -1,0 +1,15 @@
+%script(src={uri("/assets/javascripts/controllers/uiBootstrapCtrl.min.js")} type="text/javascript")
+.control-group(ng-controller="uiBootstrapController")
+	.span6
+		%h3=Messages("newgame.step1title")
+		=Messages("newgame.step1subtitle")
+		%fieldset.slight-padding-top
+			%label(for="gName")
+				%strong=Messages("newgame.gamenamelabel")
+			.input-append
+				%input.span5(type="text" required name="gName" ng-model="game.name")
+				%span.add-on.info.cursor-help(tooltip="test" tooltip-animation="true" tooltip-placement="right") ?
+		
+
+	.span6
+		test
