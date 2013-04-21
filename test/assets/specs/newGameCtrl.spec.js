@@ -13,12 +13,6 @@
  * limitations under the License.
  */
 describe('Controllers', function() {
-    describe('menuCtrl', function() {
-        it('should list 3 items', function() {
-            var scope = {}, ctrl = new menuCtrl(scope);
-            expect(scope.menuitems.length).toBe(3);
-        });
-    });
     describe('newGameCtrl', function() {
         it('should list 5 steps', function() {
             var scope = {}, ctrl = new newGameCtrl(scope);
