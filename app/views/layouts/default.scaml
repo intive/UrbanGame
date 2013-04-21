@@ -30,6 +30,8 @@
         -# Bootstrap
         %link(rel="stylesheet" media="screen" href={routes.Assets.at("stylesheets/bootstrap.min.css")})
         %link(rel="stylesheet" media="screen" href={routes.Assets.at("stylesheets/bootstrap-responsive.min.css")})
+        -# Bootstrap Lightbox
+        %link(rel="stylesheet" media="screen" href={routes.Assets.at("stylesheets/bootstrap-lightbox.min.css")})
         -# Angular UI
         %link(rel="stylesheet" media="screen" href={routes.Assets.at("stylesheets/angular-ui/angular-ui.min.css")})
         -# Main
@@ -63,7 +65,7 @@
                                     %a(href="/options") Options
 
         .container-narrow
-            .row.span8
+            .row-fluid
                 != body
         .span12.footer
             Footer
@@ -71,6 +73,8 @@
 %script(src={routes.Assets.at("javascripts/lib/jquery/jquery-1.9.0.min.js")} type="text/javascript")
 -# Bootstrap from AngularUI Team
 %script(src={routes.Assets.at("javascripts/lib/ui-bootstrap/ui-bootstrap-tpls-0.2.0.min.js")} type="text/javascript")
+-# Bootstrap Lightbox
+%script(src={routes.Assets.at("javascripts/lib/bootstrap/bootstrap-lightbox.min.js")} type="text/javascript")
 -# Angular UI
 %script(src={routes.Assets.at("javascripts/lib/angular-ui/angular-ui.min.js")} type="text/javascript")
 -# Main

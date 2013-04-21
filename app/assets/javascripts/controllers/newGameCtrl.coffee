@@ -13,8 +13,6 @@
  * limitations under the License.
 ###
 
-app = angular.module('web', ['ui.bootstrap'])
-
 app.controller 'newGameCtrl', ['$scope', '$location', ($scope, $location) ->
 
     $scope.steps = [
@@ -66,7 +64,7 @@ app.controller 'newGameCtrl', ['$scope', '$location', ($scope, $location) ->
         alert "Here this project will be saved"
 
     $scope.publishit = ->
-        $scope.save()
+        $scope.saveit()
         alert "and published too"
 
     $scope.master = {}
