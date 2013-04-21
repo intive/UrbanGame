@@ -1,30 +1,68 @@
-@contmargins: 0 auto;
 @contwidth: 940px;
 @mhmarginbottom: 20px;
 @wizminheight: 200px;
+
 @toppadding: 15px;
 
+@roffset10: 10px;
+@gray: #ccc;
+@navtabback: #fe3ddd;
+
+
 .container-narrow {
-	margin: @contmargins;
+	margin: 0 auto;
 	max-width: @contwidth;
 }
 
 .masthead {
-	margin-bottom: @mhmarginbottom;
+	margin-bottom: 30px;
 }
 
-.navig {
-	margin-bottom: @mhmarginbottom;
+.navbar .nav,
+.navbar .nav > li {
+	float: none;
+	display: inline-block;
+	*display: inline; /* ie7 fix */
+	*zoom: 1; /* hasLayout ie7 trigger */
+	vertical-align: top;
+	margin: 0px;
 }
 
-.wizard {
-	div {
-		height: @wizminheight;
+.navbarmy {
+	overflow: visible;
+	margin: 0px;
+	ul {
+		margin-bottom: -1px;
+
+		li {
+			background-color: white;
+		}
 	}
 }
+
 .slight-padding-top{
 	padding-top: @toppadding;
 }
 .cursor-help{
 	cursor: help
 }
+
+.navbar-inner {
+  text-align:center;
+}
+
+.nav-steps {
+	min-width: @contwidth;
+}
+
+.myheader {
+	background-color: @gray;
+	.navbar {
+		margin-bottom: 0px;
+	}
+}
+
+.loginform {
+	margin: @roffset10 - 5 @roffset10;
+}
+

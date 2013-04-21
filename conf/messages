@@ -3,6 +3,7 @@ header.backhome = Back to home
 login.login = Login
 login.password = Password
 
+
 newgame.stepstartmsg = Start
 newgame.stepfinishmsg = Finish
 newgame.step1title = Step 1
@@ -14,3 +15,8 @@ newgame.startmsg = Create new game
 newgame.gamenamelabel = game name:*
 
 newgame.tooltipgamename = tooltip1test
+
+newgame.step1title = Step 1
+newgame.step2title = Step 2
+newgame.step3title = Step 3
+newgame.step4title = Step 4
