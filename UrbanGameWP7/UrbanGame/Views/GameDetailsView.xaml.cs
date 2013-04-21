@@ -21,9 +21,9 @@ namespace UrbanGame.Views
         public GameDetailsView()
         {
             InitializeComponent();
-            Loaded += GameDetailsView_Loaded;
+            //Loaded += GameDetailsView_Loaded;
         }
-
+        /*
         void GameDetailsView_Loaded(object sender, RoutedEventArgs e)
         {
             BuildLocalizedApplicationBar();
@@ -38,6 +38,7 @@ namespace UrbanGame.Views
                                             Text = AppResources.JoinIn,
                                             Message = "JoinGame()"
                                         });
-        }                
+        }  
+         * */
     }
 }
