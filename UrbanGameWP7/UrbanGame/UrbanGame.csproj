@@ -101,6 +101,8 @@
     <Compile Include="Storage\BusinessTypeMapper.cs" />
     <Compile Include="Storage\Game.cs" />
     <Compile Include="Storage\Repository.cs" />
+    <Compile Include="Storage\GameTask.cs" />
+    <Compile Include="Storage\TaskSolution.cs" />
     <Compile Include="Storage\UnitOfWork.cs" />
     <Compile Include="Storage\EntityBase.cs" />
     <Compile Include="Storage\UrbanGameDataContext.cs" />

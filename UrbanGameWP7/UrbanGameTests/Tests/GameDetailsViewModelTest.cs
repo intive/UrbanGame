@@ -41,7 +41,7 @@ namespace UrbanGameTests.Tests
                 GameEnd = DateTime.Now.AddDays(2).AddHours(5),
                 NumberOfPlayers = 24,
                 NumberOfSlots = 50,
-                GameType = GameType.Quiz,
+                GameType = GameType.ScoreAttack,
                 Description = "sadsa sad ads  adsa dssa sad  asas asd as a sas as as  asas  asdas as ads as d",
                 Difficulty = GameDifficulty.Medium,
                 Prizes = "1st Bicycle\n2nd Bicycle\n3rd Bicycle\n4-8th Bicycle bicycle bicycle"

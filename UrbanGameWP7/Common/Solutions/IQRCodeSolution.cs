@@ -5,9 +5,8 @@ using System.Text;
 
 namespace Common
 {
-    public enum GameType
+    public interface IQRCodeSolution : IBaseSolution
     {
-        ScoreAttack,
-        Race
+        string QRCode { get; set; }
     }
 }

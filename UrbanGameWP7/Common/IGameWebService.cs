@@ -36,7 +36,7 @@ namespace Common
         /// Method returns an array of game's tasks
         /// </summary>
         /// <returns>Array of ITask</returns>
-        ITask[] GetTasks(int gid);
+        IBaseTask[] GetTasks(int gid);
 
         /// <summary>
         /// Returns task's details
@@ -68,7 +68,7 @@ namespace Common
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <param name="solution">Solution of task</param>
         /// <returns>a bool</returns>
-        bool SubmitTaskSolution(int gid, int tid, ISolution solution);
+        bool SubmitTaskSolution(int gid, int tid, IBaseSolution solution);
 
         /// <summary>
         /// Method responses for user authorization

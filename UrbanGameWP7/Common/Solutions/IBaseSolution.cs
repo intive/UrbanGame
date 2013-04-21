@@ -6,14 +6,12 @@ using System.Text;
 namespace Common
 {
     /// <summary>
-    /// Represents a task
+    /// Represents a solution
     /// </summary>
-    public interface ITask
+    public interface IBaseSolution
     {
-        int Id
-        {
-            get;
-            set;
-        }
+        int Id { get; set; }
+
+        TaskType TaskType { get; set; }
     }
 }

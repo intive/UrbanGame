@@ -161,20 +161,20 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to gather as many points as possible.
-        /// </summary>
-        public static string GameTypeQuiz {
-            get {
-                return ResourceManager.GetString("GameTypeQuiz", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to complete all tasks first.
         /// </summary>
         public static string GameTypeRace {
             get {
                 return ResourceManager.GetString("GameTypeRace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to gather as many points as possible.
+        /// </summary>
+        public static string GameTypeScoreAttack {
+            get {
+                return ResourceManager.GetString("GameTypeScoreAttack", resourceCulture);
             }
         }
         

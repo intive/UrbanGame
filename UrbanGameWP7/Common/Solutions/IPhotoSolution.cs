@@ -5,9 +5,8 @@ using System.Text;
 
 namespace Common
 {
-    public enum GameType
+    public interface IPhotoSolution : IBaseSolution
     {
-        ScoreAttack,
-        Race
+        string Photo { get; set; }
     }
 }

@@ -5,10 +5,8 @@ using System.Text;
 
 namespace Common
 {
-    /// <summary>
-    /// Represents a solution
-    /// </summary>
-    public interface ISolution
+    public interface IOpenQuestionSolution : IBaseSolution
     {
+        string TextAnswer { get; set; }
     }
 }

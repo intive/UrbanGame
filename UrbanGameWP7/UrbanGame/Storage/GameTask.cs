@@ -1,19 +1,21 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
+using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
-using Common;
 
-namespace WebService.BOMock
+namespace UrbanGame.Storage
 {
-    public class TaskMock : BOBase, 
-        IBaseTask, IGPSTask, IABCDTask, IOpenQuestionTask, IQRCodeTask, IPhotoTask
+    [Table]
+    public class GameTask : EntityBase, 
+        IGPSTask, IABCDTask, IOpenQuestionTask, IQRCodeTask, IPhotoTask
     {
-
         #region Id
 
         private int _id;
 
+        [Column]
         public int Id
         {
             get
@@ -36,6 +38,7 @@ namespace WebService.BOMock
 
         private string _name;
 
+        [Column]
         public string Name
         {
             get
@@ -58,6 +61,7 @@ namespace WebService.BOMock
 
         private TaskType _type;
 
+        [Column]
         public TaskType Type
         {
             get
@@ -80,6 +84,7 @@ namespace WebService.BOMock
 
         private string _description;
 
+        [Column]
         public string Description
         {
             get
@@ -102,6 +107,7 @@ namespace WebService.BOMock
 
         private string _picture;
 
+        [Column]
         public string Picture
         {
             get
@@ -124,6 +130,7 @@ namespace WebService.BOMock
 
         private SolutionStatus _solutionStatus;
 
+        [Column]
         public SolutionStatus SolutionStatus
         {
             get
@@ -146,6 +153,7 @@ namespace WebService.BOMock
 
         private bool _isRepeatable;
 
+        [Column]
         public bool IsRepeatable
         {
             get
@@ -168,6 +176,7 @@ namespace WebService.BOMock
 
         private bool _isCancelled;
 
+        [Column(DbType = "bit DEFAULT 0 NOT NULL")]
         public bool IsCancelled
         {
             get
@@ -190,6 +199,7 @@ namespace WebService.BOMock
 
         private int? _userPoints;
 
+        [Column]
         public int? UserPoints
         {
             get
@@ -212,6 +222,7 @@ namespace WebService.BOMock
 
         private int _maxPoints;
 
+        [Column]
         public int MaxPoints
         {
             get
@@ -234,6 +245,7 @@ namespace WebService.BOMock
 
         private DateTime? _endDate;
 
+        [Column]
         public DateTime? EndDate
         {
             get
@@ -256,6 +268,7 @@ namespace WebService.BOMock
 
         private double _version;
 
+        [Column]
         public double Version
         {
             get
@@ -282,6 +295,7 @@ namespace WebService.BOMock
 
         private double? _latitude;
 
+        [Column]
         public double? Latitude
         {
             get
@@ -304,6 +318,7 @@ namespace WebService.BOMock
 
         private double? _longitude;
 
+        [Column]
         public double? Longitude
         {
             get
@@ -329,7 +344,8 @@ namespace WebService.BOMock
         #region ABCDPossibleAnswers
 
         private string _abcdPossibleAnswers;
-        
+
+        [Column]
         public string ABCDPossibleAnswers
         {
             get
@@ -352,6 +368,7 @@ namespace WebService.BOMock
 
         private byte? _abcdCorrectAnswer;
 
+        [Column]
         public byte? ABCDCorrectAnswer
         {
             get
@@ -378,6 +395,7 @@ namespace WebService.BOMock
 
         private string _qrCode;
 
+        [Column]
         public string QRCode
         {
             get
@@ -404,6 +422,7 @@ namespace WebService.BOMock
 
         private string _openQuestionCorrectAnswer;
 
+        [Column]
         public string OpenQuestionCorrectAnswer
         {
             get

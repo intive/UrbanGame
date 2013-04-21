@@ -5,9 +5,8 @@ using System.Text;
 
 namespace Common
 {
-    public enum GameType
+    public interface IABCDSolution : IBaseSolution
     {
-        ScoreAttack,
-        Race
+        byte ABCDAnswer { get; set; }
     }
 }

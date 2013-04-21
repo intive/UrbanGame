@@ -5,9 +5,11 @@ using System.Text;
 
 namespace Common
 {
-    public enum GameType
+    public enum SolutionStatus
     {
-        ScoreAttack,
-        Race
+        NotSend,
+        Pending,
+        Rejected,
+        Accepted
     }
 }

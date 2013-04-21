@@ -5,9 +5,12 @@ using System.Text;
 
 namespace Common
 {
-    public enum GameType
+    public enum TaskType
     {
-        ScoreAttack,
-        Race
+        OpenQuestion,
+        GPS,
+        QRCode,
+        Photo,
+        ABCD
     }
 }

@@ -5,9 +5,10 @@ using System.Text;
 
 namespace Common
 {
-    public enum GameType
+    public interface IGPSTask : IBaseTask
     {
-        ScoreAttack,
-        Race
+        double? Latitude { get; set; }
+
+        double? Longitude { get; set; }
     }
 }
