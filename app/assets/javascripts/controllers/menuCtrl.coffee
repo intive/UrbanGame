@@ -1,4 +1,4 @@
-angular.module('web', ['ui']).controller 'menuCtrl', ['$scope', ($scope) ->
+angular.module('web', ['ui.bootstrap']).controller 'menuCtrl', ['$scope', ($scope) ->
 
 	$scope.menuitems = [
         {name: "Page1", href: "/"}

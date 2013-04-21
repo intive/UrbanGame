@@ -1,3 +1,3 @@
-app = angular.module('web', ['ui.bootstrap']);
+angular.module('web', ['ui.bootstrap']).controller 'uiBootstrapController', ['$scope', ($scope) ->
 
-app.controller 'uiBootstrapController', ['$scope', ($scope) ->]
+]

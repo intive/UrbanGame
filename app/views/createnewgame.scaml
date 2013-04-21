@@ -17,7 +17,6 @@
 	
 - attributes("scripts") = capture
 	%script(src={uri("/assets/javascripts/controllers/newGameCtrl.js")} type="text/javascript")
-	%script(src={uri("/assets/javascripts/controllers/form2.js")} type="text/javascript")
 
 
 .row
@@ -28,7 +27,7 @@
 					%a(title="Step" href="javascript:void(0);" ng-click="isDisabled($index) || goToStep($index)") {{step.no}}. {{step.name}}
 			%div.wizbody{"ng-switch on"=>"selection.no"}
 				%div(ng-switch-when="1")
-					-render(assets/views/submodules/step1form.scaml)
+					-render("submodules/step1form.scaml")
 				%div(ng-switch-when="2")
 					= Messages("newgame.step2title")
 					.control-group

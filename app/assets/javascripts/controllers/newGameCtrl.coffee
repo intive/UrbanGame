@@ -13,7 +13,7 @@
  * limitations under the License.
 ###
 
-app = angular.module('web', ['ui'])
+app = angular.module('web', ['ui.bootstrap'])
 
 app.controller 'newGameCtrl', ['$scope', '$location', ($scope, $location) ->
 
