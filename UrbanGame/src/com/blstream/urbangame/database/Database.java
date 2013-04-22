@@ -31,6 +31,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String GAMES_TABLE_NAME = "games";
 	private static final String USER_TABLE_NAME = "user";
 	private static final String USER_GAMES_SPECIFIC_TABLE_NAME = "userGamesSpecific";
+	private static final String USER_LOGGED_IN_TABLE_NAME = "userLoggedIn";
 	
 	// tables columns
 	// ---- Games
@@ -65,6 +66,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String USER_GAMES_SPECIFIC_KEY_RANK = "UGSRank";
 	private static final String USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED = "UGSGameActiveObserved";
 	
+	// ---- User logging table
+	private static final String USER_LOGGED_IN_EMAIL = "ULIEmail";
+	
 	// tables creation strings
 	private static final String CREATE_GAMES_TABLE = "CREATE TABLE " + GAMES_TABLE_NAME + " (" + GAMES_KEY_ID
 		+ " INTEGER PRIMARY KEY, " + GAMES_KEY_VERSION + " REAL, " + GAMES_KEY_TITLE + " TEXT, "
@@ -87,6 +91,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		+ USER_KEY_EMAIL + ") " + " FOREIGN KEY (" + USER_GAMES_SPECIFIC_KEY_GAME_ID + ") " + "REFERENCES "
 		+ GAMES_TABLE_NAME + " (" + GAMES_KEY_ID + ") " + ")";
 	
+	private static final String CREATE_USER_LOGGED_IN_TABLE = "CREATE TABLE " + USER_LOGGED_IN_TABLE_NAME + " ("
+		+ USER_LOGGED_IN_EMAIL + " TEXT PRIMARY KEY" + ")";
+	
 	public Database(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		SQLiteDatabase.loadLibs(context);
@@ -100,6 +107,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.execSQL(CREATE_GAMES_TABLE);
 		db.execSQL(CREATE_USER_TABLE);
 		db.execSQL(CREATE_USER_GAMES_SPECIFIC_TABLE);
+		db.execSQL(CREATE_USER_LOGGED_IN_TABLE);
 	}
 	
 	@Override
@@ -109,6 +117,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.execSQL("DROP TABLE IF EXISTS " + USER_GAMES_SPECIFIC_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + GAMES_TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + CREATE_USER_LOGGED_IN_TABLE);
 		onCreate(db);
 	}
 	
@@ -648,5 +657,44 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.close();
 		return isSucessful && isSuccessful2;
 	}
+	
+	@Override
+	public boolean setLoggedPlayer(String email) {
+		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		db.beginTransaction();
+		boolean isSuccesful = email != null;
+		isSuccesful = isSuccesful
+			&& db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_EMAIL }, null, null, null, null, null)
+				.getCount() == 0;
+		if (isSuccesful) {
+			ContentValues values = new ContentValues();
+			values.put(USER_LOGGED_IN_EMAIL, email);
+			isSuccesful = db.insert(USER_LOGGED_IN_TABLE_NAME, null, values) != -1;
+			db.setTransactionSuccessful();
+		}
+		db.endTransaction();
+		return isSuccesful;
+	}
+	
+	@Override
+	public String getLoggedPlayerID() {
+		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		Cursor cursor = db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_EMAIL }, null, null, null,
+			null, null);
+		String playerEmail = null;
+		if (cursor.moveToFirst()) {
+			playerEmail = cursor.getString(0);
+		}
+		return playerEmail;
+	}
+	
+	@Override
+	public boolean setNoOneLogged() {
+		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		int count = db.delete(USER_LOGGED_IN_TABLE_NAME, null, null);
+		boolean successful = count == 1 || count == 0;
+		return successful;
+	}
+	
 	// USER METHODS END
 }
