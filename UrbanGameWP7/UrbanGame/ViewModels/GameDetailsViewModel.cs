@@ -106,13 +106,14 @@ namespace UrbanGame.ViewModels
             }
         }
 
-        public void LogoutOrLogin()
+        public async void LogoutOrLogin()
         {
             ToogleMenuItemText();
             if (!_gameWebService.IsAuthorized)
             {
                 //to do
-                _gameWebService.Authorize("aaaaaaaaa", "fsffasfasf");
+                _gameWebService.Authorize("username", "password");
+                await RefreshGame();
                 SetAppBarContent();
             }
             else
@@ -125,69 +126,74 @@ namespace UrbanGame.ViewModels
 
         private void SetAppBarContent()
         {
-            RemoveButtonItem(Localization.AppResources.JoinIn);
-            RemoveButtonItem(Localization.AppResources.Leave);
-            if (_gameWebService.IsAuthorized)
-            {
-                if (Game.GameState == GameState.Joined)
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbarSearch.png", UriKind.Relative), Text = Localization.AppResources.Leave, Message = Localization.AppResources.Leave }, Leave);
-                }
-                else
-                {
-                    AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbar.check.png", UriKind.Relative), Text = Localization.AppResources.JoinIn, Message = Localization.AppResources.JoinIn }, JoinIn);
-                }
-            }
+                    RemoveButtonItem(Localization.AppResources.JoinIn);
+                    RemoveButtonItem(Localization.AppResources.Leave);
+                    if (_gameWebService.IsAuthorized)
+                    {
+                        if (Game.GameState == GameState.Joined)
+                        {
+                            AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbarSearch.png", UriKind.Relative), Text = Localization.AppResources.Leave, Message = Localization.AppResources.Leave }, Leave);
+                        }
+                        else
+                        {
+                            AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbar.check.png", UriKind.Relative), Text = Localization.AppResources.JoinIn, Message = Localization.AppResources.JoinIn }, JoinIn);
+                        }
+                    }
+                });
         }
 
-        public void RefreshGame()
+        public async Task RefreshGame()
         {
-            if (_gameWebService.IsAuthorized)
-            {
-                IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
-                Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
-            }
-            else
-            {
-                Game = _gameWebService.GetGameInfo(GameId);
-            }
+            await Task.Factory.StartNew(() =>
+                {
+                    if (_gameWebService.IsAuthorized)
+                    {
+                        IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
+                        Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
+                    }
+                    else
+                    {
+                        Game = _gameWebService.GetGameInfo(GameId);
+                    }
+                });
         }
 
-        public void JoinIn()
+        public async void JoinIn()
         {
             if (MessageBox.Show("join in", "join in", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
                 {
 
-
+                    //remove a game if stored in the db(it can be inactive)
                     if (uow.GetRepository<IGame>().All().ToArray<IGame>().Count() > 0)
                     {
                         var gameToDelete = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
                         uow.GetRepository<IGame>().MarkForDeletion(gameToDelete);
                     }
+                    //store game into the db
                     var games = uow.GetRepository<IGame>();
                     games.MarkForAdd(CreateInstance(GameState.Joined, uow));
                     uow.Commit();
                 }
-                RefreshGame();
+                await RefreshGame();
                 NotifyOfPropertyChange(() => IsJoined);
                 SetAppBarContent();
             }
         }
 
-        public void Leave()
+        public async void Leave()
         {
             if (MessageBox.Show("leave", "leave", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
                 {
-                    var gameToDelete = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
-                    uow.GetRepository<IGame>().MarkForDeletion(gameToDelete);
-                    uow.GetRepository<IGame>().MarkForAdd(CreateInstance(GameState.Inactive, uow));
+                    uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id).GameState = GameState.Inactive;
                     uow.Commit();
                 }
-                RefreshGame();
+                await RefreshGame();
                 NotifyOfPropertyChange(() => IsJoined);
                 SetAppBarContent();
             }
