@@ -32,6 +32,6 @@ namespace Common
 
         DateTime? EndDate { get; set; }
 
-        double Version { get; set; }
+        int Version { get; set; }
     }
 }

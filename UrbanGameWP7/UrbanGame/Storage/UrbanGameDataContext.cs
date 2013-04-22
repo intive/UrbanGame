@@ -25,6 +25,10 @@ namespace UrbanGame.Storage
                 CreateDatabase();
         }
 
-        public Table<Game> Game;
+        public Table<Game> Games;
+
+        public Table<GameTask> Tasks;
+
+        public Table<TaskSolution> Solutions;        
     }
 }

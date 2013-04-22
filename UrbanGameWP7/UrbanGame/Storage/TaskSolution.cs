@@ -107,7 +107,7 @@ namespace UrbanGame.Storage
 
         private string _photo;
 
-        [Column(Name = "TextAnswer")]
+        [Column]
         public string Photo
         {
             get
@@ -130,7 +130,7 @@ namespace UrbanGame.Storage
 
         private string _textAnswer;
 
-        [Column(Name = "TextAnswer")]
+        [Column]
         public string TextAnswer
         {
             get
@@ -176,7 +176,7 @@ namespace UrbanGame.Storage
 
         private string _qrCode;
 
-        [Column(Name="TextAnswer")]
+        [Column]
         public string QRCode
         {
             get

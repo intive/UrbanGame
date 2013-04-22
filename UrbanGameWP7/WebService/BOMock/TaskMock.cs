@@ -7,7 +7,7 @@ using Common;
 namespace WebService.BOMock
 {
     public class TaskMock : BOBase, 
-        IBaseTask, IGPSTask, IABCDTask, IOpenQuestionTask, IQRCodeTask, IPhotoTask
+        IGPSTask, IABCDTask, IOpenQuestionTask, IQRCodeTask, IPhotoTask
     {
 
         #region Id
@@ -254,9 +254,9 @@ namespace WebService.BOMock
 
         #region Version
 
-        private double _version;
+        private int _version;
 
-        public double Version
+        public int Version
         {
             get
             {

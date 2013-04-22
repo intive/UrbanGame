@@ -266,10 +266,10 @@ namespace UrbanGame.Storage
 
         #region Version
 
-        private double _version;
+        private int _version;
 
         [Column]
-        public double Version
+        public int Version
         {
             get
             {
