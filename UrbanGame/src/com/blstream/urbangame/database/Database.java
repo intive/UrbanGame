@@ -67,7 +67,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED = "UGSGameActiveObserved";
 	
 	// ---- User logging table
-	private static final String USER_LOGGED_IN_EMAIL = "ULIEmail";
+	private static final String USER_LOGGED_IN_KEY_EMAIL = "ULIEmail";
 	
 	// tables creation strings
 	private static final String CREATE_GAMES_TABLE = "CREATE TABLE " + GAMES_TABLE_NAME + " (" + GAMES_KEY_ID
@@ -92,7 +92,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		+ GAMES_TABLE_NAME + " (" + GAMES_KEY_ID + ") " + ")";
 	
 	private static final String CREATE_USER_LOGGED_IN_TABLE = "CREATE TABLE " + USER_LOGGED_IN_TABLE_NAME + " ("
-		+ USER_LOGGED_IN_EMAIL + " TEXT PRIMARY KEY" + ")";
+		+ USER_LOGGED_IN_KEY_EMAIL + " TEXT PRIMARY KEY" + ")";
 	
 	public Database(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -664,11 +664,11 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.beginTransaction();
 		boolean isSuccesful = email != null;
 		isSuccesful = isSuccesful
-			&& db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_EMAIL }, null, null, null, null, null)
-				.getCount() == 0;
+			&& db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_KEY_EMAIL }, null, null, null, null,
+				null).getCount() == 0;
 		if (isSuccesful) {
 			ContentValues values = new ContentValues();
-			values.put(USER_LOGGED_IN_EMAIL, email);
+			values.put(USER_LOGGED_IN_KEY_EMAIL, email);
 			isSuccesful = db.insert(USER_LOGGED_IN_TABLE_NAME, null, values) != -1;
 			db.setTransactionSuccessful();
 		}
@@ -679,8 +679,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	@Override
 	public String getLoggedPlayerID() {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
-		Cursor cursor = db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_EMAIL }, null, null, null,
-			null, null);
+		Cursor cursor = db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_KEY_EMAIL }, null, null,
+			null, null, null);
 		String playerEmail = null;
 		if (cursor.moveToFirst()) {
 			playerEmail = cursor.getString(0);
