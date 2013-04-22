@@ -2,7 +2,7 @@
 @mhmarginbottom: 20px;
 @wizminheight: 200px;
 
-@toppadding: 15px;
+@slightpadding: 15px;
 
 @roffset10: 10px;
 @gray: #ccc;
@@ -43,10 +43,23 @@
 	margin: 0 auto;
 	max-width: @contwidth;
 }
+input[type="radio"]{
+	margin-right: 7px;
+	margin-left: 3px;
+	margin-bottom: 3px;
+}
 
 .slight-padding-top{
-	padding-top: @toppadding;
+	padding-top: @slightpadding;
 }
+.slight-padding-right{
+	padding-right: @slightpadding;
+}
+.slight-padding-left{
+	padding-left: @slightpadding;
+}	
+	
+
 
 .cursor-help{
 	cursor: help
