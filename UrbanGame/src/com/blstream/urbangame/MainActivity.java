@@ -17,6 +17,8 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
+import com.blstream.urbangame.database.Database;
+import com.blstream.urbangame.database.DatabaseInterface;
 
 public class MainActivity extends SherlockListActivity {
 	
@@ -26,6 +28,9 @@ public class MainActivity extends SherlockListActivity {
 		setSupportProgressBarVisibility(true);
 		
 		mockData();
+		DatabaseInterface di = new Database(getApplicationContext());
+		System.out.println(di.getAllGamesShortInfo());
+		//Exampler.fillDatabase(di);
 	}
 	
 	/************************
@@ -69,7 +74,14 @@ public class MainActivity extends SherlockListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
+		Bundle bundle = new Bundle();
+		//UrbanGameShortInfo game = (UrbanGameShortInfo) (l.getItemAtPosition(position));
+		//Long selectedGameId = (game == null ? -1 : game.getID());
+		//bundle.putLong(GameDetailsActivity.GAME_KEY, selectedGameId);
+		bundle.putLong(GameDetailsActivity.GAME_KEY, -1); //mocked ID. In case of working games list, delete this line and uncomment previous three lines.
+		
 		Intent intent = new Intent(MainActivity.this, GameDetailsActivity.class);
+		intent.putExtras(bundle);
 		startActivity(intent);
 	}
 	
@@ -120,5 +132,6 @@ public class MainActivity extends SherlockListActivity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		return super.onMenuItemSelected(featureId, item);
+		
 	}
 }
