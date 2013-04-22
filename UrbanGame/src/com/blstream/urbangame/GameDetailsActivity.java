@@ -140,8 +140,8 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		description = "Krasnal Tosiek ma niesamowity apetyt na dobry browar";
 		gameLogoBase64 = ExampleData.LOGO_BASE_64;
 		operatorLogoBase64 = ExampleData.OPERATOR_LOGO_BASE_64;
-		comments = "waøne i istotne zadanie";
-		location = "Wroc≥aw";
+		comments = "wa≈ºne i istotne zadanie";
+		location = "Wroc≈Çaw";
 		detailsLink = "www.browar.pl";
 		
 		return new UrbanGame(id, gameVersion, title, operatorName, winningStrategy, players, maxPlayers, startDate,
