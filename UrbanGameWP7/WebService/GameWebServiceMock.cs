@@ -18,6 +18,13 @@ namespace WebService
         {
             ListOfGames = new List<IGame>();
             ListOfTasks = new List<IBaseTask>();
+
+            string lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam mauris vel elit tincidunt ac bibendum tortor scelerisque. Mauris nisi augue, malesuada ac lobortis sed, rhoncus et mauris. Vivamus dictum turpis congue arcu euismod in pulvinar mi volutpat. Aliquam euismod pharetra velit eu sagittis. Proin et nisi nibh, ut egestas enim.";
+            ListOfTasks.Add(new TaskMock() { Id = 1, Type = TaskType.ABCD, ABCDPossibleAnswers = "odp1\nodp2\nodp3\nodp4", ABCDCorrectAnswer = 1, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, IsCancelled = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+            ListOfTasks.Add(new TaskMock() { Id = 2, Type = TaskType.OpenQuestion, OpenQuestionCorrectAnswer = "balloon", Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = true, IsCancelled = true, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+            ListOfTasks.Add(new TaskMock() { Id = 3, Type = TaskType.Photo, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Rejected, IsRepeatable = true, IsCancelled = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+            ListOfTasks.Add(new TaskMock() { Id = 4, Type = TaskType.QRCode, QRCode = "ABCD1234", Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Accepted, IsRepeatable = false, IsCancelled = false, UserPoints = 10, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+            ListOfTasks.Add(new TaskMock() { Id = 5, Type = TaskType.GPS, Longitude = 51.111565, Latitude = 17.060416, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, IsCancelled = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
         }
         #endregion
 
@@ -98,20 +105,6 @@ namespace WebService
         }
         #endregion
 
-        #region GetTasks
-        public IBaseTask[] GetTasks(int gid)
-        {
-            return ListOfTasks.ToArray<IBaseTask>();
-        }
-        #endregion
-
-        #region GetTaskDetails
-        public ITaskDetails GetTaskDetails(int gid, int tid)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
         #region GetGameProgress
         public int GetGameProgress(int gid)
         {
@@ -119,12 +112,34 @@ namespace WebService
         }
         #endregion
 
+        #region GetTasks
+        public IBaseTask[] GetTasks(int gid)
+        {
+            return ListOfTasks.ToArray();
+        }
+        #endregion
+
+        #region GetTaskDetails
+        public IBaseTask GetTaskDetails(int gid, int tid)
+        {
+            return ListOfTasks[(gid + tid) % 5];
+        }
+        #endregion
+
+        #region GetTaskDetails generic
+        public TTaskType GetTaskDetails<TTaskType>(int gid, int tid) 
+            where TTaskType : IBaseTask
+        {
+            return (TTaskType)GetTaskDetails(gid, tid);
+        }
+        #endregion
+
         #region GetTaskProgress
         public int GetTaskProgress(int gid, int tid)
         {
-            return 0;
+            return GetTaskDetails(gid, tid).UserPoints ?? 0;
         }
-        #endregion
+        #endregion        
 
         #region SubmitTaskSolution
         public bool SubmitTaskSolution(int gid, int tid, IBaseSolution solution)

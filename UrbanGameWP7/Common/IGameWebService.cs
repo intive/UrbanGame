@@ -44,7 +44,15 @@ namespace Common
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <returns>Task's details</returns>
-        ITaskDetails GetTaskDetails(int gid, int tid);
+        IBaseTask GetTaskDetails(int gid, int tid);
+
+        /// <summary>
+        /// Returns task's details (generic version)
+        /// </summary>
+        /// <param name="gid">Integer parameter - game's identifier</param>
+        /// <param name="tid">Integer parameter - task's identifier</param>
+        /// <returns>Task's details</returns>
+        TTaskType GetTaskDetails<TTaskType>(int gid, int tid) where TTaskType : IBaseTask;
 
         /// <summary>
         /// Returns user game progress

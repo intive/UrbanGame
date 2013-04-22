@@ -15,7 +15,7 @@ namespace UrbanGame.Storage
 
         private int _id;
 
-        [Column]
+        [Column(IsPrimaryKey=true)]
         public int Id
         {
             get

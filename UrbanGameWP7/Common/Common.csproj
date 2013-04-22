@@ -71,7 +71,6 @@
     <Compile Include="IRepository.cs" />
     <Compile Include="Solutions\IBaseSolution.cs" />
     <Compile Include="Tasks\IBaseTask.cs" />
-    <Compile Include="Tasks\ITaskDetails.cs" />
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solutions\SolutionStatus.cs" />
