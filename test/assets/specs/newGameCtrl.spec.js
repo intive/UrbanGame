@@ -14,9 +14,35 @@
  */
 describe('Controllers', function() {
     describe('newGameCtrl', function() {
-        it('should list 5 steps', function() {
-            var scope = {}, ctrl = new newGameCtrl(scope);
-            expect(scope.steps.length).toBe(4);
+
+		beforeEach(module('web'));
+
+		var ctrl, scope, $httpBackend;
+
+		beforeEach(inject(function(_$httpBackend_, $controller, $rootScope) {
+			$httpBackend = _$httpBackend_;
+			scope = $rootScope.$new();
+			ctrl = $controller('newGameCtrl', {
+				$scope: scope
+			});
+		}));
+
+        it('should list 4 steps', function() {
+		expect(scope.steps.length).toBe(4);
+        });
+
+        it('should set $scope.selection on the 1st step at start', function() {
+		expect(scope.selection.no).toBe(1);
+        });
+
+        it('should increment steps', function() {
+		scope.incrementStep();
+		expect(scope.selection.no).toBe(2);
+        });
+
+        it('should decrement steps', function() {
+		scope.decrementStep();
+		expect(scope.selection.no).toBe(1);
         });
     });
 });

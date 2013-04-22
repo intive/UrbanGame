@@ -8,3 +8,4 @@ EnvJasmine.loadGlobal(EnvJasmine.libDir + "underscore-min.js");
 EnvJasmine.loadGlobal(EnvJasmine.rootDir + "main.min.js");
 EnvJasmine.loadGlobal(EnvJasmine.rootDir + "controllers/menuCtrl.min.js");
 EnvJasmine.loadGlobal(EnvJasmine.rootDir + "controllers/newGameCtrl.min.js");
+EnvJasmine.loadGlobal(EnvJasmine.testDir + "mocks/angular-mocks.js");

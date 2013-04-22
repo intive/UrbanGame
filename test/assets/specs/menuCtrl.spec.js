@@ -12,10 +12,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+'use strict';
+
 describe('Controllers', function() {
     describe('menuCtrl', function() {
+	beforeEach(module('web'));
+	var ctrl, scope;
+	beforeEach(inject(function($controller, $rootScope) {
+		scope = $rootScope.$new();
+		ctrl = $controller('menuCtrl', {
+			$scope: scope
+		});
+	}));
         it('should list 3 items', function() {
-            var scope = {}, ctrl = new menuCtrl(scope);
             expect(scope.menuitems.length).toBe(3);
         });
     });
