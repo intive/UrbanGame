@@ -112,7 +112,9 @@
             </controls:PivotItem>
         </controls:Pivot>
     </Grid>
-
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
     <!-- LOCALIZED APPLICATIONBAR IS IN GameDetailsView.xaml.cs -->
-
 </phone:PhoneApplicationPage>

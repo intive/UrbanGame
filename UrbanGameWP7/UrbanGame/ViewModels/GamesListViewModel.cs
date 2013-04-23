@@ -332,7 +332,7 @@ namespace UrbanGame.ViewModels
             _navigationService.UriFor<GameDetailsViewModel>().WithParam(g => g.GameId, gid).Navigate();
         }
 
-                public void Search()
+        public void Search()
         {
             throw new NotImplementedException();
         }
