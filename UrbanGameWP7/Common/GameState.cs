@@ -11,6 +11,7 @@ namespace Common
         Joined,
         Won,
         Ended,
-        Withdraw
+        Withdraw,
+        Inactive
     }
 }
