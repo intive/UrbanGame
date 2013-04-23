@@ -15,9 +15,10 @@ import com.blstream.urbangame.webserver.helper.WebServerHelper;
 import com.blstream.urbangame.webserver.mock.MockWebServer;
 
 public class WebServerHelperTest extends InstrumentationTestCase {
-	private final CountDownLatch signal = new CountDownLatch(1);
 	private final String TAG = "WebServerHelperTest";
 	private final int TIMEOUT = 30;
+	private CountDownLatch signal = new CountDownLatch(1);
+	private long gameIndex;
 	
 	private MockUserClass mockUserClass;
 	
@@ -38,7 +39,7 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 						assertNotNull(urbanGame);
 						
 						MockWebServer mockWebServer = new MockWebServer();
-						checkUrbanGamesEqual(urbanGame, mockWebServer.getMockSingleUrbanGame());
+						checkUrbanGamesEqual(urbanGame, mockWebServer.getMockSingleUrbanGame(gameIndex));
 						Log.d(TAG, "checkUrbanGamesEqual singleGame equal");
 						
 						signal.countDown();
@@ -69,8 +70,9 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 		//
 		// Public methods
 		//
-		public void issueGetUrbanGameDetails() {
-			WebServerHelper.getUrbanGameDetails(this, 0);
+		public void issueGetUrbanGameDetails(long _gameIndex) {
+			gameIndex = _gameIndex;
+			WebServerHelper.getUrbanGameDetails(this, gameIndex);
 		}
 		
 		public void issueGetUrbanGameBaseList() {
@@ -115,15 +117,20 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 	
 	public void testGetUrbanGameDetails() throws Throwable {
 		
-		runTestOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				mockUserClass.issueGetUrbanGameDetails();
-			}
-		});
+		for (long i = 0; i < 5; ++i) {
+			final long index = i;
+			runTestOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					mockUserClass.issueGetUrbanGameDetails(index);
+				}
+			});
+			
+			signal.await(TIMEOUT, TimeUnit.SECONDS);
+			signal = new CountDownLatch(1);
+			Log.d(TAG, "testGetUrbanGameDetails() completed");
+		}
 		
-		signal.await(TIMEOUT, TimeUnit.SECONDS);
-		Log.d(TAG, "testGetUrbanGameDetails() completed");
 	}
 	
 	public void testGetUrbanGameBaseList() throws Throwable {

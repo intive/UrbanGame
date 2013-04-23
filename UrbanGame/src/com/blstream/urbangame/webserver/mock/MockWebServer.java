@@ -19,7 +19,7 @@ public class MockWebServer {
 	private final String TAG = "MockWebServer";
 	
 	private ArrayList<UrbanGameShortInfo> mockAllUrbanGames;
-	private UrbanGame mockSingleUrbanGame;
+	private ArrayList<UrbanGame> mockSingleUrbanGames;
 	
 	//
 	// Constructor
@@ -37,17 +37,48 @@ public class MockWebServer {
 			Log.e(TAG, "ParseException " + e.toString());
 		}
 		
-		mockSingleUrbanGame = new UrbanGame(Long.valueOf(100), 15.5, "MyGameTitle", "MyOperatorName",
-			"MyWinningStrategy", 34, 50, startDate, endDate, 2, true, "MyPrizesInfo", "MyDescription",
-			"MyGameLogoBase64", "MyOperatorLogoBase64", "MyComments", "MyLocation", "MyDetaisLink");
+		mockSingleUrbanGames = new ArrayList<UrbanGame>();
+		
+		mockSingleUrbanGames.add(new UrbanGame(Long.valueOf(1), 1.0, "MyGameTitle1", "MyOperatorName1",
+			"MyWinningStrategy1", 1, 1, startDate, endDate, 1, true, "MyPrizesInfo1", "MyDescription1",
+			"MyGameLogoBase641", "MyOperatorLogoBase641", "MyComments1", "MyLocation1", "MyDetaisLink1"));
+		
+		mockSingleUrbanGames.add(new UrbanGame(Long.valueOf(2), 2.0, "MyGameTitle2", "MyOperatorName2",
+			"MyWinningStrategy2", 2, 2, startDate, endDate, 2, true, "MyPrizesInfo2", "MyDescription2",
+			"MyGameLogoBase642", "MyOperatorLogoBase642", "MyComments2", "MyLocation2", "MyDetaisLink2"));
+		
+		mockSingleUrbanGames.add(new UrbanGame(Long.valueOf(3), 3.0, "MyGameTitle3", "MyOperatorName3",
+			"MyWinningStrategy3", 3, 3, startDate, endDate, 3, true, "MyPrizesInfo3", "MyDescription3",
+			"MyGameLogoBase643", "MyOperatorLogoBase642", "MyComments3", "MyLocation3", "MyDetaisLink3"));
+		
+		mockSingleUrbanGames.add(new UrbanGame(Long.valueOf(4), 4.0, "MyGameTitle4", "MyOperatorName4",
+			"MyWinningStrategy4", 4, 4, startDate, endDate, 4, true, "MyPrizesInfo4", "MyDescription4",
+			"MyGameLogoBase644", "MyOperatorLogoBase644", "MyComments4", "MyLocation4", "MyDetaisLink4"));
+		
+		mockSingleUrbanGames.add(new UrbanGame(Long.valueOf(5), 5.0, "MyGameTitle5", "MyOperatorName5",
+			"MyWinningStrategy5", 5, 5, startDate, endDate, 5, true, "MyPrizesInfo5", "MyDescription5",
+			"MyGameLogoBase645", "MyOperatorLogoBase645", "MyComments5", "MyLocation5", "MyDetaisLink5"));
 		
 		mockAllUrbanGames = new ArrayList<UrbanGameShortInfo>();
 		
-		for (int i = 0; i < 3; ++i)
-			mockAllUrbanGames.add(new UrbanGameShortInfo(3L, "MyGameTitle", "MyOperatorName", 2, 50, startDate,
-				endDate, true, "MyLocation", "MyGamelogoBase64", "MyOperatorlogoBase64", "MyDetailsLink"));
-	}
+		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(1), "MyGameTitle6", "MyOperatorName6", 6, 6,
+			startDate, endDate, true, "MyLocation6", "MyGamelogoBase646", "MyOperatorlogoBase646", "MyDetailsLink6"));
 		
+		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(2), "MyGameTitle7", "MyOperatorName7", 7, 7,
+			startDate, endDate, true, "MyLocation7", "MyGamelogoBase647", "MyOperatorlogoBase647", "MyDetailsLink7"));
+		
+		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(3), "MyGameTitle8", "MyOperatorName8", 8, 8,
+			startDate, endDate, true, "MyLocation8", "MyGamelogoBase648", "MyOperatorlogoBase648", "MyDetailsLink8"));
+		
+		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(4), "MyGameTitle9", "MyOperatorName9", 9, 9,
+			startDate, endDate, true, "MyLocation9", "MyGamelogoBase649", "MyOperatorlogoBase649", "MyDetailsLink9"));
+		
+		mockAllUrbanGames
+			.add(new UrbanGameShortInfo(Long.valueOf(5), "MyGameTitle10", "MyOperatorName10", 10, 10, startDate,
+				endDate, true, "MyLocation10", "MyGamelogoBase6410", "MyOperatorlogoBase6410", "MyDetailsLink10"));
+		
+	}
+	
 	//
 	// Public methods
 	//
@@ -55,8 +86,8 @@ public class MockWebServer {
 		return mockAllUrbanGames;
 	}
 	
-	public UrbanGame getMockSingleUrbanGame() {
-		return mockSingleUrbanGame;
+	public UrbanGame getMockSingleUrbanGame(Long gid) {
+		return mockSingleUrbanGames.get(gid.intValue());
 	}
 	
 	public String getResponse(String queryString) {
@@ -83,7 +114,7 @@ public class MockWebServer {
 			return returnString;
 		}
 		
-		return gson.toJson(mockSingleUrbanGame);
+		return gson.toJson(mockSingleUrbanGames.get(Integer.valueOf(gidString)));
 		
 	}
 	
