@@ -32,6 +32,11 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String USER_TABLE_NAME = "user";
 	private static final String USER_GAMES_SPECIFIC_TABLE_NAME = "userGamesSpecific";
 	private static final String USER_LOGGED_IN_TABLE_NAME = "userLoggedIn";
+	private static final String TASKS_TABLE_NAME = "tasks";
+	private static final String GAMES_TASKS_TABLE_NAME = "gamesTasks";
+	private static final String USER_TASKS_SPECIFIC_TABLE_NAME = "userTasksSpecific";
+	private static final String TASKS_ABCD_TABLE_NAME = "tasksABCD";
+	private static final String TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME = "tasksPossibleAnswersABCD";
 	
 	// tables columns
 	// ---- Games
@@ -69,6 +74,39 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	// ---- User logging table
 	private static final String USER_LOGGED_IN_KEY_EMAIL = "ULIEmail";
 	
+	// ---- Tasks
+	private static final String TASKS_KEY_ID = "tid";
+	private static final String TASKS_KEY_TYPE = "TType";
+	private static final String TASKS_KEY_TITLE = "TTitle";
+	private static final String TASKS_KEY_MAX_POINTS = "TMaxPoints";
+	private static final String TASKS_KEY_REPETABLE = "TRepetable";
+	private static final String TASKS_KEY_IS_HIDDEN = "THidden";
+	private static final String TASKS_KEY_NUMBER_OF_HIDDEN = "TNumberOfHidden";
+	private static final String TASKS_KEY_END_TIME = "TEndTime";
+	private static final String TASKS_KEY_PICTURE = "TPicture";
+	private static final String TASKS_KEY_DESCRIPTION = "TDescription";
+	
+	// ---- Games Tasks
+	private static final String GAMES_TASKS_KEY_GAME_ID = "GTgid";
+	private static final String GAMES_TASKS_KEY_TASK_ID = "GTtid";
+	
+	// ---- Users tasks specific
+	private static final String USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL = "UTSPlayerEmail";
+	private static final String USER_TASKS_SPECIFIC_KEY_TASK_ID = "UTSTaskID";
+	private static final String USER_TASKS_SPECIFIC_KEY_POINTS = "UTSPoints";
+	private static final String USER_TASKS_SPECIFIC_KEY_IS_FINISHED = "UTSIsFisnished";
+	private static final String USER_TASKS_SPECIFIC_KEY_ARE_CHANGES = "UTSAreChanges";
+	private static final String USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN = "UTSWasHidden";
+	
+	// ---- Tasks ABCD
+	private static final String TASKS_ABCD_KEY_ID = "TAID";
+	private static final String TASKS_ABCD_KEY_TASK_ID = "TAtaskID";
+	private static final String TASKS_ABCD_KEY_QUESTION = "TAtaskQuestion";
+	
+	// ---- Task ABCD answers
+	private static final String TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID = "TAPAID";
+	private static final String TASKS_ABCD_POSSIBLE_ANSWERS_KEY_TASK_POSSIBLE_ANSWER = "TAPAtaskPossibleAnswer";
+	
 	// tables creation strings
 	private static final String CREATE_GAMES_TABLE = "CREATE TABLE " + GAMES_TABLE_NAME + " (" + GAMES_KEY_ID
 		+ " INTEGER PRIMARY KEY, " + GAMES_KEY_VERSION + " REAL, " + GAMES_KEY_TITLE + " TEXT, "
@@ -94,6 +132,39 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String CREATE_USER_LOGGED_IN_TABLE = "CREATE TABLE " + USER_LOGGED_IN_TABLE_NAME + " ("
 		+ USER_LOGGED_IN_KEY_EMAIL + " TEXT PRIMARY KEY" + ")";
 	
+	private static final String CREATE_TASKS_TABLE = "CREATE TABLE " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID
+		+ " INTEGER PRIMARY KEY, " + TASKS_KEY_DESCRIPTION + " TEXT, " + TASKS_KEY_END_TIME + " INTEGER, "
+		+ TASKS_KEY_IS_HIDDEN + " INTEGER, " + TASKS_KEY_MAX_POINTS + " INTEGER, " + TASKS_KEY_NUMBER_OF_HIDDEN
+		+ " INTEGER, " + TASKS_KEY_PICTURE + " TEXT, " + TASKS_KEY_REPETABLE + " INTEGER, " + TASKS_KEY_TITLE
+		+ " TEXT, " + TASKS_KEY_TYPE + " INTEGER" + ")";
+	
+	private static final String CREATE_GAMES_TASKS_TABLE = "CREATE TABLE " + GAMES_TASKS_TABLE_NAME + " ("
+		+ GAMES_TASKS_KEY_GAME_ID + " INTEGER, " + GAMES_TASKS_KEY_TASK_ID + " INTEGER, " + "PRIMARY KEY ("
+		+ GAMES_TASKS_KEY_GAME_ID + ", " + GAMES_TASKS_KEY_TASK_ID + ")" + " FOREIGN KEY (" + GAMES_TASKS_KEY_GAME_ID
+		+ ") REFERENCES " + GAMES_TABLE_NAME + " (" + GAMES_KEY_ID + "), " + " FOREIGN KEY (" + GAMES_TASKS_KEY_TASK_ID
+		+ ") REFERENCES " + TASKS_TABLE_NAME + "(" + TASKS_KEY_ID + ")" + ")";
+	
+	private static final String CREATE_USER_TASKS_SPECIFIC_TABLE = "CREATE TABLE " + USER_TASKS_SPECIFIC_TABLE_NAME
+		+ " (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + " TEXT, " + USER_TASKS_SPECIFIC_KEY_TASK_ID + " INTEGER, "
+		+ USER_TASKS_SPECIFIC_KEY_ARE_CHANGES + " TEXT, " + USER_TASKS_SPECIFIC_KEY_IS_FINISHED + " TEXT, "
+		+ USER_TASKS_SPECIFIC_KEY_POINTS + " INTEGER, " + USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN + " TEXT, "
+		+ "PRIMARY KEY (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ", " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "), "
+		+ " FOREIGN KEY (" + USER_TASKS_SPECIFIC_KEY_TASK_ID + ") REFERENCES " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID
+		+ "), " + " FOREIGN KEY (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ") REFERENCES " + USER_TABLE_NAME + " ("
+		+ USER_KEY_EMAIL + ") " + ")";
+	
+	private static final String CREATE_TASKS_ABCD_TABLE = "CREATE TABLE " + TASKS_ABCD_TABLE_NAME + " ("
+		+ TASKS_ABCD_KEY_TASK_ID + " INTEGER AUTOINCREMENT, " + TASKS_ABCD_KEY_TASK_ID + " INTEGER, "
+		+ TASKS_ABCD_KEY_QUESTION + " TEXT NOT NULL, " + "FOREIGN KEY (" + TASKS_ABCD_KEY_TASK_ID + ") "
+		+ "REFERENCES " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID + ") " + ")";
+	
+	private static final String CREATE_TASKS_ABCD_POSSIBLE_ANSWERS_TABLE = "CREATE TABLE "
+		+ TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME + " (" + TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + " INTEGER, "
+		+ TASKS_ABCD_POSSIBLE_ANSWERS_KEY_TASK_POSSIBLE_ANSWER + " INTEGER, " + "PRIMARY KEY ("
+		+ TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + ", " + TASKS_ABCD_POSSIBLE_ANSWERS_KEY_TASK_POSSIBLE_ANSWER + "), "
+		+ "FOREIGN KEY (" + TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + ") " + "REFERENCES " + TASKS_ABCD_TABLE_NAME + " ("
+		+ TASKS_ABCD_KEY_ID + ") " + ")";
+	
 	public Database(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		SQLiteDatabase.loadLibs(context);
@@ -108,12 +179,22 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.execSQL(CREATE_USER_TABLE);
 		db.execSQL(CREATE_USER_GAMES_SPECIFIC_TABLE);
 		db.execSQL(CREATE_USER_LOGGED_IN_TABLE);
+		db.execSQL(CREATE_TASKS_TABLE);
+		db.execSQL(CREATE_GAMES_TASKS_TABLE);
+		db.execSQL(CREATE_USER_TASKS_SPECIFIC_TABLE);
+		db.execSQL(CREATE_TASKS_ABCD_TABLE);
+		db.execSQL(CREATE_TASKS_ABCD_POSSIBLE_ANSWERS_TABLE);
 	}
 	
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.w(Database.class.getName(), "Upgrading database from version " + oldVersion + " to " + newVersion
 			+ ", which will destroy all old data");
+		db.execSQL("DROP TABLE IF EXISTS " + CREATE_TASKS_ABCD_POSSIBLE_ANSWERS_TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + CREATE_TASKS_ABCD_TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + CREATE_USER_TASKS_SPECIFIC_TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + CREATE_GAMES_TASKS_TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + CREATE_TASKS_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + USER_GAMES_SPECIFIC_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + GAMES_TABLE_NAME);
