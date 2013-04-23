@@ -106,6 +106,22 @@ public interface DatabaseInterface {
 	 */
 	public boolean deletePlayer(String email);
 	
+	/**
+	 * @param email - email of player to be logged in
+	 * @return true if successful
+	 */
+	public boolean setLoggedPlayer(String email);
+	
+	/**
+	 * @return returns logged player Email, or null if no one is logged
+	 */
+	public String getLoggedPlayerID();
+	
+	/**
+	 * @return true if successful
+	 */
+	public boolean setNoOneLogged();
+	
 	// USER METHOD END
 	
 	// USER GAMES SPECIFIC METHOD

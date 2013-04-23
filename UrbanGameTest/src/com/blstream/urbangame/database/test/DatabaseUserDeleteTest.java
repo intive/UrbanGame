@@ -37,6 +37,20 @@ public class DatabaseUserDeleteTest extends AndroidTestCase {
 		assertFalse(isSuccessful);
 	}
 	
+	public void testNoOneLoggedInDatabase() {
+		boolean ok = database.setNoOneLogged();
+		assertTrue(ok);
+	}
+	
+	public void testLoggingOut() {
+		boolean ok = database.setLoggedPlayer("em@em.em");
+		assertTrue(ok);
+		ok = database.setNoOneLogged();
+		assertTrue(ok);
+		String email = database.getLoggedPlayerID();
+		assertNull(email);
+	}
+	
 	public void testOneItemInDatabaseNoMatch() {
 		prepareData("email", "pass", "displayName", "avatarBase64");
 		boolean isSuccessful = database.deletePlayer("a");

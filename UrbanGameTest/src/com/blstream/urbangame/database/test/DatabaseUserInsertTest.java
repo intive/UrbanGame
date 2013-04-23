@@ -50,6 +50,12 @@ public class DatabaseUserInsertTest extends AndroidTestCase {
 		assertTrue(ok);
 	}
 	
+	// not allowed
+	public void testUserLoggingNull() {
+		boolean ok = database.setLoggedPlayer(null);
+		assertFalse(ok);
+	}
+	
 	/* ------------------------ NULL VALUES END ------------------------ */
 	
 	/* ------------------------ WRONG VALUES END ------------------------ */
@@ -62,11 +68,24 @@ public class DatabaseUserInsertTest extends AndroidTestCase {
 		assertFalse(ok);
 	}
 	
+	//not allowed
+	public void testMultiLogging() {
+		boolean ok = database.setLoggedPlayer("em@em.em");
+		assertTrue(ok);
+		ok = database.setLoggedPlayer("em2@em2.em2");
+		assertFalse(ok);
+	}
+	
 	/* ------------------------ WRONG VALUES END ------------------------ */
 	
 	/* ------------------------ NORMAL VALUES ------------------------ */
 	public void testInsertNormalValues() {
 		boolean ok = database.insertUser(player);
+		assertTrue(ok);
+	}
+	
+	public void testUserLogging() {
+		boolean ok = database.setLoggedPlayer("em@em.em");
 		assertTrue(ok);
 	}
 	/* ------------------------ NORMAL VALUES END ------------------------ */

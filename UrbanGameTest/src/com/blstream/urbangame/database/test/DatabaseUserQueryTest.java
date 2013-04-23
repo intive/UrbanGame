@@ -37,6 +37,18 @@ public class DatabaseUserQueryTest extends AndroidTestCase {
 		assertNull(p);
 	}
 	
+	public void testNoOneLogged() {
+		String email = database.getLoggedPlayerID();
+		assertNull(email);
+	}
+	
+	public void testSomeoneLogged() {
+		boolean ok = database.setLoggedPlayer("em@em.em");
+		assertTrue(ok);
+		String email = database.getLoggedPlayerID();
+		assertEquals("em@em.em", email);
+	}
+	
 	public void testOneItemInDatabaseNoMatch() {
 		prepareData("email", "pass", "displayName", "avatarBase64");
 		Player p = database.getPlayer("a");
