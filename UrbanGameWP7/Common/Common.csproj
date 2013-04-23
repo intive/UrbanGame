@@ -55,6 +55,8 @@
     <Compile Include="GameType.cs" />
     <Compile Include="GameDifficulty.cs" />
     <Compile Include="GameState.cs" />
+    <Compile Include="IAppbarItem.cs" />
+    <Compile Include="IAppbarManager.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="IGameChangesManager.cs" />
     <Compile Include="IGameWebService.cs" />

@@ -106,6 +106,7 @@
     <Compile Include="Storage\UrbanGameDataContext.cs" />
     <Compile Include="Tombstoning\TombstoningContainer.cs" />
     <Compile Include="Tombstoning\TombstoningVariables.cs" />
+    <Compile Include="Utilities\AppbarManager.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsViewModel.cs" />
     <Compile Include="ViewModels\GamesListViewModel.cs" />
