@@ -57,6 +57,10 @@
     <string name="tab_task_description">Description</string>
     <string name="tab_task_answer">Answer</string>
 
+    <!-- ProfileActivity -->
+	<string name="button_save">Save</string>
+	<string name="button_skip">Skip</string>
+	    
     <!-- Content descriptions -->
     <string name="contentDescription_gameLogo">Game logo</string>
     <string name="contentDescription_operatorLogo">Operator logo</string>
@@ -66,6 +70,7 @@
     <string name="contentDescription_taskTypeIcon">Task type icon</string>
     <string name="contentDescription_dividerHorizontalLine">Divider - horizontal line</string>
     <string name="contentDescription_taskImage">Image associated with this task</string>
+    <string name="contentDescription_profileImage">Profile image</string>
     
     <!-- Logging in-->
     <string name="hint_email">E-mail</string>
