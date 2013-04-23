@@ -21,23 +21,6 @@ namespace UrbanGame.Views
         public GameDetailsView()
         {
             InitializeComponent();
-            Loaded += GameDetailsView_Loaded;
         }
-
-        void GameDetailsView_Loaded(object sender, RoutedEventArgs e)
-        {
-            BuildLocalizedApplicationBar();
-        }
-
-        private void BuildLocalizedApplicationBar()
-        {
-            ApplicationBar = new ApplicationBar();
-            ApplicationBar.Buttons.Add(new AppBarButton()
-                                        {
-                                            IconUri = new Uri("/Images/appbar.check.png", UriKind.Relative),
-                                            Text = AppResources.JoinIn,
-                                            Message = "JoinGame()"
-                                        });
-        }                
     }
 }
