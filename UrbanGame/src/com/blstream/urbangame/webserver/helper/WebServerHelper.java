@@ -4,13 +4,12 @@ import android.util.Log;
 
 import com.blstream.urbangame.webserver.asynctask.AsyncSendWebQuery;
 
-/*WebServerHelper is an intermediary class which issues HTTP requests to web
+/* WebServerHelper is an intermediary class which issues HTTP requests to web
  * server. After query to web server has been completed listener which you
  * provided as first argument to one of WebServerHelper query methods (for
- * example to "getUrbanGameDetails()" method) will be called.
- * If there was not correct response from web server (for example because of timeout)
- * then you will get as an answer null WebResponse object in your listener.
- *  */
+ * example to "getUrbanGameDetails()" method) will be called. If there was not
+ * correct response from web server (for example because of timeout) then you
+ * will get as an answer null WebResponse object in your listener. */
 
 public class WebServerHelper {
 	private final static String TAG = "WebServerHelper";

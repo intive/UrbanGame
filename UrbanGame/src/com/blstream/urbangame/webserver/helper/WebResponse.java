@@ -5,11 +5,12 @@ import java.util.List;
 import android.util.Log;
 
 import com.blstream.urbangame.database.entity.UrbanGame;
+import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
-/*WebResponse is an auxiliary class which contains information about response
+/* WebResponse is an auxiliary class which contains information about response
  * from web server: what kind of query was send to web server and JSON message
  * returned from web server. */
 
@@ -40,7 +41,7 @@ public class WebResponse {
 		jsonResponse = _jsonResponse;
 	}
 	
-	public UrbanGame parseResponseToUrbanGame() {
+	public UrbanGame getUrbanGame() {
 		// try to parse response JSON string to UrbanGame
 		Gson gson = new Gson();
 		
@@ -54,12 +55,13 @@ public class WebResponse {
 		return null;
 	}
 	
-	public List<UrbanGame> parseResponseToUrbanGameList() {
+	public List<UrbanGameShortInfo> getUrbanGameShortInfoList() {
 		// try to parse response JSON string to list of UrbanGame objects
 		Gson gson = new Gson();
 		
 		try {
-			List<UrbanGame> urbanGames = gson.fromJson(jsonResponse, new TypeToken<List<UrbanGame>>() {}.getType());
+			List<UrbanGameShortInfo> urbanGames = gson.fromJson(jsonResponse,
+				new TypeToken<List<UrbanGameShortInfo>>() {}.getType());
 			return urbanGames;
 		}
 		catch (JsonSyntaxException e) {
@@ -68,5 +70,5 @@ public class WebResponse {
 		
 		return null;
 	}
-	
+
 }
