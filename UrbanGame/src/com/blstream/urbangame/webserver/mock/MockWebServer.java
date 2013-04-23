@@ -61,21 +61,21 @@ public class MockWebServer {
 		
 		mockAllUrbanGames = new ArrayList<UrbanGameShortInfo>();
 		
-		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(1), "MyGameTitle6", "MyOperatorName6", 6, 6,
-			startDate, endDate, true, "MyLocation6", "MyGamelogoBase646", "MyOperatorlogoBase646", "MyDetailsLink6"));
+		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(1), "MyGameTitle1", "MyOperatorName1", 1, 1,
+			startDate, endDate, true, "MyLocation1", "MyGamelogoBase641", "MyOperatorlogoBase641", "MyDetailsLink1"));
 		
-		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(2), "MyGameTitle7", "MyOperatorName7", 7, 7,
-			startDate, endDate, true, "MyLocation7", "MyGamelogoBase647", "MyOperatorlogoBase647", "MyDetailsLink7"));
+		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(2), "MyGameTitle2", "MyOperatorName2", 2, 2,
+			startDate, endDate, true, "MyLocation2", "MyGamelogoBase642", "MyOperatorlogoBase642", "MyDetailsLink2"));
 		
-		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(3), "MyGameTitle8", "MyOperatorName8", 8, 8,
-			startDate, endDate, true, "MyLocation8", "MyGamelogoBase648", "MyOperatorlogoBase648", "MyDetailsLink8"));
+		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(3), "MyGameTitle3", "MyOperatorName3", 3, 3,
+			startDate, endDate, true, "MyLocation3", "MyGamelogoBase643", "MyOperatorlogoBase643", "MyDetailsLink3"));
 		
-		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(4), "MyGameTitle9", "MyOperatorName9", 9, 9,
-			startDate, endDate, true, "MyLocation9", "MyGamelogoBase649", "MyOperatorlogoBase649", "MyDetailsLink9"));
+		mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(4), "MyGameTitle4", "MyOperatorName4", 4, 4,
+			startDate, endDate, true, "MyLocation4", "MyGamelogoBase644", "MyOperatorlogoBase644", "MyDetailsLink4"));
 		
 		mockAllUrbanGames
-			.add(new UrbanGameShortInfo(Long.valueOf(5), "MyGameTitle10", "MyOperatorName10", 10, 10, startDate,
-				endDate, true, "MyLocation10", "MyGamelogoBase6410", "MyOperatorlogoBase6410", "MyDetailsLink10"));
+			.add(new UrbanGameShortInfo(Long.valueOf(5), "MyGameTitle5", "MyOperatorName5", 5, 5, startDate,
+				endDate, true, "MyLocation5", "MyGamelogoBase645", "MyOperatorlogoBase645", "MyDetailsLink5"));
 		
 	}
 	
