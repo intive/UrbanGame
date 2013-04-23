@@ -12,11 +12,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-describe('Controllers', function() {
-    describe('MenuCtrl', function() {
-        it('should list 3 items', function() {
-            var scope = {}, ctrl = new MenuCtrl(scope);
-            expect(scope.menuitems.length).toBe(3);
-        });
-    });
-});
+package controllers
+
+import play.api._
+import play.api.mvc._
+
+object Games extends Controller {
+
+  	def createnewgame = Action {
+  		Ok(Scalate("createnewgame").render('title -> "Urban Game - Create new game"))
+  	}
+
+}
