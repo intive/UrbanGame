@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/view_margin"
+    android:padding="@dimen/view_margin"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText" >
+
+    <ImageView
+        android:id="@+id/imageViewTaskLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/contentDescription_taskLogo"
+        android:src="@drawable/mock_task_image" />
+
+    <ImageView
+        android:id="@+id/imageViewNewTaskIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="false"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/contentDescription_newTaskIndicator"
+        android:src="@drawable/new_task_indicator" />
+
+    <TextView
+        android:id="@+id/textViewTaskTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/textViewTaskRepeatable"
+        android:layout_toRightOf="@id/imageViewTaskLogo"
+        android:text="Hunt for Gnomes"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textViewTasksTimeLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textViewTaskTitle"
+        android:layout_below="@+id/textViewTaskTitle"
+        android:layout_toLeftOf="@+id/textViewTaskRepeatable"
+        android:text="2 days, 6 hours" />
+
+    <TextView
+        android:id="@+id/textViewTaskPointsDivider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textViewTaskTitle"
+        android:layout_toLeftOf="@+id/textViewMaximalTaskPoints"
+        android:text="@string/slash" />
+
+    <TextView
+        android:id="@+id/textViewMaximalTaskPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewTaskRepeatable"
+        android:layout_toLeftOf="@+id/textViewTaskPointsLabel"
+        android:text="10" />
+
+    <TextView
+        android:id="@+id/textViewTaskPointsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewTaskRepeatable"
+        android:layout_toLeftOf="@+id/imageViewNewTaskIndicator"
+        android:text="@string/label_points2" />
+
+    <TextView
+        android:id="@+id/textViewTaskRepeatable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTaskPoints"
+        android:layout_toLeftOf="@+id/imageViewNewTaskIndicator"
+        android:text="non-repeatable" />
+
+    <TextView
+        android:id="@+id/textViewTaskPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewTasksTimeLeft"
+        android:layout_toLeftOf="@+id/textViewTaskPointsDivider"
+        android:text="3" />
+
+</RelativeLayout>
