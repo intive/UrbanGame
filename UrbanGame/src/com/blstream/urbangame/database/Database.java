@@ -407,21 +407,36 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	public boolean deleteGameInfoAndShortInfo(Long gameID) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		db.beginTransaction();
+		String userTaskSpecificDeletionSQL = "DELETE FROM " + USER_TASKS_SPECIFIC_TABLE_NAME + " WHERE "
+			+ USER_TASKS_SPECIFIC_KEY_TASK_ID + " IN (SELECT " + GAMES_TASKS_KEY_TASK_ID + " FROM "
+			+ GAMES_TASKS_TABLE_NAME + " WHERE " + GAMES_TASKS_KEY_GAME_ID + "=" + gameID.longValue() + ")" + ")";
+		String abcdPossibleAnswersDeletionSQL = "DELETE FROM " + TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME + " WHERE "
+			+ TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + " IN (SELECT " + TASKS_ABCD_KEY_ID + " FROM "
+			+ TASKS_ABCD_TABLE_NAME + " WHERE " + TASKS_ABCD_KEY_TASK_ID + " IN (SELECT " + GAMES_TASKS_KEY_TASK_ID
+			+ " FROM " + GAMES_TASKS_TABLE_NAME + " WHERE " + GAMES_TASKS_KEY_GAME_ID + "=" + gameID.longValue() + ")"
+			+ ")";
+		String abcdTaskDeletionSQL = "DELETE FROM " + TASKS_ABCD_TABLE_NAME + " WHERE " + TASKS_ABCD_KEY_TASK_ID
+			+ " IN (SELECT " + GAMES_TASKS_KEY_TASK_ID + " FROM " + GAMES_TASKS_TABLE_NAME + " WHERE "
+			+ GAMES_TASKS_KEY_GAME_ID + "=" + gameID.longValue() + ")";
 		String tasksDeletionSQL = "DELETE FROM " + TASKS_TABLE_NAME + " WHERE " + TASKS_KEY_ID + " IN (SELECT "
 			+ GAMES_TASKS_KEY_TASK_ID + " FROM " + GAMES_TASKS_TABLE_NAME + " WHERE " + GAMES_TASKS_KEY_GAME_ID + "="
 			+ gameID.longValue() + ")";
-		//TODO delete special ABCD fields
+		db.rawQuery(userTaskSpecificDeletionSQL, null);
+		db.rawQuery(abcdPossibleAnswersDeletionSQL, null);
+		db.rawQuery(abcdTaskDeletionSQL, null);
 		db.rawQuery(tasksDeletionSQL, null);
 		boolean isTasksDeletionSuccessful = db.delete(GAMES_TASKS_TABLE_NAME, GAMES_TASKS_KEY_GAME_ID + "=?",
 			new String[] { gameID.longValue() + "" }) != 0;
+		boolean isUserGameSpecificDeletionSuccessful = db.delete(USER_GAMES_SPECIFIC_TABLE_NAME,
+			USER_GAMES_SPECIFIC_KEY_GAME_ID + "=?", new String[] { gameID.longValue() + "" }) != -1;
 		boolean isSucessful = db
 			.delete(GAMES_TABLE_NAME, GAMES_KEY_ID + "=?", new String[] { gameID.longValue() + "" }) != 0;
-		if (isTasksDeletionSuccessful && isSucessful) {
+		if (isTasksDeletionSuccessful && isSucessful && isUserGameSpecificDeletionSuccessful) {
 			db.setTransactionSuccessful();
 		}
 		db.endTransaction();
 		db.close();
-		return isTasksDeletionSuccessful && isSucessful;
+		return isTasksDeletionSuccessful && isSucessful && isUserGameSpecificDeletionSuccessful;
 	}
 	
 	private boolean areShortGameInfoFieldsOK(UrbanGameShortInfo game) {
@@ -979,7 +994,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		}
 	}
 	
-	//TODO
+	//TODO only update
 	@Override
 	public boolean updateTask(Task task) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
@@ -1033,6 +1048,17 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	@Override
 	public boolean deleteTask(Long taskID) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		db.beginTransaction();
+		String userTaskSpecificDeletionSQL = "DELETE FROM " + USER_TASKS_SPECIFIC_TABLE_NAME + " WHERE "
+			+ USER_TASKS_SPECIFIC_KEY_TASK_ID + "=" + taskID.longValue();
+		String abcdPossibleAnswersDeletionSQL = "DELETE FROM " + TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME + " WHERE "
+			+ TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + " IN (SELECT " + TASKS_ABCD_KEY_ID + " FROM "
+			+ TASKS_ABCD_TABLE_NAME + " WHERE " + TASKS_ABCD_KEY_TASK_ID + "=" + taskID.longValue() + ")";
+		String abcdTaskDeletionSQL = "DELETE FROM " + TASKS_ABCD_TABLE_NAME + " WHERE " + TASKS_ABCD_KEY_TASK_ID + "="
+			+ taskID.longValue();
+		db.rawQuery(userTaskSpecificDeletionSQL, null);
+		db.rawQuery(abcdPossibleAnswersDeletionSQL, null);
+		db.rawQuery(abcdTaskDeletionSQL, null);
 		boolean isSucessful = db
 			.delete(TASKS_TABLE_NAME, TASKS_KEY_ID + "=?", new String[] { taskID.longValue() + "" }) != 0;
 		db.close();
