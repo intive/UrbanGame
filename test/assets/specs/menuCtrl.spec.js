@@ -12,21 +12,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package controllers
+'use strict';
 
-import play.api._
-import play.api.mvc._
-
-object Application extends Controller {
-  
-	def index = Action {
-		Ok(Scalate("index").render('title -> "Urban Game"))
-  	}
-
-  	def logout = Action {
-  		Ok(Scalate("logout").render('title -> "Urban Game - Logout"))
-  	}
-
-  	def dummyTestFunction(left: Int,right: Int):Int=left+right
-  
-}
+describe('Controllers', function() {
+    describe('menuCtrl', function() {
+	beforeEach(module('web'));
+	var ctrl, scope;
+	beforeEach(inject(function($controller, $rootScope) {
+		scope = $rootScope.$new();
+		ctrl = $controller('menuCtrl', {
+			$scope: scope
+		});
+	}));
+        it('should list 3 items', function() {
+            expect(scope.menuitems.length).toBe(3);
+        });
+    });
+});

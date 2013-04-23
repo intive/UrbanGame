@@ -1,0 +1,87 @@
+@contwidth: 940px;
+@mhmarginbottom: 20px;
+@wizminheight: 200px;
+
+@slightpadding: 15px;
+@tareaheight: 100px;
+@roffset10: 10px;
+@gray: #ccc;
+@navtabback: #fe3ddd;
+@pullhigher: -10px;
+
+
+.masthead {
+	margin-bottom: 30px;
+}
+.no-wrap{
+	white-space:nowrap
+}
+.as-inline-block{
+	display:inline-block
+	}
+.myheader {
+	background-color: @gray;
+	
+	.navbar {
+		margin-bottom: 0px;
+
+		.navbar-inner {
+			text-align:center;
+		}
+	}
+}
+
+.loginform {
+	margin: @roffset10 - 5 @roffset10;
+}
+
+.navbar .nav,
+.navbar .nav > li {
+	float: none;
+	display: inline-block;
+	*display: inline; /* ie7 fix */
+	*zoom: 1; /* hasLayout ie7 trigger */
+	vertical-align: top;
+	margin: 0px;
+}
+
+.container-narrow {
+	margin: 0 auto;
+	max-width: @contwidth;
+}
+input[type="radio"]{
+	margin-right: 7px;
+	margin-left: 3px;
+	margin-bottom: 3px;
+}
+
+.slight-padding-top{
+	padding-top: @slightpadding;
+}
+.slight-padding-right{
+	padding-right: @slightpadding;
+}
+.slight-padding-left{
+	padding-left: @slightpadding;
+}	
+textarea{
+	height:@tareaheight;
+	resize: none;
+}
+.pull-higher{
+	margin-top: @pullhigher
+}
+
+
+.cursor-help{
+	cursor: help
+}
+
+.nav-steps {
+	min-width: @contwidth;
+
+	li {
+		width: 25%;
+	}
+}
+

@@ -43,26 +43,18 @@
         %script(src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js" type="text/javascript")
     %body
         .masthead
-            .row.pull-right.loginform
-                %form.navbar-form.pull-right
-                    %input.span2(type="text" placeholder={Messages("login.login")})
-                    %input.span2(type="text" placeholder={Messages("login.password")})
-                    %input.btn(type="submit" value={Messages("login.login")})
-            .clearfix
+            .row
+                %h3.pull-left.offset1.logo LOGO
+                .pull-right.loginform
+                    %form.navbar-form.pull-right
+                        %input.span2(type="text" placeholder={Messages("login.login")})
+                        %input.span2(type="text" placeholder={Messages("login.password")})
+                        %input.btn(type="submit" value={Messages("login.login")})
             .row.myheader
-                %h3.offset1.logo LOGO
-                %ul.navbar
-                    .navbar-inner
-                        .container
-                            %ul.nav.nav-tabs
-                                %li
-                                    %a(href="/games/new") New game
-                                %li
-                                    %a(href="/games/my") My games
-                                %li
-                                    %a(href="/games/archive") Archive
-                                %li
-                                    %a(href="/options") Options
+                .row
+                    Coś
+                .row
+                    Coś
 
         .container-narrow
             .row-fluid

@@ -2,11 +2,12 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
+# Public
 GET     /							controllers.Application.index
+GET		/logout						controllers.Application.logout
 
-# Create new game
-GET     /games/new					controllers.Application.createnewgame
+# Authenticated
+GET     /games/new					controllers.Games.createnewgame
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
