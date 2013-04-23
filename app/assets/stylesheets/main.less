@@ -3,16 +3,22 @@
 @wizminheight: 200px;
 
 @slightpadding: 15px;
-
+@tareaheight: 100px;
 @roffset10: 10px;
 @gray: #ccc;
 @navtabback: #fe3ddd;
+@pullhigher: -10px;
 
 
 .masthead {
 	margin-bottom: 30px;
 }
-
+.no-wrap{
+	white-space:nowrap
+}
+.as-inline-block{
+	display:inline-block
+	}
 .myheader {
 	background-color: @gray;
 	
@@ -58,7 +64,13 @@ input[type="radio"]{
 .slight-padding-left{
 	padding-left: @slightpadding;
 }	
-	
+textarea{
+	height:@tareaheight;
+	resize: none;
+}
+.pull-higher{
+	margin-top: @pullhigher
+}
 
 
 .cursor-help{
