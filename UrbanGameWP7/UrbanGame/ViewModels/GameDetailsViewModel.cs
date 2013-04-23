@@ -203,19 +203,19 @@ namespace UrbanGame.ViewModels
         {
             var newGame = uow.GetRepository<IGame>().CreateInstance();
             newGame.Id = GameId;
-            newGame.Name = "Hydrozagadka";
-            newGame.OperatorName = "CAFETERIA";
-            newGame.OperatorLogo = "/ApplicationIcon.png";
-            newGame.GameLogo = "/ApplicationIcon.png";
-            newGame.GameStart = DateTime.Now.AddHours(3).AddMinutes(23);
-            newGame.GameEnd = DateTime.Now.AddDays(2).AddHours(5);
+            newGame.Name = Game.Name;
+            newGame.OperatorName = Game.OperatorName;
+            newGame.OperatorLogo = Game.OperatorLogo;
+            newGame.GameLogo = Game.GameLogo;
+            newGame.GameStart = Game.GameStart;
+            newGame.GameEnd = Game.GameEnd;
             newGame.GameState = state;
-            newGame.NumberOfPlayers = 24;
-            newGame.NumberOfSlots = 50;
-            newGame.GameType = GameType.Quiz;
-            newGame.Description = DateTime.Now.ToLongTimeString() + "\nsadsa sad ads  adsa dssa sad  asas asd as a sas as as  asas  asdas as ads as d";
-            newGame.Difficulty = GameDifficulty.Medium;
-            newGame.Prizes = "1st Bicycle\n2nd Bicycle\n3rd Bicycle\n4-8th Bicycle bicycle bicycle";
+            newGame.NumberOfPlayers = Game.NumberOfPlayers;
+            newGame.NumberOfSlots = Game.NumberOfSlots;
+            newGame.GameType = Game.GameType;
+            newGame.Description = Game.Description;
+            newGame.Difficulty = Game.Difficulty;
+            newGame.Prizes = Game.Prizes;
             return newGame;
         }
 
