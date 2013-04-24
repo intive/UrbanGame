@@ -12,6 +12,7 @@ namespace UrbanGame.Views
 {
     public partial class GamesListView : PhoneApplicationPage
     {
+
         public GamesListView()
         {
             InitializeComponent();
