@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.blstream.urbangame.database.entity.Player;
 import com.blstream.urbangame.database.entity.PlayerGameSpecific;
+import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
+import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 
@@ -153,6 +155,34 @@ public interface DatabaseInterface {
 	 */
 	public boolean deleteUserGameSpecific(String email, Long gameID);
 	
+	/**
+	 * @param taskSpecific - task info specific to user to be inserted
+	 * @return true if successful
+	 */
+	public boolean insertPlayerTaskSpecific(PlayerTaskSpecific taskSpecific);
+	
+	/**
+	 * @param taskID - task id to get info for
+	 * @param playerEmail - player email to get info for
+	 * @return task specific for user information if match, else null
+	 */
+	public PlayerTaskSpecific getPlayerTaskSpecific(Long taskID, String playerEmail);
+	
+	/**
+	 * @param taskSpecific - important is player email and task id, if field is
+	 *        not changing set the value to null. Null fields will not be
+	 *        updated.
+	 * @return true is successful
+	 */
+	public boolean updatePlayerTaskSpecific(PlayerTaskSpecific taskSpecific);
+	
+	/**
+	 * @param taskID - task id to make the deletion
+	 * @param playerEmail - player email to make te deletion
+	 * @return true if successful
+	 */
+	public boolean deletePlayerTaskSpecific(Long taskID, String playerEmail);
+	
 	// USER GAMES SPECIFIC METHOD END
 	
 	// WIPE OUT USER DATA
@@ -162,5 +192,44 @@ public interface DatabaseInterface {
 	 * @return true if successful
 	 */
 	public boolean wipeOutUserData(String email);
+	
 	// WIPE OUT USER DATA END
+	
+	// TASKS METHODS
+	
+	/**
+	 * @param gameID - id of game for which the task should be inserted
+	 * @param task - task itself
+	 * @return true if successful
+	 */
+	public boolean insertTaskForGame(Long gameID, Task task);
+	
+	/**
+	 * @param gameID - points to the tasks specific for a game
+	 * @return list of tasks of game with ID given in parameter, null if no
+	 *         match
+	 */
+	public List<Task> getTasksForGame(Long gameID);
+	
+	/**
+	 * @param taskID - points to the specific task
+	 * @return single task of game with ID given in parameter, null if no match
+	 */
+	public Task getTask(Long taskID);
+	
+	/**
+	 * @param task - answers of ABCD tasks, MUST be ALL INCLUDED if one changed,
+	 *        there's NO WAY to UPDATE only ONE answer. Important is task's id,
+	 *        if field is not changing set the value to null. Null fields of
+	 *        task will not be updated.
+	 * @return true if successful
+	 */
+	public boolean updateTask(Task task);
+	
+	/**
+	 * @param taskID - task id to be deleted
+	 * @return true if successful
+	 */
+	public boolean deleteTask(Long taskID);
+	// TASKS METHODS END
 }
