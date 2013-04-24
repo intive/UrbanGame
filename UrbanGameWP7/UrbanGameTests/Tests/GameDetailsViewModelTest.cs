@@ -9,6 +9,7 @@ using UrbanGame.Storage;
 using WebService;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UrbanGameTests.Mocks;
 
 namespace UrbanGameTests.Tests
 {
@@ -49,7 +50,7 @@ namespace UrbanGameTests.Tests
             });
             unitOfWork.Commit();
 
-            GameDetailsViewModel vm = new GameDetailsViewModel(null, () => unitOfWork, webService, eventAgg) { GameId = 1 };
+            GameDetailsViewModel vm = new GameDetailsViewModel(null, () => unitOfWork, webService, eventAgg,new AppbarManagerMock()) { GameId = 1 };
             #endregion
             
             //if user is unauthorized, then game should be downloaded from WebService

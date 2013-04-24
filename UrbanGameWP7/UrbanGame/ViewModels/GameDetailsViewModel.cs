@@ -4,20 +4,90 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using UrbanGame.Storage;
+using System.Threading.Tasks;
 
 namespace UrbanGame.ViewModels
 {
     public class GameDetailsViewModel : BaseViewModel, IHandle<GameChangedEvent>
     {
+    
+        IAppbarManager _appbarManager;
         public GameDetailsViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator)
+                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
         {
+            _appbarManager=appbarManager;
         }
+
+        protected override void OnViewReady(object view)
+        {
+             SetAppBarContent();
+        }
+
+        #region appbar configurations
+
+        private List<AppbarItem> BasicAppbar = new List<AppbarItem>()
+        {
+            new AppbarItem() {  Text = Localization.AppResources.LogIn,Message="LogoutOrLogin" } 
+        };
+
+        private List<AppbarItem> AuthorizedAndJoinedAppbar = new List<AppbarItem>()
+        {
+            new AppbarItem() {  Text = Localization.AppResources.LogIn,Message="LogoutOrLogin" } ,
+            new AppbarItem() { IconUri = new Uri("/Images/appbarSearch.png", UriKind.Relative), Text = Localization.AppResources.Leave, Message = "Leave"}
+        };
+
+        private List<AppbarItem> AuthorizedAppbar = new List<AppbarItem>()
+        {
+            new AppbarItem() {  Text = Localization.AppResources.LogIn,Message="LogoutOrLogin" } ,
+            new AppbarItem() { IconUri = new Uri("/Images/appbar.check.png", UriKind.Relative), Text = Localization.AppResources.JoinIn, Message = "JoinIn" }
+        };
+
+        #endregion
+
+        #region appbar
+
+        public void RefreshMenuItemText()
+        {
+            if (_gameWebService.IsAuthorized)
+            {
+                _appbarManager.ChangeItemText("LogoutOrLogin", Localization.AppResources.Logout);
+            }
+            else
+            {
+                _appbarManager.ChangeItemText("LogoutOrLogin", Localization.AppResources.LogIn);
+            }
+        }
+
+        private void SetAppBarContent()
+        {
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+
+                if (_gameWebService.IsAuthorized)
+                {
+                    _appbarManager.ShowAppbar();
+                    if (Game.GameState == GameState.Joined)
+                    {
+                        _appbarManager.ConfigureAppbar(AuthorizedAndJoinedAppbar);
+                    }
+                    else
+                    {
+                        _appbarManager.ConfigureAppbar(AuthorizedAppbar);
+                    }
+                }
+                else
+                {
+                    _appbarManager.ConfigureAppbar(BasicAppbar);
+                }
+                RefreshMenuItemText();
+            });
+        }
+
+        #endregion
 
         #region IHandle<GameChangedEvent>
         public void Handle(GameChangedEvent game)
@@ -74,44 +144,23 @@ namespace UrbanGame.ViewModels
         protected override void OnCreated()
         {
             base.OnCreated();
-            AddMenuItem(new AppBarMenuItem() { Text = Localization.AppResources.LogIn }, LogoutOrLogin);
         }
 
-        protected override void OnActivate()
+        protected async override void OnActivate()
         {
             base.OnActivate();
-            RefreshGame();
-            SetAppBarContent();
+            await RefreshGame();
         }
 
         #endregion
 
         #region operations
 
-        public void ToogleMenuItemText()
-        {
-            var appbarButtons = GetAppBar().MenuItems;
-            foreach (AppBarMenuItem button in appbarButtons)
-            {
-                if (button.Text == Localization.AppResources.LogIn)
-                {
-                    button.Text = Localization.AppResources.Logout;
-                    break;
-                }
-                else
-                {
-                    button.Text = Localization.AppResources.LogIn;
-                    break;
-                }
-            }
-        }
-
         public async void LogoutOrLogin()
         {
-            ToogleMenuItemText();
+            
             if (!_gameWebService.IsAuthorized)
             {
-                //to do
                 _gameWebService.Authorize("username", "password");
                 await RefreshGame();
                 SetAppBarContent();
@@ -122,26 +171,8 @@ namespace UrbanGame.ViewModels
                 _gameWebService.IsAuthorized = false;
                 SetAppBarContent();
             }
-        }
-
-        private void SetAppBarContent()
-        {
-            Deployment.Current.Dispatcher.BeginInvoke(() =>
-                {
-                    RemoveButtonItem(Localization.AppResources.JoinIn);
-                    RemoveButtonItem(Localization.AppResources.Leave);
-                    if (_gameWebService.IsAuthorized)
-                    {
-                        if (Game.GameState == GameState.Joined)
-                        {
-                            AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbarSearch.png", UriKind.Relative), Text = Localization.AppResources.Leave, Message = Localization.AppResources.Leave }, Leave);
-                        }
-                        else
-                        {
-                            AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbar.check.png", UriKind.Relative), Text = Localization.AppResources.JoinIn, Message = Localization.AppResources.JoinIn }, JoinIn);
-                        }
-                    }
-                });
+            
+            
         }
 
         public async Task RefreshGame()
