@@ -29,7 +29,7 @@ namespace WebService
 
         public void GameChanged(int gid)
         {
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
                 {
                     IGame newGame = _gameWebService.GetGameInfo(gid);
                     IRepository<IGame> repo = _unitOfWorkLocator().GetRepository<IGame>();

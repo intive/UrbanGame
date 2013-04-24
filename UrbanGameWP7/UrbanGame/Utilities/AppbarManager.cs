@@ -9,8 +9,6 @@ using Caliburn.Micro;
 using Common;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using System.Linq;
-
 namespace UrbanGame.Utilities
 {
     public class AppbarManager : IAppbarManager

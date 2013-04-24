@@ -4,17 +4,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Device.Location;
 using UrbanGame.Storage;
 using System.Windows.Controls;
 using Microsoft.Phone.Controls;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace UrbanGame.ViewModels
 {
     public class GamesListViewModel : BaseViewModel, IHandle<GameChangedEvent>
     {
         IAppbarManager _appbarManager;
+        private string _activeSection;
+
         public GamesListViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
                                   IGameWebService gameWebService, IEventAggregator gameEventAggregator,IAppbarManager appbarManager)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
@@ -28,7 +31,7 @@ namespace UrbanGame.ViewModels
 
         protected override void OnViewReady(object view)
         {
-            _appbarManager.ConfigureAppbar(BasicAppbar);
+            ChangeAppbarButtons();
         }
 
         #region appbar configurations
@@ -51,7 +54,7 @@ namespace UrbanGame.ViewModels
         #region IHandle<GameChangedEvent>
         public void Handle(GameChangedEvent e)
         {
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
                 {
                     IGame game = _gameWebService.GetGameInfo(e.Id);
 
@@ -86,15 +89,9 @@ namespace UrbanGame.ViewModels
         {
             get
             {
-                return _isAuthorized;
+                return _gameWebService.IsAuthorized;
             }
-            set
-            {
-                if (_isAuthorized != value)
-                {
-                    _isAuthorized = value;
-                }
-            }
+
         }
 
         #endregion
@@ -276,7 +273,13 @@ namespace UrbanGame.ViewModels
 
         public void ChangeAppbarButtons(SelectionChangedEventArgs args)
         {
-            if (((PanoramaItem)args.AddedItems[0]).Name == "Nearby")
+            _activeSection=((FrameworkElement)args.AddedItems[0]).Name;
+            ChangeAppbarButtons();
+        }
+
+        public void ChangeAppbarButtons()
+        {
+            if (_activeSection == "Nearby")
             {
                 _appbarManager.ConfigureAppbar(NearbyAppbar);
             }
@@ -284,17 +287,17 @@ namespace UrbanGame.ViewModels
             {
                 _appbarManager.ConfigureAppbar(BasicAppbar);
             }
+            RefreshMenuItemText();
         }
 
 
         public void RefreshUserGames()
         {
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
                 UserActiveGames.Clear();
                 UserInactiveGames.Clear();
 
-                IsAuthorized = _gameWebService.IsAuthorized;
                 if (IsAuthorized)
                 {   
                     IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
@@ -323,7 +326,7 @@ namespace UrbanGame.ViewModels
                 IsRefreshing = true;
             }
 
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
                 try
                 {
@@ -352,15 +355,11 @@ namespace UrbanGame.ViewModels
             
             if (IsAuthorized)
             {
-                IsAuthorized = false;
-               // todo logout
+                _gameWebService.IsAuthorized = false;
             }
             else
             {
-                if (_gameWebService.Authorize("", "") == AuthorizeState.Success)
-                {
-                    IsAuthorized = true;
-                }
+                _gameWebService.Authorize("", "");
             }
             RefreshMenuItemText();
         }
