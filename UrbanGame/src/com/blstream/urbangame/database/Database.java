@@ -808,6 +808,122 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		return successful;
 	}
 	
+	@Override
+	public boolean insertPlayerTaskSpecific(PlayerTaskSpecific taskSpecific) {
+		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		
+		boolean isDataOk;
+		isDataOk = isTaskSpecificOk(taskSpecific);
+		
+		if (isDataOk) {
+			ContentValues values = new ContentValues();
+			values.put(USER_TASKS_SPECIFIC_KEY_TASK_ID, taskSpecific.getTaskID());
+			values.put(USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, taskSpecific.getPlayerEmail());
+			values.put(USER_TASKS_SPECIFIC_KEY_ARE_CHANGES, booleanToString(taskSpecific.getAreChanges()));
+			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.getIsFinishedByUser()));
+			values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
+			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
+			
+			boolean isInsertOK = db.insert(USER_TASKS_SPECIFIC_TABLE_NAME, null, values) != -1;
+			
+			db.close();
+			return isInsertOK;
+		}
+		else return false;
+	}
+	
+	private boolean isTaskSpecificOk(PlayerTaskSpecific taskSpecific) {
+		return taskSpecific.getTaskID() != null && taskSpecific.getPlayerEmail() != null;
+	}
+	
+	@Override
+	public PlayerTaskSpecific getPlayerTaskSpecific(Long taskID, String playerEmail) {
+		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		String[] taskColumns = { USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, USER_TASKS_SPECIFIC_KEY_TASK_ID,
+			USER_TASKS_SPECIFIC_KEY_POINTS, USER_TASKS_SPECIFIC_KEY_IS_FINISHED, USER_TASKS_SPECIFIC_KEY_ARE_CHANGES,
+			USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN };
+		
+		Cursor cursor = db.query(USER_TASKS_SPECIFIC_TABLE_NAME, taskColumns, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL
+			+ "=? AND " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "=?",
+			new String[] { playerEmail, taskID.longValue() + "" }, null, null, null, null);
+		
+		PlayerTaskSpecific taskSpecific;
+		if (cursor != null && cursor.moveToFirst()) {
+			taskSpecific = taskSpecificFromCursor(cursor);
+		}
+		else {
+			taskSpecific = null;
+		}
+		db.close();
+		return taskSpecific;
+	}
+	
+	private PlayerTaskSpecific taskSpecificFromCursor(Cursor cursor) {
+		return new PlayerTaskSpecific(cursor.getString(TaskSpecificFields.PLAYER_EMAIL.value),
+			cursor.getLong(TaskSpecificFields.TASK_ID.value), cursor.getInt(TaskSpecificFields.POINTS.value),
+			stringToBoolean(cursor.getString(TaskSpecificFields.IS_FINISHED.value)),
+			stringToBoolean(cursor.getString(TaskSpecificFields.ARE_CHANGES.value)),
+			stringToBoolean(cursor.getString(TaskSpecificFields.WAS_HIDDEN.value)));
+	}
+	
+	private enum TaskSpecificFields {
+		PLAYER_EMAIL(0), TASK_ID(1), POINTS(2), IS_FINISHED(3), ARE_CHANGES(4), WAS_HIDDEN(5);
+		int value;
+		
+		private TaskSpecificFields(int x) {
+			value = x;
+		}
+	}
+	
+	@Override
+	public boolean updatePlayerTaskSpecific(PlayerTaskSpecific taskSpecific) {
+		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		
+		boolean isDataOk = isTaskSpecificOk(taskSpecific);
+		boolean updateOK = false;
+		if (isDataOk) {
+			ContentValues values = new ContentValues();
+			putTaskSpecificInValues(taskSpecific, values);
+			
+			updateOK = db.update(USER_TASKS_SPECIFIC_TABLE_NAME, values, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL
+				+ "=? AND " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "=?", new String[] { taskSpecific.getPlayerEmail(),
+				taskSpecific.getTaskID().longValue() + "" }) == 1;
+		}
+		db.close();
+		return updateOK;
+	}
+	
+	private void putTaskSpecificInValues(PlayerTaskSpecific taskSpecific, ContentValues values) {
+		if (taskSpecific.getTaskID() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_TASK_ID, taskSpecific.getTaskID());
+		}
+		if (taskSpecific.getPlayerEmail() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, taskSpecific.getPlayerEmail());
+		}
+		if (taskSpecific.getAreChanges() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_ARE_CHANGES, booleanToString(taskSpecific.getAreChanges()));
+		}
+		if (taskSpecific.getIsFinishedByUser() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.getIsFinishedByUser()));
+		}
+		if (taskSpecific.getPoints() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
+		}
+		if (taskSpecific.getWasHidden() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
+		}
+	}
+	
+	@Override
+	public boolean deletePlayerTaskSpecific(Long taskID, String playerEmail) {
+		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		boolean isSucessful = db
+			.delete(USER_TASKS_SPECIFIC_TABLE_NAME, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + "=? AND "
+				+ USER_TASKS_SPECIFIC_KEY_TASK_ID + "=?", new String[] { playerEmail, taskID.longValue() + "" }) != 0;
+		db.close();
+		return isSucessful;
+	}
+	
 	// USER METHODS END
 	
 	// TASKS METHODS
@@ -1101,122 +1217,6 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.rawQuery(abcdTaskDeletionSQL, null);
 		boolean isSucessful = db
 			.delete(TASKS_TABLE_NAME, TASKS_KEY_ID + "=?", new String[] { taskID.longValue() + "" }) != 0;
-		db.close();
-		return isSucessful;
-	}
-	
-	@Override
-	public boolean insertPlayerTaskSpecific(PlayerTaskSpecific taskSpecific) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
-		
-		boolean isDataOk;
-		isDataOk = isTaskSpecificOk(taskSpecific);
-		
-		if (isDataOk) {
-			ContentValues values = new ContentValues();
-			values.put(USER_TASKS_SPECIFIC_KEY_TASK_ID, taskSpecific.getTaskID());
-			values.put(USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, taskSpecific.getPlayerEmail());
-			values.put(USER_TASKS_SPECIFIC_KEY_ARE_CHANGES, booleanToString(taskSpecific.getAreChanges()));
-			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.getIsFinishedByUser()));
-			values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
-			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
-			
-			boolean isInsertOK = db.insert(USER_TASKS_SPECIFIC_TABLE_NAME, null, values) != -1;
-			
-			db.close();
-			return isInsertOK;
-		}
-		else return false;
-	}
-	
-	private boolean isTaskSpecificOk(PlayerTaskSpecific taskSpecific) {
-		return taskSpecific.getTaskID() != null && taskSpecific.getPlayerEmail() != null;
-	}
-	
-	@Override
-	public PlayerTaskSpecific getPlayerTaskSpecific(Long taskID, String playerEmail) {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
-		String[] taskColumns = { USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, USER_TASKS_SPECIFIC_KEY_TASK_ID,
-			USER_TASKS_SPECIFIC_KEY_POINTS, USER_TASKS_SPECIFIC_KEY_IS_FINISHED, USER_TASKS_SPECIFIC_KEY_ARE_CHANGES,
-			USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN };
-		
-		Cursor cursor = db.query(USER_TASKS_SPECIFIC_TABLE_NAME, taskColumns, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL
-			+ "=? AND " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "=?",
-			new String[] { playerEmail, taskID.longValue() + "" }, null, null, null, null);
-		
-		PlayerTaskSpecific taskSpecific;
-		if (cursor != null && cursor.moveToFirst()) {
-			taskSpecific = taskSpecificFromCursor(cursor);
-		}
-		else {
-			taskSpecific = null;
-		}
-		db.close();
-		return taskSpecific;
-	}
-	
-	private PlayerTaskSpecific taskSpecificFromCursor(Cursor cursor) {
-		return new PlayerTaskSpecific(cursor.getString(TaskSpecificFields.PLAYER_EMAIL.value),
-			cursor.getLong(TaskSpecificFields.TASK_ID.value), cursor.getInt(TaskSpecificFields.POINTS.value),
-			stringToBoolean(cursor.getString(TaskSpecificFields.IS_FINISHED.value)),
-			stringToBoolean(cursor.getString(TaskSpecificFields.ARE_CHANGES.value)),
-			stringToBoolean(cursor.getString(TaskSpecificFields.WAS_HIDDEN.value)));
-	}
-	
-	private enum TaskSpecificFields {
-		PLAYER_EMAIL(0), TASK_ID(1), POINTS(2), IS_FINISHED(3), ARE_CHANGES(4), WAS_HIDDEN(5);
-		int value;
-		
-		private TaskSpecificFields(int x) {
-			value = x;
-		}
-	}
-	
-	@Override
-	public boolean updatePlayerTaskSpecific(PlayerTaskSpecific taskSpecific) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
-		
-		boolean isDataOk = isTaskSpecificOk(taskSpecific);
-		boolean updateOK = false;
-		if (isDataOk) {
-			ContentValues values = new ContentValues();
-			putTaskSpecificInValues(taskSpecific, values);
-			
-			updateOK = db.update(USER_TASKS_SPECIFIC_TABLE_NAME, values, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL
-				+ "=? AND " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "=?", new String[] { taskSpecific.getPlayerEmail(),
-				taskSpecific.getTaskID().longValue() + "" }) == 1;
-		}
-		db.close();
-		return updateOK;
-	}
-	
-	private void putTaskSpecificInValues(PlayerTaskSpecific taskSpecific, ContentValues values) {
-		if (taskSpecific.getTaskID() != null) {
-			values.put(USER_TASKS_SPECIFIC_KEY_TASK_ID, taskSpecific.getTaskID());
-		}
-		if (taskSpecific.getPlayerEmail() != null) {
-			values.put(USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, taskSpecific.getPlayerEmail());
-		}
-		if (taskSpecific.getAreChanges() != null) {
-			values.put(USER_TASKS_SPECIFIC_KEY_ARE_CHANGES, booleanToString(taskSpecific.getAreChanges()));
-		}
-		if (taskSpecific.getIsFinishedByUser() != null) {
-			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.getIsFinishedByUser()));
-		}
-		if (taskSpecific.getPoints() != null) {
-			values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
-		}
-		if (taskSpecific.getWasHidden() != null) {
-			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
-		}
-	}
-	
-	@Override
-	public boolean deletePlayerTaskSpecific(Long taskID, String playerEmail) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
-		boolean isSucessful = db
-			.delete(USER_TASKS_SPECIFIC_TABLE_NAME, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + "=? AND "
-				+ USER_TASKS_SPECIFIC_KEY_TASK_ID + "=?", new String[] { playerEmail, taskID.longValue() + "" }) != 0;
 		db.close();
 		return isSucessful;
 	}

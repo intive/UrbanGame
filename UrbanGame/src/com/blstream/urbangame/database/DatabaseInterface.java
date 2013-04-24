@@ -155,6 +155,34 @@ public interface DatabaseInterface {
 	 */
 	public boolean deleteUserGameSpecific(String email, Long gameID);
 	
+	/**
+	 * @param taskSpecific - task info specific to user to be inserted
+	 * @return true if successful
+	 */
+	public boolean insertPlayerTaskSpecific(PlayerTaskSpecific taskSpecific);
+	
+	/**
+	 * @param taskID - task id to get info for
+	 * @param playerEmail - player email to get info for
+	 * @return task specific for user information if match, else null
+	 */
+	public PlayerTaskSpecific getPlayerTaskSpecific(Long taskID, String playerEmail);
+	
+	/**
+	 * @param taskSpecific - important is player email and task id, if field is
+	 *        not changing set the value to null. Null fields will not be
+	 *        updated.
+	 * @return true is successful
+	 */
+	public boolean updatePlayerTaskSpecific(PlayerTaskSpecific taskSpecific);
+	
+	/**
+	 * @param taskID - task id to make the deletion
+	 * @param playerEmail - player email to make te deletion
+	 * @return true if successful
+	 */
+	public boolean deletePlayerTaskSpecific(Long taskID, String playerEmail);
+	
 	// USER GAMES SPECIFIC METHOD END
 	
 	// WIPE OUT USER DATA
@@ -203,33 +231,5 @@ public interface DatabaseInterface {
 	 * @return true if successful
 	 */
 	public boolean deleteTask(Long taskID);
-	
-	/**
-	 * @param taskSpecific - task info specific to user to be inserted
-	 * @return true if successful
-	 */
-	public boolean insertPlayerTaskSpecific(PlayerTaskSpecific taskSpecific);
-	
-	/**
-	 * @param taskID - task id to get info for
-	 * @param playerEmail - player email to get info for
-	 * @return task specific for user information if match, else null
-	 */
-	public PlayerTaskSpecific getPlayerTaskSpecific(Long taskID, String playerEmail);
-	
-	/**
-	 * @param taskSpecific - important is player email and task id, if field is
-	 *        not changing set the value to null. Null fields will not be
-	 *        updated.
-	 * @return true is successful
-	 */
-	public boolean updatePlayerTaskSpecific(PlayerTaskSpecific taskSpecific);
-	
-	/**
-	 * @param taskID - task id to make the deletion
-	 * @param playerEmail - player email to make te deletion
-	 * @return true if successful
-	 */
-	public boolean deletePlayerTaskSpecific(Long taskID, String playerEmail);
 	// TASKS METHODS END
 }
