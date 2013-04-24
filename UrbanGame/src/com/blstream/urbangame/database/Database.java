@@ -1079,22 +1079,22 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			String[] taskAnswersTableColumns = new String[] { TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID,
 				TASKS_ABCD_POSSIBLE_ANSWERS_KEY_TASK_POSSIBLE_ANSWER };
 			
-			Cursor cursor2 = db.query(TASKS_ABCD_TABLE_NAME, taskQuestionTableColumns, TASKS_ABCD_KEY_TASK_ID + "=?",
-				new String[] { id.longValue() + "" }, null, null, null);
-			String question = cursor2.getString(ABCDTaskFields.QUESTION.value);
-			long idOfAnswerSet = cursor2.getLong(ABCDTaskFields.ID.value);
+			Cursor cursorForABCDTasks = db.query(TASKS_ABCD_TABLE_NAME, taskQuestionTableColumns,
+				TASKS_ABCD_KEY_TASK_ID + "=?", new String[] { id.longValue() + "" }, null, null, null);
+			String question = cursorForABCDTasks.getString(ABCDTaskFields.QUESTION.value);
+			long idOfAnswerSet = cursorForABCDTasks.getLong(ABCDTaskFields.ID.value);
 			String[] answers = null;
 			
-			cursor2 = db.query(TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME, taskAnswersTableColumns,
+			cursorForABCDTasks = db.query(TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME, taskAnswersTableColumns,
 				TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + "=?", new String[] { idOfAnswerSet + "" }, null, null, null);
-			if (cursor2.moveToFirst()) {
+			if (cursorForABCDTasks.moveToFirst()) {
 				int i = 0;
-				answers = new String[cursor2.getCount()];
+				answers = new String[cursorForABCDTasks.getCount()];
 				do {
-					answers[i] = cursor2.getString(ABCDTaskFields.ANSWER.value);
+					answers[i] = cursorForABCDTasks.getString(ABCDTaskFields.ANSWER.value);
 					i++;
 				}
-				while (cursor2.moveToNext());
+				while (cursorForABCDTasks.moveToNext());
 			}
 			return new ABCDTask(id, title, pictureBase64, description, isRepetable, isHidden, numberOfHidden, endTime,
 				maxPoints, question, answers);
