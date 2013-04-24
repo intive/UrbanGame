@@ -55,7 +55,7 @@ public class MainActivity extends SherlockListActivity {
 		
 		for (int i = 0; i < 10; i++) {
 			map = new HashMap<String, String>();
-			map.put("game_name", "Krasnale Wroc≥awskie");
+			map.put("game_name", "Krasnale Wroc≈Çawskie");
 			map.put("operator_name", "BLStream");
 			map.put("location", "Wroclaw");
 			map.put("start_time", "Mon, Apr 1, 2013 9:00 AM");
@@ -72,13 +72,16 @@ public class MainActivity extends SherlockListActivity {
 	 ************************/
 	
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
+	protected void onListItemClick(ListView listView, View clickedView, int posViewInList, long idOfClickedItem) {
+		super.onListItemClick(listView, clickedView, posViewInList, idOfClickedItem);
 		Bundle bundle = new Bundle();
-		//UrbanGameShortInfo game = (UrbanGameShortInfo) (l.getItemAtPosition(position));
-		//Long selectedGameId = (game == null ? -1 : game.getID());
-		//bundle.putLong(GameDetailsActivity.GAME_KEY, selectedGameId);
-		bundle.putLong(GameDetailsActivity.GAME_KEY, -1); //mocked ID. In case of working games list, delete this line and uncomment previous three lines.
+		/* FIXME 
+		 * Should be uncomment, when listview will be finished.
+		 * UrbanGameShortInfo game = (UrbanGameShortInfo) (l.getItemAtPosition(position));
+		 * Long selectedGameId = (game == null ? -1 : game.getID());
+		 * bundle.putLong(GameDetailsActivity.GAME_KEY, selectedGameId);
+		*/
+		bundle.putLong(GameDetailsActivity.GAME_KEY, -1); // FIXME mocked ID. In case of working games list, delete this line
 		
 		Intent intent = new Intent(MainActivity.this, GameDetailsActivity.class);
 		intent.putExtras(bundle);

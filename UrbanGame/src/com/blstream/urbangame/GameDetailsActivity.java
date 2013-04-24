@@ -6,10 +6,8 @@ import java.util.Date;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,7 +46,6 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.i("blstream", "onResume()");
 		Intent intent = getIntent();
 		Long idOfSelectedGame = GAME_NOT_FOUND;
 		if (intent != null) {
@@ -58,6 +55,9 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 			}
 		}
 		
+		/* FIXME 
+		 * If clause below should be rewritten, when listview will be finished.
+		*/
 		UrbanGame selectedGame = null;
 		if (idOfSelectedGame == GAME_NOT_FOUND) {
 			selectedGame = getMockGame();
@@ -81,12 +81,10 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		TextView tvWinningStrategy = (TextView) findViewById(R.id.textViewWinningStrategy);
 		
 		String base64logo = selectedGame.getGameLogoBase64();
-		byte[] byteImage = Base64.decode(base64logo, Base64.DEFAULT);
-		ivGameLogo.setImageBitmap(BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length));
+		ivGameLogo.setImageDrawable(selectedGame.getGameLogoDrawable(getResources()));
 		
 		base64logo = selectedGame.getOperatorLogoBase64();
-		byteImage = Base64.decode(base64logo, Base64.DEFAULT);
-		ivOperatorLogo.setImageBitmap(BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length));
+		ivOperatorLogo.setImageDrawable(selectedGame.getOperatorLogoDrawable(getResources()));
 		
 		tvGameName.setText(selectedGame.getTitle());
 		tvOperatorName.setText(selectedGame.getOperatorName());
@@ -124,9 +122,9 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		
 		id = 1L;
 		gameVersion = 1.0;
-		title = "Browar";
-		operatorName = "Sryskie";
-		winningStrategy = "Kto pierwszy ten lepszy";
+		title = "Game title";
+		operatorName = "Operator";
+		winningStrategy = "Winning strategy";
 		players = 211;
 		maxPlayers = 311;
 		Calendar c = Calendar.getInstance();
@@ -136,13 +134,13 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		endDate = c.getTime();
 		difficulty = 5;
 		reward = true;
-		prizesInfo = "talon na balon";
-		description = "Krasnal Tosiek ma niesamowity apetyt na dobry browar";
+		prizesInfo = "Prize description";
+		description = "Game description";
 		gameLogoBase64 = ExampleData.LOGO_BASE_64;
 		operatorLogoBase64 = ExampleData.OPERATOR_LOGO_BASE_64;
-		comments = "ważne i istotne zadanie";
-		location = "Wrocław";
-		detailsLink = "www.browar.pl";
+		comments = "Comments";
+		location = "Location";
+		detailsLink = "www.domain.highdomain";
 		
 		return new UrbanGame(id, gameVersion, title, operatorName, winningStrategy, players, maxPlayers, startDate,
 			endDate, difficulty, reward, prizesInfo, description, gameLogoBase64, operatorLogoBase64, comments,
