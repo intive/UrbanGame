@@ -190,8 +190,10 @@ public interface DatabaseInterface {
 	public Task getTask(Long taskID);
 	
 	/**
-	 * @param task - important is task's id, if field is not changing set the
-	 *        value to null. Null fields of task will not be updated.
+	 * @param task - answers of ABCD tasks, MUST be ALL INCLUDED if one changed,
+	 *        there's NO WAY to UPDATE only ONE answer. Important is task's id,
+	 *        if field is not changing set the value to null. Null fields of
+	 *        task will not be updated.
 	 * @return true if successful
 	 */
 	public boolean updateTask(Task task);

@@ -159,7 +159,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	private static final String CREATE_TASKS_ABCD_TABLE = "CREATE TABLE " + TASKS_ABCD_TABLE_NAME + " ("
 		+ TASKS_ABCD_KEY_TASK_ID + " INTEGER AUTOINCREMENT, " + TASKS_ABCD_KEY_TASK_ID + " INTEGER, "
-		+ TASKS_ABCD_KEY_QUESTION + " TEXT NOT NULL, " + "FOREIGN KEY (" + TASKS_ABCD_KEY_TASK_ID + ") "
+		+ TASKS_ABCD_KEY_QUESTION + " TEXT UNIQUE NOT NULL, " + "FOREIGN KEY (" + TASKS_ABCD_KEY_TASK_ID + ") "
 		+ "REFERENCES " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID + ") " + ")";
 	
 	private static final String CREATE_TASKS_ABCD_POSSIBLE_ANSWERS_TABLE = "CREATE TABLE "
@@ -994,22 +994,62 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		}
 	}
 	
-	//TODO only update
 	@Override
 	public boolean updateTask(Task task) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
-		boolean isDataOk = isTaskOk(task);
+		boolean isDataOk = task.getId() != null;
 		boolean updateOK = false;
 		if (isDataOk) {
+			db.beginTransaction();
 			ContentValues values = new ContentValues();
 			putTaskInValues(task, values);
 			
 			updateOK = db.update(TASKS_TABLE_NAME, values, TASKS_KEY_ID + "=?", new String[] { task.getId().longValue()
 				+ "" }) == 1;
+			
+			if (task instanceof ABCDTask) {
+				updateOK = updateOK && updateABCDTaskSpecialData(db, (ABCDTask) task);
+			}
+			if (updateOK) {
+				db.setTransactionSuccessful();
+			}
 		}
 		db.close();
 		return updateOK;
+	}
+	
+	private boolean updateABCDTaskSpecialData(SQLiteDatabase db, ABCDTask task) {
+		boolean isOk = true;
+		ContentValues values;
+		if (task.getQuestion() != null) {
+			values = new ContentValues();
+			values.put(TASKS_ABCD_KEY_QUESTION, task.getQuestion());
+			isOk = isOk
+				&& db.update(TASKS_ABCD_TABLE_NAME, values, TASKS_ABCD_KEY_TASK_ID + "=?", new String[] { task.getId()
+					.longValue() + "" }) == 1;
+		}
+		if (task.getAnswers() != null) {
+			Cursor cursor = db.query(TASKS_ABCD_TABLE_NAME, new String[] { TASKS_ABCD_KEY_ID }, TASKS_ABCD_KEY_TASK_ID
+				+ "=?", new String[] { task.getId().longValue() + "" }, null, null, null);
+			
+			String abcdPossibleAnswersDeletionSQL = "DELETE FROM " + TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME + " WHERE "
+				+ TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + " IN (SELECT " + TASKS_ABCD_KEY_ID + " FROM "
+				+ TASKS_ABCD_TABLE_NAME + " WHERE " + TASKS_ABCD_KEY_TASK_ID + "=" + task.getId().longValue() + ")";
+			
+			db.execSQL(abcdPossibleAnswersDeletionSQL);
+			
+			if (isOk = (isOk && cursor.moveToFirst())) {
+				long id = cursor.getLong(0);
+				for (String s : task.getAnswers()) {
+					values = new ContentValues();
+					values.put(TASKS_ABCD_POSSIBLE_ANSWERS_KEY_TASK_POSSIBLE_ANSWER, s);
+					values.put(TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID, id);
+					isOk = db.insert(TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME, null, values) != -1;
+				}
+			}
+		}
+		return isOk;
 	}
 	
 	private void putTaskInValues(Task task, ContentValues values) {
