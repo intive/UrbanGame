@@ -3,11 +3,19 @@
 # ~~~~
 
 # Public
-GET     /							controllers.Application.index
-GET		/logout						controllers.Application.logout
+GET     /                           controllers.Application.index
+GET     /logout                     controllers.Application.logout
 
 # Authenticated
-GET     /games/new					controllers.Games.createnewgame
+GET     /games/new                  controllers.Games.createnewgame
+
+# Web Api resources
+GET     /api                        @controllers.WebApi.root
+GET     /api/games                  @controllers.WebApi.games
+GET     /api/login                  @controllers.WebApi.login
+GET     /api/my/games               @controllers.WebApi.userGames
+GET     /api/games/:gid/static      @controllers.WebApi.gameStatic(gid: Int)
+GET     /api/games/:gid/dynamic     @controllers.WebApi.gameDynamic(gid: Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
