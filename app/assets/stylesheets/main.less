@@ -1,38 +1,68 @@
 @contwidth: 940px;
 @mhmarginbottom: 20px;
 @wizminheight: 200px;
-
 @slightpadding: 15px;
+@pullhigher: -10px;
 @tareaheight: 100px;
 @roffset10: 10px;
-@gray: #ccc;
-@navtabback: #fe3ddd;
-@pullhigher: -10px;
 
+@lightgray: #ddd;
+@navtabback: #fe3ddd;
+
+html, body {
+	height: 100%;
+}
+
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -90px;
+}
+
+#push {
+	height: 30px;
+}
+
+#footer {
+	height: 90px;
+	background-color: @lightgray;
+	text-align: center;
+}
+
+@media (max-width: 767px) {
+	#footer {
+		margin-left: -20px;
+		margin-right: -20px;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+}
 
 .masthead {
 	margin-bottom: 30px;
 }
-.no-wrap{
-	white-space:nowrap
-}
-.as-inline-block{
-	display:inline-block
-	}
+
 .myheader {
-	background-color: @gray;
+	background-color: @lightgray;
 	
 	.navbar {
 		margin-bottom: 0px;
 
 		.navbar-inner {
-			text-align:center;
+			text-align: right;
 		}
 	}
 }
 
 .loginform {
 	margin: @roffset10 - 5 @roffset10;
+}
+
+.container-narrow {
+	margin: 0 auto;
+	max-width: @contwidth;
+	padding-bottom: 90px;
 }
 
 .navbar .nav,
@@ -45,38 +75,6 @@
 	margin: 0px;
 }
 
-.container-narrow {
-	margin: 0 auto;
-	max-width: @contwidth;
-}
-input[type="radio"]{
-	margin-right: 7px;
-	margin-left: 3px;
-	margin-bottom: 3px;
-}
-
-.slight-padding-top{
-	padding-top: @slightpadding;
-}
-.slight-padding-right{
-	padding-right: @slightpadding;
-}
-.slight-padding-left{
-	padding-left: @slightpadding;
-}	
-textarea{
-	height:@tareaheight;
-	resize: none;
-}
-.pull-higher{
-	margin-top: @pullhigher
-}
-
-
-.cursor-help{
-	cursor: help
-}
-
 .nav-steps {
 	min-width: @contwidth;
 
@@ -85,3 +83,53 @@ textarea{
 	}
 }
 
+input[type="radio"] {
+	margin-right: 7px;
+	margin-left: 3px;
+	margin-bottom: 3px;
+}
+
+.no-wrap {
+	white-space: nowrap
+}
+
+.as-inline-block {
+	display: inline-block
+}
+
+.slight-padding-top {
+	padding-top: @slightpadding;
+}
+
+.slight-padding-right {
+	padding-right: @slightpadding;
+}
+
+.slight-padding-left {
+	padding-left: @slightpadding;
+}
+
+textarea {
+	height: @tareaheight;
+	resize: none;
+}
+
+.pull-higher {
+	margin-top: @pullhigher
+}
+
+.cursor-help {
+	cursor: help
+}
+
+#gamelist {
+	tbody tr td {
+		border-top: none;
+	}
+
+	thead tr td {
+		border-top: 1px double #ddd;
+		border-bottom: 3px double #ddd;
+		font-weight: bold;
+	}
+}

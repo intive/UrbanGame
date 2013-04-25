@@ -1,7 +1,11 @@
-header.backhome = Back to home
-
 login.login = Login
 login.password = Password
+
+general.archive = Archive
+general.options = Options
+
+menu.newgame = New game
+menu.mygames = My games
 
 newgame.step1title = Step 1
 newgame.step2title = Step 2
@@ -32,3 +36,9 @@ newgame.ttgamestart =
 newgame.ttgameend = 
 newgame.ttgameplayersnum = 
 newgame.ttgamediff = 
+
+mygames.icon = Icon
+mygames.data = Data
+mygames.status = Status
+mygames.version = Version
+mygames.title = Game list

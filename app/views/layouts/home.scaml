@@ -13,17 +13,17 @@
     * See the License for the specific language governing permissions and
     * limitations under the License.
 
+-import controllers._
+-import play.api.i18n.Messages
+
 -@ var title: String = "Default title"
 -@ var body: String
 -@ var scripts: String = ""
 -@ var head: String = ""
 
--import controllers._
--import play.api.i18n.Messages
-
 !!! 5
 
-%html{:lang=>"en", "ng-app"=>"web"}
+%html{:lang=>"en", "ng-app"=>""}
     %head
         %title=title
         %link(rel="shortcut icon" type="image/png" href={routes.Assets.at("images/favicon.png")})
@@ -42,24 +42,26 @@
         -# Underscore
         %script(src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js" type="text/javascript")
     %body
-        .masthead
-            .row
-                %h3.pull-left.offset1.logo LOGO
-                .pull-right.loginform
-                    %form.navbar-form.pull-right
-                        %input.span2(type="text" placeholder={Messages("login.login")})
-                        %input.span2(type="text" placeholder={Messages("login.password")})
-                        %input.btn(type="submit" value={Messages("login.login")})
-            .row.myheader
+        #wrap
+            .masthead
                 .row
-                    Coś
-                .row
-                    Coś
+                    %h3.pull-left.offset1.logo LOGO
+                    .pull-right.loginform
+                        %form.navbar-form.pull-right
+                            %input.span2(type="text" placeholder={Messages("login.login")})
+                            %input.span2(type="text" placeholder={Messages("login.password")})
+                            %input.btn(type="submit" value={Messages("login.login")})
+                .row.myheader
+                    .row
+                        Coś
+                    .row
+                        Coś
 
-        .container-narrow
-            .row-fluid
-                != body
-        .span12.footer
+            .container-narrow
+                .row-fluid
+                    != body
+            #push
+        #footer
             Footer
 -# Jquery
 %script(src={routes.Assets.at("javascripts/lib/jquery/jquery-1.9.0.min.js")} type="text/javascript")
