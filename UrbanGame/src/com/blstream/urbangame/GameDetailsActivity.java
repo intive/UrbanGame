@@ -37,6 +37,7 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		Button joinLeaveButton = (Button) (findViewById(R.id.buttonJoinLeaveGame));
 		joinLeaveButton.setOnClickListener(this);
+		getMockData();
 		if (!isDialogCompleted) {
 			showDialog();
 		}
@@ -79,7 +80,10 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		TextView tvGameDesc = (TextView) findViewById(R.id.textViewGameDescription);
 		TextView tvWinningStrategy = (TextView) findViewById(R.id.textViewWinningStrategy);
 		
+		String base64logo = selectedGame.getGameLogoBase64();
 		ivGameLogo.setImageDrawable(selectedGame.getGameLogoDrawable(getResources()));
+		
+		base64logo = selectedGame.getOperatorLogoBase64();
 		ivOperatorLogo.setImageDrawable(selectedGame.getOperatorLogoDrawable(getResources()));
 		
 		tvGameName.setText(selectedGame.getTitle());
@@ -142,6 +146,16 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 			endDate, difficulty, reward, prizesInfo, description, gameLogoBase64, operatorLogoBase64, comments,
 			location, detailsLink);
 		
+	}
+	
+	private void getMockData() {
+		Intent intent = getIntent();
+		if (intent != null) {
+			Bundle extras = intent.getExtras();
+			if (extras != null) {
+				// TODO fill view
+			}
+		}
 	}
 	
 	@Override
