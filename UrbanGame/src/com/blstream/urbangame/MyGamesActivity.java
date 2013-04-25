@@ -1,16 +1,19 @@
 package com.blstream.urbangame;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -20,7 +23,10 @@ import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
-public class MyGamesActivity extends SherlockActivity implements OnItemClickListener {
+public class MyGamesActivity extends SherlockActivity implements OnChildClickListener {
+	
+	private ExpandableListView mExpandableList;
+	private ArrayList<MyGamesParent> mArrayHeaders;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,65 +34,43 @@ public class MyGamesActivity extends SherlockActivity implements OnItemClickList
 		setContentView(R.layout.activity_my_games);
 		setSupportProgressBarVisibility(true);
 		
-		mockData();
+		mExpandableList = (ExpandableListView) findViewById(R.id.expandableListViewMyGamesList);
+		mExpandableList.setOnChildClickListener(this);
+		
+		mArrayHeaders = new ArrayList<MyGamesParent>();
+		ArrayList<String> arrayChildren = new ArrayList<String>();
+		
+		Resources resources = getResources();
+		
+		MyGamesParent parent = new MyGamesParent();
+		parent.setTitle(resources.getString(R.string.header_active));
+		arrayChildren = getMockGameChildren();
+		parent.setArrayChildren(arrayChildren);
+		mArrayHeaders.add(parent);
+		
+		parent = new MyGamesParent();
+		parent.setTitle(resources.getString(R.string.header_observed));
+		arrayChildren = getMockGameChildren();
+		parent.setArrayChildren(arrayChildren);
+		mArrayHeaders.add(parent);
+		
+		parent = new MyGamesParent();
+		parent.setTitle(resources.getString(R.string.header_ended));
+		arrayChildren = getMockGameChildren();
+		parent.setArrayChildren(arrayChildren);
+		mArrayHeaders.add(parent);
+		
+		//sets the adapter that provides data to the list.
+		mExpandableList.setAdapter(new MyGamesExpandableListAdapter(MyGamesActivity.this, mArrayHeaders));
+		
 	}
 	
-	/************************
-	 ***** START MOCKING ****
-	 ************************/
-	
-	private void mockData() {
-		ArrayList<HashMap<String, String>> data = getMockData();
-		
-		SimpleAdapter simpleAdapter = new SimpleAdapter(
-			MyGamesActivity.this,
-			data,
-			R.layout.list_item_game,
-			new String[] { "game_name", "operator_name", "location", "start_time", "current_players", "total_players" },
-			new int[] { R.id.textViewGameName, R.id.textViewOperatorName, R.id.textViewLocation,
-				R.id.textViewStartTime, R.id.textViewNumberOfCurrentPlayers, R.id.textViewNumberOfTotalPlayers });
-		
-		ListView activeGamesListView = (ListView) findViewById(R.id.ListViewActiveGameList);
-		ListView observedGamesListview = (ListView) findViewById(R.id.ListViewObservedGameList);
-		ListView endedGamesListView = (ListView) findViewById(R.id.ListViewEndedGameList);
-		
-		activeGamesListView.setOnItemClickListener(this);
-		observedGamesListview.setOnItemClickListener(this);
-		endedGamesListView.setOnItemClickListener(this);
-		
-		activeGamesListView.setAdapter(simpleAdapter);
-		observedGamesListview.setAdapter(simpleAdapter);
-		endedGamesListView.setAdapter(simpleAdapter);
-	}
-	
-	public ArrayList<HashMap<String, String>> getMockData() {
-		ArrayList<HashMap<String, String>> listOfMap = new ArrayList<HashMap<String, String>>();
-		HashMap<String, String> map = null;
-		Random random = new Random();
-		
-		for (int i = 0; i < 10; i++) {
-			map = new HashMap<String, String>();
-			map.put("game_name", "Krasnale Wroc�awskie");
-			map.put("operator_name", "BLStream");
-			map.put("location", "Wroclaw");
-			map.put("start_time", "Mon, Apr 1, 2013 9:00 AM");
-			map.put("current_players", String.valueOf(random.nextInt(50)));
-			map.put("total_players", String.valueOf(random.nextInt(50)));
-			listOfMap.add(map);
+	private ArrayList<String> getMockGameChildren() {
+		ArrayList<String> arrayChildren = new ArrayList<String>();
+		for (int j = 0; j < 10; j++) {
+			arrayChildren.add("NIE MA TAKIEGO WIDOKU");
 		}
-		
-		return listOfMap;
-	}
-	
-	/************************
-	 ****** END MOCKING *****
-	 ************************/
-	
-	@Override
-	public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
-		
-		Intent intent = new Intent(MyGamesActivity.this, ActiveGameActivity.class);
-		startActivity(intent);
+		return arrayChildren;
 	}
 	
 	@Override
@@ -96,6 +80,20 @@ public class MyGamesActivity extends SherlockActivity implements OnItemClickList
 		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
 		configureSearchAction(menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+		Intent i;
+		MyGamesParent header = mArrayHeaders.get(groupPosition);
+		if (header.getTitle().equals(getResources().getString(R.string.header_observed))) {
+			i = new Intent(MyGamesActivity.this, GameDetailsActivity.class);
+		}
+		else {
+			i = new Intent(MyGamesActivity.this, ActiveGameActivity.class);
+		}
+		startActivity(i);
+		return false;
 	}
 	
 	private void configureSearchAction(Menu menu) {
@@ -136,5 +134,121 @@ public class MyGamesActivity extends SherlockActivity implements OnItemClickList
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		return super.onMenuItemSelected(featureId, item);
+	}
+	
+	private class MyGamesExpandableListAdapter extends BaseExpandableListAdapter {
+		
+		private final LayoutInflater inflater;
+		private final ArrayList<MyGamesParent> mMyGamesParent;
+		
+		public MyGamesExpandableListAdapter(Context context, ArrayList<MyGamesParent> parent) {
+			mMyGamesParent = parent;
+			inflater = LayoutInflater.from(context);
+		}
+		
+		@Override
+		//counts the number of group/parent items so the list knows how many times calls getGroupView() method
+		public int getGroupCount() {
+			return mMyGamesParent.size();
+		}
+		
+		@Override
+		//counts the number of children items so the list knows how many times calls getChildView() method
+		public int getChildrenCount(int i) {
+			return mMyGamesParent.get(i).getArrayChildren().size();
+		}
+		
+		@Override
+		//gets the title of each parent/group
+		public Object getGroup(int i) {
+			return mMyGamesParent.get(i).getTitle();
+		}
+		
+		@Override
+		//gets the name of each item
+		public Object getChild(int i, int i1) {
+			return mMyGamesParent.get(i).getArrayChildren().get(i1);
+		}
+		
+		@Override
+		public long getGroupId(int i) {
+			return i;
+		}
+		
+		@Override
+		public long getChildId(int i, int i1) {
+			return i1;
+		}
+		
+		@Override
+		public boolean hasStableIds() {
+			return true;
+		}
+		
+		@Override
+		public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
+			
+			if (view == null) {
+				view = inflater.inflate(R.layout.my_games_list_parent, viewGroup, false);
+			}
+			
+			TextView textView = (TextView) view.findViewById(R.id.TextViewMyGamesHeader);
+			//"i" is the position of the parent/group in the list
+			textView.setText(getGroup(i).toString());
+			
+			return view;
+		}
+		
+		@Override
+		//in this method you must set the text to see the children on the list
+		public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
+			if (view == null) {
+				view = inflater.inflate(R.layout.list_item_game_after_login, viewGroup, false);
+			}
+			
+			TextView textViewGameName = (TextView) view.findViewById(R.id.textViewTempGameAfterLoginName);
+			//"i" is the position of the parent/group in the list and 
+			//"i1" is the position of the child
+			textViewGameName.setText(mMyGamesParent.get(i).getArrayChildren().get(i1));
+			
+			//return the entire view
+			return view;
+		}
+		
+		@Override
+		public boolean isChildSelectable(int i, int i1) {
+			return true;
+		}
+		
+		@Override
+		public void registerDataSetObserver(DataSetObserver observer) {
+			/* used to make the notifyDataSetChanged() method work */
+			super.registerDataSetObserver(observer);
+		}
+		
+	}
+	
+	private class MyGamesParent {
+		private String mTitle;
+		
+		//this will be info about game after logging in, insted of String,
+		//but there is no such class yet
+		private ArrayList<String> mArrayChildren;
+		
+		public String getTitle() {
+			return mTitle;
+		}
+		
+		public void setTitle(String mTitle) {
+			this.mTitle = mTitle;
+		}
+		
+		public ArrayList<String> getArrayChildren() {
+			return mArrayChildren;
+		}
+		
+		public void setArrayChildren(ArrayList<String> mArrayChildren) {
+			this.mArrayChildren = mArrayChildren;
+		}
 	}
 }

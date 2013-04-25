@@ -5,64 +5,10 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <ExpandableListView
+        android:id="@+id/expandableListViewMyGamesList"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/TextViewActiveGamesHeader"
-            style="@style/styleHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/header_active" />
-
-        <ListView
-            android:id="@+id/ListViewActiveGameList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/TextViewObservedGamesHeader"
-            style="@style/styleHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/header_observed" />
-
-        <ListView
-            android:id="@+id/ListViewObservedGameList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/TextViewEndedGamesHeader"
-            style="@style/styleHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/header_ended" />
-
-        <ListView
-            android:id="@+id/ListViewEndedGameList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
-    </LinearLayout>
+        android:layout_height="match_parent" >
+    </ExpandableListView>
 
 </LinearLayout>
