@@ -25,7 +25,7 @@ import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.example.ExampleData;
 
 public class GameDetailsActivity extends SherlockActivity implements OnClickListener {
-	
+	public static final String TAG = "GameDetailsActivity";
 	public static final String GAME_KEY = "gameID";
 	public static final Long GAME_NOT_FOUND = -1L;
 	public static boolean isDialogCompleted = true;
@@ -79,11 +79,7 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		TextView tvPrizes = (TextView) findViewById(R.id.TextViewPrizes);
 		TextView tvGameDesc = (TextView) findViewById(R.id.textViewGameDescription);
 		TextView tvWinningStrategy = (TextView) findViewById(R.id.textViewWinningStrategy);
-		
-		String base64logo = selectedGame.getGameLogoBase64();
 		ivGameLogo.setImageDrawable(selectedGame.getGameLogoDrawable(getResources()));
-		
-		base64logo = selectedGame.getOperatorLogoBase64();
 		ivOperatorLogo.setImageDrawable(selectedGame.getOperatorLogoDrawable(getResources()));
 		
 		tvGameName.setText(selectedGame.getTitle());
