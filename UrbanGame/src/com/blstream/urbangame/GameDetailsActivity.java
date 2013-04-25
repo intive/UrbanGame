@@ -37,7 +37,6 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		Button joinLeaveButton = (Button) (findViewById(R.id.buttonJoinLeaveGame));
 		joinLeaveButton.setOnClickListener(this);
-		getMockData();
 		if (!isDialogCompleted) {
 			showDialog();
 		}
@@ -142,16 +141,6 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 			endDate, difficulty, reward, prizesInfo, description, gameLogoBase64, operatorLogoBase64, comments,
 			location, detailsLink);
 		
-	}
-	
-	private void getMockData() {
-		Intent intent = getIntent();
-		if (intent != null) {
-			Bundle extras = intent.getExtras();
-			if (extras != null) {
-				// TODO fill view
-			}
-		}
 	}
 	
 	@Override
