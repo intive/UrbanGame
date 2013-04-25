@@ -232,5 +232,12 @@ public interface DatabaseInterface {
 	 * @return true if successful
 	 */
 	public boolean deleteTask(Long gameID, Long taskID);
+	
 	// TASKS METHODS END
+	
+	/**
+	 * Closes database. Need to be invoked after operations on DB (Some
+	 * sqlcipher issue)
+	 */
+	public void closeDatabase();
 }

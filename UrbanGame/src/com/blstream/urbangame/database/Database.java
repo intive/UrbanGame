@@ -1238,5 +1238,11 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.close();
 		return isSucessful;
 	}
+	
 	// TASKS METHODS END
+	
+	@Override
+	public void closeDatabase() {
+		close();
+	}
 }
