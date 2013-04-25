@@ -17,8 +17,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
-import com.blstream.urbangame.database.Database;
-import com.blstream.urbangame.database.DatabaseInterface;
 
 public class MainActivity extends SherlockListActivity {
 	
@@ -26,11 +24,8 @@ public class MainActivity extends SherlockListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setSupportProgressBarVisibility(true);
-		
 		mockData();
-		DatabaseInterface di = new Database(getApplicationContext());
-		System.out.println(di.getAllGamesShortInfo());
-		//Exampler.fillDatabase(di);
+		
 	}
 	
 	/************************
