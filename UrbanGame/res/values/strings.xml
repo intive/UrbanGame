@@ -78,5 +78,19 @@
     <string name="checkbox_show_password">Show password</string>
     <string name="button_register">Register</string>
     <string name="button_log_in">Log in</string>
+    
+    <!-- Time -->
+    <string name="week">week</string>
+    <string name="weeks">weeks</string>
+    <string name="day">day</string>
+    <string name="days">days</string>
+    <string name="hour">hour</string>
+    <string name="hours">hours</string>
+    <string name="minute">minute</string>
+    <string name="minutes">minutes</string>
+    <string name="second">second</string>
+    <string name="seconds">seconds</string>
+    <string name="left">left</string>
+    <string name="ended">ended</string>
 
 </resources>
