@@ -1,3 +1,17 @@
+/**Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+ * 		 http://blstream.github.com/UrbanGame/
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 		 http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package webapi.impl
 
 import play.api._
@@ -12,19 +26,19 @@ class GamesServiceMock extends GamesService {
   
   private val list = List(
     GameSummary(123, "dasdsd"),
-    GameSummary(32, "dasdsd"),
+    GameSummary(42, "dasdsd"),
     GameSummary(564, "dasdsd")
   )
 
   private val static = Map(
     123 -> GameStatic(123, "dasdsd"),
-    32  -> GameStatic(32, "dasdsd"),
+    42  -> GameStatic(42, "dasdsd"),
     564 -> GameStatic(564, "dasdsd")
   )
 
   private val dynamic = Map(
     123 -> GameDynamic(123, 0),
-    32  -> GameDynamic( 32, 1),
+    42  -> GameDynamic( 42, 1),
     564 -> GameDynamic(564, 2)
   )
 
@@ -59,7 +73,7 @@ class UserBasicAuth(gamesService: GamesService) extends UserAuth {
   } 
   
   private def parseHeader(header: String): (String,String) = {
-    val pattern = new Regex("""(?i)\QBasic\E +([\w\d\+/=]+)""", "base64")
+    val pattern = new Regex("""Basic ([\w\d\+/=]+)""", "base64")
     val res = for {
       matched <- pattern findFirstMatchIn header
       decoded <- decode(matched group ("base64"))
