@@ -4,32 +4,57 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Device.Location;
 using UrbanGame.Storage;
 using System.Windows.Controls;
 using Microsoft.Phone.Controls;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace UrbanGame.ViewModels
 {
     public class GamesListViewModel : BaseViewModel, IHandle<GameChangedEvent>
     {
+        IAppbarManager _appbarManager;
+        private string _activeSection;
+
         public GamesListViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                  IGameWebService gameWebService, IEventAggregator gameEventAggregator)
+                                  IGameWebService gameWebService, IEventAggregator gameEventAggregator,IAppbarManager appbarManager)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
         {
-            AddMenuItem(new AppBarMenuItem() { Text = Localization.AppResources.LogIn }, LogoutOrLogin);
             UserActiveGames = new BindableCollection<IGame>();
             UserInactiveGames = new BindableCollection<IGame>();
             NearestGames = new BindableCollection<IGame>();
-
+            _appbarManager = appbarManager;
             IsRefreshing = false;
         }
+
+        protected override void OnViewReady(object view)
+        {
+            ChangeAppbarButtons();
+        }
+
+        #region appbar configurations
+
+        private List<AppbarItem> BasicAppbar = new List<AppbarItem>()
+        {
+            new AppbarItem() {  Text = Localization.AppResources.LogIn,Message="LogoutOrLogin" } 
+        };
+
+        private List<AppbarItem> NearbyAppbar = new List<AppbarItem>()
+        {
+            new AppbarItem() { Text = Localization.AppResources.LogIn,Message="LogoutOrLogin" } ,
+            new AppbarItem() { IconUri = new Uri("/Images/appbarSearch.png", UriKind.Relative), Text = Localization.AppResources.Search, Message = "Search" },
+            new AppbarItem() { IconUri = new Uri("/Images/appbarRefresh.png", UriKind.Relative), Text = Localization.AppResources.Refresh, Message = "RefreshNearestGames" }
+       
+        };
+
+        #endregion
 
         #region IHandle<GameChangedEvent>
         public void Handle(GameChangedEvent e)
         {
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
                 {
                     IGame game = _gameWebService.GetGameInfo(e.Id);
 
@@ -64,15 +89,9 @@ namespace UrbanGame.ViewModels
         {
             get
             {
-                return _isAuthorized;
+                return _gameWebService.IsAuthorized;
             }
-            set
-            {
-                if (_isAuthorized != value)
-                {
-                    _isAuthorized = value;
-                }
-            }
+
         }
 
         #endregion
@@ -240,55 +259,45 @@ namespace UrbanGame.ViewModels
 
         #region operations
 
-        public void ToogleMenuItemText()
+        public void RefreshMenuItemText()
         {
-            var appbarButtons = GetAppBar().MenuItems;
-            foreach (AppBarMenuItem button in appbarButtons)
+            if (IsAuthorized)
             {
-                if (button.Text == Localization.AppResources.LogIn)
-                {
-                    button.Text = Localization.AppResources.Logout;
-                    break;
-                }
-                else
-                {
-                    button.Text = Localization.AppResources.LogIn;
-                    break;
-                }
+                _appbarManager.ChangeItemText("LogoutOrLogin", Localization.AppResources.Logout);
+            }
+            else
+            {
+                _appbarManager.ChangeItemText("LogoutOrLogin", Localization.AppResources.LogIn);
             }
         }
 
         public void ChangeAppbarButtons(SelectionChangedEventArgs args)
         {
-            if (((PanoramaItem)args.AddedItems[0]).Name == "MyGames")
+            _activeSection=((FrameworkElement)args.AddedItems[0]).Name;
+            ChangeAppbarButtons();
+        }
+
+        public void ChangeAppbarButtons()
+        {
+            if (_activeSection == "Nearby")
             {
-                RemoveButtonItem(Localization.AppResources.Refresh);
-                RemoveButtonItem(Localization.AppResources.Search);
+                _appbarManager.ConfigureAppbar(NearbyAppbar);
             }
-            else if (((PanoramaItem)args.AddedItems[0]).Name == "Nearby")
+            else
             {
-                AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbarSearch.png", UriKind.Relative), Text = Localization.AppResources.Search, Message = Localization.AppResources.Search }, Search);
-                AddButtonItem(new AppBarButton() { IconUri = new Uri("/Images/appbarRefresh.png", UriKind.Relative), Text = Localization.AppResources.Refresh, Message = Localization.AppResources.Refresh }, RefreshNearestGames);
+                _appbarManager.ConfigureAppbar(BasicAppbar);
             }
-            else if (((PanoramaItem)args.AddedItems[0]).Name == "MyAccount")
-            {
-                RemoveButtonItem(Localization.AppResources.Refresh);
-                RemoveButtonItem(Localization.AppResources.Search);
-            }
-            else if (((PanoramaItem)args.AddedItems[0]).Name == "About")
-            {
-            }
+            RefreshMenuItemText();
         }
 
 
         public void RefreshUserGames()
         {
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
                 UserActiveGames.Clear();
                 UserInactiveGames.Clear();
 
-                IsAuthorized = _gameWebService.IsAuthorized;
                 if (IsAuthorized)
                 {   
                     IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
@@ -308,12 +317,16 @@ namespace UrbanGame.ViewModels
 
         public void RefreshNearestGames()
         {
-            if (IsRefreshing) 
+            if (IsRefreshing)
+            {
                 return;
+            }
             else
+            {
                 IsRefreshing = true;
+            }
 
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
                 try
                 {
@@ -332,22 +345,23 @@ namespace UrbanGame.ViewModels
             _navigationService.UriFor<GameDetailsViewModel>().WithParam(g => g.GameId, gid).Navigate();
         }
 
-                public void Search()
+        public void Search()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void LogoutOrLogin()
         {
-            ToogleMenuItemText();
+            
             if (IsAuthorized)
             {
-                //to do
+                _gameWebService.IsAuthorized = false;
             }
             else
             {
-                //to do implement login logout
+                _gameWebService.Authorize("", "");
             }
+            RefreshMenuItemText();
         }
 
         #endregion

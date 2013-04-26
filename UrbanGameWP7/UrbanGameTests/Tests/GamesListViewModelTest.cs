@@ -9,6 +9,7 @@ using Common;
 using UrbanGame.Storage;
 using WebService;
 using System.Threading;
+using UrbanGameTests.Mocks;
 
 namespace UrbanGameTests.Tests
 {
@@ -58,7 +59,7 @@ namespace UrbanGameTests.Tests
             unitOfWork.GetRepository<IGame>().MarkForAdd(CreateTestGame(GameState.Ended, 3, "Hydrozagadka2"));
             unitOfWork.GetRepository<IGame>().MarkForAdd(CreateTestGame(GameState.None, 4, "Hydrozagadka2"));
             unitOfWork.Commit();
-            GamesListViewModel vm = new GamesListViewModel(null, () => unitOfWork, webService, eventAgg);
+            GamesListViewModel vm = new GamesListViewModel(null, () => unitOfWork, webService, eventAgg,new AppbarManagerMock());
             #endregion
 
             //when user is authorized

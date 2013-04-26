@@ -213,4 +213,7 @@
   <data name="Search" xml:space="preserve">
     <value>Szukaj</value>
   </data>
+  <data name="Leave" xml:space="preserve">
+    <value>Opuść</value>
+  </data>
 </root>

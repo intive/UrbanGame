@@ -9,6 +9,7 @@ using Microsoft.Phone.Shell;
 using Common;
 using WebService;
 using UrbanGame.Storage;
+using UrbanGame.Utilities;
 
 namespace UrbanGame
 {
@@ -24,7 +25,8 @@ namespace UrbanGame
             container.PerRequest<UrbanGameDataContext>();
             container.PerRequest<IUnitOfWork, UnitOfWork>();
             container.Singleton<IGameWebService, GameWebServiceMock>();
-            container.Singleton<IGameChangesManager, GameChangesManager>();            
+            container.Singleton<IGameChangesManager, GameChangesManager>();
+            container.PerRequest<IAppbarManager, AppbarManager>();
         }
 
         protected override object GetInstance(Type service, string key)

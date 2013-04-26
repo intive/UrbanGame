@@ -127,6 +127,9 @@
   <data name="AboutText2" xml:space="preserve">
     <value>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultricies turpis et augue pretium nec rhoncus odio congue. Duis faucibus accumsan eros sed volutpat. Nulla lorem urna, adipiscing non euismod non, egestas sit amet ligula. Maecenas condimentum tellus lacus, ornare mattis lacus.</value>
   </data>
+  <data name="Accomplished" xml:space="preserve">
+    <value>accomplished tasks</value>
+  </data>
   <data name="ByOperator" xml:space="preserve">
     <value>by</value>
   </data>
@@ -169,6 +172,9 @@
   <data name="JoinOrLogIn" xml:space="preserve">
     <value>Join to the Urban Game or Log in!</value>
   </data>
+  <data name="Leave" xml:space="preserve">
+    <value>Leave</value>
+  </data>
   <data name="LogIn" xml:space="preserve">
     <value>Log in</value>
   </data>
@@ -177,6 +183,9 @@
   </data>
   <data name="Medium" xml:space="preserve">
     <value>medium</value>
+  </data>
+  <data name="Messages" xml:space="preserve">
+    <value>messages</value>
   </data>
   <data name="MyAccount" xml:space="preserve">
     <value>my account</value>
@@ -202,8 +211,14 @@
   <data name="Prizes" xml:space="preserve">
     <value>prizes</value>
   </data>
+  <data name="Quests" xml:space="preserve">
+    <value>quests</value>
+  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
+  </data>
+  <data name="Scores" xml:space="preserve">
+    <value>high scores</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>

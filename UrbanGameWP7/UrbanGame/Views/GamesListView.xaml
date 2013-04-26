@@ -16,8 +16,8 @@
     shell:SystemTray.IsVisible="False">
 
     <Grid x:Name="LayoutRoot">
-        <controls:Panorama Title="urban games" cal:Message.Attach="[Event SelectionChanged]=[Action ChangeAppbarButtons($eventArgs)]">
-            <controls:PanoramaItem x:Name="MyGames" Header="{Binding Path=AppResources.MyGames, Source={StaticResource LocalizedStrings}}">
+        <controls:Panorama Title="urban games" cal:Message.Attach="[Event SelectionChanged]=[Action ChangeAppbarButtons($eventArgs)]" >
+            <controls:PanoramaItem x:Name="MyGames"  Header="{Binding Path=AppResources.MyGames, Source={StaticResource LocalizedStrings}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
