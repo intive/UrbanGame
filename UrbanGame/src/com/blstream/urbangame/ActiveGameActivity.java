@@ -2,6 +2,7 @@ package com.blstream.urbangame;
 
 import android.os.Bundle;
 import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -13,6 +14,7 @@ import com.blstream.urbangame.fragments.GameTasksFragment;
 import com.blstream.urbangame.fragments.TabManager;
 
 public class ActiveGameActivity extends SherlockFragmentActivity {
+	public static final String GAME_ID = "game_id";
 	private final String TAB_LAST_SELECTED = "tab";
 	
 	private TabHost tabHost;
@@ -26,9 +28,7 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 		
 		setUpTabHost();
 		
-		if (savedInstanceState != null) {
-			tabHost.setCurrentTabByTag(savedInstanceState.getString(TAB_LAST_SELECTED));
-		}
+		if (savedInstanceState != null) tabHost.setCurrentTabByTag(savedInstanceState.getString(TAB_LAST_SELECTED));
 	}
 	
 	private void setUpTabHost() {
@@ -39,15 +39,19 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 	
 	private void fillTabHost() {
 		tabManager = new TabManager(this, tabHost, R.id.realtabcontent);
+		Bundle extras = getIntent().getExtras();
 		
 		String tagGameInfo = getString(R.string.tab_game_gameInfo);
-		tabManager.addTab(tabHost.newTabSpec(tagGameInfo).setIndicator(tagGameInfo), GameInfoFragment.class);
+		TabSpec tabGameInfo = tabHost.newTabSpec(tagGameInfo).setIndicator(tagGameInfo);
+		tabManager.addTab(tabGameInfo, GameInfoFragment.class, extras);
 		
 		String tagTasks = getString(R.string.tab_game_tasks);
-		tabManager.addTab(tabHost.newTabSpec(tagTasks).setIndicator(tagTasks), GameTasksFragment.class);
+		TabSpec tabTasks = tabHost.newTabSpec(tagTasks).setIndicator(tagTasks);
+		tabManager.addTab(tabTasks, GameTasksFragment.class, extras);
 		
 		String tagRanking = getString(R.string.tab_game_ranking);
-		tabManager.addTab(tabHost.newTabSpec(tagRanking).setIndicator(tagRanking), GameRankingFragment.class);
+		TabSpec tabRanging = tabHost.newTabSpec(tagRanking).setIndicator(tagRanking);
+		tabManager.addTab(tabRanging, GameRankingFragment.class, extras);
 	}
 	
 	@Override

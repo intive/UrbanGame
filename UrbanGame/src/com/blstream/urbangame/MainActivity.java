@@ -41,6 +41,10 @@ public class MainActivity extends SherlockListActivity {
 			R.id.textViewNumberOfCurrentPlayers, R.id.textViewNumberOfTotalPlayers });
 		
 		setListAdapter(simpleAdapter);
+		
+		Intent i = new Intent(MainActivity.this, ActiveTaskActivity.class);
+		i.putExtra(ActiveTaskActivity.TASK_ID, 1L);
+		startActivity(i);
 	}
 	
 	public ArrayList<HashMap<String, String>> getMockData() {

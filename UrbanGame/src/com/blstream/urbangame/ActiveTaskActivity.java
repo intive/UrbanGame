@@ -2,6 +2,7 @@ package com.blstream.urbangame;
 
 import android.os.Bundle;
 import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -12,6 +13,7 @@ import com.blstream.urbangame.fragments.TaskAnswerFragment;
 import com.blstream.urbangame.fragments.TaskDescriptionFragment;
 
 public class ActiveTaskActivity extends SherlockFragmentActivity {
+	public static final String TASK_ID = "task_id";
 	private final String TAB_LAST_SELECTED = "tab";
 	
 	private TabHost tabHost;
@@ -23,28 +25,31 @@ public class ActiveTaskActivity extends SherlockFragmentActivity {
 		setContentView(R.layout.tabhost_layout);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		setUpTabHost();
-		
-		if (savedInstanceState != null) {
-			tabHost.setCurrentTabByTag(savedInstanceState.getString(TAB_LAST_SELECTED));
-		}
+		setUpTabHost(savedInstanceState);
 	}
 	
-	private void setUpTabHost() {
+	private void setUpTabHost(Bundle savedInstanceState) {
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
 		tabHost.setup();
 		fillTabHost();
+		
+		if (savedInstanceState != null) {
+			String lastSelectedTabTag = savedInstanceState.getString(TAB_LAST_SELECTED);
+			tabHost.setCurrentTabByTag(lastSelectedTabTag);
+		}
 	}
 	
 	private void fillTabHost() {
 		tabManager = new TabManager(this, tabHost, R.id.realtabcontent);
+		Bundle extras = getIntent().getExtras();
 		
 		String tagTaskDescription = getString(R.string.tab_task_description);
-		tabManager.addTab(tabHost.newTabSpec(tagTaskDescription).setIndicator(tagTaskDescription),
-			TaskDescriptionFragment.class);
+		TabSpec tabDescription = tabHost.newTabSpec(tagTaskDescription).setIndicator(tagTaskDescription);
+		tabManager.addTab(tabDescription, TaskDescriptionFragment.class, extras);
 		
 		String tagTasksAnswer = getString(R.string.tab_task_answer);
-		tabManager.addTab(tabHost.newTabSpec(tagTasksAnswer).setIndicator(tagTasksAnswer), TaskAnswerFragment.class);
+		TabSpec tabAnswer = tabHost.newTabSpec(tagTasksAnswer).setIndicator(tagTasksAnswer);
+		tabManager.addTab(tabAnswer, TaskAnswerFragment.class, extras);
 	}
 	
 	@Override
