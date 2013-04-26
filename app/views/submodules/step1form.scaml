@@ -22,20 +22,16 @@
 		.controls.slight-padding-top
 			%label(for="gName")
 				%strong=Messages("newgame.gamenamelabel")
-			.input-append
-				%input.input-xlarge(type="text" maxlength="100" required name="gName" ng-model="game.name")
-				%span.add-on.btn.info.cursor-help(popover={Messages("newgame.ttgamename")} popover-animation="true" popover-placement="right") ?
+			.control
+				%input.input-xlarge(type="text" maxlength="100" required name="gName" ng-model="game.name" tooltip={Messages("newgame.ttgamename")} tooltip-placement="right") 
 			%label(for="gDesc")
 				%strong=Messages("newgame.gamedesclabel")
-			.input-append
-				%textarea.input-xlarge(required maxlength="1000" name="gDesc" ng-model="game.description")
-				%span.add-on.btn.info.cursor-help(popover={Messages("newgame.ttgamedesc")} popover-animation="true" popover-placement="right") ?
+			.control
+				%textarea.input-xlarge(required maxlength="1000" name="gDesc" ng-model="game.description" tooltip={Messages("newgame.ttgamedesc")} tooltip-placement="right")
 			%label(for="gAwards")
 				%strong=Messages("newgame.gameawardslabel")
-			.input-append
-				%textarea.input-xlarge(name="gAwards" ng-model="game.awards")
-				%span.add-on.info.btn.cursor-help(popover={Messages("newgame.ttgameawards")} popover-animation="true" popover-placement="right") ?
-
+			.control
+				%textarea.input-xlarge(name="gAwards" ng-model="game.awards" tooltip={Messages("newgame.ttgameawards")} tooltip-placement="right")
 	.span6.pull-right.slight-padding-left
 		.slight-padding-top
 			%label(for="gType")
@@ -46,57 +42,54 @@
 						.span10
 							%input.as-inline-block.pull-left(type="radio" id="gType1" name="gType" value="gameType1" checked)  
 							%label(for="gType1")=Messages("newgame.gametype1")
-						%span.pull-right.btn.btn-small.info.cursor-help(popover={Messages("newgame.ttgametype1")} popover-animation="true" popover-placement="right") ?
+						%span.pull-right.btn.btn-small.info.cursor-help(disabled tooltip={Messages("newgame.ttgametype1")} tooltip-placement="right") ?
 				.span5
 					.controls-row
 						.span10
 							%input.as-inline-block.pull-left(type="radio" id="gType2" name="gType" ng-model="game.gameType" value="gameType2") 
 							%label(for="gType2")=Messages("newgame.gametype2")
-						%span.pull-right.btn.btn-small.info.cursor-help(popover={Messages("newgame.ttgametype2")} popover-animation="true" popover-placement="right") ?
+						%span.pull-right.btn.btn-small.info.cursor-help(disabled tooltip={Messages("newgame.ttgametype2")} tooltip-placement="right") ?
 			%label.slight-padding-top(for="gLocation")
 				%strong=Messages("newgame.gamelocationlabel")
-			.input-append
-				%input.input-xlarge(type="text" maxlength="100" required name="gName" ng-model="game.location")
-				%button.btn() Map
-				%span.add-on.btn.info.cursor-help(popover={Messages("newgame.ttgamelocation")} popover-animation="true" popover-placement="right") ?
+			.control
+				%input.input-xlarge(type="text" maxlength="100" required name="gName" ng-model="game.location" tooltip={Messages("newgame.ttgamelocation")} tooltip-placement="left")
 			%label(for="gStartTime")
 				%strong=Messages("newgame.gamestartlabel")
-			.controls-row
+			.controls-row(tooltip={Messages("newgame.ttgamestart")} tooltip-placement="left")
 				%input.input-mini(type="text" required name="gStartTime" ng-model="game.startTime")
 				%span.pull-higher=" GMT"
 				.input-append
-					%input.input-medium(type="text" name="gStartDate" ng-model="game.startDate")
-					%button.btn() Calendar
-				%span.btn.btn-small.info.cursor-help.pull-higher(popover={Messages("newgame.ttgamestart")} popover-animation="true" popover-placement="right") ?
+					%input.input-medium(type="text" name="gStartDate" required ng-model="game.startDate")
+					%a.btn()
+						%i.icon-calendar()
 			%label(for="gEndTime")
 				%strong=Messages("newgame.gameendlabel")
-			.controls-row
+			.controls-row(tooltip={Messages("newgame.ttgameend")} tooltip-placement="left" )
 				%input.input-mini(type="text" required name="gEndTime" ng-model="game.endTime")
 				%span.pull-higher=" GMT"
 				.input-append
-					%input.input-medium(type="text" name="gEndDate" ng-model="game.endDate")
-					%button.btn() Calendar
-				%span.btn.btn-small.info.cursor-help.pull-higher(popover={Messages("newgame.ttendstart")} popover-animation="true" popover-placement="right") ?
+					%input.input-medium(type="text" name="gEndDate" required ng-model="game.endDate")
+					%a.btn()
+						%i.icon-calendar()
 			.row-fluid
 				.span6.pull-left
 					%label(for="gPlayersNum")
 						%strong=Messages("newgame.gameplayersnumlabel")
-					.input-append
-						%input.input-small(type="text" name="gPlayersNum" ng-model="game.playersNum")
-						%span.add-on.btn.info.cursor-help(popover={Messages("newgame.ttgameplayersnum")} popover-animation="true" popover-placement="right") ?
+					.input-append.input-prepend
+						%button.btn() -
+						%input.input-mini(type="text" name="gPlayersNum" required ng-model="game.playersNum" tooltip={Messages("newgame.ttgameplayersnum")} tooltip-placement="bottom")
+						%button.btn() +
 				.span6.pull-right
 					%label(for="gStrategy")
 						%strong=Messages("newgame.gamestrategylabel")
-					.input-append
-						%input.input-small(type="text" name="gStrategy" ng-model="game.strategy")
-						%span.add-on.btn.info.cursor-help(popover={Messages("newgame.ttgamestrategy")} popover-animation="true" popover-placement="right") ?
+					%input.input-small(type="text" name="gStrategy" ng-model="game.strategy"  required tooltip={Messages("newgame.ttgamestrategy")} tooltip-placement="bottom")
 			%label(for="gDifficulty")
 				%strong=Messages("newgame.gamedifflabel")
-			%div.btn-group(id="btnsDiff" data-toggle="buttons-radio")
-				%button.btn.btn-info(type="button") 1
-				%button.btn.btn-info(type="button") 2
-				%button.btn.btn-info(type="button") 3
-				%button.btn.btn-info(type="button") 4
-				%button.btn.btn-info(type="button") 5
+			%div.btn-group(id="btnsDiff" data-toggle="buttons-checkbox")
+				%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="1") 1
+				%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="2") 2
+				%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="3") 3
+				%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="4") 4 
+				%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="5") 5
 				
 		

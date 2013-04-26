@@ -29,7 +29,9 @@ newgame.gamestrategylabel = winning strategy*:
 newgame.gamedifflabel = level of difficulty:
 newgame.gametype1 = Gather as many points as possible.
 newgame.gametype2 = Solve all tasks in shortest time. 
-newgame.ttgamename = 
+
+
+newgame.ttgamename = *I'm a tooltip!*
 newgame.ttgamedesc =
 newgame.ttgamestrategy =  
 newgame.ttgameawards = 
