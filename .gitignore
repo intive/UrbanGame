@@ -24,3 +24,7 @@ project.properties
 
 # Other folders not revelant to project
 UX/
+
+# some configuration files
+UrbanGame/.classpath
+UrbanGame/lint.xml
