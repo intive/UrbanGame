@@ -14,7 +14,8 @@
 ###
 
 app.controller 'newGameCtrl', ['$scope', '$location', ($scope, $location) ->
-
+	
+	
     $scope.steps = [
         {no: 1, name: 'Data'},
         {no: 2, name: 'Tasks'},
