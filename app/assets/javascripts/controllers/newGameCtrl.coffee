@@ -13,9 +13,8 @@
  * limitations under the License.
 ###
 
-app.controller 'newGameCtrl', ['$scope', '$location', ($scope, $location) ->
-	
-	
+app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', ($scope, $location, $route, $rootScope) ->
+
     $scope.steps = [
         {no: 1, name: 'Data'},
         {no: 2, name: 'Tasks'},
@@ -67,17 +66,4 @@ app.controller 'newGameCtrl', ['$scope', '$location', ($scope, $location) ->
     $scope.publishit = ->
         $scope.saveit()
         alert "and published too"
-
-    $scope.master = {}
-
-    $scope.update = (user) ->
-        $scope.master = angular.copy(user)
-
-    $scope.reset = ->
-        $scope.user = angular.copy($scope.master)
-
-    $scope.isUnchanged = (user) ->
-        angular.equals(user, $scope.master)
-        
-    $scope.reset()
 ]
