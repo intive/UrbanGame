@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +22,7 @@ import com.blstream.urbangame.ActiveTaskActivity;
 import com.blstream.urbangame.R;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
+import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.date.TimeLeftBuilder;
 
@@ -40,6 +42,8 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 	private ImageView imageViewDialogTaskImage;
 	private Bitmap taskImageDrawable;
 	
+	private int awardedPoints;
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -47,7 +51,10 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 		this.imageDialog = new Dialog(activity);
 		this.imageViewDialogTaskImage = new ImageView(activity);
 		this.databaseInterface = new Database(activity);
-		getTask();
+		
+		long taskID = getSelectedTaskID();
+		this.task = databaseInterface.getTask(taskID);
+		this.awardedPoints = getPlayerAwardedPoints(taskID);
 	}
 	
 	/*
@@ -59,11 +66,25 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 	 *	
 	 *	Where ID is an ID of clicked Task on the tasks list
 	 */
-	private void getTask() {
-		Bundle arguments = getArguments();
+	private long getSelectedTaskID() {
 		long taskID = 1L;
+		
+		Bundle arguments = getArguments();
 		if (arguments != null) taskID = arguments.getLong(ActiveTaskActivity.TASK_ID, taskID);
-		this.task = databaseInterface.getTask(taskID);
+		
+		return taskID;
+	}
+	
+	private int getPlayerAwardedPoints(long taskID) {
+		String playerID = databaseInterface.getLoggedPlayerID();
+		int awardedPoints = 0;
+		
+		if (playerID != null) {
+			PlayerTaskSpecific currentTask = databaseInterface.getPlayerTaskSpecific(taskID, playerID);
+			if (currentTask != null) awardedPoints = currentTask.getPoints();
+		}
+		
+		return awardedPoints;
 	}
 	
 	@Override
@@ -101,7 +122,7 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 		taskDescription.setText(task.getDescription());
 		taskTimeLeft.setText(getTimeLeft());
 		taskRepeatable.setText(task.isRepetable() ? R.string.label_taksRepeatable : R.string.string_empty);
-		taskPoints.setText(String.valueOf(task.getMaxPoints()));
+		taskPoints.setText(awardedPoints + "/" + task.getMaxPoints());
 		
 		setTaskImage();
 		setTaskTypeIcon();
@@ -129,6 +150,7 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 	private String getTimeLeft() {
 		Date endDate = task.getEndTime();
 		TimeLeftBuilder timeLeft = new TimeLeftBuilder(getResources(), endDate);
+		Log.d("TASK", timeLeft.getLeftTimeForDebug());
 		return timeLeft.getLeftTime();
 	}
 	

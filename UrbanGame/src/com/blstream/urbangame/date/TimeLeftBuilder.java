@@ -63,4 +63,8 @@ public class TimeLeftBuilder {
 	public String getLeftTime() {
 		return leftTime;
 	}
+	
+	public String getLeftTimeForDebug() {
+		return dateUtil.getDateDifferenceString();
+	}
 }

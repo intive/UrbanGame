@@ -8,9 +8,15 @@ import java.util.Date;
  * 
  */
 public class DateUtil {
+	private static final int MINUTE = 60 * 1000;
+	private static final int HOUR = 60 * MINUTE;
+	private static final int DAY = 24 * HOUR;
+	private static final int WEEK = 7;
+	
 	private Date dateNow;
 	private Date endDate;
 	
+	private int weeks;
 	private int days;
 	private int hours;
 	private int minutes;
@@ -24,9 +30,14 @@ public class DateUtil {
 	private void calculateDifferences() {
 		long diff = dateNow.getTime() - endDate.getTime();
 		
-		minutes = (int) (diff / (60 * 1000) % 60);
-		hours = (int) (diff / (60 * 60 * 1000) % 24);
-		days = (int) (diff / (24 * 60 * 60 * 1000));
+		minutes = (int) (diff / MINUTE % 60);	// minutes left, which are not included in full hours
+		hours = (int) (diff / HOUR % 24);		// hours left, which are not included in full days
+		days = (int) (diff / DAY);
+		weeks = days / WEEK;
+	}
+	
+	public int getDifferenceInWeeks() {
+		return weeks;
 	}
 	
 	public int getDifferenceInDays() {
@@ -59,16 +70,19 @@ public class DateUtil {
 	
 	// formatter:off
 	public String getDateDifferenceString() {
+		int differenceInWeeks = getDifferenceInWeeks();
 		int differenceInDays = getDifferenceInDays();
 		int differenceInHours = getDifferenceInHours();
 		int differenceInMinutes = getDifferenceInMinutes();
 		
 		return String.format(
 			"Time left: " +
+							(differenceInWeeks	   != 0 ? "%d weeks " 	 : "") +
 							(differenceInDays 	   != 0 ? "%d days " 	 : "") +
 							(differenceInHours 	   != 0 ? "%d hours " 	 : "") +
 							(differenceInMinutes   != 0 ? "%d minutes."  : ""),
-							 differenceInDays, 
+							 differenceInWeeks,
+							 differenceInDays,
 							 differenceInHours,
 							 differenceInMinutes);
 	}
