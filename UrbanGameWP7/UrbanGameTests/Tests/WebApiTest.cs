@@ -50,9 +50,9 @@ namespace UrbanGameTests.Tests
         public void GetTasksTest2()
         {
             var ggwsm = GetGameWebServiceMock();
-            var game = new Game();
-            var task = new TaskMock() { Id = 1 };
-            task.Id = 5;
+            var game = new Game() { Id = 1 };
+            var task = new GameTask() { Id = 1 };
+            game.Tasks.Add(task);
             ggwsm.ListOfTasks.Add(task);
             var games = new IGame[] { game, new Game() { Id = 2 }, new Game() { Id = 3 }, new Game() { Id = 4 }, new Game() { Id = 5 } };
             ggwsm.ListOfGames.AddRange(games);
