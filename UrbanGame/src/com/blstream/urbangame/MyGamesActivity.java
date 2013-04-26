@@ -1,6 +1,9 @@
 package com.blstream.urbangame;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Random;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +13,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -22,11 +28,12 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
+import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 
-public class MyGamesActivity extends SherlockActivity implements OnChildClickListener {
+public class MyGamesActivity extends SherlockActivity implements OnChildClickListener, OnNavigationListener {
 	
 	private ExpandableListView mExpandableList;
-	private ArrayList<MyGamesParent> mArrayHeaders;
+	private ArrayList<ExpandableListHeader> mArrayHeaders;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,26 +44,26 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 		mExpandableList = (ExpandableListView) findViewById(R.id.expandableListViewMyGamesList);
 		mExpandableList.setOnChildClickListener(this);
 		
-		mArrayHeaders = new ArrayList<MyGamesParent>();
-		ArrayList<String> arrayChildren = new ArrayList<String>();
+		mArrayHeaders = new ArrayList<ExpandableListHeader>();
+		ArrayList<UrbanGameShortInfo> arrayChildren = new ArrayList<UrbanGameShortInfo>();
 		
 		Resources resources = getResources();
 		
-		MyGamesParent parent = new MyGamesParent();
+		ExpandableListHeader parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_active));
-		arrayChildren = getMockGameChildren();
+		arrayChildren = mockData();
 		parent.setArrayChildren(arrayChildren);
 		mArrayHeaders.add(parent);
 		
-		parent = new MyGamesParent();
+		parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_observed));
-		arrayChildren = getMockGameChildren();
+		arrayChildren = mockData();
 		parent.setArrayChildren(arrayChildren);
 		mArrayHeaders.add(parent);
 		
-		parent = new MyGamesParent();
+		parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_ended));
-		arrayChildren = getMockGameChildren();
+		arrayChildren = mockData();
 		parent.setArrayChildren(arrayChildren);
 		mArrayHeaders.add(parent);
 		
@@ -65,54 +72,100 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 		
 	}
 	
-	private ArrayList<String> getMockGameChildren() {
-		ArrayList<String> arrayChildren = new ArrayList<String>();
-		for (int j = 0; j < 10; j++) {
-			arrayChildren.add("NIE MA TAKIEGO WIDOKU");
+	/************************
+	 ***** START MOCKING ****
+	 ************************/
+	
+	private ArrayList<UrbanGameShortInfo> mockData() {
+		ArrayList<HashMap<String, String>> data = getMockData();
+		
+		ArrayList<UrbanGameShortInfo> gameItems = new ArrayList<UrbanGameShortInfo>();
+		for (HashMap<String, String> map : data) {
+			gameItems.add(new UrbanGameShortInfo(map.get("game_name"), map.get("operator_name"), Integer.parseInt(map
+				.get("current_players")), Integer.parseInt(map.get("total_players")), new Date(), new Date(), true, map
+				.get("location"), null, null, null));
 		}
-		return arrayChildren;
+		
+		return gameItems;
 	}
+	
+	public ArrayList<HashMap<String, String>> getMockData() {
+		ArrayList<HashMap<String, String>> listOfMap = new ArrayList<HashMap<String, String>>();
+		HashMap<String, String> map = null;
+		Random random = new Random();
+		
+		for (int i = 0; i < 10; i++) {
+			map = new HashMap<String, String>();
+			map.put("game_name", "Krasnale Wroc�awskie");
+			map.put("operator_name", "BLStream");
+			map.put("location", "Wroclaw");
+			map.put("start_time", "Mon, Apr 1, 2013 9:00 AM");
+			map.put("current_players", String.valueOf(random.nextInt(50)));
+			map.put("total_players", String.valueOf(random.nextInt(50)));
+			listOfMap.add(map);
+		}
+		
+		return listOfMap;
+	}
+	
+	/************************
+	 ****** END MOCKING *****
+	 ************************/
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		Context context = getSupportActionBar().getThemedContext();
+		ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.menu_navigation_list,
+			R.layout.sherlock_spinner_item);
+		list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+		
+		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		getSupportActionBar().setListNavigationCallbacks(list, this);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		
 		MenuInflater menuInflater = getSupportMenuInflater();
-		menuInflater.inflate(R.menu.top_bar_games_list, menu);
+		menuInflater.inflate(R.menu.top_bar_my_games_list, menu);
 		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
 		configureSearchAction(menu);
 		return true;
 	}
 	
 	@Override
-	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-		Intent i;
-		MyGamesParent header = mArrayHeaders.get(groupPosition);
+	public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
+		Intent intent;
+		ExpandableListHeader header = mArrayHeaders.get(groupPosition);
 		if (header.getTitle().equals(getResources().getString(R.string.header_observed))) {
-			i = new Intent(MyGamesActivity.this, GameDetailsActivity.class);
+			intent = new Intent(MyGamesActivity.this, GameDetailsActivity.class);
 		}
 		else {
-			i = new Intent(MyGamesActivity.this, ActiveGameActivity.class);
+			intent = new Intent(MyGamesActivity.this, ActiveGameActivity.class);
 		}
-		startActivity(i);
+		//I haven't found how we pass game number
+		startActivity(intent);
+		return false;
+	}
+	
+	@Override
+	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		// TODO Switch to all games
 		return false;
 	}
 	
 	private void configureSearchAction(Menu menu) {
 		final MenuItem moreItem = menu.findItem(R.id.menu_more);
-		final MenuItem loginItem = menu.findItem(R.id.menu_login);
 		
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
 			@Override
 			public boolean onMenuItemActionExpand(MenuItem item) {
 				moreItem.setVisible(false);
-				loginItem.setVisible(false);
 				return true;
 			}
 			
 			@Override
 			public boolean onMenuItemActionCollapse(MenuItem item) {
 				moreItem.setVisible(true);
-				loginItem.setVisible(true);
 				return true;
 			}
 		});
@@ -136,48 +189,47 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 		return super.onMenuItemSelected(featureId, item);
 	}
 	
+	//Adapter for expandable list
 	private class MyGamesExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		private final LayoutInflater inflater;
-		private final ArrayList<MyGamesParent> mMyGamesParent;
+		private final ArrayList<ExpandableListHeader> mExpandableListHeader;
 		
-		public MyGamesExpandableListAdapter(Context context, ArrayList<MyGamesParent> parent) {
-			mMyGamesParent = parent;
+		public MyGamesExpandableListAdapter(Context context, ArrayList<ExpandableListHeader> parent) {
+			mExpandableListHeader = parent;
 			inflater = LayoutInflater.from(context);
 		}
 		
 		@Override
-		//counts the number of group/parent items so the list knows how many times calls getGroupView() method
 		public int getGroupCount() {
-			return mMyGamesParent.size();
+			return mExpandableListHeader.size();
 		}
 		
 		@Override
-		//counts the number of children items so the list knows how many times calls getChildView() method
-		public int getChildrenCount(int i) {
-			return mMyGamesParent.get(i).getArrayChildren().size();
+		public int getChildrenCount(int groupPosition) {
+			return mExpandableListHeader.get(groupPosition).getArrayChildren().size();
 		}
 		
 		@Override
-		//gets the title of each parent/group
-		public Object getGroup(int i) {
-			return mMyGamesParent.get(i).getTitle();
+		public Object getGroup(int groupPosition) {
+			return mExpandableListHeader.get(groupPosition).getTitle();
 		}
 		
 		@Override
-		//gets the name of each item
-		public Object getChild(int i, int i1) {
-			return mMyGamesParent.get(i).getArrayChildren().get(i1);
+		public Object getChild(int groupPosition, int childPosition) {
+			UrbanGameShortInfo urbanGameShortInfo = mExpandableListHeader.get(groupPosition).getArrayChildren()
+				.get(childPosition);
+			return urbanGameShortInfo;
 		}
 		
 		@Override
-		public long getGroupId(int i) {
-			return i;
+		public long getGroupId(int groupPosition) {
+			return groupPosition;
 		}
 		
 		@Override
-		public long getChildId(int i, int i1) {
-			return i1;
+		public long getChildId(int groupPosition, int childPosition) {
+			return childPosition;
 		}
 		
 		@Override
@@ -186,54 +238,49 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 		}
 		
 		@Override
-		public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
+		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 			
-			if (view == null) {
-				view = inflater.inflate(R.layout.my_games_list_parent, viewGroup, false);
+			if (convertView == null) {
+				convertView = inflater.inflate(R.layout.expandable_lists_header, parent, false);
 			}
 			
-			TextView textView = (TextView) view.findViewById(R.id.TextViewMyGamesHeader);
-			//"i" is the position of the parent/group in the list
-			textView.setText(getGroup(i).toString());
+			TextView textView = (TextView) convertView.findViewById(R.id.TextViewMyGamesHeader);
+			textView.setText(getGroup(groupPosition).toString());
 			
-			return view;
+			return convertView;
 		}
 		
 		@Override
-		//in this method you must set the text to see the children on the list
-		public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-			if (view == null) {
-				view = inflater.inflate(R.layout.list_item_game_after_login, viewGroup, false);
+		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView,
+			ViewGroup parent) {
+			if (convertView == null) {
+				convertView = inflater.inflate(R.layout.list_item_game, parent, false);
 			}
 			
-			TextView textViewGameName = (TextView) view.findViewById(R.id.textViewTempGameAfterLoginName);
-			//"i" is the position of the parent/group in the list and 
-			//"i1" is the position of the child
-			textViewGameName.setText(mMyGamesParent.get(i).getArrayChildren().get(i1));
+			UrbanGameShortInfo gameItemInfo = (UrbanGameShortInfo) getChild(groupPosition, childPosition);
 			
-			//return the entire view
-			return view;
+			//here put data from gameItemInfo into views
+			
+			return convertView;
 		}
 		
 		@Override
-		public boolean isChildSelectable(int i, int i1) {
+		public boolean isChildSelectable(int groupPosition, int childPosition) {
 			return true;
 		}
 		
 		@Override
 		public void registerDataSetObserver(DataSetObserver observer) {
-			/* used to make the notifyDataSetChanged() method work */
 			super.registerDataSetObserver(observer);
 		}
 		
 	}
 	
-	private class MyGamesParent {
+	//Header for expandable list parent ("Active","Observed","End")
+	private class ExpandableListHeader {
 		private String mTitle;
 		
-		//this will be info about game after logging in, insted of String,
-		//but there is no such class yet
-		private ArrayList<String> mArrayChildren;
+		private ArrayList<UrbanGameShortInfo> mArrayGameInfo;
 		
 		public String getTitle() {
 			return mTitle;
@@ -243,12 +290,12 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 			this.mTitle = mTitle;
 		}
 		
-		public ArrayList<String> getArrayChildren() {
-			return mArrayChildren;
+		public ArrayList<UrbanGameShortInfo> getArrayChildren() {
+			return mArrayGameInfo;
 		}
 		
-		public void setArrayChildren(ArrayList<String> mArrayChildren) {
-			this.mArrayChildren = mArrayChildren;
+		public void setArrayChildren(ArrayList<UrbanGameShortInfo> mArrayGameInfo) {
+			this.mArrayGameInfo = mArrayGameInfo;
 		}
 	}
 }
