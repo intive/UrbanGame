@@ -29,6 +29,8 @@ namespace UrbanGame.Storage
 
         public Table<GameTask> Tasks;
 
+        public Table<ABCDPossibleAnswer> ABCDPossibleAnswers;
+
         public Table<TaskSolution> Solutions;        
     }
 }

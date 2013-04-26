@@ -17,14 +17,14 @@ namespace WebService
         public GameWebServiceMock()
         {
             ListOfGames = new List<IGame>();
-            ListOfTasks = new List<IBaseTask>();
+            ListOfTasks = new List<ITask>();
 
             string lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam mauris vel elit tincidunt ac bibendum tortor scelerisque. Mauris nisi augue, malesuada ac lobortis sed, rhoncus et mauris. Vivamus dictum turpis congue arcu euismod in pulvinar mi volutpat. Aliquam euismod pharetra velit eu sagittis. Proin et nisi nibh, ut egestas enim.";
-            ListOfTasks.Add(new TaskMock() { Id = 1, Type = TaskType.ABCD, ABCDPossibleAnswers = "odp1\nodp2\nodp3\nodp4", ABCDCorrectAnswer = 1, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, IsCancelled = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
-            ListOfTasks.Add(new TaskMock() { Id = 2, Type = TaskType.OpenQuestion, OpenQuestionCorrectAnswer = "balloon", Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = true, IsCancelled = true, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+            ListOfTasks.Add(new TaskMock() { Id = 1, Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, IsCancelled = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+            ListOfTasks.Add(new TaskMock() { Id = 2, Type = TaskType.OpenQuestion, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = true, IsCancelled = true, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
             ListOfTasks.Add(new TaskMock() { Id = 3, Type = TaskType.Photo, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Rejected, IsRepeatable = true, IsCancelled = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
-            ListOfTasks.Add(new TaskMock() { Id = 4, Type = TaskType.QRCode, QRCode = "ABCD1234", Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Accepted, IsRepeatable = false, IsCancelled = false, UserPoints = 10, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
-            ListOfTasks.Add(new TaskMock() { Id = 5, Type = TaskType.GPS, Longitude = 51.111565, Latitude = 17.060416, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, IsCancelled = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+            ListOfTasks.Add(new TaskMock() { Id = 4, Type = TaskType.QRCode, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Accepted, IsRepeatable = false, IsCancelled = false, UserPoints = 10, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+            ListOfTasks.Add(new TaskMock() { Id = 5, Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, IsCancelled = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
         }
         #endregion
 
@@ -44,7 +44,7 @@ namespace WebService
         /// <summary>
         /// Task's containter
         /// </summary>
-        public List<IBaseTask> ListOfTasks
+        public List<ITask> ListOfTasks
         {
             get;
             private set;
@@ -113,14 +113,14 @@ namespace WebService
         #endregion
 
         #region GetTasks
-        public IBaseTask[] GetTasks(int gid)
+        public ITask[] GetTasks(int gid)
         {
             return ListOfTasks.ToArray();
         }
         #endregion
 
         #region GetTaskDetails
-        public IBaseTask GetTaskDetails(int gid, int tid)
+        public ITask GetTaskDetails(int gid, int tid)
         {
             return ListOfTasks[(gid + tid) % 5];
         }
@@ -128,7 +128,7 @@ namespace WebService
 
         #region GetTaskDetails generic
         public TTaskType GetTaskDetails<TTaskType>(int gid, int tid) 
-            where TTaskType : IBaseTask
+            where TTaskType : ITask
         {
             return (TTaskType)GetTaskDetails(gid, tid);
         }

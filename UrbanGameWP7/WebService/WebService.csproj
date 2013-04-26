@@ -65,6 +65,7 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BOMock\ABCDPossibleAnswerMock.cs" />
     <Compile Include="BOMock\BOBase.cs" />
     <Compile Include="BOMock\GameMock.cs" />
     <Compile Include="GameChangesManager.cs" />

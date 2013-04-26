@@ -470,5 +470,18 @@ namespace WebService.BOMock
             }
         }
         #endregion
+
+        #region TasksList - IGame
+
+        private IList<ITask> _tasksList = new List<ITask>();
+
+        public IList<ITask> TasksList
+        {
+            get
+            {
+                return _tasksList;
+            }
+        }
+        #endregion
     }
 }

@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Common
 {
-    public interface IGPSTask : IBaseTask
+    public interface IABCDPossibleAnswer
     {
-        double? Latitude { get; set; }
+        string Answer { get; set; }
 
-        double? Longitude { get; set; }
+        ITask AssignedTask { get; }
     }
 }

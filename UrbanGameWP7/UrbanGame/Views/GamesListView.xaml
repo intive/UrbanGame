@@ -86,7 +86,7 @@
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding GameName}" Grid.Row="0"/>
+                                            <TextBlock Text="{Binding Name}" Grid.Row="0"/>
                                             <StackPanel Orientation="Horizontal" Grid.Row="1">
                                                 <TextBlock Text="{Binding OperatorName}" Margin="0,0,10,0"/>
                                                 <Image Source="{Binding OperatorLogo}" Width="30" Height="30" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]"/>

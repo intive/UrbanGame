@@ -1,6 +1,7 @@
 ﻿using Common;
 using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,13 @@ using System.Text;
 namespace UrbanGame.Storage
 {
     [Table]
-    public class GameTask : EntityBase, 
-        IGPSTask, IABCDTask, IOpenQuestionTask, IQRCodeTask, IPhotoTask
+    public class GameTask : EntityBase, ITask
     {
+        public GameTask() : base()
+        {
+            _abcdAnswersRefs = new EntitySet<ABCDPossibleAnswer>(OnABCDAnswerAdded, OnABCDAnswerRemoved);
+        }
+
         #region Id
 
         private int _id;
@@ -30,6 +35,75 @@ namespace UrbanGame.Storage
                     _id = value;
                     NotifyPropertyChanged("Id");
                 }
+            }
+        }
+        #endregion
+
+        #region GameId
+
+        private int? _gameId;
+
+        [Column]
+        public int? GameId
+        {
+            get
+            {
+                return _gameId;
+            }
+            set
+            {
+                if (_gameId != value)
+                {
+                    NotifyPropertyChanging("GameId");
+                    _gameId = value;
+                    NotifyPropertyChanged("GameId");
+                }
+            }
+        }
+        #endregion
+
+        #region Game
+
+        private EntityRef<Game> _gameRef = new EntityRef<Game>();
+
+        [Association(Name = "FK_Game_Tasks", Storage = "_gameRef", ThisKey = "GameId", OtherKey = "Id", IsForeignKey = true)]
+        public Game Game
+        {
+            get
+            {
+                return _gameRef.Entity;
+            }
+            set
+            {
+                Game previousValue = _gameRef.Entity;
+                if (((previousValue != value) || (_gameRef.HasLoadedOrAssignedValue == false)))
+                {
+                    _gameRef.Entity = value;
+
+                    //remove task from previous game
+                    if (previousValue != null)
+                        previousValue.Tasks.Remove(this);
+
+                    //add task to the new game
+                    if ((value != null))
+                    {
+                        value.Tasks.Add(this);
+                        this.GameId = value.Id;
+                    }
+                    else
+                        this.GameId = default(Nullable<int>);
+                }
+            }
+        }
+        #endregion
+
+        #region AssignedGame - ITask
+
+        public IGame AssignedGame
+        {
+            get
+            {
+                return Game;
             }
         }
         #endregion
@@ -101,6 +175,60 @@ namespace UrbanGame.Storage
                 }
             }
         }
+        #endregion
+
+        #region AdditionalText
+
+        private string _additionalText;
+
+        [Column]
+        public string AdditionalText
+        {
+            get
+            {
+                return _additionalText;
+            }
+            set
+            {
+                if (_additionalText != value)
+                {
+                    NotifyPropertyChanging("AdditionalText");
+                    _additionalText = value;
+                    NotifyPropertyChanged("AdditionalText");
+                }
+            }
+        }
+        #endregion
+
+        #region ABCDPossibleAnswers
+
+        private EntitySet<ABCDPossibleAnswer> _abcdAnswersRefs;
+
+        [Association(Name = "FK_Game_ABCDAnswers", Storage = "_abcdAnswersRefs", ThisKey = "Id", OtherKey = "TaskId")]
+        public EntitySet<ABCDPossibleAnswer> ABCDPossibleAnswers
+        {
+            get { return _abcdAnswersRefs; }
+        }
+
+        private void OnABCDAnswerAdded(ABCDPossibleAnswer answer)
+        {
+            answer.Task = this;
+        }
+
+        private void OnABCDAnswerRemoved(ABCDPossibleAnswer answer)
+        {
+            answer.Task = null;
+        }
+
+        #endregion
+
+        #region ABCDPossibleAnswersList - ITask
+
+        public IList<IABCDPossibleAnswer> ABCDPossibleAnswersList
+        {
+            get { return _abcdAnswersRefs.Cast<IABCDPossibleAnswer>().ToList(); }
+        }
+
         #endregion
 
         #region Picture
@@ -285,162 +413,6 @@ namespace UrbanGame.Storage
                 }
             }
         }
-        #endregion
-
-
-
-        #region GPS Task
-
-        #region Latitude
-
-        private double? _latitude;
-
-        [Column]
-        public double? Latitude
-        {
-            get
-            {
-                return _latitude;
-            }
-            set
-            {
-                if (_latitude != value)
-                {
-                    NotifyPropertyChanging("Latitude");
-                    _latitude = value;
-                    NotifyPropertyChanged("Latitude");
-                }
-            }
-        }
-        #endregion
-
-        #region Longitude
-
-        private double? _longitude;
-
-        [Column]
-        public double? Longitude
-        {
-            get
-            {
-                return _longitude;
-            }
-            set
-            {
-                if (_longitude != value)
-                {
-                    NotifyPropertyChanging("Longitude");
-                    _longitude = value;
-                    NotifyPropertyChanged("Longitude");
-                }
-            }
-        }
-        #endregion
-
-        #endregion
-
-        #region ABCD Task
-
-        #region ABCDPossibleAnswers
-
-        private string _abcdPossibleAnswers;
-
-        [Column]
-        public string ABCDPossibleAnswers
-        {
-            get
-            {
-                return _abcdPossibleAnswers;
-            }
-            set
-            {
-                if (_abcdPossibleAnswers != value)
-                {
-                    NotifyPropertyChanging("ABCDPossibleAnswers");
-                    _abcdPossibleAnswers = value;
-                    NotifyPropertyChanged("ABCDPossibleAnswers");
-                }
-            }
-        }
-        #endregion
-
-        #region ABCDCorrectAnswer
-
-        private byte? _abcdCorrectAnswer;
-
-        [Column]
-        public byte? ABCDCorrectAnswer
-        {
-            get
-            {
-                return _abcdCorrectAnswer;
-            }
-            set
-            {
-                if (_abcdCorrectAnswer != value)
-                {
-                    NotifyPropertyChanging("ABCDCorrectAnswer");
-                    _abcdCorrectAnswer = value;
-                    NotifyPropertyChanged("ABCDCorrectAnswer");
-                }
-            }
-        }
-        #endregion
-
-        #endregion
-
-        #region QRCode Task
-
-        #region QRCode
-
-        private string _qrCode;
-
-        [Column]
-        public string QRCode
-        {
-            get
-            {
-                return _qrCode;
-            }
-            set
-            {
-                if (_qrCode != value)
-                {
-                    NotifyPropertyChanging("QRCode");
-                    _qrCode = value;
-                    NotifyPropertyChanged("QRCode");
-                }
-            }
-        }
-        #endregion
-
-        #endregion
-
-        #region OpenQuestion Task
-
-        #region OpenQuestionCorrectAnswer
-
-        private string _openQuestionCorrectAnswer;
-
-        [Column]
-        public string OpenQuestionCorrectAnswer
-        {
-            get
-            {
-                return _openQuestionCorrectAnswer;
-            }
-            set
-            {
-                if (_openQuestionCorrectAnswer != value)
-                {
-                    NotifyPropertyChanging("OpenQuestionCorrectAnswer");
-                    _openQuestionCorrectAnswer = value;
-                    NotifyPropertyChanged("OpenQuestionCorrectAnswer");
-                }
-            }
-        }
-        #endregion
-
         #endregion
     }
 }

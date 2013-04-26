@@ -6,10 +6,8 @@ using Common;
 
 namespace WebService.BOMock
 {
-    public class TaskMock : BOBase, 
-        IGPSTask, IABCDTask, IOpenQuestionTask, IQRCodeTask, IPhotoTask
+    public class TaskMock : BOBase,  ITask
     {
-
         #region Id
 
         private int _id;
@@ -96,6 +94,50 @@ namespace WebService.BOMock
                 }
             }
         }
+        #endregion
+
+        #region AdditionalText
+
+        private string _additionalText;
+
+        public string AdditionalText
+        {
+            get
+            {
+                return _additionalText;
+            }
+            set
+            {
+                if (_additionalText != value)
+                {
+                    NotifyPropertyChanging("AdditionalText");
+                    _additionalText = value;
+                    NotifyPropertyChanged("AdditionalText");
+                }
+            }
+        }
+        #endregion
+
+        #region AssignedGame - ITask
+
+        public IGame AssignedGame
+        {
+            get
+            {
+                return null;
+            }
+        }
+        #endregion
+
+        #region ABCDPossibleAnswersList - ITask
+
+        private IList<IABCDPossibleAnswer> _abcdPossibleAnswersList = new List<IABCDPossibleAnswer>();
+
+        public IList<IABCDPossibleAnswer> ABCDPossibleAnswersList 
+        {
+            get { return _abcdPossibleAnswersList; }
+        }
+
         #endregion
 
         #region Picture
@@ -272,156 +314,6 @@ namespace WebService.BOMock
                 }
             }
         }
-        #endregion
-
-
-
-        #region GPS Task
-
-        #region Latitude
-
-        private double? _latitude;
-
-        public double? Latitude
-        {
-            get
-            {
-                return _latitude;
-            }
-            set
-            {
-                if (_latitude != value)
-                {
-                    NotifyPropertyChanging("Latitude");
-                    _latitude = value;
-                    NotifyPropertyChanged("Latitude");
-                }
-            }
-        }
-        #endregion
-
-        #region Longitude
-
-        private double? _longitude;
-
-        public double? Longitude
-        {
-            get
-            {
-                return _longitude;
-            }
-            set
-            {
-                if (_longitude != value)
-                {
-                    NotifyPropertyChanging("Longitude");
-                    _longitude = value;
-                    NotifyPropertyChanged("Longitude");
-                }
-            }
-        }
-        #endregion
-
-        #endregion
-
-        #region ABCD Task
-
-        #region ABCDPossibleAnswers
-
-        private string _abcdPossibleAnswers;
-        
-        public string ABCDPossibleAnswers
-        {
-            get
-            {
-                return _abcdPossibleAnswers;
-            }
-            set
-            {
-                if (_abcdPossibleAnswers != value)
-                {
-                    NotifyPropertyChanging("ABCDPossibleAnswers");
-                    _abcdPossibleAnswers = value;
-                    NotifyPropertyChanged("ABCDPossibleAnswers");
-                }
-            }
-        }
-        #endregion
-
-        #region ABCDCorrectAnswer
-
-        private byte? _abcdCorrectAnswer;
-
-        public byte? ABCDCorrectAnswer
-        {
-            get
-            {
-                return _abcdCorrectAnswer;
-            }
-            set
-            {
-                if (_abcdCorrectAnswer != value)
-                {
-                    NotifyPropertyChanging("ABCDCorrectAnswer");
-                    _abcdCorrectAnswer = value;
-                    NotifyPropertyChanged("ABCDCorrectAnswer");
-                }
-            }
-        }
-        #endregion
-
-        #endregion
-
-        #region QRCode Task
-
-        #region QRCode
-
-        private string _qrCode;
-
-        public string QRCode
-        {
-            get
-            {
-                return _qrCode;
-            }
-            set
-            {
-                if (_qrCode != value)
-                {
-                    NotifyPropertyChanging("QRCode");
-                    _qrCode = value;
-                    NotifyPropertyChanged("QRCode");
-                }
-            }
-        }
-        #endregion
-
-        #endregion
-
-        #region OpenQuestion Task
-
-        #region OpenQuestionCorrectAnswer
-
-        private string _openQuestionCorrectAnswer;
-
-        public string OpenQuestionCorrectAnswer
-        {
-            get
-            {
-                return _openQuestionCorrectAnswer;
-            }
-            set
-            {
-                if (_openQuestionCorrectAnswer != value)
-                {
-                    NotifyPropertyChanging("OpenQuestionCorrectAnswer");
-                    _openQuestionCorrectAnswer = value;
-                    NotifyPropertyChanged("OpenQuestionCorrectAnswer");
-                }
-            }
-        }
-        #endregion
-
         #endregion
     }
 }

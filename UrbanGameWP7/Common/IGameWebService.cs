@@ -36,7 +36,7 @@ namespace Common
         /// Method returns an array of game's tasks
         /// </summary>
         /// <returns>Array of ITask</returns>
-        IBaseTask[] GetTasks(int gid);
+        ITask[] GetTasks(int gid);
 
         /// <summary>
         /// Returns task's details
@@ -44,7 +44,7 @@ namespace Common
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <returns>Task's details</returns>
-        IBaseTask GetTaskDetails(int gid, int tid);
+        ITask GetTaskDetails(int gid, int tid);
 
         /// <summary>
         /// Returns task's details (generic version)
@@ -52,7 +52,7 @@ namespace Common
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <returns>Task's details</returns>
-        TTaskType GetTaskDetails<TTaskType>(int gid, int tid) where TTaskType : IBaseTask;
+        TTaskType GetTaskDetails<TTaskType>(int gid, int tid) where TTaskType : ITask;
 
         /// <summary>
         /// Returns user game progress

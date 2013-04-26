@@ -8,7 +8,7 @@ namespace Common
     /// <summary>
     /// Represents a task
     /// </summary>
-    public interface IBaseTask
+    public interface ITask
     {
         int Id { get; set; }
 
@@ -17,6 +17,12 @@ namespace Common
         TaskType Type { get; set; }
 
         string Description { get; set; }
+
+        string AdditionalText { get; set; }
+
+        IList<IABCDPossibleAnswer> ABCDPossibleAnswersList { get; }
+
+        IGame AssignedGame { get; }
 
         string Picture { get; set; }
 
