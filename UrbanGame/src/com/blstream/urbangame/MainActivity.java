@@ -6,6 +6,7 @@ import java.util.Random;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -15,10 +16,12 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
 public class MainActivity extends SherlockListActivity {
+	private static final String TAG = "MainActivity";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,16 @@ public class MainActivity extends SherlockListActivity {
 	private void configureSearchAction(Menu menu) {
 		final MenuItem moreItem = menu.findItem(R.id.menu_more);
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);
+		loginItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				Log.i(TAG, "onMenuItemClick(): " + item.getTitleCondensed());
+				Intent intent = new Intent(MainActivity.this, LoggingInActivity.class);
+				startActivity(intent);
+				return true;
+			}
+		});
 		
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
