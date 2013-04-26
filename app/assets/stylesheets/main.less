@@ -1,13 +1,27 @@
+/* heights, widths */
 @contwidth: 940px;
-@mhmarginbottom: 20px;
 @wizminheight: 200px;
+@tareaheight: 100px;
+@hfooter: 130px;
+
+/* margins, paddings */
+@mhmarginbottom: 20px;
 @slightpadding: 15px;
 @pullhigher: -10px;
-@tareaheight: 100px;
 @roffset10: 10px;
 
+/* colors */
 @lightgray: #ddd;
 @navtabback: #fe3ddd;
+
+@finishedback: #ccccff;
+@finishedtext: #cc99ff;
+@onlineback: #ccffcc;
+@onlinetext: #33ff00;
+@projectback: #eee;
+@projecttext: #ccc;
+@publishedback: #ccffff;
+@publishedtext: #66ccff;
 
 html, body {
 	height: 100%;
@@ -17,17 +31,40 @@ html, body {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -90px;
-}
+	margin: 0 auto -@hfooter;
 
-#push {
-	height: 30px;
+	#push {
+		height: @roffset10 * 3;
+	}
 }
 
 #footer {
-	height: 90px;
+	height: @hfooter;
 	background-color: @lightgray;
 	text-align: center;
+	font-size: 11px;
+	padding: @slightpadding;
+
+	.row {
+		text-align: left;
+
+		p:nth-child(1) {
+			font-weight: bold;
+		}
+	}
+
+	select {
+		margin-top: @slightpadding;
+	}
+
+	.cicons {
+		text-align: left;
+	}
+
+	#footmenu {
+		margin-bottom: @slightpadding;
+		margin-top: @hfooter * 0.7;
+	}
 }
 
 @media (max-width: 767px) {
@@ -40,29 +77,30 @@ html, body {
 }
 
 .masthead {
-	margin-bottom: 30px;
-}
+	margin-bottom: @roffset10 * 3;
 
-.myheader {
-	background-color: @lightgray;
-	
-	.navbar {
-		margin-bottom: 0px;
+	.myheader {
+		background-color: @lightgray;
+		
+		.navbar {
+			margin-bottom: 0;
 
-		.navbar-inner {
-			text-align: right;
+			.navbar-inner {
+				text-align: right;
+			}
 		}
 	}
-}
 
-.loginform {
-	margin: @roffset10 - 5 @roffset10;
+	.loginform {
+		margin: @roffset10 - 5 @roffset10;
+	}
+
 }
 
 .container-narrow {
 	margin: 0 auto;
 	max-width: @contwidth;
-	padding-bottom: 90px;
+	padding-bottom: @hfooter;
 }
 
 .navbar .nav,
@@ -115,11 +153,11 @@ textarea {
 }
 
 .pull-higher {
-	margin-top: @pullhigher
+	margin-top: @pullhigher;
 }
 
 .cursor-help {
-	cursor: help
+	cursor: help;
 }
 
 #gamelist {
@@ -128,8 +166,75 @@ textarea {
 	}
 
 	thead tr td {
-		border-top: 1px double #ddd;
-		border-bottom: 3px double #ddd;
+		border-top: 1px double @lightgray;
+		border-bottom: 3px double @lightgray;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	tbody tr {
+		td {
+			font-size: 13px;
+			vertical-align: middle;
+			padding-right: 10px;
+			padding-left: 10px;
+			text-align: center;
+
+			span {
+				font-weight: bold;
+			}
+
+			h4 {
+				margin: 2px 0;
+			}
+		}
+
+		td:nth-child(2) {
+			text-align: left;
+		}
+	}
+}
+
+.finished {
+	tr& {
+		background-color: @finishedback;
+	}
+
+	span& {
+		color: @finishedtext;
+		font-weight: bold;
+	}
+}
+
+.project {
+	tr& {
+		background-color: @projectback;
+	}
+
+	span& {
+		color: @projecttext;
+		font-weight: bold;
+	}
+}
+
+.online {
+	tr& {
+		background-color: @onlineback;
+	}
+
+	span& {
+		color: @onlinetext;
+		font-weight: bold;
+	}
+}
+
+.published {
+	tr& {
+		background-color: @publishedback;
+	}
+
+	span& {
+		color: @publishedtext;
 		font-weight: bold;
 	}
 }

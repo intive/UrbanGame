@@ -23,7 +23,7 @@
 
 !!! 5
 
-%html{:lang=>"en", "ng-app"=>""}
+%html{"ng-app"=>"web"}
     %head
         %title=title
         %link(rel="shortcut icon" type="image/png" href={routes.Assets.at("images/favicon.png")})
@@ -37,6 +37,8 @@
         -# Main
         %link(rel="stylesheet" media="screen" href={routes.Assets.at("stylesheets/main.css")})
         != head
+        -# Jquery
+        %script(src={routes.Assets.at("javascripts/lib/jquery/jquery-1.9.0.min.js")} type="text/javascript")
         -# AngularJS
         %script(src={routes.Assets.at("javascripts/lib/angular/angular.min.js")} type="text/javascript")
         -# Underscore
@@ -61,10 +63,8 @@
                 .row-fluid
                     != body
             #push
-        #footer
-            Footer
--# Jquery
-%script(src={routes.Assets.at("javascripts/lib/jquery/jquery-1.9.0.min.js")} type="text/javascript")
+        -render("submodules/footer.scaml")
+
 -# Bootstrap from AngularUI Team
 %script(src={routes.Assets.at("javascripts/lib/ui-bootstrap/ui-bootstrap-tpls-0.2.0.min.js")} type="text/javascript")
 -# Bootstrap Lightbox

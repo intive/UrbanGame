@@ -20,6 +20,8 @@ import http.{Writeable, ContentTypeOf, ContentTypes}
 import mvc.Codec
 import play.api.Play.current
 import org.fusesource.scalate.layout.DefaultLayoutStrategy
+import org.fusesource.scalate.scaml.ScamlOptions
+import org.fusesource.scalate.Binding
 import java.io.File
 
 object Scalate {
@@ -39,10 +41,12 @@ object Scalate {
         engine.resourceLoader = new FileResourceLoader(Some(Play.getFile("app/views")))
         engine.sourceDirectories = new File(path, "app") :: Nil
         engine.layoutStrategy = new DefaultLayoutStrategy(engine, "app/views/layouts/default." + format)
+        //engine.bindings = List(Binding(name="lan", className="play.api.i18n.Lang", importMembers=false, defaultValue=scala.None, kind="val", isImplicit=true, classNamePositional=scala.None, defaultValuePositional=scala.None))
         engine.classpath = "tmp/classes"
         engine.workingDirectory = Play.getFile("tmp")
         engine.combinedClassPath = true
         engine.classLoader = Play.classloader
+        ScamlOptions.format = ScamlOptions.Format.html5
         engine
     }
 

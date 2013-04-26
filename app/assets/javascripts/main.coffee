@@ -1,4 +1,4 @@
-app = angular.module('web', ['ui.bootstrap'])
+app = angular.module('web', ['ui', 'ui.bootstrap'])
 
 app.config ['$routeProvider', '$locationProvider', ($routeProvider, $location) ->
 
@@ -26,10 +26,11 @@ app.directive 'activeLink', ['$location', ($location) ->
     }
 ]###
 
-app.controller 'topMenuCtrl', ['$scope', '$rootScope', '$location', ($scope, $rootScope, $location) ->
+app.controller 'menuCtrl', ['$scope', '$http', '$rootScope', '$location', ($scope, $http, $rootScope, $location) ->
     $rootScope.location = window.location.pathname
 
-    $scope.setRoute = (route) ->
-        $location.path(route)
+    $scope.$watch 'selectLanguage', (newVal) ->
+        if !_.isUndefined(newVal)
+            langform.submit()
 ]
 

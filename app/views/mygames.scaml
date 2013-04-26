@@ -13,13 +13,14 @@
 	* See the License for the specific language governing permissions and
 	* limitations under the License.
 
+-import controllers._
 -import play.api.i18n.Messages
 
 - attributes("scripts") = capture
 	%script(src={uri("/assets/javascripts/controllers/myGamesCtrl.min.js")} type="text/javascript")
 
 .row.span12
-	= Messages("mygames.title")
+	%h3 = Messages("mygames.title")
 	%table#gamelist.table.table-hover
 		%thead
 			%tr
@@ -28,16 +29,39 @@
 				%td = Messages("mygames.status")
 				%td = Messages("mygames.version")
 				%td = Messages("general.options")
-		%tbody
-			%tr
+		%tbody(ng-controller="myGamesCtrl")
+			%tr(ng-repeat="game in games")
 				%td
+					%img(ng-src="/assets/images/{{game.icon}}")/
 				%td
+					.row
+						%h4 {{game.name | uppercase}}
+					.row
+						%span
+							= Messages("mygames.location")
+						{{game.location}}
+					.row
+						%span
+							= Messages("mygames.timestart")
+						{{game.timestart}}
+					.row
+						%span
+							= Messages("mygames.tasks")
+						{{game.tasksno}}
 				%td
-				%td
-				%td
-			%tr
-				%td
-				%td
-				%td
-				%td
-				%td
+					.row
+						%span(class="{{game.status}}") {{game.status | uppercase}}
+					.row(ng-show="game.status == 'online'")
+						%p 
+							to END left
+							%br/
+							{{game.toend}}
+					.row(ng-show="game.status == 'published'")
+						%p 
+							to START left
+							%br/
+							{{game.tostart}}
+
+				%td 
+					{{game.version}}
+				%td 

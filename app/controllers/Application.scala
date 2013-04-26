@@ -16,10 +16,15 @@ package controllers
 
 import play.api._
 import play.api.mvc._
+import play.api.i18n._
+import play.api.Play.current
+import play.api.Logger
+import play.api.data._
+import play.api.data.Forms._
 
-object Application extends Controller {
+object Application extends Controller  {
   
-	def index = Action {
+	def index = Action { implicit request =>
 		Ok(Scalate("index").render('title -> "Urban Game"))
   	}
 
@@ -28,5 +33,22 @@ object Application extends Controller {
   	}
 
   	def dummyTestFunction(left: Int,right: Int):Int=left+right
-  
+
+	val langform = Form("lang" -> nonEmptyText)
+
+  	def changeLang = Action { implicit request =>
+  		val referrer = request.headers.get(REFERER).getOrElse(HOME_URL)
+  		langform.bindFromRequest.fold(
+            errors => {
+                Logger.logger.debug("The locale can not be change to : " + errors.get)
+                BadRequest(referrer)
+            },
+            lang => {
+                Logger.logger.debug("Change user lang to : " + lang)
+                Redirect(referrer).withLang(Lang(lang))
+            }
+        )
+  	}
+
+  	protected val HOME_URL = "/"
 }

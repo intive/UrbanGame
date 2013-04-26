@@ -38,6 +38,8 @@
         -# Main
         %link(rel="stylesheet" media="screen" href={routes.Assets.at("stylesheets/main.css")})
         != head
+        -# Jquery
+        %script(src={routes.Assets.at("javascripts/lib/jquery/jquery-1.9.0.min.js")} type="text/javascript")
         -# AngularJS
         %script(src={routes.Assets.at("javascripts/lib/angular/angular.min.js")} type="text/javascript")
         -# Underscore
@@ -56,7 +58,7 @@
                     %ul.navbar
                         .navbar-inner
                             .container
-                                %ul.nav.nav-tabs(ng-controller="topMenuCtrl")
+                                %ul.nav.nav-tabs(ng-controller="menuCtrl")
                                     %li(ng-class="{active: location == '/games/new'}")
                                         %a(href="/games/new") = Messages("menu.newgame")
                                     %li(ng-class="{active: location == '/games/my'}")
@@ -70,10 +72,8 @@
                 .row-fluid
                     != body
             #push
-        #footer
-            Footer
--# Jquery
-%script(src={routes.Assets.at("javascripts/lib/jquery/jquery-1.9.0.min.js")} type="text/javascript")
+        -render("submodules/footer.scaml")
+
 -# Bootstrap from AngularUI Team
 %script(src={routes.Assets.at("javascripts/lib/ui-bootstrap/ui-bootstrap-tpls-0.2.0.min.js")} type="text/javascript")
 -# Bootstrap Lightbox
