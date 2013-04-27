@@ -20,14 +20,14 @@ import http.{Writeable, ContentTypeOf, ContentTypes}
 import mvc.Codec
 import play.api.Play.current
 import org.fusesource.scalate.layout.DefaultLayoutStrategy
-import org.fusesource.scalate.scaml.ScamlOptions
-import org.fusesource.scalate.Binding
 import java.io.File
 
 object Scalate {
 
     import org.fusesource.scalate._
     import org.fusesource.scalate.util._
+    import org.fusesource.scalate.scaml.ScamlOptions
+    import org.fusesource.scalate.Binding
 
     var format = Play.configuration.getString("scalate.format") match {
         case Some(configuredFormat) => configuredFormat
@@ -54,10 +54,13 @@ object Scalate {
 
     case class Template(name: String) {
         def render(args: (Symbol, Any)*) = {
+            
+            import scala.language.postfixOps
+
             ScalateContent{
                 scalateEngine.layout(name, args.map {
                     case (k, v) => k.name -> v
-                } toMap)
+                }toMap)
             }
         }
     }

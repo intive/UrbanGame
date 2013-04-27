@@ -10,12 +10,3 @@ app.config ['$routeProvider', '$locationProvider', ($routeProvider, $location) -
 ]
 
 
-app.controller 'menuCtrl', ['$scope', '$http', '$rootScope', '$location', ($scope, $http, $rootScope, $location) ->
-    $rootScope.location = window.location.pathname
-
-    $scope.$watch 'selectLanguage', (newVal) ->
-        if !_.isUndefined(newVal)
-            langform.submit()
-]
-
-

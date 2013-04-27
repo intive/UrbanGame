@@ -16,16 +16,29 @@
 
 describe('Controllers', function() {
     describe('menuCtrl', function() {
-	beforeEach(module('web'));
-	var ctrl, scope;
-	beforeEach(inject(function($controller, $rootScope) {
-		scope = $rootScope.$new();
-		ctrl = $controller('menuCtrl', {
-			$scope: scope
-		});
-	}));
-        it('should list 3 items', function() {
-            expect(scope.menuitems.length).toBe(3);
+		beforeEach(module('web'));
+		var ctrl, scope, rootScope, location;
+		beforeEach(inject(function($controller, $rootScope, $location) {
+			rootScope = $rootScope;
+			scope = $rootScope.$new();
+			location = $location;
+			ctrl = $controller('menuCtrl', {
+				$scope: scope;
+			});
+		}));
+
+        it('should have correct location path', function() {
+            location.path('/');
+        	rootScope.$apply();
+        	expect(location.path()).toBe('/');
+
+            location.path('/games/new');
+        	rootScope.$apply();
+        	expect(location.path()).toBe('/games/new');
+
+            location.path('/games/my');
+        	rootScope.$apply();
+        	expect(location.path()).toBe('/games/my');
         });
     });
 });
