@@ -427,18 +427,17 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.rawQuery(abcdPossibleAnswersDeletionSQL, null);
 		db.rawQuery(abcdTaskDeletionSQL, null);
 		db.rawQuery(tasksDeletionSQL, null);
-		boolean isTasksDeletionSuccessful = db.delete(GAMES_TASKS_TABLE_NAME, GAMES_TASKS_KEY_GAME_ID + "=?",
-			new String[] { gameID.longValue() + "" }) != -1;
-		boolean isUserGameSpecificDeletionSuccessful = db.delete(USER_GAMES_SPECIFIC_TABLE_NAME,
-			USER_GAMES_SPECIFIC_KEY_GAME_ID + "=?", new String[] { gameID.longValue() + "" }) != -1;
+		db.delete(GAMES_TASKS_TABLE_NAME, GAMES_TASKS_KEY_GAME_ID + "=?", new String[] { gameID.longValue() + "" });
+		db.delete(USER_GAMES_SPECIFIC_TABLE_NAME, USER_GAMES_SPECIFIC_KEY_GAME_ID + "=?",
+			new String[] { gameID.longValue() + "" });
 		boolean isSucessful = db
 			.delete(GAMES_TABLE_NAME, GAMES_KEY_ID + "=?", new String[] { gameID.longValue() + "" }) != 0;
-		if (isTasksDeletionSuccessful && isSucessful && isUserGameSpecificDeletionSuccessful) {
+		if (isSucessful) {
 			db.setTransactionSuccessful();
 		}
 		db.endTransaction();
 		db.close();
-		return isTasksDeletionSuccessful && isSucessful && isUserGameSpecificDeletionSuccessful;
+		return isSucessful;
 	}
 	
 	private boolean areShortGameInfoFieldsOK(UrbanGameShortInfo game) {
