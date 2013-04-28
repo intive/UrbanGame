@@ -23,7 +23,7 @@ public class ActiveTaskActivity extends SherlockFragmentActivity {
 	private TabManager tabManager;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabhost_layout);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);

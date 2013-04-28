@@ -29,17 +29,18 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 		setContentView(R.layout.tabhost_layout);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		setUpTabHost();
-		
-		if (savedInstanceState != null) {
-			tabHost.setCurrentTabByTag(savedInstanceState.getString(TAB_LAST_SELECTED));
-		}
+		setUpTabHost(savedInstanceState);
 	}
 	
-	private void setUpTabHost() {
+	private void setUpTabHost(Bundle savedInstanceState) {
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
 		tabHost.setup();
 		fillTabHost();
+		
+		if (savedInstanceState != null) {
+			String lastSelectedTabTag = savedInstanceState.getString(TAB_LAST_SELECTED);
+			tabHost.setCurrentTabByTag(lastSelectedTabTag);
+		}
 	}
 	
 	private void fillTabHost() {

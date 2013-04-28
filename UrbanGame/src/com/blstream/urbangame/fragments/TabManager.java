@@ -88,14 +88,24 @@ public class TabManager implements TabHost.OnTabChangeListener {
 	@Override
 	public void onTabChanged(String tabId) {
 		TabInfo newTabInfo = tabsMap.get(tabId);
-		if (lastTabInfo != newTabInfo) { // if tab is being switched
+		
+		if (lastTabInfo != newTabInfo) { // if tab has been switched
 			FragmentTransaction ft = fragmentManager.beginTransaction();
-			if (lastTabInfo != null) if (lastTabInfo.fragment != null) ft.detach(lastTabInfo.fragment); // detach fragment if has been shown
-			if (newTabInfo != null) if (newTabInfo.fragment == null) {
-				newTabInfo.fragment = Fragment.instantiate(activity, newTabInfo.clss.getName(), newTabInfo.args);
-				ft.add(containerId, newTabInfo.fragment, newTabInfo.tag);
+			
+			if (lastTabInfo != null) {
+				if (lastTabInfo.fragment != null) {
+					ft.detach(lastTabInfo.fragment); // detach fragment if has been shown
+				}
 			}
-			else ft.attach(newTabInfo.fragment);
+			if (newTabInfo != null) {
+				if (newTabInfo.fragment == null) {
+					newTabInfo.fragment = Fragment.instantiate(activity, newTabInfo.clss.getName(), newTabInfo.args);
+					ft.add(containerId, newTabInfo.fragment, newTabInfo.tag);
+				}
+				else {
+					ft.attach(newTabInfo.fragment);
+				}
+			}
 			
 			lastTabInfo = newTabInfo;
 			ft.commit();
