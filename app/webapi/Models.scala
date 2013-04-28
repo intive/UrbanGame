@@ -39,4 +39,3 @@ class ApiException(code: Int, message: String) extends RuntimeException(message)
 }
 
 class AuthException(msg: String) extends ApiException(401, msg)
-

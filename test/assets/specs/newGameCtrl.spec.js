@@ -28,21 +28,21 @@ describe('Controllers', function() {
 		}));
 
         it('should list 4 steps', function() {
-		expect(scope.steps.length).toBe(4);
+			expect(scope.steps.length).toBe(4);
         });
 
         it('should set $scope.selection on the 1st step at start', function() {
-		expect(scope.selection.no).toBe(1);
+			expect(scope.selection.no).toBe(1);
         });
 
         it('should increment steps', function() {
-		scope.incrementStep();
-		expect(scope.selection.no).toBe(2);
+			scope.incrementStep();
+			expect(scope.selection.no).toBe(2);
         });
 
         it('should decrement steps', function() {
-		scope.decrementStep();
-		expect(scope.selection.no).toBe(1);
+			scope.decrementStep();
+			expect(scope.selection.no).toBe(1);
         });
     });
 });

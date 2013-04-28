@@ -6,9 +6,9 @@ general.options = Options
 
 menu.newgame = New game
 menu.mygames = My games
-menu.about = About
-menu.contact = Contact
-menu.help = Help
+menu.about = O nas
+menu.contact = Kontakt
+menu.help = Pomoc
 menu.faq = FAQ
 
 newgame.step1title = Step 1
@@ -29,9 +29,7 @@ newgame.gamestrategylabel = winning strategy*:
 newgame.gamedifflabel = level of difficulty:
 newgame.gametype1 = Gather as many points as possible.
 newgame.gametype2 = Solve all tasks in shortest time. 
-
-
-newgame.ttgamename = *I'm a tooltip!*
+newgame.ttgamename = 
 newgame.ttgamedesc =
 newgame.ttgamestrategy =  
 newgame.ttgameawards = 
@@ -48,9 +46,6 @@ mygames.data = Data
 mygames.status = Status
 mygames.version = Version
 mygames.title = Game list
-mygames.location = Location
-mygames.timestart = Start time
-mygames.tasks = Tasks
 
 language.pick = Pick a language
 language.en = English

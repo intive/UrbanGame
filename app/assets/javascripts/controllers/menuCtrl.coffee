@@ -1,8 +1,7 @@
 app.controller 'menuCtrl', ['$scope', ($scope) ->
+    $scope.location = window.location.pathname
 
-	$scope.menuitems = [
-        {name: "Page1", href: "/"}
-        {name: "Page2", href: "/"}
-        {name: "Page3", href: "/"}
-    ]
+    $scope.$watch 'selectLanguage', (newVal) ->
+        langform.submit() if !_.isUndefined(newVal)
+
 ]
