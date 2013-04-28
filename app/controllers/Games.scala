@@ -19,8 +19,12 @@ import play.api.mvc._
 
 object Games extends Controller {
 
-  	def createnewgame = Action {
-  		Ok(Scalate("createnewgame").render('title -> "Urban Game - Create new game"))
-  	}
+	def newgame = Action { implicit request =>
+		Ok(Scalate("newgame").render('title -> "Urban Game - Create new game", 'request -> request))
+	}
+
+	def mygames = Action { implicit request =>
+		Ok(Scalate("mygames").render('title -> "Urban Game - Create new game", 'request -> request))
+	}
 
 }

@@ -13,10 +13,12 @@
 	* See the License for the specific language governing permissions and
 	* limitations under the License.
 
+-import controllers._
 -import play.api.i18n.Messages
 	
 - attributes("scripts") = capture
 	%script(src={uri("/assets/javascripts/controllers/newGameCtrl.min.js")} type="text/javascript")
+	%script(src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript")
 
 .row.span12
 	.wizard(ng-controller="newGameCtrl")
