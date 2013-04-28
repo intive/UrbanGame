@@ -15,6 +15,9 @@ import com.blstream.urbangame.fragments.TabManager;
 
 public class ActiveGameActivity extends SherlockFragmentActivity {
 	public static final String GAME_ID = "game_id";
+	public static final String TAG_TAB_INFO = "fragment_info";
+	public static final String TAG_TAB_TASKS = "fragment_tasks";
+	public static final String TAG_TAB_RANKING = "fragment_tanking";
 	private final String TAB_LAST_SELECTED = "tab";
 	
 	private TabHost tabHost;
@@ -28,7 +31,9 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 		
 		setUpTabHost();
 		
-		if (savedInstanceState != null) tabHost.setCurrentTabByTag(savedInstanceState.getString(TAB_LAST_SELECTED));
+		if (savedInstanceState != null) {
+			tabHost.setCurrentTabByTag(savedInstanceState.getString(TAB_LAST_SELECTED));
+		}
 	}
 	
 	private void setUpTabHost() {
@@ -42,15 +47,15 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 		Bundle extras = getIntent().getExtras();
 		
 		String tagGameInfo = getString(R.string.tab_game_gameInfo);
-		TabSpec tabGameInfo = tabHost.newTabSpec(tagGameInfo).setIndicator(tagGameInfo);
+		TabSpec tabGameInfo = tabHost.newTabSpec(TAG_TAB_INFO).setIndicator(tagGameInfo);
 		tabManager.addTab(tabGameInfo, GameInfoFragment.class, extras);
 		
 		String tagTasks = getString(R.string.tab_game_tasks);
-		TabSpec tabTasks = tabHost.newTabSpec(tagTasks).setIndicator(tagTasks);
+		TabSpec tabTasks = tabHost.newTabSpec(TAG_TAB_TASKS).setIndicator(tagTasks);
 		tabManager.addTab(tabTasks, GameTasksFragment.class, extras);
 		
 		String tagRanking = getString(R.string.tab_game_ranking);
-		TabSpec tabRanging = tabHost.newTabSpec(tagRanking).setIndicator(tagRanking);
+		TabSpec tabRanging = tabHost.newTabSpec(TAG_TAB_RANKING).setIndicator(tagRanking);
 		tabManager.addTab(tabRanging, GameRankingFragment.class, extras);
 	}
 	

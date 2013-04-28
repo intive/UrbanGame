@@ -53,7 +53,6 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 		this.databaseInterface = new Database(activity);
 		
 		long taskID = getSelectedTaskID();
-		this.task = databaseInterface.getTask(taskID);
 		this.awardedPoints = getPlayerAwardedPoints(taskID);
 	}
 	
@@ -70,7 +69,9 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 		long taskID = 1L;
 		
 		Bundle arguments = getArguments();
-		if (arguments != null) taskID = arguments.getLong(ActiveTaskActivity.TASK_ID, taskID);
+		if (arguments != null) {
+			taskID = arguments.getLong(ActiveTaskActivity.TASK_ID, taskID);
+		}
 		
 		return taskID;
 	}
@@ -80,8 +81,10 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 		int awardedPoints = 0;
 		
 		if (playerID != null) {
-			PlayerTaskSpecific currentTask = databaseInterface.getPlayerTaskSpecific(taskID, playerID);
-			if (currentTask != null) awardedPoints = currentTask.getPoints();
+			PlayerTaskSpecific playerTaskSpecific = databaseInterface.getPlayerTaskSpecific(taskID, playerID);
+			if (playerTaskSpecific != null) {
+				awardedPoints = playerTaskSpecific.getPoints();
+			}
 		}
 		
 		return awardedPoints;
@@ -142,8 +145,12 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 	
 	private void setTaskTypeIcon() {
 		int imageResourceId;
-		if (task.getType().equals(Task.TASK_TYPE_ABCD)) imageResourceId = R.drawable.task_abcd_icon;
-		else imageResourceId = R.drawable.task_gps_icon;
+		if (task.getType().equals(Task.TASK_TYPE_ABCD)) {
+			imageResourceId = R.drawable.task_abcd_icon;
+		}
+		else {
+			imageResourceId = R.drawable.task_gps_icon;
+		}
 		imageViewTaskTypeIcon.setImageResource(imageResourceId);
 	}
 	
@@ -156,6 +163,8 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 	
 	@Override
 	public void onClick(View v) {
-		if (imageViewTaskImage == v) imageDialog.show();
+		if (imageViewTaskImage == v) {
+			imageDialog.show();
+		}
 	}
 }

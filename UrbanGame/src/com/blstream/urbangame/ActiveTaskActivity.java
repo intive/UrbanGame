@@ -14,6 +14,9 @@ import com.blstream.urbangame.fragments.TaskDescriptionFragment;
 
 public class ActiveTaskActivity extends SherlockFragmentActivity {
 	public static final String TASK_ID = "task_id";
+	public static final String TAG_TAB_DESCRIPTION = "fragment_description";
+	public static final String TAG_TAB_ANSWER = "fragment_answer";
+	
 	private final String TAB_LAST_SELECTED = "tab";
 	
 	private TabHost tabHost;
@@ -44,11 +47,11 @@ public class ActiveTaskActivity extends SherlockFragmentActivity {
 		Bundle extras = getIntent().getExtras();
 		
 		String tagTaskDescription = getString(R.string.tab_task_description);
-		TabSpec tabDescription = tabHost.newTabSpec(tagTaskDescription).setIndicator(tagTaskDescription);
+		TabSpec tabDescription = tabHost.newTabSpec(TAG_TAB_DESCRIPTION).setIndicator(tagTaskDescription);
 		tabManager.addTab(tabDescription, TaskDescriptionFragment.class, extras);
 		
 		String tagTasksAnswer = getString(R.string.tab_task_answer);
-		TabSpec tabAnswer = tabHost.newTabSpec(tagTasksAnswer).setIndicator(tagTasksAnswer);
+		TabSpec tabAnswer = tabHost.newTabSpec(TAG_TAB_ANSWER).setIndicator(tagTasksAnswer);
 		tabManager.addTab(tabAnswer, TaskAnswerFragment.class, extras);
 	}
 	
