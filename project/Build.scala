@@ -7,14 +7,12 @@ object ApplicationBuild extends Build {
 
     val appName         = "UrbanGame"
     val appVersion      = "1.0-SNAPSHOT"
-
     val appDependencies = Seq(
         jdbc,
         anorm,
         "org.fusesource.scalate" % "scalate-core_2.10" % "1.6.1",
         "commons-codec" % "commons-codec" % "1.6"
     )
-
 
     val main = play.Project(appName, appVersion, appDependencies)
     .settings(

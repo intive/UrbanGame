@@ -10,7 +10,6 @@ POST    /locale						controllers.Application.changeLang
 
 # Authenticated
 GET     /games/new					controllers.Games.newgame
-
 GET     /games/my					controllers.Games.mygames
 
 # Web Api resources

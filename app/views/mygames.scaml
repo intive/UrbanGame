@@ -55,12 +55,12 @@
 						%p 
 							to END left
 							%br/
-							{{game.toend}}
+							{{mtimeLeft[$index]}}
 					.row(ng-show="game.status == 'published'")
 						%p 
 							to START left
 							%br/
-							{{game.tostart}}
+							{{mtimeLeft[$index]}}
 
 				%td 
 					{{game.version}}
