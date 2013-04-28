@@ -24,54 +24,54 @@ import java.io.File
 
 object Scalate {
 
-    import org.fusesource.scalate._
-    import org.fusesource.scalate.util._
-    import org.fusesource.scalate.scaml.ScamlOptions
-    import org.fusesource.scalate.Binding
+  import org.fusesource.scalate._
+  import org.fusesource.scalate.util._
+  import org.fusesource.scalate.scaml.ScamlOptions
+  import org.fusesource.scalate.Binding
 
-    var format = Play.configuration.getString("scalate.format") match {
-        case Some(configuredFormat) => configuredFormat
-        case _ => "scaml"
+  var format = Play.configuration.getString("scalate.format") match {
+    case Some(configuredFormat) => configuredFormat
+    case _ => "scaml"
+  }
+
+  lazy val path = Play.application.path
+
+  lazy val scalateEngine = {
+    val engine = new TemplateEngine
+    engine.resourceLoader = new FileResourceLoader(Some(Play.getFile("app/views")))
+    engine.sourceDirectories = new File(path, "app") :: Nil
+    engine.layoutStrategy = new DefaultLayoutStrategy(engine, "app/views/layouts/default." + format)
+    //engine.bindings = List(Binding(name="lan", className="play.api.i18n.Lang", importMembers=false, defaultValue=scala.None, kind="val", isImplicit=true, classNamePositional=scala.None, defaultValuePositional=scala.None))
+    engine.classpath = "tmp/classes"
+    engine.workingDirectory = Play.getFile("tmp")
+    engine.combinedClassPath = true
+    engine.classLoader = Play.classloader
+    ScamlOptions.format = ScamlOptions.Format.html5
+    engine
+  }
+
+  def apply(template: String, myformat: String = format) = Template(template + "." + myformat)
+
+  case class Template(name: String) {
+    def render(args: (Symbol, Any)*) = {
+        
+      import scala.language.postfixOps
+
+      ScalateContent{
+        scalateEngine.layout(name, args.map {
+          case (k, v) => k.name -> v
+        }toMap)
+      }
     }
+  }
 
-    lazy val path = Play.application.path
+  case class ScalateContent(val cont: String)
 
-    lazy val scalateEngine = {
-        val engine = new TemplateEngine
-        engine.resourceLoader = new FileResourceLoader(Some(Play.getFile("app/views")))
-        engine.sourceDirectories = new File(path, "app") :: Nil
-        engine.layoutStrategy = new DefaultLayoutStrategy(engine, "app/views/layouts/default." + format)
-        //engine.bindings = List(Binding(name="lan", className="play.api.i18n.Lang", importMembers=false, defaultValue=scala.None, kind="val", isImplicit=true, classNamePositional=scala.None, defaultValuePositional=scala.None))
-        engine.classpath = "tmp/classes"
-        engine.workingDirectory = Play.getFile("tmp")
-        engine.combinedClassPath = true
-        engine.classLoader = Play.classloader
-        ScamlOptions.format = ScamlOptions.Format.html5
-        engine
-    }
+  implicit def writeableOf_ScalateContent[SC <: ScalateContent](implicit codec: Codec): Writeable[SC] = {
+    Writeable(scalate => codec.encode(scalate.cont))
+  }
 
-    def apply(template: String, myformat: String = format) = Template(template + "." + myformat)
-
-    case class Template(name: String) {
-        def render(args: (Symbol, Any)*) = {
-            
-            import scala.language.postfixOps
-
-            ScalateContent{
-                scalateEngine.layout(name, args.map {
-                    case (k, v) => k.name -> v
-                }toMap)
-            }
-        }
-    }
-
-    case class ScalateContent(val cont: String)
-
-    implicit def writeableOf_ScalateContent[SC <: ScalateContent](implicit codec: Codec): Writeable[SC] = {
-        Writeable(scalate => codec.encode(scalate.cont))
-    }
-
-    implicit def contentTypeOf_ScalateContent[SC <: ScalateContent](implicit codec: Codec): ContentTypeOf[SC] = {
-        ContentTypeOf(Some(ContentTypes.HTML))
-    }
+  implicit def contentTypeOf_ScalateContent[SC <: ScalateContent](implicit codec: Codec): ContentTypeOf[SC] = {
+    ContentTypeOf(Some(ContentTypes.HTML))
+  }
 }

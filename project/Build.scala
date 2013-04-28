@@ -12,7 +12,8 @@ object ApplicationBuild extends Build {
     jdbc,
     anorm,
     "org.fusesource.scalate" % "scalate-core_2.10" % "1.6.1",
-    "commons-codec" % "commons-codec" % "1.6"
+    "commons-codec" % "commons-codec" % "1.6",
+    "com.typesafe.slick" %% "slick" % "1.0.0"
   )
 
 
