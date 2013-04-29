@@ -5,10 +5,11 @@ using System.Text;
 
 namespace Common
 {
-    /// <summary>
-    /// Represent task details
-    /// </summary>
-    public interface ITaskDetails
+    public enum SolutionStatus
     {
+        NotSend,
+        Pending,
+        Rejected,
+        Accepted
     }
 }

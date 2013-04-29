@@ -14,7 +14,7 @@ namespace UrbanGame.Converters
         {         
             switch ((GameType)value)
             {
-                case GameType.Quiz: return AppResources.GameTypeQuiz;
+                case GameType.ScoreAttack: return AppResources.GameTypeScoreAttack;
                 case GameType.Race: return AppResources.GameTypeRace;
                 default: return "";
             }

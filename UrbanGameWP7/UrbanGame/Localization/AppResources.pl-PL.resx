@@ -144,7 +144,7 @@
   <data name="GameTypeRace" xml:space="preserve">
     <value>ukończ zadania jako pierwszy</value>
   </data>
-  <data name="GameTypeQuiz" xml:space="preserve">
+  <data name="GameTypeScoreAttack" xml:space="preserve">
     <value>zdobądź jak najwięcej punktów</value>
   </data>
   <data name="Hard" xml:space="preserve">

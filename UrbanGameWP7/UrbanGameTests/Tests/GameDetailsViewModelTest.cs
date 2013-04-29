@@ -43,7 +43,7 @@ namespace UrbanGameTests.Tests
                 GameEnd = DateTime.Now.AddDays(2).AddHours(5),
                 NumberOfPlayers = 24,
                 NumberOfSlots = 50,
-                GameType = GameType.Quiz,
+                GameType = GameType.ScoreAttack,
                 Description = "sadsa sad ads  adsa dssa sad  asas asd as a sas as as  asas  asdas as ads as d",
                 Difficulty = GameDifficulty.Medium,
                 Prizes = "1st Bicycle\n2nd Bicycle\n3rd Bicycle\n4-8th Bicycle bicycle bicycle"
@@ -56,7 +56,6 @@ namespace UrbanGameTests.Tests
             //if user is unauthorized, then game should be downloaded from WebService
             webService.IsAuthorized = false;
             await vm.RefreshGame();
-            Thread.Sleep(1000);
             Assert.IsNotNull(vm.Game);
             Assert.AreNotEqual(vm.Game.Name, "FromDatabase");
             
@@ -64,6 +63,7 @@ namespace UrbanGameTests.Tests
             //handling operator's updates
             //description changes each time in mock-up WebService results
             string oldDesc = vm.Game.Description;
+            Thread.Sleep(1000);
             eventAgg.Publish(new GameChangedEvent() { Id = 1 });
             Thread.Sleep(1000);
             Assert.AreNotEqual(vm.Game.Description, oldDesc);
@@ -73,7 +73,6 @@ namespace UrbanGameTests.Tests
             //if user is authorized, then game should be downloaded from database
             webService.IsAuthorized = true;
             await vm.RefreshGame();
-            Thread.Sleep(1000);
             Assert.IsNotNull(vm.Game);
             Assert.AreEqual(vm.Game.Name, "FromDatabase");
             
@@ -82,7 +81,6 @@ namespace UrbanGameTests.Tests
             unitOfWork.GetRepository<IGame>().All().First(g => g.Id == 1).Name = "Changed";
             unitOfWork.Commit();
             eventAgg.Publish(new GameChangedEvent() { Id = 1 });
-            Thread.Sleep(1000);
             Assert.AreEqual(vm.Game.Name, "Changed");
             
         }

@@ -5,9 +5,8 @@ using System.Text;
 
 namespace Common
 {
-    public enum GameType
+    public interface IOpenQuestionSolution : IBaseSolution
     {
-        Quiz,
-        Race
+        string TextAnswer { get; set; }
     }
 }
