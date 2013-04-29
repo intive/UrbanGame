@@ -53,40 +53,35 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthorizeState.cs" />
+    <Compile Include="WebService\AuthorizeState.cs" />
     <Compile Include="Collections\IEntityEnumerable.cs" />
     <Compile Include="Collections\EntityEnumerable.cs" />
-    <Compile Include="GameChangedEvent.cs" />
-    <Compile Include="GameType.cs" />
-    <Compile Include="GameDifficulty.cs" />
-    <Compile Include="GameState.cs" />
+    <Compile Include="Games\GameChangedEvent.cs" />
+    <Compile Include="Games\GameType.cs" />
+    <Compile Include="Games\GameDifficulty.cs" />
+    <Compile Include="Games\GameState.cs" />
     <Compile Include="Solutions\IABCDSolution.cs" />
-    <Compile Include="IAppbarItem.cs" />
-    <Compile Include="IAppbarManager.cs" />
-    <Compile Include="IGame.cs" />
-    <Compile Include="IGameChangesManager.cs" />
-    <Compile Include="IGameWebService.cs" />
+    <Compile Include="Utilities\IAppbarItem.cs" />
+    <Compile Include="Utilities\IAppbarManager.cs" />
+    <Compile Include="Games\IGame.cs" />
+    <Compile Include="Games\IGameChangesManager.cs" />
+    <Compile Include="WebService\IGameWebService.cs" />
     <Compile Include="Solutions\IGPSSolution.cs" />
     <Compile Include="Solutions\IOpenQuestionSolution.cs" />
     <Compile Include="Solutions\IPhotoSolution.cs" />
     <Compile Include="Solutions\IQRCodeSolution.cs" />
-    <Compile Include="IRepository.cs" />
+    <Compile Include="Storage\IRepository.cs" />
     <Compile Include="Solutions\IBaseSolution.cs" />
     <Compile Include="Tasks\IABCDPossibleAnswer.cs" />
     <Compile Include="Tasks\ITask.cs" />
-    <Compile Include="IUnitOfWork.cs" />
+    <Compile Include="Storage\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solutions\SolutionStatus.cs" />
     <Compile Include="Tasks\TaskType.cs" />
-    <Compile Include="WebEnum.cs" />
-    <Compile Include="WebException.cs" />
+    <Compile Include="WebService\WebEnum.cs" />
+    <Compile Include="WebService\WebException.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Games\" />
-    <Folder Include="Storage\" />
-    <Folder Include="Utilities\" />
-    <Folder Include="WebService\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions />
