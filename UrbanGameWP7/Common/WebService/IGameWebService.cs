@@ -44,7 +44,15 @@ namespace Common
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <returns>Task's details</returns>
-        ITaskDetails GetTaskDetails(int gid, int tid);
+        ITask GetTaskDetails(int gid, int tid);
+
+        /// <summary>
+        /// Returns task's details (generic version)
+        /// </summary>
+        /// <param name="gid">Integer parameter - game's identifier</param>
+        /// <param name="tid">Integer parameter - task's identifier</param>
+        /// <returns>Task's details</returns>
+        TTaskType GetTaskDetails<TTaskType>(int gid, int tid) where TTaskType : ITask;
 
         /// <summary>
         /// Returns user game progress
@@ -68,7 +76,7 @@ namespace Common
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <param name="solution">Solution of task</param>
         /// <returns>a bool</returns>
-        bool SubmitTaskSolution(int gid, int tid, ISolution solution);
+        bool SubmitTaskSolution(int gid, int tid, IBaseSolution solution);
 
         /// <summary>
         /// Method responses for user authorization

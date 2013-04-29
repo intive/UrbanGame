@@ -154,11 +154,11 @@
   <data name="GameStart" xml:space="preserve">
     <value>start:</value>
   </data>
-  <data name="GameTypeQuiz" xml:space="preserve">
-    <value>gather as many points as possible</value>
-  </data>
   <data name="GameTypeRace" xml:space="preserve">
     <value>complete all tasks first</value>
+  </data>
+  <data name="GameTypeScoreAttack" xml:space="preserve">
+    <value>gather as many points as possible</value>
   </data>
   <data name="Hard" xml:space="preserve">
     <value>hard</value>

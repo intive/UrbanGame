@@ -58,5 +58,7 @@ namespace Common
         string Description { get; set; }
 
         string Prizes { get; set; }
+
+        IEntityEnumerable<ITask> Tasks { get; }
     }
 }

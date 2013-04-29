@@ -19,7 +19,7 @@ namespace UrbanGame.ViewModels
                                     IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
         {
-            _appbarManager=appbarManager;
+            _appbarManager = appbarManager;
         }
 
         protected override void OnViewReady(object view)

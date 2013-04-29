@@ -8,7 +8,10 @@ namespace Common
     /// <summary>
     /// Represents a solution
     /// </summary>
-    public interface ISolution
+    public interface IBaseSolution
     {
+        int Id { get; set; }
+
+        TaskType TaskType { get; set; }
     }
 }

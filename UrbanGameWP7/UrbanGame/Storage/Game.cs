@@ -5,12 +5,18 @@ using System.Linq;
 using System.Text;
 using Common;
 using System.Device.Location;
+using System.Data.Linq;
 
 namespace UrbanGame.Storage
 {
     [Table]
     public class Game : EntityBase, IGame
-    {        
+    {
+        public Game() : base()
+        {
+            _taskRefs = new EntitySet<GameTask>(OnTaskAdded, OnTaskRemoved);
+        }
+
         #region Id
 
         private int _id;
@@ -490,6 +496,38 @@ namespace UrbanGame.Storage
                     _prizes = value;
                     NotifyPropertyChanged("Prizes");
                 }
+            }
+        }
+        #endregion
+
+        #region Tasks
+
+        private EntitySet<GameTask> _taskRefs;
+
+        [Association(Name = "FK_Game_Tasks", Storage = "_taskRefs", ThisKey = "Id", OtherKey = "GameId")]
+        public EntitySet<GameTask> Tasks
+        {
+            get { return _taskRefs; }
+        }
+
+        private void OnTaskAdded(GameTask task)
+        {
+            task.Game = this;
+        }
+
+        private void OnTaskRemoved(GameTask task)
+        {
+            task.Game = null;
+        }
+
+        #endregion
+
+        #region IGame.Tasks
+        IEntityEnumerable<ITask> IGame.Tasks
+        {
+            get
+            {
+                return new EntityEnumerable<ITask, GameTask>(_taskRefs);
             }
         }
         #endregion

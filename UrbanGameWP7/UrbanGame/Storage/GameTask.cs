@@ -1,24 +1,26 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
+using System.Data.Linq;
+using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
-using Common;
-using System.Data.Linq;
 
-namespace WebService.BOMock
+namespace UrbanGame.Storage
 {
-    public class TaskMock : BOBase,  ITask
+    [Table]
+    public class GameTask : EntityBase, ITask
     {
-        public TaskMock()
+        public GameTask() : base()
         {
-            EntitySet<ABCDPossibleAnswerMock> es = new EntitySet<ABCDPossibleAnswerMock>(OnAnswerAdded, OnAnswerRemoved);
-            _abcdPossibleAnswers =  new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswerMock>(es);
+            _abcdAnswersRefs = new EntitySet<ABCDPossibleAnswer>(OnABCDAnswerAdded, OnABCDAnswerRemoved);
         }
 
         #region Id
 
         private int _id;
 
+        [Column(IsPrimaryKey=true)]
         public int Id
         {
             get
@@ -37,10 +39,85 @@ namespace WebService.BOMock
         }
         #endregion
 
+        #region GameId
+
+        private int? _gameId;
+
+        [Column]
+        public int? GameId
+        {
+            get
+            {
+                return _gameId;
+            }
+            set
+            {
+                if (_gameId != value)
+                {
+                    NotifyPropertyChanging("GameId");
+                    _gameId = value;
+                    NotifyPropertyChanged("GameId");
+                }
+            }
+        }
+        #endregion
+
+        #region Game
+
+        private EntityRef<Game> _gameRef = new EntityRef<Game>();
+
+        [Association(Name = "FK_Game_Tasks", Storage = "_gameRef", ThisKey = "GameId", OtherKey = "Id", IsForeignKey = true)]
+        public Game Game
+        {
+            get
+            {
+                return _gameRef.Entity;
+            }
+            set
+            {
+                Game previousValue = _gameRef.Entity;
+                if (((previousValue != value) || (_gameRef.HasLoadedOrAssignedValue == false)))
+                {
+                    _gameRef.Entity = value;
+
+                    //remove task from previous game
+                    if (previousValue != null)
+                        previousValue.Tasks.Remove(this);
+
+                    //add task to the new game
+                    if ((value != null))
+                    {
+                        value.Tasks.Add(this);
+                        this.GameId = value.Id;
+                    }
+                    else
+                        this.GameId = default(Nullable<int>);
+                }
+            }
+        }
+        #endregion
+
+        #region ITask.Game
+
+        IGame ITask.Game
+        {
+            get
+            {
+                return Game;
+            }
+
+            set
+            {
+                Game = (Game)value;
+            }
+        }
+        #endregion
+
         #region Name
 
         private string _name;
 
+        [Column]
         public string Name
         {
             get
@@ -63,6 +140,7 @@ namespace WebService.BOMock
 
         private TaskType _type;
 
+        [Column]
         public TaskType Type
         {
             get
@@ -85,6 +163,7 @@ namespace WebService.BOMock
 
         private string _description;
 
+        [Column]
         public string Description
         {
             get
@@ -107,6 +186,7 @@ namespace WebService.BOMock
 
         private string _additionalText;
 
+        [Column]
         public string AdditionalText
         {
             get
@@ -125,55 +205,45 @@ namespace WebService.BOMock
         }
         #endregion
 
-        #region ITask.Game
+        #region ABCDPossibleAnswers
 
-        private IGame _game;
+        private EntitySet<ABCDPossibleAnswer> _abcdAnswersRefs;
 
-        public IGame Game
+        [Association(Name = "FK_Game_ABCDAnswers", Storage = "_abcdAnswersRefs", ThisKey = "Id", OtherKey = "TaskId")]
+        public EntitySet<ABCDPossibleAnswer> ABCDPossibleAnswers
         {
-            get
-            {
-                return _game;
-            }
-            set
-            {
-                if (_game != value)
-                {
-                    NotifyPropertyChanging("Game");
-                    _game = value;
-                    NotifyPropertyChanged("Game");
-                }
-            }
-        }
-        #endregion
-
-        #region ITask.ABCDPossibleAnswers
-
-        private IEntityEnumerable<IABCDPossibleAnswer> _abcdPossibleAnswers;
-
-        public IEntityEnumerable<IABCDPossibleAnswer> ABCDPossibleAnswers
-        {
-            get
-            {
-                return _abcdPossibleAnswers;
-            }
+            get { return _abcdAnswersRefs; }
         }
 
-        private void OnAnswerAdded(ABCDPossibleAnswerMock answer)
+        private void OnABCDAnswerAdded(ABCDPossibleAnswer answer)
         {
             answer.Task = this;
         }
 
-        private void OnAnswerRemoved(ABCDPossibleAnswerMock answer)
+        private void OnABCDAnswerRemoved(ABCDPossibleAnswer answer)
         {
             answer.Task = null;
         }
+
+        #endregion
+
+        #region ITask.ABCDPossibleAnswers
+
+        IEntityEnumerable<IABCDPossibleAnswer> ITask.ABCDPossibleAnswers
+        {
+            get 
+            { 
+                return new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswer>(_abcdAnswersRefs); 
+            }
+        }
+
         #endregion
 
         #region Picture
 
         private string _picture;
 
+        [Column]
         public string Picture
         {
             get
@@ -196,6 +266,7 @@ namespace WebService.BOMock
 
         private SolutionStatus _solutionStatus;
 
+        [Column]
         public SolutionStatus SolutionStatus
         {
             get
@@ -218,6 +289,7 @@ namespace WebService.BOMock
 
         private bool _isRepeatable;
 
+        [Column]
         public bool IsRepeatable
         {
             get
@@ -240,6 +312,7 @@ namespace WebService.BOMock
 
         private bool _isCancelled;
 
+        [Column(DbType = "bit DEFAULT 0 NOT NULL")]
         public bool IsCancelled
         {
             get
@@ -262,6 +335,7 @@ namespace WebService.BOMock
 
         private int? _userPoints;
 
+        [Column]
         public int? UserPoints
         {
             get
@@ -284,6 +358,7 @@ namespace WebService.BOMock
 
         private int _maxPoints;
 
+        [Column]
         public int MaxPoints
         {
             get
@@ -306,6 +381,7 @@ namespace WebService.BOMock
 
         private DateTime? _endDate;
 
+        [Column]
         public DateTime? EndDate
         {
             get
@@ -328,6 +404,7 @@ namespace WebService.BOMock
 
         private int _version;
 
+        [Column]
         public int Version
         {
             get
