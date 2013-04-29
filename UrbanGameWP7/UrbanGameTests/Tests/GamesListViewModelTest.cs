@@ -13,7 +13,7 @@ using UrbanGameTests.Mocks;
 
 namespace UrbanGameTests.Tests
 {
-    //[TestClass]
+    [TestClass]
     public class GamesListViewModelTest
     {
         #region CreateTestGame
