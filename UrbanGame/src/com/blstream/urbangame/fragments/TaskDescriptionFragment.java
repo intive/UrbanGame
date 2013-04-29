@@ -54,6 +54,7 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 		
 		long taskID = getSelectedTaskID();
 		this.awardedPoints = getPlayerAwardedPoints(taskID);
+		this.task = databaseInterface.getTask(taskID);
 	}
 	
 	/*

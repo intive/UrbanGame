@@ -19,13 +19,6 @@ import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.example.ExampleData;
 
-/**
- * WARNING!
- * 
- * This test requires commenting line no 26 in {#link ActiveTaskActivity}
- * //getSupportActionBar().setDisplayHomeAsUpEnabled(true); because action bas
- * is not supported during tests
- */
 public class ActiveTaskActivityTest extends ActivityUnitTestCase<ActiveTaskActivity> {
 	private DatabaseInterface database;
 	private Player player;
@@ -56,6 +49,14 @@ public class ActiveTaskActivityTest extends ActivityUnitTestCase<ActiveTaskActiv
 		initializeFragment();
 	}
 	
+	public void initDB() {
+		database.insertUser(player);
+		database.setLoggedPlayer(player.getEmail());
+		database.insertGameInfo(urbanGame);
+		database.insertTaskForGame(urbanGame.getID(), abcdTask);
+		database.insertPlayerTaskSpecific(playerTaskSpecific);
+	}
+	
 	private void initializeFragment() {
 		startActivity();
 		FragmentActivity activity = getActivity();
@@ -65,21 +66,6 @@ public class ActiveTaskActivityTest extends ActivityUnitTestCase<ActiveTaskActiv
 		fragmentView = fragment.onCreateView(activity.getLayoutInflater(),
 			(ViewGroup) getActivity().findViewById(R.layout.tabhost_layout), null);
 		fragment.onViewCreated(fragmentView, null);
-	}
-	
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-		context.deleteDatabase(Database.DATABASE_NAME);
-		database = null;
-	}
-	
-	public void initDB() {
-		database.insertUser(player);
-		database.setLoggedPlayer(player.getEmail());
-		database.insertGameInfo(urbanGame);
-		database.insertTaskForGame(urbanGame.getID(), abcdTask);
-		database.insertPlayerTaskSpecific(playerTaskSpecific);
 	}
 	
 	private void startActivity() {
@@ -101,15 +87,24 @@ public class ActiveTaskActivityTest extends ActivityUnitTestCase<ActiveTaskActiv
 	}
 	
 	public void testTaskRepeatable() {
-		assertEquals(abcdTask.isRepetable() ? "repeatable" : "", getTextViewText(R.id.textViewIsTaskRepeatable));
+		assertEquals(
+			abcdTask.isRepetable() ? context.getString(R.string.label_taksRepeatable)
+				: context.getString(R.string.string_empty), getTextViewText(R.id.textViewIsTaskRepeatable));
 	}
 	
 	public void testTaskPoints() {
-		assertEquals(playerTaskSpecific.getPoints() + "/" + abcdTask.getMaxPoints(),
+		assertEquals(playerTaskSpecific.getPoints() + context.getString(R.string.slash) + abcdTask.getMaxPoints(),
 			getTextViewText(R.id.textViewTaskPoints));
 	}
 	
 	private String getTextViewText(int textViewId) {
 		return ((TextView) fragmentView.findViewById(textViewId)).getText().toString();
+	}
+	
+	@Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		context.deleteDatabase(Database.DATABASE_NAME);
+		database = null;
 	}
 }

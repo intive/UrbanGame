@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -26,9 +27,16 @@ public class ActiveTaskActivity extends SherlockFragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabhost_layout);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
+		configureActionBar();
 		setUpTabHost(savedInstanceState);
+	}
+	
+	private void configureActionBar() {
+		ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
 	}
 	
 	private void setUpTabHost(Bundle savedInstanceState) {
