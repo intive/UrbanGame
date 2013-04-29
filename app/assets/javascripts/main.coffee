@@ -1,5 +1,4 @@
-app = angular.module('web', ['ui', 'ui.bootstrap'])
-angularUi = angular.module('angularUi', ['ui'])
+app = angular.module 'web', ['ui.bootstrap','ui']
 
 app.config ['$routeProvider', '$locationProvider', ($routeProvider, $location) ->
 
@@ -8,5 +7,3 @@ app.config ['$routeProvider', '$locationProvider', ($routeProvider, $location) -
     $routeProvider.when('/games/my', {template: 'mygames.scaml', controller: 'myGamesCtrl'})
     $routeProvider.when('/games/archive')
 ]
-
-

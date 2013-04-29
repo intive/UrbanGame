@@ -21,6 +21,8 @@ app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', ($
         {no: 3, name: 'Skin'},
         {no: 4, name: 'Publish'}
     ]
+	
+
     
     $scope.selection = $scope.steps[0]
 
@@ -66,4 +68,7 @@ app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', ($
     $scope.publishit = ->
         $scope.saveit()
         alert "and published too"
+		
+	
 ]
+   

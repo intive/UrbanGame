@@ -1,5 +1,6 @@
 login.login = Login
 login.password = Password
+dateformat = "yy-dd-mm"
 
 general.archive = Archive
 general.options = Options
@@ -25,23 +26,23 @@ newgame.gamelocationlabel = game location:*
 newgame.gamestartlabel = start time/date:*
 newgame.gameendlabel = end time/date:*
 newgame.gameplayersnumlabel = number of players:
-newgame.gamestrategylabel = winning strategy*:
 newgame.gamedifflabel = level of difficulty:
 newgame.gametype1 = Gather as many points as possible.
 newgame.gametype2 = Solve all tasks in shortest time. 
 
 
-newgame.ttgamename = *I'm a tooltip!*
-newgame.ttgamedesc =
-newgame.ttgamestrategy =  
-newgame.ttgameawards = 
-newgame.ttgametype1 = 
-newgame.ttgametype2 = 
-newgame.ttgamelocation = 
-newgame.ttgamestart = 
-newgame.ttgameend = 
-newgame.ttgameplayersnum = 
-newgame.ttgamediff = 
+newgame.ttgamename = *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! 
+newgame.ttgamedesc = x
+newgame.ttgameawards = x
+newgame.ttgametype1 = x
+newgame.ttgametype2 = x
+newgame.ttgamelocation = x
+newgame.ttgamestarttime = x
+newgame.ttgamestartdate = x
+newgame.ttgameendtime = x
+newgame.ttgameenddate = x
+newgame.ttgameplayersnum = x
+newgame.ttgamediff = x
 
 mygames.icon = Icon
 mygames.data = Data
