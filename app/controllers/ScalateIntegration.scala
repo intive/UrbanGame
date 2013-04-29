@@ -58,11 +58,11 @@ object Scalate {
       import scala.language.postfixOps
 
       ScalateContent{
-        implicit val extraBindings: Traversable[Binding] = Traversable(Binding(name="lan", className="play.api.i18n.Lang", isImplicit=true))
+        //implicit val extraBindings: Traversable[Binding] = Traversable(Binding(name="lan", className="play.api.i18n.Lang", isImplicit=true))
     
         scalateEngine.layout(name, args.map {
           case (k, v) => k.name -> v
-        }toMap, extraBindings)
+        }toMap)
       }
     }
   }
