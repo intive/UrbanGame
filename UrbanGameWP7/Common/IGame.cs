@@ -59,6 +59,6 @@ namespace Common
 
         string Prizes { get; set; }
 
-        IList<ITask> TasksList { get; }
+        IEntityEnumerable<ITask> Tasks { get; }
     }
 }

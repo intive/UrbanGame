@@ -43,6 +43,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="system.data.linq" />
     <Reference Include="System.Device" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
@@ -53,6 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizeState.cs" />
+    <Compile Include="Collections\IEntityEnumerable.cs" />
+    <Compile Include="Collections\EntityEnumerable.cs" />
     <Compile Include="GameChangedEvent.cs" />
     <Compile Include="GameType.cs" />
     <Compile Include="GameDifficulty.cs" />
@@ -77,6 +80,12 @@
     <Compile Include="Tasks\TaskType.cs" />
     <Compile Include="WebEnum.cs" />
     <Compile Include="WebException.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Games\" />
+    <Folder Include="Storage\" />
+    <Folder Include="Utilities\" />
+    <Folder Include="WebService\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />

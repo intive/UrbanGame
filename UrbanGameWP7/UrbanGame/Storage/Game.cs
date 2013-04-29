@@ -522,13 +522,12 @@ namespace UrbanGame.Storage
 
         #endregion
 
-        #region TasksList - IGame
-
-        public IList<ITask> TasksList
+        #region IGame.Tasks
+        IEntityEnumerable<ITask> IGame.Tasks
         {
             get
             {
-                return _taskRefs.Cast<ITask>().ToList();
+                return new EntityEnumerable<ITask, GameTask>(_taskRefs);
             }
         }
         #endregion

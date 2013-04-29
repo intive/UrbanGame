@@ -97,13 +97,18 @@ namespace UrbanGame.Storage
         }
         #endregion
 
-        #region AssignedGame - ITask
+        #region ITask.Game
 
-        public IGame AssignedGame
+        IGame ITask.Game
         {
             get
             {
                 return Game;
+            }
+
+            set
+            {
+                Game = (Game)value;
             }
         }
         #endregion
@@ -222,11 +227,14 @@ namespace UrbanGame.Storage
 
         #endregion
 
-        #region ABCDPossibleAnswersList - ITask
+        #region ITask.ABCDPossibleAnswers
 
-        public IList<IABCDPossibleAnswer> ABCDPossibleAnswersList
+        IEntityEnumerable<IABCDPossibleAnswer> ITask.ABCDPossibleAnswers
         {
-            get { return _abcdAnswersRefs.Cast<IABCDPossibleAnswer>().ToList(); }
+            get 
+            { 
+                return new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswer>(_abcdAnswersRefs); 
+            }
         }
 
         #endregion

@@ -30,35 +30,24 @@ namespace WebService.BOMock
         }
         #endregion
 
-        #region TaskId
+        #region IABCDPossibleAnswer.Task
 
-        private int? _taskId;
+        private ITask _task;
 
-        public int? TaskId
+        public ITask Task
         {
             get
             {
-                return _taskId;
+                return _task;
             }
             set
             {
-                if (_taskId != value)
+                if (_task != value)
                 {
-                    NotifyPropertyChanging("TaskId");
-                    _taskId = value;
-                    NotifyPropertyChanged("TaskId");
+                    NotifyPropertyChanging("Task");
+                    _task = value;
+                    NotifyPropertyChanged("Task");
                 }
-            }
-        }
-        #endregion
-
-        #region AssignedTask - IABCDPossibleAnswer
-
-        public ITask AssignedTask
-        {
-            get
-            {
-                return null;
             }
         }
         #endregion

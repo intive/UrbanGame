@@ -115,7 +115,7 @@ namespace WebService
         #region GetTasks
         public ITask[] GetTasks(int gid)
         {
-            return ListOfTasks.Where(task => task.AssignedGame == null ? false : task.AssignedGame.Id == gid).ToArray();
+            return ListOfTasks.Where(task => task.Game == null ? false : task.Game.Id == gid).ToArray();
         }
         #endregion
 

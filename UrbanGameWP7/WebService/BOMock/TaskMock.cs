@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Common;
+using System.Data.Linq;
 
 namespace WebService.BOMock
 {
     public class TaskMock : BOBase,  ITask
     {
+        public TaskMock()
+        {
+            EntitySet<ABCDPossibleAnswerMock> es = new EntitySet<ABCDPossibleAnswerMock>(OnAnswerAdded, OnAnswerRemoved);
+            _abcdPossibleAnswers =  new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswerMock>(es);
+        }
+
         #region Id
 
         private int _id;
@@ -118,26 +125,49 @@ namespace WebService.BOMock
         }
         #endregion
 
-        #region AssignedGame - ITask
+        #region ITask.Game
 
-        public IGame AssignedGame
+        private IGame _game;
+
+        public IGame Game
         {
             get
             {
-                return null;
+                return _game;
+            }
+            set
+            {
+                if (_game != value)
+                {
+                    NotifyPropertyChanging("Game");
+                    _game = value;
+                    NotifyPropertyChanged("Game");
+                }
             }
         }
         #endregion
 
-        #region ABCDPossibleAnswersList - ITask
+        #region ITask.ABCDPossibleAnswers
 
-        private IList<IABCDPossibleAnswer> _abcdPossibleAnswersList = new List<IABCDPossibleAnswer>();
+        private IEntityEnumerable<IABCDPossibleAnswer> _abcdPossibleAnswers;
 
-        public IList<IABCDPossibleAnswer> ABCDPossibleAnswersList 
+        public IEntityEnumerable<IABCDPossibleAnswer> ABCDPossibleAnswers
         {
-            get { return _abcdPossibleAnswersList; }
+            get
+            {
+                return _abcdPossibleAnswers;
+            }
         }
 
+        private void OnAnswerAdded(ABCDPossibleAnswerMock answer)
+        {
+            answer.Task = this;
+        }
+
+        private void OnAnswerRemoved(ABCDPossibleAnswerMock answer)
+        {
+            answer.Task = null;
+        }
         #endregion
 
         #region Picture

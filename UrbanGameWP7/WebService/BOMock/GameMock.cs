@@ -4,11 +4,17 @@ using System.Linq;
 using System.Text;
 using Common;
 using System.Device.Location;
+using System.Data.Linq;
 
 namespace WebService.BOMock
 {
     public class GameMock : BOBase, IGame
-    {        
+    {
+        public GameMock()
+        {
+            _tasks = new EntityEnumerable<ITask, TaskMock>(new EntitySet<TaskMock>(OnTaskAdded, OnTaskRemoved));
+        }
+
         #region Id
 
         private int _id;
@@ -471,16 +477,26 @@ namespace WebService.BOMock
         }
         #endregion
 
-        #region TasksList - IGame
+        #region IGame.Tasks
 
-        private IList<ITask> _tasksList = new List<ITask>();
+        private IEntityEnumerable<ITask> _tasks;
 
-        public IList<ITask> TasksList
+        public IEntityEnumerable<ITask> Tasks
         {
             get
             {
-                return _tasksList;
+                return _tasks;
             }
+        }
+
+        private void OnTaskAdded(TaskMock task)
+        {
+            task.Game = this;
+        }
+
+        private void OnTaskRemoved(TaskMock task)
+        {
+            task.Game = null;
         }
         #endregion
     }

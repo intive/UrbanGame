@@ -9,6 +9,6 @@ namespace Common
     {
         string Answer { get; set; }
 
-        ITask AssignedTask { get; }
+        ITask Task { get; set; }
     }
 }

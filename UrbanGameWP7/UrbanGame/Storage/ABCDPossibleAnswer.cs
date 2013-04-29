@@ -92,13 +92,18 @@ namespace UrbanGame.Storage
         }
         #endregion
 
-        #region AssignedTask - IABCDPossibleAnswer
+        #region IABCDPossibleAnswer.Task
 
-        public ITask AssignedTask
+        ITask IABCDPossibleAnswer.Task
         {
             get
             {
                 return Task;
+            }
+
+            set
+            {
+                Task = (GameTask)value;
             }
         }
         #endregion

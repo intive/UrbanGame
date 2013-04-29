@@ -83,8 +83,6 @@ namespace UrbanGame.ViewModels
 
         #region IsAuthorized
 
-        private bool _isAuthorized;
-
         public bool IsAuthorized
         {
             get
@@ -95,7 +93,6 @@ namespace UrbanGame.ViewModels
         }
 
         #endregion
-
 
         #region UserActiveGames
 
@@ -291,9 +288,9 @@ namespace UrbanGame.ViewModels
         }
 
 
-        public void RefreshUserGames()
+        public async Task RefreshUserGames()
         {
-            Task.Factory.StartNew(() =>
+            await Task.Factory.StartNew(() =>
             {
                 UserActiveGames.Clear();
                 UserInactiveGames.Clear();

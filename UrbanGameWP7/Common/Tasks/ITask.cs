@@ -20,9 +20,9 @@ namespace Common
 
         string AdditionalText { get; set; }
 
-        IList<IABCDPossibleAnswer> ABCDPossibleAnswersList { get; }
+        IEntityEnumerable<IABCDPossibleAnswer> ABCDPossibleAnswers { get; }
 
-        IGame AssignedGame { get; }
+        IGame Game { get; set; }
 
         string Picture { get; set; }
 
