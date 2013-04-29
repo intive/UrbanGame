@@ -1,5 +1,5 @@
-app = angular.module('web', ['ui.bootstrap'])
-angularUi = angular.module('angularUi', ['ui'])
+app = angular.module 'web', ['ui.bootstrap','ui']
+
 
 
 app.config ['$routeProvider', '$locationProvider', ($routeProvider, $location) ->
@@ -9,7 +9,7 @@ app.config ['$routeProvider', '$locationProvider', ($routeProvider, $location) -
     $routeProvider.when('/games/my', {template: 'mygames.scaml', controller: 'myGamesCtrl'})
     $routeProvider.when('/games/archive')
 ]
-###
+
 app.directive 'activeLink', ['$location', ($location) ->
     return {
         restrict: 'A',
@@ -26,7 +26,7 @@ app.directive 'activeLink', ['$location', ($location) ->
                     element.removeClass(clazz)
 
     }
-]###
+]
 
 app.controller 'topMenuCtrl', ['$scope', '$rootScope', '$location', ($scope, $rootScope, $location) ->
     $rootScope.location = window.location.pathname

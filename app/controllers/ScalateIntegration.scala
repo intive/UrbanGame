@@ -53,7 +53,7 @@ object Scalate {
             ScalateContent{
                 scalateEngine.layout(name, args.map {
                     case (k, v) => k.name -> v
-                } toMap)
+                } .toMap)
             }
         }
     }
