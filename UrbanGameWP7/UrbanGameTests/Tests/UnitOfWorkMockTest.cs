@@ -27,14 +27,14 @@ namespace UrbanGameTests.Tests
 
             //inserting
             gameRepo.MarkForAdd(game);
-            Assert.AreEqual(gameRepo.All().Count(), 0);
+            Assert.AreEqual(0, gameRepo.All().Count());
             unitOfWork.Commit();
-            Assert.AreEqual(gameRepo.All().Count(), 1);
+            Assert.AreEqual(1, gameRepo.All().Count());
 
             taskRepo.MarkForAdd(task);
-            Assert.AreEqual(taskRepo.All().Count(), 0);
+            Assert.AreEqual(0, taskRepo.All().Count());
             unitOfWork.Commit();
-            Assert.AreEqual(taskRepo.All().Count(), 1);
+            Assert.AreEqual(1, taskRepo.All().Count());
 
             //checking if getting table again returns the same table
             Assert.IsTrue(unitOfWork.GetRepository<IGame>().All().Any(g => g.Id == 1));
@@ -42,19 +42,19 @@ namespace UrbanGameTests.Tests
 
             //deleting
             gameRepo.MarkForDeletion(game);
-            Assert.AreEqual(gameRepo.All().Count(), 1);
+            Assert.AreEqual(1, gameRepo.All().Count());
             unitOfWork.Commit();
-            Assert.AreEqual(gameRepo.All().Count(), 0);
+            Assert.AreEqual(0, gameRepo.All().Count());
 
             taskRepo.MarkForDeletion(task);
-            Assert.AreEqual(taskRepo.All().Count(), 1);
+            Assert.AreEqual(1, taskRepo.All().Count());
             unitOfWork.Commit();
-            Assert.AreEqual(taskRepo.All().Count(), 0);
+            Assert.AreEqual(0, taskRepo.All().Count());
 
             //deleting & inserting           
             gameRepo.MarkForAdd(game);
             unitOfWork.Commit();
-            Assert.AreEqual(gameRepo.All().Count(), 1);
+            Assert.AreEqual(1, gameRepo.All().Count());
 
             //before submit
             gameRepo.MarkForAdd(game2);
@@ -64,27 +64,27 @@ namespace UrbanGameTests.Tests
 
             //after submit
             unitOfWork.Commit();
-            Assert.AreEqual(gameRepo.All().Count(), 1);
+            Assert.AreEqual(1, gameRepo.All().Count());
             Assert.IsTrue(gameRepo.All().Contains(game2));
             Assert.IsFalse(gameRepo.All().Contains(game));
 
             gameRepo.MarkForDeletion(game2);
             unitOfWork.Commit();
-            Assert.AreEqual(gameRepo.All().Count(), 0);
+            Assert.AreEqual(0, gameRepo.All().Count());
 
             //multiple insert
             gameRepo.MarkForAdd(game);
             gameRepo.MarkForAdd(game2);
-            Assert.AreEqual(gameRepo.All().Count(), 0);
+            Assert.AreEqual(0, gameRepo.All().Count());
             unitOfWork.Commit();
-            Assert.AreEqual(gameRepo.All().Count(), 2);
+            Assert.AreEqual(2, gameRepo.All().Count());
 
             //multiple delete
             gameRepo.MarkForDeletion(game);
             gameRepo.MarkForDeletion(game2);
-            Assert.AreEqual(gameRepo.All().Count(), 2);
+            Assert.AreEqual(2, gameRepo.All().Count());
             unitOfWork.Commit();
-            Assert.AreEqual(gameRepo.All().Count(), 0);
+            Assert.AreEqual(0, gameRepo.All().Count());
         }
         #endregion
     }

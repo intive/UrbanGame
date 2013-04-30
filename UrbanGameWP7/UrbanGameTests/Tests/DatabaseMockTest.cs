@@ -25,14 +25,14 @@ namespace UrbanGameTests.Tests
 
             //inserting
             gameTable.InsertOnSubmit(game);
-            Assert.AreEqual(gameTable.All().Count(), 0);
+            Assert.AreEqual(0, gameTable.All().Count());
             database.SubmitAllChanges();
-            Assert.AreEqual(gameTable.All().Count(), 1);
+            Assert.AreEqual(1, gameTable.All().Count());
 
             taskTable.InsertOnSubmit(task);
-            Assert.AreEqual(taskTable.All().Count(), 0);
+            Assert.AreEqual(0, taskTable.All().Count());
             database.SubmitAllChanges();
-            Assert.AreEqual(taskTable.All().Count(), 1);
+            Assert.AreEqual(1, taskTable.All().Count());
 
             //checking if getting table again returns the same table
             Assert.IsTrue(database.GetTable<IGame>().All().Any(g => g.Id == 1));
@@ -40,19 +40,19 @@ namespace UrbanGameTests.Tests
 
             //deleting
             gameTable.DeleteOnSubmit(game);
-            Assert.AreEqual(gameTable.All().Count(), 1);
+            Assert.AreEqual(1, gameTable.All().Count());
             database.SubmitAllChanges();
-            Assert.AreEqual(gameTable.All().Count(), 0);
+            Assert.AreEqual(0, gameTable.All().Count());
 
             taskTable.DeleteOnSubmit(task);
-            Assert.AreEqual(taskTable.All().Count(), 1);
+            Assert.AreEqual(1, taskTable.All().Count());
             database.SubmitAllChanges();
-            Assert.AreEqual(taskTable.All().Count(), 0);
+            Assert.AreEqual(0, taskTable.All().Count());
 
             //deleting & inserting           
             gameTable.InsertOnSubmit(game);
             database.SubmitAllChanges();
-            Assert.AreEqual(gameTable.All().Count(), 1);
+            Assert.AreEqual(1, gameTable.All().Count());
 
             //before submit
             gameTable.InsertOnSubmit(game2);
@@ -62,26 +62,26 @@ namespace UrbanGameTests.Tests
 
             //after submit
             database.SubmitAllChanges();
-            Assert.AreEqual(gameTable.All().Count(), 1);
+            Assert.AreEqual(1, gameTable.All().Count());
             Assert.IsTrue(gameTable.All().Contains(game2));
             Assert.IsFalse(gameTable.All().Contains(game));
 
             gameTable.ClearTable();
-            Assert.AreEqual(gameTable.All().Count(), 0);
+            Assert.AreEqual(0, gameTable.All().Count());
 
             //multiple insert
             gameTable.InsertOnSubmit(game);
             gameTable.InsertOnSubmit(game2);
-            Assert.AreEqual(gameTable.All().Count(), 0);
+            Assert.AreEqual(0, gameTable.All().Count());
             database.SubmitAllChanges();
-            Assert.AreEqual(gameTable.All().Count(), 2);
+            Assert.AreEqual(2, gameTable.All().Count());
 
             //multiple delete
             gameTable.DeleteOnSubmit(game);
             gameTable.DeleteOnSubmit(game2);
-            Assert.AreEqual(gameTable.All().Count(), 2);
+            Assert.AreEqual(2, gameTable.All().Count());
             database.SubmitAllChanges();
-            Assert.AreEqual(gameTable.All().Count(), 0);
+            Assert.AreEqual(0, gameTable.All().Count());
         }
         #endregion
     }

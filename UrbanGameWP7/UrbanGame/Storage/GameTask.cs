@@ -209,7 +209,7 @@ namespace UrbanGame.Storage
 
         private EntitySet<ABCDPossibleAnswer> _abcdAnswersRefs;
 
-        [Association(Name = "FK_Game_ABCDAnswers", Storage = "_abcdAnswersRefs", ThisKey = "Id", OtherKey = "TaskId")]
+        [Association(Name = "FK_GameTask_ABCDAnswers", Storage = "_abcdAnswersRefs", ThisKey = "Id", OtherKey = "TaskId")]
         public EntitySet<ABCDPossibleAnswer> ABCDPossibleAnswers
         {
             get { return _abcdAnswersRefs; }
