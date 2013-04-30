@@ -45,25 +45,25 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 		mExpandableList.setOnChildClickListener(this);
 		
 		mArrayHeaders = new ArrayList<ExpandableListHeader>();
-		ArrayList<UrbanGameShortInfo> arrayChildren = new ArrayList<UrbanGameShortInfo>();
+		ArrayList<UrbanGameShortInfo> arrayChildren = new ArrayList<UrbanGameShortInfo>();	//FIXME change to class containing game after login
 		
 		Resources resources = getResources();
 		
 		ExpandableListHeader parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_active));
-		arrayChildren = mockData();
+		arrayChildren = mockData();			//FIXME - put active games here
 		parent.setArrayChildren(arrayChildren);
 		mArrayHeaders.add(parent);
 		
 		parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_observed));
-		arrayChildren = mockData();
+		arrayChildren = mockData();			//FIXME - put observed games here
 		parent.setArrayChildren(arrayChildren);
 		mArrayHeaders.add(parent);
 		
 		parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_ended));
-		arrayChildren = mockData();
+		arrayChildren = mockData();			//FIXME - put ended games here
 		parent.setArrayChildren(arrayChildren);
 		mArrayHeaders.add(parent);
 		
@@ -96,7 +96,7 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 		
 		for (int i = 0; i < 10; i++) {
 			map = new HashMap<String, String>();
-			map.put("game_name", "Krasnale Wroc�awskie");
+			map.put("game_name", "Krasnale Wrocławskie");
 			map.put("operator_name", "BLStream");
 			map.put("location", "Wroclaw");
 			map.put("start_time", "Mon, Apr 1, 2013 9:00 AM");
@@ -135,13 +135,20 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 	public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
 		Intent intent;
 		ExpandableListHeader header = mArrayHeaders.get(groupPosition);
+		Bundle bundle = new Bundle();
+		UrbanGameShortInfo game = header.getArrayChildren().get(childPosition);	//FIXME change to class containing game after login
+		//Long selectedGameId = (game == null ? -1 : game.getID());	//FIXME uncomment when getID won't be null (class comes from database)
+		bundle.putLong(GameDetailsActivity.GAME_KEY, -1);
+		
 		if (header.getTitle().equals(getResources().getString(R.string.header_observed))) {
 			intent = new Intent(MyGamesActivity.this, GameDetailsActivity.class);
 		}
 		else {
 			intent = new Intent(MyGamesActivity.this, ActiveGameActivity.class);
 		}
-		//I haven't found how we pass game number
+		
+		intent.putExtras(bundle);
+		
 		startActivity(intent);
 		return false;
 	}
@@ -217,7 +224,7 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 		
 		@Override
 		public Object getChild(int groupPosition, int childPosition) {
-			UrbanGameShortInfo urbanGameShortInfo = mExpandableListHeader.get(groupPosition).getArrayChildren()
+			UrbanGameShortInfo urbanGameShortInfo = mExpandableListHeader.get(groupPosition).getArrayChildren() //FIXME change to class containing game after login
 				.get(childPosition);
 			return urbanGameShortInfo;
 		}
@@ -256,10 +263,12 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 			if (convertView == null) {
 				convertView = inflater.inflate(R.layout.list_item_game, parent, false);
 			}
-			
+			//FIXME change to class containing game after login
 			UrbanGameShortInfo gameItemInfo = (UrbanGameShortInfo) getChild(groupPosition, childPosition);
 			
-			//here put data from gameItemInfo into views
+			//FIXME here put data from gameItemInfo into views
+			((TextView) convertView.findViewById(R.id.textViewGameName)).setText(gameItemInfo.getTitle());
+			//The final view will be different so now I only set Title for example, another items will be set similary 
 			
 			return convertView;
 		}
@@ -280,7 +289,7 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 	private class ExpandableListHeader {
 		private String mTitle;
 		
-		private ArrayList<UrbanGameShortInfo> mArrayGameInfo;
+		private ArrayList<UrbanGameShortInfo> mArrayGameInfo; //FIXME change to class containing game after login
 		
 		public String getTitle() {
 			return mTitle;
@@ -290,10 +299,12 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 			this.mTitle = mTitle;
 		}
 		
+		//FIXME change to class containing game after login
 		public ArrayList<UrbanGameShortInfo> getArrayChildren() {
 			return mArrayGameInfo;
 		}
 		
+		//FIXME change to class containing game after login
 		public void setArrayChildren(ArrayList<UrbanGameShortInfo> mArrayGameInfo) {
 			this.mArrayGameInfo = mArrayGameInfo;
 		}
