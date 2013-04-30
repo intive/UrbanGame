@@ -44,7 +44,8 @@ namespace UrbanGameTests.Tests
         public async void UserGameListsTest()
         {
             #region preparing view model
-            IUnitOfWork unitOfWork = new UnitOfWork(new UrbanGameDataContext());
+            IDatabaseMock database = new DatabaseMock();
+            IUnitOfWork unitOfWork = new UnitOfWorkMock(database);
             IGameWebService webService = new GameWebServiceMock();
             IEventAggregator eventAgg = new EventAggregator();
             
@@ -59,7 +60,8 @@ namespace UrbanGameTests.Tests
             unitOfWork.GetRepository<IGame>().MarkForAdd(CreateTestGame(GameState.Ended, 3, "Hydrozagadka2"));
             unitOfWork.GetRepository<IGame>().MarkForAdd(CreateTestGame(GameState.None, 4, "Hydrozagadka2"));
             unitOfWork.Commit();
-            GamesListViewModel vm = new GamesListViewModel(null, () => new UnitOfWork(new UrbanGameDataContext()), webService, eventAgg, new AppbarManagerMock());
+            GamesListViewModel vm = new GamesListViewModel(null, () => new UnitOfWorkMock(database), 
+                                                           webService, eventAgg, new AppbarManagerMock());
             #endregion
 
             //when user is authorized
@@ -80,12 +82,14 @@ namespace UrbanGameTests.Tests
             await vm.RefreshUserGames();
 
             //description changes each time in mock-up WebService results
-            string oldDescription = unitOfWork.GetRepository<IGame>().All().First(g => g.Id == 3).Description; 
+            string oldDescription = unitOfWork.GetRepository<IGame>().All().First(g => g.Id == 3).Description;
+            Thread.Sleep(1000);
             eventAgg.Publish(new GameChangedEvent() { Id = 3 });
             Thread.Sleep(1000);
             Assert.AreNotEqual(vm.UserInactiveGames.First(g => g.Id == 3).Description, oldDescription);
 
             oldDescription = unitOfWork.GetRepository<IGame>().All().First(g => g.Id == 1).Description;
+            Thread.Sleep(1000);
             eventAgg.Publish(new GameChangedEvent() { Id = 1 });
             Thread.Sleep(1000);
             Assert.AreNotEqual(vm.UserActiveGames.First(g => g.Id == 1).Description, oldDescription);

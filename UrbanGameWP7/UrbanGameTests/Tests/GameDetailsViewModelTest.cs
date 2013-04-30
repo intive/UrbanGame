@@ -22,12 +22,13 @@ namespace UrbanGameTests.Tests
         public async void GameRefreshingTest()
         {
             #region preparing view model
-            IUnitOfWork unitOfWork = new UnitOfWork(new UrbanGameDataContext());
+            IDatabaseMock database = new DatabaseMock();
+            IUnitOfWork unitOfWork = new UnitOfWorkMock(database);
             IGameWebService webService = new GameWebServiceMock();
             IEventAggregator eventAgg = new EventAggregator();
 
             //removing current records
-            foreach (IGame g in unitOfWork.GetRepository<IGame>().All().ToList())
+            foreach (IGame g in unitOfWork.GetRepository<IGame>().All())
                 unitOfWork.GetRepository<IGame>().MarkForDeletion(g);
             unitOfWork.Commit();
 
@@ -50,7 +51,9 @@ namespace UrbanGameTests.Tests
             });
             unitOfWork.Commit();
 
-            GameDetailsViewModel vm = new GameDetailsViewModel(null, () => unitOfWork, webService, eventAgg,new AppbarManagerMock()) { GameId = 1 };
+            GameDetailsViewModel vm = 
+                new GameDetailsViewModel(null, () => new UnitOfWorkMock(database), 
+                                         webService, eventAgg, new AppbarManagerMock()) { GameId = 1 };
             #endregion
             
             //if user is unauthorized, then game should be downloaded from WebService
@@ -81,8 +84,7 @@ namespace UrbanGameTests.Tests
             unitOfWork.GetRepository<IGame>().All().First(g => g.Id == 1).Name = "Changed";
             unitOfWork.Commit();
             eventAgg.Publish(new GameChangedEvent() { Id = 1 });
-            Assert.AreEqual(vm.Game.Name, "Changed");
-            
+            Assert.AreEqual(vm.Game.Name, "Changed");            
         }
         
         #endregion

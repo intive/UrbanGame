@@ -19,10 +19,16 @@ namespace UrbanGame.Storage
     {
         public static string DBConnectionString = "Data Source=isostore:/UrbanGame.sdf";
 
-        public UrbanGameDataContext() : base(UrbanGameDataContext.DBConnectionString)
+        public UrbanGameDataContext()
+            : base(UrbanGameDataContext.DBConnectionString)
         {
             if (!DatabaseExists())
                 CreateDatabase();
+        }
+
+        public UrbanGameDataContext(string connectionString) 
+            : base(connectionString)
+        {            
         }
 
         public Table<Game> Games;
