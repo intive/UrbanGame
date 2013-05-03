@@ -30,6 +30,6 @@ namespace UrbanGame
             #endif    
         }        
 
-        public static IGameChangesManager GameChangesManager;
+        public static ITaskChangesManager GameChangesManager;
     }
 }

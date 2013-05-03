@@ -168,8 +168,8 @@
   <data name="Started" xml:space="preserve">
     <value>rozpoczęto</value>
   </data>
-  <data name="Undefinied" xml:space="preserve">
-    <value>nieokreślone</value>
+  <data name="AnswerGPS" xml:space="preserve">
+    <value>Jeśli uważasz, że znajdujesz się w odpowiednim miejscu, wyślij swoje koordynaty.</value>
   </data>
   <data name="About" xml:space="preserve">
     <value>o grze</value>
@@ -215,5 +215,20 @@
   </data>
   <data name="Leave" xml:space="preserve">
     <value>Opuść</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>wyślij</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>odpowiedź</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>opis</value>
+  </data>
+  <data name="ToEnd" xml:space="preserve">
+    <value>do końca</value>
+  </data>
+  <data name="Points" xml:space="preserve">
+    <value> punktów</value>
   </data>
 </root>
