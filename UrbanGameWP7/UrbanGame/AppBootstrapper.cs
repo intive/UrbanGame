@@ -23,9 +23,10 @@ namespace UrbanGame
             container.PerRequest<GameDetailsViewModel>();
             container.PerRequest<GamesListViewModel>();
             container.PerRequest<UrbanGameDataContext>();
+            container.PerRequest<TaskViewModel>();
             container.PerRequest<IUnitOfWork, UnitOfWork>();
             container.Singleton<IGameWebService, GameWebServiceMock>();
-            container.Singleton<IGameChangesManager, GameChangesManager>();
+            container.Singleton<ITaskChangesManager, GameChangesManager>();
             container.PerRequest<IAppbarManager, AppbarManager>();
         }
 
@@ -42,7 +43,7 @@ namespace UrbanGame
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
             base.OnStartup(sender, e);
-            App.GameChangesManager = IoC.Get<IGameChangesManager>();
+            App.GameChangesManager = IoC.Get<ITaskChangesManager>();
         }
 
         protected override void BuildUp(object instance)
