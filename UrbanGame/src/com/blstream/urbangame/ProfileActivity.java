@@ -110,13 +110,18 @@ public class ProfileActivity extends SherlockActivity {
 	protected void onResume() {
 		super.onResume();
 		
-		Player loggedPlayer = dbHelper.getPlayer(dbHelper.getLoggedPlayerID());
+		Player loggedPlayer = null;
+		String loggedPlayerID = dbHelper.getLoggedPlayerID();
+		
+		if (loggedPlayerID != null) {
+			loggedPlayer = dbHelper.getPlayer(loggedPlayerID);
+		}
 		
 		//restore avatar
 		if (avatarBitmap != null) {
 			imageViewProfileImage.setImageBitmap(avatarBitmap);
 		}
-		else if (loggedPlayer.getAvatarBase64() != null) {
+		else if (loggedPlayer != null && loggedPlayer.getAvatarBase64() != null) {
 			Drawable avatarDrawable = loggedPlayer.getAvatar(getResources());
 			imageViewProfileImage.setImageDrawable(avatarDrawable);
 		}
@@ -128,7 +133,7 @@ public class ProfileActivity extends SherlockActivity {
 		if (savedDisplayName != null) {
 			editTextDisplayName.setText(savedDisplayName);
 		}
-		else if (loggedPlayer.getDisplayName() != null) {
+		else if (loggedPlayer != null && loggedPlayer.getDisplayName() != null) {
 			editTextDisplayName.setText(loggedPlayer.getDisplayName());
 		}
 		else {
