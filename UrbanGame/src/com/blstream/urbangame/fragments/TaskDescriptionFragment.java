@@ -121,6 +121,7 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		if (task == null) return;
 		
 		taskTitle.setText(task.getTitle());
 		taskDescription.setText(task.getDescription());

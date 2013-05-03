@@ -28,7 +28,7 @@ public class DateUtil {
 	}
 	
 	private void calculateDifferences() {
-		long diff = dateNow.getTime() - endDate.getTime();
+		long diff = endDate.getTime() - dateNow.getTime();
 		
 		minutes = (int) (diff / MINUTE % 60);	// minutes left, which are not included in full hours
 		hours = (int) (diff / HOUR % 24);		// hours left, which are not included in full days

@@ -35,6 +35,11 @@
     <string name="menu_messages">Messages</string>
     <string name="menu_more">More</string>
     <string name="menu_alert">Alert</string>
+    <string-array name="menu_navigation_list">
+        <item >My games</item>
+        <item >All games</item>
+    </string-array>
+    
 
     <!-- GamesDetailsActivity -->
     <string name="label_winners">Winners:</string>
@@ -89,9 +94,14 @@
     <string name="label_taksRepeatable">repeatable</string>
 
     <!-- ProfileActivity -->
-    <string name="button_save">Save</string>
-    <string name="button_skip">Skip</string>
-
+	<string name="button_save">Save</string>
+	<string name="button_skip">Skip</string>
+	    
+	<!-- MyGamesActivity -->
+	<string name="header_active">Active</string>
+	<string name="header_ended">Ended</string>
+	<string name="header_observed">Observed</string>
+	
     <!-- Content descriptions -->
     <string name="contentDescription_gameLogo">Game logo</string>
     <string name="contentDescription_operatorLogo">Operator logo</string>

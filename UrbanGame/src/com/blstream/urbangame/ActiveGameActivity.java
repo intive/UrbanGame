@@ -56,8 +56,8 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 		tabManager.addTab(tabTasks, GameTasksFragment.class, extras);
 		
 		String tagRanking = getString(R.string.tab_game_ranking);
-		TabSpec tabRanging = tabHost.newTabSpec(TAG_TAB_RANKING).setIndicator(tagRanking);
-		tabManager.addTab(tabRanging, GameRankingFragment.class, extras);
+		TabSpec tabRanking = tabHost.newTabSpec(TAG_TAB_RANKING).setIndicator(tagRanking);
+		tabManager.addTab(tabRanking, GameRankingFragment.class, extras);
 	}
 	
 	@Override
