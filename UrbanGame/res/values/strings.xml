@@ -21,6 +21,10 @@
     <!-- TasksListActivity -->
     <string name="label_points2">" pts"</string>
     <string name="slash">/</string>
+    <string name="header_active_tasks">Active Tasks</string>
+    <string name="header_inactive_tasks">Inactive Tasks</string>
+    <string name="header_finished_tasks">Finished Tasks</string>
+    <string name="header_canceled_tasks">Canceled Tasks</string>
     <!-- ActionBar -->
     <string name="menu_search_hint">Filter games</string>
     <string name="menu_search">Search</string>
@@ -32,11 +36,11 @@
     <string name="menu_messages">Messages</string>
     <string name="menu_more">More</string>
     <string name="menu_alert">Alert</string>
+
     <string-array name="menu_navigation_list">
-        <item >My games</item>
-        <item >All games</item>
+        <item>My games</item>
+        <item>All games</item>
     </string-array>
-    
 
     <!-- GamesDetailsActivity -->
     <string name="label_winners">Winners:</string>
@@ -51,7 +55,7 @@
     <string name="dialog_join_title">Join to the game</string>
     <string name="dialog_join_message">Are you sure?</string>
     <string name="dialog_join_positive_button">Yes</string>
-    <string name="dialog_join_negative_button">No</string>  
+    <string name="dialog_join_negative_button">No</string>
 
     <!-- ActiveGameActivity -->
     <string name="tab_game_gameInfo">Game info</string>
@@ -63,14 +67,14 @@
     <string name="tab_task_answer">Answer</string>
 
     <!-- ProfileActivity -->
-	<string name="button_save">Save</string>
-	<string name="button_skip">Skip</string>
-	    
-	<!-- MyGamesActivity -->
-	<string name="header_active">Active</string>
-	<string name="header_ended">Ended</string>
-	<string name="header_observed">Observed</string>
-	
+    <string name="button_save">Save</string>
+    <string name="button_skip">Skip</string>
+
+    <!-- MyGamesActivity -->
+    <string name="header_active">Active</string>
+    <string name="header_ended">Ended</string>
+    <string name="header_observed">Observed</string>
+
     <!-- Content descriptions -->
     <string name="contentDescription_gameLogo">Game logo</string>
     <string name="contentDescription_operatorLogo">Operator logo</string>
@@ -81,8 +85,8 @@
     <string name="contentDescription_dividerHorizontalLine">Divider - horizontal line</string>
     <string name="contentDescription_taskImage">Image associated with this task</string>
     <string name="contentDescription_profileImage">Profile image</string>
-    
-    <!-- Logging in-->
+
+    <!-- Logging in -->
     <string name="hint_email">E-mail</string>
     <string name="hint_password">Password</string>
     <string name="checkbox_show_password">Show password</string>
@@ -91,8 +95,8 @@
     <string name="dialog_register_title">Account registered</string>
     <string name="dialog_register_message">An e-mail with verification link has been sent to E-mail</string>
     <string name="dialog_register_button_positive">OK</string>
-	<string name="invalid_data_tittle">Invalid data</string>
-	<string name="invalid_data_message">E-mail or password is incorrect</string>
-	<string name="invalid_data_button">OK</string>	
-	
+    <string name="invalid_data_tittle">Invalid data</string>
+    <string name="invalid_data_message">E-mail or password is incorrect</string>
+    <string name="invalid_data_button">OK</string>
+
 </resources>
