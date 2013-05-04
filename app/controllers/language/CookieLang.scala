@@ -14,26 +14,30 @@
  */
 package controllers
 
-import play.api._
-import play.api.mvc._
-import play.api.i18n._
-import play.api.Play.current
-import play.api.Logger
+import play.api.mvc.{Action, Controller}
+import play.api.i18n.Lang
 import play.api.data._
 import play.api.data.Forms._
+import play.api.Logger
+import play.api.Play.current
 
-object Application extends Controller with CookieLang {
-  
-  override protected val HOME_URL = "/"
-  
-  def index = Action { implicit request =>
-    Ok(Scalate("index").render('title -> "Urban Game"))
+trait CookieLang extends Controller {
+
+  val langform = Form("lang" -> nonEmptyText)
+
+  val changeLang = Action { implicit request =>
+    val referrer = request.headers.get(REFERER).getOrElse(HOME_URL)
+    langform.bindFromRequest.fold(
+      errors => {
+        Logger.logger.debug("The locale can not be change to : " + errors)
+        BadRequest(referrer)
+      },
+      lang => {
+        Logger.logger.debug("Change user lang to : " + lang)
+        Redirect(referrer).withLang(Lang(lang)) // TODO Check if the lang is handled by the application
+      }
+    )
   }
 
-  def logout = Action {
-    Ok(Scalate("logout").render('title -> "Urban Game - Logout"))
-  }
-
-  def dummyTestFunction(left: Int,right: Int):Int=left+right
-
+  protected val HOME_URL = "/"
 }
