@@ -71,4 +71,5 @@ app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', ($
 		
 	
 ]
-   
+$ ->
+    $("#locationInput").geocomplete types: ['(cities)']

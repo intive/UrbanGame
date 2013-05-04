@@ -82,3 +82,8 @@
     };
   }
 ]);
+$(function() {
+  return $("#locationInput").geocomplete({
+    types: ['(cities)']
+  });
+});

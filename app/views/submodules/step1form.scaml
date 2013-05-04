@@ -50,7 +50,7 @@
                 %label.slight-padding-top(for="gLocation")
                     %strong=Messages("newgame.gamelocationlabel")
                 .control
-                    %input.input-xlarge(type="text" maxlength="100" required name="gName" ng-model="game.location"  tooltip-animation="true" tooltip={Messages("newgame.ttgamelocation")} tooltip-placement="left")
+                    %input.input-xlarge(type="text" id="locationInput" maxlength="100" required name="gName" ng-model="game.location"  tooltip-animation="true" tooltip={Messages("newgame.ttgamelocation")} tooltip-placement="left")
                 %label(for="gStartTime")
                     %strong=Messages("newgame.gamestartlabel")
                 .controls-row()
