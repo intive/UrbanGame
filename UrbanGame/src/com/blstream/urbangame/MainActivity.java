@@ -28,7 +28,6 @@ public class MainActivity extends SherlockListActivity {
 		super.onCreate(savedInstanceState);
 		setSupportProgressBarVisibility(true);
 		mockData();
-		
 	}
 	
 	/************************
@@ -143,6 +142,5 @@ public class MainActivity extends SherlockListActivity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		return super.onMenuItemSelected(featureId, item);
-		
 	}
 }

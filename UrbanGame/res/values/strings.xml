@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">UrbanGameMock</string>
+    <string name="string_empty"></string>
 
     <!-- UrbanGameMockActivity -->
     <string name="button_games">Games</string>
@@ -18,9 +19,11 @@
     <string name="label_daysLeft">Days left:</string>
     <string name="label_hoursLeft">Hours left:</string>
     <string name="label_minutesLeft">Minutes left:</string>
+
     <!-- TasksListActivity -->
     <string name="label_points2">" pts"</string>
     <string name="slash">/</string>
+
     <!-- ActionBar -->
     <string name="menu_search_hint">Filter games</string>
     <string name="menu_search">Search</string>
@@ -51,7 +54,7 @@
     <string name="dialog_join_title">Join to the game</string>
     <string name="dialog_join_message">Are you sure?</string>
     <string name="dialog_join_positive_button">Yes</string>
-    <string name="dialog_join_negative_button">No</string>  
+    <string name="dialog_join_negative_button">No</string>
 
     <!-- ActiveGameActivity -->
     <string name="tab_game_gameInfo">Game info</string>
@@ -61,6 +64,34 @@
     <!-- ActiveTaskActivity -->
     <string name="tab_task_description">Description</string>
     <string name="tab_task_answer">Answer</string>
+
+    <!-- TaskDescriptionFragment -->
+    <string name="string_left">left</string>
+    <string name="string_noMoreTime">No more time</string>
+
+    <plurals name="numberOfYears">
+        <item quantity="one">one year</item>
+        <item quantity="other">%d years</item>
+    </plurals>
+    <plurals name="numberOfMonths">
+        <item quantity="one">one month</item>
+        <item quantity="other">%d months</item>
+    </plurals>
+    <plurals name="numberOfDays">
+        <item quantity="one">one day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="numberOfHours">
+        <item quantity="one">one hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="numberOfMinutes">
+        <item quantity="one">one minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+
+    <!-- Task -->
+    <string name="label_taksRepeatable">repeatable</string>
 
     <!-- ProfileActivity -->
 	<string name="button_save">Save</string>
@@ -81,8 +112,8 @@
     <string name="contentDescription_dividerHorizontalLine">Divider - horizontal line</string>
     <string name="contentDescription_taskImage">Image associated with this task</string>
     <string name="contentDescription_profileImage">Profile image</string>
-    
-    <!-- Logging in-->
+
+    <!-- Logging in -->
     <string name="hint_email">E-mail</string>
     <string name="hint_password">Password</string>
     <string name="checkbox_show_password">Show password</string>
