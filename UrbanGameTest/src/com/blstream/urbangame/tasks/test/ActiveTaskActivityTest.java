@@ -20,6 +20,7 @@ import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.example.ExampleData;
 
 public class ActiveTaskActivityTest extends ActivityUnitTestCase<ActiveTaskActivity> {
+	
 	private DatabaseInterface database;
 	private Player player;
 	private PlayerTaskSpecific playerTaskSpecific;
