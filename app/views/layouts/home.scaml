@@ -43,17 +43,16 @@
         #wrap
             .masthead
                 .row
-                    %h3.pull-left.offset1.logo LOGO
+                    %h3.pull-left.offset1.logo 
+                        %a(href="/") LOGO
                     .pull-right.loginform
-                        %form.navbar-form.pull-right
-                            %input.span2(type="text" placeholder={Messages("login.login")})
-                            %input.span2(type="text" placeholder={Messages("login.password")})
-                            %input.btn(type="submit" value={Messages("login.login")})
+                        %form.navbar-form.pull-right(action={routes.Application.login} method="post" name="loginForm")
+                            %input.span2(type="text" placeholder={Messages("login.name")(lan)} name="login")
+                            %input.span2(type="password" placeholder={Messages("login.password")(lan)} name="password")
+                            %input.btn(type="submit" value={Messages("login.login")(lan)})
                 .row.myheader
-                    .row
-                        Coś
-                    .row
-                        Coś
+                    .row.big-image
+                        BIG IMAGE HERE
 
             .container-narrow
                 .row-fluid

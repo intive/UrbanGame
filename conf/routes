@@ -5,12 +5,17 @@
 # Public
 GET     /                           controllers.Application.index
 GET     /logout                     controllers.Application.logout
-
+POST    /login                     	controllers.Application.login
+POST	/register					controllers.Application.register
 POST    /locale						controllers.Application.changeLang
 
 # Authenticated
-GET     /games/new					controllers.Games.newgame
-GET     /games/my					controllers.Games.mygames
+GET     /games/new					controllers.GamesCtrl.newgame
+GET     /games/my					controllers.GamesCtrl.mygames
+
+# Json
+GET     /games/list					controllers.GamesCtrl.getGamesList
+POST    /games/new					controllers.GamesCtrl.saveGame
 
 # Web Api resources
 GET     /api                        @controllers.WebApi.root

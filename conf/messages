@@ -1,5 +1,13 @@
-login.login = Login
+register.name = Name
+register.email = E-mail
+register.password = Password
+register.captcha = Enter the code
+register.submit = Register
+
+login.name = Login
 login.password = Password
+login.login = Login
+login.logout = Logout
 dateformat = "yy-dd-mm"
 
 general.archive = Archive

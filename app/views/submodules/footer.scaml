@@ -29,7 +29,7 @@
                 Lorem ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
 
     .span2.offset1
-        %form.form-vertical(action={routes.Application.changeLang} method="post" name="langform" class="css-form")
+        %form(action={routes.Application.changeLang} method="post" name="langform" class="css-form")
             %select(name="lang" id="chglang")
                 -play.api.i18n.Lang.availables(play.api.Play.current).map { lang =>
                     -if(lan.code == lang.code)
