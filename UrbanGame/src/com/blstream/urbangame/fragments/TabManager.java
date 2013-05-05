@@ -3,6 +3,7 @@ package com.blstream.urbangame.fragments;
 import java.util.HashMap;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -39,11 +40,13 @@ public class TabManager implements TabHost.OnTabChangeListener {
 	static final class TabInfo {
 		private final String tag;
 		private final Class<?> clss;
+		private final Bundle args;
 		private Fragment fragment;
 		
-		TabInfo(String tag, Class<?> clss) {
+		TabInfo(String tag, Class<?> clss, Bundle args) {
 			this.tag = tag;
 			this.clss = clss;
+			this.args = args;
 		}
 	}
 	
@@ -63,10 +66,10 @@ public class TabManager implements TabHost.OnTabChangeListener {
 		}
 	}
 	
-	public void addTab(TabHost.TabSpec tabSpec, Class<?> clss) {
+	public void addTab(TabHost.TabSpec tabSpec, Class<?> clss, Bundle args) {
 		tabSpec.setContent(new DummyTabFactory(activity));
 		String tag = tabSpec.getTag();
-		TabInfo newTabInfo = new TabInfo(tag, clss);
+		TabInfo newTabInfo = new TabInfo(tag, clss, args);
 		
 		// Check to see if we already have a fragment for this tab, probably
 		// from a previously saved state.  If so, deactivate it, because our
@@ -85,8 +88,10 @@ public class TabManager implements TabHost.OnTabChangeListener {
 	@Override
 	public void onTabChanged(String tabId) {
 		TabInfo newTabInfo = tabsMap.get(tabId);
-		if (lastTabInfo != newTabInfo) { // if tab is being switched
+		
+		if (lastTabInfo != newTabInfo) { // if tab has been switched
 			FragmentTransaction ft = fragmentManager.beginTransaction();
+			
 			if (lastTabInfo != null) {
 				if (lastTabInfo.fragment != null) {
 					ft.detach(lastTabInfo.fragment); // detach fragment if has been shown
@@ -94,7 +99,7 @@ public class TabManager implements TabHost.OnTabChangeListener {
 			}
 			if (newTabInfo != null) {
 				if (newTabInfo.fragment == null) {
-					newTabInfo.fragment = Fragment.instantiate(activity, newTabInfo.clss.getName(), null);
+					newTabInfo.fragment = Fragment.instantiate(activity, newTabInfo.clss.getName(), newTabInfo.args);
 					ft.add(containerId, newTabInfo.fragment, newTabInfo.tag);
 				}
 				else {
