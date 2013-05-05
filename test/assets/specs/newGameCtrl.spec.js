@@ -40,9 +40,6 @@ describe('Controllers', function() {
 			expect(scope.selection.no).toBe(2);
         });
 
-        it('should decrement steps', function() {
-			scope.decrementStep();
-			expect(scope.selection.no).toBe(1);
-        });
+        
     });
 });
