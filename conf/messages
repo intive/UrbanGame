@@ -1,6 +1,6 @@
 login.login = Login
 login.password = Password
-dateformat = "yy-dd-mm"
+dateformat = "yy-mm-dd"
 
 general.archive = Archive
 general.options = Options
@@ -44,6 +44,11 @@ newgame.ttgameenddate = x
 newgame.ttgameplayersnum = x
 newgame.ttgamediff = x
 
+newgame.gstarttimeerror = Wrong start time format or input is empty.
+newgame.gendtimeerror = Wrong end time format or input is empty.
+newgame.gstartdateerror = Wrong start date format or input is empty. Try using calendar to pick the date.
+newgame.genddateerror = Wrong end date format or input is empty. Try using calendar to pick the date.
+newgame.dateorderinvalid = Start date must be before end date.
 mygames.icon = Icon
 mygames.data = Data
 mygames.status = Status
