@@ -26,15 +26,15 @@ newgame.step3title = Step 3
 newgame.step4title = Step 4
 
 newgame.step1subtitle = Make your game easy to find. Complete the identity data of your game.
-newgame.gamenamelabel = game name:*
-newgame.gamedesclabel = game description:*
-newgame.gameawardslabel = game awards:
-newgame.gametypelabel = game type:*
-newgame.gamelocationlabel = game location:*
-newgame.gamestartlabel = start time/date:*
-newgame.gameendlabel = end time/date:*
-newgame.gameplayersnumlabel = number of players:
-newgame.gamedifflabel = level of difficulty:
+newgame.gamenamelabel = Game name
+newgame.gamedesclabel = Description
+newgame.gameawardslabel = Awards
+newgame.gametypelabel = Game type
+newgame.gamelocationlabel = Game location
+newgame.gamestartlabel = Start time/date
+newgame.gameendlabel = End time/date
+newgame.gameplayersnumlabel = Number of players
+newgame.gamedifflabel = Level of difficulty
 newgame.gametype1 = Gather as many points as possible.
 newgame.gametype2 = Solve all tasks in shortest time. 
 
@@ -52,6 +52,11 @@ newgame.ttgameenddate = x
 newgame.ttgameplayersnum = x
 newgame.ttgamediff = x
 
+newgame.gstarttimeerror = Wrong start time format or input is empty.
+newgame.gendtimeerror = Wrong end time format or input is empty.
+newgame.gstartdateerror = Wrong start date format or input is empty. Try using calendar to pick the date.
+newgame.genddateerror = Wrong end date format or input is empty. Try using calendar to pick the date.
+newgame.dateorderinvalid = Start date must be before end date.
 mygames.icon = Icon
 mygames.data = Data
 mygames.status = Status
