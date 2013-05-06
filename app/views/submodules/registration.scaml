@@ -1,19 +1,54 @@
 /
-	*Copyright 2013 BLStream, BLStream's Patronage Program Contributors
-	* 		 http://blstream.github.com/UrbanGame/
-	* 
-	* Licensed under the Apache License, Version 2.0 (the "License");
-	* you may not use this file except in compliance with the License.
-	* You may obtain a copy of the License at
-	* 		 http://www.apache.org/licenses/LICENSE-2.0
-	* 
-	* Unless required by applicable law or agreed to in writing, software
-	* distributed under the License is distributed on an "AS IS" BASIS,
-	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	* See the License for the specific language governing permissions and
-	* limitations under the License.
+    *Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+    *        http://blstream.github.com/UrbanGame/
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *        http://www.apache.org/licenses/LICENSE-2.0
+    * 
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+
+-import controllers._
+-import play.api.i18n.Messages
+-import play.api.i18n.Lang
+
+-@ val lan: Lang
 
 .row
-	UrbanGame application will be available here soon.
+    Register for free
+    %br/
+    The application is a web interface that allows to create a game. When the game is created, the organizer can add different tasks for players. We are assuming that many tasks will be related to position on the map and finding something in
 .row
-	REGISTRATION FORM
+    %form.form-horizontal(action={routes.Application.register} method="post" name="registration" class="css-form" id="registration")
+        .controls-row
+            .controls-group
+                %label.control-label = Messages("register.name")(lan)
+                .controls
+                    %input(type="text" name="name" id="name" placeholder={Messages("register.name")(lan)})
+            .controls-group
+                %label.control-label = Messages("register.email")(lan)
+                .controls
+                    %input(type="text" name="email" id="email" placeholder={Messages("register.email")(lan)})
+            .controls-group
+                %label.control-label = Messages("register.password")(lan)
+                .controls
+                    %input(type="password" name="password" id="password" placeholder={Messages("register.password")(lan)})
+            .controls-group
+                %label.control-label = Messages("register.captcha")(lan)
+                .controls
+                    %input(type="text" name="captcha" id="captcha" placeholder={Messages("register.captcha")(lan)})
+                    %img(src={routes.Assets.at("images/captcha.png")})
+            .controls-group
+                .controls
+                    %label.checkbox
+                        %input(type="checkbox" name="terms" id="terms") 
+                            I agree to 
+                            %a(href="") Terms of Service 
+                            and 
+                            %a(href="") Privacy Policy
+                    %input.btn.pull-right(type="submit" name="regbtn" id="regbtn" value={Messages("register.submit")(lan)})

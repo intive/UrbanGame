@@ -46,12 +46,12 @@
             .masthead
                 .row.pull-right.loginform
                     %form.navbar-form.pull-right
-                        %input.span2(type="text" placeholder={Messages("login.login")})
-                        %input.span2(type="text" placeholder={Messages("login.password")})
-                        %input.btn(type="submit" value={Messages("login.login")})
+                        You are logged in as SamplerUser
+                        %input.btn(type="submit" value={Messages("login.logout")(lan)})
                 .clearfix
                 .row.myheader
-                    %h3.offset1.logo LOGO
+                    %h3.offset1.logo 
+                        %a(href="/") LOGO
                     %ul.navbar
                         .navbar-inner
                             .container

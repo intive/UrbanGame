@@ -41,7 +41,6 @@ object Scalate {
     engine.resourceLoader = new FileResourceLoader(Some(Play.getFile("app/views")))
     engine.sourceDirectories = new File(path, "app") :: Nil
     engine.layoutStrategy = new DefaultLayoutStrategy(engine, "app/views/layouts/default." + format)
-    //engine.bindings = List(Binding(name="lan", className="play.api.i18n.Lang", importMembers=false, defaultValue=scala.None, kind="val", isImplicit=true, classNamePositional=scala.None, defaultValuePositional=scala.None))
     engine.classpath = "tmp/classes"
     engine.workingDirectory = Play.getFile("tmp")
     engine.combinedClassPath = true

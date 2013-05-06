@@ -16,22 +16,52 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import play.api.i18n._
+import play.api.db.slick.Config.driver.simple._
+import play.api.db.DB
+import scala.slick.session.Database
 import play.api.Play.current
-import play.api.Logger
+import models.mutils._
+import models.dal.Bridges._
 import play.api.data._
 import play.api.data.Forms._
 
 object Application extends Controller with CookieLang {
   
-  override protected val HOME_URL = "/"
-  
   def index = Action { implicit request =>
     Ok(Scalate("index").render('title -> "Urban Game"))
   }
 
+  val loginForm = Form(
+    tuple(
+      "login" -> nonEmptyText,
+      "password" -> nonEmptyText
+    )
+  )
+
+  def login = Action { implicit request =>
+    loginForm.bindFromRequest.fold(
+      errors => BadRequest(Scalate("index").render('title -> "Urban Game", 'errors -> errors)),
+      { case (login, password) => 
+          Redirect(routes.GamesCtrl.mygames)
+      }
+    )
+  }
+
   def logout = Action {
     Ok(Scalate("logout").render('title -> "Urban Game - Logout"))
+  }
+
+  import play.api.libs.json._
+  import play.api.libs.functional.syntax._
+  
+  def register = Action { implicit request =>
+    val od = OperatorsData(None, "op", "pass")
+
+    val opId = play.api.db.slick.DB.withSession { implicit session =>
+      Operators.createAccount(od)
+    }
+
+    Ok(Json.toJson(opId))
   }
 
   def dummyTestFunction(left: Int,right: Int):Int=left+right

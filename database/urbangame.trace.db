@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 05-04 10:09:08 jdbc[5]: exception
 org.h2.jdbc.JdbcSQLException: Tablela "PLAY_EVOLUTIONS" nie istnieje
 Table "PLAY_EVOLUTIONS" not found; SQL statement:
+=======
+05-05 22:51:33 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLException: Table "PLAY_EVOLUTIONS" not found; SQL statement:
+>>>>>>> angela/web
 select id, hash, apply_script, revert_script, state, last_problem from play_evolutions where state like 'applying_%' [42102-168]

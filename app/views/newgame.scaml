@@ -33,13 +33,6 @@
                     -render("submodules/step1form.scaml")
                 %div(ng-switch-when="2")
                     = Messages("newgame.step2title")
-                    .control-group
-                        %input(type="text" ng-model="user.name" name="uName" required)
-                        %input(type="email" ng-model="user.email" name="uEmail" required)
-                        %div(ng-show="form.uEmail.$dirty && form.uEmail.$invalid") 
-                            Invalid:
-                            %span(ng-show="form.uEmail.$error.required") Tell us your email.
-                            %span(ng-show="form.uEmail.$error.email") This is not a valid email.
                 %div(ng-switch-when="3")
                     = Messages("newgame.step3title")
                     %a(data-toggle="lightbox" href="#demoLightbox") Open Lightbox

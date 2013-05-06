@@ -38,6 +38,16 @@ html, body {
 	}
 }
 
+.myheader {
+	.navbar {
+		margin: 0;
+	}
+	.big-image {
+		text-align: center;
+		height: 200px;
+	}
+}
+
 #footer {
 	height: @hfooter;
 	background-color: @lightgray;
@@ -242,9 +252,24 @@ textarea {
 		font-weight: bold;
 	}
 }
+
+
+form#registration {
+	margin-top: @slightpadding * 2;
+
+	input#captcha {
+		width: 100px;
+	}
+}
+
+.row {
+	margin-left: 0;
+}
+
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
 }
+
 .form-style{
     border: 1px #b8b8b8 solid;
     border-radius: 5px;
