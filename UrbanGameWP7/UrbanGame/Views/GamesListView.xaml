@@ -45,7 +45,7 @@
                                                 <RowDefinition />
                                                 <RowDefinition />
                                             </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding GameName}" Grid.Row="0"/>
+                                            <TextBlock Text="{Binding Name}" Grid.Row="0"/>
                                             <StackPanel Orientation="Horizontal" Grid.Row="2">
                                                 <TextBlock Text="current rank: " />
                                                 <TextBlock Text="{Binding rank}" />
