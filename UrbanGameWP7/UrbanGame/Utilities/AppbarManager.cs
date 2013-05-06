@@ -52,16 +52,8 @@ namespace UrbanGame.Utilities
                    applicationBar.Buttons.Add(applicationBarButton);
                }
            }
-           InvokeAppbarBind();
+           ViewModelBinder.BindAppBar(GetPage());
         }
-
-        private void InvokeAppbarBind()
-        {
-            var binderType = typeof(ViewModelBinder);
-            var bindingMethod = binderType.GetMethod("BindAppBar", BindingFlags.NonPublic | BindingFlags.Static);
-            bindingMethod.Invoke(null, new object[]{GetPage()});
-        }
-
 
         public void HideAppbar()
         {
