@@ -13,14 +13,18 @@
  * limitations under the License.
 ###
 
-app = angular.module 'web', ['ui.bootstrap','ui']
+app = angular.module 'web', ['ui.bootstrap','ui', 'ngResource']
 
 app.config ['$routeProvider', '$locationProvider', ($routeProvider, $location) ->
 
     $routeProvider.when('/', {template: 'index.scaml'})
-    $routeProvider.when('/games/new', {template: 'newgame.scaml', controller: 'newGameCtrl'})
-    $routeProvider.when('/games/my', {template: 'mygames.scaml', controller: 'myGamesCtrl'})
-    $routeProvider.when('/games/archive')
+    $routeProvider.when('/my/games/new', {template: 'newgame.scaml', controller: 'newGameCtrl'})
+    $routeProvider.when('/my/games', {template: 'mygames.scaml', controller: 'myGamesCtrl'})
+    $routeProvider.when('/my/games/:gid')
+    $routeProvider.when('/my/games/:gid/tasks')
+    $routeProvider.when('/my/games/:gid/tasks/:tid')
+    $routeProvider.when('/my/games/archive')
+    $routeProvider.when('/my/profile')
 ]
 
 $("select#chglang").on('change', (newVal) ->
