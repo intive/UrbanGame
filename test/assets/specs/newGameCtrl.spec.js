@@ -42,12 +42,20 @@ describe('Controllers', function() {
 
         it('should increment players number', function() {
 			scope.game.playersNum=5;
+<<<<<<< HEAD
             scope.incrementPlayersNum();
+=======
+            scope.game.incrementPlayersNum();
+>>>>>>> 74cadb6821a4de823d7d7d3dceae83aeaf3a3671
 			expect(scope.game.playersNum).toBe(6);
         });
         
         it('should decrement players number', function() {
+<<<<<<< HEAD
 			scope.game.playersNum=5;
+=======
+			scope.game.playersNsum=5;
+>>>>>>> 74cadb6821a4de823d7d7d3dceae83aeaf3a3671
             scope.decrementPlayersNum();
 			expect(scope.game.playersNum).toBe(4);
         });
