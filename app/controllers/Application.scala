@@ -64,6 +64,41 @@ object Application extends Controller with CookieLang {
     Ok(Json.toJson(opId))
   }
 
-  def dummyTestFunction(left: Int,right: Int):Int=left+right
+  def fillDatabase = Action { implicit request =>
+    import scala.io._
+    import com.github.nscala_time.time.Imports._
+
+    val filepaths: List[String] = List("app/initData/games.txt","app/initData/operators.txt")
+    var cnt1 = 0
+    var cnt2 = 0
+        
+    play.api.db.slick.DB.withSession { implicit session =>
+      if (Operators.getRowsNo == 0) {
+        Source.fromFile(filepaths(1)).getLines.foreach { line => 
+          val splitted = line.split("::").map(_.toString)
+
+          val od = OperatorsData(None, splitted(0), splitted(1))
+
+          Operators.createAccount(od)
+          cnt2 = cnt2 + 1
+        }
+      }
+
+      if (Games.getRowsNo == 0) {
+        Source.fromFile(filepaths(0)).getLines.foreach { line => 
+          val splitted = line.split("::").map(_.toString)
+
+          val gd = GamesDetails(None, splitted(0), splitted(1).toInt, splitted(2), splitted(3), splitted(4).toInt, 
+            new DateTime(splitted(5)), new DateTime(splitted(6)), new DateTime(splitted(7)), new DateTime(splitted(8)), new DateTime(splitted(9)), 
+            splitted(10), splitted(11).toInt, splitted(12), splitted(13).toInt, splitted(14), splitted(15), splitted(16))
+
+          Games.createGame(gd)
+          cnt1 = cnt1 + 1
+        }
+      }
+    }
+
+    Ok("Inserted " + cnt1 + " games and " + cnt2 + " operators")
+  }
 
 }

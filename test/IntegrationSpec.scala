@@ -33,7 +33,7 @@ class IntegrationSpec extends Specification {
 
         browser.goTo("http://localhost:3333/")
 
-        browser.pageSource must contain("UrbanGame application will be available here soon.")
+        browser.pageSource must contain("Last created games")
        
       }
     }

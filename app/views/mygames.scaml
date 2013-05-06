@@ -1,68 +1,74 @@
 -#
-	*Copyright 2013 BLStream, BLStream's Patronage Program Contributors
-	* 		 http://blstream.github.com/UrbanGame/
-	* 
-	* Licensed under the Apache License, Version 2.0 (the "License");
-	* you may not use this file except in compliance with the License.
-	* You may obtain a copy of the License at
-	* 		 http://www.apache.org/licenses/LICENSE-2.0
-	* 
-	* Unless required by applicable law or agreed to in writing, software
-	* distributed under the License is distributed on an "AS IS" BASIS,
-	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	* See the License for the specific language governing permissions and
-	* limitations under the License.
+    *Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+    *        http://blstream.github.com/UrbanGame/
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *        http://www.apache.org/licenses/LICENSE-2.0
+    * 
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
 
 -import controllers._
 -import play.api.i18n.Messages
 
 - attributes("scripts") = capture
-	%script(src={uri("/assets/javascripts/controllers/myGamesCtrl.min.js")} type="text/javascript")
-	%script(src={uri("/assets/javascripts/services/Games.min.js")} type="text/javascript")
+    %script(src={uri("/assets/javascripts/controllers/myGamesCtrl.min.js")} type="text/javascript")
+    %script(src={uri("/assets/javascripts/services/Games.min.js")} type="text/javascript")
 
 .row.span12
-	%h3 = Messages("mygames.title")
-	%table#gamelist.table.table-hover
-		%thead
-			%tr
-				%td = Messages("mygames.icon")
-				%td = Messages("mygames.data")
-				%td = Messages("mygames.status")
-				%td = Messages("mygames.version")
-				%td = Messages("general.options")
-		%tbody(ng-controller="myGamesCtrl")
-			%tr(ng-repeat="game in games" ng-click="")
-				%td
-					%img(ng-src="/assets/images/{{game.icon}}")/
-				%td
-					.row
-						%h4 {{game.name | uppercase}}
-					.row
-						%span
-							= Messages("mygames.location")
-						{{game.location}}
-					.row
-						%span
-							= Messages("mygames.timestart")
-						{{game.startTime | date: 'dd MMM yyyy HH:mm'}} GMT{{game.startTime | date: 'Z'}}
-					.row
-						%span
-							= Messages("mygames.tasks")
-						{{game.tasksno}}
-				%td
-					.row
-						%span(class="{{game.status}}") {{game.status | uppercase}}
-					.row(ng-show="game.status == 'online'")
-						%p 
-							to END left
-							%br/
-							{{mtimeLeft[$index]}}
-					.row(ng-show="game.status == 'published'")
-						%p 
-							to START left
-							%br/
-							{{mtimeLeft[$index]}}
+    %h3 = Messages("mygames.title")
+    %table#gamelist.table.table-hover
+        %thead
+            %tr
+                %td = Messages("mygames.icon")
+                %td = Messages("mygames.data")
+                %td = Messages("mygames.status")
+                %td = Messages("mygames.version")
+                %td = Messages("general.options")
+        %tbody(ng-controller="myGamesCtrl")
+            %tr(ng-repeat="game in games" ng-click="showDetails($index)")
+                %td
+                    %img(ng-src="/assets/images/{{game.image}}")/
+                %td
+                    .row
+                        %h4 {{game.name | uppercase}}
+                    .row
+                        %span
+                            = Messages("mygames.location")
+                        {{game.location}}
+                    .row
+                        %span
+                            = Messages("mygames.timestart")
+                        {{game.startTime | date: 'dd MMM yyyy HH:mm'}} GMT{{game.startTime | date: 'Z'}}
+                    .row
+                        %span
+                            = Messages("mygames.tasks")
+                        {{tasksNo}}
+                %td
+                    .row
+                        %span(class="{{game.status}}") {{game.status | uppercase}}
+                    .row(ng-show="game.status == 'online'")
+                        %p 
+                            to END left
+                            %br/
+                            {{mtimeLeft[$index]}}
+                    .row(ng-show="game.status == 'published'")
+                        %p 
+                            to START left
+                            %br/
+                            {{mtimeLeft[$index]}}
 
-				%td 
-					{{game.version}}
-				%td 
+                %td 
+                    {{game.version}}
+                %td 
+                    .row
+                        %button.btn.btn-small(type="button") Edit
+                    .row(ng-show="game.status != 'finished' || game.status != 'online'")
+                        %button.btn.btn-small(type="button") Delete
+                    .row(ng-show="game.status == 'published'")
+                        %button.btn.btn-small(type="button") Cancel

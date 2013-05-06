@@ -57,7 +57,7 @@ object GamesCtrl extends Controller with CookieLang {
     val gid = play.api.db.slick.DB.withSession { implicit session =>
       Games.createGame(gd)
     }
-    
+
     Ok(Json.toJson(gid))
   }
 

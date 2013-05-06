@@ -11,11 +11,15 @@ app.controller('myGamesCtrl', [
       }
     };
     $scope.games = [];
+    $scope.tasksNo = 0;
     Games.query({}, function(data) {
       return $scope.games = data;
     }, function(error) {
       return console.log("Error occurred while getting list of games");
     });
+    $scope.showDetails = function(idx) {
+      return alert("Game with id: " + $scope.games[idx].id + " and name: " + $scope.games[idx].name + " will be showed");
+    };
     $scope.timeLeft = function(sdate, edate) {
       var dateEnd, dateStart, days, diff, hours, minutes, now, seconds, zeros;
       zeros = function(x) {

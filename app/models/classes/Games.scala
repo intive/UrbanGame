@@ -47,30 +47,35 @@ object Games extends Table[GamesDetails]("GAMES") {
   def maxPlayers = column[Int]("maxPlayers", O.NotNull, O.Default(1000000))
   def awards = column[String]("awards", O.NotNull)
   def status = column[String]("status", O.NotNull, O.Default("project"))
+  def image = column[String]("image", O.NotNull, O.Default("games/gameicon.png"))
   def * = id.? ~ name ~ version ~ description ~ location ~ operatorId ~ 
     created ~ startTime ~ endTime ~ started ~ ended ~ winning ~ nWins ~ 
-    difficulty ~ maxPlayers ~ awards ~ status <> (GamesDetails, GamesDetails.unapply _)
-  def operator = foreignKey("OP_FK", operatorId, Operators)(_.id)
+    difficulty ~ maxPlayers ~ awards ~ status ~ image <> (GamesDetails, GamesDetails.unapply _)
+
   def forInsert = name ~ version ~ description ~ location ~ operatorId ~ 
     created ~ startTime ~ endTime ~ started ~ ended ~ winning ~ nWins ~ 
-    difficulty ~ maxPlayers ~ awards ~ status <> ({ t => 
+    difficulty ~ maxPlayers ~ awards ~ status ~ image <> ({ t => 
       GamesDetails(None, t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, 
-        t._10, t._11, t._12, t._13, t._14, t._15, t._16)}, 
+        t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17)}, 
       { (gd: GamesDetails) => Some((gd.name, gd.version, gd.description, gd.location, 
         gd.operatorId, gd.created, gd.startTime, gd.endTime, gd.started, gd.ended, 
-        gd.winning, gd.nWins, gd.difficulty, gd.maxPlayers, gd.awards, gd.status))
+        gd.winning, gd.nWins, gd.difficulty, gd.maxPlayers, gd.awards, gd.status, gd.image))
       })
+
+  def operator = foreignKey("OP_FK", operatorId, Operators)(_.id)
 
 }
 
 trait Games { this: ImplicitSession =>
 
+  def getRowsNo: Int = (for {g <- Games} yield g.count).first
+
   def getOperatorGamesList(id: Int): List[GamesList] = {
     val q = for {
       g <- Games if g.operatorId === id.bind
-    } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status)
+    } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status, g.image)
     q.list map {
-      case (id, name, ver, loc, st, et, stat) => GamesList(Some(id), name, ver, loc, st, et, stat)
+      case (id, name, ver, loc, st, et, stat, img) => GamesList(Some(id), name, ver, loc, st, et, stat, img)
     }
   }
 

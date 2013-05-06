@@ -8,6 +8,7 @@ app.controller 'myGamesCtrl', ['$scope', '$timeout', 'Games', ($scope, $timeout,
             this.$apply();
 
     $scope.games = []
+    $scope.tasksNo = 0
 
     Games.query(
         {},
@@ -16,6 +17,9 @@ app.controller 'myGamesCtrl', ['$scope', '$timeout', 'Games', ($scope, $timeout,
         (error) ->
             console.log("Error occurred while getting list of games")
     )
+
+    $scope.showDetails = (idx) ->
+        alert "Game with id: " + $scope.games[idx].id + " and name: " + $scope.games[idx].name + " will be showed"
 
     $scope.timeLeft = (sdate, edate) ->
 

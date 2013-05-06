@@ -20,11 +20,11 @@ import play.api.db.slick.Config.driver.simple._
 import models.mutils._
 
 object Operators extends Table[OperatorsData]("OPERATORS") {
-	def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-	def login = column[String]("login", O.NotNull)
-	def pass_hash = column[String]("pass_hash", O.NotNull)
-	def * = id.? ~ login ~ pass_hash <> (OperatorsData, OperatorsData.unapply _)
-	def forInsert = login ~ pass_hash <> ({ t => 
+  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+  def login = column[String]("login", O.NotNull)
+  def pass_hash = column[String]("pass_hash", O.NotNull)
+  def * = id.? ~ login ~ pass_hash <> (OperatorsData, OperatorsData.unapply _)
+  def forInsert = login ~ pass_hash <> ({ t => 
       OperatorsData(None, t._1, t._2)}, 
       { (od: OperatorsData) => Some((od.login, od.pass_hash))
       })
@@ -32,6 +32,8 @@ object Operators extends Table[OperatorsData]("OPERATORS") {
 
 trait Operators { this: ImplicitSession =>
 
-	def createAccount(od: OperatorsData): Int = Operators.forInsert returning Operators.id insert od
-	
+  def getRowsNo: Int = (for {op <- Operators} yield op.count).first
+
+  def createAccount(od: OperatorsData): Int = Operators.forInsert returning Operators.id insert od
+  
 }

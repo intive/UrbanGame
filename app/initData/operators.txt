@@ -1,0 +1,2 @@
+operator1::haslo1
+operator2::haslo2

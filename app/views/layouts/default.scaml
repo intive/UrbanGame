@@ -56,14 +56,14 @@
                         .navbar-inner
                             .container
                                 %ul.nav.nav-tabs(ng-controller="menuCtrl")
-                                    %li(ng-class="{active: location == '/games/new'}")
-                                        %a(href="/games/new") = Messages("menu.newgame")
-                                    %li(ng-class="{active: location == '/games/my'}")
-                                        %a(href="/games/my") = Messages("menu.mygames")
-                                    %li(ng-class="{active: location == '/games/archive'}")
-                                        %a(href="/games/archive") = Messages("general.archive")
-                                    %li(ng-class="{active: location == '/games/options'}")
-                                        %a(href="/games/options") = Messages("general.options")
+                                    %li(ng-class="{active: location == '/my/games/new'}")
+                                        %a(href="/my/games/new") = Messages("menu.newgame")
+                                    %li(ng-class="{active: location == '/my/games'}")
+                                        %a(href="/my/games") = Messages("menu.mygames")
+                                    %li(ng-class="{active: location == '/my/games/archive'}")
+                                        %a(href="/my/games/archive") = Messages("general.archive")
+                                    %li(ng-class="{active: location == '/my/options'}")
+                                        %a(href="/my/options") = Messages("general.options")
 
             .container-narrow
                 .row-fluid

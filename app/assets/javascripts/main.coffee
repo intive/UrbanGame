@@ -24,7 +24,7 @@ app.config ['$routeProvider', '$locationProvider', ($routeProvider, $location) -
     $routeProvider.when('/my/games/:gid/tasks')
     $routeProvider.when('/my/games/:gid/tasks/:tid')
     $routeProvider.when('/my/games/archive')
-    $routeProvider.when('/my/profile')
+    $routeProvider.when('/my/options')
 ]
 
 $("select#chglang").on('change', (newVal) ->
