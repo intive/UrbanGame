@@ -10,12 +10,14 @@ POST	/register					controllers.Application.register
 POST    /locale						controllers.Application.changeLang
 
 # Authenticated
-GET     /games/new					controllers.GamesCtrl.newgame
-GET     /games/my					controllers.GamesCtrl.mygames
+GET     /my/games/new				controllers.GamesCtrl.newgame
+GET     /my/games					controllers.GamesCtrl.mygames
 
 # Json
-GET     /games/list					controllers.GamesCtrl.getGamesList
-POST    /games/new					controllers.GamesCtrl.saveGame
+GET     /my/games/list				controllers.GamesCtrl.getGamesList
+POST    /my/games					controllers.GamesCtrl.saveGame
+PUT		/my/games/:gid				controllers.GamesCtrl.updateGame(gid: Int)
+DELETE	/my/games/:gid				controllers.GamesCtrl.deleteGame(gid: Int)
 
 # Web Api resources
 GET     /api                        @controllers.WebApi.root

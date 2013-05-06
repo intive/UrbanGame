@@ -54,10 +54,19 @@ object GamesCtrl extends Controller with CookieLang {
         DateTime.now + 600.hours, DateTime.now, DateTime.now + 600.hours, "max_points", 1, 
         "easy", 20, "Jakieś", "online")
 
-    val gId = play.api.db.slick.DB.withSession { implicit session =>
+    val gid = play.api.db.slick.DB.withSession { implicit session =>
       Games.createGame(gd)
     }
-    Ok(Json.toJson(gId))
+    
+    Ok(Json.toJson(gid))
+  }
+
+  def updateGame(gid: Int) = Action { implicit request =>
+    Ok(Json.toJson(gid))
+  }
+
+  def deleteGame(gid: Int) = Action { implicit request =>
+    Ok(Json.toJson(gid))
   }
 
 }
