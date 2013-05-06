@@ -18,6 +18,7 @@
 
 - attributes("scripts") = capture
 	%script(src={uri("/assets/javascripts/controllers/myGamesCtrl.min.js")} type="text/javascript")
+	%script(src={uri("/assets/javascripts/services/Games.min.js")} type="text/javascript")
 
 .row.span12
 	%h3 = Messages("mygames.title")
@@ -30,7 +31,7 @@
 				%td = Messages("mygames.version")
 				%td = Messages("general.options")
 		%tbody(ng-controller="myGamesCtrl")
-			%tr(ng-repeat="game in games")
+			%tr(ng-repeat="game in games" ng-click="")
 				%td
 					%img(ng-src="/assets/images/{{game.icon}}")/
 				%td
@@ -43,7 +44,7 @@
 					.row
 						%span
 							= Messages("mygames.timestart")
-						{{game.timestart}}
+						{{game.startTime | date: 'dd MMM yyyy HH:mm'}} GMT{{game.startTime | date: 'Z'}}
 					.row
 						%span
 							= Messages("mygames.tasks")
