@@ -38,7 +38,7 @@ newgame.gameplayersnumlabel = Number of players
 newgame.gamedifflabel = Level of difficulty
 newgame.gametype1 = Gather as many points as possible.
 newgame.gametype2 = Solve all tasks in shortest time. 
-
+newgame.gamewinningnumlabel = Winners number
 
 newgame.ttgamename = *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! 
 newgame.ttgamedesc = x
@@ -52,12 +52,14 @@ newgame.ttgameendtime = x
 newgame.ttgameenddate = x
 newgame.ttgameplayersnum = x
 newgame.ttgamediff = x
+newgame.ttgamewinningnum = x
 
 newgame.gstarttimeerror = Wrong start time format or input is empty.
 newgame.gendtimeerror = Wrong end time format or input is empty.
 newgame.gstartdateerror = Wrong start date format or input is empty. Try using calendar to pick the date.
 newgame.genddateerror = Wrong end date format or input is empty. Try using calendar to pick the date.
 newgame.dateorderinvalid = Start date must be before end date.
+newgame.gwinningerror = Number of winners must be lesser than number of players and there must be at least one winner.
 mygames.icon = Icon
 mygames.data = Data
 mygames.status = Status
