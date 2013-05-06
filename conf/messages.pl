@@ -25,18 +25,18 @@ newgame.step3title = Krok 3
 newgame.step4title = Krok 4
 
 newgame.step1subtitle = Make your game easy to find. Complete the identity data of your game.
-newgame.gamenamelabel = game name:*
-newgame.gamedesclabel = game description:*
-newgame.gameawardslabel = game awards:
-newgame.gametypelabel = game type:*
-newgame.gamelocationlabel = game location:*
-newgame.gamestartlabel = start time/date:*
-newgame.gameendlabel = end time/date:*
-newgame.gameplayersnumlabel = number of players:
-newgame.gamedifflabel = level of difficulty:
-newgame.gametype1 = Gather as many points as possible.
-newgame.gametype2 = Solve all tasks in shortest time. 
-
+newgame.gamenamelabel = Nazwa gry
+newgame.gamedesclabel = Opis
+newgame.gameawardslabel = Nagrody
+newgame.gametypelabel = Rodzaj gry
+newgame.gamelocationlabel = Lokalizacja gry
+newgame.gamestartlabel = Czas/data rozpoczęcia
+newgame.gameendlabel = Czas/data zakończenia
+newgame.gameplayersnumlabel = Liczba graczy
+newgame.gamedifflabel = Poziom trudności
+newgame.gametype1 = Zdobądź najwięcej punktów.
+newgame.gametype2 = Ukończ wszystkie zadania w najkrótszym czasie. 
+newgame.gamewinningnumlabel = Liczba zwycięzców
 
 newgame.ttgamename = *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! 
 newgame.ttgamedesc = x
@@ -50,6 +50,7 @@ newgame.ttgameendtime = x
 newgame.ttgameenddate = x
 newgame.ttgameplayersnum = x
 newgame.ttgamediff = x
+newgame.ttgamewinningnum = x
 
 mygames.icon = Ikona
 mygames.data = Dane

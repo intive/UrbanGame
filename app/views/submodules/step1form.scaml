@@ -20,8 +20,8 @@
 
 .control-group.row-fluid.form-style
     %div
-        %h3=Messages("newgame.step1title")
-        %em=Messages("newgame.step1subtitle")
+        %h3=Messages("newgame.step1title")(lan)
+        %em=Messages("newgame.step1subtitle")(lan)
     .span12.slight-padding-top
         .span6.pull-left.slight-padding-right
             .controls.slight-padding-top
@@ -60,7 +60,7 @@
                         %input.input-mini(type="text" id="startTime" required name="gStartTime" ng-model="game.startTime"  time tooltip-animation="true" tooltip={Messages("newgame.ttgamestarttime")(lan)} tooltip-placement="left")
                         %span.pull-higher.gmt()
                             {{timezone}}
-                        %input.input-medium(type="text" id="startDate" name="gStartDate" ng-require="true" ng-model="game.startDate" ui-date=dateOpts  tooltip-animation="true" tooltip={Messages("newgame.ttgamestartdate")(lan)} tooltip-placement="right")
+                        %input.input-medium(type="text" id="startDate" name="gStartDate" required ng-model="game.startDate" ui-date=dateOpts  tooltip-animation="true" tooltip={Messages("newgame.ttgamestartdate")(lan)} tooltip-placement="right")
                 .alert.alert-error.span11(ng-show="form.gStartTime.$error.time" ng-cloak)=Messages("newgame.gstarttimeerror")
                 .controls-group
                     %label(for="gEndTime")
@@ -69,16 +69,25 @@
                         %input.input-mini(type="text" id="endTime" required name="gEndTime" ng-model="game.endTime"  time tooltip-animation="true" tooltip={Messages("newgame.ttgameendtime")(lan)} tooltip-placement="left")
                         %span.pull-higher.gmt()
                             {{timezone}}
-                        %input.input-medium(type="text" name="gEndDate" id="endDate" ng-required ng-model="game.endDate" ui-date=dateOpts  tooltip-animation="true" tooltip={Messages("newgame.ttgameenddate")(lan)} tooltip-placement="right")					
+                        %input.input-medium(type="text" name="gEndDate" id="endDate" required ng-model="game.endDate" ui-date=dateOpts  tooltip-animation="true" tooltip={Messages("newgame.ttgameenddate")(lan)} tooltip-placement="right")					
                 .alert.alert-error.span11(ng-show="form.gEndTime.$error.time" ng-cloak)=Messages("newgame.gendtimeerror")
-                .alert.alert-error.span11(ng-show="dateNotOrdered" ng-cloak)=Messages("newgame.dateorderinvalid")
+                .alert.alert-error.span11(ng-show="form.$error.dates" ng-cloak)=Messages("newgame.dateorderinvalid")
                 .row-fluid
-                    %label(for="gPlayersNum")
-                        %strong=Messages("newgame.gameplayersnumlabel")(lan)
-                    .input-append.input-prepend(tooltip={Messages("newgame.ttgameplayersnum")(lan)}  tooltip-animation="true" tooltip-placement="left")
-                        %button.btn( ng-click="decrementPlayersNum()") -
-                        %input.input-mini.text-center(type="number" name="gPlayersNum" required ng-model="game.playersNum" )
-                        %button.btn( ng-click="incrementPlayersNum()") +
+                    .pull-left
+                        %label(for="gPlayersNum")
+                            %strong=Messages("newgame.gameplayersnumlabel")(lan)
+                        .input-append.input-prepend(tooltip={Messages("newgame.ttgameplayersnum")(lan)}  tooltip-animation="true" tooltip-placement="left")
+                            %button.btn( ng-click="decrementPlayersNum()") -
+                            %input.input-mini.text-center(type="number" min="2" placeholder="nolimit" name="gPlayersNum" ng-model="game.playersNum" )
+                            %button.btn( ng-click="incrementPlayersNum()") +
+                    .pull-left(style="margin-left:2em;")
+                        %label(for="gWinningNum")
+                            %strong=Messages("newgame.gamewinningnumlabel")(lan)
+                        .input-append.input-prepend(tooltip={Messages("newgame.ttgamewinningnum")(lan)}  tooltip-animation="true" tooltip-placement="right")
+                            %button.btn( ng-click="decrementWinningNum()") -
+                            %input.input-mini.text-center(type="number" min="1" winning required name="gWinningNum" ng-model="game.winningNum" )
+                            %button.btn( ng-click="incrementWinningNum()") +
+                .alert.alert-error.span11(ng-show="form.$error.morewinnersthanplayers" ng-cloak)=Messages("newgame.gwinningerror")
                 %label(for="gDifficulty")
                     %strong=Messages("newgame.gamedifflabel")(lan)
                 %div.btn-group(id="btnsDiff" data-toggle="buttons-checkbox" tooltip={Messages("newgame.ttgamediff")(lan)}  tooltip-animation="true" tooltip-placement="left")

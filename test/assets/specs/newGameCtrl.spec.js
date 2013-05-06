@@ -45,16 +45,19 @@ describe('Controllers', function() {
             scope.game.incrementPlayersNum();
 			expect(scope.game.playersNum).toBe(6);
         });
+        
         it('should decrement players number', function() {
 			scope.game.playersnum=5;
-            scope.game.decrementPlayersNum();
+            scope.decrementPlayersNum();
 			expect(scope.game.playersNum).toBe(4);
         });
+        
         it('should contains game defined', function() {
             expect(scope.game).not.toBe(null);
         });
-        it('should be set at 0 players at start', function() {
-            expect(scope.game.playersNum).toBe(0);
+        
+        it('should be set at nolimit(null) players at start', function() {
+            expect(scope.game.playersNum).toBe(null);
         });
     });
 });
