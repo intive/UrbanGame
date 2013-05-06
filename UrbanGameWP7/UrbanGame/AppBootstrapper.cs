@@ -22,11 +22,15 @@ namespace UrbanGame
             container.RegisterPhoneServices();
             container.PerRequest<GameDetailsViewModel>();
             container.PerRequest<GamesListViewModel>();
-            container.PerRequest<UrbanGameDataContext>();
             container.PerRequest<IUnitOfWork, UnitOfWork>();
             container.Singleton<IGameWebService, GameWebServiceMock>();
             container.Singleton<IGameChangesManager, GameChangesManager>();
             container.PerRequest<IAppbarManager, AppbarManager>();
+
+            container.Handler<UrbanGameDataContext>((sc) =>
+            {
+                return new UrbanGameDataContext();
+            });
         }
 
         protected override object GetInstance(Type service, string key)
