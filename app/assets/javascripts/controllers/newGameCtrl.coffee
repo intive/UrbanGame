@@ -61,12 +61,14 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         previousStep = stepIndex - 1
         !_.isUndefined($scope.steps[previousStep])
 
+    $scope.incrementStepIfValid = ->
+        $scope.incrementStep() if (!$scope.form.$invalid)
     $scope.incrementStep = ->
         (
             stepIndex = $scope.getCurrentStepIndex()
             nextStep = stepIndex + 1
             $scope.selection = $scope.steps[nextStep]
-        ) if ( $scope.hasNextStep() && !$scope.form.$invalid )
+        ) if ( $scope.hasNextStep() )
 
     $scope.decrementStep = ->
         (
