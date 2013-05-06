@@ -48,7 +48,7 @@
                 %li(ng-class="{disabled: !hasPreviousStep()}")
                     %a(href="javascript:void(0);" ng-click="decrementStep()") &larr; Previous Step
                 %li(ng-show="!isLast()" ng-class="{disabled: (!hasNextStep() || form.$invalid)}")
-                    %a(href="javascript:void(0);" ng-click="incrementStep()") Next Step &rarr;
+                    %a(href="javascript:void(0);" ng-click="incrementStepIfValid()") Next Step &rarr;
                 %li(ng-hide="!isLast()" ng-class="{disabled: !hasPreviousStep() || form.$invalid}")
                     %a(href="javascript:void(0);" ng-click="saveit()") Save project
                 %li(ng-hide="!isLast()")
