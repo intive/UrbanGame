@@ -245,10 +245,10 @@ namespace UrbanGame.ViewModels
 
         #region lifecycle
 
-        protected override void OnActivate()
+        protected override async void OnActivate()
         {
             base.OnActivate();
-            RefreshUserGames();
+            await RefreshUserGames();
             RefreshNearestGames();
         }
 
@@ -290,6 +290,7 @@ namespace UrbanGame.ViewModels
 
         public async Task RefreshUserGames()
         {
+            NotifyOfPropertyChange(() => IsAuthorized);
             await Task.Factory.StartNew(() =>
             {
                 UserActiveGames.Clear();
@@ -347,7 +348,7 @@ namespace UrbanGame.ViewModels
             
         }
 
-        public void LogoutOrLogin()
+        public async void LogoutOrLogin()
         {
             
             if (IsAuthorized)
@@ -359,6 +360,7 @@ namespace UrbanGame.ViewModels
                 _gameWebService.Authorize("", "");
             }
             RefreshMenuItemText();
+            await RefreshUserGames();
         }
 
         #endregion
