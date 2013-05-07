@@ -18,6 +18,7 @@ import org.specs2.mutable._
 
 import play.api.test._
 import play.api.test.Helpers._
+import play.api.libs.json._
 
 class WebApiSpec extends Specification {
   
@@ -39,7 +40,7 @@ class WebApiSpec extends Specification {
 	
     "send list of games in Json format" in {
       running(FakeApplication()) {
-        val games = route(FakeRequest(GET, "/api/games")).get
+        val games = route(FakeRequest(GET, "/api/games?lat=0&lon=0&r=1")).get
         
         status(games) must equalTo(OK)
         contentType(games) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
@@ -56,18 +57,27 @@ class WebApiSpec extends Specification {
     }
 
     import org.apache.commons.codec.binary.Base64
-    val existingUser = (
-      ("Authorization", "Basic "+Base64.encodeBase64String("user:pass" getBytes))
+    val newUser = (
+      ("Authorization", "Basic "+Base64.encodeBase64String("new_user:pass" getBytes))
     )
-    val nonexistingUser = (
-      ("Authorization", "Basic "+Base64.encodeBase64String("XXX:pass" getBytes))
+
+    val existingUser = (
+      ("Authorization", "Basic "+Base64.encodeBase64String("admin:pass" getBytes))
     )
 
     "send UNAUTHORIZED status for non-existing user on 'login' command" in {
       running(FakeApplication()) {
-        val login = route(FakeRequest(GET, "/api/login").withHeaders(nonexistingUser)).get
+        val login = route(FakeRequest(GET, "/api/login").withHeaders(newUser)).get
         
         status(login) must equalTo(UNAUTHORIZED)
+      }
+    }
+    
+    "send OK status after creating new user" in {
+      val json = Json.obj("login"->"new_user", "password"->"pass")
+      running(FakeApplication()) {
+        val register = route(FakeRequest(POST, "/api/register").withJsonBody(json)).get
+        status(register) must equalTo(OK)
       }
     }
 
