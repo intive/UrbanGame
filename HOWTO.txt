@@ -1,6 +1,6 @@
-In order to run this project Play framework must be installed on your local machine.
+In order to run this project Play Framework (2.1.1) must be installed on your local machine.
 You can find instructions how to do it on
-http://www.playframework.com/documentation/1.0.1/install
+http://www.playframework.com/documentation/2.1.1/Installing
 
 After having the installation finished you can run the project by using command "play run" in command line,
 preceded by entering application directory.
