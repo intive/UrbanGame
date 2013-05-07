@@ -630,6 +630,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		Player player;
 		if (cursor != null && cursor.moveToFirst()) {
 			player = new Player(cursor.getString(0), cursor.getString(3), cursor.getString(1), cursor.getString(2));
+			cursor.close();
 		}
 		else {
 			player = null;
@@ -710,6 +711,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		if (cursor != null && cursor.moveToFirst()) {
 			playerGameSpecific = new PlayerGameSpecific(cursor.getInt(2), cursor.getString(0), cursor.getLong(1),
 				cursor.getInt(3));
+			cursor.close();
 		}
 		else {
 			playerGameSpecific = null;
@@ -798,6 +800,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		if (cursor.moveToFirst()) {
 			playerEmail = cursor.getString(0);
 		}
+		cursor.close();
 		return playerEmail;
 	}
 	

@@ -23,14 +23,11 @@
     <!-- TasksListActivity -->
     <string name="label_points2">" pts"</string>
     <string name="slash">/</string>
-<<<<<<< HEAD
-
-=======
     <string name="header_active_tasks">Active Tasks</string>
     <string name="header_inactive_tasks">Inactive Tasks</string>
     <string name="header_finished_tasks">Finished Tasks</string>
     <string name="header_canceled_tasks">Canceled Tasks</string>
->>>>>>> 77b453d4a94d8fc6a8d992980210d8bbb66b4f57
+
     <!-- ActionBar -->
     <string name="menu_search_hint">Filter games</string>
     <string name="menu_search">Search</string>
@@ -129,7 +126,6 @@
     <string name="dialog_register_title">Account registered</string>
     <string name="dialog_register_message">An e-mail with verification link has been sent to E-mail</string>
     <string name="dialog_register_button_positive">OK</string>
-<<<<<<< HEAD
 	<string name="invalid_data_tittle">Invalid data</string>
 	<string name="invalid_data_message">E-mail or password is incorrect</string>
 	<string name="invalid_data_button">OK</string>	
@@ -140,11 +136,8 @@
 	    <item>Gallery</item>
 	    <item>Camera</item>
 	</string-array>
-	
-=======
     <string name="invalid_data_tittle">Invalid data</string>
     <string name="invalid_data_message">E-mail or password is incorrect</string>
     <string name="invalid_data_button">OK</string>
-
->>>>>>> 77b453d4a94d8fc6a8d992980210d8bbb66b4f57
+    
 </resources>
