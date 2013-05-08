@@ -88,9 +88,9 @@ object Application extends Controller with CookieLang {
         Source.fromFile(filepaths(0)).getLines.foreach { line => 
           val splitted = line.split("::").map(_.toString)
 
-          val gd = GamesDetails(None, splitted(0), splitted(1).toInt, splitted(2), splitted(3), splitted(4).toInt, 
-            new DateTime(splitted(5)), new DateTime(splitted(6)), new DateTime(splitted(7)), new DateTime(splitted(8)), new DateTime(splitted(9)), 
-            splitted(10), splitted(11).toInt, splitted(12), splitted(13).toInt, splitted(14), splitted(15), splitted(16))
+          val gd = GamesDetails(None, splitted(0), splitted(1).toInt, splitted(2), splitted(3), splitted(4).toFloat, splitted(5).toFloat, splitted(6).toInt, 
+            new DateTime(splitted(7)), new DateTime(splitted(8)), new DateTime(splitted(9)), new DateTime(splitted(10)), new DateTime(splitted(11)), 
+            splitted(12), splitted(13).toInt, splitted(14), splitted(15).toInt, splitted(16), splitted(17), splitted(18))
 
           Games.createGame(gd)
           cnt1 = cnt1 + 1

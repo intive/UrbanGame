@@ -1,4 +1,4 @@
-app.controller 'myGamesCtrl', ['$scope', '$timeout', 'Games', ($scope, $timeout, Games) ->
+app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', ($scope, $location, $timeout, Games) ->
     
     $scope.safeApply =  ->
         phase = this.$root.$$phase;
@@ -19,10 +19,14 @@ app.controller 'myGamesCtrl', ['$scope', '$timeout', 'Games', ($scope, $timeout,
     )
 
     $scope.showDetails = (idx) ->
-        alert "Game with id: " + $scope.games[idx].id + " and name: " + $scope.games[idx].name + " will be showed"
+        window.location.pathname = "/my/games/" + $scope.games[idx].id if $scope.games[idx].status == 'online'
+        alert "Game with id: " + $scope.games[idx].id + " and name: " + $scope.games[idx].name + " will be edited here" if $scope.games[idx].status == 'project' || $scope.games[idx].status == 'published'
+    $scope.delete = (idx) ->
+        alert "Here the game with id: " + $scope.games[idx].id + " will be deleted"
+    $scope.cancel = (idx) ->
+        alert "Here the game with id: " + $scope.games[idx].id + " will be canceled"
 
     $scope.timeLeft = (sdate, edate) ->
-
         zeros = (x) -> 
             ( if x < 10 then "0" else "") + x
 
