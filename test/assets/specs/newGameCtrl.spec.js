@@ -41,13 +41,13 @@ describe('Controllers', function() {
         });
 
         it('should increment players number', function() {
-			scope.game.playersnum=5;
-            scope.game.incrementPlayersNum();
+			scope.game.playersNum=5;
+            scope.incrementPlayersNum();
 			expect(scope.game.playersNum).toBe(6);
         });
         
         it('should decrement players number', function() {
-			scope.game.playersnum=5;
+			scope.game.playersNum=5;
             scope.decrementPlayersNum();
 			expect(scope.game.playersNum).toBe(4);
         });
