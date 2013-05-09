@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">UrbanGameMock</string>
+    <string name="string_empty"></string>
 
     <!-- UrbanGameMockActivity -->
     <string name="button_games">Games</string>
@@ -18,9 +19,15 @@
     <string name="label_daysLeft">Days left:</string>
     <string name="label_hoursLeft">Hours left:</string>
     <string name="label_minutesLeft">Minutes left:</string>
+
     <!-- TasksListActivity -->
     <string name="label_points2">" pts"</string>
     <string name="slash">/</string>
+    <string name="header_active_tasks">Active Tasks</string>
+    <string name="header_inactive_tasks">Inactive Tasks</string>
+    <string name="header_finished_tasks">Finished Tasks</string>
+    <string name="header_canceled_tasks">Canceled Tasks</string>
+
     <!-- ActionBar -->
     <string name="menu_search_hint">Filter games</string>
     <string name="menu_search">Search</string>
@@ -32,6 +39,11 @@
     <string name="menu_messages">Messages</string>
     <string name="menu_more">More</string>
     <string name="menu_alert">Alert</string>
+
+    <string-array name="menu_navigation_list">
+        <item>My games</item>
+        <item>All games</item>
+    </string-array>
 
     <!-- GamesDetailsActivity -->
     <string name="label_winners">Winners:</string>
@@ -46,7 +58,7 @@
     <string name="dialog_join_title">Join to the game</string>
     <string name="dialog_join_message">Are you sure?</string>
     <string name="dialog_join_positive_button">Yes</string>
-    <string name="dialog_join_negative_button">No</string>  
+    <string name="dialog_join_negative_button">No</string>
 
     <!-- ActiveGameActivity -->
     <string name="tab_game_gameInfo">Game info</string>
@@ -57,10 +69,43 @@
     <string name="tab_task_description">Description</string>
     <string name="tab_task_answer">Answer</string>
 
+    <!-- TaskDescriptionFragment -->
+    <string name="string_left">left</string>
+    <string name="string_noMoreTime">No more time</string>
+
+    <plurals name="numberOfYears">
+        <item quantity="one">one year</item>
+        <item quantity="other">%d years</item>
+    </plurals>
+    <plurals name="numberOfMonths">
+        <item quantity="one">one month</item>
+        <item quantity="other">%d months</item>
+    </plurals>
+    <plurals name="numberOfDays">
+        <item quantity="one">one day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="numberOfHours">
+        <item quantity="one">one hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="numberOfMinutes">
+        <item quantity="one">one minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+
+    <!-- Task -->
+    <string name="label_taksRepeatable">repeatable</string>
+
     <!-- ProfileActivity -->
-	<string name="button_save">Save</string>
-	<string name="button_skip">Skip</string>
-	    
+    <string name="button_save">Save</string>
+    <string name="button_skip">Skip</string>
+
+    <!-- MyGamesActivity -->
+    <string name="header_active">Active</string>
+    <string name="header_ended">Ended</string>
+    <string name="header_observed">Observed</string>
+
     <!-- Content descriptions -->
     <string name="contentDescription_gameLogo">Game logo</string>
     <string name="contentDescription_operatorLogo">Operator logo</string>
@@ -71,8 +116,8 @@
     <string name="contentDescription_dividerHorizontalLine">Divider - horizontal line</string>
     <string name="contentDescription_taskImage">Image associated with this task</string>
     <string name="contentDescription_profileImage">Profile image</string>
-    
-    <!-- Logging in-->
+
+    <!-- Logging in -->
     <string name="hint_email">E-mail</string>
     <string name="hint_password">Password</string>
     <string name="checkbox_show_password">Show password</string>
@@ -93,4 +138,22 @@
     <string name="left">left</string>
     <string name="ended">ended</string>
 
+    <string name="dialog_register_title">Account registered</string>
+    <string name="dialog_register_message">An e-mail with verification link has been sent to E-mail</string>
+    <string name="dialog_register_button_positive">OK</string>
+	<string name="invalid_data_tittle">Invalid data</string>
+	<string name="invalid_data_message">E-mail or password is incorrect</string>
+	<string name="invalid_data_button">OK</string>	
+	
+	<!-- Profile Activity-->
+	<string name="profile_activity_dialog_title">Choose avatar from:</string>
+	<string-array name="profile_activty_dialog_options">
+	    <item>Gallery</item>
+	    <item>Camera</item>
+	</string-array>
+    <string name="invalid_data_tittle">Invalid data</string>
+    <string name="invalid_data_message">E-mail or password is incorrect</string>
+    <string name="invalid_data_button">OK</string>
+    
+>>>>>>> 20d282cbb2cce65a328059b0ca9025ecd1b256ff
 </resources>

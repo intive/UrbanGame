@@ -149,7 +149,7 @@ public abstract class Task {
 	/**
 	 * @return the isRepetable
 	 */
-	public Boolean getIsRepetable() {
+	public Boolean isRepetable() {
 		return isRepetable;
 	}
 	
@@ -163,7 +163,7 @@ public abstract class Task {
 	/**
 	 * @return the isHidden
 	 */
-	public Boolean getIsHidden() {
+	public Boolean isHidden() {
 		return isHidden;
 	}
 	

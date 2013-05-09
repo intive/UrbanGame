@@ -227,9 +227,17 @@ public interface DatabaseInterface {
 	public boolean updateTask(Task task);
 	
 	/**
+	 * @param gameID - game id of which task have to be deleted
 	 * @param taskID - task id to be deleted
 	 * @return true if successful
 	 */
-	public boolean deleteTask(Long taskID);
+	public boolean deleteTask(Long gameID, Long taskID);
+	
 	// TASKS METHODS END
+	
+	/**
+	 * Closes database. Need to be invoked after operations on DB (Some
+	 * sqlcipher issue)
+	 */
+	public void closeDatabase();
 }

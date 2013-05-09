@@ -137,10 +137,10 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		+ USER_LOGGED_IN_KEY_EMAIL + " TEXT PRIMARY KEY" + ")";
 	
 	private static final String CREATE_TASKS_TABLE = "CREATE TABLE " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID
-		+ " INTEGER PRIMARY KEY, " + TASKS_KEY_DESCRIPTION + " TEXT, " + TASKS_KEY_END_TIME + " INTEGER, "
-		+ TASKS_KEY_IS_HIDDEN + " INTEGER, " + TASKS_KEY_MAX_POINTS + " INTEGER, " + TASKS_KEY_NUMBER_OF_HIDDEN
-		+ " INTEGER, " + TASKS_KEY_PICTURE + " TEXT, " + TASKS_KEY_REPETABLE + " INTEGER, " + TASKS_KEY_TITLE
-		+ " TEXT, " + TASKS_KEY_TYPE + " INTEGER" + ")";
+		+ " INTEGER PRIMARY KEY, " + TASKS_KEY_DESCRIPTION + " TEXT NOT NULL, " + TASKS_KEY_END_TIME + " INTEGER, "
+		+ TASKS_KEY_IS_HIDDEN + " INTEGER, " + TASKS_KEY_MAX_POINTS + " INTEGER NOT NULL, "
+		+ TASKS_KEY_NUMBER_OF_HIDDEN + " INTEGER, " + TASKS_KEY_PICTURE + " TEXT, " + TASKS_KEY_REPETABLE
+		+ " INTEGER NOT NULL, " + TASKS_KEY_TITLE + " TEXT, " + TASKS_KEY_TYPE + " INTEGER" + ")";
 	
 	private static final String CREATE_GAMES_TASKS_TABLE = "CREATE TABLE " + GAMES_TASKS_TABLE_NAME + " ("
 		+ GAMES_TASKS_KEY_GAME_ID + " INTEGER, " + GAMES_TASKS_KEY_TASK_ID + " INTEGER, " + "PRIMARY KEY ("
@@ -150,7 +150,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	private static final String CREATE_USER_TASKS_SPECIFIC_TABLE = "CREATE TABLE " + USER_TASKS_SPECIFIC_TABLE_NAME
 		+ " (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + " TEXT, " + USER_TASKS_SPECIFIC_KEY_TASK_ID + " INTEGER, "
-		+ USER_TASKS_SPECIFIC_KEY_ARE_CHANGES + " TEXT, " + USER_TASKS_SPECIFIC_KEY_IS_FINISHED + " TEXT, "
+		+ USER_TASKS_SPECIFIC_KEY_ARE_CHANGES + " TEXT, " + USER_TASKS_SPECIFIC_KEY_IS_FINISHED + " TEXT NOT NULL, "
 		+ USER_TASKS_SPECIFIC_KEY_POINTS + " INTEGER, " + USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN + " TEXT, "
 		+ "PRIMARY KEY (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ", " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "), "
 		+ " FOREIGN KEY (" + USER_TASKS_SPECIFIC_KEY_TASK_ID + ") REFERENCES " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID
@@ -158,8 +158,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		+ USER_KEY_EMAIL + ") " + ")";
 	
 	private static final String CREATE_TASKS_ABCD_TABLE = "CREATE TABLE " + TASKS_ABCD_TABLE_NAME + " ("
-		+ TASKS_ABCD_KEY_TASK_ID + " INTEGER AUTOINCREMENT, " + TASKS_ABCD_KEY_TASK_ID + " INTEGER, "
-		+ TASKS_ABCD_KEY_QUESTION + " TEXT UNIQUE NOT NULL, " + "FOREIGN KEY (" + TASKS_ABCD_KEY_TASK_ID + ") "
+		+ TASKS_ABCD_KEY_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " + TASKS_ABCD_KEY_TASK_ID + " INTEGER, "
+		+ TASKS_ABCD_KEY_QUESTION + " TEXT NOT NULL, " + "FOREIGN KEY (" + TASKS_ABCD_KEY_TASK_ID + ") "
 		+ "REFERENCES " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID + ") " + ")";
 	
 	private static final String CREATE_TASKS_ABCD_POSSIBLE_ANSWERS_TABLE = "CREATE TABLE "
@@ -266,8 +266,10 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			values.put(GAMES_KEY_PRIZE_INFO, game.getPrizesInfo());
 			values.put(GAMES_KEY_COMMENTS, game.getComments());
 			
-			boolean isInDB = db.query(GAMES_TABLE_NAME, new String[] { GAMES_KEY_ID }, GAMES_KEY_ID + "=?",
-				new String[] { game.getID().longValue() + "" }, null, null, null).moveToFirst();
+			Cursor c = db.query(GAMES_TABLE_NAME, new String[] { GAMES_KEY_ID }, GAMES_KEY_ID + "=?",
+				new String[] { game.getID().longValue() + "" }, null, null, null);
+			boolean isInDB = c.moveToFirst();
+			c.close();
 			
 			boolean isInsertOK;
 			if (isInDB) {
@@ -409,7 +411,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.beginTransaction();
 		String userTaskSpecificDeletionSQL = "DELETE FROM " + USER_TASKS_SPECIFIC_TABLE_NAME + " WHERE "
 			+ USER_TASKS_SPECIFIC_KEY_TASK_ID + " IN (SELECT " + GAMES_TASKS_KEY_TASK_ID + " FROM "
-			+ GAMES_TASKS_TABLE_NAME + " WHERE " + GAMES_TASKS_KEY_GAME_ID + "=" + gameID.longValue() + ")" + ")";
+			+ GAMES_TASKS_TABLE_NAME + " WHERE " + GAMES_TASKS_KEY_GAME_ID + "=" + gameID.longValue() + ")";
 		String abcdPossibleAnswersDeletionSQL = "DELETE FROM " + TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME + " WHERE "
 			+ TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + " IN (SELECT " + TASKS_ABCD_KEY_ID + " FROM "
 			+ TASKS_ABCD_TABLE_NAME + " WHERE " + TASKS_ABCD_KEY_TASK_ID + " IN (SELECT " + GAMES_TASKS_KEY_TASK_ID
@@ -425,18 +427,17 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.rawQuery(abcdPossibleAnswersDeletionSQL, null);
 		db.rawQuery(abcdTaskDeletionSQL, null);
 		db.rawQuery(tasksDeletionSQL, null);
-		boolean isTasksDeletionSuccessful = db.delete(GAMES_TASKS_TABLE_NAME, GAMES_TASKS_KEY_GAME_ID + "=?",
-			new String[] { gameID.longValue() + "" }) != 0;
-		boolean isUserGameSpecificDeletionSuccessful = db.delete(USER_GAMES_SPECIFIC_TABLE_NAME,
-			USER_GAMES_SPECIFIC_KEY_GAME_ID + "=?", new String[] { gameID.longValue() + "" }) != -1;
+		db.delete(GAMES_TASKS_TABLE_NAME, GAMES_TASKS_KEY_GAME_ID + "=?", new String[] { gameID.longValue() + "" });
+		db.delete(USER_GAMES_SPECIFIC_TABLE_NAME, USER_GAMES_SPECIFIC_KEY_GAME_ID + "=?",
+			new String[] { gameID.longValue() + "" });
 		boolean isSucessful = db
 			.delete(GAMES_TABLE_NAME, GAMES_KEY_ID + "=?", new String[] { gameID.longValue() + "" }) != 0;
-		if (isTasksDeletionSuccessful && isSucessful && isUserGameSpecificDeletionSuccessful) {
+		if (isSucessful) {
 			db.setTransactionSuccessful();
 		}
 		db.endTransaction();
 		db.close();
-		return isTasksDeletionSuccessful && isSucessful && isUserGameSpecificDeletionSuccessful;
+		return isSucessful;
 	}
 	
 	private boolean areShortGameInfoFieldsOK(UrbanGameShortInfo game) {
@@ -629,6 +630,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		Player player;
 		if (cursor != null && cursor.moveToFirst()) {
 			player = new Player(cursor.getString(0), cursor.getString(3), cursor.getString(1), cursor.getString(2));
+			cursor.close();
 		}
 		else {
 			player = null;
@@ -709,6 +711,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		if (cursor != null && cursor.moveToFirst()) {
 			playerGameSpecific = new PlayerGameSpecific(cursor.getInt(2), cursor.getString(0), cursor.getLong(1),
 				cursor.getInt(3));
+			cursor.close();
 		}
 		else {
 			playerGameSpecific = null;
@@ -797,6 +800,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		if (cursor.moveToFirst()) {
 			playerEmail = cursor.getString(0);
 		}
+		cursor.close();
 		return playerEmail;
 	}
 	
@@ -820,7 +824,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			values.put(USER_TASKS_SPECIFIC_KEY_TASK_ID, taskSpecific.getTaskID());
 			values.put(USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, taskSpecific.getPlayerEmail());
 			values.put(USER_TASKS_SPECIFIC_KEY_ARE_CHANGES, booleanToString(taskSpecific.getAreChanges()));
-			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.getIsFinishedByUser()));
+			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.isFinishedByUser()));
 			values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
 			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
 			
@@ -903,8 +907,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		if (taskSpecific.getAreChanges() != null) {
 			values.put(USER_TASKS_SPECIFIC_KEY_ARE_CHANGES, booleanToString(taskSpecific.getAreChanges()));
 		}
-		if (taskSpecific.getIsFinishedByUser() != null) {
-			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.getIsFinishedByUser()));
+		if (taskSpecific.isFinishedByUser() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.isFinishedByUser()));
 		}
 		if (taskSpecific.getPoints() != null) {
 			values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
@@ -948,17 +952,17 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			values.put(TASKS_KEY_TYPE, task.getType());
 			values.put(TASKS_KEY_PICTURE, task.getPictureBase64());
 			values.put(TASKS_KEY_DESCRIPTION, task.getDescription());
-			values.put(TASKS_KEY_REPETABLE, booleanToString(task.getIsRepetable()));
-			values.put(TASKS_KEY_IS_HIDDEN, booleanToString(task.getIsHidden()));
+			values.put(TASKS_KEY_REPETABLE, booleanToString(task.isRepetable()));
+			values.put(TASKS_KEY_IS_HIDDEN, booleanToString(task.isHidden()));
 			values.put(TASKS_KEY_NUMBER_OF_HIDDEN, task.getNumberOfHidden());
 			values.put(TASKS_KEY_END_TIME, dateToLong(task.getEndTime()));
 			values.put(TASKS_KEY_MAX_POINTS, task.getMaxPoints());
 			
 			boolean isInsert2OK = db.insert(TASKS_TABLE_NAME, null, values) != -1;
-			
+			boolean isInsert3OK = true;
 			if (isInsert1OK && isInsert2OK) {
 				if (task instanceof ABCDTask) {
-					boolean isInsert3OK = insertTaskABCD(db, (ABCDTask) task);
+					isInsert3OK = insertTaskABCD(db, (ABCDTask) task);
 					if (isInsert3OK) {
 						db.setTransactionSuccessful();
 					}
@@ -970,7 +974,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			db.endTransaction();
 			db.close();
 			
-			return isInsert1OK && isInsert2OK;
+			return isInsert1OK && isInsert2OK && isInsert3OK;
 		}
 		else return false;
 	}
@@ -982,7 +986,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		long newId = db.insert(TASKS_ABCD_TABLE_NAME, null, values);
 		boolean isInsert1OK = newId != -1;
 		boolean isInsert2OK = false;
-		if (isInsert1OK) {
+		if (isInsert1OK && (isInsert2OK = (abcdTask.getAnswers() != null))) {
 			String[] answers = abcdTask.getAnswers();
 			
 			isInsert2OK = true;
@@ -1011,7 +1015,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			+ TASKS_KEY_MAX_POINTS + ", " + TASKS_KEY_REPETABLE + ", " + TASKS_KEY_IS_HIDDEN + ", "
 			+ TASKS_KEY_NUMBER_OF_HIDDEN + ", " + TASKS_KEY_END_TIME + ", " + TASKS_KEY_PICTURE + ", "
 			+ TASKS_KEY_DESCRIPTION + " FROM " + "( SELECT * FROM " + GAMES_TASKS_TABLE_NAME + " WHERE "
-			+ GAMES_TASKS_KEY_GAME_ID + "=" + gameID.longValue() + ")" + " INNER JOIN " + TASKS_TABLE_NAME + " ON "
+			+ GAMES_TASKS_KEY_GAME_ID + "=" + gameID.longValue() + ")" + " LEFT JOIN " + TASKS_TABLE_NAME + " ON "
 			+ GAMES_TASKS_KEY_TASK_ID + "=" + TASKS_KEY_ID;
 		
 		Cursor cursor = db.rawQuery(query, null);
@@ -1025,6 +1029,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			}
 			while (cursor.moveToNext());
 		}
+		db.close();
 		return tasksList;
 	}
 	
@@ -1081,8 +1086,12 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			
 			Cursor cursorForABCDTasks = db.query(TASKS_ABCD_TABLE_NAME, taskQuestionTableColumns,
 				TASKS_ABCD_KEY_TASK_ID + "=?", new String[] { id.longValue() + "" }, null, null, null);
-			String question = cursorForABCDTasks.getString(ABCDTaskFields.QUESTION.value);
-			long idOfAnswerSet = cursorForABCDTasks.getLong(ABCDTaskFields.ID.value);
+			String question = null;
+			Long idOfAnswerSet = null;
+			if (cursorForABCDTasks.moveToFirst()) {
+				question = cursorForABCDTasks.getString(ABCDTaskFields.QUESTION.value);
+				idOfAnswerSet = cursorForABCDTasks.getLong(ABCDTaskFields.ID.value);
+			}
 			String[] answers = null;
 			
 			cursorForABCDTasks = db.query(TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME, taskAnswersTableColumns,
@@ -1096,6 +1105,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 				}
 				while (cursorForABCDTasks.moveToNext());
 			}
+			
+			cursorForABCDTasks.close();
+			
 			return new ABCDTask(id, title, pictureBase64, description, isRepetable, isHidden, numberOfHidden, endTime,
 				maxPoints, question, answers);
 		}
@@ -1130,6 +1142,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			if (updateOK) {
 				db.setTransactionSuccessful();
 			}
+			db.endTransaction();
 		}
 		db.close();
 		return updateOK;
@@ -1184,11 +1197,11 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		if (task.getDescription() != null) {
 			values.put(TASKS_KEY_DESCRIPTION, task.getDescription());
 		}
-		if (task.getIsRepetable() != null) {
-			values.put(TASKS_KEY_REPETABLE, booleanToString(task.getIsRepetable()));
+		if (task.isRepetable() != null) {
+			values.put(TASKS_KEY_REPETABLE, booleanToString(task.isRepetable()));
 		}
-		if (task.getIsHidden() != null) {
-			values.put(TASKS_KEY_IS_HIDDEN, booleanToString(task.getIsHidden()));
+		if (task.isHidden() != null) {
+			values.put(TASKS_KEY_IS_HIDDEN, booleanToString(task.isHidden()));
 		}
 		if (task.getNumberOfHidden() != null) {
 			values.put(TASKS_KEY_NUMBER_OF_HIDDEN, task.getNumberOfHidden());
@@ -1202,7 +1215,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean deleteTask(Long taskID) {
+	public boolean deleteTask(Long gameID, Long taskID) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		db.beginTransaction();
 		String userTaskSpecificDeletionSQL = "DELETE FROM " + USER_TASKS_SPECIFIC_TABLE_NAME + " WHERE "
@@ -1217,8 +1230,21 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.rawQuery(abcdTaskDeletionSQL, null);
 		boolean isSucessful = db
 			.delete(TASKS_TABLE_NAME, TASKS_KEY_ID + "=?", new String[] { taskID.longValue() + "" }) != 0;
+		isSucessful = isSucessful
+			&& db.delete(GAMES_TASKS_TABLE_NAME, GAMES_TASKS_KEY_TASK_ID + "=? AND " + GAMES_TASKS_KEY_GAME_ID + "=?",
+				new String[] { taskID.longValue() + "", gameID.longValue() + "" }) != 0;
+		if (isSucessful) {
+			db.setTransactionSuccessful();
+		}
+		db.endTransaction();
 		db.close();
 		return isSucessful;
 	}
+	
 	// TASKS METHODS END
+	
+	@Override
+	public void closeDatabase() {
+		close();
+	}
 }

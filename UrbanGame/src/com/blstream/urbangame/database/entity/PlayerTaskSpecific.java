@@ -32,6 +32,10 @@ public class PlayerTaskSpecific {
 		this.wasHidden = wasHidden;
 	}
 	
+	public PlayerTaskSpecific() {
+		this(null, null, null, null, null, null);
+	}
+	
 	/**
 	 * @return the playerEmail
 	 */
@@ -77,7 +81,7 @@ public class PlayerTaskSpecific {
 	/**
 	 * @return the isFinishedByUser
 	 */
-	public Boolean getIsFinishedByUser() {
+	public Boolean isFinishedByUser() {
 		return isFinishedByUser;
 	}
 	
