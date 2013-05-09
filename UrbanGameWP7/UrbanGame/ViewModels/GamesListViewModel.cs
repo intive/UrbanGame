@@ -338,9 +338,9 @@ namespace UrbanGame.ViewModels
             });
         }
 
-        public void ShowDetails(int gid)
-        {            
-            _navigationService.UriFor<GameDetailsViewModel>().WithParam(g => g.GameId, gid).Navigate();
+        public void ShowDetails(IGame game)
+        {
+            _navigationService.UriFor<GameDetailsPreViewModel>().WithParam(g => g.GameId, game.Id).Navigate();
         }
 
         public void Search()

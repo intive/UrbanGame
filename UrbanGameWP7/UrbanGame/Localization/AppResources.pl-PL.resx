@@ -130,7 +130,7 @@
     <value>dni</value>
   </data>
   <data name="Difficulty" xml:space="preserve">
-    <value>poziom trudności:</value>
+    <value>POZIOM TRUDNOŚCI</value>
   </data>
   <data name="Easy" xml:space="preserve">
     <value>łatwe</value>
@@ -201,7 +201,7 @@
   <data name="Logout" xml:space="preserve">
     <value>Wyloguj</value>
   </data>
-  <data name="MyPreviousGame" xml:space="preserve">
+  <data name="MyLatestGames" xml:space="preserve">
     <value>moje poprzednie gry</value>
   </data>
   <data name="NoGamesPlaying" xml:space="preserve">
@@ -215,5 +215,74 @@
   </data>
   <data name="Leave" xml:space="preserve">
     <value>Opuść</value>
+  </data>
+  <data name="Accomplished" xml:space="preserve">
+    <value>ukończone</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>aktywne</value>
+  </data>
+  <data name="Alerts" xml:space="preserve">
+    <value>powiadomienia</value>
+  </data>
+  <data name="BonusTask" xml:space="preserve">
+    <value>znalezione bonusowe zadania</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>skasowane</value>
+  </data>
+  <data name="CurrentRank" xml:space="preserve">
+    <value>aktualna pozycja</value>
+  </data>
+  <data name="Descrition" xml:space="preserve">
+    <value>opis</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>CZAS TRWANIA</value>
+  </data>
+  <data name="GameStateEnded" xml:space="preserve">
+    <value>zakończył</value>
+  </data>
+  <data name="GameStateInactive" xml:space="preserve">
+    <value>nieaktywny</value>
+  </data>
+  <data name="GameStateJoined" xml:space="preserve">
+    <value>dołączył</value>
+  </data>
+  <data name="GameStateNone" xml:space="preserve">
+    <value />
+  </data>
+  <data name="GameStateWithdraw" xml:space="preserve">
+    <value>remis</value>
+  </data>
+  <data name="GameStateWon" xml:space="preserve">
+    <value>wygrał</value>
+  </data>
+  <data name="GameType" xml:space="preserve">
+    <value>TYP GRY</value>
+  </data>
+  <data name="HighScores" xml:space="preserve">
+    <value>najlepsze wyniki</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>nieaktywne</value>
+  </data>
+  <data name="PlayersUPCase" xml:space="preserve">
+    <value>GRACZE</value>
+  </data>
+  <data name="Points" xml:space="preserve">
+    <value>punkty</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>pozycja</value>
+  </data>
+  <data name="Tasks" xml:space="preserve">
+    <value>zadania</value>
+  </data>
+  <data name="ToEnd" xml:space="preserve">
+    <value>DO KOŃCA</value>
+  </data>
+  <data name="ByOperatorUpCase" xml:space="preserve">
+    <value>OD</value>
   </data>
 </root>

@@ -14,7 +14,7 @@ using UrbanGameTests.Mocks;
 namespace UrbanGameTests.Tests
 {
     [TestClass]
-    public class GameDetailsViewModelTest
+    public class GameDetailsPreViewModelTest
     {
         #region GameTest
         
@@ -38,7 +38,7 @@ namespace UrbanGameTests.Tests
                 Id = 1,
                 Name = "FromDatabase",
                 OperatorName = "CAFETERIA",
-                OperatorLogo = "/ApplicationIcon.png",
+                //Localization = "Wroclaw",
                 GameLogo = "/ApplicationIcon.png",
                 GameStart = DateTime.Now.AddHours(3).AddMinutes(23),
                 GameEnd = DateTime.Now.AddDays(2).AddHours(5),
@@ -51,8 +51,8 @@ namespace UrbanGameTests.Tests
             });
             unitOfWork.Commit();
 
-            GameDetailsViewModel vm = 
-                new GameDetailsViewModel(null, () => new UnitOfWorkMock(database), 
+            GameDetailsPreViewModel vm = 
+                new GameDetailsPreViewModel(null, () => new UnitOfWorkMock(database), 
                                          webService, eventAgg, new AppbarManagerMock()) { GameId = 1 };
             #endregion
             

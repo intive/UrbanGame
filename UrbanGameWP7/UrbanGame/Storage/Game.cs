@@ -85,29 +85,6 @@ namespace UrbanGame.Storage
         }
         #endregion
 
-        #region OperatorLogo
-
-        private string _operatorLogo;
-
-        [Column]
-        public string OperatorLogo
-        {
-            get
-            {
-                return _operatorLogo;
-            }
-            set
-            {
-                if (_operatorLogo != value)
-                {
-                    NotifyPropertyChanging("OperatorLogo");
-                    _operatorLogo = value;
-                    NotifyPropertyChanged("OperatorLogo");
-                }
-            }
-        }
-        #endregion
-
         #region GameLogo
 
         private string _gameLogo;
@@ -126,6 +103,29 @@ namespace UrbanGame.Storage
                     NotifyPropertyChanging("GameLogo");
                     _gameLogo = value;
                     NotifyPropertyChanged("GameLogo");
+                }
+            }
+        }
+        #endregion
+
+        #region Localization
+
+        private string _localization;
+
+        [Column]
+        public string Localization
+        {
+            get
+            {
+                return _localization;
+            }
+            set
+            {
+                if (_localization != value)
+                {
+                    NotifyPropertyChanging("Localization");
+                    _localization = value;
+                    NotifyPropertyChanged("Localization");
                 }
             }
         }
@@ -527,6 +527,70 @@ namespace UrbanGame.Storage
             get
             {
                 return new EntityEnumerable<ITask, GameTask>(_taskRefs);
+            }
+        }
+        #endregion
+        
+        #region Alerts
+
+        private EntitySet<GameAlert> _alertRefs;
+
+        [Association(Name = "FK_Game_Alrts", Storage = "_alertRefs", ThisKey = "Id", OtherKey = "GameId")]
+        public EntitySet<GameAlert> Alerts
+        {
+            get { return _alertRefs; }
+        }
+
+        private void OnAlertAdded(GameAlert alert)
+        {
+            alert.Game = this;
+        }
+
+        private void OnAlertRemoved(GameAlert alert)
+        {
+            alert.Game = null;
+        }
+
+        #endregion
+
+        #region IGame.Alerts
+        IEntityEnumerable<IAlert> IGame.Alerts
+        {
+            get
+            {
+                return new EntityEnumerable<IAlert, GameAlert>(_alertRefs);
+            }
+        }
+        #endregion
+
+        #region High Scores
+
+        private EntitySet<GameHighScore> _highScoreRefs;
+
+        [Association(Name = "FK_Game_HighScores", Storage = "_highScoreRefs", ThisKey = "Id", OtherKey = "GameId")]
+        public EntitySet<GameHighScore> HighScores
+        {
+            get { return _highScoreRefs; }
+        }
+
+        private void OnHighScoreAdded(GameHighScore highScore)
+        {
+            highScore.Game = this;
+        }
+
+        private void OnHighScoreRemoved(GameHighScore highScore)
+        {
+            highScore.Game = null;
+        }
+
+        #endregion
+
+        #region IGame.HighScores
+        IEntityEnumerable<IHighScore> IGame.HighScores
+        {
+            get
+            {
+                return new EntityEnumerable<IHighScore, GameHighScore>(_highScoreRefs);
             }
         }
         #endregion
