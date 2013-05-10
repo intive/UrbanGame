@@ -143,6 +143,11 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 			data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
 			notifyDataSetChanged();
 		}
+		else {
+			database = new Database(context);
+			data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
+			notifyDataSetChanged();
+		}
 	}
 	
 }
