@@ -11,15 +11,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
+import com.blstream.urbangame.date.TimeLeftBuilder;
 
 public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 	
 	private ArrayList<UrbanGameShortInfo> data;
 	private final int viewResourceId;
 	private final Context context;
-	private DatabaseInterface databaseInterface = null;
+	private DatabaseInterface database = null;
 	
 	private static class ViewHolder {
 		ImageView imageViewGameLogo;
@@ -39,23 +41,27 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 		super(context, viewResourceId);
 		this.viewResourceId = viewResourceId;
 		this.context = context;
-		data = new ArrayList<UrbanGameShortInfo>();
+		database = new Database(context);
+		
+		// Retrieve data from database
+		data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
 	}
 	
 	public GamesListAdapter(Context context, int viewResourceId, DatabaseInterface interfaceDB) {
 		super(context, viewResourceId);
 		this.viewResourceId = viewResourceId;
 		this.context = context;
-		databaseInterface = interfaceDB;
+		database = interfaceDB;
 		
 		// Retrieve data from database
-		data = (ArrayList<UrbanGameShortInfo>) databaseInterface.getAllGamesShortInfo();
+		data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
 	}
 	
 	public GamesListAdapter(Context context, int viewResourceId, ArrayList<UrbanGameShortInfo> data) {
 		super(context, viewResourceId);
 		this.context = context;
 		this.viewResourceId = viewResourceId;
+		database = new Database(context);
 		this.data = data;
 	}
 	
@@ -101,32 +107,40 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 		holder.textViewLocation.setText(gameInfo.getLocation());
 		holder.textViewNumberOfCurrentPlayers.setText(gameInfo.getPlayers().toString());
 		if (gameInfo.getMaxPlayers() != null) {
+			// If the game has limit for maximum number of players.
 			holder.textViewNumberOfTotalPlayers.setText(gameInfo.getMaxPlayers().toString());
 			holder.textViewDivider.setText("/");
 		}
 		else {
-			//Removing divider
+			//Removing divider if the game doesn't have limit for maximum number of players.
 			holder.textViewDivider.setText("");
 		}
 		holder.textViewOperatorName.setText(gameInfo.getOperatorName());
-		holder.textViewStartTime.setText(TimeLeft.timeLeft(gameInfo.getStartDate(), gameInfo.getEndDate(), new Date(),
-			context));
+		holder.textViewStartTime.setText(timeLeft(gameInfo.getStartDate(), gameInfo.getEndDate()));
 		
 		return row;
 	}
 	
-	public void setDatabaseInterface(DatabaseInterface interfaceDB) {
-		databaseInterface = interfaceDB;
-		data = (ArrayList<UrbanGameShortInfo>) databaseInterface.getAllGamesShortInfo();
+	private String timeLeft(Date startDate, Date endDate) {
+		
+		String timeString = null;
+		Date currentDate = new Date();
+		if (currentDate.before(startDate)) {
+			timeString = startDate.toString();
+		}
+		else {
+			TimeLeftBuilder timeLeftBuilder = new TimeLeftBuilder(context.getResources(), endDate);
+			timeString = timeLeftBuilder.getLeftTime();
+		}
+		return timeString;
 	}
 	
-	public DatabaseInterface getDatabaseInterface() {
-		return databaseInterface;
-	}
-	
+	/**
+	 * Used to update games data from database.
+	 */
 	public void updateData() {
-		if (databaseInterface != null) {
-			data = (ArrayList<UrbanGameShortInfo>) databaseInterface.getAllGamesShortInfo();
+		if (database != null) {
+			data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
 			notifyDataSetChanged();
 		}
 	}
