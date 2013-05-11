@@ -160,6 +160,9 @@
   <data name="Days" xml:space="preserve">
     <value>days</value>
   </data>
+  <data name="DayShortcut" xml:space="preserve">
+    <value>d</value>
+  </data>
   <data name="Descrition" xml:space="preserve">
     <value>description</value>
   </data>
@@ -211,6 +214,9 @@
   <data name="HighScores" xml:space="preserve">
     <value>high scores</value>
   </data>
+  <data name="HoursShortcut" xml:space="preserve">
+    <value>h</value>
+  </data>
   <data name="Inactive" xml:space="preserve">
     <value>inactive</value>
   </data>
@@ -237,6 +243,9 @@
   </data>
   <data name="Messages" xml:space="preserve">
     <value>messages</value>
+  </data>
+  <data name="MinutesShortcut" xml:space="preserve">
+    <value>m</value>
   </data>
   <data name="MyAccount" xml:space="preserve">
     <value>my account</value>
@@ -280,6 +289,9 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="Start" xml:space="preserve">
+    <value>start:</value>
+  </data>
   <data name="Started" xml:space="preserve">
     <value>started</value>
   </data>
@@ -288,6 +300,9 @@
   </data>
   <data name="ToEnd" xml:space="preserve">
     <value>TO END</value>
+  </data>
+  <data name="ToEndLowCase" xml:space="preserve">
+    <value>to end</value>
   </data>
   <data name="Undefinied" xml:space="preserve">
     <value>undefinied</value>

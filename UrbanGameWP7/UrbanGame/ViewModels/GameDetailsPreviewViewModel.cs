@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace UrbanGame.ViewModels
 {
-    public class GameDetailsPreViewModel : BaseViewModel, IHandle<GameChangedEvent>
+    public class GameDetailsPreviewViewModel : BaseViewModel, IHandle<GameChangedEvent>
     {
 
         IAppbarManager _appbarManager;
-        public GameDetailsPreViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
+        public GameDetailsPreviewViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
                                     IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
         {

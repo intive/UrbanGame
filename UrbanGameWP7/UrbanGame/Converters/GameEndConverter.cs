@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
+using UrbanGame.Localization;
 
 namespace UrbanGame.Converters
 {
@@ -10,8 +11,8 @@ namespace UrbanGame.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return ((DateTime)value).Subtract(DateTime.Today).Days + " d " + ((DateTime)value).Subtract(DateTime.Today).Hours
-                + " h " + ((DateTime)value).Subtract(DateTime.Today).Minutes+ " m to end";
+            return ((DateTime)value).Subtract(DateTime.Today).Days + " " + AppResources.DayShortcut + " " + ((DateTime)value).Subtract(DateTime.Today).Hours
+                + " " + AppResources.HoursShortcut + " " + ((DateTime)value).Subtract(DateTime.Today).Minutes + " " + AppResources.MinutesShortcut + " " + AppResources.ToEndLowCase;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

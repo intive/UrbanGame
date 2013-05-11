@@ -285,4 +285,19 @@
   <data name="ByOperatorUpCase" xml:space="preserve">
     <value>OD</value>
   </data>
+  <data name="DayShortcut" xml:space="preserve">
+    <value>d</value>
+  </data>
+  <data name="HoursShortcut" xml:space="preserve">
+    <value>h</value>
+  </data>
+  <data name="MinutesShortcut" xml:space="preserve">
+    <value>m</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>początek:</value>
+  </data>
+  <data name="ToEndLowCase" xml:space="preserve">
+    <value>do końca</value>
+  </data>
 </root>

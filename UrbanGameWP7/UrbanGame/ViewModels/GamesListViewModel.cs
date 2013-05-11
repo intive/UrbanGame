@@ -340,7 +340,7 @@ namespace UrbanGame.ViewModels
 
         public void ShowDetails(IGame game)
         {
-            _navigationService.UriFor<GameDetailsPreViewModel>().WithParam(g => g.GameId, game.Id).Navigate();
+            _navigationService.UriFor<GameDetailsPreviewViewModel>().WithParam(g => g.GameId, game.Id).Navigate();
         }
 
         public void Search()

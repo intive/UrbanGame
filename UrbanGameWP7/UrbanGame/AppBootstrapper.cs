@@ -20,7 +20,7 @@ namespace UrbanGame
         {
             container = new PhoneContainer(RootFrame);
             container.RegisterPhoneServices();
-            container.PerRequest<GameDetailsPreViewModel>();
+            container.PerRequest<GameDetailsPreviewViewModel>();
             container.PerRequest<GamesListViewModel>();
             container.PerRequest<IUnitOfWork, UnitOfWork>();
             container.Singleton<IGameWebService, GameWebServiceMock>();

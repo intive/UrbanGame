@@ -14,7 +14,7 @@ using UrbanGameTests.Mocks;
 namespace UrbanGameTests.Tests
 {
     [TestClass]
-    public class GameDetailsPreViewModelTest
+    public class GameDetailsPreviewViewModelTest
     {
         #region GameTest
         
@@ -51,8 +51,8 @@ namespace UrbanGameTests.Tests
             });
             unitOfWork.Commit();
 
-            GameDetailsPreViewModel vm = 
-                new GameDetailsPreViewModel(null, () => new UnitOfWorkMock(database), 
+            GameDetailsPreviewViewModel vm = 
+                new GameDetailsPreviewViewModel(null, () => new UnitOfWorkMock(database), 
                                          webService, eventAgg, new AppbarManagerMock()) { GameId = 1 };
             #endregion
             
