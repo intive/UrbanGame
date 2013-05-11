@@ -91,8 +91,8 @@ namespace WebService
                 Id = gid,
                 Name = "Hydrozagadka",
                 OperatorName = "CAFETERIA",
-                OperatorLogo = "/ApplicationIcon.png",
                 GameLogo = "/ApplicationIcon.png",
+                Localization = "Wrocław",
                 GameStart = DateTime.Now.AddHours(3).AddMinutes(23),
                 GameEnd = DateTime.Now.AddDays(2).AddHours(5),
                 NumberOfPlayers = 24,
@@ -177,9 +177,9 @@ namespace WebService
         public IGame[] UsersActiveGames()
         {
             return new IGame[] {
-                new GameMock(){Name = "M For The Mission", GameType = GameType.Race, GameState = GameState.Joined, Id = 6, OperatorLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(2).AddHours(13), Rank = 4},
-                new GameMock(){Name = "Thanks For All That Fish", GameType = GameType.ScoreAttack, GameState = GameState.Joined, Id = 7, OperatorLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(5), Rank = null},
-                new GameMock(){Name = "Pontifex", GameType = GameType.Race, GameState = GameState.Joined, Id = 8, OperatorLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(8), Rank = 8}};
+                new GameMock(){Name = "M For The Mission", GameType = GameType.Race, GameState = GameState.Joined, Id = 6, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(2).AddHours(13), Rank = 4},
+                new GameMock(){Name = "Thanks For All That Fish", GameType = GameType.ScoreAttack, GameState = GameState.Joined, Id = 7, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(5), Rank = null},
+                new GameMock(){Name = "Pontifex", GameType = GameType.Race, GameState = GameState.Joined, Id = 8, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(8), Rank = 8}};
         }
         #endregion
 
@@ -187,11 +187,11 @@ namespace WebService
         public IGame[] UserNearbyGames(GeoCoordinate coordinate)
         {
             return new IGame[] {
-                new GameMock(){Name = "Hydromystery", GameType = GameType.ScoreAttack, OperatorName = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 1, OperatorLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None, Difficulty = GameDifficulty.Easy, Description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010."},
-                new GameMock(){Name = "North & South", GameType = GameType.Race, OperatorName = "Infogrames", NumberOfPlayers = 23, Id = 2, OperatorLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(12), GameState = GameState.None},
-                new GameMock(){Name = "Ultimate Quest", GameType = GameType.ScoreAttack,  OperatorName = "JCVD", NumberOfPlayers = 23,Id = 3, OperatorLogo = "/ApplicationIcon.png",  GameEnd = DateTime.Now.AddDays(10), GameState = GameState.None},
-                new GameMock(){Name = "Galaxy Quest", GameType = GameType.Race,  OperatorName = "NSEA", NumberOfPlayers = 23,Id = 4, OperatorLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameState = GameState.None},
-                new GameMock(){Name = "The Quest for NEETs", GameType = GameType.Race,  OperatorName = "Ron Jeremy", NumberOfPlayers = 23,Id = 5, OperatorLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8), GameState = GameState.None}};
+                new GameMock(){Name = "Hydromystery", GameType = GameType.ScoreAttack, OperatorName = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 1, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None, Difficulty = GameDifficulty.Easy, Description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010."},
+                new GameMock(){Name = "North & South", GameType = GameType.Race, OperatorName = "Infogrames", NumberOfPlayers = 23, Id = 2, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 5, 8, 12, 12,0), GameEnd = DateTime.Now.AddDays(3).AddHours(12), GameState = GameState.None},
+                new GameMock(){Name = "Ultimate Quest", GameType = GameType.ScoreAttack, OperatorName = "JCVD", NumberOfPlayers = 23,Id = 3, GameLogo = "/ApplicationIcon.png", GameStart = DateTime.Now.AddDays(1).AddHours(12), GameEnd = DateTime.Now.AddDays(10), GameState = GameState.None},
+                new GameMock(){Name = "Galaxy Quest", GameType = GameType.Race, OperatorName = "NSEA", NumberOfPlayers = 23,Id = 4, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameEnd = new DateTime(2013,6,5,4,12,30), GameState = GameState.None},
+                new GameMock(){Name = "The Quest for NEETs", GameType = GameType.Race, OperatorName = "Ron Jeremy", NumberOfPlayers = 23,Id = 5, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8), GameState = GameState.None}};
         }
         #endregion
 
@@ -199,8 +199,8 @@ namespace WebService
         public IGame[] UsersInactiveGames()
         {
             return new IGame[] {
-                new GameMock(){Name = "Wilqu!", GameType = GameType.ScoreAttack, Id = 9, OperatorLogo = "/ApplicationIcon.png", GameState = GameState.Ended, Rank = 4},
-                new GameMock(){Name = "Torghal", GameType = GameType.Race, Id = 10, OperatorLogo = "/ApplicationIcon.png", GameState = GameState.Withdraw, Rank = null}};
+                new GameMock(){Name = "Wilqu!", GameType = GameType.ScoreAttack, Id = 9, GameLogo = "/ApplicationIcon.png", GameState = GameState.Ended, Rank = 4},
+                new GameMock(){Name = "Torghal", GameType = GameType.Race, Id = 10, GameLogo = "/ApplicationIcon.png", GameState = GameState.Withdraw, Rank = null}};
         }
         #endregion
     }

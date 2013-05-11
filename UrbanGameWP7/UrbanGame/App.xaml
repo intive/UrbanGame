@@ -12,10 +12,16 @@
     <Application.Resources>        
         <local:AppBootstrapper x:Key="bootstrapper"/>
         <localization:LocalizedStrings x:Key="LocalizedStrings" />
-        <conv:GameStartEndConverter x:Key="GameStartEndConverter" />
+        <conv:GameStartConverter x:Key="GameStartConverter" />
+        <conv:GameEndConverter x:Key="GameEndConverter" />
         <conv:DifficultyConverter x:Key="DifficultyConverter" />
         <conv:GameTypeConverter x:Key="GameTypeConverter" />
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <conv:OpositeBoolToVisibilityConverter x:Key="OpositeBoolToVisibilityConverter" />
+        <conv:IntToSlashIntConverter x:Key="IntToSlashIntConverter" />
+        <conv:GameStateConverter x:Key="GameStateConverter" />
+        <conv:RankConverter x:Key="RankConverter" />
+        <conv:DateToVisibilityConverter x:Key="DateToVisibilityConverter" />
+        <conv:OpositeDateToVisibilityConverter x:Key="OpositeDateToVisibilityConverter" />
     </Application.Resources>
 </Application>

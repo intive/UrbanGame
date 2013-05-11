@@ -130,11 +130,29 @@
   <data name="Accomplished" xml:space="preserve">
     <value>accomplished tasks</value>
   </data>
+  <data name="Active" xml:space="preserve">
+    <value>acitve</value>
+  </data>
+  <data name="Alerts" xml:space="preserve">
+    <value>alerts</value>
+  </data>
+  <data name="BonusTask" xml:space="preserve">
+    <value>bonus task found</value>
+  </data>
   <data name="ByOperator" xml:space="preserve">
     <value>by</value>
   </data>
+  <data name="ByOperatorUpCase" xml:space="preserve">
+    <value>BY</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>cancelled</value>
+  </data>
   <data name="Completed" xml:space="preserve">
     <value>completed</value>
+  </data>
+  <data name="CurrentRank" xml:space="preserve">
+    <value>current rank:</value>
   </data>
   <data name="Day" xml:space="preserve">
     <value>day</value>
@@ -142,8 +160,17 @@
   <data name="Days" xml:space="preserve">
     <value>days</value>
   </data>
+  <data name="DayShortcut" xml:space="preserve">
+    <value>d</value>
+  </data>
+  <data name="Descrition" xml:space="preserve">
+    <value>description</value>
+  </data>
   <data name="Difficulty" xml:space="preserve">
-    <value>difficulty:</value>
+    <value>DIFFICULTY</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>DURATION</value>
   </data>
   <data name="Easy" xml:space="preserve">
     <value>easy</value>
@@ -154,6 +181,27 @@
   <data name="GameStart" xml:space="preserve">
     <value>start:</value>
   </data>
+  <data name="GameStateEnded" xml:space="preserve">
+    <value>ended</value>
+  </data>
+  <data name="GameStateInactive" xml:space="preserve">
+    <value>inactive</value>
+  </data>
+  <data name="GameStateJoined" xml:space="preserve">
+    <value>joined</value>
+  </data>
+  <data name="GameStateNone" xml:space="preserve">
+    <value />
+  </data>
+  <data name="GameStateWithdraw" xml:space="preserve">
+    <value>withdraw</value>
+  </data>
+  <data name="GameStateWon" xml:space="preserve">
+    <value>won</value>
+  </data>
+  <data name="GameType" xml:space="preserve">
+    <value>GAME TYPE</value>
+  </data>
   <data name="GameTypeRace" xml:space="preserve">
     <value>complete all tasks first</value>
   </data>
@@ -162,6 +210,15 @@
   </data>
   <data name="Hard" xml:space="preserve">
     <value>hard</value>
+  </data>
+  <data name="HighScores" xml:space="preserve">
+    <value>high scores</value>
+  </data>
+  <data name="HoursShortcut" xml:space="preserve">
+    <value>h</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>inactive</value>
   </data>
   <data name="JoinIn" xml:space="preserve">
     <value>Join in</value>
@@ -187,14 +244,17 @@
   <data name="Messages" xml:space="preserve">
     <value>messages</value>
   </data>
+  <data name="MinutesShortcut" xml:space="preserve">
+    <value>m</value>
+  </data>
   <data name="MyAccount" xml:space="preserve">
     <value>my account</value>
   </data>
   <data name="MyGames" xml:space="preserve">
     <value>my games</value>
   </data>
-  <data name="MyPreviousGames" xml:space="preserve">
-    <value>my previous games</value>
+  <data name="MyLatestGames" xml:space="preserve">
+    <value>my latest games</value>
   </data>
   <data name="Nearby" xml:space="preserve">
     <value>nearby</value>
@@ -207,6 +267,12 @@
   </data>
   <data name="Players" xml:space="preserve">
     <value>players:</value>
+  </data>
+  <data name="PlayersUPCase" xml:space="preserve">
+    <value>PLAYERS</value>
+  </data>
+  <data name="Points" xml:space="preserve">
+    <value>points</value>
   </data>
   <data name="Prizes" xml:space="preserve">
     <value>prizes</value>
@@ -223,8 +289,20 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="Start" xml:space="preserve">
+    <value>start:</value>
+  </data>
   <data name="Started" xml:space="preserve">
     <value>started</value>
+  </data>
+  <data name="Tasks" xml:space="preserve">
+    <value>tasks</value>
+  </data>
+  <data name="ToEnd" xml:space="preserve">
+    <value>TO END</value>
+  </data>
+  <data name="ToEndLowCase" xml:space="preserve">
+    <value>to end</value>
   </data>
   <data name="Undefinied" xml:space="preserve">
     <value>undefinied</value>
