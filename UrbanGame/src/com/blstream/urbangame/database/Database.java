@@ -778,16 +778,18 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		db.beginTransaction();
 		boolean isSuccesful = email != null;
-		isSuccesful = isSuccesful
-			&& db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_KEY_EMAIL }, null, null, null, null,
-				null).getCount() == 0;
+		Cursor c = db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_KEY_EMAIL }, null, null, null, null,
+			null);
+		isSuccesful = isSuccesful && c.getCount() == 0;
 		if (isSuccesful) {
 			ContentValues values = new ContentValues();
 			values.put(USER_LOGGED_IN_KEY_EMAIL, email);
 			isSuccesful = db.insert(USER_LOGGED_IN_TABLE_NAME, null, values) != -1;
 			db.setTransactionSuccessful();
 		}
+		c.close();
 		db.endTransaction();
+		
 		return isSuccesful;
 	}
 	

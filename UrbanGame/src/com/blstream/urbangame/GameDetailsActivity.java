@@ -23,6 +23,7 @@ import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.example.ExampleData;
+import com.blstream.urbangame.menuitem.MenuItemHelper;
 
 public class GameDetailsActivity extends SherlockActivity implements OnClickListener {
 	public static final String TAG = "GameDetailsActivity";
@@ -93,6 +94,9 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		tvPrizes.setText(selectedGame.getPrizesInfo());
 		tvGameDesc.setText(selectedGame.getDescription());
 		tvWinningStrategy.setText(selectedGame.getWinningStrategy());
+		
+	    this.supportInvalidateOptionsMenu();
+		Log.i(TAG, "onResume completed");
 	}
 	
 	private UrbanGame getMockGame() {
@@ -150,6 +154,9 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 			case android.R.id.home:
 				finish();
 				break;
+			case R.id.menu_logout:
+				MenuItemHelper.invokeActionLogoutMenuItem(this);
+				break;	
 		}
 		return true;
 	}
@@ -157,6 +164,7 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.top_bar_menu_more, menu);
+		MenuItemHelper.initLogoutMenuItem(this, menu);
 		return true;
 	}
 	

@@ -23,6 +23,10 @@
                 android:id="@+id/menu_feedback"
                 android:showAsAction="always|withText"
                 android:title="@string/menu_feedback"/>
+            <item
+                android:id="@+id/menu_logout"
+                android:showAsAction="always|withText"
+                android:title="@string/menu_logout"/> 
         </menu>
     </item>
 

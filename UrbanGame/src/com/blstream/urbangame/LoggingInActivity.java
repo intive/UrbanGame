@@ -18,6 +18,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.Player;
+import com.blstream.urbangame.menuitem.MenuItemHelper;
 
 public class LoggingInActivity extends SherlockActivity {
 	public static boolean isRegisterDialogCompleted = true;
@@ -42,6 +43,7 @@ public class LoggingInActivity extends SherlockActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
+		MenuItemHelper.initLogoutMenuItem(this, menu);
 		return true;
 	}
 	
@@ -64,12 +66,20 @@ public class LoggingInActivity extends SherlockActivity {
 				
 			}
 		});
+		
+	    this.supportInvalidateOptionsMenu();
+		Log.i(TAG, "onResume completed");
 	}
 	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		return super.onMenuItemSelected(featureId, item);
-		
+		int itemId = item.getItemId();
+		switch (itemId) {
+			case R.id.menu_logout:
+				MenuItemHelper.invokeActionLogoutMenuItem(this);
+				break;
+		}
+		return true;
 	}
 	
 	public void showPassword() {
