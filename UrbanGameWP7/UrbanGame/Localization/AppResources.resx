@@ -130,6 +130,12 @@
   <data name="Accomplished" xml:space="preserve">
     <value>accomplished tasks</value>
   </data>
+  <data name="Answer" xml:space="preserve">
+    <value>answer</value>
+  </data>
+  <data name="AnswerGPS" xml:space="preserve">
+    <value>If you think this is the right spot, please submit your coordinates to check.</value>
+  </data>
   <data name="ByOperator" xml:space="preserve">
     <value>by</value>
   </data>
@@ -141,6 +147,9 @@
   </data>
   <data name="Days" xml:space="preserve">
     <value>days</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>description</value>
   </data>
   <data name="Difficulty" xml:space="preserve">
     <value>difficulty:</value>
@@ -208,6 +217,9 @@
   <data name="Players" xml:space="preserve">
     <value>players:</value>
   </data>
+  <data name="Points" xml:space="preserve">
+    <value> points</value>
+  </data>
   <data name="Prizes" xml:space="preserve">
     <value>prizes</value>
   </data>
@@ -225,6 +237,12 @@
   </data>
   <data name="Started" xml:space="preserve">
     <value>started</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>submit</value>
+  </data>
+  <data name="ToEnd" xml:space="preserve">
+    <value>to end</value>
   </data>
   <data name="Undefinied" xml:space="preserve">
     <value>undefinied</value>
