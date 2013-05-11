@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Accomplished" xml:space="preserve">
+    <value>accomplished tasks</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>answer</value>
+  </data>
+  <data name="AnswerGPS" xml:space="preserve">
+    <value>If you think this is the right spot, please submit your coordinates to check.</value>
+  </data>
   <data name="ByOperator" xml:space="preserve">
     <value>od</value>
   </data>
@@ -128,6 +137,9 @@
   </data>
   <data name="Days" xml:space="preserve">
     <value>dni</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>description</value>
   </data>
   <data name="Difficulty" xml:space="preserve">
     <value>poziom trudności:</value>
@@ -156,17 +168,35 @@
   <data name="Medium" xml:space="preserve">
     <value>średnie</value>
   </data>
+  <data name="Messages" xml:space="preserve">
+    <value>messages</value>
+  </data>
   <data name="Overview" xml:space="preserve">
     <value>o grze</value>
   </data>
   <data name="Players" xml:space="preserve">
     <value>graczy:</value>
   </data>
+  <data name="Points" xml:space="preserve">
+    <value> points</value>
+  </data>
   <data name="Prizes" xml:space="preserve">
     <value>nagrody</value>
   </data>
+  <data name="Quests" xml:space="preserve">
+    <value>quests</value>
+  </data>
+  <data name="Scores" xml:space="preserve">
+    <value>high scores</value>
+  </data>
   <data name="Started" xml:space="preserve">
     <value>rozpoczęto</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>submit</value>
+  </data>
+  <data name="ToEnd" xml:space="preserve">
+    <value>to end</value>
   </data>
   <data name="Undefinied" xml:space="preserve">
     <value>nieokreślone</value>

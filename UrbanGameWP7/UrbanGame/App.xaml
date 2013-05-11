@@ -17,5 +17,10 @@
         <conv:GameTypeConverter x:Key="GameTypeConverter" />
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <conv:OpositeBoolToVisibilityConverter x:Key="OpositeBoolToVisibilityConverter" />
+        <conv:ABCDToVisibilityConverter x:Key="ABCDToVisibilityConverter" />
+        <conv:GPSToVisibilityConverter x:Key="GPSToVisibilityConverter" />
+        <conv:TaskEndConverter x:Key="TaskEndConverter"/>
+        <conv:NullableToNumberConverter x:Key="NullableToNumberConverter"/>
+        <conv:ToUpperCaseConverter x:Key="ToUpperCaseConverter"/>
     </Application.Resources>
 </Application>
