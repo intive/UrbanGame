@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.blstream.urbangame.GamesListAdapter;
+import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 
 public class GamesListAdapterTest extends AndroidTestCase {

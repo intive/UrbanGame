@@ -1,4 +1,4 @@
-package com.blstream.urbangame;
+package com.blstream.urbangame.adapters;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blstream.urbangame.R;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
@@ -19,8 +20,8 @@ import com.blstream.urbangame.date.TimeLeftBuilder;
 public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 	
 	private ArrayList<UrbanGameShortInfo> data;
-	private final int viewResourceId;
-	private final Context context;
+	private int viewResourceId;
+	private Context context;
 	private DatabaseInterface database = null;
 	
 	private static class ViewHolder {
@@ -39,30 +40,38 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 	
 	public GamesListAdapter(Context context, int viewResourceId) {
 		super(context, viewResourceId);
-		this.viewResourceId = viewResourceId;
-		this.context = context;
-		database = new Database(context);
-		
-		// Retrieve data from database
-		data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
+		init(context, viewResourceId, null, null);
 	}
 	
 	public GamesListAdapter(Context context, int viewResourceId, DatabaseInterface interfaceDB) {
 		super(context, viewResourceId);
-		this.viewResourceId = viewResourceId;
-		this.context = context;
-		database = interfaceDB;
-		
-		// Retrieve data from database
-		data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
+		init(context, viewResourceId, null, interfaceDB);
 	}
 	
 	public GamesListAdapter(Context context, int viewResourceId, ArrayList<UrbanGameShortInfo> data) {
 		super(context, viewResourceId);
+		init(context, viewResourceId, data, null);
+	}
+	
+	private void init(Context context, int viewResourceId, ArrayList<UrbanGameShortInfo> data,
+		DatabaseInterface interfaceDB) {
 		this.context = context;
 		this.viewResourceId = viewResourceId;
-		database = new Database(context);
-		this.data = data;
+		
+		if (interfaceDB == null) {
+			database = new Database(context);
+		}
+		else {
+			database = interfaceDB;
+		}
+		
+		if (data == null) {
+			// Retrieve data from database
+			this.data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
+		}
+		else {
+			this.data = data;
+		}
 	}
 	
 	@Override
@@ -139,15 +148,11 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 	 * Used to update games data from database.
 	 */
 	public void updateData() {
-		if (database != null) {
-			data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
-			notifyDataSetChanged();
-		}
-		else {
+		if (database == null) {
 			database = new Database(context);
-			data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
-			notifyDataSetChanged();
 		}
+		data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
+		notifyDataSetChanged();
 	}
 	
 }
