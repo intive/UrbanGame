@@ -126,18 +126,22 @@
     <string name="dialog_register_title">Account registered</string>
     <string name="dialog_register_message">An e-mail with verification link has been sent to E-mail</string>
     <string name="dialog_register_button_positive">OK</string>
-	<string name="invalid_data_tittle">Invalid data</string>
-	<string name="invalid_data_message">E-mail or password is incorrect</string>
-	<string name="invalid_data_button">OK</string>	
-	
-	<!-- Profile Activity-->
-	<string name="profile_activity_dialog_title">Choose avatar from:</string>
-	<string-array name="profile_activty_dialog_options">
-	    <item>Gallery</item>
-	    <item>Camera</item>
-	</string-array>
     <string name="invalid_data_tittle">Invalid data</string>
     <string name="invalid_data_message">E-mail or password is incorrect</string>
     <string name="invalid_data_button">OK</string>
-    
+    <string name="title_section1">SIGN IN</string>
+    <string name="title_section2">CREATE NEW ACCOUNT</string>
+
+    <!-- Profile Activity -->
+    <string name="profile_activity_dialog_title">Choose avatar from:</string>
+
+    <string-array name="profile_activty_dialog_options">
+        <item>Gallery</item>
+        <item>Camera</item>
+    </string-array>
+
+    <string name="invalid_data_tittle">Invalid data</string>
+    <string name="invalid_data_message">E-mail or password is incorrect</string>
+    <string name="invalid_data_button">OK</string>
+
 </resources>
