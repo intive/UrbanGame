@@ -53,6 +53,7 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Solutions\SolutionStatusChanged.cs" />
     <Compile Include="WebService\AuthorizeState.cs" />
     <Compile Include="Collections\IEntityEnumerable.cs" />
     <Compile Include="Collections\EntityEnumerable.cs" />

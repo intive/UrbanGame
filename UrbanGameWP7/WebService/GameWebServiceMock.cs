@@ -144,7 +144,8 @@ namespace WebService
         #region SubmitTaskSolution
         public bool SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
-            throw new NotImplementedException();
+            GameChangesManager.AddSolution(new SubmittedSolution() { TaskId = tid });
+            return true;
         }
         #endregion
 
