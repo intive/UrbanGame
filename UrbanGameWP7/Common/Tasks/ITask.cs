@@ -16,6 +16,11 @@ namespace Common
 
         TaskType Type { get; set; }
 
+        /// <summary>
+        /// Field shows that taks is active, inactive, accomplished or cancelled
+        /// </summary>
+        TaskState State { get; set; }
+
         string Description { get; set; }
 
         string AdditionalText { get; set; }
@@ -29,8 +34,6 @@ namespace Common
         SolutionStatus SolutionStatus { get; set; }
 
         bool IsRepeatable { get; set; }
-
-        bool IsCancelled { get; set; }
 
         int? UserPoints { get; set; }
 

@@ -159,6 +159,29 @@ namespace UrbanGame.Storage
         }
         #endregion
 
+        #region State
+
+        private TaskState _state;
+
+        [Column]
+        public TaskState State
+        {
+            get
+            {
+                return _state;
+            }
+            set
+            {
+                if (_state != value)
+                {
+                    NotifyPropertyChanging("Steate");
+                    _state = value;
+                    NotifyPropertyChanged("State");
+                }
+            }
+        }
+        #endregion
+
         #region Description
 
         private string _description;
@@ -303,29 +326,6 @@ namespace UrbanGame.Storage
                     NotifyPropertyChanging("IsRepeatable");
                     _isRepeatable = value;
                     NotifyPropertyChanged("IsRepeatable");
-                }
-            }
-        }
-        #endregion
-
-        #region IsCancelled
-
-        private bool _isCancelled;
-
-        [Column(DbType = "bit DEFAULT 0 NOT NULL")]
-        public bool IsCancelled
-        {
-            get
-            {
-                return _isCancelled;
-            }
-            set
-            {
-                if (_isCancelled != value)
-                {
-                    NotifyPropertyChanging("IsCancelled");
-                    _isCancelled = value;
-                    NotifyPropertyChanged("IsCancelled");
                 }
             }
         }

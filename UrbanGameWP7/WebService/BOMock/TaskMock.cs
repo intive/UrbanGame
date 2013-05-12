@@ -81,6 +81,28 @@ namespace WebService.BOMock
         }
         #endregion
 
+        #region State
+
+        private TaskState _state;
+
+        public TaskState State
+        {
+            get
+            {
+                return _state;
+            }
+            set
+            {
+                if (_state != value)
+                {
+                    NotifyPropertyChanging("State");
+                    _state = value;
+                    NotifyPropertyChanged("State");
+                }
+            }
+        }
+        #endregion
+
         #region Description
 
         private string _description;

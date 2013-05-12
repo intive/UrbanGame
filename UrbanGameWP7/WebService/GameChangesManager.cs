@@ -50,6 +50,7 @@ namespace WebService
                         toUpdate.GameLongitude = newGame.GameLongitude;
                         toUpdate.GameLatitude = newGame.GameLatitude;
                         toUpdate.GameLogo = newGame.GameLogo;
+                        //toUpdate.Localization = newGame.Localization;
                         toUpdate.GameStart = newGame.GameStart;
                         toUpdate.GameState = newGame.GameState;
                         toUpdate.GameType = newGame.GameType;
@@ -59,7 +60,6 @@ namespace WebService
                         toUpdate.NumberOfPlayers = newGame.NumberOfPlayers;
                         toUpdate.NumberOfSlots = newGame.NumberOfSlots;
                         toUpdate.NumberOfTasks = newGame.NumberOfTasks;
-                        toUpdate.OperatorLogo = newGame.OperatorLogo;
                         toUpdate.OperatorName = newGame.OperatorName;
                         toUpdate.Points = newGame.Points;
                         toUpdate.Prizes = newGame.Prizes;
