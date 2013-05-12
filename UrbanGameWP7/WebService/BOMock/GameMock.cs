@@ -80,23 +80,23 @@ namespace WebService.BOMock
         }
         #endregion
 
-        #region OperatorLogo
+        #region Localization
 
-        private string _operatorLogo;
+        private string _localization;
 
-        public string OperatorLogo
+        public string Localization
         {
             get
             {
-                return _operatorLogo;
+                return _localization;
             }
             set
             {
-                if (_operatorLogo != value)
+                if (_localization != value)
                 {
-                    NotifyPropertyChanging("OperatorLogo");
-                    _operatorLogo = value;
-                    NotifyPropertyChanged("OperatorLogo");
+                    NotifyPropertyChanging("Localization");
+                    _localization = value;
+                    NotifyPropertyChanged("Localization");
                 }
             }
         }
@@ -496,6 +496,52 @@ namespace WebService.BOMock
         private void OnTaskRemoved(TaskMock task)
         {
             task.Game = null;
+        }
+        #endregion
+
+        #region IGame.Alerts
+
+        private IEntityEnumerable<IAlert> _alerts;
+
+        public IEntityEnumerable<IAlert> Alerts
+        {
+            get
+            {
+                return _alerts;
+            }
+        }
+
+        private void OnAlertAdded(TaskMock alert)
+        {
+            alert.Game = this;
+        }
+
+        private void OnAlertRemoved(TaskMock alert)
+        {
+            alert.Game = null;
+        }
+        #endregion
+
+        #region IGame.HighScores
+
+        private IEntityEnumerable<IHighScore> _highScores;
+
+        public IEntityEnumerable<IHighScore> HighScores
+        {
+            get
+            {
+                return _highScores;
+            }
+        }
+
+        private void OnHighScoreAdded(TaskMock highScore)
+        {
+            highScore.Game = this;
+        }
+
+        private void OnHighScoreRemoved(TaskMock highScore)
+        {
+            highScore.Game = null;
         }
         #endregion
     }

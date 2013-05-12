@@ -16,7 +16,7 @@ namespace Common
 
         string OperatorName { get; set; }
 
-        string OperatorLogo { get; set; }
+        string Localization { get; set; }
 
         string GameLogo { get; set; }
 
@@ -59,5 +59,9 @@ namespace Common
         string Prizes { get; set; }
 
         IEntityEnumerable<ITask> Tasks { get; }
+
+        IEntityEnumerable<IAlert> Alerts { get; }
+
+        IEntityEnumerable<IHighScore> HighScores { get; }
     }
 }
