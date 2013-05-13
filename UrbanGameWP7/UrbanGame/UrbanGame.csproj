@@ -94,10 +94,16 @@
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\GameStartEndConverter.cs" />
+    <Compile Include="Converters\DateToVisibilityConverter.cs" />
+    <Compile Include="Converters\GameEndConverter.cs" />
+    <Compile Include="Converters\GameStartConverter.cs" />
+    <Compile Include="Converters\GameStateConverter.cs" />
     <Compile Include="Converters\GameTypeConverter.cs" />
     <Compile Include="Converters\DifficultyConverter.cs" />
+    <Compile Include="Converters\IntToSlashIntConverter.cs" />
     <Compile Include="Converters\OpositeBoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\OpositeDateToVisibilityConverter.cs" />
+    <Compile Include="Converters\RankConverter.cs" />
     <Compile Include="Localization\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -113,6 +119,8 @@
     <Compile Include="Storage\ABCDPossibleAnswer.cs" />
     <Compile Include="Storage\BusinessTypeMapper.cs" />
     <Compile Include="Storage\Game.cs" />
+    <Compile Include="Storage\GameAlert.cs" />
+    <Compile Include="Storage\GameHighScore.cs" />
     <Compile Include="Storage\Repository.cs" />
     <Compile Include="Storage\GameTask.cs" />
     <Compile Include="Storage\TaskSolution.cs" />
@@ -123,10 +131,10 @@
     <Compile Include="Tombstoning\TombstoningVariables.cs" />
     <Compile Include="Utilities\AppbarManager.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\GameDetailsViewModel.cs" />
+    <Compile Include="ViewModels\GameDetailsPreviewViewModel.cs" />
     <Compile Include="ViewModels\GamesListViewModel.cs" />
-    <Compile Include="Views\GameDetailsView.xaml.cs">
-      <DependentUpon>GameDetailsView.xaml</DependentUpon>
+    <Compile Include="Views\GameDetailsPreviewView.xaml.cs">
+      <DependentUpon>GameDetailsPreviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GamesListView.xaml.cs">
       <DependentUpon>GamesListView.xaml</DependentUpon>
@@ -137,7 +145,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Page Include="Views\GameDetailsView.xaml">
+    <Page Include="Views\GameDetailsPreviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
