@@ -24,7 +24,7 @@ namespace UrbanGameTests.Tests
         #endregion
 
         #region CreateSampleEntities
-        private void CreateSampleEntities(out Game game, out GameTask task, out ABCDPossibleAnswer answer)
+        private void CreateSampleEntities(out Game game, out GameTask task, out GameAlert alert, out GameHighScore highScore, out ABCDPossibleAnswer answer)
         {
             game = new Game()
             {
@@ -60,6 +60,20 @@ namespace UrbanGameTests.Tests
                 Version = 1
             };
 
+            alert = new GameAlert()
+            {
+                Id = 1,
+                Topic = "Operator",
+                Description = "There were more than one possible answears before, now only 1 is correct"
+            };
+
+            highScore = new GameHighScore()
+            {
+                Id = 1,
+                UserLogin = "LoganXxX",
+                Points = 130
+            };
+
             answer = new ABCDPossibleAnswer()
             {
                 Id = 1,
@@ -67,15 +81,19 @@ namespace UrbanGameTests.Tests
             };
         }
 
-        private void CreateSampleEntities(out IGame game, out ITask task, out IABCDPossibleAnswer answer)
+        private void CreateSampleEntities(out IGame game, out ITask task, out IAlert alert, out IHighScore highScore, out IABCDPossibleAnswer answer)
         {
             Game g;
             GameTask t;
+            GameAlert al;
+            GameHighScore h;
             ABCDPossibleAnswer a;
-            CreateSampleEntities(out g, out t, out a);
+            CreateSampleEntities(out g, out t, out al, out h, out a);
 
             game = g;
             task = t;
+            alert = al;
+            highScore = h;
             answer = a;
         }
         #endregion
@@ -94,15 +112,21 @@ namespace UrbanGameTests.Tests
         {
             Game game;
             GameTask task;
+            GameAlert alert;
+            GameHighScore highScore;
             ABCDPossibleAnswer answer;
-            CreateSampleEntities(out game, out task, out answer);
+            CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
 
             using (UrbanGameDataContext dataContext = RecreateDatabase())
             {
-                #region Game <-> GameTask relation
+                #region Game <-> GameTask, GameAlert, GameHighScore relation
 
                 //adding task to game
                 game.Tasks.Add(task);
+                game.Alerts.Add(alert);
+                game.HighScores.Add(highScore);
+
+                
                 Assert.AreSame(game, task.Game);
 
                 dataContext.GetTable<Game>().InsertOnSubmit(game);
@@ -118,13 +142,17 @@ namespace UrbanGameTests.Tests
                 dataContext.SubmitChanges();
 
                 //removing
-                dataContext.GetTable<Game>().DeleteOnSubmit(game);  
-                dataContext.GetTable<GameTask>().DeleteOnSubmit(task);                              
+                dataContext.GetTable<Game>().DeleteOnSubmit(game);
+                dataContext.GetTable<GameTask>().DeleteOnSubmit(task);
+                dataContext.GetTable<GameAlert>().DeleteOnSubmit(alert);
+                dataContext.GetTable<GameHighScore>().DeleteOnSubmit(highScore);
                 dataContext.SubmitChanges();
                 Assert.AreEqual(0, dataContext.GetTable<Game>().Count());
                 Assert.AreEqual(0, dataContext.GetTable<GameTask>().Count());
+                Assert.AreEqual(0, dataContext.GetTable<GameAlert>().Count());
+                Assert.AreEqual(0, dataContext.GetTable<GameHighScore>().Count());
 
-                CreateSampleEntities(out game, out task, out answer);
+                CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
 
                 //adding game to task
                 task.Game = game;
@@ -167,7 +195,7 @@ namespace UrbanGameTests.Tests
                 Assert.AreEqual(0, dataContext.GetTable<GameTask>().Count());
                 Assert.AreEqual(0, dataContext.GetTable<ABCDPossibleAnswer>().Count());
 
-                CreateSampleEntities(out game, out task, out answer);
+                CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
 
                 
                 //adding task to abcdPossibleAnswer
@@ -192,8 +220,10 @@ namespace UrbanGameTests.Tests
         {
             IGame game;
             ITask task;
+            IAlert alert;
+            IHighScore highScore;
             IABCDPossibleAnswer answer;
-            CreateSampleEntities(out game, out task, out answer);
+            CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
 
             using (UrbanGameDataContext dataContext = RecreateDatabase())
             {
@@ -222,7 +252,7 @@ namespace UrbanGameTests.Tests
                 Assert.AreEqual(0, dataContext.GetTable<Game>().Count());
                 Assert.AreEqual(0, dataContext.GetTable<GameTask>().Count());
 
-                CreateSampleEntities(out game, out task, out answer);
+                CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
 
                 //adding game to task
                 task.Game = game;
@@ -265,7 +295,7 @@ namespace UrbanGameTests.Tests
                 Assert.AreEqual(0, dataContext.GetTable<GameTask>().Count());
                 Assert.AreEqual(0, dataContext.GetTable<ABCDPossibleAnswer>().Count());
 
-                CreateSampleEntities(out game, out task, out answer);
+                CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
 
                 //adding task to abcdPossibleAnswer
                 answer.Task = task;

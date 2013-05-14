@@ -61,7 +61,7 @@ namespace UrbanGame.Storage
 
         private EntityRef<Game> _gameRef = new EntityRef<Game>();
 
-        [Association(Name = "FK_Game_Tasks", Storage = "_gameRef", ThisKey = "GameId", OtherKey = "Id", IsForeignKey = true)]
+        [Association(Name = "FK_Game_Alerts", Storage = "_gameRef", ThisKey = "GameId", OtherKey = "Id", IsForeignKey = true)]
         public Game Game
         {
             get

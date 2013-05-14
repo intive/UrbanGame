@@ -45,7 +45,7 @@ namespace WebService
                         toUpdate.GameLongitude = newGame.GameLongitude;
                         toUpdate.GameLatitude = newGame.GameLatitude;
                         toUpdate.GameLogo = newGame.GameLogo;
-                        //toUpdate.Localization = newGame.Localization;
+                        toUpdate.Localization = newGame.Localization;
                         toUpdate.GameStart = newGame.GameStart;
                         toUpdate.GameState = newGame.GameState;
                         toUpdate.GameType = newGame.GameType;
@@ -64,7 +64,7 @@ namespace WebService
                     }
 
                     _gameEventAggregator.Publish(new GameChangedEvent() { Id = gid });                                      
-                });            
+                });      
         }
 
         private void RandomChange(object obj)

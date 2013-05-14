@@ -12,6 +12,8 @@ namespace WebService.BOMock
         public GameMock()
         {
             _tasks = new EntityEnumerable<ITask, TaskMock>(new EntitySet<TaskMock>(OnTaskAdded, OnTaskRemoved));
+            _alerts = new EntityEnumerable<IAlert, AlertMock>(new EntitySet<AlertMock>(OnAlertAdded, OnAlertRemoved));
+            _highScores = new EntityEnumerable<IHighScore, HighScoreMock>(new EntitySet<HighScoreMock>(OnHighScoreAdded, OnHighScoreRemoved));
         }
 
         #region Id
@@ -511,12 +513,12 @@ namespace WebService.BOMock
             }
         }
 
-        private void OnAlertAdded(TaskMock alert)
+        private void OnAlertAdded(AlertMock alert)
         {
             alert.Game = this;
         }
 
-        private void OnAlertRemoved(TaskMock alert)
+        private void OnAlertRemoved(AlertMock alert)
         {
             alert.Game = null;
         }
@@ -534,12 +536,12 @@ namespace WebService.BOMock
             }
         }
 
-        private void OnHighScoreAdded(TaskMock highScore)
+        private void OnHighScoreAdded(HighScoreMock highScore)
         {
             highScore.Game = this;
         }
 
-        private void OnHighScoreRemoved(TaskMock highScore)
+        private void OnHighScoreRemoved(HighScoreMock highScore)
         {
             highScore.Game = null;
         }
