@@ -84,7 +84,6 @@
     <Compile Include="GameWebServiceMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BOMock\TaskMock.cs" />
-    <Compile Include="TaskChangesManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

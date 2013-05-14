@@ -53,7 +53,6 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tasks\ITaskChangesManager.cs" />
     <Compile Include="Tasks\TaskChangedEvent.cs" />
     <Compile Include="WebService\AuthorizeState.cs" />
     <Compile Include="Collections\IEntityEnumerable.cs" />
