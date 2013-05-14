@@ -35,6 +35,8 @@ object Games extends Table[GamesDetails]("GAMES") {
   def version = column[Int]("version", O.NotNull, O.Default(1))
   def description = column[String]("description", O.NotNull)
   def location = column[String]("location", O.NotNull)
+  def lat = column[Float]("lat", O.NotNull)
+  def lon = column[Float]("lon", O.NotNull)
   def operatorId = column[Int]("operatorId", O.NotNull)
   def created = column[DateTime]("created", O.NotNull, O.Default(DateTime.now))
   def startTime = column[DateTime]("startTime", O.NotNull, O.Default(DateTime.now))
@@ -48,17 +50,17 @@ object Games extends Table[GamesDetails]("GAMES") {
   def awards = column[String]("awards", O.NotNull)
   def status = column[String]("status", O.NotNull, O.Default("project"))
   def image = column[String]("image", O.NotNull, O.Default("games/gameicon.png"))
-  def * = id.? ~ name ~ version ~ description ~ location ~ operatorId ~ 
+  def * = id.? ~ name ~ version ~ description ~ location ~ lat ~ lon ~ operatorId ~ 
     created ~ startTime ~ endTime ~ started ~ ended ~ winning ~ nWins ~ 
     difficulty ~ maxPlayers ~ awards ~ status ~ image <> (GamesDetails, GamesDetails.unapply _)
 
-  def forInsert = name ~ version ~ description ~ location ~ operatorId ~ 
+  def forInsert = name ~ version ~ description ~ location ~ lat ~ lon ~ operatorId ~ 
     created ~ startTime ~ endTime ~ started ~ ended ~ winning ~ nWins ~ 
     difficulty ~ maxPlayers ~ awards ~ status ~ image <> ({ t => 
       GamesDetails(None, t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, 
-        t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17)}, 
-      { (gd: GamesDetails) => Some((gd.name, gd.version, gd.description, gd.location, 
-        gd.operatorId, gd.created, gd.startTime, gd.endTime, gd.started, gd.ended, 
+        t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17, t._18, t._19)}, 
+      { (gd: GamesDetails) => Some((gd.name, gd.version, gd.description, gd.location, gd.lat, 
+        gd.lon, gd.operatorId, gd.created, gd.startTime, gd.endTime, gd.started, gd.ended, 
         gd.winning, gd.nWins, gd.difficulty, gd.maxPlayers, gd.awards, gd.status, gd.image))
       })
 

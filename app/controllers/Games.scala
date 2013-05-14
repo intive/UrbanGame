@@ -32,7 +32,11 @@ object GamesCtrl extends Controller with CookieLang {
   }
 
   def mygames = Action { implicit request =>
-    Ok(Scalate("mygames").render('title -> "Urban Game - Create new game", 'request -> request))
+    Ok(Scalate("mygames").render('title -> "Urban Game - My games", 'request -> request))
+  }
+
+  def gameinfo(gid: Int) = Action { implicit request =>
+    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game informations", 'request -> request))
   }
 
   import play.api.libs.json._
@@ -40,7 +44,7 @@ object GamesCtrl extends Controller with CookieLang {
   import scala.language.existentials
 
   def getGamesList = Action { implicit request =>
-    val opId = 2 // will be set from session soon
+    val opId = 1 // will be set from session soon
 
     val glist = play.api.db.slick.DB.withSession { implicit session =>
         Games.getOperatorGamesList(opId)
@@ -50,7 +54,7 @@ object GamesCtrl extends Controller with CookieLang {
   }
 
   def saveGame = Action { implicit request =>
-    val gd = GamesDetails(None, "gg1", 1, "Game1", "Wro", 1, DateTime.now, DateTime.now, 
+    val gd = GamesDetails(None, "gg1", 1, "Game1", "Wro", 2.456.toFloat, 1.009.toFloat, 1, DateTime.now, DateTime.now, 
         DateTime.now + 600.hours, DateTime.now, DateTime.now + 600.hours, "max_points", 1, 
         "easy", 20, "Jakieś", "online")
 

@@ -65,10 +65,8 @@
 
                 %td 
                     {{game.version}}
-                %td 
-                    .row
-                        %button.btn.btn-small(type="button") Edit
-                    .row(ng-show="game.status != 'finished' || game.status != 'online'")
-                        %button.btn.btn-small(type="button") Delete
+                %td
+                    .row(ng-show="game.status == 'project' || game.status == 'online'")
+                        %button.btn.btn-small(type="button" ng-class="{disabled: game.status == 'online'}" ng-click="delete($index); $event.stopPropagation();") Delete
                     .row(ng-show="game.status == 'published'")
-                        %button.btn.btn-small(type="button") Cancel
+                        %button.btn.btn-small(type="button" ng-click="cancel($index); $event.stopPropagation();") Cancel

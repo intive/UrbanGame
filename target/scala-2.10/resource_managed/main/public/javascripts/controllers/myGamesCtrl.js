@@ -1,5 +1,5 @@
 app.controller('myGamesCtrl', [
-  '$scope', '$timeout', 'Games', function($scope, $timeout, Games) {
+  '$scope', '$location', '$timeout', 'Games', function($scope, $location, $timeout, Games) {
     var intervalID;
     $scope.safeApply = function() {
       var phase;
@@ -18,7 +18,18 @@ app.controller('myGamesCtrl', [
       return console.log("Error occurred while getting list of games");
     });
     $scope.showDetails = function(idx) {
-      return alert("Game with id: " + $scope.games[idx].id + " and name: " + $scope.games[idx].name + " will be showed");
+      if ($scope.games[idx].status === 'online') {
+        window.location.pathname = "/my/games/" + $scope.games[idx].id;
+      }
+      if ($scope.games[idx].status === 'project' || $scope.games[idx].status === 'published') {
+        return alert("Game with id: " + $scope.games[idx].id + " and name: " + $scope.games[idx].name + " will be edited here");
+      }
+    };
+    $scope["delete"] = function(idx) {
+      return alert("Here the game with id: " + $scope.games[idx].id + " will be deleted");
+    };
+    $scope.cancel = function(idx) {
+      return alert("Here the game with id: " + $scope.games[idx].id + " will be canceled");
     };
     $scope.timeLeft = function(sdate, edate) {
       var dateEnd, dateStart, days, diff, hours, minutes, now, seconds, zeros;
