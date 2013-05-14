@@ -24,7 +24,6 @@ namespace UrbanGameTests.Tests
                 Id = id,
                 Name = name,
                 OperatorName = "CAFETERIA",
-                OperatorLogo = "/ApplicationIcon.png",
                 GameLogo = "/ApplicationIcon.png",
                 GameStart = DateTime.Now.AddHours(3).AddMinutes(23),
                 GameEnd = DateTime.Now.AddDays(2).AddHours(5),
