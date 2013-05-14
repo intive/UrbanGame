@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace UrbanGame.ViewModels
 {
-    public class TaskViewModel : BaseViewModel, IHandle<GameChangedEvent>
+    public class TaskViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<TaskChangedEvent>
     {
 
         IAppbarManager _appbarManager;
@@ -59,7 +59,7 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
-        #region IHandle<GameChangedEvent>
+        #region IHandle<TaskChangedEvent>
         public void Handle(TaskChangedEvent task)
         {
             if (task.Id == TaskId)
@@ -146,15 +146,10 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-                if (_gameWebService.IsAuthorized)
-                {
-                    IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
-                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
-                }
-                else
-                {
-                    Game = _gameWebService.GetGameInfo(GameId);
-                }
+
+                IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
+                Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
+
             });
         }
 
@@ -162,15 +157,10 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-                if (_gameWebService.IsAuthorized)
-                {
-                    IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
-                    CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId) ?? _gameWebService.GetTaskDetails(GameId, TaskId);
-                }
-                else
-                {
-                    CurrentTask = _gameWebService.GetTaskDetails(GameId, TaskId);
-                }
+
+                IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
+                CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId) ?? _gameWebService.GetTaskDetails(GameId, TaskId);
+
             });
         }
 
