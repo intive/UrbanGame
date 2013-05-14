@@ -108,7 +108,7 @@
     <Compile Include="Tests\DatabaseMockTest.cs" />
     <Compile Include="Tests\DatabaseTest.cs" />
     <Compile Include="Tests\GameChangesManagerTest.cs" />
-    <Compile Include="Tests\GameDetailsViewModelTest.cs" />
+    <Compile Include="Tests\GameDetailsPreviewViewModelTest.cs" />
     <Compile Include="Tests\GamesListViewModelTest.cs" />
     <Compile Include="Tests\UnitOfWorkMockTest.cs" />
     <Compile Include="Tests\WebApiTest.cs" />

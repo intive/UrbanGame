@@ -188,6 +188,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to d.
+        /// </summary>
+        public static string DayShortcut {
+            get {
+                return ResourceManager.GetString("DayShortcut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to description.
         /// </summary>
         public static string Descrition {
@@ -341,6 +350,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to h.
+        /// </summary>
+        public static string HoursShortcut {
+            get {
+                return ResourceManager.GetString("HoursShortcut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to inactive.
         /// </summary>
         public static string Inactive {
@@ -418,6 +436,15 @@ namespace UrbanGame.Localization {
         public static string Messages {
             get {
                 return ResourceManager.GetString("Messages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to m.
+        /// </summary>
+        public static string MinutesShortcut {
+            get {
+                return ResourceManager.GetString("MinutesShortcut", resourceCulture);
             }
         }
         
@@ -548,6 +575,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to start:.
+        /// </summary>
+        public static string Start {
+            get {
+                return ResourceManager.GetString("Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to started.
         /// </summary>
         public static string Started {
@@ -571,6 +607,15 @@ namespace UrbanGame.Localization {
         public static string ToEnd {
             get {
                 return ResourceManager.GetString("ToEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to end.
+        /// </summary>
+        public static string ToEndLowCase {
+            get {
+                return ResourceManager.GetString("ToEndLowCase", resourceCulture);
             }
         }
         
