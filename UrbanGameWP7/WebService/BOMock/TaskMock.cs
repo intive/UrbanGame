@@ -256,29 +256,7 @@ namespace WebService.BOMock
                 }
             }
         }
-        #endregion
-
-        #region IsCancelled
-
-        private bool _isCancelled;
-
-        public bool IsCancelled
-        {
-            get
-            {
-                return _isCancelled;
-            }
-            set
-            {
-                if (_isCancelled != value)
-                {
-                    NotifyPropertyChanging("IsCancelled");
-                    _isCancelled = value;
-                    NotifyPropertyChanged("IsCancelled");
-                }
-            }
-        }
-        #endregion
+        #endregion        
 
         #region UserPoints
 
