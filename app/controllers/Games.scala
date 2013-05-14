@@ -40,7 +40,7 @@ object GamesCtrl extends Controller with CookieLang {
   import scala.language.existentials
 
   def getGamesList = Action { implicit request =>
-    val opId = 1 // will be set from session soon
+    val opId = 2 // will be set from session soon
 
     val glist = play.api.db.slick.DB.withSession { implicit session =>
         Games.getOperatorGamesList(opId)
