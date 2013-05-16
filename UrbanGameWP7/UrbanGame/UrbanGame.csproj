@@ -93,6 +93,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
+    <Compile Include="Converters\ABCDToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateToVisibilityConverter.cs" />
     <Compile Include="Converters\GameEndConverter.cs" />
@@ -100,10 +101,14 @@
     <Compile Include="Converters\GameStateConverter.cs" />
     <Compile Include="Converters\GameTypeConverter.cs" />
     <Compile Include="Converters\DifficultyConverter.cs" />
+    <Compile Include="Converters\GPSToVisibilityConverter.cs" />
     <Compile Include="Converters\IntToSlashIntConverter.cs" />
+    <Compile Include="Converters\NullableToNumberConverter.cs" />
     <Compile Include="Converters\OpositeBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\OpositeDateToVisibilityConverter.cs" />
     <Compile Include="Converters\RankConverter.cs" />
+    <Compile Include="Converters\TaskEndConverter.cs" />
+    <Compile Include="Converters\ToUpperCaseConverter.cs" />
     <Compile Include="Localization\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -133,11 +138,15 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsPreviewViewModel.cs" />
     <Compile Include="ViewModels\GamesListViewModel.cs" />
+    <Compile Include="ViewModels\TaskViewModel.cs" />
     <Compile Include="Views\GameDetailsPreviewView.xaml.cs">
       <DependentUpon>GameDetailsPreviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GamesListView.xaml.cs">
       <DependentUpon>GamesListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskView.xaml.cs">
+      <DependentUpon>TaskView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +161,10 @@
     <Page Include="Views\GamesListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TaskView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

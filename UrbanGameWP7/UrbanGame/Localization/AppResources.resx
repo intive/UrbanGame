@@ -307,4 +307,16 @@
   <data name="Undefinied" xml:space="preserve">
     <value>undefinied</value>
   </data>
+  <data name="Answer" xml:space="preserve">
+    <value>answer</value>
+  </data>
+  <data name="AnswerGPS" xml:space="preserve">
+    <value>If you think this is the right spot, please submit your coordinates to check.</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>submit</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>description</value>
+  </data>
 </root>
