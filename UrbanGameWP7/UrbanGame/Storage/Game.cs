@@ -14,6 +14,8 @@ namespace UrbanGame.Storage
         public Game() : base()
         {
             _taskRefs = new EntitySet<GameTask>(OnTaskAdded, OnTaskRemoved);
+            _alertRefs = new EntitySet<GameAlert>(OnAlertAdded, OnAlertRemoved);
+            _highScoreRefs = new EntitySet<GameHighScore>(OnHighScoreAdded, OnHighScoreRemoved);
         }
 
         #region Id
@@ -535,7 +537,7 @@ namespace UrbanGame.Storage
 
         private EntitySet<GameAlert> _alertRefs;
 
-        [Association(Name = "FK_Game_Alrts", Storage = "_alertRefs", ThisKey = "Id", OtherKey = "GameId")]
+        [Association(Name = "FK_Game_Alerts", Storage = "_alertRefs", ThisKey = "Id", OtherKey = "GameId")]
         public EntitySet<GameAlert> Alerts
         {
             get { return _alertRefs; }

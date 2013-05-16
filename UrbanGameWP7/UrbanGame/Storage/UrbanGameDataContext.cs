@@ -35,6 +35,10 @@ namespace UrbanGame.Storage
 
         public Table<GameTask> Tasks;
 
+        public Table<GameAlert> Alerts;
+
+        public Table<GameHighScore> HighScores;
+
         public Table<ABCDPossibleAnswer> ABCDPossibleAnswers;
 
         public Table<TaskSolution> Solutions;        

@@ -78,8 +78,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BOMock\ABCDPossibleAnswerMock.cs" />
+    <Compile Include="BOMock\AlertMock.cs" />
     <Compile Include="BOMock\BOBase.cs" />
     <Compile Include="BOMock\GameMock.cs" />
+    <Compile Include="BOMock\HighScoreMock.cs" />
     <Compile Include="GameChangesManager.cs" />
     <Compile Include="GameWebServiceMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
