@@ -72,6 +72,12 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 		else {
 			this.data = data;
 		}
+		
+		if (data != null) {
+			for (UrbanGameShortInfo element : data) {
+				add(element);
+			}
+		}
 	}
 	
 	@Override
@@ -111,6 +117,9 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 		if (gameInfo.getReward()) {
 			holder.imageViewGamePrize.setImageResource(R.drawable.prize);
 		}
+		else {
+			holder.imageViewGamePrize.setImageDrawable(null);
+		}
 		holder.imageViewOperatorLogo.setImageDrawable(gameInfo.getOperatorLogoDrawable(context.getResources()));
 		holder.textViewGameName.setText(gameInfo.getTitle());
 		holder.textViewLocation.setText(gameInfo.getLocation());
@@ -122,6 +131,7 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 		}
 		else {
 			//Removing divider if the game doesn't have limit for maximum number of players.
+			holder.textViewNumberOfTotalPlayers.setText("");
 			holder.textViewDivider.setText("");
 		}
 		holder.textViewOperatorName.setText(gameInfo.getOperatorName());
