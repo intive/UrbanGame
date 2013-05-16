@@ -21,18 +21,20 @@ public class MenuItemHelper {
 	// Public methods
 	//
 	public static void initLogoutMenuItem(Activity activity, Menu menu) {
-		// This method grey out "Logout" menu item if user is not logged.
-		// If user is logged "Logout" menu item is enabled.
+		// This method hides "Logout" menu item in Menu if user is not logged.
+		// If user is logged "Logout" menu item is visible in Menu.
+
 		DatabaseInterface database = new Database(activity);
-		if (database.getLoggedPlayerID() == null) menu.findItem(R.id.menu_logout).setEnabled(false);
-		else menu.findItem(R.id.menu_logout).setEnabled(true);
+		
+		if (database.getLoggedPlayerID() == null) menu.findItem(R.id.menu_logout).setVisible(false);
+		else  menu.findItem(R.id.menu_logout).setVisible(true);
 		
 		database.closeDatabase();
 		Log.i(TAG, "initLogoutMenuItem completed in: " + activity.getClass().getSimpleName());
 	}
 	
 	public static void invokeActionLogoutMenuItem(Activity activity) {
-		// This method erase information that user is logged in
+		// This method erases information that user is logged in
 		// and shows MainActivitiy to the user
 		DatabaseInterface database = new Database(activity);
 		if (database.getLoggedPlayerID() != null) {

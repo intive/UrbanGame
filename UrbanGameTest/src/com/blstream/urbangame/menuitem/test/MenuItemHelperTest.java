@@ -52,9 +52,9 @@ public class MenuItemHelperTest extends ActivityInstrumentationTestCase2<MenuIte
 		// Set that no one is logged
 		assertTrue(database.setNoOneLogged());
 		
-		// Now create activity; "Logout" menu item should be disabled.
+		// Now create activity; "Logout" menu item should not be visible to user.
 		mockActivity = getActivity();
-		assertFalse(mockActivity.getLogoutMenuItem().isEnabled());
+		assertFalse(mockActivity.getLogoutMenuItem().isVisible());
 		
 		Log.d(TAG, "testMenuItemLogoutUserNotLogged completed");
 	}
@@ -69,9 +69,9 @@ public class MenuItemHelperTest extends ActivityInstrumentationTestCase2<MenuIte
 		mainActivityMonitor = new ActivityMonitor(MainActivity.class.getName(), null, false);
 		getInstrumentation().addMonitor(mainActivityMonitor);
 		
-		// Now create activity; "Logout" menu item should be enabled.
+		// Now create activity; "Logout" menu item should be visible to user.
 		mockActivity = getActivity();
-		assertTrue(mockActivity.getLogoutMenuItem().isEnabled());
+		assertTrue(mockActivity.getLogoutMenuItem().isVisible());
 		
 		// Simulate click on "Logout" menu item. 
 		mockActivity.onMenuItemSelected(R.id.menu_logout, mockActivity.getLogoutMenuItem());
