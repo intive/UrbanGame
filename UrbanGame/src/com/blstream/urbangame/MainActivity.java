@@ -19,6 +19,7 @@ import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
+import com.blstream.urbangame.menuitem.MenuItemHelper;
 
 public class MainActivity extends SherlockListActivity {
 	private static final String TAG = "MainActivity";
@@ -90,8 +91,18 @@ public class MainActivity extends SherlockListActivity {
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_games_list, menu);
 		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
+		Log.i(TAG, "onCreateOptionsMenu");
+		MenuItemHelper.initLogoutMenuItem(this, menu);
+		
 		configureSearchAction(menu);
 		return true;
+	}
+	
+	@Override
+	protected void onResume() {
+	    super.onResume();
+	    this.supportInvalidateOptionsMenu();
+		Log.i(TAG, "onResume completed");
 	}
 	
 	private void configureSearchAction(Menu menu) {
@@ -141,6 +152,12 @@ public class MainActivity extends SherlockListActivity {
 	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		return super.onMenuItemSelected(featureId, item);
+		int itemId = item.getItemId();
+		switch (itemId) {
+			case R.id.menu_logout:
+				MenuItemHelper.invokeActionLogoutMenuItem(this);
+				break;
+		}
+		return true;
 	}
 }

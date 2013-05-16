@@ -26,6 +26,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.entity.Player;
+import com.blstream.urbangame.menuitem.MenuItemHelper;
 
 public class ProfileActivity extends SherlockActivity {
 	
@@ -139,6 +140,9 @@ public class ProfileActivity extends SherlockActivity {
 		else {
 			editTextDisplayName.setText(null);
 		}
+		
+	    this.supportInvalidateOptionsMenu();
+		Log.i(TAG, "onResume completed");
 	}
 	
 	/**
@@ -211,6 +215,7 @@ public class ProfileActivity extends SherlockActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
+		MenuItemHelper.initLogoutMenuItem(this, menu);
 		return true;
 	}
 	
@@ -220,6 +225,9 @@ public class ProfileActivity extends SherlockActivity {
 		switch (itemId) {
 			case android.R.id.home:
 				finish();
+				break;
+			case R.id.menu_logout:
+				MenuItemHelper.invokeActionLogoutMenuItem(this);
 				break;
 		}
 		return true;
