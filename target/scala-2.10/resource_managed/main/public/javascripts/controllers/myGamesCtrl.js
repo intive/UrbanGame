@@ -26,7 +26,9 @@ app.controller('myGamesCtrl', [
       }
     };
     $scope["delete"] = function(idx) {
-      return alert("Here the game with id: " + $scope.games[idx].id + " will be deleted");
+      if (!($scope.games[idx].status === 'online')) {
+        return alert("Here the game with id: " + $scope.games[idx].id + " will be deleted");
+      }
     };
     $scope.cancel = function(idx) {
       return alert("Here the game with id: " + $scope.games[idx].id + " will be canceled");

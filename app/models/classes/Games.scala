@@ -17,18 +17,25 @@ package models
 import play.api.Play.current
 import play.api.db.slick.DB
 import play.api.db.slick.Config.driver.simple._
-import slick.lifted.{MappedTypeMapper, TypeMapper}
-import com.github.nscala_time.time.Imports._
+import slick.lifted.{MappedTypeMapper, BaseTypeMapper}
 import java.sql.Timestamp
 import scala.language.postfixOps
 import models.mutils._
+import com.github.tototoshi.slick.JodaSupport._
+import com.github.nscala_time.time.Imports._
 
 
 object Games extends Table[GamesDetails]("GAMES") {
 
-  implicit val DateTimeMapper: TypeMapper[DateTime] = MappedTypeMapper.base[DateTime, Timestamp](
-    d => new Timestamp(d millis), t => new DateTime(t getTime)
-  )
+  //implicit val DateTimeMapper: BaseTypeMapper[DateTime] = MappedTypeMapper.base[DateTime, Timestamp](
+  //  d => new Timestamp(d millis), t => new DateTime(t getTime)
+  //)
+
+  // implicit object DateTimeTypeMapper extends MappedTypeMapper[DateTime, Timestamp] with BaseTypeMapper[DateTime] {
+  //   def map(e: DateTime) = new Timestamp(e millis)
+  //   def comap(s: Timestamp) = new DateTime(s getTime)
+  //   override def sqlTypeName = Some("DateTime")
+  // }
 
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name", O.NotNull)
@@ -41,8 +48,8 @@ object Games extends Table[GamesDetails]("GAMES") {
   def created = column[DateTime]("created", O.NotNull, O.Default(DateTime.now))
   def startTime = column[DateTime]("startTime", O.NotNull, O.Default(DateTime.now))
   def endTime = column[DateTime]("endTime", O.NotNull)
-  def started = column[DateTime]("started", O.NotNull, O.Default(DateTime.now))
-  def ended = column[DateTime]("ended", O.NotNull)
+  def started = column[DateTime]("started")
+  def ended = column[DateTime]("ended")
   def winning = column[String]("winning", O.NotNull, O.Default("max_points"))
   def nWins = column[Int]("nWins", O.NotNull, O.Default(1))
   def difficulty = column[String]("difficulty", O.NotNull, O.Default("easy"))
@@ -70,11 +77,40 @@ object Games extends Table[GamesDetails]("GAMES") {
 
 trait Games { this: ImplicitSession =>
 
-  def getRowsNo: Int = (for {g <- Games} yield g.count).first
+  def getRowsNo: Int = (for {g <- Games} yield g.length).first
+
+  def checkGamesStatus = {
+    val q = for {
+      g <- Games 
+      if g.status === "online" && g.endTime <= DateTime.now
+    } yield g.status
+    Console.printf(q.selectStatement)
+    val p = for {
+      g <- Games 
+      if g.status === "published" && g.startTime <= DateTime.now
+    } yield g.status
+    Console.printf(p.selectStatement)
+    q update "finished"
+    p update "online"
+  }
 
   def getOperatorGamesList(id: Int): List[GamesList] = {
+    checkGamesStatus
     val q = for {
-      g <- Games if g.operatorId === id.bind
+      g <- Games 
+      if g.operatorId === id.bind 
+      if g.status =!= "finished"
+    } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status, g.image)
+    q.list map {
+      case (id, name, ver, loc, st, et, stat, img) => GamesList(Some(id), name, ver, loc, st, et, stat, img)
+    }
+  }
+
+  def getOperatorGamesArchive(id: Int): List[GamesList] = {
+    val q = for {
+      g <- Games 
+      if g.operatorId === id.bind 
+      if g.status === "finished"
     } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status, g.image)
     q.list map {
       case (id, name, ver, loc, st, et, stat, img) => GamesList(Some(id), name, ver, loc, st, et, stat, img)
