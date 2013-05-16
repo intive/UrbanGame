@@ -22,6 +22,7 @@ namespace UrbanGame
             container.RegisterPhoneServices();
             container.PerRequest<GameDetailsPreviewViewModel>();
             container.PerRequest<GamesListViewModel>();
+            container.PerRequest<TaskViewModel>();
             container.PerRequest<IUnitOfWork, UnitOfWork>();
             container.Singleton<IGameWebService, GameWebServiceMock>();
             container.Singleton<IGameChangesManager, GameChangesManager>();
