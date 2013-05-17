@@ -25,7 +25,7 @@
         <activity android:name=".GameDetailsActivity" />
         <activity android:name=".ActiveGameActivity" />
         <activity android:name=".ActiveTaskActivity" />
-        <activity android:name=".LoggingInActivity" />
+        <activity android:name=".LoginRegisterActivity" />
     </application>
 
 </manifest>

@@ -91,22 +91,27 @@ public class MainActivity extends SherlockListActivity {
 		menuInflater.inflate(R.menu.top_bar_games_list, menu);
 		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
 		configureSearchAction(menu);
+		configureLoginAction(menu);
 		return true;
 	}
 	
-	private void configureSearchAction(Menu menu) {
-		final MenuItem moreItem = menu.findItem(R.id.menu_more);
+	private void configureLoginAction(Menu menu) {
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);
 		loginItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				Log.i(TAG, "onMenuItemClick(): " + item.getTitleCondensed());
-				Intent intent = new Intent(MainActivity.this, LoggingInActivity.class);
+				Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
 				startActivity(intent);
 				return true;
 			}
 		});
+	}
+	
+	private void configureSearchAction(Menu menu) {
+		final MenuItem moreItem = menu.findItem(R.id.menu_more);;
+		final MenuItem loginItem = menu.findItem(R.id.menu_login);
 		
 		MenuItem searchItem = menu.findItem(R.id.menu_search);
 		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
