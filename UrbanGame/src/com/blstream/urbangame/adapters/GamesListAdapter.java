@@ -73,11 +73,12 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 			this.data = data;
 		}
 		
-		if (data != null) {
-			for (UrbanGameShortInfo element : data) {
-				add(element);
-			}
-		}
+	}
+	
+	@Override
+	public int getCount() {
+		if (data != null) return data.size();
+		return 0;
 	}
 	
 	@Override
