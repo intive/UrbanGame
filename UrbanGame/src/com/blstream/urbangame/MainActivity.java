@@ -114,10 +114,10 @@ public class MainActivity extends SherlockListActivity {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				Log.i(TAG, "onMenuItemClick(): " + item.getTitleCondensed());
-				Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
-				startActivity(intent);
-				return true;
-			}
+					Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
+					startActivity(intent);
+					return true;
+				}
 		});
 	}
 
