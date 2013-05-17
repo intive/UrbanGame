@@ -1,15 +1,13 @@
 package com.blstream.urbangame;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.GregorianCalendar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
@@ -19,49 +17,44 @@ import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
+import com.blstream.urbangame.adapters.GamesListAdapter;
+import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
+import com.blstream.urbangame.database.helper.Base64ImageCoder;
 
 public class MainActivity extends SherlockListActivity {
 	private static final String TAG = "MainActivity";
+	private GamesListAdapter adapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setSupportProgressBarVisibility(true);
-		mockData();
+		
+		// FIXME remove mock data when it is no longer needed
+		adapter = new GamesListAdapter(this, R.layout.list_item_game, mockData());
+		setListAdapter(adapter);
 	}
 	
 	/************************
 	 ***** START MOCKING ****
 	 ************************/
 	
-	private void mockData() {
-		ArrayList<HashMap<String, String>> data = getMockData();
-		
-		SimpleAdapter simpleAdapter = new SimpleAdapter(MainActivity.this, data, R.layout.list_item_game, new String[] {
-			"game_name", "operator_name", "location", "start_time", "current_players", "total_players" }, new int[] {
-			R.id.textViewGameName, R.id.textViewOperatorName, R.id.textViewLocation, R.id.textViewStartTime,
-			R.id.textViewNumberOfCurrentPlayers, R.id.textViewNumberOfTotalPlayers });
-		
-		setListAdapter(simpleAdapter);
-	}
-	
-	public ArrayList<HashMap<String, String>> getMockData() {
-		ArrayList<HashMap<String, String>> listOfMap = new ArrayList<HashMap<String, String>>();
-		HashMap<String, String> map = null;
-		Random random = new Random();
-		
+	private ArrayList<UrbanGameShortInfo> mockData() {
+		ArrayList<UrbanGameShortInfo> mockList = new ArrayList<UrbanGameShortInfo>();
+		mockList.add(new UrbanGameShortInfo(Long.valueOf(GameDetailsActivity.GAME_NOT_FOUND), "Krasnale Wroclawskie",
+			"BLStream", 25, null, (new GregorianCalendar(2013, 7, 1)).getTime(), (new GregorianCalendar(2013, 7, 13))
+				.getTime(), false, "Wroclaw", Base64ImageCoder.convertImage(getResources().getDrawable(
+				R.drawable.ic_launcher_big)), Base64ImageCoder.convertImage(getResources().getDrawable(
+				R.drawable.mock_logo_operator)), "details"));
 		for (int i = 0; i < 10; i++) {
-			map = new HashMap<String, String>();
-			map.put("game_name", "Krasnale Wrocławskie");
-			map.put("operator_name", "BLStream");
-			map.put("location", "Wroclaw");
-			map.put("start_time", "Mon, Apr 1, 2013 9:00 AM");
-			map.put("current_players", String.valueOf(random.nextInt(50)));
-			map.put("total_players", String.valueOf(random.nextInt(50)));
-			listOfMap.add(map);
+			mockList.add(new UrbanGameShortInfo(Long.valueOf(GameDetailsActivity.GAME_NOT_FOUND),
+				"Krasnale Wroclawskie", "BLStream", 25, 75, (new GregorianCalendar(2012, 6, 1)).getTime(),
+				(new GregorianCalendar(2013, 7, 3)).getTime(), true, "Wroclaw", Base64ImageCoder
+					.convertImage(getResources().getDrawable(R.drawable.ic_launcher_big)), Base64ImageCoder
+					.convertImage(getResources().getDrawable(R.drawable.mock_logo_operator)), "details"));
 		}
 		
-		return listOfMap;
+		return mockList;
 	}
 	
 	/************************
@@ -72,13 +65,10 @@ public class MainActivity extends SherlockListActivity {
 	protected void onListItemClick(ListView listView, View clickedView, int posViewInList, long idOfClickedItem) {
 		super.onListItemClick(listView, clickedView, posViewInList, idOfClickedItem);
 		Bundle bundle = new Bundle();
-		/* FIXME 
-		 * Should be uncomment, when listview will be finished.
-		 * UrbanGameShortInfo game = (UrbanGameShortInfo) (l.getItemAtPosition(position));
-		 * Long selectedGameId = (game == null ? -1 : game.getID());
-		 * bundle.putLong(GameDetailsActivity.GAME_KEY, selectedGameId);
-		*/
-		bundle.putLong(GameDetailsActivity.GAME_KEY, -1); // FIXME mocked ID. In case of working games list, delete this line
+		
+		UrbanGameShortInfo game = adapter.getItem(posViewInList);
+		Long selectedGameId = (game == null ? -1 : game.getID());
+		bundle.putLong(GameDetailsActivity.GAME_KEY, selectedGameId);
 		
 		Intent intent = new Intent(MainActivity.this, GameDetailsActivity.class);
 		intent.putExtras(bundle);
