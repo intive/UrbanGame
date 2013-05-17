@@ -1,6 +1,7 @@
 package com.blstream.urbangame;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
@@ -12,8 +13,12 @@ import com.blstream.urbangame.fragments.GameInfoFragment;
 import com.blstream.urbangame.fragments.GameRankingFragment;
 import com.blstream.urbangame.fragments.GameTasksFragment;
 import com.blstream.urbangame.fragments.TabManager;
+import com.blstream.urbangame.menuitem.MenuItemHelper;
 
 public class ActiveGameActivity extends SherlockFragmentActivity {
+	
+	private final String TAG = ActiveGameActivity.class.getSimpleName();
+	
 	public static final String GAME_ID = "game_id";
 	public static final String TAG_TAB_INFO = "fragment_info";
 	public static final String TAG_TAB_TASKS = "fragment_tasks";
@@ -31,7 +36,7 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 		
 		setUpTabHost(savedInstanceState);
 	}
-	
+		
 	private void setUpTabHost(Bundle savedInstanceState) {
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
 		tabHost.setup();
@@ -67,10 +72,19 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 	}
 	
 	@Override
+	protected void onResume() {
+	    super.onResume();
+	    this.supportInvalidateOptionsMenu();
+		Log.i(TAG, "onResume completed");
+	}
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_message, menu);
 		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
+		MenuItemHelper.initLogoutMenuItem(this, menu);
+		
 		return true;
 	}
 	
@@ -80,6 +94,9 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 		switch (itemId) {
 			case android.R.id.home:
 				finish();
+				break;
+			case R.id.menu_logout:
+				MenuItemHelper.invokeActionLogoutMenuItem(this);
 				break;
 		}
 		return true;

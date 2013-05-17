@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +30,11 @@ import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
+import com.blstream.urbangame.menuitem.MenuItemHelper;
 
 public class MyGamesActivity extends SherlockActivity implements OnChildClickListener, OnNavigationListener {
+		
+	private final String TAG = MyGamesActivity.class.getSimpleName();
 	
 	private ExpandableListView mExpandableList;
 	private ArrayList<ExpandableListHeader> mArrayHeaders;
@@ -70,6 +74,13 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 		//sets the adapter that provides data to the list.
 		mExpandableList.setAdapter(new MyGamesExpandableListAdapter(MyGamesActivity.this, mArrayHeaders));
 		
+	}
+	
+	@Override
+	protected void onResume() {
+	    super.onResume();
+	    this.supportInvalidateOptionsMenu();
+		Log.i(TAG, "onResume completed");
 	}
 	
 	/************************
@@ -127,6 +138,7 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_my_games_list, menu);
 		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
+		MenuItemHelper.initLogoutMenuItem(this, menu);
 		configureSearchAction(menu);
 		return true;
 	}
@@ -193,7 +205,13 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		return super.onMenuItemSelected(featureId, item);
+		int itemId = item.getItemId();
+		switch (itemId) {
+			case R.id.menu_logout:
+				MenuItemHelper.invokeActionLogoutMenuItem(this);
+				break;
+		}
+		return true;
 	}
 	
 	//Adapter for expandable list
