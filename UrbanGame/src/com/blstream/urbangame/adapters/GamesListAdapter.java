@@ -82,6 +82,11 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 	}
 	
 	@Override
+	public UrbanGameShortInfo getItem(int position) {
+		return data.get(position);
+	}
+	
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
 		View row = null;
