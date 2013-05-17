@@ -130,8 +130,8 @@
     <string name="invalid_data_tittle">Invalid data</string>
     <string name="invalid_data_message">E-mail or password is incorrect</string>
     <string name="invalid_data_button">OK</string>
-    <string name="title_section1">LOGIN</string>
-    <string name="title_section2">CREATE NEW ACCOUNT</string>
+    <string name="tabTitle_login">LOGIN</string>
+    <string name="tabTitle_register">CREATE NEW ACCOUNT</string>
 
     <!-- Profile Activity -->
     <string name="profile_activity_dialog_title">Choose avatar from:</string>
