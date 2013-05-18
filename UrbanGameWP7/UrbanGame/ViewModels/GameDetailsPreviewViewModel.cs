@@ -195,8 +195,7 @@ namespace UrbanGame.ViewModels
             if (MessageBox.Show("join in", "join in", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
-                {
-
+                {                   
                     //remove a game if stored in the db(it can be inactive)
                     if (uow.GetRepository<IGame>().All().ToArray<IGame>().Count() > 0)
                     {
@@ -204,7 +203,7 @@ namespace UrbanGame.ViewModels
                         uow.GetRepository<IGame>().MarkForDeletion(gameToDelete);
                     }
                     //store game into the db
-                    var games = uow.GetRepository<IGame>();
+                    var games = uow.GetRepository<IGame>();                   
                     games.MarkForAdd(CreateInstance(GameState.Joined, uow));
                     uow.Commit();
                 }
@@ -246,6 +245,10 @@ namespace UrbanGame.ViewModels
             newGame.Description = Game.Description;
             newGame.Difficulty = Game.Difficulty;
             newGame.Prizes = Game.Prizes;
+
+            foreach (var task in Game.Tasks)
+                newGame.Tasks.Add(task);
+
             return newGame;
         }
 

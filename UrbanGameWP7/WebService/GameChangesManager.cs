@@ -10,12 +10,17 @@ using System.Threading;
 
 namespace WebService
 {
+    public class SubmittedSolution
+    {
+        public int TaskId { get; set; }
+    }
+
     public class GameChangesManager : IGameChangesManager
     {
         IGameWebService _gameWebService;
         IEventAggregator _gameEventAggregator;
         Func<IUnitOfWork> _unitOfWorkLocator;
-        Timer _mockTimer;
+        Timer _mockTimer;        
 
         public GameChangesManager(IGameWebService gameWebService, IEventAggregator gameEventAggregator, 
                                   Func<IUnitOfWork> unitOfWorkLocator)
@@ -67,9 +72,52 @@ namespace WebService
                 });      
         }
 
+        static List<SubmittedSolution> SubmittedSolutions = new List<SubmittedSolution>();
+        static object _syncObj = new object();
+
+        public static void AddSolution(SubmittedSolution solution)
+        {
+            lock (_syncObj)
+            {
+                SubmittedSolution s = SubmittedSolutions.FirstOrDefault(sol => sol.TaskId == solution.TaskId);
+                if (s != null)
+                    SubmittedSolutions.Remove(s);
+
+                SubmittedSolutions.Add(solution);
+            }
+        }
+
+        public void UpdateSolutionStatus()
+        {
+            Random r = new Random();
+
+            Task.Factory.StartNew(() =>
+            {
+                lock (_syncObj)
+                {
+                    IRepository<ITask> repo = _unitOfWorkLocator().GetRepository<ITask>();
+
+                    foreach (SubmittedSolution solution in SubmittedSolutions)
+                    {
+                        ITask toUpdate = repo.All().FirstOrDefault(t => t.Id == solution.TaskId);
+
+                        if (toUpdate != null)
+                        {
+                            toUpdate.SolutionStatus = r.Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
+                            SubmittedSolutions.Remove(solution);
+
+                            _unitOfWorkLocator().Commit();
+                            _gameEventAggregator.Publish(new SolutionStatusChanged() { Id = 1, TaskId = solution.TaskId, Status = toUpdate.SolutionStatus });
+                        }
+                    }
+                };
+            });
+        }
+
         private void RandomChange(object obj)
         {
             GameChanged(new Random().Next(1, 5));
+            UpdateSolutionStatus();
         }
     }
 }
