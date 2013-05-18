@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using UrbanGame.Storage;
@@ -24,7 +25,7 @@ namespace UrbanGameTests.Tests
         #endregion
 
         #region CreateSampleEntities
-        private void CreateSampleEntities(out Game game, out GameTask task, out GameAlert alert, out GameHighScore highScore, out ABCDPossibleAnswer answer)
+        private void CreateSampleEntities(out Game game, out GameTask task, out GameAlert alert, out GameHighScore highScore)
         {
             game = new Game()
             {
@@ -72,31 +73,146 @@ namespace UrbanGameTests.Tests
                 Id = 1,
                 UserLogin = "LoganXxX",
                 Points = 130
-            };
-
-            answer = new ABCDPossibleAnswer()
-            {
-                Id = 1,
-                Answer = "Simple answer"
-            };
+            };             
         }
 
-        private void CreateSampleEntities(out IGame game, out ITask task, out IAlert alert, out IHighScore highScore, out IABCDPossibleAnswer answer)
+        private void CreateSampleEntities(out IGame game, out ITask task, out IAlert alert, out IHighScore highScore)
         {
             Game g;
             GameTask t;
             GameAlert al;
             GameHighScore h;
-            ABCDPossibleAnswer a;
-            CreateSampleEntities(out g, out t, out al, out h, out a);
+            CreateSampleEntities(out g, out t, out al, out h);
 
             game = g;
             task = t;
             alert = al;
             highScore = h;
-            answer = a;
         }
         #endregion
+
+        #region TestEntitiesRelationship
+        private void TestEntitiesRelationship<TParent, TChild>(Func<TParent> createSampleParent, 
+                                                               Func<TChild> createSampleChild,                                                               
+                                                               Func<TParent, EntitySet<TChild>> getChildren,
+                                                               Func<TChild, TParent> getParent,
+                                                               Action<TChild, TParent> setParent)
+            where TParent : class
+            where TChild : class
+        {
+            TParent parent = createSampleParent();
+            TChild child = createSampleChild();            
+
+            using (UrbanGameDataContext dataContext = RecreateDatabase())
+            {
+                dataContext.GetTable<TParent>().InsertOnSubmit(parent);
+                dataContext.SubmitChanges();
+
+                //adding child to parent
+                parent = dataContext.GetTable<TParent>().First();
+                getChildren(parent).Add(child);
+                Assert.AreSame(parent, getParent(child));
+
+                dataContext.GetTable<TChild>().InsertOnSubmit(child);
+                dataContext.SubmitChanges();
+                Assert.IsTrue(dataContext.GetTable<TChild>().Count() == 1);
+                Assert.AreEqual(1, getChildren(dataContext.GetTable<TParent>().First()).Count);
+                Assert.IsNotNull(getParent(dataContext.GetTable<TChild>().First()));
+
+                //removing child from parent
+                getChildren(parent).Remove(child);
+                Assert.IsNull(getChildren(parent).FirstOrDefault());
+                Assert.IsNull(getParent(child));
+                dataContext.SubmitChanges();
+
+                //removing
+                dataContext.GetTable<TChild>().DeleteOnSubmit(child);
+                dataContext.GetTable<TParent>().DeleteOnSubmit(parent);
+                dataContext.SubmitChanges();
+                Assert.AreEqual(0, dataContext.GetTable<TParent>().Count());
+                Assert.AreEqual(0, dataContext.GetTable<TChild>().Count());
+
+                parent = createSampleParent();
+                child = createSampleChild(); 
+
+
+                //adding parent to child
+                setParent(child, parent);
+                Assert.AreSame(child, getChildren(parent).First());
+
+                dataContext.GetTable<TParent>().InsertOnSubmit(parent);
+                dataContext.SubmitChanges();
+                Assert.AreEqual(1, dataContext.GetTable<TChild>().Count());
+                Assert.AreEqual(1, dataContext.GetTable<TParent>().Count());
+                Assert.AreEqual(1, getChildren(dataContext.GetTable<TParent>().First()).Count);
+                Assert.IsNotNull(getParent(dataContext.GetTable<TChild>().First()));
+            }
+        }
+        #endregion
+
+        #region TestInterfaceRelationship
+        private void TestInterfaceRelationship<TParent, TChild, TParentEntity, TChildEntity>(
+                                                                Func<TParent> createSampleParent, 
+                                                                Func<TChild> createSampleChild,                                                                
+                                                                Func<TParent, IEntityEnumerable<TChild>> getChildren,
+                                                                Func<TChild, TParent> getParent,
+                                                                Action<TChild, TParent> setParent)
+            where TParent : class
+            where TChild : class
+            where TParentEntity : class, TParent
+            where TChildEntity : class, TChild
+        {
+            TParent parent = createSampleParent();
+            TChild child = createSampleChild();
+
+            using (UrbanGameDataContext dataContext = RecreateDatabase())
+            {
+                dataContext.GetTable<TParentEntity>().InsertOnSubmit((TParentEntity)parent);
+                dataContext.SubmitChanges();
+
+                //adding child to parent
+                parent = dataContext.GetTable<TParentEntity>().First();
+                getChildren(parent).Add(child);
+                Assert.AreSame(parent, getParent(child));
+
+                dataContext.GetTable<TChildEntity>().InsertOnSubmit((TChildEntity)child);
+                dataContext.SubmitChanges();
+                Assert.IsTrue(dataContext.GetTable<TChildEntity>().Count() == 1);
+                Assert.AreEqual(1, getChildren(dataContext.GetTable<TParentEntity>().First()).Count());
+                Assert.IsNotNull(getParent(dataContext.GetTable<TChildEntity>().First()));
+
+                //removing child from parent
+                getChildren(parent).Remove(child);
+                Assert.IsNull(getChildren(parent).FirstOrDefault());
+                Assert.IsNull(getParent(child));
+                dataContext.SubmitChanges();
+
+                //removing
+                dataContext.GetTable<TChildEntity>().DeleteOnSubmit((TChildEntity)child);
+                dataContext.GetTable<TParentEntity>().DeleteOnSubmit((TParentEntity)parent);
+                dataContext.SubmitChanges();
+                Assert.AreEqual(0, dataContext.GetTable<TParentEntity>().Count());
+                Assert.AreEqual(0, dataContext.GetTable<TChildEntity>().Count());
+
+                parent = createSampleParent();
+                child = createSampleChild();
+
+
+                //adding parent to child
+                setParent(child, parent);
+                Assert.AreSame(child, getChildren(parent).First());
+
+                dataContext.GetTable<TParentEntity>().InsertOnSubmit((TParentEntity)parent);
+                dataContext.SubmitChanges();
+                Assert.AreEqual(1, dataContext.GetTable<TChildEntity>().Count());
+                Assert.AreEqual(1, dataContext.GetTable<TParentEntity>().Count());
+                Assert.AreEqual(1, getChildren(dataContext.GetTable<TParentEntity>().First()).Count());
+                Assert.IsNotNull(getParent(dataContext.GetTable<TChildEntity>().First()));
+            }
+        }
+        #endregion
+
+
 
         #region DatabaseCreationTest
         [TestMethod]
@@ -114,8 +230,8 @@ namespace UrbanGameTests.Tests
             GameTask task;
             GameAlert alert;
             GameHighScore highScore;
-            ABCDPossibleAnswer answer;
-            CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
+            ABCDPossibleAnswer answer;            
+            CreateSampleEntities(out game, out task, out alert, out highScore);            
 
             using (UrbanGameDataContext dataContext = RecreateDatabase())
             {
@@ -152,7 +268,7 @@ namespace UrbanGameTests.Tests
                 Assert.AreEqual(0, dataContext.GetTable<GameAlert>().Count());
                 Assert.AreEqual(0, dataContext.GetTable<GameHighScore>().Count());
 
-                CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
+                CreateSampleEntities(out game, out task, out alert, out highScore);
 
                 //adding game to task
                 task.Game = game;
@@ -164,53 +280,84 @@ namespace UrbanGameTests.Tests
                 Assert.IsTrue(dataContext.GetTable<GameTask>().Any(t => t.Id == 1));
                 Assert.AreEqual(1, dataContext.GetTable<Game>().First(g => g.Id == 1).Tasks.Count);
                 Assert.IsNotNull(dataContext.GetTable<GameTask>().First(t => t.Id == 1).Game);
-
-                #endregion
-
-                #region Task <-> ABCDPossibleAnswer relation
-
-                //adding abcdPossibleAnswer to task
-                task = dataContext.GetTable<GameTask>().First();
-                task.ABCDPossibleAnswers.Add(answer);
-                Assert.AreSame(task, answer.Task);
-
-                dataContext.GetTable<ABCDPossibleAnswer>().InsertOnSubmit(answer);
-                dataContext.SubmitChanges();
-                Assert.IsTrue(dataContext.GetTable<ABCDPossibleAnswer>().Any(a => a.Id == 1));
-                Assert.AreEqual(1, dataContext.GetTable<GameTask>().First(t => t.Id == 1).ABCDPossibleAnswers.Count);
-                Assert.IsNotNull(dataContext.GetTable<ABCDPossibleAnswer>().First(t => t.Id == 1).Task);
-
-                //removing abcdPossibleAnswer from task
-                task.ABCDPossibleAnswers.Remove(answer);
-                Assert.IsNull(task.ABCDPossibleAnswers.FirstOrDefault());
-                Assert.IsNull(answer.Task);
-                dataContext.SubmitChanges();
-
-                //removing
-                dataContext.GetTable<Game>().DeleteOnSubmit(game);
-                dataContext.GetTable<GameTask>().DeleteOnSubmit(task);
-                dataContext.GetTable<ABCDPossibleAnswer>().DeleteOnSubmit(answer);
-                dataContext.SubmitChanges();
-                Assert.AreEqual(0, dataContext.GetTable<Game>().Count());
-                Assert.AreEqual(0, dataContext.GetTable<GameTask>().Count());
-                Assert.AreEqual(0, dataContext.GetTable<ABCDPossibleAnswer>().Count());
-
-                CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
-
-                
-                //adding task to abcdPossibleAnswer
-                answer.Task = task;
-                Assert.AreSame(answer, task.ABCDPossibleAnswers.First());
-
-                dataContext.GetTable<GameTask>().InsertOnSubmit(task);
-                dataContext.SubmitChanges();
-                Assert.IsTrue(dataContext.GetTable<ABCDPossibleAnswer>().Any(a => a.Id == 1));
-                Assert.IsTrue(dataContext.GetTable<GameTask>().Any(t => t.Id == 1));
-                Assert.AreEqual(1, dataContext.GetTable<GameTask>().First(t => t.Id == 1).ABCDPossibleAnswers.Count);
-                Assert.IsNotNull(dataContext.GetTable<ABCDPossibleAnswer>().First(t => t.Id == 1).Task);
-
-                #endregion
+                #endregion                
             }
+
+            #region Task <-> ABCDPossibleAnswer relation
+
+            Func<GameTask> sampleGameTask = () => new GameTask()
+            {
+                Id = 1,
+                Name = "TestTask",
+                AdditionalText = "Bla bla",
+                Description = "sad as ads  adsdas  assad sad ads ",
+                EndDate = DateTime.Now.AddDays(2),
+                State = TaskState.Active,
+                IsRepeatable = true,
+                MaxPoints = 100,
+                Picture = "/path/picture.jpeg",
+                SolutionStatus = SolutionStatus.Accepted,
+                Type = TaskType.OpenQuestion,
+                UserPoints = 50,
+                Version = 1
+            };
+            Func<ABCDPossibleAnswer> sampleABCDPossibleAnswer = () => new ABCDPossibleAnswer()
+            {
+                Id = 1,
+                Answer = "Simple answer"
+            };
+
+            TestEntitiesRelationship<GameTask, ABCDPossibleAnswer>(sampleGameTask, sampleABCDPossibleAnswer,
+                                                                   t => t.ABCDPossibleAnswers,
+                                                                   a => a.Task,
+                                                                   (a, t) => a.Task = t);
+            #endregion
+
+            #region TaskSolution <-> ABCDUserAnswer relation
+
+            Func<TaskSolution> sampleTaskSolution = () => new TaskSolution()
+            {
+                Id = 1,
+                TaskType = TaskType.ABCD
+            };
+            Func<ABCDUserAnswer> sampleAnswer = () => new ABCDUserAnswer()
+            {
+                Id = 1,
+                Answer = 1
+            };
+
+            TestEntitiesRelationship<TaskSolution, ABCDUserAnswer>(sampleTaskSolution, sampleAnswer,
+                                                                   solution => solution.ABCDUserAnswers,
+                                                                   userAnswer => userAnswer.Solution,
+                                                                   (userAnswer, solution) => userAnswer.Solution = solution);
+
+            #endregion
+
+            #region Task <-> TaskSolution relation
+
+            Func<GameTask> sampleTask = () => new GameTask()
+            {
+                Id = 1,
+                Name = "TestTask",
+                AdditionalText = "Bla bla",
+                Description = "sad as ads  adsdas  assad sad ads ",
+                EndDate = DateTime.Now.AddDays(2),
+                State = TaskState.Active,
+                IsRepeatable = true,
+                MaxPoints = 100,
+                Picture = "/path/picture.jpeg",
+                SolutionStatus = SolutionStatus.Accepted,
+                Type = TaskType.OpenQuestion,
+                UserPoints = 50,
+                Version = 1
+            };
+
+            TestEntitiesRelationship<GameTask, TaskSolution>(sampleTask, sampleTaskSolution,
+                                                             t => t.Solutions,
+                                                             s => s.Task,
+                                                             (s, t) => s.Task = t);
+
+            #endregion
         }
         #endregion
 
@@ -218,98 +365,94 @@ namespace UrbanGameTests.Tests
         [TestMethod]
         public void InterfaceRelationsTest()
         {
-            IGame game;
-            ITask task;
-            IAlert alert;
-            IHighScore highScore;
-            IABCDPossibleAnswer answer;
-            CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
-
-            using (UrbanGameDataContext dataContext = RecreateDatabase())
+            Func<ITask> sampleGameTask = () => new GameTask()
             {
-                #region IGame <-> ITask relation
+                Id = 1,
+                Name = "TestTask",
+                AdditionalText = "Bla bla",
+                Description = "sad as ads  adsdas  assad sad ads ",
+                EndDate = DateTime.Now.AddDays(2),
+                State = TaskState.Active,
+                IsRepeatable = true,
+                MaxPoints = 100,
+                Picture = "/path/picture.jpeg",
+                SolutionStatus = SolutionStatus.Accepted,
+                Type = TaskType.OpenQuestion,
+                UserPoints = 50,
+                Version = 1
+            };
 
-                //adding task to game
-                game.Tasks.Add(task);
-                Assert.AreSame(game, task.Game);
+            #region IGame <-> ITask relation
 
-                dataContext.GetTable<Game>().InsertOnSubmit((Game)game);
-                dataContext.SubmitChanges();
-                Assert.IsTrue(dataContext.GetTable<Game>().Any(g => g.Id == 1));
-                Assert.IsTrue(dataContext.GetTable<GameTask>().Any(t => t.Id == 1));
-                Assert.AreEqual(1, dataContext.GetTable<Game>().First(g => g.Id == 1).Tasks.Count);
-                Assert.IsNotNull(dataContext.GetTable<GameTask>().First(t => t.Id == 1).Game);
+            Func<IGame> sampleGame = () => new Game()
+            {
+                Id = 1,
+                Name = "TestGame",
+                OperatorName = "CAFETERIA",
+                Localization = "Wroclaw",
+                GameLogo = "/ApplicationIcon.png",
+                GameStart = DateTime.Now.AddHours(3).AddMinutes(23),
+                GameEnd = DateTime.Now.AddDays(2).AddHours(5),
+                NumberOfPlayers = 24,
+                NumberOfSlots = 50,
+                GameType = GameType.ScoreAttack,
+                Description = DateTime.Now.ToLongTimeString() + "\nsadsa sad ads  adsa dssa sad  asas asd as a sas as as  asas  asdas as ads as d",
+                Difficulty = GameDifficulty.Medium,
+                Prizes = "1st Bicycle\n2nd Bicycle\n3rd Bicycle\n4-8th Bicycle bicycle bicycle"
+            };
 
-                //removing task from game
-                game.Tasks.Remove(task);
-                Assert.IsNull(task.Game);
-                dataContext.SubmitChanges();
+            TestInterfaceRelationship<IGame, ITask, Game, GameTask>(sampleGame, sampleGameTask,
+                                                                    g => g.Tasks,
+                                                                    t => t.Game,
+                                                                    (t, g) => t.Game = g);
 
-                //removing
-                dataContext.GetTable<Game>().DeleteOnSubmit((Game)game);
-                dataContext.GetTable<GameTask>().DeleteOnSubmit((GameTask)task);
-                dataContext.SubmitChanges();
-                Assert.AreEqual(0, dataContext.GetTable<Game>().Count());
-                Assert.AreEqual(0, dataContext.GetTable<GameTask>().Count());
+            #endregion                                        
 
-                CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
+            #region ITask <-> IABCDPossibleAnswer relation
 
-                //adding game to task
-                task.Game = game;
-                Assert.AreSame(task, game.Tasks.FirstOrDefault());
+            Func<IABCDPossibleAnswer> sampleABCDPossibleAnswer = () => new ABCDPossibleAnswer()
+            {
+                Id = 1,
+                Answer = "Simple answer"
+            };
 
-                dataContext.GetTable<GameTask>().InsertOnSubmit((GameTask)task);
-                dataContext.SubmitChanges();
-                Assert.IsTrue(dataContext.GetTable<Game>().Any(g => g.Id == 1));
-                Assert.IsTrue(dataContext.GetTable<GameTask>().Any(t => t.Id == 1));
-                Assert.AreEqual(1, dataContext.GetTable<Game>().First(g => g.Id == 1).Tasks.Count);
-                Assert.IsNotNull(dataContext.GetTable<GameTask>().First(t => t.Id == 1).Game);
+            TestInterfaceRelationship<ITask, IABCDPossibleAnswer,
+                                     GameTask, ABCDPossibleAnswer>(sampleGameTask, sampleABCDPossibleAnswer,
+                                                                   t => t.ABCDPossibleAnswers,
+                                                                   a => a.Task,
+                                                                   (a, t) => a.Task = t);
+            #endregion
 
-                #endregion
+            #region ITask <-> ITaskSolution relation
 
-                #region ITask <-> IABCDPossibleAnswer relation
+            Func<IBaseSolution> sampleTaskSolution = () => new TaskSolution()
+            {
+                Id = 1,
+                TaskType = TaskType.ABCD
+            };
+            Func<ITask> sampleTask = () => new GameTask()
+            {
+                Id = 1,
+                Name = "TestTask",
+                AdditionalText = "Bla bla",
+                Description = "sad as ads  adsdas  assad sad ads ",
+                EndDate = DateTime.Now.AddDays(2),
+                State = TaskState.Active,
+                IsRepeatable = true,
+                MaxPoints = 100,
+                Picture = "/path/picture.jpeg",
+                SolutionStatus = SolutionStatus.Accepted,
+                Type = TaskType.OpenQuestion,
+                UserPoints = 50,
+                Version = 1
+            };
 
-                //adding abcdPossibleAnswer to task
-                task = dataContext.GetTable<GameTask>().First();
-                task.ABCDPossibleAnswers.Add(answer);
-                Assert.AreSame(task, answer.Task);
+            TestInterfaceRelationship<ITask, IBaseSolution, GameTask, TaskSolution>(sampleTask, sampleTaskSolution,
+                                                             t => t.Solutions,
+                                                             s => s.Task,
+                                                             (s, t) => s.Task = t);
 
-                dataContext.GetTable<ABCDPossibleAnswer>().InsertOnSubmit((ABCDPossibleAnswer)answer);
-                dataContext.SubmitChanges();
-                Assert.IsTrue(dataContext.GetTable<ABCDPossibleAnswer>().Any(a => a.Id == 1));
-                Assert.AreEqual(1, dataContext.GetTable<GameTask>().First(t => t.Id == 1).ABCDPossibleAnswers.Count);
-                Assert.IsNotNull(dataContext.GetTable<ABCDPossibleAnswer>().First(t => t.Id == 1).Task);
-
-                //removing abcdPossibleAnswer from task
-                task.ABCDPossibleAnswers.Remove(answer);
-                Assert.IsNull(task.ABCDPossibleAnswers.FirstOrDefault());
-                Assert.IsNull(answer.Task);
-                dataContext.SubmitChanges();
-
-                //removing
-                dataContext.GetTable<Game>().DeleteOnSubmit((Game)game);
-                dataContext.GetTable<GameTask>().DeleteOnSubmit((GameTask)task);
-                dataContext.GetTable<ABCDPossibleAnswer>().DeleteOnSubmit((ABCDPossibleAnswer)answer);
-                dataContext.SubmitChanges();
-                Assert.AreEqual(0, dataContext.GetTable<Game>().Count());
-                Assert.AreEqual(0, dataContext.GetTable<GameTask>().Count());
-                Assert.AreEqual(0, dataContext.GetTable<ABCDPossibleAnswer>().Count());
-
-                CreateSampleEntities(out game, out task, out alert, out highScore, out answer);
-
-                //adding task to abcdPossibleAnswer
-                answer.Task = task;
-                Assert.AreSame(answer, task.ABCDPossibleAnswers.First());
-
-                dataContext.GetTable<GameTask>().InsertOnSubmit((GameTask)task);
-                dataContext.SubmitChanges();
-                Assert.IsTrue(dataContext.GetTable<ABCDPossibleAnswer>().Any(a => a.Id == 1));
-                Assert.IsTrue(dataContext.GetTable<GameTask>().Any(t => t.Id == 1));
-                Assert.AreEqual(1, dataContext.GetTable<GameTask>().First(t => t.Id == 1).ABCDPossibleAnswers.Count);
-                Assert.IsNotNull(dataContext.GetTable<ABCDPossibleAnswer>().First(t => t.Id == 1).Task);
-
-                #endregion
-            }
+            #endregion
         }
         #endregion
     }

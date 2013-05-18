@@ -53,7 +53,7 @@
                                 <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <TextBlock TextWrapping="Wrap" Text="{Binding Path=AppResources.AnswerGPS, Source={StaticResource LocalizedStrings}}" Grid.ColumnSpan="2" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="15 0 0 0"/>
-                            <Button Content="{Binding Path=AppResources.Submit, Source={StaticResource LocalizedStrings}}" Background="OliveDrab" BorderBrush="OliveDrab" Grid.Column="1" Grid.Row="1" x:Name="SubmitGPS"/>
+                            <Button cal:Message.Attach="[Event Tap] = [Action SubmitGPS()]" Content="{Binding Path=AppResources.Submit, Source={StaticResource LocalizedStrings}}" Background="OliveDrab" BorderBrush="OliveDrab" Grid.Column="1" Grid.Row="1" x:Name="SubmitGPS"/>
                         </Grid>
                     </Grid>
                 </ScrollViewer>

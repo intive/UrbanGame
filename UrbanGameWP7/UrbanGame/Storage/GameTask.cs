@@ -14,6 +14,7 @@ namespace UrbanGame.Storage
         public GameTask() : base()
         {
             _abcdAnswersRefs = new EntitySet<ABCDPossibleAnswer>(OnABCDAnswerAdded, OnABCDAnswerRemoved);
+            _solutionsRefs = new EntitySet<TaskSolution>(OnSolutionAdded, OnSolutionRemoved);
         }
 
         #region Id
@@ -232,7 +233,7 @@ namespace UrbanGame.Storage
 
         private EntitySet<ABCDPossibleAnswer> _abcdAnswersRefs;
 
-        [Association(Name = "FK_GameTask_ABCDAnswers", Storage = "_abcdAnswersRefs", ThisKey = "Id", OtherKey = "TaskId")]
+        [Association(Name = "FK_GameTask_ABCDAnswers", Storage = "_abcdAnswersRefs", ThisKey = "Id", OtherKey = "TaskId", DeleteRule = "CASCADE")]
         public EntitySet<ABCDPossibleAnswer> ABCDPossibleAnswers
         {
             get { return _abcdAnswersRefs; }
@@ -257,6 +258,40 @@ namespace UrbanGame.Storage
             get 
             { 
                 return new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswer>(_abcdAnswersRefs); 
+            }
+        }
+
+        #endregion
+
+        #region Solutions
+
+        private EntitySet<TaskSolution> _solutionsRefs;
+
+        [Association(Name = "FK_GameTask_Solutions", Storage = "_solutionsRefs", ThisKey = "Id", OtherKey = "TaskId", DeleteRule = "CASCADE")]
+        public EntitySet<TaskSolution> Solutions
+        {
+            get { return _solutionsRefs; }
+        }
+
+        private void OnSolutionAdded(TaskSolution solution)
+        {
+            solution.Task = this;
+        }
+
+        private void OnSolutionRemoved(TaskSolution solution)
+        {
+            solution.Task = null;
+        }
+
+        #endregion
+
+        #region ITask.Solutions
+
+        IEntityEnumerable<IBaseSolution> ITask.Solutions
+        {
+            get
+            {
+                return new EntityEnumerable<IBaseSolution, TaskSolution>(_solutionsRefs);
             }
         }
 

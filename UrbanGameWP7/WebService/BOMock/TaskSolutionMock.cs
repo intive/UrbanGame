@@ -2,26 +2,24 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Linq;
-using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
 
-namespace UrbanGame.Storage
+namespace WebService.BOMock
 {
-    [Table]
-    public class TaskSolution : EntityBase, 
+    public class TaskSolutionMock : BOBase, 
         IGPSSolution, IPhotoSolution, IOpenQuestionSolution, IABCDSolution, IQRCodeSolution
     {
-        public TaskSolution() : base()
+        public TaskSolutionMock() : base()
         {
-            _abcdUserAnswersRefs = new EntitySet<ABCDUserAnswer>(OnABCDUserAnswerAdded, OnABCDUserAnswerRemoved);
+            EntitySet<ABCDUserAnswerMock> es = new EntitySet<ABCDUserAnswerMock>(OnABCDUserAnswerAdded, OnABCDUserAnswerRemoved);
+            _abcdUserAnswers = new EntityEnumerable<IABCDUserAnswer, ABCDUserAnswerMock>(es);
         }
 
         #region Id
 
         private int _id;
 
-        [Column(IsPrimaryKey = true, AutoSync = AutoSync.OnInsert, IsDbGenerated = true)]
         public int Id
         {
             get
@@ -44,7 +42,6 @@ namespace UrbanGame.Storage
 
         private TaskType _taskType;
 
-        [Column]
         public TaskType TaskType
         {
             get
@@ -67,7 +64,6 @@ namespace UrbanGame.Storage
 
         private double? _longitude;
 
-        [Column]
         public double? Longitude
         {
             get
@@ -90,7 +86,6 @@ namespace UrbanGame.Storage
 
         private double? _latitude;
 
-        [Column]
         public double? Latitude
         {
             get
@@ -113,7 +108,6 @@ namespace UrbanGame.Storage
 
         private string _photo;
 
-        [Column]
         public string Photo
         {
             get
@@ -136,7 +130,6 @@ namespace UrbanGame.Storage
 
         private string _textAnswer;
 
-        [Column]
         public string TextAnswer
         {
             get
@@ -155,109 +148,47 @@ namespace UrbanGame.Storage
         }
         #endregion
 
-        #region ABCDUserAnswers
+        #region IBaseSolution.ABCDUserAnswers
 
-        private EntitySet<ABCDUserAnswer> _abcdUserAnswersRefs;
+        private IEntityEnumerable<IABCDUserAnswer> _abcdUserAnswers;
 
-        [Association(Name = "FK_TaskSolution_ABCDUserAnswers", Storage = "_abcdUserAnswersRefs", ThisKey = "Id", OtherKey = "SolutionId", DeleteRule = "CASCADE")]
-        public EntitySet<ABCDUserAnswer> ABCDUserAnswers
+        public IEntityEnumerable<IABCDUserAnswer> ABCDUserAnswers
         {
-            get { return _abcdUserAnswersRefs; }
+            get
+            {
+                return _abcdUserAnswers;
+            }
         }
 
-        private void OnABCDUserAnswerAdded(ABCDUserAnswer answer)
+        private void OnABCDUserAnswerAdded(ABCDUserAnswerMock answer)
         {
             answer.Solution = this;
         }
 
-        private void OnABCDUserAnswerRemoved(ABCDUserAnswer answer)
+        private void OnABCDUserAnswerRemoved(ABCDUserAnswerMock answer)
         {
             answer.Solution = null;
         }
         #endregion
 
-        #region IABCDSolution.ABCDUserAnswers
-
-        IEntityEnumerable<IABCDUserAnswer> IABCDSolution.ABCDUserAnswers
-        {
-            get
-            {
-                return new EntityEnumerable<IABCDUserAnswer, ABCDUserAnswer>(_abcdUserAnswersRefs);
-            }
-        }
-
-        #endregion
-
-        #region TaskId
-
-        private int? _taskId;
-
-        [Column]
-        public int? TaskId
-        {
-            get
-            {
-                return _taskId;
-            }
-            set
-            {
-                if (_taskId != value)
-                {
-                    NotifyPropertyChanging("TaskId");
-                    _taskId = value;
-                    NotifyPropertyChanged("TaskId");
-                }
-            }
-        }
-        #endregion
-
-        #region Task
-
-        private EntityRef<GameTask> _taskRef = new EntityRef<GameTask>();
-
-        [Association(Name = "FK_Solution_Task", Storage = "_taskRef", ThisKey = "TaskId", OtherKey = "Id", IsForeignKey = true)]
-        public GameTask Task
-        {
-            get
-            {
-                return _taskRef.Entity;
-            }
-            set
-            {
-                GameTask previousValue = _taskRef.Entity;
-                if (((previousValue != value) || (_taskRef.HasLoadedOrAssignedValue == false)))
-                {
-                    _taskRef.Entity = value;
-
-                    //remove solution from previous task
-                    if (previousValue != null)
-                        previousValue.Solutions.Remove(this);
-
-                    //add solution to the new task
-                    if ((value != null))
-                    {
-                        value.Solutions.Add(this);
-                        this.TaskId = value.Id;
-                    }
-                    else
-                        this.TaskId = default(Nullable<int>);
-                }
-            }
-        }
-        #endregion
-
         #region IBaseSolution.Task
 
-        ITask IBaseSolution.Task
+        private ITask _task;
+
+        public ITask Task
         {
             get
             {
-                return Task;
+                return _task;
             }
-
             set
             {
-                Task = (GameTask)value;
+                if (_task != value)
+                {
+                    NotifyPropertyChanging("Task");
+                    _task = value;
+                    NotifyPropertyChanged("Task");
+                }
             }
         }
         #endregion
@@ -266,7 +197,6 @@ namespace UrbanGame.Storage
 
         private string _qrCode;
 
-        [Column]
         public string QRCode
         {
             get
