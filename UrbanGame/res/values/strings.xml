@@ -97,6 +97,7 @@
 
     <!-- Task -->
     <string name="label_taksRepeatable">repeatable</string>
+    <string name="button_submit">Submit</string>
 
     <!-- ProfileActivity -->
     <string name="button_save">Save</string>
