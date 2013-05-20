@@ -21,13 +21,20 @@ app.controller('myGamesCtrl', [
       if ($scope.games[idx].status === 'online') {
         window.location.pathname = "/my/games/" + $scope.games[idx].id;
       }
-      if ($scope.games[idx].status === 'project' || $scope.games[idx].status === 'published') {
-        return alert("Game with id: " + $scope.games[idx].id + " and name: " + $scope.games[idx].name + " will be edited here");
+      if ($scope.games[idx].status === 'published' || $scope.games[idx].status === 'project') {
+        return window.location.pathname = "/my/games/edit" + $scope.games[idx].id;
       }
     };
     $scope["delete"] = function(idx) {
-      if (!($scope.games[idx].status === 'online')) {
-        return alert("Here the game with id: " + $scope.games[idx].id + " will be deleted");
+      if ($scope.games[idx].status === 'published' || $scope.games[idx].status === 'project') {
+        return Games["delete"]({
+          gid: $scope.games[idx].id
+        }, function(data) {
+          alert("msg: " + data.msg);
+          return $scope.games.splice(idx, 1);
+        }, function(error) {
+          return alert("error: " + error);
+        });
       }
     };
     $scope.cancel = function(idx) {

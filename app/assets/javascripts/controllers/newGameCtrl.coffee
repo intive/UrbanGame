@@ -69,6 +69,8 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         ) if ( $scope.hasPreviousStep() )
 
     $scope.savegame = ->
+        $scope.game.playersNum = 1000000 if $scope.game.playersNum == null
+
         if ($scope.gameid == null || _.isUndefined($scope.gameid))
             Games.save(
                 {game: $scope.game},
@@ -76,20 +78,29 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                     $scope.gameid = data.id
                     $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
                 (error) ->
-                    alert("Error occured while saving a game")
+                    alert("Error occured while saving a game " + error)
             )
         else
             Games.update(
-                {id: $scope.gameid, game: $scope.game},
+                {gid: $scope.gameid, game: $scope.game},
                 (data) ->
                     $scope.gameid = data.id
                     $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
                 (error) ->
-                    alert("Error occured while updating a game")
+                    alert("Error occured while updating a game " + error)
             )
 
     $scope.publishgame = ->
         alert "published"
+
+    $scope.isValidName = ->
+        Games.checkName(
+            {name: $scope.game.name},
+            (result) ->
+                alert(result.valid)
+            (error) ->
+                alert("Error occured")
+        )
         
     $scope.incrementPlayersNum = ->
         if  $scope.game.playersNum==null

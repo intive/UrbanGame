@@ -42,7 +42,7 @@ object Application extends Controller with CookieLang {
     loginForm.bindFromRequest.fold(
       errors => BadRequest(Scalate("index").render('title -> "Urban Game", 'errors -> errors)),
       { case (login, password) => 
-          Redirect(routes.GamesCtrl.mygames)
+          Redirect(routes.GamesCtrl.myGames)
       }
     )
   }

@@ -20,9 +20,18 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', ($sco
 
     $scope.showDetails = (idx) ->
         window.location.pathname = "/my/games/" + $scope.games[idx].id if $scope.games[idx].status == 'online'
-        alert "Game with id: " + $scope.games[idx].id + " and name: " + $scope.games[idx].name + " will be edited here" if $scope.games[idx].status == 'project' || $scope.games[idx].status == 'published'
+        window.location.pathname = "/my/games/edit" + $scope.games[idx].id if $scope.games[idx].status == 'published' || $scope.games[idx].status == 'project'
     $scope.delete = (idx) ->
-        alert "Here the game with id: " + $scope.games[idx].id + " will be deleted" if !($scope.games[idx].status == 'online')
+        if ($scope.games[idx].status == 'published' || $scope.games[idx].status == 'project')
+            Games.delete(
+                {gid: $scope.games[idx].id},
+                (data) ->
+                    alert("msg: " + data.msg)
+                    $scope.games.splice(idx, 1)
+                (error) ->
+                    alert("error: " + error)
+            ) 
+
     $scope.cancel = (idx) ->
         alert "Here the game with id: " + $scope.games[idx].id + " will be canceled"
 

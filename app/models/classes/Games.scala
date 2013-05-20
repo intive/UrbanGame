@@ -73,10 +73,12 @@ trait Games { this: ImplicitSession =>
       g <- Games 
       if g.status === "online" && g.endTime <= DateTime.now
     } yield g.status
+
     val p = for {
       g <- Games 
       if g.status === "published" && g.startTime <= DateTime.now
     } yield g.status
+
     q update "finished"
     p update "online"
   }
@@ -105,6 +107,24 @@ trait Games { this: ImplicitSession =>
   }
 
   def createGame(gd: GamesDetails): Int = Games.forInsert returning Games.id insert gd
+
+  def updateGame(gid: Int, gd: GamesDetails): Int = {
+    val q = for {
+      g <- Games if g.id === gid
+    } yield g
+
+    q.update(gd)
+  }
+
+  def deleteGame(gid: Int): Int = {
+    val q = for {
+      g <- Games if g.id === gid
+    } yield g
+
+    q.delete
+  }
+
+  def checkName(name: String): Int = (for {g <- Games if g.name === name} yield g.length).first
 
 }
 

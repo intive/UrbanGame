@@ -16,6 +16,7 @@
 - attributes("scripts") = capture
     %script(src={uri("/assets/javascripts/controllers/myGamesCtrl.min.js")} type="text/javascript")
     %script(src={uri("/assets/javascripts/services/games.min.js")} type="text/javascript")
+    %script(src={uri("/assets/javascripts/directives/animations.min.js")} type="text/javascript")
 
 .row.span12
     %h3 = Messages("mygames.title")
@@ -28,7 +29,7 @@
                 %td = Messages("mygames.version")
                 %td = Messages("general.options")
         %tbody(ng-controller="myGamesCtrl")
-            %tr(ng-repeat="game in games" ng-click="showDetails($index)")
+            %tr(ng-repeat="game in games" fadey="500" ng-click="showDetails($index)")
                 %td
                     %img(ng-src="/assets/images/{{game.image}}")/
                 %td
