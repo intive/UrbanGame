@@ -41,13 +41,9 @@ class ApplicationSpec extends Specification {
         Thread.sleep(10 * 1000)
         status(home) must equalTo(OK)
         contentType(home) must beSome.which(_ == "text/html")
-        contentAsString(home) must contain ("UrbanGame application will be available here soon.")
+        contentAsString(home) must contain ("Last created games")
       }
     }
-	
-	"correctly sum two integers" in { 
-		controllers.Application.dummyTestFunction(1,2) must equalTo(3)
-	}
 	
   }
 }

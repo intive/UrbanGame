@@ -40,9 +40,24 @@ describe('Controllers', function() {
 			expect(scope.selection.no).toBe(2);
         });
 
-        it('should decrement steps', function() {
-			scope.decrementStep();
-			expect(scope.selection.no).toBe(1);
+        it('should increment players number', function() {
+			scope.game.playersNum=5;
+            scope.incrementPlayersNum();
+			expect(scope.game.playersNum).toBe(6);
+        });
+        
+        it('should decrement players number', function() {
+			scope.game.playersNum=5;
+            scope.decrementPlayersNum();
+			expect(scope.game.playersNum).toBe(4);
+        });
+        
+        it('should contains game defined', function() {
+            expect(scope.game).not.toBe(null);
+        });
+        
+        it('should be set at nolimit(null) players at start', function() {
+            expect(scope.game.playersNum).toBe(null);
         });
     });
 });

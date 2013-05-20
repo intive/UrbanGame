@@ -13,7 +13,7 @@ object ApplicationBuild extends Build {
     anorm,
     "org.fusesource.scalate" % "scalate-core_2.10" % "1.6.1",
     "commons-codec" % "commons-codec" % "1.6",
-    "com.typesafe.slick" %% "slick" % "1.0.0"
+    "com.github.nscala-time" %% "nscala-time" % "0.4.0"
   )
 
 
@@ -35,4 +35,5 @@ object ApplicationBuild extends Build {
   .settings(
     scalacOptions ++= Seq("-deprecation","-unchecked","-feature")
   )
+  .dependsOn(RootProject( uri("git://github.com/freekh/play-slick.git") ))
 }

@@ -5,13 +5,21 @@
 # Public
 GET     /                           controllers.Application.index
 GET     /logout                     controllers.Application.logout
+POST    /login                      controllers.Application.login
+POST    /register                   controllers.Application.register
 POST    /locale                     controllers.Application.changeLang
 
 # Authenticated
-GET     /games/new                  controllers.Games.newgame
-GET     /games/my                   controllers.Games.mygames
+GET     /my/games/new               controllers.GamesCtrl.newgame
+GET     /my/games                   controllers.GamesCtrl.mygames
 
-# Web Api resources
+# Json
+GET     /my/games/list              controllers.GamesCtrl.getGamesList
+POST    /my/games                   controllers.GamesCtrl.saveGame
+PUT     /my/games/:gid              controllers.GamesCtrl.updateGame(gid: Int)
+DELETE  /my/games/:gid              controllers.GamesCtrl.deleteGame(gid: Int)
+
+# WebApi resources
 GET     /api                        @controllers.WebApi.root
 GET     /api/games                  @controllers.WebApi.games(lat: Double, lon: Double, r: Double)
 GET     /api/login                  @controllers.WebApi.login
@@ -22,3 +30,6 @@ POST    /api/register               @controllers.WebApi.register
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# Additional
+GET     /filldb                        controllers.Application.fillDatabase
