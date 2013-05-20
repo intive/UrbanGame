@@ -1,19 +1,4 @@
-###*Copyright 2013 BLStream, BLStream's Patronage Program Contributors
- *       http://blstream.github.com/UrbanGame/
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *       http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
-###
-
-newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', ($scope, $location, $route, $rootScope) ->
+newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', 'Games', ($scope, $location, $route, $rootScope, Games) ->
 
     $scope.steps = [
         {no: 1, name: 'Data'},
@@ -21,20 +6,22 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         {no: 3, name: 'Skin'},
         {no: 4, name: 'Publish'}
     ]
+
+    $scope.gameid = null
     
     $scope.game = {
-        name:"",
-        description:"",
-        awards:"",
-        type:"gameType1",
-        loc:"",
-        startTime:"",
-        startDate:null,
-        endTime:"",
-        endDate:null,
-        playersNum:null,
-        winningNum:1,
-        diff:""
+        name: "",
+        description: "",
+        location: "",
+        startTime: "",
+        startDate: null,
+        endTime: "",
+        endDate: null,
+        winning: "max_points",
+        winningNum: 1,
+        diff: 'easy',
+        playersNum: null,
+        awards: ""
     }
     
     $scope.selection = $scope.steps[0]
@@ -63,11 +50,15 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
 
     $scope.incrementStepIfValid = ->
         $scope.incrementStep() if (!$scope.form.$invalid)
+
     $scope.incrementStep = ->
         (
             stepIndex = $scope.getCurrentStepIndex()
-            nextStep = stepIndex + 1
-            $scope.selection = $scope.steps[nextStep]
+            if stepIndex == 0
+                $scope.savegame()
+            else
+                nextStep = stepIndex + 1
+                $scope.selection = $scope.steps[nextStep]
         ) if ( $scope.hasNextStep() )
 
     $scope.decrementStep = ->
@@ -77,12 +68,28 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             $scope.selection = $scope.steps[previousStep]
         ) if ( $scope.hasPreviousStep() )
 
-    $scope.saveit = ->
-        alert "Here this project will be saved"
+    $scope.savegame = ->
+        if ($scope.gameid == null || _.isUndefined($scope.gameid))
+            Games.save(
+                {game: $scope.game},
+                (data) ->
+                    $scope.gameid = data.id
+                    $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
+                (error) ->
+                    alert("Error occured while saving a game")
+            )
+        else
+            Games.update(
+                {id: $scope.gameid, game: $scope.game},
+                (data) ->
+                    $scope.gameid = data.id
+                    $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
+                (error) ->
+                    alert("Error occured while updating a game")
+            )
 
-    $scope.publishit = ->
-        $scope.saveit()
-        alert "and published too"
+    $scope.publishgame = ->
+        alert "published"
         
     $scope.incrementPlayersNum = ->
         if  $scope.game.playersNum==null
@@ -127,6 +134,7 @@ $ ->
         setTimeout (->
             $sco.game.loc = $("#locationInput").val()
         ), 500
+
     $("#startTime, #startDate, #endTime, #endDate").bind 'input blur', (event)->
         scp = angular.element($('#outer')).scope()
         if scp.game.startDate instanceof Date && scp.game.endDate instanceof Date && scp.form.gStartTime.$valid && scp.form.gEndTime.$valid
@@ -140,7 +148,9 @@ $ ->
                 scp.form.$setValidity "dates", true
         else
             scp.form.$setValidity "dates", true
+
 time_regexp = /^(20|21|22|23|[01]\d|\d)(:[0-5]\d)$/
+
 app.directive 'time', ->
     require: "ngModel"
     link: (scope, elm, attr, ctrl) ->

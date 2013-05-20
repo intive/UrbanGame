@@ -16,13 +16,6 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import play.api.db.slick.Config.driver.simple._
-import play.api.db.DB
-import scala.slick.session.Database
-import play.api.Play.current
-import com.github.nscala_time.time.Imports._
-import models.mutils._
-import models.dal.Bridges._
 import play.api.Logger
 
 object GamesCtrl extends Controller with CookieLang {
@@ -39,38 +32,58 @@ object GamesCtrl extends Controller with CookieLang {
     Ok(Scalate("gameinfo").render('title -> "Urban Game - Game informations", 'request -> request))
   }
 
+  def archive = Action { implicit request =>
+    Ok("Archive")
+  }
+
   import play.api.libs.json._
   import play.api.libs.functional.syntax._
+  import play.api.db.slick.Config.driver.simple._
+  import play.api.db.DB
+  import scala.slick.session.Database
+  import play.api.Play.current
+  import com.github.nscala_time.time.Imports._
+  import models.mutils._
+  import models.dal.Bridges._
   import scala.language.existentials
 
   def getGamesList = Action { implicit request =>
-    val opId = 2 // will be set from session soon
+    val opId = 1 // will be set from session soon
 
     val glist = play.api.db.slick.DB.withSession { implicit session =>
-        Games.getOperatorGamesList(opId)
+      Games.getOperatorGamesList(opId)
     }
 
     Ok(Json.toJson(glist))
   }
 
   def saveGame = Action { implicit request =>
-    val gd = GamesDetails(None, "gg1", 1, "Game1", "Wro", 2.456.toFloat, 1.009.toFloat, 1, DateTime.now, DateTime.now, 
-        DateTime.now + 600.hours, DateTime.now, DateTime.now + 600.hours, "max_points", 1, 
-        "easy", 20, "Jakieś", "online")
+    request.body.asJson.map { json =>
+      ( json \ "game").validate[SmallGame].fold (
+        valid = { res => 
+          val gd = GamesDetails(id = None, name = res.name, description = res.description, location = res.location, operatorId = 1, 
+            startTime = combineDate(res.startDate, res.startTime), endTime = combineDate(res.endDate, res.endTime), 
+            winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards) 
+          
+          val gid: Int = play.api.db.slick.DB.withSession { implicit session =>
+            Games.createGame(gd)
+          }
 
-    val gid = play.api.db.slick.DB.withSession { implicit session =>
-      Games.createGame(gd)
+          Ok(Json.toJson(Map("id" -> gid)))
+        },
+        invalid = ( e => BadRequest(e.toString) )
+      )
+    }.getOrElse{
+      BadRequest("Detected error, JSON expected.")
     }
-
-    Ok(Json.toJson(gid))
   }
 
   def updateGame(gid: Int) = Action { implicit request =>
-    Ok(Json.toJson(gid))
+    Ok(Json.toJson(Map("id" -> gid)))
   }
 
   def deleteGame(gid: Int) = Action { implicit request =>
-    Ok(Json.toJson(gid))
+    Ok(Json.toJson(Map("id" -> gid)))
   }
 
 }

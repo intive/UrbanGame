@@ -5,24 +5,26 @@
 # Public
 GET     /                           controllers.Application.index
 GET     /logout                     controllers.Application.logout
-POST    /login                     	controllers.Application.login
-POST	/register					controllers.Application.register
-POST    /locale						controllers.Application.changeLang
+POST    /login                      controllers.Application.login
+POST    /register                   controllers.Application.register
+POST    /locale                     controllers.Application.changeLang
 
 # Json
-GET     /my/games/list				controllers.GamesCtrl.getGamesList
-POST    /my/games					controllers.GamesCtrl.saveGame
-PUT		/my/games/:gid				controllers.GamesCtrl.updateGame(gid: Int)
-DELETE	/my/games/:gid				controllers.GamesCtrl.deleteGame(gid: Int)
+GET     /my/games/list              controllers.GamesCtrl.getGamesList
+POST    /my/games                   controllers.GamesCtrl.saveGame
+PUT     /my/games/:gid              controllers.GamesCtrl.updateGame(gid: Int)
+DELETE  /my/games/:gid              controllers.GamesCtrl.deleteGame(gid: Int)
 
 # Authenticated
-GET     /my/games/new				controllers.GamesCtrl.newgame
-GET     /my/games					controllers.GamesCtrl.mygames
-GET     /my/games/:gid				controllers.GamesCtrl.gameinfo(gid: Int)
-GET     /my/games/:gid/players		controllers.GamesCtrl.gameinfo(gid: Int)
-GET     /my/games/:gid/tasks		controllers.GamesCtrl.gameinfo(gid: Int)
-GET     /my/games/:gid/skin			controllers.GamesCtrl.gameinfo(gid: Int)
-GET     /my/games/:gid/messages		controllers.GamesCtrl.gameinfo(gid: Int)
+GET     /my/games/new               controllers.GamesCtrl.newgame
+GET     /my/games                   controllers.GamesCtrl.mygames
+GET     /my/games/:gid              controllers.GamesCtrl.gameinfo(gid: Int)
+GET     /my/games/:gid/players      controllers.GamesCtrl.gameinfo(gid: Int)
+GET     /my/games/:gid/tasks        controllers.GamesCtrl.gameinfo(gid: Int)
+GET     /my/games/:gid/skin         controllers.GamesCtrl.gameinfo(gid: Int)
+GET     /my/games/:gid/messages     controllers.GamesCtrl.gameinfo(gid: Int)
+GET     /my/games/archive           controllers.GamesCtrl.archive
+GET     /my/options                 controllers.GamesCtrl.archive
 
 # Web Api resources
 GET     /api                        @controllers.WebApi.root
@@ -36,4 +38,4 @@ GET     /api/games/:gid/dynamic     @controllers.WebApi.gameDynamic(gid: Int)
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Additional
-GET 	/filldb						controllers.Application.fillDatabase
+GET     /filldb                     controllers.Application.fillDatabase

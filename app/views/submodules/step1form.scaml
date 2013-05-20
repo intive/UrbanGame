@@ -13,10 +13,8 @@
     * See the License for the specific language governing permissions and
     * limitations under the License.
 
--import play.api.i18n.Messages
--import play.api.i18n.Lang
 -@ val lan: Lang
--@ val dateOpts: String = "{ dateFormat: "+Messages("dateformat")+"}"
+-@ val dateOpts: String = "{ dateFormat: " + Messages("dateformat") + "}"
 
 .control-group.row-fluid.form-style
     %div
@@ -45,15 +43,15 @@
                 .row-fluid
                     .controls-row
                         .controls-group(tooltip={Messages("newgame.ttgametype1")(lan)} tooltip-placement="left" tooltip-animation="true" )
-                            %input.pull-left(type="radio" id="gType1" name="gType" ng-model="game.type" value="gameType1" checked)  
+                            %input.pull-left(type="radio" id="gType1" name="gType" ng-model="game.winning" value="max_points" checked)  
                             %label(for="gType1")=Messages("newgame.gametype1")(lan)
                         .controls-group(tooltip={Messages("newgame.ttgametype2")(lan)} tooltip-placement="left" tooltip-animation="true" )
-                            %input.pull-left(type="radio" id="gType2" name="gType" ng-model="game.type" value="gameType2" ) 
+                            %input.pull-left(type="radio" id="gType2" name="gType" ng-model="game.winning" value="shortest_time" ) 
                             %label(for="gType2")=Messages("newgame.gametype2")(lan)
                 %label.slight-padding-top(for="gLocation")
                     %strong=Messages("newgame.gamelocationlabel")(lan)
                 .control
-                    %input.input-xlarge(type="text" id="locationInput" maxlength="100" required name="gName" ng-model="game.loc"  tooltip-animation="true" tooltip={Messages("newgame.ttgamelocation")(lan)} tooltip-placement="left")
+                    %input.input-xlarge(type="text" id="locationInput" maxlength="100" required name="gName" ng-model="game.location" tooltip-animation="true" tooltip={Messages("newgame.ttgamelocation")(lan)} tooltip-placement="left")
                 .controls-group
                     %label(for="gStartTime")
                         %strong=Messages("newgame.gamestartlabel")(lan)
@@ -71,31 +69,29 @@
                         %span.pull-higher.gmt()
                             {{timezone}}
                         %input.input-medium(type="text" name="gEndDate" id="endDate" required ng-model="game.endDate" ui-date=dateOpts  tooltip-animation="true" tooltip={Messages("newgame.ttgameenddate")(lan)} tooltip-placement="right")					
-                .alert.alert-error.span11(ng-show="form.gEndTime.$error.time" ng-cloak)=Messages("newgame.gendtimeerror")
-                .alert.alert-error.span11(ng-show="form.$error.dates" ng-cloak)=Messages("newgame.dateorderinvalid")
+                .alert.alert-error.span11(ng-show="form.gEndTime.$error.time" ng-cloak) = Messages("newgame.gendtimeerror")
+                .alert.alert-error.span11(ng-show="form.$error.dates" ng-cloak) = Messages("newgame.dateorderinvalid")
                 .row-fluid
                     .pull-left
                         %label(for="gPlayersNum")
                             %strong=Messages("newgame.gameplayersnumlabel")(lan)
-                        .input-append.input-prepend(tooltip={Messages("newgame.ttgameplayersnum")(lan)}  tooltip-animation="true" tooltip-placement="left")
+                        .input-append.input-prepend(tooltip={Messages("newgame.ttgameplayersnum")(lan)} tooltip-animation="true" tooltip-placement="left")
                             %button.btn( ng-click="decrementPlayersNum()") -
                             %input.input-mini.text-center(type="number" min="2" placeholder="nolimit" name="gPlayersNum" ng-model="game.playersNum" )
                             %button.btn( ng-click="incrementPlayersNum()") +
                     .pull-left(style="margin-left:2em;")
                         %label(for="gWinningNum")
                             %strong=Messages("newgame.gamewinningnumlabel")(lan)
-                        .input-append.input-prepend(tooltip={Messages("newgame.ttgamewinningnum")(lan)}  tooltip-animation="true" tooltip-placement="right")
+                        .input-append.input-prepend(tooltip={Messages("newgame.ttgamewinningnum")(lan)} tooltip-animation="true" tooltip-placement="right")
                             %button.btn( ng-click="decrementWinningNum()") -
                             %input.input-mini.text-center(type="number" min="1" winning required name="gWinningNum" ng-model="game.winningNum" )
                             %button.btn( ng-click="incrementWinningNum()") +
-                .alert.alert-error.span11(ng-show="form.$error.morewinnersthanplayers" ng-cloak)=Messages("newgame.gwinningerror")
+                .alert.alert-error.span11(ng-show="form.$error.morewinnersthanplayers" ng-cloak) = Messages("newgame.gwinningerror")
                 %label(for="gDifficulty")
                     %strong=Messages("newgame.gamedifflabel")(lan)
-                %div.btn-group(id="btnsDiff" data-toggle="buttons-checkbox" tooltip={Messages("newgame.ttgamediff")(lan)}  tooltip-animation="true" tooltip-placement="left")
-                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="1") 1
-                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="2") 2
-                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="3") 3
-                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="4") 4 
-                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="5") 5
+                %div.btn-group(id="btnsDiff" data-toggle="buttons-checkbox" tooltip={Messages("newgame.ttgamediff")(lan)} tooltip-animation="true" tooltip-placement="left")
+                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="'easy'") = Messages("newgame.diff.easy")(lan)
+                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="'medium'") = Messages("newgame.diff.medium")(lan)
+                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="'hard'") = Messages("newgame.diff.hard")(lan)
             
             

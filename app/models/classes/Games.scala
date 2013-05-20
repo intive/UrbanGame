@@ -26,17 +26,6 @@ import com.github.nscala_time.time.Imports._
 
 
 object Games extends Table[GamesDetails]("GAMES") {
-
-  //implicit val DateTimeMapper: BaseTypeMapper[DateTime] = MappedTypeMapper.base[DateTime, Timestamp](
-  //  d => new Timestamp(d millis), t => new DateTime(t getTime)
-  //)
-
-  // implicit object DateTimeTypeMapper extends MappedTypeMapper[DateTime, Timestamp] with BaseTypeMapper[DateTime] {
-  //   def map(e: DateTime) = new Timestamp(e millis)
-  //   def comap(s: Timestamp) = new DateTime(s getTime)
-  //   override def sqlTypeName = Some("DateTime")
-  // }
-
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name", O.NotNull)
   def version = column[Int]("version", O.NotNull, O.Default(1))
@@ -48,8 +37,8 @@ object Games extends Table[GamesDetails]("GAMES") {
   def created = column[DateTime]("created", O.NotNull, O.Default(DateTime.now))
   def startTime = column[DateTime]("startTime", O.NotNull, O.Default(DateTime.now))
   def endTime = column[DateTime]("endTime", O.NotNull)
-  def started = column[DateTime]("started")
-  def ended = column[DateTime]("ended")
+  def started = column[Option[DateTime]]("started")
+  def ended = column[Option[DateTime]]("ended")
   def winning = column[String]("winning", O.NotNull, O.Default("max_points"))
   def nWins = column[Int]("nWins", O.NotNull, O.Default(1))
   def difficulty = column[String]("difficulty", O.NotNull, O.Default("easy"))
@@ -84,12 +73,10 @@ trait Games { this: ImplicitSession =>
       g <- Games 
       if g.status === "online" && g.endTime <= DateTime.now
     } yield g.status
-    Console.printf(q.selectStatement)
     val p = for {
       g <- Games 
       if g.status === "published" && g.startTime <= DateTime.now
     } yield g.status
-    Console.printf(p.selectStatement)
     q update "finished"
     p update "online"
   }
