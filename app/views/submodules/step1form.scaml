@@ -1,95 +1,101 @@
 -#
-	*Copyright 2013 BLStream, BLStream's Patronage Program Contributors
-	* 		 http://blstream.github.com/UrbanGame/
-	* 
-	* Licensed under the Apache License, Version 2.0 (the "License");
-	* you may not use this file except in compliance with the License.
-	* You may obtain a copy of the License at
-	* 		 http://www.apache.org/licenses/LICENSE-2.0
-	* 
-	* Unless required by applicable law or agreed to in writing, software
-	* distributed under the License is distributed on an "AS IS" BASIS,
-	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	* See the License for the specific language governing permissions and
-	* limitations under the License.
+    *Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+    * 		 http://blstream.github.com/UrbanGame/
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    * 		 http://www.apache.org/licenses/LICENSE-2.0
+    * 
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
 
 -import play.api.i18n.Messages
+-import play.api.i18n.Lang
+-@ val lan: Lang
+-@ val dateOpts: String = "{ dateFormat: "+Messages("dateformat")+"}"
 
-.control-group.row-fluid
-	.span6.pull-left.slight-padding-right
-		%h3=Messages("newgame.step1title")
-		%em=Messages("newgame.step1subtitle")
-		.controls.slight-padding-top
-			%label(for="gName")
-				%strong=Messages("newgame.gamenamelabel")
-			.control
-				%input.input-xlarge(type="text" maxlength="100" required name="gName" ng-model="game.name" tooltip={Messages("newgame.ttgamename")} tooltip-placement="right") 
-			%label(for="gDesc")
-				%strong=Messages("newgame.gamedesclabel")
-			.control
-				%textarea.input-xlarge(required maxlength="1000" name="gDesc" ng-model="game.description" tooltip={Messages("newgame.ttgamedesc")} tooltip-placement="right")
-			%label(for="gAwards")
-				%strong=Messages("newgame.gameawardslabel")
-			.control
-				%textarea.input-xlarge(name="gAwards" ng-model="game.awards" tooltip={Messages("newgame.ttgameawards")} tooltip-placement="right")
-	.span6.pull-right.slight-padding-left
-		.slight-padding-top
-			%label(for="gType")
-				%strong=Messages("newgame.gametypelabel")
-			.row-fluid
-				.span6.pull-left
-					.controls-row
-						.span10
-							%input.as-inline-block.pull-left(type="radio" id="gType1" name="gType" value="gameType1" checked)  
-							%label(for="gType1")=Messages("newgame.gametype1")
-						%span.pull-right.btn.btn-small.info.cursor-help(disabled tooltip={Messages("newgame.ttgametype1")} tooltip-placement="right") ?
-				.span5
-					.controls-row
-						.span10
-							%input.as-inline-block.pull-left(type="radio" id="gType2" name="gType" ng-model="game.gameType" value="gameType2") 
-							%label(for="gType2")=Messages("newgame.gametype2")
-						%span.pull-right.btn.btn-small.info.cursor-help(disabled tooltip={Messages("newgame.ttgametype2")} tooltip-placement="right") ?
-			%label.slight-padding-top(for="gLocation")
-				%strong=Messages("newgame.gamelocationlabel")
-			.control
-				%input.input-xlarge(type="text" maxlength="100" required name="gName" ng-model="game.location" tooltip={Messages("newgame.ttgamelocation")} tooltip-placement="left")
-			%label(for="gStartTime")
-				%strong=Messages("newgame.gamestartlabel")
-			.controls-row(tooltip={Messages("newgame.ttgamestart")} tooltip-placement="left")
-				%input.input-mini(type="text" required name="gStartTime" ng-model="game.startTime")
-				%span.pull-higher=" GMT"
-				.input-append
-					%input.input-medium(type="text" name="gStartDate" required ng-model="game.startDate")
-					%a.btn()
-						%i.icon-calendar()
-			%label(for="gEndTime")
-				%strong=Messages("newgame.gameendlabel")
-			.controls-row(tooltip={Messages("newgame.ttgameend")} tooltip-placement="left" )
-				%input.input-mini(type="text" required name="gEndTime" ng-model="game.endTime")
-				%span.pull-higher=" GMT"
-				.input-append
-					%input.input-medium(type="text" name="gEndDate" required ng-model="game.endDate")
-					%a.btn()
-						%i.icon-calendar()
-			.row-fluid
-				.span6.pull-left
-					%label(for="gPlayersNum")
-						%strong=Messages("newgame.gameplayersnumlabel")
-					.input-append.input-prepend
-						%button.btn() -
-						%input.input-mini(type="text" name="gPlayersNum" required ng-model="game.playersNum" tooltip={Messages("newgame.ttgameplayersnum")} tooltip-placement="bottom")
-						%button.btn() +
-				.span6.pull-right
-					%label(for="gStrategy")
-						%strong=Messages("newgame.gamestrategylabel")
-					%input.input-small(type="text" name="gStrategy" ng-model="game.strategy"  required tooltip={Messages("newgame.ttgamestrategy")} tooltip-placement="bottom")
-			%label(for="gDifficulty")
-				%strong=Messages("newgame.gamedifflabel")
-			%div.btn-group(id="btnsDiff" data-toggle="buttons-checkbox")
-				%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="1") 1
-				%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="2") 2
-				%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="3") 3
-				%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="4") 4 
-				%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="5") 5
-				
-		
+.control-group.row-fluid.form-style
+    %div
+        %h3=Messages("newgame.step1title")(lan)
+        %em=Messages("newgame.step1subtitle")(lan)
+        {{game}}
+    .span12.slight-padding-top
+        .span6.pull-left.slight-padding-right
+            .controls.slight-padding-top
+                %label(for="gName")
+                    %strong=Messages("newgame.gamenamelabel")(lan)
+                .control
+                    %input.input-xlarge(type="text" maxlength="100" required name="gName" ng-model="game.name" tooltip={Messages("newgame.ttgamename")(lan)} tooltip-animation="true" tooltip-placement="right") 
+                %label(for="gDesc")
+                    %strong=Messages("newgame.gamedesclabel")(lan)
+                .control
+                    %textarea.input-xlarge(required maxlength="1000" name="gDesc" ng-model="game.description" tooltip={Messages("newgame.ttgamedesc")(lan)} tooltip-animation="true" tooltip-placement="right")
+                %label(for="gAwards")
+                    %strong=Messages("newgame.gameawardslabel")(lan)
+                .control
+                    %textarea.input-xlarge(name="gAwards" ng-model="game.awards" tooltip={Messages("newgame.ttgameawards")(lan)} tooltip-placement="right" tooltip-animation="true" )
+        .span6.pull-right.slight-padding-left
+            .slight-padding-top
+                %label(for="gType")
+                    %strong=Messages("newgame.gametypelabel")(lan)
+                .row-fluid
+                    .controls-row
+                        .controls-group(tooltip={Messages("newgame.ttgametype1")(lan)} tooltip-placement="left" tooltip-animation="true" )
+                            %input.pull-left(type="radio" id="gType1" name="gType" ng-model="game.type" value="gameType1" checked)  
+                            %label(for="gType1")=Messages("newgame.gametype1")(lan)
+                        .controls-group(tooltip={Messages("newgame.ttgametype2")(lan)} tooltip-placement="left" tooltip-animation="true" )
+                            %input.pull-left(type="radio" id="gType2" name="gType" ng-model="game.type" value="gameType2" ) 
+                            %label(for="gType2")=Messages("newgame.gametype2")(lan)
+                %label.slight-padding-top(for="gLocation")
+                    %strong=Messages("newgame.gamelocationlabel")(lan)
+                .control
+                    %input.input-xlarge(type="text" id="locationInput" maxlength="100" required name="gName" ng-model="game.loc"  tooltip-animation="true" tooltip={Messages("newgame.ttgamelocation")(lan)} tooltip-placement="left")
+                .controls-group
+                    %label(for="gStartTime")
+                        %strong=Messages("newgame.gamestartlabel")(lan)
+                    .controls-row()
+                        %input.input-mini(type="text" id="startTime" required name="gStartTime" ng-model="game.startTime"  time tooltip-animation="true" tooltip={Messages("newgame.ttgamestarttime")(lan)} tooltip-placement="left")
+                        %span.pull-higher.gmt()
+                            {{timezone}}
+                        %input.input-medium(type="text" id="startDate" name="gStartDate" required ng-model="game.startDate" ui-date=dateOpts  tooltip-animation="true" tooltip={Messages("newgame.ttgamestartdate")(lan)} tooltip-placement="right")
+                .alert.alert-error.span11(ng-show="form.gStartTime.$error.time" ng-cloak)=Messages("newgame.gstarttimeerror")
+                .controls-group
+                    %label(for="gEndTime")
+                        %strong=Messages("newgame.gameendlabel")(lan)
+                    .controls-row()
+                        %input.input-mini(type="text" id="endTime" required name="gEndTime" ng-model="game.endTime"  time tooltip-animation="true" tooltip={Messages("newgame.ttgameendtime")(lan)} tooltip-placement="left")
+                        %span.pull-higher.gmt()
+                            {{timezone}}
+                        %input.input-medium(type="text" name="gEndDate" id="endDate" required ng-model="game.endDate" ui-date=dateOpts  tooltip-animation="true" tooltip={Messages("newgame.ttgameenddate")(lan)} tooltip-placement="right")					
+                .alert.alert-error.span11(ng-show="form.gEndTime.$error.time" ng-cloak)=Messages("newgame.gendtimeerror")
+                .alert.alert-error.span11(ng-show="form.$error.dates" ng-cloak)=Messages("newgame.dateorderinvalid")
+                .row-fluid
+                    .pull-left
+                        %label(for="gPlayersNum")
+                            %strong=Messages("newgame.gameplayersnumlabel")(lan)
+                        .input-append.input-prepend(tooltip={Messages("newgame.ttgameplayersnum")(lan)}  tooltip-animation="true" tooltip-placement="left")
+                            %button.btn( ng-click="decrementPlayersNum()") -
+                            %input.input-mini.text-center(type="number" min="2" placeholder="nolimit" name="gPlayersNum" ng-model="game.playersNum" )
+                            %button.btn( ng-click="incrementPlayersNum()") +
+                    .pull-left(style="margin-left:2em;")
+                        %label(for="gWinningNum")
+                            %strong=Messages("newgame.gamewinningnumlabel")(lan)
+                        .input-append.input-prepend(tooltip={Messages("newgame.ttgamewinningnum")(lan)}  tooltip-animation="true" tooltip-placement="right")
+                            %button.btn( ng-click="decrementWinningNum()") -
+                            %input.input-mini.text-center(type="number" min="1" winning required name="gWinningNum" ng-model="game.winningNum" )
+                            %button.btn( ng-click="incrementWinningNum()") +
+                .alert.alert-error.span11(ng-show="form.$error.morewinnersthanplayers" ng-cloak)=Messages("newgame.gwinningerror")
+                %label(for="gDifficulty")
+                    %strong=Messages("newgame.gamedifflabel")(lan)
+                %div.btn-group(id="btnsDiff" data-toggle="buttons-checkbox" tooltip={Messages("newgame.ttgamediff")(lan)}  tooltip-animation="true" tooltip-placement="left")
+                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="1") 1
+                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="2") 2
+                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="3") 3
+                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="4") 4 
+                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="5") 5
+            
+            

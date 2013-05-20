@@ -17,6 +17,8 @@
 -import play.api.i18n.Messages
 -import play.api.i18n.Lang
 
+-@ val lan: Lang
+
 #footer(ng-controller="menuCtrl")
     .span3.offset1
         .row
@@ -27,21 +29,27 @@
                 Lorem ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
 
     .span2.offset1
-        %form.form-vertical(action={routes.Application.changeLang()} method="post" name="langform" class="css-form")
-            %select(ng-model="selectLanguage" name="lang")
+        %form(action={routes.Application.changeLang} method="post" name="langform" class="css-form")
+            %select(name="lang" id="chglang")
                 -play.api.i18n.Lang.availables(play.api.Play.current).map { lang =>
-                    %option(value={lang.code}) = Messages("language." + lang.code) 
+                    -if(lan.code == lang.code)
+                        %option(value={lang.code} selected) = Messages("language." + lang.code)
+                    -else
+                        %option(value={lang.code}) = Messages("language." + lang.code)
                 -}
         %p.cicons
-            Icon Icon
+            %ul.inline
+                %li
+                    %a(href="") 
+                        %img(src="")
 
     .span4.offset1
         %ul#footmenu.inline
             %li(ng-class="{active: location == '/about'}")
-                %a(href="/about") = Messages("menu.about")
+                %a(href="/about") = Messages("menu.about")(lan)
             %li(ng-class="{active: location == '/contact'}")
-                %a(href="/contact") = Messages("menu.contact")
+                %a(href="/contact") = Messages("menu.contact")(lan)
             %li(ng-class="{active: location == '/help'}")
-                %a(href="/help") = Messages("menu.help")
+                %a(href="/help") = Messages("menu.help")(lan)
             %li(ng-class="{active: location == '/faq'}")
-                %a(href="/faq") = Messages("menu.faq")
+                %a(href="/faq") = Messages("menu.faq")(lan)
