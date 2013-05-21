@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LinearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/view_margin"
     android:orientation="vertical" >
-
-    <ExpandableListView
-        android:id="@+id/expandableListViewTasksList"
+    
+    <TextView 
+        android:id="@+id/textViewEmptyActiveList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </ExpandableListView>
+        android:layout_height="wrap_content"
+        android:padding="@dimen/view_margin"
+        android:text="@string/text_view_empty_active_list"/>
+    
 
 </LinearLayout>

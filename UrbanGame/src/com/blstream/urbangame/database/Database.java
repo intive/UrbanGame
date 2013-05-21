@@ -21,8 +21,6 @@ import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
-//import android.database.sqlite.SQLiteDatabase;
-//import android.database.sqlite.SQLiteOpenHelper;
 
 public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
@@ -778,8 +776,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		db.beginTransaction();
 		boolean isSuccesful = email != null;
-		Cursor c = db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_KEY_EMAIL }, null, null, null, null,
-			null);
+		Cursor c = db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_KEY_EMAIL }, null, null, null,
+			null, null);
 		isSuccesful = isSuccesful && c.getCount() == 0;
 		if (isSuccesful) {
 			ContentValues values = new ContentValues();
@@ -803,6 +801,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			playerEmail = cursor.getString(0);
 		}
 		cursor.close();
+		db.close();
 		return playerEmail;
 	}
 	
@@ -1051,6 +1050,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		}
 		else {
 			task = null;
+		}
+		if (cursor != null) {
+			cursor.close();
 		}
 		db.close();
 		return task;

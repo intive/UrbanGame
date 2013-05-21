@@ -17,10 +17,10 @@ import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
-import com.blstream.urbangame.menuitem.MenuItemHelper;
 import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
+import com.blstream.urbangame.menuitem.MenuItemHelper;
 
 public class MainActivity extends SherlockListActivity {
 	private static final String TAG = "MainActivity";
@@ -89,28 +89,27 @@ public class MainActivity extends SherlockListActivity {
 		return true;
 	}
 	
-
 	@Override
 	protected void onResume() {
-	    super.onResume();
-	    this.supportInvalidateOptionsMenu();
+		super.onResume();
+		this.supportInvalidateOptionsMenu();
 		Log.i(TAG, "onResume completed");
 	}
-
+	
 	private void configureLoginAction(Menu menu) {
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);
 		loginItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
+			
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				Log.i(TAG, "onMenuItemClick(): " + item.getTitleCondensed());
-					Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
-					startActivity(intent);
-					return true;
-				}
+				Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
+				startActivity(intent);
+				return true;
+			}
 		});
 	}
-
+	
 	private void configureSearchAction(Menu menu) {
 		final MenuItem moreItem = menu.findItem(R.id.menu_more);;
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);
