@@ -4,9 +4,11 @@ import java.util.List;
 
 import android.util.Log;
 
+import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
@@ -19,6 +21,8 @@ public class WebResponse {
 	
 	public final static int queryTypeGetUrbanGameDetails = 1;
 	public final static int queryTypeGetUrbanGameBaseList = 2;
+	public final static int queryTypeGetTask = 3;
+	public final static int queryTypeGetTaskList = 4;
 	
 	private int queryType;
 	private String jsonResponse;
@@ -28,6 +32,15 @@ public class WebResponse {
 	//
 	public WebResponse(int _responseType) {
 		queryType = _responseType;
+	}
+	
+	//
+	// Private methods
+	//
+	private Gson initalizeGsonTaskAdapter() {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(Task.class, new GsonTaskAdapter());
+		return gsonBuilder.create();
 	}
 	
 	//
@@ -70,5 +83,35 @@ public class WebResponse {
 		
 		return null;
 	}
-
+	
+	public List<Task> getTaskList() {
+		// try to parse response JSON string to list of Task objects
+		Gson gson = initalizeGsonTaskAdapter();
+		
+		try {
+			List<Task> taskList = gson.fromJson(jsonResponse, new TypeToken<List<Task>>() {}.getType());
+			return taskList;
+		}
+		catch (JsonSyntaxException e) {
+			Log.e(TAG, "parseResponseToTaskList() exception " + e.toString());
+		}
+		
+		return null;
+	}
+	
+	public Task getTask() {
+		// try to parse response JSON string to a single Task object
+		Gson gson = initalizeGsonTaskAdapter();
+		
+		try {
+			Task task = gson.fromJson(jsonResponse, Task.class);
+			return task;
+		}
+		catch (JsonSyntaxException e) {
+			Log.e(TAG, "parseResponseToTask() exception " + e.toString());
+		}
+		
+		return null;
+	}
+	
 }

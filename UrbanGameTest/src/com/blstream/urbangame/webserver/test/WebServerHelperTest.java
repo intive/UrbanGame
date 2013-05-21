@@ -8,6 +8,10 @@ import java.util.concurrent.TimeUnit;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
+import com.blstream.urbangame.database.Database;
+import com.blstream.urbangame.database.DatabaseInterface;
+import com.blstream.urbangame.database.entity.ABCDTask;
+import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.webserver.helper.WebResponse;
@@ -18,9 +22,11 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 	private final String TAG = "WebServerHelperTest";
 	private final int TIMEOUT = 30;
 	private CountDownLatch signal = new CountDownLatch(1);
-	private long gameIndex;
+	private Long gid;
+	private Long tid;
 	
 	private MockUserClass mockUserClass;
+	private MockWebServer mockWebServer;
 	
 	private class MockUserClass implements WebServerHelper.WebServerResponseInterface {
 		//
@@ -38,21 +44,19 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 						
 						assertNotNull(urbanGame);
 						
-						MockWebServer mockWebServer = new MockWebServer();
-						checkUrbanGamesEqual(urbanGame, mockWebServer.getMockSingleUrbanGame(gameIndex));
+						checkUrbanGamesEqual(urbanGame, mockWebServer.getMockUrbanGameDetails(gid));
 						Log.d(TAG, "checkUrbanGamesEqual singleGame equal");
 						
 						signal.countDown();
 						break;
 					}
-					// if query returned array of all available games
+					// if query returned list of all available games
 					case (WebResponse.queryTypeGetUrbanGameBaseList): {
 						
 						List<UrbanGameShortInfo> urbanGames = webResponse.getUrbanGameShortInfoList();
 						
 						assertNotNull(urbanGames);
 						
-						MockWebServer mockWebServer = new MockWebServer();
 						ArrayList<UrbanGameShortInfo> mockAllUrbanGames = mockWebServer.getMockAllUrbanGames();
 						
 						for (int i = 0; i < mockAllUrbanGames.size(); ++i) {
@@ -63,6 +67,32 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 						signal.countDown();
 						break;
 					}
+					// if query returned single Task
+					case (WebResponse.queryTypeGetTask): {
+						Task task = webResponse.getTask();
+						assertNotNull(task);
+						checkTasksEqual(task, mockWebServer.getMockSingleTask(gid, tid));
+						
+						Log.d(TAG, "checkTaskEqual singleTask equal");
+						signal.countDown();
+						break;
+					}
+					
+					// if query returned list of Tasks for a particular game
+					case (WebResponse.queryTypeGetTaskList): {
+						List<Task> taskList = webResponse.getTaskList();
+						assertNotNull(taskList);
+						ArrayList<Task> mockTaskList = mockWebServer.getMockTaskList(gid);
+						
+						for (int i = 0; i < mockTaskList.size(); ++i) {
+							checkTasksEqual(mockTaskList.get(i), taskList.get(i));
+							Log.d(TAG, "checkTasksEqual index i: " + i);
+						}
+						
+						signal.countDown();
+						break;
+					}
+					
 				}
 			}
 		}
@@ -70,13 +100,24 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 		//
 		// Public methods
 		//
-		public void issueGetUrbanGameDetails(long _gameIndex) {
-			gameIndex = _gameIndex;
-			WebServerHelper.getUrbanGameDetails(this, gameIndex);
+		public void issueGetUrbanGameDetails(long _gid) {
+			gid = _gid;
+			WebServerHelper.getUrbanGameDetails(this, gid);
 		}
 		
 		public void issueGetUrbanGameBaseList() {
 			WebServerHelper.getUrbanGameBaseList(this);
+		}
+		
+		public void issueGetTaskList(long _gid) {
+			gid = _gid;
+			WebServerHelper.getTaskList(this, gid);
+		}
+		
+		public void issueGetTask(long _gid, long _tid) {
+			gid = _gid;
+			tid = _tid;
+			WebServerHelper.getTask(this, gid, tid);
 		}
 		
 		public void checkUrbanGamesEqual(UrbanGame expected, UrbanGame actual) {
@@ -106,6 +147,30 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 			assertEquals(expected.getTitle(), actual.getTitle());
 		}
 		
+		public void checkTasksEqual(Task expected, Task actual) {
+			assertEquals(expected.getDescription(), actual.getDescription());
+			assertEquals(expected.getEndTime(), actual.getEndTime());
+			assertEquals(expected.getId(), actual.getId());
+			assertEquals(expected.getMaxPoints(), actual.getMaxPoints());
+			assertEquals(expected.getNumberOfHidden(), actual.getNumberOfHidden());
+			assertEquals(expected.getPictureBase64(), actual.getPictureBase64());
+			assertEquals(expected.getTitle(), actual.getTitle());
+			assertEquals(expected.getType(), actual.getType());
+			
+			if (expected.getType() == Task.TASK_TYPE_ABCD) {
+				ABCDTask expectedABCD = (ABCDTask) expected;
+				ABCDTask actualABCD = (ABCDTask) actual;
+				
+				String[] expectedAnswers = expectedABCD.getAnswers();
+				String[] actualAnswers = actualABCD.getAnswers();
+				
+				for (int i = 0; i < expectedAnswers.length; ++i)
+					assertEquals(expectedAnswers[i], actualAnswers[i]);
+				
+				assertEquals(expectedABCD.getQuestion(), actualABCD.getQuestion());
+			}
+		}
+		
 	}
 	
 	//
@@ -113,16 +178,20 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 	//
 	public void setUp() {
 		mockUserClass = new MockUserClass();
+		mockWebServer = new MockWebServer();
 	}
 	
 	public void testGetUrbanGameDetails() throws Throwable {
+		// Get short information about all available games
+		ArrayList<UrbanGameShortInfo> mockAllUrbanGames = mockWebServer.getMockAllUrbanGames();
 		
-		for (long i = 0; i < 5; ++i) {
-			final long index = i;
+		// For each game issue query to get game details
+		for (int i = 0; i < mockAllUrbanGames.size(); ++i) {
+			final long gameID = mockAllUrbanGames.get(i).getID();
 			runTestOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					mockUserClass.issueGetUrbanGameDetails(index);
+					mockUserClass.issueGetUrbanGameDetails(gameID);
 				}
 			});
 			
@@ -142,7 +211,85 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 		});
 		
 		signal.await(TIMEOUT, TimeUnit.SECONDS);
+		signal = new CountDownLatch(1);
 		Log.d(TAG, "testGetUrbanGameBaseList() completed");
+	}
+	
+	public void testGetTask() throws Throwable {
+		// Get short information about all available games
+		ArrayList<UrbanGameShortInfo> mockAllUrbanGames = mockWebServer.getMockAllUrbanGames();
+		
+		// For each game
+		for (int i = 0; i < mockAllUrbanGames.size(); ++i) {
+			
+			// Get list of tasks that are related to a game
+			ArrayList<Task> taskList = mockWebServer.getMockTaskList(mockAllUrbanGames.get(i).getID());
+			final long gameID = mockAllUrbanGames.get(i).getID();
+			
+			// Now get information about the particular Task
+			for (int j = 0; j < taskList.size(); ++j) {
+				final long taskID = taskList.get(j).getId();
+				
+				runTestOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						mockUserClass.issueGetTask(gameID, taskID);
+					}
+				});
+				
+				signal.await(TIMEOUT, TimeUnit.SECONDS);
+				signal = new CountDownLatch(1);
+			}
+			
+			Log.d(TAG, "testGetTask() completed");
+		}
+		
+	}
+	
+	public void testGetTaskList() throws Throwable {
+		// Get short information about all available games
+		ArrayList<UrbanGameShortInfo> mockAllUrbanGames = mockWebServer.getMockAllUrbanGames();
+				
+		// For each game issue query to get Task list for the game
+		for (int i = 0; i < mockAllUrbanGames.size(); ++i) {
+			final long gameID = mockAllUrbanGames.get(i).getID();
+			
+			runTestOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					mockUserClass.issueGetTaskList(gameID);
+				}
+			});
+			
+			signal.await(TIMEOUT, TimeUnit.SECONDS);
+			signal = new CountDownLatch(1);
+			Log.d(TAG, "testGetTaskList() completed");
+		}
+		
+	}
+	
+	public void testMockSimulateNewTaskAvailable() {
+		DatabaseInterface database = new Database(getInstrumentation().getTargetContext());
+		Task task = null;
+		
+		// simulate that new ABCDTask was created
+		task = WebServerHelper.mockSimulateNewTaskAvailable(Task.TASK_TYPE_ABCD, getInstrumentation()
+			.getTargetContext());
+		
+		// Check that ABCDTask was created correctly and is not stored in Database
+		assertNotNull(task);
+		assertEquals((Integer) Task.TASK_TYPE_ABCD, task.getType());
+		assertNull(database.getTask(task.getId()));
+		
+		// simulate that new LocationTask was created
+		task = WebServerHelper.mockSimulateNewTaskAvailable(Task.TASK_TYPE_LOCATION, getInstrumentation()
+			.getTargetContext());
+		
+		// Check that LocationTask was created correctly and is not stored in Database
+		assertNotNull(task);
+		assertEquals((Integer) Task.TASK_TYPE_LOCATION, task.getType());
+		assertNull(database.getTask(task.getId()));
+		Log.d(TAG, "testMockSimulateNewTaskAvailable() completed");
 	}
 	
 }
