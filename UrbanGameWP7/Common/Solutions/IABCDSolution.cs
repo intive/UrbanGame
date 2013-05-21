@@ -7,6 +7,6 @@ namespace Common
 {
     public interface IABCDSolution : IBaseSolution
     {
-        byte ABCDAnswer { get; set; }
+        IEntityEnumerable<IABCDUserAnswer> ABCDUserAnswers { get; }
     }
 }

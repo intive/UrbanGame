@@ -6,14 +6,14 @@ using System.Text;
 namespace Common
 {
     /// <summary>
-    /// Represents a solution
+    /// Represents a single user answer for ABCD task
     /// </summary>
-    public interface IBaseSolution
+    public interface IABCDUserAnswer
     {
         int Id { get; set; }
 
-        TaskType TaskType { get; set; }
+        IABCDSolution Solution { get; set; }
 
-        ITask Task { get; set; }
+        byte Answer { get; set; }
     }
 }

@@ -505,7 +505,7 @@ namespace UrbanGame.Storage
 
         private EntitySet<GameTask> _taskRefs;
 
-        [Association(Name = "FK_Game_Tasks", Storage = "_taskRefs", ThisKey = "Id", OtherKey = "GameId")]
+        [Association(Name = "FK_Game_Tasks", Storage = "_taskRefs", ThisKey = "Id", OtherKey = "GameId", DeleteRule = "CASCADE")]
         public EntitySet<GameTask> Tasks
         {
             get { return _taskRefs; }
@@ -537,7 +537,7 @@ namespace UrbanGame.Storage
 
         private EntitySet<GameAlert> _alertRefs;
 
-        [Association(Name = "FK_Game_Alerts", Storage = "_alertRefs", ThisKey = "Id", OtherKey = "GameId")]
+        [Association(Name = "FK_Game_Alerts", Storage = "_alertRefs", ThisKey = "Id", OtherKey = "GameId", DeleteRule = "CASCADE")]
         public EntitySet<GameAlert> Alerts
         {
             get { return _alertRefs; }
@@ -569,7 +569,7 @@ namespace UrbanGame.Storage
 
         private EntitySet<GameHighScore> _highScoreRefs;
 
-        [Association(Name = "FK_Game_HighScores", Storage = "_highScoreRefs", ThisKey = "Id", OtherKey = "GameId")]
+        [Association(Name = "FK_Game_HighScores", Storage = "_highScoreRefs", ThisKey = "Id", OtherKey = "GameId", DeleteRule = "CASCADE")]
         public EntitySet<GameHighScore> HighScores
         {
             get { return _highScoreRefs; }

@@ -13,6 +13,9 @@ namespace WebService.BOMock
         {
             EntitySet<ABCDPossibleAnswerMock> es = new EntitySet<ABCDPossibleAnswerMock>(OnAnswerAdded, OnAnswerRemoved);
             _abcdPossibleAnswers =  new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswerMock>(es);
+
+            EntitySet<TaskSolutionMock> es2 = new EntitySet<TaskSolutionMock>(OnSolutionAdded, OnSolutionRemoved);
+            _solutions = new EntityEnumerable<IBaseSolution, TaskSolutionMock>(es2);
         }
 
         #region Id
@@ -189,6 +192,29 @@ namespace WebService.BOMock
         private void OnAnswerRemoved(ABCDPossibleAnswerMock answer)
         {
             answer.Task = null;
+        }
+        #endregion
+
+        #region ITask.Solutions
+
+        private IEntityEnumerable<IBaseSolution> _solutions;
+
+        public IEntityEnumerable<IBaseSolution> Solutions
+        {
+            get
+            {
+                return _solutions;
+            }
+        }
+
+        private void OnSolutionAdded(TaskSolutionMock solution)
+        {
+            solution.Task = this;
+        }
+
+        private void OnSolutionRemoved(TaskSolutionMock solution)
+        {
+            solution.Task = null;
         }
         #endregion
 

@@ -27,6 +27,8 @@ namespace Common
 
         IEntityEnumerable<IABCDPossibleAnswer> ABCDPossibleAnswers { get; }
 
+        IEntityEnumerable<IBaseSolution> Solutions { get; }
+
         IGame Game { get; set; }
 
         string Picture { get; set; }

@@ -39,8 +39,10 @@ namespace UrbanGame.Storage
 
         public Table<GameHighScore> HighScores;
 
-        public Table<ABCDPossibleAnswer> ABCDPossibleAnswers;
+        public Table<ABCDPossibleAnswer> ABCDPossibleAnswers;        
 
-        public Table<TaskSolution> Solutions;        
+        public Table<TaskSolution> Solutions;
+
+        public Table<ABCDUserAnswer> ABCDUserAnswers;
     }
 }

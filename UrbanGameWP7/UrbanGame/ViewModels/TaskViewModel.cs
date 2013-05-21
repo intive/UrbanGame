@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace UrbanGame.ViewModels
 {
-    public class TaskViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<TaskChangedEvent>
+    public class TaskViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<TaskChangedEvent>, IHandle<SolutionStatusChanged>
     {
 
         IAppbarManager _appbarManager;
@@ -69,6 +69,16 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
+        #region IHandle<SolutionStatusChanged>
+        public void Handle(SolutionStatusChanged message)
+        {
+            if (message.TaskId == CurrentTask.Id)
+            {
+                CurrentTask.SolutionStatus = message.Status;
+            }
+        }
+        #endregion
+
         #region navigation properties
 
         public int GameId { get; set; }
@@ -121,6 +131,27 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
+        #region Solution
+
+        private IBaseSolution _solution;
+
+        public IBaseSolution Solution
+        {
+            get
+            {
+                return _solution;
+            }
+            set
+            {
+                if (_solution != value)
+                {
+                    _solution = value;
+                    NotifyOfPropertyChange(() => Solution);
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
         #region lifecycle
@@ -145,11 +176,9 @@ namespace UrbanGame.ViewModels
         public async Task RefreshGame()
         {
             await Task.Factory.StartNew(() =>
-            {
-
+            {               
                 IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
                 Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
-
             });
         }
 
@@ -157,18 +186,39 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-
                 IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
                 CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId) ?? _gameWebService.GetTaskDetails(GameId, TaskId);
-
             });
+        }
+
+        private void SubmitSolution(IBaseSolution solution)
+        {
+            //saving solution in database
+            using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
+            {
+                GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
+                solution.Task = task;
+
+                unitOfWork.GetRepository<IBaseSolution>().MarkForAdd(solution);
+                unitOfWork.Commit();
+            }
+
+            //sending solution
+            _gameWebService.SubmitTaskSolution(Game.Id, CurrentTask.Id, solution);
+
+            Solution = solution;
         }
 
         public async Task SubmitGPS()
         {
             await Task.Factory.StartNew(() =>
             {
-
+                GPSLocation gps = new GPSLocation();
+                gps.GetCurrentCoordinates(coords =>
+                {
+                    IGPSSolution solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
+                    SubmitSolution(solution);
+                });
             });
         }
 
@@ -176,10 +226,21 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
+                IABCDSolution solution = new TaskSolution() { TaskType = TaskType.ABCD };
 
+                /* when the view will be finished, then it should be there something like this:
+                 
+                foreach (var check in ABCDAnswers)
+                {
+                    IABCDUserAnswer answer = new ABCDUserAnswer() { Answer = check.LP, Solution = solution };
+                    solution.ABCDUserAnswers.Add(answer);
+                }
+                */
+
+                SubmitSolution(solution);
             });
         }
 
-        #endregion
+        #endregion        
     }
 }
