@@ -13,15 +13,13 @@
  * limitations under the License.
 ###
 
-newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', ($scope, $location, $route, $rootScope) ->
-
+newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', 'Games', ($scope, $location, $route, $rootScope, Games) ->
     $scope.steps = [
         {no: 1, name: 'Data'},
         {no: 2, name: 'Tasks'},
         {no: 3, name: 'Skin'},
         {no: 4, name: 'Publish'}
     ]
-    
     $scope.gameid = null
     
     $scope.game = {
@@ -88,7 +86,9 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         ) if ( $scope.hasPreviousStep() )
 
      $scope.savegame = ->
-        $scope.game.playersNum = 1000000 if $scope.game.playersNum == null
+        if $scope.game.playersNum == null
+            $scope.game.playersNum = 1000000
+            notSetByUser=true 
 
         if ($scope.gameid == null || _.isUndefined($scope.gameid))
             Games.save(
@@ -108,6 +108,8 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 (error) ->
                     alert("Error occured while updating a game " + error)
             )
+        if notSetByUser
+            $scope.game.playersNum = null
 
     $scope.publishgame = ->
         alert "published"
@@ -116,9 +118,12 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         Games.checkName(
             {name: $scope.game.name},
             (result) ->
-                alert(result.valid)
+                if result.valid
+                    $scope.form.$setValidity "nameunique", true
+                else
+                    $scope.form.$setValidity "nameunique", false
             (error) ->
-                alert("Error occured")
+                alert("Error occured while checking if game name is unique " + error)
         )
 
     $scope.incrementPlayersNum = ->
@@ -163,6 +168,9 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 if (!$scope.geolocationBound) 
                     $("#locationInput").geocomplete types: ['(cities)']
                     $scope.geolocationBound=true
+            $("#nameInput").on 'keyup', ->
+                if $scope.game.name!=undefined
+                    $scope.isValidName()
             $("#locationInput").on 'click', -> $("#locationInput").bind 'propertychange blur input paste', (event)->
                 setTimeout (->
                     $scope.game.loc = $("#locationInput").val()
@@ -196,7 +204,7 @@ app.directive 'time', ->
                 viewValue
             else
                 ctrl.$setValidity "time", false
-                'undefined'
+                undefined
 
             
 
