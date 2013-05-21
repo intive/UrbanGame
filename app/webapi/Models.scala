@@ -27,6 +27,7 @@ trait GamesService {
   def gameStatic(gid: Int): Option[GameStatic]
   def gameDynamic(gid: Int): Option[GameDynamic]
   def getUser(login: String, password: String): Option[User]
+  def createUser(login: String, password: String)
 }
 
 trait UserAuth {
@@ -39,3 +40,4 @@ class ApiException(code: Int, message: String) extends RuntimeException(message)
 }
 
 class AuthException(msg: String) extends ApiException(401, msg)
+

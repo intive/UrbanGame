@@ -42,7 +42,7 @@ object Application extends Controller with CookieLang {
     loginForm.bindFromRequest.fold(
       errors => BadRequest(Scalate("index").render('title -> "Urban Game", 'errors -> errors)),
       { case (login, password) => 
-          Redirect(routes.GamesCtrl.mygames)
+          Redirect(routes.GamesCtrl.myGames)
       }
     )
   }
@@ -89,7 +89,7 @@ object Application extends Controller with CookieLang {
           val splitted = line.split("::").map(_.toString)
 
           val gd = GamesDetails(None, splitted(0), splitted(1).toInt, splitted(2), splitted(3), splitted(4).toFloat, splitted(5).toFloat, splitted(6).toInt, 
-            new DateTime(splitted(7)), new DateTime(splitted(8)), new DateTime(splitted(9)), new DateTime(splitted(10)), new DateTime(splitted(11)), 
+            new DateTime(splitted(7)), DateTime.now, new DateTime(splitted(8)), new DateTime(splitted(9)), Some(new DateTime(splitted(10))), Some(new DateTime(splitted(11))), 
             splitted(12), splitted(13).toInt, splitted(14), splitted(15).toInt, splitted(16), splitted(17), splitted(18))
 
           Games.createGame(gd)

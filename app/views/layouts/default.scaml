@@ -13,10 +13,6 @@
     * See the License for the specific language governing permissions and
     * limitations under the License.
 
--import controllers._
--import play.api.i18n.Messages
--import play.api.i18n.Lang
-
 -@ var title: String = "Default title"
 -@ val request: play.api.mvc.Request[Any]
 -@ var body: String
@@ -58,7 +54,7 @@
                                 %ul.nav.nav-tabs(ng-controller="menuCtrl")
                                     %li(ng-class="{active: location == '/my/games/new'}")
                                         %a(href="/my/games/new") = Messages("menu.newgame")
-                                    %li(ng-class="{active: location == '/my/games'}")
+                                    %li(ng-class="{active: checkLocation() || location == '/my/games'}")
                                         %a(href="/my/games") = Messages("menu.mygames")
                                     %li(ng-class="{active: location == '/my/games/archive'}")
                                         %a(href="/my/games/archive") = Messages("general.archive")

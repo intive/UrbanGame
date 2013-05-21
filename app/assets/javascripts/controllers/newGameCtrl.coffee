@@ -22,19 +22,21 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         {no: 4, name: 'Publish'}
     ]
     
+    $scope.gameid = null
+    
     $scope.game = {
-        name:"x",
-        description:"x",
-        awards:"x",
-        type:"gameType1",
-        loc:"",
-        startTime:"",
-        startDate:null,
-        endTime:"",
-        endDate:null,
-        playersNum:null,
-        winningNum:1,
-        diff:""
+        name: "",
+        description: "",
+        location: "",
+        startTime: "",
+        startDate: null,
+        endTime: "",
+        endDate: null,
+        winning: "max_points",
+        winningNum: 1,
+        diff: 'easy',
+        playersNum: null,
+        awards: ""
     }
     
     $scope.selection = $scope.steps[0]
@@ -63,33 +65,62 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
 
     $scope.incrementStepIfValid = ->
         $scope.incrementStep() if (!$scope.form.$invalid)
-    $scope.incrementStep = ->
+    
+      $scope.incrementStep = ->
         (
             stepIndex = $scope.getCurrentStepIndex()
-            nextStep = stepIndex + 1
-            $scope.selection = $scope.steps[nextStep]
-            if $scope.getCurrentStepIndex()==1
-                !$scope.geolocationBound=false
-                
+            if stepIndex == 0
+                $scope.savegame()
+            else
+                if stepIndex == 1
+                    !$scope.geolocationBound=false
+                nextStep = stepIndex + 1
+                $scope.selection = $scope.steps[nextStep]
         ) if ( $scope.hasNextStep() )
-
+        
     $scope.decrementStep = ->
         (
             stepIndex = $scope.getCurrentStepIndex()
             previousStep = stepIndex - 1
             $scope.selection = $scope.steps[previousStep]
             if ($scope.getCurrentStepIndex()==0)
-                console.log "switching to tab 1"
                 $scope.onTab1Switch() 
         ) if ( $scope.hasPreviousStep() )
-        
-    $scope.saveit = ->
-        alert "Here this project will be saved"
 
-    $scope.publishit = ->
-        $scope.saveit()
-        alert "and published too"
-        
+     $scope.savegame = ->
+        $scope.game.playersNum = 1000000 if $scope.game.playersNum == null
+
+        if ($scope.gameid == null || _.isUndefined($scope.gameid))
+            Games.save(
+                {game: $scope.game},
+                (data) ->
+                    $scope.gameid = data.id
+                    $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
+                (error) ->
+                    alert("Error occured while saving a game " + error)
+            )
+        else
+            Games.update(
+                {gid: $scope.gameid, game: $scope.game},
+                (data) ->
+                    $scope.gameid = data.id
+                    $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
+                (error) ->
+                    alert("Error occured while updating a game " + error)
+            )
+
+    $scope.publishgame = ->
+        alert "published"
+    
+     $scope.isValidName = ->
+        Games.checkName(
+            {name: $scope.game.name},
+            (result) ->
+                alert(result.valid)
+            (error) ->
+                alert("Error occured")
+        )
+
     $scope.incrementPlayersNum = ->
         if  $scope.game.playersNum==null
             $scope.game.playersNum=2
@@ -132,7 +163,6 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 if (!$scope.geolocationBound) 
                     $("#locationInput").geocomplete types: ['(cities)']
                     $scope.geolocationBound=true
-                    console.log 'geoagain'
             $("#locationInput").on 'click', -> $("#locationInput").bind 'propertychange blur input paste', (event)->
                 setTimeout (->
                     $scope.game.loc = $("#locationInput").val()
@@ -152,7 +182,6 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         ), 200
         
     $ ->
-        console.log "switched to tab1"
         $scope.onTab1Switch()
 ]
 

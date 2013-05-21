@@ -279,4 +279,27 @@ form#registration {
     -webkit-box-shadow: 0px 0px 3px 1px #e7e4e4;
     box-shadow: 0px 0px 3px 1px #e7e4e4;
 }
-.ui-datepicker{ z-index: 9999 !important;}
+
+.ui-datepicker{ 
+	z-index: 9999 !important;
+}
+
+tr {
+  transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+}
+
+tr.ui-animate {
+  opacity: 0;
+  max-height: 0;
+  padding: 0 5px;
+}
+
+tr.ui-animate-out {
+  transition: all 0.01s ease;
+  -o-transition: all 0.01s ease;
+  -moz-transition: all 0.01s ease;
+  -webkit-transition: all 0.01s ease;
+}

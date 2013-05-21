@@ -45,6 +45,11 @@ object Scalate {
     engine.workingDirectory = Play.getFile("tmp")
     engine.combinedClassPath = true
     engine.classLoader = Play.classloader
+    engine.importStatements = List(
+      "import controllers._",
+      "import play.api.i18n.Messages",
+      "import play.api.i18n.Lang"
+    )
     ScamlOptions.format = ScamlOptions.Format.html5
     engine
   }
