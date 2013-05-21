@@ -13,6 +13,8 @@ public class PlayerTaskSpecific {
 	private Boolean isFinishedByUser;
 	private Boolean areChanges;
 	private Boolean wasHidden; //true if it was a hidden task
+	private String changes;
+	private Integer status;
 	
 	/**
 	 * @param playerEmail
@@ -21,19 +23,23 @@ public class PlayerTaskSpecific {
 	 * @param isFinishedByUser
 	 * @param areChanges
 	 * @param wasHidden
+	 * @param changes
+	 * @param status
 	 */
 	public PlayerTaskSpecific(String playerEmail, Long taskID, Integer points, Boolean isFinishedByUser,
-		Boolean areChanges, Boolean wasHidden) {
+		Boolean areChanges, Boolean wasHidden, String changes, Integer status) {
 		this.playerEmail = playerEmail;
 		this.taskID = taskID;
 		this.points = points;
 		this.isFinishedByUser = isFinishedByUser;
 		this.areChanges = areChanges;
 		this.wasHidden = wasHidden;
+		this.changes = changes;
+		this.status = status;
 	}
 	
 	public PlayerTaskSpecific() {
-		this(null, null, null, null, null, null);
+		this(null, null, null, null, null, null, null, null);
 	}
 	
 	/**
@@ -118,5 +124,33 @@ public class PlayerTaskSpecific {
 	 */
 	public void setWasHidden(Boolean wasHidden) {
 		this.wasHidden = wasHidden;
+	}
+	
+	/**
+	 * @return the changes
+	 */
+	public String getChanges() {
+		return changes;
+	}
+	
+	/**
+	 * @param changes the changes to set
+	 */
+	public void setChanges(String changes) {
+		this.changes = changes;
+	}
+	
+	/**
+	 * @return the status
+	 */
+	public Integer getStatus() {
+		return status;
+	}
+	
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 }
