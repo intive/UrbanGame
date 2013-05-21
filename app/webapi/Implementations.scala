@@ -23,6 +23,7 @@ class GamesServiceMock extends GamesService {
   override def gameStatic(gid: Int) = static get gid
   override def gameDynamic(gid: Int) = dynamic get gid
   override def getUser(user: String, hash: String) = users get user    
+  override def createUser(user: String, hash: String) { users += (user -> User(hash.hashCode)) }
   
   private val list = List(
     GameSummary(123, "dasdsd"),
@@ -42,6 +43,7 @@ class GamesServiceMock extends GamesService {
     564 -> GameDynamic(564, 2)
   )
 
+  import scala.collection.mutable.Map
   private val users = Map(
     "admin" -> User(0),
     "user" -> User(666)
