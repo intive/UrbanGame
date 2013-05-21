@@ -83,10 +83,10 @@ object GamesCtrl extends Controller with CookieLang {
 
   def saveGame = Action { implicit request =>
     request.body.asJson.map { json =>
-      ( json \ "game").validate[SmallGame].fold (
+      ( json \ "game").validate[GamePartData].fold (
         valid = { res => 
           val gd = GamesDetails(id = None, name = res.name, description = res.description, location = res.location, operatorId = 1, 
-            startTime = combineDate(res.startDate, res.startTime), endTime = combineDate(res.endDate, res.endTime), 
+            created = DateTime.now, startTime = combineDate(res.startDate, res.startTime), endTime = combineDate(res.endDate, res.endTime), 
             winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards) 
           
           val gid: Int = play.api.db.slick.DB.withSession { implicit session =>
@@ -104,10 +104,10 @@ object GamesCtrl extends Controller with CookieLang {
 
   def updateGame(gid: Int) = Action { implicit request =>
     request.body.asJson.map { json =>
-      ( json \ "game").validate[SmallGame].fold (
+      ( json \ "game").validate[GamePartData].fold (
         valid = { res => 
           val gd = GamesDetails(id = Some(gid), name = res.name, description = res.description, location = res.location, operatorId = 1, 
-            startTime = combineDate(res.startDate, res.startTime), endTime = combineDate(res.endDate, res.endTime), 
+            created = DateTime.now, startTime = combineDate(res.startDate, res.startTime), endTime = combineDate(res.endDate, res.endTime), 
             winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards) 
           
           val ugid: Int = play.api.db.slick.DB.withSession { implicit session =>
