@@ -198,11 +198,11 @@ namespace UrbanGame.ViewModels
                 {
 
                     //remove a game if stored in the db(it can be inactive)
-                    if (uow.GetRepository<IGame>().All().ToArray<IGame>().Count() > 0)
+                    /*if (uow.GetRepository<IGame>().All().ToArray<IGame>().Count() > 0)
                     {
                         var gameToDelete = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
                         uow.GetRepository<IGame>().MarkForDeletion(gameToDelete);
-                    }
+                    }*/
                     //store game into the db
                     var games = uow.GetRepository<IGame>();
                     games.MarkForAdd(CreateInstance(GameState.Joined, uow));

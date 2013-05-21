@@ -137,10 +137,14 @@
     <Compile Include="Utilities\AppbarManager.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsPreviewViewModel.cs" />
+    <Compile Include="ViewModels\GameDetailsViewModel.cs" />
     <Compile Include="ViewModels\GamesListViewModel.cs" />
     <Compile Include="ViewModels\TaskViewModel.cs" />
     <Compile Include="Views\GameDetailsPreviewView.xaml.cs">
       <DependentUpon>GameDetailsPreviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GameDetailsView.xaml.cs">
+      <DependentUpon>GameDetailsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GamesListView.xaml.cs">
       <DependentUpon>GamesListView.xaml</DependentUpon>
@@ -155,6 +159,10 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="Views\GameDetailsPreviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameDetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

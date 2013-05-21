@@ -343,6 +343,12 @@ namespace UrbanGame.ViewModels
             _navigationService.UriFor<GameDetailsPreviewViewModel>().WithParam(g => g.GameId, game.Id).Navigate();
         }
 
+        public void ShowFullDetails(IGame game)
+        {
+            MessageBox.Show("dziala");
+            _navigationService.UriFor<GameDetailsViewModel>().WithParam(g => g.GameId, game.Id).Navigate();
+        }
+
         public void Search()
         {
             

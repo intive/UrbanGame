@@ -128,7 +128,7 @@
     <value>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultricies turpis et augue pretium nec rhoncus odio congue. Duis faucibus accumsan eros sed volutpat. Nulla lorem urna, adipiscing non euismod non, egestas sit amet ligula. Maecenas condimentum tellus lacus, ornare mattis lacus.</value>
   </data>
   <data name="Accomplished" xml:space="preserve">
-    <value>accomplished tasks</value>
+    <value>accomplished</value>
   </data>
   <data name="Active" xml:space="preserve">
     <value>acitve</value>
@@ -141,9 +141,6 @@
   </data>
   <data name="ByOperator" xml:space="preserve">
     <value>by</value>
-  </data>
-  <data name="ByOperatorUpCase" xml:space="preserve">
-    <value>BY</value>
   </data>
   <data name="Cancelled" xml:space="preserve">
     <value>cancelled</value>
@@ -318,5 +315,11 @@
   </data>
   <data name="Description" xml:space="preserve">
     <value>description</value>
+  </data>
+  <data name="AbandonGame" xml:space="preserve">
+    <value>Abandon game</value>
+  </data>
+  <data name="Operator" xml:space="preserve">
+    <value>Operator</value>
   </data>
 </root>
