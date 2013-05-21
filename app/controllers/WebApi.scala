@@ -28,45 +28,70 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
     Ok("Hello!")
   }
 
-  def games = ApiAction { request =>
-    val list = gamesService.listGames(0,0,0)
+  def games(lat: Double, lon: Double, r: Double) = ApiAction { request =>
+    val list = gamesService.listGames(lat, lon, r)
     Ok(Json.toJson(list))
   }
 
-  def login = UserAction { request => user =>
+  def login = ApiUserAction { request => user =>
     Ok("You are logged!")
   }
 
-  def userGames = UserAction { request => user =>
+  def register = ApiAction { implicit request =>
+    withJsonArguments { a: RegisterArgs =>
+      gamesService.createUser(a.login, a.password)
+      Ok(s"Created user ${a.login}!")
+    }
+  }
+
+  def userGames = ApiUserAction { request => user =>
     val list = gamesService.listGames(0,0,0)
     Ok(Json.toJson(list))
   }
 
-  def gameStatic(gid: Int) = UserAction { request => user =>
+  def gameStatic(gid: Int) = ApiUserAction { request => user =>
     val stat = gamesService.gameStatic(gid)
     stat map { x => Ok(Json.toJson(x)) } getOrElse NotFound("Game not found")
   }
 
-  def gameDynamic(gid: Int) = UserAction { request => user =>
+  def gameDynamic(gid: Int) = ApiUserAction { request => user =>
     val dyna = gamesService.gameDynamic(gid)
     dyna map { x => Ok(Json.toJson(x)) } getOrElse NotFound("Game not found")
   }
   
-  private def UserAction(f: Request[AnyContent] => User => Result): Action[AnyContent] =
-    ApiAction { request => f (request) (auth(request)) }
+  private def ApiUserAction(f: Request[AnyContent] => User => Result): Action[AnyContent] =
+    ApiAction { request => 
+      try { f (request) (auth(request)) } catch {
+        case authEx: AuthException => 
+          Unauthorized(authEx.getMessage).withHeaders("WWW-Authenticate" -> "Basic realm=\"myrealm\"")
+      }
+    }
 
   private def ApiAction(f: Request[AnyContent] => Result): Action[AnyContent] = 
     Action { request =>
-      if (request.accepts("application/hal+json"))
+      //if (request.accepts("application/hal+json")) // it doesn't work
+      if (true)
         try { f (request) } catch {
-          case authEx: AuthException => 
-            Unauthorized(authEx.getMessage).withHeaders("WWW-Authenticate" -> "Basic realm=\"myrealm\"")
           case ex: Exception => 
             InternalServerError(ex.getMessage)
         }
       else
-        BadRequest("Expected acception of application/hal+json")
+        BadRequest("Client must accept 'application/hal+json' type")
     }
+
+  private def withJsonArguments[A] (f: A => Result) (implicit request: Request[AnyContent], rds: Reads[A]) = {
+    request.body.asJson map { json =>
+      json.validate (rds) map (f) recoverTotal {e => BadRequest(JsError.toFlatJson(e))}
+    } getOrElse {
+      BadRequest("Expected Json arguments")
+    }
+  }
+
+  case class GamesArgs(lat: Double, lon: Double, r: Double)
+  case class RegisterArgs(login: String, password: String)
+
+  implicit val gamesArgsReads    = Json.reads[GamesArgs]
+  implicit val registerArgsReads = Json.reads[RegisterArgs]
 
   implicit val userWritesWrites  = Json.writes[User]
   implicit val gameSummaryWrites = Json.writes[GameSummary]

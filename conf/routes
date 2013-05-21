@@ -18,9 +18,9 @@ DELETE  /my/games/:gid              controllers.GamesCtrl.deleteGame(gid: Int)
 # Authenticated
 GET     /my/games/new               controllers.GamesCtrl.newGame
 POST    /my/games/checkName         controllers.GamesCtrl.checkName
-GET     /my/games/edit/:gid         controllers.GamesCtrl.editGame(gid: Int)
 GET     /my/games                   controllers.GamesCtrl.myGames
 GET     /my/games/:gid              controllers.GamesCtrl.gameInfo(gid: Int)
+GET     /my/games/:gid/edit         controllers.GamesCtrl.editGame(gid: Int)
 GET     /my/games/:gid/players      controllers.GamesCtrl.gamePlayers(gid: Int)
 GET     /my/games/:gid/tasks        controllers.GamesCtrl.gameTasks(gid: Int)
 GET     /my/games/:gid/skin         controllers.GamesCtrl.gameSkin(gid: Int)
@@ -28,13 +28,14 @@ GET     /my/games/:gid/messages     controllers.GamesCtrl.gameMessages(gid: Int)
 GET     /my/games/archive           controllers.GamesCtrl.gameArchive
 GET     /my/options                 controllers.GamesCtrl.options
 
-# Web Api resources
+# WebApi resources
 GET     /api                        @controllers.WebApi.root
-GET     /api/games                  @controllers.WebApi.games
+GET     /api/games                  @controllers.WebApi.games(lat: Double, lon: Double, r: Double)
 GET     /api/login                  @controllers.WebApi.login
 GET     /api/my/games               @controllers.WebApi.userGames
 GET     /api/games/:gid/static      @controllers.WebApi.gameStatic(gid: Int)
 GET     /api/games/:gid/dynamic     @controllers.WebApi.gameDynamic(gid: Int)
+POST    /api/register               @controllers.WebApi.register
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
