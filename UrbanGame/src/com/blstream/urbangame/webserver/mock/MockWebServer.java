@@ -92,9 +92,9 @@ public class MockWebServer {
 	public UrbanGame getMockUrbanGameDetails(long gid) {
 		UrbanGame urbanGame = null;
 		
-		for (int i = 0; i < mockUrbanGameDetails.size(); ++i)
-			if (mockUrbanGameDetails.get(i).getID() == gid) {
-				urbanGame = mockUrbanGameDetails.get(i);
+		for (UrbanGame mockUrbanGame: mockUrbanGameDetails) 
+			if (mockUrbanGame.getID() == gid) {
+				urbanGame = mockUrbanGame;
 				break;
 			}
 		return urbanGame;
@@ -109,9 +109,9 @@ public class MockWebServer {
 		Task task = null;
 		
 		if (taskList != null) {
-			for (int i = 0; i < taskList.size(); ++i) {
-				if (taskList.get(i).getId() == tid) {
-					task = taskList.get(i);
+			for (Task mockTask: taskList)  {
+				if (mockTask.getId() == tid) {
+					task = mockTask;
 					break;
 				}
 			}
@@ -127,46 +127,49 @@ public class MockWebServer {
 		
 		Log.i(TAG, "queryString " + queryString);	
 		Gson gson = new Gson();
-		String returnString = null;
+		StringBuilder stringBuilder = new StringBuilder();		
 		int i;
 		
 		switch (queryType) {
 			case (WebResponse.queryTypeGetUrbanGameDetails):
 				UrbanGame urbanGame = getMockUrbanGameDetails(gid);
-				if (urbanGame != null) returnString = gson.toJson(urbanGame);
+				if (urbanGame != null) stringBuilder.append(gson.toJson(urbanGame));
 				
 				break;
 			
 			case (WebResponse.queryTypeGetUrbanGameBaseList):
-				returnString = "[";
+				stringBuilder.append("[");
 				
 				for (i = 0; i < mockAllUrbanGames.size() - 1; ++i)
-					returnString = returnString + gson.toJson(mockAllUrbanGames.get(i)) + ",";
+					stringBuilder.append( gson.toJson(mockAllUrbanGames.get(i))).append(",");
 				
-				returnString = returnString + gson.toJson(mockAllUrbanGames.get(i)) + "]";
+				stringBuilder.append( gson.toJson(mockAllUrbanGames.get(i))).append("]");
 				break;
 			
 			case (WebResponse.queryTypeGetTaskList):
 				
 				ArrayList<Task> taskList = mockTaskLists.get(gid);
 				if (taskList != null) {
-					returnString = "[";
+					stringBuilder.append("[");
 					
 					for (i = 0; i < taskList.size() - 1; ++i)
-						returnString = returnString + gson.toJson(taskList.get(i)) + ",";
+						stringBuilder.append(gson.toJson(taskList.get(i))).append(",");
 					
-					returnString = returnString + gson.toJson(taskList.get(i)) + "]";
+					stringBuilder.append(gson.toJson(taskList.get(i))).append("]");
 				}
 				break;
 			
 			case (WebResponse.queryTypeGetTask):
 				Task task = getMockSingleTask(gid, tid);
-				if (task != null) returnString = gson.toJson(task);
+				if (task != null) stringBuilder.append( gson.toJson(task));
 				
 				break;
 		}
 		
-		return returnString;
+		if( stringBuilder.length() == 0)
+			return null;
+		
+		return stringBuilder.toString();
 	}
 	
 }
