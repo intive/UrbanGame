@@ -29,7 +29,10 @@ describe('Controllers', function() {
 
         it('should calculate dates interval', function() {
             var interval = scope.timeLeft("2013-05-20", "2013-05-21")
-			expect(interval).toBe("01d:00h:00min:00sec");
+            expect(interval).toContain("d:");
+            expect(interval).toContain("h:");
+            expect(interval).toContain("min:");
+			expect(interval).toContain("sec");
         });
     });
 });
