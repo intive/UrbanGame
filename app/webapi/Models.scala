@@ -21,6 +21,8 @@ case class User(id: Int)
 case class GameSummary(gid: Int, name: String)
 case class GameStatic (gid: Int, name: String)
 case class GameDynamic(gid: Int, version: Int)
+case class GameStatus (gid: Int, points: Int)
+case class TaskStatus (gid: Int, tid: Int, points: Int)
 
 trait GamesService {
   def listGames(lat: Double, lon: Double, r: Double): List[GameSummary]
@@ -28,6 +30,9 @@ trait GamesService {
   def gameDynamic(gid: Int): Option[GameDynamic]
   def getUser(login: String, password: String): Option[User]
   def createUser(login: String, password: String)
+  def listUserGames(user: User): List[GameSummary]
+  def getUserGameStatus(user: User, gid: Int): Option[GameStatus]
+  def getUserTaskStatus(user: User, gid: Int, tid: Int): Option[TaskStatus]
 }
 
 trait UserAuth {
