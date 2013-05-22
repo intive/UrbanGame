@@ -54,6 +54,7 @@ newgame.ttgameplayersnum = x
 newgame.ttgamediff = x
 newgame.ttgamewinningnum = x
 
+newgame.gnameinvaliderror = Game name is not unique. Choose another name.
 newgame.gstarttimeerror = Wrong start time format or input is empty.
 newgame.gendtimeerror = Wrong end time format or input is empty.
 newgame.gstartdateerror = Wrong start date format or input is empty. Try using calendar to pick the date.

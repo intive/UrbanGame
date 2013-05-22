@@ -17,17 +17,18 @@
 -@ val dateOpts: String = "{ dateFormat: " + Messages("dateformat") + "}"
 
 .control-group.row-fluid.form-style
-    %div
+    %div(id="formDiv")
         %h3=Messages("newgame.step1title")(lan)
         %em=Messages("newgame.step1subtitle")(lan)
-        {{game}}
+        {{gameid}}
     .span12.slight-padding-top
         .span6.pull-left.slight-padding-right
             .controls.slight-padding-top
                 %label(for="gName")
                     %strong=Messages("newgame.gamenamelabel")(lan)
                 .control
-                    %input.input-xlarge(type="text" maxlength="100" required name="gName" ng-model="game.name" tooltip={Messages("newgame.ttgamename")(lan)} tooltip-animation="true" tooltip-placement="right") 
+                    %input.input-xlarge(type="text" maxlength="100" id='nameInput' required name="gName" ng-model="game.name" tooltip={Messages("newgame.ttgamename")(lan)} tooltip-animation="true" tooltip-placement="right") 
+                .alert.alert-error.span11(ng-show="form.$error.nameunique" ng-cloak) = Messages("newgame.gnameinvaliderror")
                 %label(for="gDesc")
                     %strong=Messages("newgame.gamedesclabel")(lan)
                 .control
