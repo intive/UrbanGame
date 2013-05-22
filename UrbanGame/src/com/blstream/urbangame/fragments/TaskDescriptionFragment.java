@@ -60,7 +60,7 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 	/*
 	 * Example of use:
 	 * 
-	  	Intent showTaskIntent = new Intent(MainActivity.this, ActiveTaskActivity.class);
+	  	Intent showTaskIntent = new Intent(GamesListActivity.this, ActiveTaskActivity.class);
 		showTaskIntent.putExtra(ActiveTaskActivity.TASK_ID, ID);
 		startActivity(showTaskIntent);
 	 *	

@@ -5,17 +5,14 @@ import android.util.Log;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.blstream.urbangame.fragments.GameInfoFragment;
 import com.blstream.urbangame.fragments.GameRankingFragment;
 import com.blstream.urbangame.fragments.GameTasksFragment;
 import com.blstream.urbangame.fragments.TabManager;
-import com.blstream.urbangame.menuitem.MenuItemHelper;
 
-public class ActiveGameActivity extends SherlockFragmentActivity {
+public class ActiveGameActivity extends MenuActivity {
 	
 	private final String TAG = ActiveGameActivity.class.getSimpleName();
 	
@@ -36,7 +33,7 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 		
 		setUpTabHost(savedInstanceState);
 	}
-		
+	
 	private void setUpTabHost(Bundle savedInstanceState) {
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
 		tabHost.setup();
@@ -73,8 +70,8 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 	
 	@Override
 	protected void onResume() {
-	    super.onResume();
-	    this.supportInvalidateOptionsMenu();
+		super.onResume();
+		this.supportInvalidateOptionsMenu();
 		Log.i(TAG, "onResume completed");
 	}
 	
@@ -82,23 +79,7 @@ public class ActiveGameActivity extends SherlockFragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_message, menu);
-		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
-		MenuItemHelper.initLogoutMenuItem(this, menu);
 		
-		return true;
-	}
-	
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		int itemId = item.getItemId();
-		switch (itemId) {
-			case android.R.id.home:
-				finish();
-				break;
-			case R.id.menu_logout:
-				MenuItemHelper.invokeActionLogoutMenuItem(this);
-				break;
-		}
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 }

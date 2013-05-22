@@ -5,7 +5,7 @@ import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
-import com.blstream.urbangame.MainActivity;
+import com.blstream.urbangame.GamesListActivity;
 import com.blstream.urbangame.R;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
@@ -65,8 +65,8 @@ public class MenuItemHelperTest extends ActivityInstrumentationTestCase2<MenuIte
 		success = database.setLoggedPlayer("mockMail@mock.com");
 		assertTrue(success);
 		
-		// monitor MainActivity
-		mainActivityMonitor = new ActivityMonitor(MainActivity.class.getName(), null, false);
+		// monitor GamesListActivity
+		mainActivityMonitor = new ActivityMonitor(GamesListActivity.class.getName(), null, false);
 		getInstrumentation().addMonitor(mainActivityMonitor);
 		
 		// Now create activity; "Logout" menu item should be visible to user.
@@ -79,9 +79,9 @@ public class MenuItemHelperTest extends ActivityInstrumentationTestCase2<MenuIte
 		// Check if information about logged player is not set now
 		assertNull(database.getLoggedPlayerID());
 		
-		// Check if MainActivity was started
+		// Check if GamesListActivity was started
 		Activity activity = mainActivityMonitor.waitForActivityWithTimeout(TIMEOUT);
-		assertTrue(activity instanceof MainActivity);
+		assertTrue(activity instanceof GamesListActivity);
 		activity.finish();
 		Log.d(TAG, "testMenuItemLogoutUserLogged completed");
 	}
