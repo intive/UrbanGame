@@ -96,6 +96,7 @@ public class ProfileActivity extends MenuActivity {
 		savedDisplayName = null;
 		
 		Intent intent = new Intent(ProfileActivity.this, MyGamesActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 		finish();
 	}

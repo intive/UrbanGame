@@ -11,13 +11,10 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.blstream.urbangame.LoginRegisterActivity;
 import com.blstream.urbangame.R;
-import com.blstream.urbangame.database.Database;
-import com.blstream.urbangame.database.DatabaseInterface;
-import com.blstream.urbangame.database.entity.Player;
+import com.blstream.urbangame.login.LoginSession;
 
 public class LoginFragment extends SherlockFragment implements OnClickListener {
 	private LoginRegisterView loginRegisterView;
-	private DatabaseInterface databaseInterface;
 	private AlertDialog invalidDataAlertDialog;
 	private LoginRegisterActivity activity;
 	
@@ -25,7 +22,6 @@ public class LoginFragment extends SherlockFragment implements OnClickListener {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		this.activity = (LoginRegisterActivity) activity;
-		this.databaseInterface = new Database(activity);
 		createAlertDialog();
 	}
 	
@@ -45,7 +41,7 @@ public class LoginFragment extends SherlockFragment implements OnClickListener {
 	public void onClick(View v) {
 		String email = loginRegisterView.getEmail();
 		String password = loginRegisterView.getPassword();
-		boolean valid = isLoginDataValid(email, password);
+		boolean valid = LoginSession.getInstance(activity).isLoginDataValid(email, password);
 		
 		if (valid) {
 			setLoggedUserAndStartBrowsing(email);
@@ -55,15 +51,8 @@ public class LoginFragment extends SherlockFragment implements OnClickListener {
 		}
 	}
 	
-	private boolean isLoginDataValid(String email, String password) {
-		Player player = databaseInterface.getPlayer(email);
-		if (player == null) return false;
-		else return player.getPassword().equals(password);
-	}
-	
 	private void setLoggedUserAndStartBrowsing(String email) {
-		databaseInterface.setLoggedPlayer(email);
-		activity.finishAndOpenProfileAcitivty();
+		activity.loginUser(email);
 	}
 	
 	private void showInvalidDataAlertDialog() {

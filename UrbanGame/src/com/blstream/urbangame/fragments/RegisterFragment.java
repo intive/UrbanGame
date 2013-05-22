@@ -87,8 +87,7 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 	private final DialogInterface.OnClickListener registerSuccessfulListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			databaseInterface.setLoggedPlayer(loginRegisterView.getEmail());
-			activity.finishAndOpenProfileAcitivty();
+			activity.loginUser(loginRegisterView.getEmail());
 		}
 	};
 }

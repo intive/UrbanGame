@@ -19,6 +19,7 @@ import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
+import com.blstream.urbangame.login.LoginSession;
 
 public class GamesListActivity extends MenuListActivity {
 	private static final String TAG = "GamesListActivity";
@@ -96,13 +97,20 @@ public class GamesListActivity extends MenuListActivity {
 	private void configureLoginAction(Menu menu) {
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);
 		loginItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				Log.i(TAG, "onMenuItemClick(): " + item.getTitleCondensed());
-				Intent intent = new Intent(GamesListActivity.this, LoginRegisterActivity.class);
+				Intent intent = getLoginIntent();
 				startActivity(intent);
 				return true;
+			}
+			
+			private Intent getLoginIntent() {
+				LoginSession loginSession = LoginSession.getInstance(GamesListActivity.this);
+				boolean isUserLoggedIn = loginSession.isUserLoggedIn();
+				Intent intent = new Intent(GamesListActivity.this, isUserLoggedIn ? MyGamesActivity.class
+					: LoginRegisterActivity.class);
+				return intent;
 			}
 		});
 	}

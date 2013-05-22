@@ -6,7 +6,7 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.blstream.urbangame.session.LoginSession;
+import com.blstream.urbangame.login.LoginSession;
 
 public class MenuListActivity extends SherlockListActivity {
 	private LoginSession loginSession;

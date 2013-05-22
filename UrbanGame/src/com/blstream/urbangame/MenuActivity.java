@@ -6,7 +6,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.blstream.urbangame.session.LoginSession;
+import com.blstream.urbangame.login.LoginSession;
 
 // formatter:off
 /* EXAMPLE OF USE:
@@ -83,6 +83,7 @@ public class MenuActivity extends SherlockFragmentActivity {
 		switch (itemId) {
 			case R.id.menu_logout:
 				loginSession.logoutUser();
+				finish();
 				break;
 			case android.R.id.home:
 				finish();

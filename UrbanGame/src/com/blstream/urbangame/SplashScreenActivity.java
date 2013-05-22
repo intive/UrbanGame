@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.blstream.urbangame.session.LoginSession;
+import com.blstream.urbangame.login.LoginSession;
 
 public class SplashScreenActivity extends Activity {
 	private LoginSession loginSession;
@@ -27,10 +27,14 @@ public class SplashScreenActivity extends Activity {
 	}
 	
 	private void startGamesListActivity() {
-		startActivity(new Intent(SplashScreenActivity.this, GamesListActivity.class));
+		startSpecificActivity(GamesListActivity.class);
 	}
 	
 	private void startMyGamesActivity() {
-		startActivity(new Intent(SplashScreenActivity.this, MyGamesActivity.class));
+		startSpecificActivity(MyGamesActivity.class);
+	}
+	
+	private void startSpecificActivity(Class<?> cls) {
+		startActivity(new Intent(SplashScreenActivity.this, cls));
 	}
 }

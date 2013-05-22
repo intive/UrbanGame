@@ -1,4 +1,4 @@
-package com.blstream.urbangame.session;
+package com.blstream.urbangame.login;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.util.Log;
 import com.blstream.urbangame.GamesListActivity;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
+import com.blstream.urbangame.database.entity.Player;
 
 public class LoginSession {
 	private final static String TAG = "LoginSession";
@@ -36,13 +37,31 @@ public class LoginSession {
 	}
 	
 	private boolean isUserIdEmpty() {
-		return database.getLoggedPlayerID().length() != 0;
+		return database.getLoggedPlayerID().length() == 0;
 	}
 	
-	public void loginUser(String email) {
+	public boolean loginUser(String email) {
 		Log.i(TAG, email + " logging in");
 		
-		database.setLoggedPlayer(email);
+		return database.setLoggedPlayer(email);
+	}
+	
+	public boolean isLoginDataValid(String email, String password) {
+		Player player = getPlayerFromDB(email);
+		if (!playerExists(player)) return false;
+		else return isPlayerPasswordCorrect(password, player);
+	}
+	
+	private Player getPlayerFromDB(String email) {
+		return database.getPlayer(email);
+	}
+	
+	private boolean playerExists(Player player) {
+		return player != null;
+	}
+	
+	private boolean isPlayerPasswordCorrect(String password, Player player) {
+		return player.getPassword().equals(password);
 	}
 	
 	public void logoutUser() {
