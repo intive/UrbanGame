@@ -37,19 +37,19 @@ object GamesCtrl extends Controller with CookieLang {
   }
 
   def gamePlayers(gid: Int) = Action { implicit request =>
-    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game informations", 'request -> request))
+    Ok(Scalate("gameinfo").render('title -> "Urban Game - Players list", 'request -> request))
   }
 
   def gameTasks(gid: Int) = Action { implicit request =>
-    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game informations", 'request -> request))
+    Ok(Scalate("gameinfo").render('title -> "Urban Game - Tasks list", 'request -> request))
   }
 
   def gameSkin(gid: Int) = Action { implicit request =>
-    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game informations", 'request -> request))
+    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game skin", 'request -> request))
   }
 
   def gameMessages(gid: Int) = Action { implicit request =>
-    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game informations", 'request -> request))
+    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game messages", 'request -> request))
   }
 
   def gameArchive = Action { implicit request =>
