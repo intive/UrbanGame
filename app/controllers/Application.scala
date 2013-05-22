@@ -42,7 +42,7 @@ object Application extends Controller with CookieLang {
     loginForm.bindFromRequest.fold(
       errors => BadRequest(Scalate("index").render('title -> "Urban Game", 'errors -> errors)),
       { case (login, password) => 
-          Redirect(routes.GamesCtrl.mygames)
+          Redirect(routes.GamesCtrl.myGames)
       }
     )
   }
@@ -75,9 +75,9 @@ object Application extends Controller with CookieLang {
     play.api.db.slick.DB.withSession { implicit session =>
       if (Operators.getRowsNo == 0) {
         Source.fromFile(filepaths(1)).getLines.foreach { line => 
-          val splitted = line.split("::").map(_.toString)
+          val List(uname, pass) = line.split("::").map(_.toString).toList
 
-          val od = OperatorsData(None, splitted(0), splitted(1))
+          val od = OperatorsData(None, uname, pass)
 
           Operators.createAccount(od)
           cnt2 = cnt2 + 1
@@ -86,11 +86,13 @@ object Application extends Controller with CookieLang {
 
       if (Games.getRowsNo == 0) {
         Source.fromFile(filepaths(0)).getLines.foreach { line => 
-          val splitted = line.split("::").map(_.toString)
+          val List(name, version, description, location, lat, lon, operatorId, 
+            created, startTime, endTime, started, ended, winning, nWins, difficulty, 
+            maxPlayers, awards, status, image) = line.split("::").map(_.toString).toList
 
-          val gd = GamesDetails(None, splitted(0), splitted(1).toInt, splitted(2), splitted(3), splitted(4).toInt, 
-            new DateTime(splitted(5)), new DateTime(splitted(6)), new DateTime(splitted(7)), new DateTime(splitted(8)), new DateTime(splitted(9)), 
-            splitted(10), splitted(11).toInt, splitted(12), splitted(13).toInt, splitted(14), splitted(15), splitted(16))
+          val gd = GamesDetails(None, name, version.toInt, description, location, lat.toFloat, lon.toFloat, operatorId.toInt, 
+            new DateTime(created), DateTime.now, new DateTime(startTime), new DateTime(endTime), Some(new DateTime(started)), 
+            Some(new DateTime(ended)), winning, nWins.toInt, difficulty, maxPlayers.toInt, awards, status, image)
 
           Games.createGame(gd)
           cnt1 = cnt1 + 1
