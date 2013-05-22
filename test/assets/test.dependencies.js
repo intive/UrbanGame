@@ -1,5 +1,6 @@
 // Dependencies for the unit test via Jasmine
 EnvJasmine.loadGlobal(EnvJasmine.libDir + "jquery/jquery-1.9.0.min.js");
+EnvJasmine.loadGlobal(EnvJasmine.libDir + "jquery/jquery.geocomplete.js");
 EnvJasmine.loadGlobal(EnvJasmine.libDir + "forTests/angular.min.js");
 EnvJasmine.loadGlobal(EnvJasmine.libDir + "forTests/angular-resource.min.js");
 EnvJasmine.loadGlobal(EnvJasmine.libDir + "angular-ui/angular-ui.min.js");
