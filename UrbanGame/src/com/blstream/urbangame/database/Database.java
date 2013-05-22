@@ -859,6 +859,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		else {
 			taskSpecific = null;
 		}
+		if (cursor != null) {
+			cursor.close();
+		}
 		db.close();
 		return taskSpecific;
 	}
@@ -1029,6 +1032,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 				tasksList.add(task);
 			}
 			while (cursor.moveToNext());
+		}
+		if (cursor != null) {
+			cursor.close();
 		}
 		db.close();
 		return tasksList;

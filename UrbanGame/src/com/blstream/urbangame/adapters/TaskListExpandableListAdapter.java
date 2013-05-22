@@ -24,6 +24,8 @@ import com.blstream.urbangame.fragments.GameTasksFragment;
 //Adapter for expandable list
 public class TaskListExpandableListAdapter extends BaseExpandableListAdapter {
 	
+	private final String LIST = "List";
+	
 	private final LayoutInflater inflater;
 	private final ArrayList<ExpandableListHeader<Task>> mExpandableListHeader;
 	private final DatabaseInterface database;
@@ -89,43 +91,55 @@ public class TaskListExpandableListAdapter extends BaseExpandableListAdapter {
 	
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-		// On the position number zero should be activeTaskHeader.
-		// On the position number one should be emptyTaskHeader.
-		// On the position number tree should be hiddenTaskHeader. 
 		
 		TextView textView;
 		
 		if (convertView == null) {
-			switch (groupPosition) {
-				case 1:
-					convertView = inflater.inflate(R.layout.fragment_tasks_empty_active_list, parent, false);
-					break;
-				case 3:
-					convertView = inflater.inflate(R.layout.fragment_tasks_hidden_tasks_label, parent, false);
-					break;
-				default:
-					convertView = inflater.inflate(R.layout.expandable_lists_header_tasks, parent, false);
+			if (getGroup(groupPosition).equals(GameTasksFragment.EMPTY_TASK_HEADER)) {
+				convertView = inflater.inflate(R.layout.fragment_tasks_empty_active_list, parent, false);
+				convertView.setTag(GameTasksFragment.EMPTY_TASK_HEADER);
+			}
+			else if (getGroup(groupPosition).equals(GameTasksFragment.HIDDEN_TASK_HEADER)) {
+				convertView = inflater.inflate(R.layout.fragment_tasks_hidden_tasks_label, parent, false);
+				convertView.setTag(GameTasksFragment.HIDDEN_TASK_HEADER);
+			}
+			else {
+				convertView = inflater.inflate(R.layout.expandable_lists_header_tasks, parent, false);
+				convertView.setTag(LIST);
 			}
 		}
 		
-		switch (groupPosition) {
-			case 1:
-				textView = (TextView) convertView.findViewById(R.id.textViewEmptyActiveList);
-				if (getChildrenCount(0) == 0) {
-					textView.setVisibility(View.VISIBLE);
-				}
-				else {
-					textView.setVisibility(View.GONE);
-				}
-				break;
-			case 3:
-				textView = (TextView) convertView.findViewById(R.id.textViewNumberOfHiddenTasks);
-				textView.setText(Integer.toString(numberOfFindedHiddenTasks) + "/"
-					+ Integer.toString(numberOfHiddenTasks));
-				break;
-			default:
-				textView = (TextView) convertView.findViewById(R.id.TextViewMyGamesHeader);
-				textView.setText(getGroup(groupPosition).toString());
+		if (getGroup(groupPosition).equals(GameTasksFragment.EMPTY_TASK_HEADER)) {
+			if (!convertView.getTag().equals(GameTasksFragment.EMPTY_TASK_HEADER)) {
+				convertView = inflater.inflate(R.layout.fragment_tasks_empty_active_list, parent, false);
+				convertView.setTag(GameTasksFragment.EMPTY_TASK_HEADER);
+			}
+			
+			textView = (TextView) convertView.findViewById(R.id.textViewEmptyActiveList);
+			if (getChildrenCount(0) == 0) {
+				textView.setVisibility(View.VISIBLE);
+			}
+			else {
+				textView.setVisibility(View.GONE);
+			}
+		}
+		else if (getGroup(groupPosition).equals(GameTasksFragment.HIDDEN_TASK_HEADER)) {
+			if (!convertView.getTag().equals(GameTasksFragment.HIDDEN_TASK_HEADER)) {
+				convertView = inflater.inflate(R.layout.fragment_tasks_hidden_tasks_label, parent, false);
+				convertView.setTag(GameTasksFragment.HIDDEN_TASK_HEADER);
+			}
+			
+			textView = (TextView) convertView.findViewById(R.id.textViewNumberOfHiddenTasks);
+			textView.setText(Integer.toString(numberOfFindedHiddenTasks) + "/" + Integer.toString(numberOfHiddenTasks));
+		}
+		else {
+			if (!convertView.getTag().equals(LIST)) {
+				convertView = inflater.inflate(R.layout.expandable_lists_header_tasks, parent, false);
+				convertView.setTag(LIST);
+			}
+			
+			textView = (TextView) convertView.findViewById(R.id.TextViewMyGamesHeader);
+			textView.setText(getGroup(groupPosition).toString());
 		}
 		
 		// always expanded
@@ -141,11 +155,7 @@ public class TaskListExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		View row = null;
 		Task task = mExpandableListHeader.get(groupPosition).getArrayChildren().get(childPosition);
-		PlayerTaskSpecific playerTaskSpecific;
-		//FIXME mock
-		playerTaskSpecific = GameTasksFragment.getPlayerTaskSpecificMock(task.getId());
-		// FIXME uncomment after deleting mock
-		//	playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), playerEmail);
+		PlayerTaskSpecific playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), playerEmail);
 		
 		if (convertView == null) {
 			row = inflater.inflate(R.layout.list_item_task, parent, false);

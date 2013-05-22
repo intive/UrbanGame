@@ -1,8 +1,6 @@
 package com.blstream.urbangame.fragments;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,17 +15,19 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.blstream.urbangame.ActiveTaskActivity;
 import com.blstream.urbangame.GameDetailsActivity;
+import com.blstream.urbangame.MainActivity;
 import com.blstream.urbangame.R;
 import com.blstream.urbangame.adapters.TaskListExpandableListAdapter;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
-import com.blstream.urbangame.database.entity.ABCDTask;
-import com.blstream.urbangame.database.entity.LocationTask;
 import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.datastructures.ExpandableListHeader;
 
 public class GameTasksFragment extends SherlockFragment implements OnChildClickListener {
+	
+	public static final String HIDDEN_TASK_HEADER = "Hidden task header";
+	public static final String EMPTY_TASK_HEADER = "Empty taks header";
 	
 	private int numberOfHiddenTasks;
 	private int numberOfFindedHiddenTasks;
@@ -53,8 +53,10 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 			gameID = GameDetailsActivity.GAME_NOT_FOUND;
 		}
 		database = new Database(getActivity());
-		playerEmail = database.getLoggedPlayerID();
+		// FIXME mock delete when not needed
+		gameID = MainActivity.MOCK_GAME_ID;
 		
+		playerEmail = database.getLoggedPlayerID();
 	}
 	
 	@Override
@@ -78,9 +80,9 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		inactiveTaskHeader.setTitle(resources.getString(R.string.header_inactive_tasks));
 		finishedTaskHeader.setTitle(resources.getString(R.string.header_finished_tasks));
 		canceledTaskHeader.setTitle(resources.getString(R.string.header_canceled_tasks));
-		// we don't need title for this two
-		hiddenTaskHaeder.setTitle("");
-		emptyTaskHaeder.setTitle("");
+		
+		hiddenTaskHaeder.setTitle(HIDDEN_TASK_HEADER);
+		emptyTaskHaeder.setTitle(EMPTY_TASK_HEADER);
 		
 		initLists();
 		activeTaskHeader.setArrayChildren(activeTasks);
@@ -91,8 +93,6 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		emptyTaskHaeder.setArrayChildren(new ArrayList<Task>());
 		
 		// Order of adding headers shouldn't be changed. Display of this fragment depends on it.
-		// If changes are made then adjustment should be made in method getGroupView in
-		// TaskListExpandableListAdapter class.
 		arrayTaskListHeaders.add(activeTaskHeader);
 		arrayTaskListHeaders.add(emptyTaskHaeder);
 		arrayTaskListHeaders.add(inactiveTaskHeader);
@@ -129,10 +129,7 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		// element to that list should be implemented.
 		
 		ArrayList<Task> list;
-		//FIXME remove mock when it is no longer needed
-		list = getMockTaskList();
-		// FIXME uncomment after deleting mock
-		//list = (ArrayList<Task>) database.getTasksForGame(gameID);
+		list = (ArrayList<Task>) database.getTasksForGame(gameID);
 		
 		numberOfHiddenTasks = 0;
 		numberOfFindedHiddenTasks = 0;
@@ -146,10 +143,7 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		
 		for (Task task : list) {
 			
-			//FIXME mock
-			playerTaskSpecific = getPlayerTaskSpecificMock(task.getId());
-			// FIXME uncomment
-			// 	playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), playerEmail);
+			playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), playerEmail);
 			
 			if (playerTaskSpecific == null) {
 				if (task.isHidden()) {
@@ -171,45 +165,6 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 					activeTasks.add(task);
 				}
 			}
-		}
+		} // end of for loop
 	}
-	
-	// ---- START MOCK DATA
-	
-	private ArrayList<Task> getMockTaskList() {
-		ArrayList<Task> list = new ArrayList<Task>();
-		String[] answers = { "answer1", "answer2" };
-		Date endTime = (new GregorianCalendar(2013, 7, 13)).getTime();
-		list.add(new ABCDTask(Long.valueOf(-1), "Spoon for Gourmand", null, "description", true, false, 8, endTime, 10,
-			"question", answers));
-		list.add(new LocationTask(Long.valueOf(1), "Title", null, "desctription", false, true, 8, endTime, 6));
-		list.add(new ABCDTask(Long.valueOf(2), "Title 2", null, "description", false, false, 8, endTime, 10,
-			"question", answers));
-		for (int i = 1; i < 6; i++) {
-			list.add(new ABCDTask(Long.valueOf(-1), "Title", null, "description", true, false, 8, endTime, 10,
-				"question", answers));
-		}
-		list.add(new ABCDTask(Long.valueOf(-1), "Hidden", null, "description", false, true, 8, endTime, 10, "question",
-			answers));
-		
-		return list;
-	}
-	
-	public static PlayerTaskSpecific getPlayerTaskSpecificMock(Long taskID) {
-		PlayerTaskSpecific playerTaskSpecific = null;
-		
-		switch (taskID.intValue()) {
-			case 1:
-				playerTaskSpecific = new PlayerTaskSpecific("", taskID, 3, true, true, true);
-				break;
-			case 2:
-				playerTaskSpecific = new PlayerTaskSpecific("", taskID, 4, false, false, false);
-				break;
-			default:
-				break;
-		}
-		
-		return playerTaskSpecific;
-	}
-	// ---- END MOCK DATA
 }
