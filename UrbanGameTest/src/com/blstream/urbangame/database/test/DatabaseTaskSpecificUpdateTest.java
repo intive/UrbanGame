@@ -18,7 +18,8 @@ public class DatabaseTaskSpecificUpdateTest extends AndroidTestCase {
 		if (database == null) {
 			database = new Database(mContext);
 		}
-		playerTaskSpecific = new PlayerTaskSpecific("em@em.em", 1L, 10, false, false, false);
+		playerTaskSpecific = new PlayerTaskSpecific("em@em.em", 1L, 10, false, false, false, "something",
+			PlayerTaskSpecific.ACTIVE);
 	}
 	
 	@Override
@@ -32,7 +33,8 @@ public class DatabaseTaskSpecificUpdateTest extends AndroidTestCase {
 	public void testUpdateAll() {
 		boolean isOK = database.insertPlayerTaskSpecific(playerTaskSpecific);
 		assertTrue(isOK);
-		playerTaskSpecific = new PlayerTaskSpecific("em@em.em", 1L, 20, true, true, true);
+		playerTaskSpecific = new PlayerTaskSpecific("em@em.em", 1L, 20, true, true, true, "other",
+			PlayerTaskSpecific.CANCELED);
 		isOK = database.updatePlayerTaskSpecific(playerTaskSpecific);
 		assertTrue(isOK);
 		PlayerTaskSpecific ptsNew = database.getPlayerTaskSpecific(1L, "em@em.em");
@@ -43,6 +45,8 @@ public class DatabaseTaskSpecificUpdateTest extends AndroidTestCase {
 		assertEquals(true, ptsNew.isFinishedByUser().booleanValue());
 		assertEquals(true, ptsNew.getAreChanges().booleanValue());
 		assertEquals(true, ptsNew.getWasHidden().booleanValue());
+		assertEquals("other", ptsNew.getChanges());
+		assertEquals(PlayerTaskSpecific.CANCELED, ptsNew.getStatus().intValue());
 	}
 	
 	public void testUpdateNothing() {
@@ -61,6 +65,8 @@ public class DatabaseTaskSpecificUpdateTest extends AndroidTestCase {
 		assertEquals(false, ptsNew.isFinishedByUser().booleanValue());
 		assertEquals(false, ptsNew.getAreChanges().booleanValue());
 		assertEquals(false, ptsNew.getWasHidden().booleanValue());
+		assertEquals("something", ptsNew.getChanges());
+		assertEquals(PlayerTaskSpecific.ACTIVE, ptsNew.getStatus().intValue());
 	}
 	/* ------------------------ UPDATE END ------------------------ */
 }
