@@ -14,16 +14,9 @@
 ###
 
 app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', ($scope, $location, $timeout, Games) ->
-    
-    $scope.safeApply =  ->
-        phase = this.$root.$$phase;
-        if(phase == '$apply' || phase == '$digest')
-            this.$eval();
-        else
-            this.$apply();
 
     $scope.games = []
-    $scope.tasksNo = 0
+    $scope.tasksNo = []
 
     Games.query(
         {},
