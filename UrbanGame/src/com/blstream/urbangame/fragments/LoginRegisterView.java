@@ -111,6 +111,11 @@ public class LoginRegisterView extends LinearLayout {
 	
 	private void showPassword(boolean show) {
 		editTextPassword.setInputType(show ? PASSWORD_SHOW : PASSWORD_HIDE);
+		setCursorAtTheEndOfText();
+	}
+
+	private void setCursorAtTheEndOfText() {
+		editTextPassword.setSelection(editTextPassword.getText().length());
 	}
 	
 	public void setType(int type) {
@@ -119,17 +124,19 @@ public class LoginRegisterView extends LinearLayout {
 		requestLayout();
 	}
 	
+	public void setOnButtonClickListener(OnClickListener listener) {
+		buttonLoginRegister.setOnClickListener(listener);
+	}
+	
 	public String getEmail() {
 		return editTextEmail.getText().toString();
 	}
 	
 	public String getPassword() {
 		return editTextPassword.getText().toString();
-		
 	}
 	
-	public String getDesplayName() {
+	public String getDisplayName() {
 		return editTextDisplayName.getText().toString();
-		
 	}
 }
