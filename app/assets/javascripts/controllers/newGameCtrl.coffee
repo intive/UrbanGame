@@ -82,7 +82,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             )
         else
             Games.update(
-                {gid: $scope.gameid, game: $scope.game},
+                {id: $scope.gameid, game: $scope.game},
                 (data) ->
                     $scope.gameid = data.id
                     $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
