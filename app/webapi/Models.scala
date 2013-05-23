@@ -21,13 +21,31 @@ case class User(id: Int)
 case class GameSummary(gid: Int, name: String)
 case class GameStatic (gid: Int, name: String)
 case class GameDynamic(gid: Int, version: Int)
+case class TaskSummary(gid: Int, tid: Int, name: String)
+case class TaskStatic (gid: Int, tid: Int, name: String)
+case class TaskDynamic(gid: Int, tid: Int, version: Int)
+case class UserGameStatus (gid: Int, points: Int)
+case class UserTaskStatus (gid: Int, tid: Int, points: Int)
+
+abstract class UserAnswer
+case class GPSAnswer(lat: Double, lon: Double) extends UserAnswer
+case class ABCAnswer(checked: Int) extends UserAnswer
 
 trait GamesService {
   def listGames(lat: Double, lon: Double, r: Double): List[GameSummary]
-  def gameStatic(gid: Int): Option[GameStatic]
-  def gameDynamic(gid: Int): Option[GameDynamic]
-  def getUser(login: String, password: String): Option[User]
+  def getGameStatic(gid: Int): GameStatic
+  def getGameDynamic(gid: Int): GameDynamic
+  def listTasks(gid: Int): List[TaskSummary]
+  def getTaskStatic(gid: Int, tid: Int): TaskStatic
+  def getTaskDynamic(gid: Int, tid: Int): TaskDynamic
+  def getUserOpt(login: String, password: String): Option[User]
   def createUser(login: String, password: String)
+  def joinGame(user: User, gid: Int)
+  def leaveGame(user: User, gid: Int)
+  def listUserGames(user: User): List[GameSummary]
+  def getUserGameStatus(user: User, gid: Int): UserGameStatus
+  def getUserTaskStatus(user: User, gid: Int, tid: Int): UserTaskStatus
+  def checkUserAnswer(user: User, gid: Int, tid: Int, ans: UserAnswer)
 }
 
 trait UserAuth {
