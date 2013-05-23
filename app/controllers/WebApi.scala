@@ -33,37 +33,13 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
   }
 
   def games(lat: Double, lon: Double, r: Double) = ApiAction { implicit request =>
-    val links = Seq(selfLink, gamesLink)
     val list = gamesService.listGames(lat, lon, r)
     val embedded = list map { game => 
-      val selfHref = gameLink(game.gid).href
-      val links = Seq(HalLink("self", selfHref))
+      val selfLink = HalLink("self", gameLink(game.gid).href)
+      val links = Seq(selfLink)
       HalJsonRes(links, Seq(), Json.toJson(game))
     }
-    ApiOk(HalJsonRes(links, embedded))
-  }
-
-  def login = ApiUserAction { implicit request => user =>
-    val links = Seq(selfLink, gamesLink, userGamesLink, rootLink)
-    ApiOk(HalJsonRes(links))
-  }
-
-  def register = ApiAction { implicit request =>
-    withJsonArguments { a: RegisterArgs =>
-      val links = Seq(selfLink, loginLink)
-      gamesService.createUser(a.login, a.password)
-      ApiOk(HalJsonRes(links))
-    }
-  }
-
-  def userGames() = ApiUserAction { implicit request => user =>
     val links = Seq(selfLink, gamesLink)
-    val list = gamesService.listUserGames(user)
-    val embedded = list map { game => 
-      val selfHref = gameLink(game.gid).href
-      val links = Seq(HalLink("self", selfHref))
-      HalJsonRes(links, Seq(), Json.toJson(game))
-    }
     ApiOk(HalJsonRes(links, embedded))
   }
 
@@ -73,29 +49,98 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
   }
 
   def gameStatic(gid: Int) = ApiUserAction { implicit request => user =>
-    val stat = gamesService.gameStatic(gid)
-    stat map { x => 
-      val links = Seq(selfLink, gameLink(gid))
-      ApiOk(HalJsonRes(links, Seq(), Json.toJson(stat)))
-    } getOrElse NotFound("Game not found")
+    val stat = gamesService.getGameStatic(gid)
+    val links = Seq(selfLink, gameLink(gid))
+    ApiOk(HalJsonRes(links, Seq(), Json.toJson(stat)))
   }
 
   def gameDynamic(gid: Int) = ApiUserAction { implicit request => user =>
-    val dyna = gamesService.gameDynamic(gid)
-    dyna map { x => 
-      val links = Seq(selfLink, gameLink(gid))
-      ApiOk(HalJsonRes(links, Seq(), Json.toJson(dyna)))
-    } getOrElse NotFound("Game not found")
+    val links = Seq(selfLink, gameLink(gid))
+    val dyna = gamesService.getGameDynamic(gid)
+    ApiOk(HalJsonRes(links, Seq(), Json.toJson(dyna)))
+  }
+
+  def tasks(gid: Int) = ApiUserAction { implicit request => user =>
+    val list = gamesService.listTasks(gid)
+    val embedded = list map { task => 
+      val selfLink = HalLink("self", taskLink(task.gid, task.tid).href)
+      val links = Seq(selfLink)
+      HalJsonRes(links, Seq(), Json.toJson(task))
+    }
+    val links = Seq(selfLink, gameLink(gid))
+    ApiOk(HalJsonRes(links, embedded))
+  }
+
+  def task(gid: Int, tid: Int) = ApiUserAction { implicit request => user =>
+    val links = Seq(selfLink, gameLink(gid), taskStaticLink(gid,tid), taskDynamicLink(gid,tid))
+    ApiOk(HalJsonRes(links))
+  }
+
+  def taskStatic(gid: Int, tid: Int) = ApiUserAction { implicit request => user =>
+    val stat = gamesService.getTaskStatic(gid, tid)
+    val links = Seq(selfLink, gameLink(gid))
+    ApiOk(HalJsonRes(links, Seq(), Json.toJson(stat)))
+  }
+
+  def taskDynamic(gid: Int, tid: Int) = ApiUserAction { implicit request => user =>
+    val dyna = gamesService.getTaskDynamic(gid, tid)
+    val links = Seq(selfLink, gameLink(gid))
+    ApiOk(HalJsonRes(links, Seq(), Json.toJson(dyna)))
+  }
+  
+  def login = ApiUserAction { implicit request => user =>
+    val links = Seq(selfLink, gamesLink, userGamesLink, rootLink)
+    ApiOk(HalJsonRes(links))
+  }
+
+  def register = ApiAction { implicit request =>
+    withJsonArguments { a: RegisterArgs =>
+      gamesService.createUser(a.login, a.password)
+      val links = Seq(selfLink, loginLink)
+      ApiOk(HalJsonRes(links))
+    }
+  }
+
+  def joinGame(gid: Int) = ApiUserAction { implicit request => user =>
+    gamesService.joinGame(user, gid)
+    val links = Seq(selfLink, tasksLink(gid))
+    ApiOk(HalJsonRes(links))
+  }
+
+  def leaveGame(gid: Int) = ApiUserAction { implicit request => user =>
+    gamesService.leaveGame(user, gid)
+    val links = Seq(selfLink, gamesLink)
+    ApiOk(HalJsonRes(links))
+  }
+
+  def userGames() = ApiUserAction { implicit request => user =>
+    val list = gamesService.listUserGames(user)
+    val embedded = list map { game => 
+      val selfLink = HalLink("self", gameLink(game.gid).href)
+      val links = Seq(selfLink)
+      HalJsonRes(links, Seq(), Json.toJson(game))
+    }
+    val links = Seq(selfLink, gamesLink)
+    ApiOk(HalJsonRes(links, embedded))
   }
 
   def userGameStatus(gid: Int) = ApiUserAction { implicit request => user =>
-      val links = Seq(selfLink, gameLink(gid))
       val status = gamesService.getUserGameStatus(user, gid)
-      status map {
-        s => ApiOk(HalJsonRes(links, Seq(), Json.toJson(s)))
-      } getOrElse NotFound("Game not found")
+      val links = Seq(selfLink, gameLink(gid))
+      ApiOk(HalJsonRes(links, Seq(), Json.toJson(status)))
   }
   
+  def userTaskStatus(gid: Int, tid: Int) = ApiUserAction { implicit request => user =>
+      val status = gamesService.getUserTaskStatus(user, gid, tid)
+      val links = Seq(selfLink, gameLink(gid))
+      ApiOk(HalJsonRes(links, Seq(), Json.toJson(status)))
+  }
+
+  def sendUserAnswer(gid: Int, tid: Int) = ApiUserAction { implicit request => user =>
+    val links = Seq(selfLink, gameLink(gid))
+    ApiOk(HalJsonRes(links, Seq(), Json.obj("info" -> "not implemented")))
+  }
+
   private def ApiUserAction(f: Request[AnyContent] => User => Result): Action[AnyContent] =
     ApiAction { request => 
       try { f (request) (auth(request)) } catch {
@@ -138,7 +183,11 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
   implicit val gameSummaryWrites = Json.writes[GameSummary]
   implicit val gameStaticWrites  = Json.writes[GameStatic]
   implicit val gameDynamicWrites = Json.writes[GameDynamic]
-  implicit val gameStatusWrites  = Json.writes[GameStatus]
+  implicit val gameStatusWrites  = Json.writes[UserGameStatus]
+  implicit val taskSummaryWrites = Json.writes[TaskSummary]
+  implicit val taskStaticWrites  = Json.writes[TaskStatic]
+  implicit val taskDynamicWrites = Json.writes[TaskDynamic]
+  implicit val taskStatusWrites  = Json.writes[UserTaskStatus]
 
   implicit val halJsonResWrites = new Writes[HalJsonRes] {
     def writes(r: HalJsonRes): JsValue = {
@@ -168,5 +217,8 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
   def gameStaticLink(gid: Int) = HalLink("gameStatic", s"$gamesUrl/$gid/static")
   def gameDynamicLink(gid: Int) = HalLink("gameDynamic", s"$gamesUrl/$gid/dynamic")
   def tasksLink(gid: Int) = HalLink("tasks", s"$gamesUrl/$gid/tasks")
+  def taskLink(gid: Int, tid: Int) = HalLink("task", s"$gamesUrl/$gid/tasks/$tid")
+  def taskStaticLink(gid: Int, tid: Int) = HalLink("taskStatic", s"$gamesUrl/$gid/tasks/$tid/static")
+  def taskDynamicLink(gid: Int, tid: Int) = HalLink("taskDynamic", s"$gamesUrl/$gid/tasks/$tid/dynamic")
 }
 

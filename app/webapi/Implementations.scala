@@ -20,13 +20,19 @@ import webapi.models._
 
 class GamesServiceMock extends GamesService {
   override def listGames(lat: Double, lon: Double, r: Double) = list
-  override def gameStatic(gid: Int) = static get gid
-  override def gameDynamic(gid: Int) = dynamic get gid
-  override def getUser(user: String, hash: String) = users get user    
+  override def getGameStatic(gid: Int) = static get gid getOrElse {throw new ApiException(404,  "Game not found")}
+  override def getGameDynamic(gid: Int) = dynamic get gid getOrElse {throw new ApiException(404,  "Game not found")}
+  override def listTasks(gid: Int) = tasks get gid getOrElse {throw new ApiException(404, "Task not found")}
+  override def getTaskStatic(gid: Int, tid: Int) = taskStatic get (gid,tid) getOrElse {throw new ApiException(404,  "Game not found")}
+  override def getTaskDynamic(gid: Int, tid: Int) = taskDynamic get (gid,tid) getOrElse {throw new ApiException(404,  "Game not found")}
+  override def getUserOpt(user: String, hash: String) = users get user    
   override def createUser(user: String, hash: String) { users += (user -> User(hash.hashCode)) }
   override def listUserGames(user: User) = list
-  override def getUserGameStatus(user: User, gid: Int) = Some(GameStatus(gid, 123))
-  override def getUserTaskStatus(user: User, gid: Int, tid: Int) = Some(TaskStatus(gid, tid, 123))
+  override def getUserGameStatus(user: User, gid: Int) = UserGameStatus(gid, 123)
+  override def getUserTaskStatus(user: User, gid: Int, tid: Int) = UserTaskStatus(gid, tid, 123)
+  override def joinGame(user: User, gid: Int) = {} 
+  override def leaveGame(user: User, gid: Int) = {}
+  override def checkUserAnswer(user: User, gid: Int, tid: Int, ans: UserAnswer) = {}
   
   private val list = List(
     GameSummary(123, "dasdsd"),
@@ -46,6 +52,30 @@ class GamesServiceMock extends GamesService {
     564 -> GameDynamic(564, 2)
   )
 
+  private val tasks = Map(
+    123 -> List(TaskSummary(123,0,"fdsf"), TaskSummary(123,1,"fffff")),
+    42  -> List(TaskSummary( 42,0,"fdsf"), TaskSummary( 42,1,"fffff")),
+    564 -> List(TaskSummary(564,0,"fdsf"), TaskSummary(564,1,"fffff"))
+  )
+
+  private val taskStatic = Map(
+    (123, 0) -> TaskStatic(123,0,"fdsf"),
+    (123, 1) -> TaskStatic(123,1,"fffff"),
+    ( 42, 0) -> TaskStatic( 42,0,"fdsf"),
+    ( 42, 1) -> TaskStatic( 42,1,"fffff"),
+    (564, 0) -> TaskStatic( 42,0,"fdsf"),
+    (564, 1) -> TaskStatic( 42,1,"fffff")
+  )
+
+  private val taskDynamic = Map(
+    (123, 0) -> TaskDynamic(123,0,1),
+    (123, 1) -> TaskDynamic(123,1,1),
+    ( 42, 0) -> TaskDynamic( 42,0,1),
+    ( 42, 1) -> TaskDynamic( 42,1,1),
+    (564, 0) -> TaskDynamic( 42,0,1),
+    (564, 1) -> TaskDynamic( 42,1,1)
+  )
+
   import scala.collection.mutable.Map
   private val users = Map(
     "admin" -> User(0),
@@ -58,7 +88,7 @@ class UserBasicAuth(gamesService: GamesService) extends UserAuth {
   override def authorize[A](request: Request[A]): User = {
     val header = getAuthHeader(request)
     val (login, hash) = parseHeader(header)
-    gamesService.getUser(login, hash) getOrElse { 
+    gamesService.getUserOpt(login, hash) getOrElse { 
       throw new AuthException("User not found")
     }
   }
