@@ -34,7 +34,7 @@ trait CookieLang extends Controller {
       },
       lang => {
         Logger.logger.debug("Change user lang to : " + lang)
-        Redirect(referrer).withLang(Lang(lang)) // TODO Check if the lang is handled by the application
+        Redirect(referrer).withLang(Lang(lang))
       }
     )
   }

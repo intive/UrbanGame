@@ -1,10 +1,10 @@
 /**Copyright 2013 BLStream, BLStream's Patronage Program Contributors
- * 		 http://blstream.github.com/UrbanGame/
+ *       http://blstream.github.com/UrbanGame/
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 		 http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,41 +15,36 @@
 describe('Controllers', function() {
     describe('newGameCtrl', function() {
 
-		beforeEach(module('web'));
+        beforeEach(module('web'));
 
-		var ctrl, scope, $httpBackend;
+        var ctrl, scope, $httpBackend;
 
-		beforeEach(inject(function(_$httpBackend_, $controller, $rootScope) {
-			$httpBackend = _$httpBackend_;
-			scope = $rootScope.$new();
-			ctrl = $controller('newGameCtrl', {
-				$scope: scope
-			});
-		}));
+        beforeEach(inject(function(_$httpBackend_, $controller, $rootScope) {
+            $httpBackend = _$httpBackend_;
+            scope = $rootScope.$new();
+            ctrl = $controller('newGameCtrl', {
+                $scope: scope
+            });
+        }));
 
         it('should list 4 steps', function() {
-			expect(scope.steps.length).toBe(4);
+            expect(scope.steps.length).toBe(4);
         });
 
         it('should set $scope.selection on the 1st step at start', function() {
-			expect(scope.selection.no).toBe(1);
-        });
-
-        it('should increment steps', function() {
-			scope.incrementStep();
-			expect(scope.selection.no).toBe(2);
+            expect(scope.selection.no).toBe(1);
         });
 
         it('should increment players number', function() {
-			scope.game.playersNum=5;
+            scope.game.playersNum=5;
             scope.incrementPlayersNum();
-			expect(scope.game.playersNum).toBe(6);
+            expect(scope.game.playersNum).toBe(6);
         });
         
         it('should decrement players number', function() {
-			scope.game.playersNum=5;
+            scope.game.playersNum=5;
             scope.decrementPlayersNum();
-			expect(scope.game.playersNum).toBe(4);
+            expect(scope.game.playersNum).toBe(4);
         });
         
         it('should contains game defined', function() {

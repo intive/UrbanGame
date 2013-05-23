@@ -32,7 +32,7 @@ object Operators extends Table[OperatorsData]("OPERATORS") {
 
 trait Operators { this: ImplicitSession =>
 
-  def getRowsNo: Int = (for {op <- Operators} yield op.count).first
+  def getRowsNo: Int = (for {op <- Operators} yield op.length).first
 
   def createAccount(od: OperatorsData): Int = Operators.forInsert returning Operators.id insert od
   
