@@ -1,4 +1,19 @@
-app.controller 'myGamesCtrl', ['$scope', '$timeout', 'Games', ($scope, $timeout, Games) ->
+###*Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+ *       http://blstream.github.com/UrbanGame/
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+###
+
+app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', ($scope, $location, $timeout, Games) ->
     
     $scope.safeApply =  ->
         phase = this.$root.$$phase;
@@ -19,10 +34,23 @@ app.controller 'myGamesCtrl', ['$scope', '$timeout', 'Games', ($scope, $timeout,
     )
 
     $scope.showDetails = (idx) ->
-        alert "Game with id: " + $scope.games[idx].id + " and name: " + $scope.games[idx].name + " will be showed"
+        window.location.pathname = "/my/games/" + $scope.games[idx].id if $scope.games[idx].status == 'online'
+        window.location.pathname = "/my/games/edit" + $scope.games[idx].id if $scope.games[idx].status == 'published' || $scope.games[idx].status == 'project'
+    $scope.delete = (idx) ->
+        if ($scope.games[idx].status == 'published' || $scope.games[idx].status == 'project')
+            Games.delete(
+                {gid: $scope.games[idx].id},
+                (data) ->
+                    alert("msg: " + data.msg)
+                    $scope.games.splice(idx, 1)
+                (error) ->
+                    alert("error: " + error)
+            ) 
+
+    $scope.cancel = (idx) ->
+        alert "Here the game with id: " + $scope.games[idx].id + " will be canceled"
 
     $scope.timeLeft = (sdate, edate) ->
-
         zeros = (x) -> 
             ( if x < 10 then "0" else "") + x
 
