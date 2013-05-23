@@ -13,7 +13,8 @@ object ApplicationBuild extends Build {
     anorm,
     "org.fusesource.scalate" % "scalate-core_2.10" % "1.6.1",
     "commons-codec" % "commons-codec" % "1.6",
-    "com.github.nscala-time" %% "nscala-time" % "0.4.0"
+    "com.github.nscala-time" %% "nscala-time" % "0.4.0",
+    "com.github.tototoshi" %% "slick-joda-mapper" % "0.2.1"
   )
 
 

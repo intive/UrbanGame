@@ -16,9 +16,6 @@
 package models
 
 import scala.slick.session._
-import slick.lifted.{MappedTypeMapper, TypeMapper}
-import com.github.nscala_time.time.Imports._
-import java.sql.Timestamp
 import scala.language.postfixOps
 
 object dal extends dal {

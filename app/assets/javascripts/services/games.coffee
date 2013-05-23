@@ -10,4 +10,5 @@ app.factory 'Games', ($resource) ->
             save: {method: 'POST', headers: [{'Content-Type': 'application/json'}, {'Accept'  : 'application/json'}]},
             update: {method: 'PUT', headers: [{'Content-Type': 'application/json'}, {'Accept'  : 'application/json'}]},
             delete: {method: 'DELETE', headers: [{'Content-Type': 'application/json'}, {'Accept'  : 'application/json'}]},
+            checkName: {method: 'POST', params: {ctrl: "checkName"}, headers: [{'Content-Type': 'application/json'}, {'Accept'  : 'application/json'}]}
         }
