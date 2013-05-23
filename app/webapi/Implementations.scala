@@ -24,6 +24,9 @@ class GamesServiceMock extends GamesService {
   override def gameDynamic(gid: Int) = dynamic get gid
   override def getUser(user: String, hash: String) = users get user    
   override def createUser(user: String, hash: String) { users += (user -> User(hash.hashCode)) }
+  override def listUserGames(user: User) = list
+  override def getUserGameStatus(user: User, gid: Int) = Some(GameStatus(gid, 123))
+  override def getUserTaskStatus(user: User, gid: Int, tid: Int) = Some(TaskStatus(gid, tid, 123))
   
   private val list = List(
     GameSummary(123, "dasdsd"),

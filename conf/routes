@@ -24,9 +24,12 @@ GET     /api                        @controllers.WebApi.root
 GET     /api/games                  @controllers.WebApi.games(lat: Double, lon: Double, r: Double)
 GET     /api/login                  @controllers.WebApi.login
 GET     /api/my/games               @controllers.WebApi.userGames
+GET     /api/games/:gid             @controllers.WebApi.game(gid: Int)
 GET     /api/games/:gid/static      @controllers.WebApi.gameStatic(gid: Int)
 GET     /api/games/:gid/dynamic     @controllers.WebApi.gameDynamic(gid: Int)
+GET     /api/my/games/:gid/dynamic  @controllers.WebApi.userGameStatus(gid: Int)
 POST    /api/register               @controllers.WebApi.register
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
