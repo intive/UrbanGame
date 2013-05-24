@@ -50,8 +50,8 @@ public class LoginRegisterPageAdapter extends FragmentPagerAdapter {
 			/*
 			 * Manually add new fragments when are needed
 			 */
-			addFragmentWithTitle(new LoginFragment(), R.string.title_section1);
-			addFragmentWithTitle(new RegisterFragment(), R.string.title_section2);
+			addFragmentWithTitle(new LoginFragment(), R.string.tabTitle_login);
+			addFragmentWithTitle(new RegisterFragment(), R.string.tabTitle_register);
 		}
 		
 		private void addFragmentWithTitle(SherlockFragment fragment, int fragmentTitleResourceID) {

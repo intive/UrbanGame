@@ -27,9 +27,9 @@ public class DatabaseTaskSpecificQueryTest extends AndroidTestCase {
 	}
 	
 	private void prepareData(String playerEmail, Long taskID, Integer points, Boolean isFinishedByUser,
-		Boolean areChanges, Boolean wasHidden) {
+		Boolean areChanges, Boolean wasHidden, String changes, Integer status) {
 		PlayerTaskSpecific pts = new PlayerTaskSpecific(playerEmail, taskID, points, isFinishedByUser, areChanges,
-			wasHidden);
+			wasHidden, changes, status);
 		database.insertPlayerTaskSpecific(pts);
 	}
 	
@@ -40,13 +40,13 @@ public class DatabaseTaskSpecificQueryTest extends AndroidTestCase {
 	}
 	
 	public void testOneItemInDatabaseNoMatch() {
-		prepareData("em@em.em", 2L, 12, true, false, true);
+		prepareData("em@em.em", 2L, 12, true, false, true, "no", PlayerTaskSpecific.ACTIVE);
 		PlayerTaskSpecific pts = database.getPlayerTaskSpecific(1L, "em@em.em2");
 		assertNull(pts);
 	}
 	
 	public void testOneItemInDatabaseMatch() {
-		prepareData("em@em.em", 2L, 12, true, false, true);
+		prepareData("em@em.em", 2L, 12, true, false, true, "ok", PlayerTaskSpecific.ACTIVE);
 		PlayerTaskSpecific pts = database.getPlayerTaskSpecific(2L, "em@em.em");
 		assertNotNull(pts);
 		assertEquals("em@em.em", pts.getPlayerEmail());
@@ -55,11 +55,14 @@ public class DatabaseTaskSpecificQueryTest extends AndroidTestCase {
 		assertEquals(true, pts.isFinishedByUser().booleanValue());
 		assertEquals(false, pts.getAreChanges().booleanValue());
 		assertEquals(true, pts.getWasHidden().booleanValue());
+		assertEquals("ok", pts.getChanges());
+		assertEquals(PlayerTaskSpecific.ACTIVE, pts.getStatus().intValue());
 	}
 	
 	public void testManyItemsInDatabaseNoMatch() {
 		for (int i = 0; i < 30; i++) {
-			prepareData("em@em.em" + i, (long) i, i, i % 2 == 0, i % 3 == 0, i % 4 == 0);
+			prepareData("em@em.em" + i, (long) i, i, i % 2 == 0, i % 3 == 0, i % 4 == 0, "ok" + i,
+				PlayerTaskSpecific.ACTIVE);
 		}
 		
 		PlayerTaskSpecific pts = database.getPlayerTaskSpecific(123L, "em@em.em");
@@ -68,7 +71,8 @@ public class DatabaseTaskSpecificQueryTest extends AndroidTestCase {
 	
 	public void testManyItemsInDatabaseMatch() {
 		for (int i = 0; i < 30; i++) {
-			prepareData("em@em.em" + i, (long) i, i, i % 2 == 0, i % 3 == 0, i % 4 == 0);
+			prepareData("em@em.em" + i, (long) i, i, i % 2 == 0, i % 3 == 0, i % 4 == 0, "ok" + i,
+				PlayerTaskSpecific.ACTIVE);
 		}
 		
 		int testedItem = 13;
@@ -81,6 +85,8 @@ public class DatabaseTaskSpecificQueryTest extends AndroidTestCase {
 		assertEquals(testedItem % 2 == 0, pts.isFinishedByUser().booleanValue());
 		assertEquals(testedItem % 3 == 0, pts.getAreChanges().booleanValue());
 		assertEquals(testedItem % 4 == 0, pts.getWasHidden().booleanValue());
+		assertEquals("ok" + testedItem, pts.getChanges());
+		assertEquals(PlayerTaskSpecific.ACTIVE, pts.getStatus().intValue());
 	}
 	/* ------------------------ PLAYER TASKS SPECIFIC QUERIES END ------------------------ */
 }

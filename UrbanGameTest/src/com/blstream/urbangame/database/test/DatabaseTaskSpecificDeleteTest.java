@@ -27,9 +27,9 @@ public class DatabaseTaskSpecificDeleteTest extends AndroidTestCase {
 	}
 	
 	private void prepareData(String playerEmail, Long taskID, Integer points, Boolean isFinishedByUser,
-		Boolean areChanges, Boolean wasHidden) {
+		Boolean areChanges, Boolean wasHidden, String changes, Integer status) {
 		PlayerTaskSpecific pts = new PlayerTaskSpecific(playerEmail, taskID, points, isFinishedByUser, areChanges,
-			wasHidden);
+			wasHidden, changes, status);
 		database.insertPlayerTaskSpecific(pts);
 	}
 	
@@ -40,20 +40,21 @@ public class DatabaseTaskSpecificDeleteTest extends AndroidTestCase {
 	}
 	
 	public void testOneItemInDatabaseNoMatch() {
-		prepareData("e@e.e", 1L, 10, true, true, true);
+		prepareData("e@e.e", 1L, 10, true, true, true, "no", PlayerTaskSpecific.ACTIVE);
 		boolean isOK = database.deletePlayerTaskSpecific(23L, "e@e.e");
 		assertFalse(isOK);
 	}
 	
 	public void testOneItemInDatabaseMatch() {
-		prepareData("e@e.e", 1L, 10, true, true, true);
+		prepareData("e@e.e", 1L, 10, true, true, true, "no", PlayerTaskSpecific.ACTIVE);
 		boolean isOK = database.deletePlayerTaskSpecific(1L, "e@e.e");
 		assertTrue(isOK);
 	}
 	
 	public void testManyItemsInDatabaseNoMatch() {
 		for (int i = 0; i < 30; i++) {
-			prepareData("e@e.e", (long) i, i % 10, i % 2 == 0, i % 3 == 0, i % 4 == 0);
+			prepareData("e@e.e", (long) i, i % 10, i % 2 == 0, i % 3 == 0, i % 4 == 0, "ok" + i,
+				PlayerTaskSpecific.ACTIVE);
 		}
 		boolean isOK = database.deletePlayerTaskSpecific(1234L, "e@e.e");
 		assertFalse(isOK);
@@ -61,7 +62,8 @@ public class DatabaseTaskSpecificDeleteTest extends AndroidTestCase {
 	
 	public void testManyItemsInDatabaseMatch() {
 		for (int i = 0; i < 30; i++) {
-			prepareData("e@e.e", (long) i, i % 10, i % 2 == 0, i % 3 == 0, i % 4 == 0);
+			prepareData("e@e.e", (long) i, i % 10, i % 2 == 0, i % 3 == 0, i % 4 == 0, "ok" + i,
+				PlayerTaskSpecific.ACTIVE);
 		}
 		boolean isOK = database.deletePlayerTaskSpecific(23L, "e@e.e");
 		assertTrue(isOK);
