@@ -19,7 +19,7 @@ import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
-import com.blstream.urbangame.login.LoginSession;
+import com.blstream.urbangame.session.LoginManager;
 
 public class GamesListActivity extends MenuListActivity {
 	private static final String TAG = "GamesListActivity";
@@ -106,8 +106,8 @@ public class GamesListActivity extends MenuListActivity {
 			}
 			
 			private Intent getLoginIntent() {
-				LoginSession loginSession = LoginSession.getInstance(GamesListActivity.this);
-				boolean isUserLoggedIn = loginSession.isUserLoggedIn();
+				LoginManager loginManager = LoginManager.getInstance(GamesListActivity.this);
+				boolean isUserLoggedIn = loginManager.isUserLoggedIn();
 				Intent intent = new Intent(GamesListActivity.this, isUserLoggedIn ? MyGamesActivity.class
 					: LoginRegisterActivity.class);
 				return intent;

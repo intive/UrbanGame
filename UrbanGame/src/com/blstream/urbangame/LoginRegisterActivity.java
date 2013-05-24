@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
 import com.blstream.urbangame.fragments.LoginRegisterPageAdapter;
-import com.blstream.urbangame.login.LoginSession;
+import com.blstream.urbangame.session.LoginManager;
+import com.blstream.urbangame.session.RegistrationManager;
 
 public class LoginRegisterActivity extends MenuActivity {
 	public final static String ACTION_RETURN_LOGIN_RESULT = "intent_open_games";
@@ -16,7 +17,8 @@ public class LoginRegisterActivity extends MenuActivity {
 	private LoginRegisterPageAdapter sectionsPagerAdapter;
 	private ViewPager viewPager;
 	
-	private LoginSession loginSession;
+	private LoginManager loginManager;
+	private RegistrationManager registrationManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +27,15 @@ public class LoginRegisterActivity extends MenuActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.activity_login_register);
 		
-		loginSession = LoginSession.getInstance(LoginRegisterActivity.this);
+		loginManager = LoginManager.getInstance(LoginRegisterActivity.this);
+		registrationManager = RegistrationManager.getInstance(LoginRegisterActivity.this);
 		sectionsPagerAdapter = new LoginRegisterPageAdapter(getSupportFragmentManager(), LoginRegisterActivity.this);
 		viewPager = (ViewPager) findViewById(R.id.view_pager);
 		viewPager.setAdapter(sectionsPagerAdapter);
 	}
 	
 	public void loginUser(String email) {
-		boolean loginResult = loginSession.loginUser(email);
+		boolean loginResult = loginManager.loginUser(email);
 		handleLoginResult(loginResult);
 	}
 	
@@ -57,5 +60,10 @@ public class LoginRegisterActivity extends MenuActivity {
 	private void finishAndGoBackToGame(boolean loginResult) {
 		setResult(loginResult ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
 		this.finish();
+	}
+	
+	public void registerAndLoginUser(String email, String displayName, String password) {
+		registrationManager.registerUser(email, password, displayName, null);
+		loginUser(email);
 	}
 }

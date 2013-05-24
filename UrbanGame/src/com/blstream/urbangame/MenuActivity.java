@@ -6,7 +6,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.blstream.urbangame.login.LoginSession;
+import com.blstream.urbangame.session.LoginManager;
 
 // formatter:off
 /* EXAMPLE OF USE:
@@ -51,13 +51,13 @@ import com.blstream.urbangame.login.LoginSession;
 // formatter:on
 
 public class MenuActivity extends SherlockFragmentActivity {
-	private LoginSession loginSession;
+	private LoginManager loginManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		loginSession = LoginSession.getInstance(MenuActivity.this);
+		loginManager = LoginManager.getInstance(MenuActivity.this);
 	}
 	
 	@Override
@@ -69,7 +69,7 @@ public class MenuActivity extends SherlockFragmentActivity {
 	}
 	
 	private void configureLogoutMenuItem(Menu menu) {
-		if (loginSession.isUserLoggedIn()) {
+		if (loginManager.isUserLoggedIn()) {
 			menu.findItem(R.id.menu_logout).setVisible(true);
 		}
 		else {
@@ -82,7 +82,7 @@ public class MenuActivity extends SherlockFragmentActivity {
 		int itemId = item.getItemId();
 		switch (itemId) {
 			case R.id.menu_logout:
-				loginSession.logoutUser();
+				loginManager.logoutUser();
 				finish();
 				break;
 			case android.R.id.home:

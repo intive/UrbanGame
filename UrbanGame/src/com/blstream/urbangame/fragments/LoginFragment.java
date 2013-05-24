@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.blstream.urbangame.LoginRegisterActivity;
 import com.blstream.urbangame.R;
-import com.blstream.urbangame.login.LoginSession;
+import com.blstream.urbangame.session.LoginManager;
 
 public class LoginFragment extends SherlockFragment implements OnClickListener {
 	private LoginRegisterView loginRegisterView;
@@ -25,10 +25,16 @@ public class LoginFragment extends SherlockFragment implements OnClickListener {
 		createAlertDialog();
 	}
 	
+	// formatter:off
 	private void createAlertDialog() {
-		invalidDataAlertDialog = new AlertDialog.Builder(activity).setTitle(R.string.dialog_data_invalid_tittle)
-			.setMessage(R.string.dialog_data_invalid_message).setPositiveButton(R.string.button_correct, null).create();
+		invalidDataAlertDialog = 
+			new AlertDialog.Builder(activity)
+				.setTitle(R.string.dialog_data_invalid_tittle)
+				.setMessage(R.string.dialog_data_invalid_message)
+				.setPositiveButton(R.string.button_correct, null)
+				.create();
 	}
+	// formatter:on
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,9 +47,10 @@ public class LoginFragment extends SherlockFragment implements OnClickListener {
 	public void onClick(View v) {
 		String email = loginRegisterView.getEmail();
 		String password = loginRegisterView.getPassword();
-		boolean valid = LoginSession.getInstance(activity).isLoginDataValid(email, password);
+		boolean isLoginDataValid = loginRegisterView.isDataCorrect()
+			&& LoginManager.getInstance(activity).isLoginDataValid(email, password);
 		
-		if (valid) {
+		if (isLoginDataValid) {
 			setLoggedUserAndStartBrowsing(email);
 		}
 		else {

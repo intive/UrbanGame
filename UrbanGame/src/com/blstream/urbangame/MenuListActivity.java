@@ -6,16 +6,16 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.blstream.urbangame.login.LoginSession;
+import com.blstream.urbangame.session.LoginManager;
 
 public class MenuListActivity extends SherlockListActivity {
-	private LoginSession loginSession;
+	private LoginManager loginManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		loginSession = LoginSession.getInstance(MenuListActivity.this);
+		loginManager = LoginManager.getInstance(MenuListActivity.this);
 	}
 	
 	@Override
@@ -27,7 +27,7 @@ public class MenuListActivity extends SherlockListActivity {
 	}
 	
 	private void configureLogoutMenuItem(Menu menu) {
-		if (loginSession.isUserLoggedIn()) {
+		if (loginManager.isUserLoggedIn()) {
 			menu.findItem(R.id.menu_logout).setVisible(true);
 		}
 		else {
@@ -40,7 +40,7 @@ public class MenuListActivity extends SherlockListActivity {
 		int itemId = item.getItemId();
 		switch (itemId) {
 			case R.id.menu_logout:
-				loginSession.logoutUser();
+				loginManager.logoutUser();
 				break;
 			case android.R.id.home:
 				finish();
