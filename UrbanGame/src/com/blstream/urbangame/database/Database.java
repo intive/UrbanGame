@@ -21,6 +21,8 @@ import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
+//import android.database.sqlite.SQLiteDatabase;
+//import android.database.sqlite.SQLiteOpenHelper;
 
 public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
