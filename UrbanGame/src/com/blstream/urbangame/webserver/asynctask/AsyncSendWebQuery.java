@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.blstream.urbangame.webserver.helper.WebResponse;
+import com.blstream.urbangame.webserver.helper.WebResponse.QueryType;
 import com.blstream.urbangame.webserver.helper.WebServerHelper;
 import com.blstream.urbangame.webserver.helper.WebServerHelper.WebServerResponseInterface;
 import com.blstream.urbangame.webserver.mock.MockWebServer;
@@ -25,16 +26,16 @@ public class AsyncSendWebQuery extends AsyncTask<Void, Void, WebResponse> {
 	//
 	// Constructors
 	//
-	public AsyncSendWebQuery(WebServerResponseInterface _webServerResponseListener, int queryType) {
+	public AsyncSendWebQuery(WebServerResponseInterface _webServerResponseListener, QueryType queryType) {
 		init(_webServerResponseListener, queryType);
 	}
 	
-	public AsyncSendWebQuery(WebServerResponseInterface _webServerResponseListener, int queryType, long gid) {
+	public AsyncSendWebQuery(WebServerResponseInterface _webServerResponseListener, QueryType queryType, long gid) {
 		this.gid = gid;
 		init(_webServerResponseListener, queryType);
 	}
 	
-	public AsyncSendWebQuery(WebServerResponseInterface _webServerResponseListener, int queryType, long gid, long tid) {
+	public AsyncSendWebQuery(WebServerResponseInterface _webServerResponseListener, QueryType queryType, long gid, long tid) {
 		this.gid = gid;
 		this.tid = tid;
 		init(_webServerResponseListener, queryType);
@@ -43,7 +44,7 @@ public class AsyncSendWebQuery extends AsyncTask<Void, Void, WebResponse> {
 	//
 	// Private methods
 	//
-	private void init(WebServerResponseInterface _webServerResponseListener, int queryType) {
+	private void init(WebServerResponseInterface _webServerResponseListener, QueryType queryType) {
 		webQuery = new Uri.Builder();
 		webServerResponseListener = _webServerResponseListener;
 		webResponse = new WebResponse(queryType);
@@ -52,25 +53,30 @@ public class AsyncSendWebQuery extends AsyncTask<Void, Void, WebResponse> {
 		webQuery.authority(WebServerHelper.authority);
 		webQuery.path(WebServerHelper.basePath);
 		
+		
 		switch (queryType) {
-			case (WebResponse.queryTypeGetUrbanGameBaseList):
+			case GetUrbanGameBaseList:
 				webQuery.appendPath(WebServerHelper.gameSubPath);
 				break;
 			
-			case (WebResponse.queryTypeGetUrbanGameDetails):
+			case GetUrbanGameDetails:
 				webQuery.appendPath(WebServerHelper.gameSubPath);
 				webQuery.appendPath(String.valueOf(gid));
 				break;
 			
-			case (WebResponse.queryTypeGetTaskList):
+			case GetTaskList:
 				createGetTaskListQuery();
 				break;
 			
-			case (WebResponse.queryTypeGetTask):
+			case GetTask:
 				createGetTaskListQuery();
 				webQuery.appendPath(String.valueOf(tid));
 				break;
+			default:
+				Log.e(TAG, "Incorrect queryType " + queryType.toString());
+				break;	
 		}
+		
 		
 	}
 	

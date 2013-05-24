@@ -15,6 +15,7 @@ import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.webserver.helper.WebResponse;
+import com.blstream.urbangame.webserver.helper.WebResponse.QueryType;
 import com.google.gson.Gson;
 
 /* MockWebServer class is simulating web server behavior. Try to not use this
@@ -121,7 +122,7 @@ public class MockWebServer {
 		
 	}
 	
-	public String getResponse(String queryString, int queryType, long gid, long tid) {
+	public String getResponse(String queryString, QueryType queryType, long gid, long tid) {
 		// Method returns JSON string which is a server response for
 		// a queryString
 		
@@ -131,13 +132,13 @@ public class MockWebServer {
 		int i;
 		
 		switch (queryType) {
-			case (WebResponse.queryTypeGetUrbanGameDetails):
+			case GetUrbanGameDetails:
 				UrbanGame urbanGame = getMockUrbanGameDetails(gid);
 				if (urbanGame != null) stringBuilder.append(gson.toJson(urbanGame));
 				
 				break;
 			
-			case (WebResponse.queryTypeGetUrbanGameBaseList):
+			case GetUrbanGameBaseList:
 				stringBuilder.append("[");
 				
 				for (i = 0; i < mockAllUrbanGames.size() - 1; ++i)
@@ -146,7 +147,7 @@ public class MockWebServer {
 				stringBuilder.append( gson.toJson(mockAllUrbanGames.get(i))).append("]");
 				break;
 			
-			case (WebResponse.queryTypeGetTaskList):
+			case GetTaskList:
 				
 				ArrayList<Task> taskList = mockTaskLists.get(gid);
 				if (taskList != null) {
@@ -159,10 +160,14 @@ public class MockWebServer {
 				}
 				break;
 			
-			case (WebResponse.queryTypeGetTask):
+			case GetTask:
 				Task task = getMockSingleTask(gid, tid);
 				if (task != null) stringBuilder.append( gson.toJson(task));
 				
+				break;
+				
+			default:
+				Log.e(TAG, "Incorrect queryType " + queryType.toString());
 				break;
 		}
 		

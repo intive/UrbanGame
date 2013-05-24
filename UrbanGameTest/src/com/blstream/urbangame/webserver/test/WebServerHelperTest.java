@@ -39,7 +39,7 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 				switch (webResponse.getQueryType()) {
 				
 				// If query returned information about single UrbanGame
-					case (WebResponse.queryTypeGetUrbanGameDetails): {
+					case GetUrbanGameDetails: {
 						UrbanGame urbanGame = webResponse.getUrbanGame();
 						
 						assertNotNull(urbanGame);
@@ -51,7 +51,7 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 						break;
 					}
 					// if query returned list of all available games
-					case (WebResponse.queryTypeGetUrbanGameBaseList): {
+					case GetUrbanGameBaseList: {
 						
 						List<UrbanGameShortInfo> urbanGames = webResponse.getUrbanGameShortInfoList();
 						
@@ -68,7 +68,7 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 						break;
 					}
 					// if query returned single Task
-					case (WebResponse.queryTypeGetTask): {
+					case GetTask: {
 						Task task = webResponse.getTask();
 						assertNotNull(task);
 						checkTasksEqual(task, mockWebServer.getMockSingleTask(gid, tid));
@@ -79,7 +79,7 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 					}
 					
 					// if query returned list of Tasks for a particular game
-					case (WebResponse.queryTypeGetTaskList): {
+					case GetTaskList: {
 						List<Task> taskList = webResponse.getTaskList();
 						assertNotNull(taskList);
 						ArrayList<Task> mockTaskList = mockWebServer.getMockTaskList(gid);
@@ -92,6 +92,9 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 						signal.countDown();
 						break;
 					}
+					default:
+					  Log.e(TAG, "Incorrect queryType " + webResponse.getQueryType().toString());
+					  break;
 					
 				}
 			}

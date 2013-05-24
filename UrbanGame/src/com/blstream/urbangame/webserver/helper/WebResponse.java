@@ -18,20 +18,16 @@ import com.google.gson.reflect.TypeToken;
 
 public class WebResponse {
 	private final String TAG = "WebResponse";
-	
-	public final static int queryTypeGetUrbanGameDetails = 1;
-	public final static int queryTypeGetUrbanGameBaseList = 2;
-	public final static int queryTypeGetTask = 3;
-	public final static int queryTypeGetTaskList = 4;
-	
-	private int queryType;
+	public enum QueryType {GetUrbanGameDetails, GetUrbanGameBaseList,
+		                   GetTask, GetTaskList};	
+	private QueryType queryType;
 	private String jsonResponse;
 	
 	//
 	// Constructor
 	//
-	public WebResponse(int _responseType) {
-		queryType = _responseType;
+	public WebResponse(QueryType _queryType) {
+		queryType = _queryType;
 	}
 	
 	//
@@ -46,7 +42,7 @@ public class WebResponse {
 	//
 	// Public methods
 	//
-	public int getQueryType() {
+	public QueryType getQueryType() {
 		return queryType;
 	}
 	

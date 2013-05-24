@@ -11,6 +11,7 @@ import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.LocationTask;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.webserver.asynctask.AsyncSendWebQuery;
+import com.blstream.urbangame.webserver.helper.WebResponse.QueryType;
 
 /* WebServerHelper is an intermediary class which issues HTTP requests to web
  * server. After query to web server has been completed listener which you
@@ -46,7 +47,7 @@ public class WebServerHelper {
 		// data for particular GID number.
 		
 		if (webServerResponseInterface != null) {
-			new AsyncSendWebQuery(webServerResponseInterface, WebResponse.queryTypeGetUrbanGameDetails, gid).execute();
+			new AsyncSendWebQuery(webServerResponseInterface, QueryType.GetUrbanGameDetails, gid).execute();
 			
 			Log.i(TAG, "getUrbanGameDetails success");
 		}
@@ -58,7 +59,7 @@ public class WebServerHelper {
 		// of all available games;
 		
 		if (webServerResponseInterface != null) {
-			new AsyncSendWebQuery(webServerResponseInterface, WebResponse.queryTypeGetUrbanGameBaseList).execute();
+			new AsyncSendWebQuery(webServerResponseInterface, QueryType.GetUrbanGameBaseList).execute();
 			
 			Log.i(TAG, "getUrbanGameBaseList success");
 		}
@@ -70,7 +71,7 @@ public class WebServerHelper {
 		// for particular game.
 		
 		if (webServerResponseInterface != null) {
-			new AsyncSendWebQuery(webServerResponseInterface, WebResponse.queryTypeGetTaskList, gid).execute();
+			new AsyncSendWebQuery(webServerResponseInterface, QueryType.GetTaskList, gid).execute();
 			
 			Log.i(TAG, "getTaskList success");
 		}
@@ -82,7 +83,7 @@ public class WebServerHelper {
 		// about particular Task that belongs to a specified game.
 		
 		if (webServerResponseInterface != null) {
-			new AsyncSendWebQuery(webServerResponseInterface, WebResponse.queryTypeGetTask, gid, tid).execute();
+			new AsyncSendWebQuery(webServerResponseInterface, QueryType.GetTask, gid, tid).execute();
 			
 			Log.i(TAG, "getTask success");
 		}
