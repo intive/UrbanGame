@@ -99,6 +99,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String USER_TASKS_SPECIFIC_KEY_IS_FINISHED = "UTSIsFisnished";
 	private static final String USER_TASKS_SPECIFIC_KEY_ARE_CHANGES = "UTSAreChanges";
 	private static final String USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN = "UTSWasHidden";
+	private static final String USER_TASKS_SPECIFIC_KEY_CHANGES = "UTSChanges";
+	private static final String USER_TASKS_SPECIFIC_KEY_STATUS = "UTSStatus";
 	
 	// ---- Tasks ABCD
 	private static final String TASKS_ABCD_KEY_ID = "TAID";
@@ -150,9 +152,10 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		+ " (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + " TEXT, " + USER_TASKS_SPECIFIC_KEY_TASK_ID + " INTEGER, "
 		+ USER_TASKS_SPECIFIC_KEY_ARE_CHANGES + " TEXT, " + USER_TASKS_SPECIFIC_KEY_IS_FINISHED + " TEXT NOT NULL, "
 		+ USER_TASKS_SPECIFIC_KEY_POINTS + " INTEGER, " + USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN + " TEXT, "
-		+ "PRIMARY KEY (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ", " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "), "
-		+ " FOREIGN KEY (" + USER_TASKS_SPECIFIC_KEY_TASK_ID + ") REFERENCES " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID
-		+ "), " + " FOREIGN KEY (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ") REFERENCES " + USER_TABLE_NAME + " ("
+		+ USER_TASKS_SPECIFIC_KEY_CHANGES + " TEXT, " + USER_TASKS_SPECIFIC_KEY_STATUS + " INTEGER, " + "PRIMARY KEY ("
+		+ USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ", " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "), " + " FOREIGN KEY ("
+		+ USER_TASKS_SPECIFIC_KEY_TASK_ID + ") REFERENCES " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID + "), "
+		+ " FOREIGN KEY (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ") REFERENCES " + USER_TABLE_NAME + " ("
 		+ USER_KEY_EMAIL + ") " + ")";
 	
 	private static final String CREATE_TASKS_ABCD_TABLE = "CREATE TABLE " + TASKS_ABCD_TABLE_NAME + " ("
@@ -170,8 +173,6 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	public Database(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		SQLiteDatabase.loadLibs(context);
-		//		Uri path = Uri.parse("android.resource://com.blstream.urbangame/raw/icudt46l.zip");
-		//		SQLiteDatabase.loadLibs(context, new File(path.toString()));
 	}
 	
 	@Override
@@ -828,6 +829,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.isFinishedByUser()));
 			values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
 			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
+			values.put(USER_TASKS_SPECIFIC_KEY_CHANGES, taskSpecific.getChanges());
+			values.put(USER_TASKS_SPECIFIC_KEY_STATUS, taskSpecific.getStatus());
 			
 			boolean isInsertOK = db.insert(USER_TASKS_SPECIFIC_TABLE_NAME, null, values) != -1;
 			
@@ -846,7 +849,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		String[] taskColumns = { USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, USER_TASKS_SPECIFIC_KEY_TASK_ID,
 			USER_TASKS_SPECIFIC_KEY_POINTS, USER_TASKS_SPECIFIC_KEY_IS_FINISHED, USER_TASKS_SPECIFIC_KEY_ARE_CHANGES,
-			USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN };
+			USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, USER_TASKS_SPECIFIC_KEY_CHANGES, USER_TASKS_SPECIFIC_KEY_STATUS };
 		
 		Cursor cursor = db.query(USER_TASKS_SPECIFIC_TABLE_NAME, taskColumns, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL
 			+ "=? AND " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "=?",
@@ -871,11 +874,12 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			cursor.getLong(TaskSpecificFields.TASK_ID.value), cursor.getInt(TaskSpecificFields.POINTS.value),
 			stringToBoolean(cursor.getString(TaskSpecificFields.IS_FINISHED.value)),
 			stringToBoolean(cursor.getString(TaskSpecificFields.ARE_CHANGES.value)),
-			stringToBoolean(cursor.getString(TaskSpecificFields.WAS_HIDDEN.value)));
+			stringToBoolean(cursor.getString(TaskSpecificFields.WAS_HIDDEN.value)),
+			cursor.getString(TaskSpecificFields.CHANGES.value), cursor.getInt(TaskSpecificFields.STATUS.value));
 	}
 	
 	private enum TaskSpecificFields {
-		PLAYER_EMAIL(0), TASK_ID(1), POINTS(2), IS_FINISHED(3), ARE_CHANGES(4), WAS_HIDDEN(5);
+		PLAYER_EMAIL(0), TASK_ID(1), POINTS(2), IS_FINISHED(3), ARE_CHANGES(4), WAS_HIDDEN(5), CHANGES(6), STATUS(7);
 		int value;
 		
 		private TaskSpecificFields(int x) {
@@ -919,6 +923,12 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		}
 		if (taskSpecific.getWasHidden() != null) {
 			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
+		}
+		if (taskSpecific.getChanges() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_CHANGES, taskSpecific.getChanges());
+		}
+		if (taskSpecific.getStatus() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_STATUS, taskSpecific.getStatus());
 		}
 	}
 	

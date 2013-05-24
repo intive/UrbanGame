@@ -102,6 +102,7 @@
     <!-- Task -->
     <string name="label_taksRepeatable">repeatable</string>
     <string name="label_taskNon_repeatable">non-repeatable</string>
+    <string name="button_submit">Submit</string>
 
     <!-- ProfileActivity -->
     <string name="button_save">Save</string>
@@ -126,17 +127,18 @@
     <!-- Logging in -->
     <string name="hint_email">E-mail</string>
     <string name="hint_password">Password</string>
+    <string name="hint_displayName">Display name</string>
     <string name="checkbox_show_password">Show password</string>
     <string name="button_register">Register</string>
-    <string name="button_log_in">Log in</string>
+    <string name="button_login">Login</string>
     <string name="dialog_register_title">Account registered</string>
     <string name="dialog_register_message">An e-mail with verification link has been sent to E-mail</string>
     <string name="dialog_register_button_positive">OK</string>
     <string name="invalid_data_tittle">Invalid data</string>
     <string name="invalid_data_message">E-mail or password is incorrect</string>
     <string name="invalid_data_button">OK</string>
-    <string name="title_section1">SIGN IN</string>
-    <string name="title_section2">CREATE NEW ACCOUNT</string>
+    <string name="tabTitle_login">LOGIN</string>
+    <string name="tabTitle_register">CREATE NEW ACCOUNT</string>
 
     <!-- Profile Activity -->
     <string name="profile_activity_dialog_title">Choose avatar from:</string>

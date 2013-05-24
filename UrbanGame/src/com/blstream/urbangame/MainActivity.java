@@ -114,11 +114,18 @@ public class MainActivity extends SherlockListActivity {
 		
 		ArrayList<PlayerTaskSpecific> list = new ArrayList<PlayerTaskSpecific>();
 		
-		list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(100057), 3, true, true, true));
-		list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(100058), 3, false, false, false));
+		list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(100057), 3, true, true, true, "g",
+			PlayerTaskSpecific.ACTIVE));
+		list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(100058), 3, false, false, false, "",
+			PlayerTaskSpecific.INACTIVE));
 		for (int i = 100050; i <= 100056; i++) {
-			list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(i), 3, true, false, true));
+			list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(i), 3, true, false, true, "",
+				PlayerTaskSpecific.FINISHED));
 		}
+		list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(100059), 3, false, false, false, "",
+			PlayerTaskSpecific.FINISHED));
+		list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(100060), 3, false, false, false, "",
+			PlayerTaskSpecific.FINISHED));
 		
 		return list;
 	}

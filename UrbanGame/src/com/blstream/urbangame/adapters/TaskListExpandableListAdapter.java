@@ -45,6 +45,11 @@ public class TaskListExpandableListAdapter extends BaseExpandableListAdapter {
 		public TextView textViewTaskPoints;
 	}
 	
+	private class GroupViewHolder {
+		public TextView textView;
+		public String type;
+	}
+	
 	public TaskListExpandableListAdapter(Context context, ArrayList<ExpandableListHeader<Task>> parent) {
 		mExpandableListHeader = parent;
 		inflater = LayoutInflater.from(context);
@@ -92,54 +97,64 @@ public class TaskListExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 		
-		TextView textView;
-		
 		if (convertView == null) {
+			final GroupViewHolder groupViewHolder = new GroupViewHolder();
 			if (getGroup(groupPosition).equals(GameTasksFragment.EMPTY_TASK_HEADER)) {
 				convertView = inflater.inflate(R.layout.fragment_tasks_empty_active_list, parent, false);
-				convertView.setTag(GameTasksFragment.EMPTY_TASK_HEADER);
+				groupViewHolder.type = GameTasksFragment.EMPTY_TASK_HEADER;
+				groupViewHolder.textView = (TextView) convertView.findViewById(R.id.textViewEmptyActiveList);
+				convertView.setTag(groupViewHolder);
 			}
 			else if (getGroup(groupPosition).equals(GameTasksFragment.HIDDEN_TASK_HEADER)) {
 				convertView = inflater.inflate(R.layout.fragment_tasks_hidden_tasks_label, parent, false);
-				convertView.setTag(GameTasksFragment.HIDDEN_TASK_HEADER);
+				groupViewHolder.type = GameTasksFragment.HIDDEN_TASK_HEADER;
+				groupViewHolder.textView = (TextView) convertView.findViewById(R.id.textViewNumberOfHiddenTasks);
+				convertView.setTag(groupViewHolder);
 			}
 			else {
 				convertView = inflater.inflate(R.layout.expandable_lists_header_tasks, parent, false);
-				convertView.setTag(LIST);
+				groupViewHolder.type = LIST;
+				groupViewHolder.textView = (TextView) convertView.findViewById(R.id.TextViewMyGamesHeader);
+				convertView.setTag(groupViewHolder);
 			}
 		}
 		
+		GroupViewHolder groupViewHolder = (GroupViewHolder) convertView.getTag();
 		if (getGroup(groupPosition).equals(GameTasksFragment.EMPTY_TASK_HEADER)) {
-			if (!convertView.getTag().equals(GameTasksFragment.EMPTY_TASK_HEADER)) {
+			if (!groupViewHolder.type.equals(GameTasksFragment.EMPTY_TASK_HEADER)) {
 				convertView = inflater.inflate(R.layout.fragment_tasks_empty_active_list, parent, false);
-				convertView.setTag(GameTasksFragment.EMPTY_TASK_HEADER);
+				groupViewHolder.type = GameTasksFragment.EMPTY_TASK_HEADER;
+				groupViewHolder.textView = (TextView) convertView.findViewById(R.id.textViewEmptyActiveList);
+				convertView.setTag(groupViewHolder);
 			}
 			
-			textView = (TextView) convertView.findViewById(R.id.textViewEmptyActiveList);
 			if (getChildrenCount(0) == 0) {
-				textView.setVisibility(View.VISIBLE);
+				groupViewHolder.textView.setVisibility(View.VISIBLE);
 			}
 			else {
-				textView.setVisibility(View.GONE);
+				groupViewHolder.textView.setVisibility(View.GONE);
 			}
 		}
 		else if (getGroup(groupPosition).equals(GameTasksFragment.HIDDEN_TASK_HEADER)) {
-			if (!convertView.getTag().equals(GameTasksFragment.HIDDEN_TASK_HEADER)) {
+			if (!groupViewHolder.type.equals(GameTasksFragment.HIDDEN_TASK_HEADER)) {
 				convertView = inflater.inflate(R.layout.fragment_tasks_hidden_tasks_label, parent, false);
-				convertView.setTag(GameTasksFragment.HIDDEN_TASK_HEADER);
+				groupViewHolder.type = GameTasksFragment.HIDDEN_TASK_HEADER;
+				groupViewHolder.textView = (TextView) convertView.findViewById(R.id.textViewNumberOfHiddenTasks);
+				convertView.setTag(groupViewHolder);
 			}
 			
-			textView = (TextView) convertView.findViewById(R.id.textViewNumberOfHiddenTasks);
-			textView.setText(Integer.toString(numberOfFindedHiddenTasks) + "/" + Integer.toString(numberOfHiddenTasks));
+			groupViewHolder.textView.setText(Integer.toString(numberOfFindedHiddenTasks) + "/"
+				+ Integer.toString(numberOfHiddenTasks));
 		}
 		else {
-			if (!convertView.getTag().equals(LIST)) {
+			if (!groupViewHolder.type.equals(LIST)) {
 				convertView = inflater.inflate(R.layout.expandable_lists_header_tasks, parent, false);
-				convertView.setTag(LIST);
+				groupViewHolder.type = LIST;
+				groupViewHolder.textView = (TextView) convertView.findViewById(R.id.TextViewMyGamesHeader);
+				convertView.setTag(groupViewHolder);
 			}
 			
-			textView = (TextView) convertView.findViewById(R.id.TextViewMyGamesHeader);
-			textView.setText(getGroup(groupPosition).toString());
+			groupViewHolder.textView.setText(getGroup(groupPosition).toString());
 		}
 		
 		// always expanded

@@ -18,7 +18,8 @@ public class DatabaseTaskSpecificInsertTest extends AndroidTestCase {
 		if (database == null) {
 			database = new Database(mContext);
 		}
-		playerTaskSpecific = new PlayerTaskSpecific("em@em.em", 1L, 10, false, false, false);
+		playerTaskSpecific = new PlayerTaskSpecific("em@em.em", 1L, 10, false, false, false, "no",
+			PlayerTaskSpecific.ACTIVE);
 	}
 	
 	@Override
@@ -67,6 +68,20 @@ public class DatabaseTaskSpecificInsertTest extends AndroidTestCase {
 	//allowed
 	public void testNullWasHidden() {
 		playerTaskSpecific.setWasHidden(null);
+		boolean isOK = database.insertPlayerTaskSpecific(playerTaskSpecific);
+		assertTrue(isOK);
+	}
+	
+	//allowed
+	public void testNullChanges() {
+		playerTaskSpecific.setChanges(null);
+		boolean isOK = database.insertPlayerTaskSpecific(playerTaskSpecific);
+		assertTrue(isOK);
+	}
+	
+	//allowed
+	public void testNullStatus() {
+		playerTaskSpecific.setStatus(null);
 		boolean isOK = database.insertPlayerTaskSpecific(playerTaskSpecific);
 		assertTrue(isOK);
 	}

@@ -30,7 +30,7 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 	public static final String EMPTY_TASK_HEADER = "Empty taks header";
 	
 	private int numberOfHiddenTasks;
-	private int numberOfFindedHiddenTasks;
+	private int numberOfFoundHiddenTasks;
 	
 	private ArrayList<Task> activeTasks;
 	private ArrayList<Task> finishedTasks;
@@ -101,7 +101,7 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		arrayTaskListHeaders.add(canceledTaskHeader);
 		
 		adapter = new TaskListExpandableListAdapter(getActivity(), arrayTaskListHeaders);
-		adapter.setNumbersOfHiddenTasks(numberOfHiddenTasks, numberOfFindedHiddenTasks);
+		adapter.setNumbersOfHiddenTasks(numberOfHiddenTasks, numberOfFoundHiddenTasks);
 		
 		expandableListViewTaskList.setAdapter(adapter);
 		
@@ -124,15 +124,12 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 	}
 	
 	private void initLists() {
-		//FIXME At this point there is nothing that indicates which tasks have been canceled,
-		// so for now list with canceled tasks is always empty. When something will change adding
-		// element to that list should be implemented.
 		
 		ArrayList<Task> list;
 		list = (ArrayList<Task>) database.getTasksForGame(gameID);
 		
 		numberOfHiddenTasks = 0;
-		numberOfFindedHiddenTasks = 0;
+		numberOfFoundHiddenTasks = 0;
 		
 		activeTasks = new ArrayList<Task>();
 		finishedTasks = new ArrayList<Task>();
@@ -141,30 +138,43 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		
 		PlayerTaskSpecific playerTaskSpecific;
 		
-		for (Task task : list) {
-			
-			playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), playerEmail);
-			
-			if (playerTaskSpecific == null) {
-				if (task.isHidden()) {
-					++numberOfHiddenTasks;
+		if (list != null) {
+			for (Task task : list) {
+				
+				playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), playerEmail);
+				
+				if (playerTaskSpecific == null) {
+					if (task.isHidden()) {
+						++numberOfHiddenTasks;
+					}
+					else {
+						inactiveTasks.add(task);
+					}
 				}
 				else {
-					inactiveTasks.add(task);
+					switch (playerTaskSpecific.getStatus()) {
+						case PlayerTaskSpecific.ACTIVE:
+							activeTasks.add(task);
+							break;
+						case PlayerTaskSpecific.INACTIVE:
+							inactiveTasks.add(task);
+							break;
+						case PlayerTaskSpecific.FINISHED:
+							finishedTasks.add(task);
+							break;
+						case PlayerTaskSpecific.CANCELED:
+							canceledTasks.add(task);
+							break;
+						default:
+							break;
+					}
+					if (playerTaskSpecific.getWasHidden()
+						&& (playerTaskSpecific.getStatus() != PlayerTaskSpecific.CANCELED)) {
+						++numberOfFoundHiddenTasks;
+						++numberOfHiddenTasks;
+					}
 				}
-			}
-			else {
-				if (playerTaskSpecific.getWasHidden()) {
-					++numberOfFindedHiddenTasks;
-					++numberOfHiddenTasks;
-				}
-				if (playerTaskSpecific.isFinishedByUser()) {
-					finishedTasks.add(task);
-				}
-				else {
-					activeTasks.add(task);
-				}
-			}
-		} // end of for loop
+			} // end of for loop
+		}
 	}
 }
