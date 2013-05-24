@@ -20,15 +20,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.entity.Player;
-import com.blstream.urbangame.menuitem.MenuItemHelper;
 
-public class ProfileActivity extends SherlockActivity {
+public class ProfileActivity extends MenuActivity {
 	
 	private static final String TAG = ProfileActivity.class.getSimpleName();
 	
@@ -77,34 +72,33 @@ public class ProfileActivity extends SherlockActivity {
 		//save button
 		Button saveButton = (Button) findViewById(R.id.buttonProfileSaveButton);
 		saveButton.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG, "Save button clicked");
 				saveProfileInfo();
-				avatarBitmap = null;
-				savedDisplayName = null;
-				Intent intent = new Intent(ProfileActivity.this, MyGamesActivity.class);
-				startActivity(intent);
+				startMyGamesActivity();
 			}
-			
 		});
 		
 		//skip button
 		Button skipButton = (Button) findViewById(R.id.buttonProfileSkipButton);
 		skipButton.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG, "Skip button clicked");
-				avatarBitmap = null;
-				savedDisplayName = null;
-				Intent intent = new Intent(ProfileActivity.this, MyGamesActivity.class);
-				startActivity(intent);
+				startMyGamesActivity();
 			}
-			
 		});
+	}
+	
+	private void startMyGamesActivity() {
+		avatarBitmap = null;
+		savedDisplayName = null;
 		
+		Intent intent = new Intent(ProfileActivity.this, MyGamesActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+		finish();
 	}
 	
 	@Override
@@ -141,7 +135,7 @@ public class ProfileActivity extends SherlockActivity {
 			editTextDisplayName.setText(null);
 		}
 		
-	    this.supportInvalidateOptionsMenu();
+		this.supportInvalidateOptionsMenu();
 		Log.i(TAG, "onResume completed");
 	}
 	
@@ -209,28 +203,6 @@ public class ProfileActivity extends SherlockActivity {
 		Log.d(TAG, "New profile info stored in database");
 		
 		//TODO store in webserver, should be done when web api will be released
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater menuInflater = getSupportMenuInflater();
-		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
-		MenuItemHelper.initLogoutMenuItem(this, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		int itemId = item.getItemId();
-		switch (itemId) {
-			case android.R.id.home:
-				finish();
-				break;
-			case R.id.menu_logout:
-				MenuItemHelper.invokeActionLogoutMenuItem(this);
-				break;
-		}
-		return true;
 	}
 	
 	@Override

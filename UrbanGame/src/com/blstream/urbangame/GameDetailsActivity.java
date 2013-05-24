@@ -16,16 +16,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.example.ExampleData;
-import com.blstream.urbangame.menuitem.MenuItemHelper;
 
-public class GameDetailsActivity extends SherlockActivity implements OnClickListener {
+public class GameDetailsActivity extends MenuActivity implements OnClickListener {
 	public static final String TAG = "GameDetailsActivity";
 	public static final String GAME_KEY = "gameID";
 	public static final Long GAME_NOT_FOUND = -1L;
@@ -95,7 +91,7 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		tvGameDesc.setText(selectedGame.getDescription());
 		tvWinningStrategy.setText(selectedGame.getWinningStrategy());
 		
-	    this.supportInvalidateOptionsMenu();
+		this.supportInvalidateOptionsMenu();
 		Log.i(TAG, "onResume completed");
 	}
 	
@@ -145,27 +141,6 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 			endDate, difficulty, reward, prizesInfo, description, gameLogoBase64, operatorLogoBase64, comments,
 			location, detailsLink);
 		
-	}
-	
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		int itemId = item.getItemId();
-		switch (itemId) {
-			case android.R.id.home:
-				finish();
-				break;
-			case R.id.menu_logout:
-				MenuItemHelper.invokeActionLogoutMenuItem(this);
-				break;	
-		}
-		return true;
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.top_bar_menu_more, menu);
-		MenuItemHelper.initLogoutMenuItem(this, menu);
-		return true;
 	}
 	
 	@Override

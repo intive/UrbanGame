@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -30,10 +29,9 @@ import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
-import com.blstream.urbangame.menuitem.MenuItemHelper;
 
-public class MyGamesActivity extends SherlockActivity implements OnChildClickListener, OnNavigationListener {
-		
+public class MyGamesActivity extends MenuActivity implements OnChildClickListener, OnNavigationListener {
+	
 	private final String TAG = MyGamesActivity.class.getSimpleName();
 	
 	private ExpandableListView mExpandableList;
@@ -78,8 +76,8 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 	
 	@Override
 	protected void onResume() {
-	    super.onResume();
-	    this.supportInvalidateOptionsMenu();
+		super.onResume();
+		this.supportInvalidateOptionsMenu();
 		Log.i(TAG, "onResume completed");
 	}
 	
@@ -125,7 +123,6 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		
 		Context context = getSupportActionBar().getThemedContext();
 		ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.menu_navigation_list,
 			R.layout.sherlock_spinner_item);
@@ -137,10 +134,9 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 		
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_my_games_list, menu);
-		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
-		MenuItemHelper.initLogoutMenuItem(this, menu);
 		configureSearchAction(menu);
-		return true;
+		
+		return super.onCreateOptionsMenu(menu);
 	}
 	
 	@Override
@@ -148,7 +144,7 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 		Intent intent;
 		ExpandableListHeader header = mArrayHeaders.get(groupPosition);
 		Bundle bundle = new Bundle();
-		UrbanGameShortInfo game = header.getArrayChildren().get(childPosition);	//FIXME change to class containing game after login
+		//UrbanGameShortInfo game = header.getArrayChildren().get(childPosition);	//FIXME change to class containing game after login
 		//Long selectedGameId = (game == null ? -1 : game.getID());	//FIXME uncomment when getID won't be null (class comes from database)
 		bundle.putLong(GameDetailsActivity.GAME_KEY, -1);
 		
@@ -201,17 +197,6 @@ public class MyGamesActivity extends SherlockActivity implements OnChildClickLis
 				return true;
 			}
 		});
-	}
-	
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		int itemId = item.getItemId();
-		switch (itemId) {
-			case R.id.menu_logout:
-				MenuItemHelper.invokeActionLogoutMenuItem(this);
-				break;
-		}
-		return true;
 	}
 	
 	//Adapter for expandable list

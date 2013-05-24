@@ -6,17 +6,14 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.blstream.urbangame.fragments.TabManager;
 import com.blstream.urbangame.fragments.TaskAnswerFragment;
 import com.blstream.urbangame.fragments.TaskDescriptionFragment;
-import com.blstream.urbangame.menuitem.MenuItemHelper;
 
-public class ActiveTaskActivity extends SherlockFragmentActivity {
-	private final String TAG = ActiveTaskActivity .class.getSimpleName();
+public class ActiveTaskActivity extends MenuActivity {
+	private final String TAG = ActiveTaskActivity.class.getSimpleName();
 	
 	public static final String TASK_ID = "task_id";
 	public static final String TAG_TAB_DESCRIPTION = "fragment_description";
@@ -38,8 +35,8 @@ public class ActiveTaskActivity extends SherlockFragmentActivity {
 	
 	@Override
 	protected void onResume() {
-	    super.onResume();
-	    this.supportInvalidateOptionsMenu();
+		super.onResume();
+		this.supportInvalidateOptionsMenu();
 		Log.i(TAG, "onResume completed");
 	}
 	
@@ -85,22 +82,7 @@ public class ActiveTaskActivity extends SherlockFragmentActivity {
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_alert, menu);
 		menuInflater.inflate(R.menu.top_bar_message, menu);
-		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
-		MenuItemHelper.initLogoutMenuItem(this, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		int itemId = item.getItemId();
-		switch (itemId) {
-			case android.R.id.home:
-				finish();
-				break;
-			case R.id.menu_logout:
-				MenuItemHelper.invokeActionLogoutMenuItem(this);
-				break;
-		}
-		return true;
+		
+		return super.onCreateOptionsMenu(menu);
 	}
 }
