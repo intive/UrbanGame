@@ -26,8 +26,6 @@
         <activity android:name=".ActiveGameActivity" />
         <activity android:name=".ActiveTaskActivity" />
         <activity android:name=".LoginRegisterActivity" />
-        <activity android:name=".menuitem.test.MenuItemHelperMockActivity" /> 
-        <activity android:name=".menuitem.test.MenuItemHelperMockActivity" />
+        <activity android:name=".menuitem.test.MenuItemHelperMockActivity"/>  
     </application>
-
 </manifest>
