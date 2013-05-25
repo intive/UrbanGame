@@ -46,6 +46,8 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		if (!isDialogCompleted) {
 			showDialog();
 		}
+		
+		new Database(getApplicationContext()).setLoggedPlayer("em@em.em");
 	}
 	
 	//setting button text
@@ -221,43 +223,51 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 			}
 			else { //leave game
 				Log.i(TAG, "Leaving the game");
-				leavePlayerFromGame();
+				showDialog();
 			}
 		}
 	}
 	
 	public void showDialog() {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-		dialogBuilder.setTitle(R.string.dialog_join_title);
-		dialogBuilder.setMessage(R.string.dialog_join_message);
+		dialogBuilder.setTitle(!isPlayerAParticipantOfCurrentGame ? R.string.dialog_join_title
+			: R.string.dialog_leave_title);
+		dialogBuilder.setMessage(R.string.dialog_join_leave_message);
 		dialogBuilder.setCancelable(false);
-		dialogBuilder.setPositiveButton(R.string.dialog_join_positive_button, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Log.i("UrbanGame", "Dialog: clicked positive button");
-				isDialogCompleted = true;
-				
-				if (isSomeoneLogged) {
-					Log.i(TAG, "There's already logged player");
-					joinPlayerToTheGame();
+		dialogBuilder.setPositiveButton(R.string.dialog_join_leave_positive_button,
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Log.i("UrbanGame", "Dialog: clicked positive button");
+					isDialogCompleted = true;
+					
+					if (isSomeoneLogged) {
+						if (isPlayerAParticipantOfCurrentGame) {
+							leavePlayerFromGame();
+						}
+						else {
+							Log.i(TAG, "There's already logged player");
+							joinPlayerToTheGame();
+						}
+					}
+					else {
+						Log.i(TAG, "There's no one logged");
+						//starts login activity
+						Intent intent = new Intent(GameDetailsActivity.this, LoginRegisterActivity.class);
+						intent.putExtra(LoginRegisterActivity.ACTION_AFTER_LOGIN,
+							LoginRegisterActivity.ACTION_RETURN_LOGIN_RESULT);
+						startActivityForResult(intent, LoginRegisterActivity.LOGIN_REQUEST_CODE);
+					}
 				}
-				else {
-					Log.i(TAG, "There's no one logged");
-					//starts login activity
-					Intent intent = new Intent(GameDetailsActivity.this, LoginRegisterActivity.class);
-					intent.putExtra(LoginRegisterActivity.ACTION_AFTER_LOGIN,
-						LoginRegisterActivity.ACTION_RETURN_LOGIN_RESULT);
-					startActivityForResult(intent, LoginRegisterActivity.LOGIN_REQUEST_CODE);
+			});
+		dialogBuilder.setNegativeButton(R.string.dialog_join_leave_negative_button,
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Log.i("UrbanGame", "Dialog: clicked negative button");
+					isDialogCompleted = true;
 				}
-			}
-		});
-		dialogBuilder.setNegativeButton(R.string.dialog_join_negative_button, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Log.i("UrbanGame", "Dialog: clicked negative button");
-				isDialogCompleted = true;
-			}
-		});
+			});
 		dialogBuilder.show();
 	}
 	
@@ -297,6 +307,13 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		//	M O C K  E N D	//
 		//					//
 		//******************//
+		isPlayerAParticipantOfCurrentGame = true;
+		startActivityAfterCompletedJoinAction();
+	}
+	
+	private void startActivityAfterCompletedJoinAction() {
+		Intent intent = new Intent(GameDetailsActivity.this, MyGamesActivity.class);
+		startActivity(intent);
 	}
 	
 	private void leavePlayerFromGame() {
@@ -314,10 +331,12 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 		// FIXME code below should be invoked after positive response from server [move that code when appropriate class is ready]
 		db.deleteUserGameSpecific(playerEmail, gameID);
 		db.closeDatabase();
+		((Button) findViewById(R.id.buttonJoinLeaveGame)).setText(R.string.button_join);
 		//******************//
 		//					//
 		//	M O C K  E N D	//
 		//					//
 		//******************//
+		isPlayerAParticipantOfCurrentGame = false;
 	}
 }
