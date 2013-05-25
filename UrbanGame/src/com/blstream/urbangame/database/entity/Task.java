@@ -4,13 +4,17 @@ import java.util.Date;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
 
-public abstract class Task {
+public abstract class Task implements Parcelable {
 	
 	public static final int TASK_TYPE_ABCD = 0;
 	public static final int TASK_TYPE_LOCATION = 1;
+	
+	public static final String TASK_KEY = "Task";
 	
 	private Long id;
 	private Integer type;
@@ -52,6 +56,19 @@ public abstract class Task {
 	
 	public Task() {
 		this(null, null, null, null, null, null, null, null, null, null);
+	}
+	
+	public Task(Parcel in) {
+		this.id = in.readLong();
+		this.type = in.readInt();
+		this.title = in.readString();
+		this.pictureBase64 = in.readString();
+		this.description = in.readString();
+		this.isRepetable = in.readByte() == 1;
+		this.isHidden = in.readByte() == 1;
+		this.numberOfHidden = in.readInt();
+		this.endTime = (Date) in.readSerializable();
+		this.maxPoints = in.readInt();
 	}
 	
 	/**
@@ -215,4 +232,24 @@ public abstract class Task {
 	public void setMaxPoints(Integer maxPoints) {
 		this.maxPoints = maxPoints;
 	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeLong(id);
+		out.writeInt(type);
+		out.writeString(title);
+		out.writeString(pictureBase64);
+		out.writeString(description);
+		out.writeByte((byte) (isRepetable ? 1 : 0));
+		out.writeByte((byte) (isHidden ? 1 : 0));
+		out.writeInt(numberOfHidden);
+		out.writeSerializable(endTime);
+		out.writeInt(maxPoints);
+	}
+	
 }

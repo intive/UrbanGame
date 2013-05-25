@@ -52,9 +52,17 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 		this.imageViewDialogTaskImage = new ImageView(activity);
 		this.databaseInterface = new Database(activity);
 		
-		long taskID = getSelectedTaskID();
+		task = getArguments().getParcelable(Task.TASK_KEY);
+		Long taskID;
+		if (task != null) {
+			taskID = task.getId();
+		}
+		else {
+			taskID = getSelectedTaskID();
+		}
 		this.awardedPoints = getPlayerAwardedPoints(taskID);
 		this.task = databaseInterface.getTask(taskID);
+		
 	}
 	
 	/*
@@ -121,6 +129,7 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		
 		if (task == null) return;
 		
 		taskTitle.setText(task.getTitle());
