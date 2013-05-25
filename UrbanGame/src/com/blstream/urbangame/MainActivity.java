@@ -3,7 +3,9 @@ package com.blstream.urbangame;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,19 +19,27 @@ import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
-import com.blstream.urbangame.menuitem.MenuItemHelper;
 import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
+import com.blstream.urbangame.listeners.GpsLocationListener;
+import com.blstream.urbangame.menuitem.MenuItemHelper;
 
 public class MainActivity extends SherlockListActivity {
 	private static final String TAG = "MainActivity";
 	private GamesListAdapter adapter;
+	private LocationManager locationManager;
+	private GpsLocationListener gpsLocationListener;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setSupportProgressBarVisibility(true);
+		
+		//gps, I think we need it all the time
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		gpsLocationListener = new GpsLocationListener();
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, gpsLocationListener);
 		
 		// FIXME remove mock data when it is no longer needed
 		adapter = new GamesListAdapter(this, R.layout.list_item_game, mockData());
@@ -70,7 +80,7 @@ public class MainActivity extends SherlockListActivity {
 		UrbanGameShortInfo game = adapter.getItem(posViewInList);
 		Long selectedGameId = (game == null ? -1 : game.getID());
 		bundle.putLong(GameDetailsActivity.GAME_KEY, selectedGameId);
-		
+		bundle.putParcelable(GpsLocationListener.GPS_LISTENER_KEY, gpsLocationListener);
 		Intent intent = new Intent(MainActivity.this, GameDetailsActivity.class);
 		intent.putExtras(bundle);
 		startActivity(intent);
@@ -89,28 +99,27 @@ public class MainActivity extends SherlockListActivity {
 		return true;
 	}
 	
-
 	@Override
 	protected void onResume() {
-	    super.onResume();
-	    this.supportInvalidateOptionsMenu();
+		super.onResume();
+		this.supportInvalidateOptionsMenu();
 		Log.i(TAG, "onResume completed");
 	}
-
+	
 	private void configureLoginAction(Menu menu) {
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);
 		loginItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
+			
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				Log.i(TAG, "onMenuItemClick(): " + item.getTitleCondensed());
-					Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
-					startActivity(intent);
-					return true;
-				}
+				Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
+				startActivity(intent);
+				return true;
+			}
 		});
 	}
-
+	
 	private void configureSearchAction(Menu menu) {
 		final MenuItem moreItem = menu.findItem(R.id.menu_more);;
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);
