@@ -47,7 +47,6 @@ public class GameDetailsActivity extends SherlockActivity implements OnClickList
 			showDialog();
 		}
 		
-		new Database(getApplicationContext()).setLoggedPlayer("em@em.em");
 	}
 	
 	//setting button text
