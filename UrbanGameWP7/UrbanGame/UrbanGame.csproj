@@ -96,6 +96,7 @@
     <Compile Include="Converters\ABCDToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateToVisibilityConverter.cs" />
+    <Compile Include="Converters\DurationTimeConverter.cs" />
     <Compile Include="Converters\GameEndConverter.cs" />
     <Compile Include="Converters\GameStartConverter.cs" />
     <Compile Include="Converters\GameStateConverter.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Storage\Game.cs" />
     <Compile Include="Storage\GameAlert.cs" />
     <Compile Include="Storage\GameHighScore.cs" />
+    <Compile Include="Storage\PositionedHighScores.cs" />
     <Compile Include="Storage\Repository.cs" />
     <Compile Include="Storage\GameTask.cs" />
     <Compile Include="Storage\TaskSolution.cs" />
@@ -138,10 +140,14 @@
     <Compile Include="Utilities\AppbarManager.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsPreviewViewModel.cs" />
+    <Compile Include="ViewModels\GameDetailsViewModel.cs" />
     <Compile Include="ViewModels\GamesListViewModel.cs" />
     <Compile Include="ViewModels\TaskViewModel.cs" />
     <Compile Include="Views\GameDetailsPreviewView.xaml.cs">
       <DependentUpon>GameDetailsPreviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GameDetailsView.xaml.cs">
+      <DependentUpon>GameDetailsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GamesListView.xaml.cs">
       <DependentUpon>GamesListView.xaml</DependentUpon>
@@ -156,6 +162,10 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="Views\GameDetailsPreviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameDetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -183,6 +193,9 @@
     <Content Include="Images\appbar.check.png" />
     <Content Include="Images\appbarRefresh.png" />
     <Content Include="Images\appbarSearch.png" />
+    <Content Include="Images\GameviewPanorama.png" />
+    <Content Include="Images\MainPanorama.png" />
+    <Content Include="Images\PivotPage.png" />
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
