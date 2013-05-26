@@ -78,13 +78,15 @@ public class GamesListActivity extends MenuListActivity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_games_list, menu);
 		
 		configureLoginAction(menu);
 		configureSearchAction(menu);
 		
-		return super.onCreateOptionsMenu(menu);
+		return true;
 	}
 	
 	@Override
