@@ -804,6 +804,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			playerEmail = cursor.getString(0);
 		}
 		cursor.close();
+		db.close();
 		return playerEmail;
 	}
 	
@@ -862,6 +863,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		}
 		else {
 			taskSpecific = null;
+		}
+		if (cursor != null) {
+			cursor.close();
 		}
 		db.close();
 		return taskSpecific;
@@ -1041,6 +1045,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			}
 			while (cursor.moveToNext());
 		}
+		if (cursor != null) {
+			cursor.close();
+		}
 		db.close();
 		return tasksList;
 	}
@@ -1061,6 +1068,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		}
 		else {
 			task = null;
+		}
+		if (cursor != null) {
+			cursor.close();
 		}
 		db.close();
 		return task;
@@ -1105,6 +1115,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 				idOfAnswerSet = cursorForABCDTasks.getLong(ABCDTaskFields.ID.value);
 			}
 			String[] answers = null;
+			cursorForABCDTasks.close();
 			
 			cursorForABCDTasks = db.query(TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME, taskAnswersTableColumns,
 				TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + "=?", new String[] { idOfAnswerSet + "" }, null, null, null);

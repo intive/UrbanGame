@@ -1,6 +1,7 @@
 package com.blstream.urbangame;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import android.content.Intent;
@@ -17,10 +18,18 @@ import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
-import com.blstream.urbangame.menuitem.MenuItemHelper;
 import com.blstream.urbangame.adapters.GamesListAdapter;
+import com.blstream.urbangame.database.Database;
+import com.blstream.urbangame.database.DatabaseInterface;
+import com.blstream.urbangame.database.entity.ABCDTask;
+import com.blstream.urbangame.database.entity.LocationTask;
+import com.blstream.urbangame.database.entity.Player;
+import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
+import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
+import com.blstream.urbangame.menuitem.MenuItemHelper;
+
 public class MainActivity extends SherlockListActivity {
 	private static final String TAG = "MainActivity";
 	private GamesListAdapter adapter;
@@ -33,11 +42,16 @@ public class MainActivity extends SherlockListActivity {
 		// FIXME remove mock data when it is no longer needed
 		adapter = new GamesListAdapter(this, R.layout.list_item_game, mockData());
 		setListAdapter(adapter);
+		// FIXME remove mock when it is no longer needed
+		putMockDataToDatabase();
 	}
 	
 	/************************
 	 ***** START MOCKING ****
 	 ************************/
+	
+	public static final Long MOCK_GAME_ID = 100000001L;
+	public static final String MOCK_PLAYER_EMAIL = "mockPlayer@mockSite.com";
 	
 	private ArrayList<UrbanGameShortInfo> mockData() {
 		ArrayList<UrbanGameShortInfo> mockList = new ArrayList<UrbanGameShortInfo>();
@@ -55,6 +69,79 @@ public class MainActivity extends SherlockListActivity {
 		}
 		
 		return mockList;
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void putMockDataToDatabase() {
+		DatabaseInterface database = new Database(this);
+		Date startDate = new Date(2013, 7, 5);
+		Date endDate = new Date(2013, 8, 5);
+		database.insertGameShortInfo(new UrbanGameShortInfo(MOCK_GAME_ID, "Looking for dwarwes", "City hall", 5, 100,
+			startDate, endDate, true, "Wroclaw", null, null, "details"));
+		database.insertUser(new Player(MOCK_PLAYER_EMAIL, "", "Name", ""));
+		database.setLoggedPlayer(MOCK_PLAYER_EMAIL);
+		for (Task element : getMockTaskList()) {
+			database.insertTaskForGame(MOCK_GAME_ID, element);
+		}
+		for (PlayerTaskSpecific element : getPlayerTaskSpecificListMock()) {
+			database.insertPlayerTaskSpecific(element);
+		}
+	}
+	
+	private ArrayList<Task> getMockTaskList() {
+		ArrayList<Task> list = new ArrayList<Task>();
+		String[] answers = { "answer1", "answer2" };
+		Date endTime = (new GregorianCalendar(2013, 7, 13)).getTime();
+		list.add(new ABCDTask(Long.valueOf(100057), "Spoon for Gourmand", Base64ImageCoder.convertImage(getResources()
+			.getDrawable(R.drawable.mock_task_image)), "description", true, false, 8, endTime, 10, "question", answers));
+		list.add(new LocationTask(Long.valueOf(100058), "Find dwarf with newspaper", Base64ImageCoder
+			.convertImage(getResources().getDrawable(R.drawable.mock_task_image)), "desctription", false, true, 8,
+			endTime, 6));
+		list.add(new ABCDTask(Long.valueOf(100059), "Dwarves", Base64ImageCoder.convertImage(getResources()
+			.getDrawable(R.drawable.mock_task_image)), "description", false, false, 8, endTime, 10, "question", answers));
+		for (int i = 100050; i <= 100056; i++) {
+			list.add(new ABCDTask(Long.valueOf(i), "Another generic task", Base64ImageCoder.convertImage(getResources()
+				.getDrawable(R.drawable.mock_task_image)), "description", true, false, 8, endTime, 10, "question",
+				answers));
+		}
+		list.add(new ABCDTask(Long.valueOf(100060), "Hidden", Base64ImageCoder.convertImage(getResources().getDrawable(
+			R.drawable.mock_task_image)), "description", false, true, 8, endTime, 10, "question", answers));
+		
+		return list;
+	}
+	
+	private ArrayList<PlayerTaskSpecific> getPlayerTaskSpecificListMock() {
+		
+		ArrayList<PlayerTaskSpecific> list = new ArrayList<PlayerTaskSpecific>();
+		
+		list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(100057), 3, false, true, true, "g",
+			PlayerTaskSpecific.ACTIVE));
+		list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(100058), 3, false, false, false, "",
+			PlayerTaskSpecific.INACTIVE));
+		for (int i = 100050; i <= 100056; i++) {
+			list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(i), 3, true, false, true, "",
+				PlayerTaskSpecific.FINISHED));
+		}
+		list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(100059), 3, true, false, false, "",
+			PlayerTaskSpecific.FINISHED));
+		list.add(new PlayerTaskSpecific(MOCK_PLAYER_EMAIL, Long.valueOf(100060), 3, true, false, false, "",
+			PlayerTaskSpecific.CANCELED));
+		
+		return list;
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		DatabaseInterface database = new Database(this);
+		for (int i = 100050; i <= 100058; i++) {
+			database.deletePlayerTaskSpecific(Long.valueOf(i), MOCK_PLAYER_EMAIL);
+			database.deleteTask(MOCK_GAME_ID, Long.valueOf(i));
+		}
+		database.deleteTask(MOCK_GAME_ID, Long.valueOf(100059));
+		database.deleteTask(MOCK_GAME_ID, Long.valueOf(100060));
+		database.deleteGameInfoAndShortInfo(MOCK_GAME_ID);
+		database.deletePlayer(MOCK_PLAYER_EMAIL);
 	}
 	
 	/************************
@@ -88,28 +175,27 @@ public class MainActivity extends SherlockListActivity {
 		return true;
 	}
 	
-
 	@Override
 	protected void onResume() {
-	    super.onResume();
-	    this.supportInvalidateOptionsMenu();
+		super.onResume();
+		this.supportInvalidateOptionsMenu();
 		Log.i(TAG, "onResume completed");
 	}
-
+	
 	private void configureLoginAction(Menu menu) {
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);
 		loginItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
+			
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				Log.i(TAG, "onMenuItemClick(): " + item.getTitleCondensed());
-					Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
-					startActivity(intent);
-					return true;
-				}
+				Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
+				startActivity(intent);
+				return true;
+			}
 		});
 	}
-
+	
 	private void configureSearchAction(Menu menu) {
 		final MenuItem moreItem = menu.findItem(R.id.menu_more);;
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);

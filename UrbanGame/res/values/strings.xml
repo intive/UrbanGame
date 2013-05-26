@@ -23,10 +23,14 @@
     <!-- TasksListActivity -->
     <string name="label_points2">" pts"</string>
     <string name="slash">/</string>
-    <string name="header_active_tasks">Active Tasks</string>
-    <string name="header_inactive_tasks">Inactive Tasks</string>
-    <string name="header_finished_tasks">Finished Tasks</string>
-    <string name="header_canceled_tasks">Canceled Tasks</string>
+    <string name="header_active_tasks">ACTIVE TASKS</string>
+    <string name="header_inactive_tasks">INACTIVE TASKS</string>
+    <string name="header_finished_tasks">FINISHED TASKS</string>
+    <string name="header_canceled_tasks">CANCELED TASKS</string>
+    <string name="text_view_hidden_tasks">Hidden tasks found:</string>
+    <string name="text_view_empty_active_list">There are no tasks at
+        this point. Try later or try to connect from different area of
+        the city to receive hidden bonus tasks.</string>
 
     <!-- ActionBar -->
     <string name="menu_search_hint">Filter games</string>
@@ -97,6 +101,7 @@
 
     <!-- Task -->
     <string name="label_taksRepeatable">repeatable</string>
+    <string name="label_taskNon_repeatable">non-repeatable</string>
     <string name="button_submit">Submit</string>
 
     <!-- ProfileActivity -->
