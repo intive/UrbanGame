@@ -21,7 +21,6 @@ import com.blstream.urbangame.menuitem.MenuItemHelper;
 import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
-
 public class MainActivity extends SherlockListActivity {
 	private static final String TAG = "MainActivity";
 	private GamesListAdapter adapter;
