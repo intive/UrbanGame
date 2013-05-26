@@ -282,9 +282,6 @@
   <data name="ToEnd" xml:space="preserve">
     <value>DO KOŃCA</value>
   </data>
-  <data name="ByOperatorUpCase" xml:space="preserve">
-    <value>OD</value>
-  </data>
   <data name="DayShortcut" xml:space="preserve">
     <value>d</value>
   </data>
@@ -299,5 +296,23 @@
   </data>
   <data name="ToEndLowCase" xml:space="preserve">
     <value>do końca</value>
+  </data>
+  <data name="AbandonGame" xml:space="preserve">
+    <value>Porzuć grę</value>
+  </data>
+  <data name="Operator" xml:space="preserve">
+    <value>Operator</value>
+  </data>
+  <data name="Games" xml:space="preserve">
+    <value>GAMES</value>
+  </data>
+  <data name="Messages" xml:space="preserve">
+    <value>wiadomości</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>zasilany przez</value>
+  </data>
+  <data name="Urban" xml:space="preserve">
+    <value>URBAN</value>
   </data>
 </root>
