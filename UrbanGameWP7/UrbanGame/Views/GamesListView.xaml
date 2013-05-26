@@ -16,10 +16,27 @@
     shell:SystemTray.IsVisible="False">
 
     <Grid x:Name="LayoutRoot">
-        <controls:Panorama Title="urban games" cal:Message.Attach="[Event SelectionChanged]=[Action ChangeAppbarButtons($eventArgs)]" >
-            <controls:PanoramaItem x:Name="MyGames"  Header="{Binding Path=AppResources.MyGames, Source={StaticResource LocalizedStrings}}" IsHitTestVisible="False" Foreground="Green">
+        <controls:Panorama cal:Message.Attach="[Event SelectionChanged]=[Action ChangeAppbarButtons($eventArgs)]">
+            <controls:Panorama.Background>
+                <ImageBrush ImageSource="/Images/MainPanorama.png"/>
+            </controls:Panorama.Background>
+            <controls:Panorama.Title>
+                <Grid Background="Transparent" Margin="0,100,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Column="1" FontSize="50" FontWeight="Bold" Margin="-30,0,0,0"/>
+                    <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Column="0" FontSize="50" Foreground="Green" FontWeight="Bold"/>
+                </Grid>
+            </controls:Panorama.Title>
+
+            <controls:PanoramaItem x:Name="MyGames"  Header="{Binding Path=AppResources.MyGames, Source={StaticResource LocalizedStrings}}" Foreground="Green">
                 <ScrollViewer>
-                    <Grid>
+                    <Grid Background="Transparent">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
@@ -28,7 +45,7 @@
                         <ListBox ItemsSource="{Binding UserActiveGames}" VerticalAlignment="Top" Grid.Row="0" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="0,5,0,0">
+                                    <Grid Margin="0,5,0,0" Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowFullDetails($dataContext)]">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition/>
@@ -38,7 +55,7 @@
                                                 <Setter Property="Margin" Value="0,0,5,5" />
                                             </Style>
                                         </Grid.Resources>
-                                        <Image Source="{Binding GameLogo}" Grid.Column="0" Width="100" Height="100" cal:Message.Attach="[Event Tap]=[Action ShowFullDetails($dataContext)]" Margin="5,0,5,0" VerticalAlignment="Top"/>
+                                        <Image Source="{Binding GameLogo}" Grid.Column="0" Width="100" Height="100" Margin="5,0,5,0" VerticalAlignment="Top"/>
                                         <StackPanel Grid.Column="1" Orientation="Vertical">
                                             <Grid>
                                                 <Grid.RowDefinitions>
@@ -47,17 +64,22 @@
                                                     <RowDefinition />
                                                     <RowDefinition />
                                                 </Grid.RowDefinitions>
-                                                <TextBlock Text="{Binding Name}" Grid.Row="0" Margin="0,0,0,5" FontSize="{StaticResource PhoneFontSizeLarge}" cal:Message.Attach="[Event Tap]=[Action ShowFullDetails($dataContext)]"/>
+                                                <TextBlock Text="{Binding Name}" Grid.Row="0" Margin="0,0,0,5" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="White"/>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                    <StackPanel.Resources>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="White" />
+                                                        </Style>
+                                                    </StackPanel.Resources>
                                                     <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                                     <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="2">
                                                     <StackPanel.Resources>
                                                         <Style TargetType="TextBlock">
-                                                            <Setter Property="Foreground" Value="Green"/>
                                                             <Setter Property="Margin" Value="0,0,5,5" />
                                                             <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeSmall}" />
+                                                            <Setter Property="Foreground" Value="Green" />
                                                         </Style>
                                                     </StackPanel.Resources>
                                                     <TextBlock Text="{Binding Points}"/>
@@ -70,9 +92,9 @@
                                                 <StackPanel Orientation="Horizontal" Grid.Row="3">
                                                     <StackPanel.Resources>
                                                         <Style TargetType="TextBlock">
-                                                            <Setter Property="Foreground" Value="Green"/>
                                                             <Setter Property="Margin" Value="0,0,5,5" />
                                                             <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeSmall}" />
+                                                            <Setter Property="Foreground" Value="Green" />
                                                         </Style>
                                                     </StackPanel.Resources>
                                                     <TextBlock Text="{Binding Path=AppResources.Start, Source={StaticResource LocalizedStrings}}" Visibility="{Binding GameStart, Converter={StaticResource DateToVisibilityConverter}}" />
@@ -89,7 +111,7 @@
                         <ListBox Grid.Row="2" ItemsSource="{Binding UserInactiveGames}" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="5,0,5,0">
+                                    <Grid Margin="5,0,5,0" Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition/>
@@ -99,15 +121,15 @@
                                                 <Setter Property="Margin" Value="0,0,5,5" />
                                             </Style>
                                         </Grid.Resources>
-                                        <Image Source="{Binding GameLogo}" Width="100" Height="100" Grid.Column="0" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]" Margin="0,0,5,0" VerticalAlignment="Top"/>
-                                        <Grid Grid.Column="1">
+                                        <Image Source="{Binding GameLogo}" Width="100" Height="100" Grid.Column="0" Margin="0,0,5,0" VerticalAlignment="Top"/>
+                                        <Grid Grid.Column="1" Background="Transparent">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding Name}" Grid.Row="0" FontSize="{StaticResource PhoneFontSizeLarge}" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]" Foreground="White"/>
+                                            <TextBlock Text="{Binding Name}" Grid.Row="0" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="White"/>
                                             <StackPanel Grid.Row="1">
                                                 <StackPanel.Resources>
                                                     <Style TargetType="TextBlock">
@@ -122,7 +144,7 @@
                                                     <Style TargetType="TextBlock">
                                                         <Setter Property="Margin" Value="0,0,5,5" />
                                                         <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeSmall}" />
-                                                        <Setter Property="Foreground" Value="Green"/>
+                                                        <Setter Property="Foreground" Value="Green" />
                                                     </Style>
                                                 </StackPanel.Resources>
                                                 <TextBlock Text="{Binding Points}"/>
@@ -144,11 +166,11 @@
             </controls:PanoramaItem>
 
             <controls:PanoramaItem x:Name="Nearby" Header="{Binding Path=AppResources.Nearby, Source={StaticResource LocalizedStrings}}" Foreground="Green">
-                <Grid>
-                    <ListBox ItemsSource="{Binding NearestGames}" VerticalAlignment="Top" Grid.Row="0" IsHitTestVisible="True" ItemContainerStyle="{StaticResource ItemStyle}">
+                <Grid Background="Transparent">
+                    <ListBox ItemsSource="{Binding NearestGames}" VerticalAlignment="Top" Grid.Row="0" ItemContainerStyle="{StaticResource ItemStyle}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="5,0,5,0">
+                                <Grid Margin="5,0,5,0" Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition />
@@ -159,28 +181,32 @@
                                             <Setter Property="Foreground" Value="White" />
                                         </Style>
                                     </Grid.Resources>
-
-                                    <Image Source="{Binding GameLogo}" Grid.Column="0" Width="100" Height="100" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]" Margin="0,0,5,0" VerticalAlignment="Top"/>
+                                    <Image Source="{Binding GameLogo}" Grid.Column="0" Width="100" Height="100" Margin="0,0,5,0" VerticalAlignment="Top"/>
                                     <StackPanel Grid.Column="1" Orientation="Vertical">
-                                        <Grid>
+                                        <Grid Background="Transparent">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto"/>
-                                                
+
                                             </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding Name}" Grid.Row="0" Margin="0,-3,0,0" FontSize="{StaticResource PhoneFontSizeLarge}" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]"/>
+                                            <TextBlock Text="{Binding Name}" Grid.Row="0" Margin="0,-3,0,0" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="White"/>
                                             <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                <StackPanel.Resources>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="White" />
+                                                    </Style>
+                                                </StackPanel.Resources>
                                                 <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                                 <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                             </StackPanel>
                                             <StackPanel Grid.Row="2" Orientation="Horizontal">
                                                 <StackPanel.Resources>
                                                     <Style TargetType="TextBlock">
-                                                        <Setter Property="Foreground" Value="Green" />
                                                         <Setter Property="Margin" Value="0,0,5,5" />
                                                         <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeSmall}" />
+                                                        <Setter Property="Foreground" Value="Green" />
                                                     </Style>
                                                 </StackPanel.Resources>
                                                 <TextBlock Text="{Binding Path=AppResources.Players, Source={StaticResource LocalizedStrings}}" />
@@ -190,9 +216,9 @@
                                             <StackPanel Orientation="Horizontal" Grid.Row="3">
                                                 <StackPanel.Resources>
                                                     <Style TargetType="TextBlock">
-                                                        <Setter Property="Foreground" Value="Green" />
                                                         <Setter Property="Margin" Value="0,0,5,5" />
                                                         <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeSmall}" />
+                                                        <Setter Property="Foreground" Value="Green" />
                                                     </Style>
                                                 </StackPanel.Resources>
                                                 <TextBlock Text="{Binding Path=AppResources.Start, Source={StaticResource LocalizedStrings}}" Visibility="{Binding GameStart, Converter={StaticResource DateToVisibilityConverter}}"/>
@@ -209,18 +235,18 @@
             </controls:PanoramaItem>
 
             <controls:PanoramaItem x:Name="MyAccount" Header="{Binding Path=AppResources.MyAccount, Source={StaticResource LocalizedStrings}}" Foreground="Green">
-                <Grid>
+                <Grid Background="Transparent">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding Path=AppResources.JoinOrLogIn, Source={StaticResource LocalizedStrings}}" Grid.Row="0" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}" Foreground="White"/>
-                    <Grid Margin="5,5,5,0">
+                    <Grid Margin="5,5,5,0" Background="Transparent">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="1" Orientation="Vertical" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" >
-                            <Grid>
+                            <Grid Background="Transparent">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>

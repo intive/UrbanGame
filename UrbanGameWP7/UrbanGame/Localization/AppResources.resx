@@ -322,4 +322,13 @@
   <data name="Operator" xml:space="preserve">
     <value>Operator</value>
   </data>
+  <data name="Games" xml:space="preserve">
+    <value>GAMES</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>powered by</value>
+  </data>
+  <data name="Urban" xml:space="preserve">
+    <value>URBAN</value>
+  </data>
 </root>

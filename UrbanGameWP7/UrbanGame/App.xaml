@@ -28,6 +28,7 @@
         <conv:OpositeDateToVisibilityConverter x:Key="OpositeDateToVisibilityConverter" />
         <conv:TaskEndConverter x:Key="TaskEndConverter" />
         <conv:ToUpperCaseConverter x:Key="ToUpperCaseConverter" />
+        <conv:DurationTimeConverter x:Key="DurationTimeConverter" />
         
         <Style x:Key="ItemStyle" TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

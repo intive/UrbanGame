@@ -19,7 +19,7 @@ namespace UrbanGame.ViewModels
         private string _activeSection;
 
         public GamesListViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                  IGameWebService gameWebService, IEventAggregator gameEventAggregator,IAppbarManager appbarManager)
+                                  IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
         {
             UserActiveGames = new BindableCollection<IGame>();
@@ -55,13 +55,13 @@ namespace UrbanGame.ViewModels
         public void Handle(GameChangedEvent e)
         {
             Task.Factory.StartNew(() =>
-                {
-                    IGame game = _gameWebService.GetGameInfo(e.Id);
+            {
+                IGame game = _gameWebService.GetGameInfo(e.Id);
 
-                    UpdateGame(UserActiveGames, game);
-                    UpdateGame(UserInactiveGames, game);
-                    UpdateGame(NearestGames, game);
-                });
+                UpdateGame(UserActiveGames, game);
+                UpdateGame(UserInactiveGames, game);
+                UpdateGame(NearestGames, game);
+            });
         }
         #endregion
 
@@ -270,7 +270,7 @@ namespace UrbanGame.ViewModels
 
         public void ChangeAppbarButtons(SelectionChangedEventArgs args)
         {
-            _activeSection=((FrameworkElement)args.AddedItems[0]).Name;
+            _activeSection = ((FrameworkElement)args.AddedItems[0]).Name;
             ChangeAppbarButtons();
         }
 
@@ -297,19 +297,19 @@ namespace UrbanGame.ViewModels
                 UserInactiveGames.Clear();
 
                 if (IsAuthorized)
-                {   
+                {
                     IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
 
                     UserActiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Joined)
                                                                          .OrderBy(g => g.GameEnd)
                                                                          .AsEnumerable());
 
-                    UserInactiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Ended || 
-                                                                                       g.GameState == GameState.Won || 
+                    UserInactiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Ended ||
+                                                                                       g.GameState == GameState.Won ||
                                                                                        g.GameState == GameState.Withdraw)
                                                                            .OrderByDescending(g => g.GameStart)
-                                                                           .AsEnumerable());                   
-                }                   
+                                                                           .AsEnumerable());
+                }
             });
         }
 
@@ -333,7 +333,7 @@ namespace UrbanGame.ViewModels
                 }
                 finally
                 {
-                    IsRefreshing = false;                        
+                    IsRefreshing = false;
                 }
             });
         }
@@ -345,18 +345,17 @@ namespace UrbanGame.ViewModels
 
         public void ShowFullDetails(IGame game)
         {
-            MessageBox.Show("dziala");
             _navigationService.UriFor<GameDetailsViewModel>().WithParam(g => g.GameId, game.Id).Navigate();
         }
 
         public void Search()
         {
-            
+
         }
 
         public async void LogoutOrLogin()
         {
-            
+
             if (IsAuthorized)
             {
                 _gameWebService.IsAuthorized = false;

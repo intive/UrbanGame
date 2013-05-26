@@ -269,6 +269,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GAMES.
+        /// </summary>
+        public static string Games {
+            get {
+                return ResourceManager.GetString("Games", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to start:.
         /// </summary>
         public static string GameStart {
@@ -566,6 +575,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to powered by.
+        /// </summary>
+        public static string PoweredBy {
+            get {
+                return ResourceManager.GetString("PoweredBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to prizes.
         /// </summary>
         public static string Prizes {
@@ -670,6 +688,15 @@ namespace UrbanGame.Localization {
         public static string Undefinied {
             get {
                 return ResourceManager.GetString("Undefinied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URBAN.
+        /// </summary>
+        public static string Urban {
+            get {
+                return ResourceManager.GetString("Urban", resourceCulture);
             }
         }
     }

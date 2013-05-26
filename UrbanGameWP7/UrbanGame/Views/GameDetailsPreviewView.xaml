@@ -16,109 +16,123 @@
     shell:SystemTray.IsVisible="True">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot">
         <!--Pivot Control-->
         <controls:Pivot>
+            <controls:Pivot.Background>
+                <ImageBrush ImageSource="/Images/PivoPage.png" />
+            </controls:Pivot.Background>
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
                     <ContentPresenter>
-                        <TextBlock Text="{Binding}" FontSize="60" Margin="0,8,0,-10" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding}" FontSize="60" Margin="0,8,0,-10" Foreground="Green" />
+                        </StackPanel>
                     </ContentPresenter>
                 </DataTemplate>
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.Title>
-                <TextBlock Text="URBAN GAMES" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,15,15,0" FontWeight="Bold" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="-30,15,15,0" FontWeight="Bold" Foreground="Green"/>
+                    <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Column="0" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,15,15,0" FontWeight="Bold" Foreground="White"/>
+                </Grid>
             </controls:Pivot.Title>
 
             <!--Pivot item one-->
             <controls:PivotItem Header="{Binding Path=AppResources.Overview, Source={StaticResource LocalizedStrings}}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-
-                    <!-- MAIN GAME DETAILS -->
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="TextTrimming" Value="WordEllipsis" />
-                            </Style>
-                        </Grid.Resources>
-
-                        <Image Width="130" Height="130" Margin="0,10,24,0" Source="{Binding Path=Game.GameLogo}" VerticalAlignment="Top" />
-
-                        <StackPanel Grid.Column="1" Orientation="Vertical">
-                            <TextBlock Text="{Binding Path=Game.Name}" FontSize="{StaticResource PhoneFontSizeLarge}" FontWeight="Bold" />
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Path=AppResources.ByOperatorUpCase, Source={StaticResource LocalizedStrings}}" 
-                                           Margin="0,0,10,0" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding Path=Game.OperatorName}" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <TextBlock Text="{Binding Path=Game.Localization}"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                <ScrollViewer>
+                    <Grid Background="Transparent">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Margin" Value="0,0,0,5" />
-                            </Style>
-                            <Style TargetType="StackPanel">
-                                <Setter Property="Margin" Value="0,5,0,5" />
-                            </Style>
-                        </Grid.Resources>
 
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=AppResources.GameType, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" FontWeight="Bold" />
-                            <TextBlock Text="{Binding Path=Game.GameType, Converter={StaticResource GameTypeConverter}}" />
-                        </StackPanel>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=AppResources.PlayersUPCase, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" FontWeight="Bold" />
-                            <TextBlock Text="{Binding Path=Game.NumberOfPlayers}" />
-                            <TextBlock Text="{Binding Path=Game.NumberOfSlots, Converter={StaticResource IntToSlashIntConverter}}"/>
-                        </StackPanel>
-                        <StackPanel Grid.Row="2" Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=AppResources.Duration, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" FontWeight="Bold" />
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <StackPanel Grid.Row="0" Margin="0,0,0,0" Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Path=Game.GameStart, Converter={StaticResource GameStartConverter}, ConverterParameter=start}"/>
-                                    <TextBlock Text="-"/>
+                        <!-- MAIN GAME DETAILS -->
+                        <Grid Grid.Row="0" Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextTrimming" Value="WordEllipsis" />
+                                    <Setter Property="Foreground" Value="White" />
+                                </Style>
+                            </Grid.Resources>
+
+                            <Image Width="130" Height="130" Margin="0,10,24,0" Source="{Binding Path=Game.GameLogo}" VerticalAlignment="Top" />
+
+                            <StackPanel Grid.Column="1" Orientation="Vertical">
+                                <TextBlock Text="{Binding Path=Game.Name}" FontSize="{StaticResource PhoneFontSizeLarge}" FontWeight="Bold" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path=AppResources.ByOperatorUpCase, Source={StaticResource LocalizedStrings}}" 
+                                           Margin="0,0,10,0" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center" Foreground="White"/>
+                                    <TextBlock Text="{Binding Path=Game.OperatorName}" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center" Foreground="White"/>
                                 </StackPanel>
-                                <TextBlock Grid.Row="1" Text="{Binding Path=Game.GameEnd, Converter={StaticResource GameStartConverter}}"/>
-                            </Grid>
-                        </StackPanel>
-                        <StackPanel Grid.Row="3" Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=AppResources.Difficulty, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" FontWeight="Bold" />
-                            <TextBlock Text="{Binding Path=Game.Difficulty, Converter={StaticResource DifficultyConverter}}" />
-                        </StackPanel>
-                        <!-- DESCRIPTION -->
-                        <ScrollViewer Grid.Row="4">
-                            <TextBlock Text="{Binding Path=Game.Description}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMedium}"/>
-                        </ScrollViewer>
+                                <TextBlock Text="{Binding Path=Game.Localization}" Foreground="White"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Row="1" Margin="0,10,0,0" Background="Transparent">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Margin" Value="0,0,0,5" />
+                                    <Setter Property="Foreground" Value="White" />
+                                </Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Margin" Value="0,5,0,5" />
+                                </Style>
+                            </Grid.Resources>
+
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=AppResources.GameType, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" FontWeight="Bold" />
+                                <TextBlock Text="{Binding Path=Game.GameType, Converter={StaticResource GameTypeConverter}}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=AppResources.PlayersUPCase, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" FontWeight="Bold" />
+                                <TextBlock Text="{Binding Path=Game.NumberOfPlayers}" />
+                                <TextBlock Text="{Binding Path=Game.NumberOfSlots, Converter={StaticResource IntToSlashIntConverter}}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=AppResources.Duration, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" FontWeight="Bold" />
+                                <Grid Background="Transparent">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0" Margin="0,0,0,0" Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Path=Game.GameStart, Converter={StaticResource GameStartConverter}, ConverterParameter=start}"/>
+                                        <TextBlock Text="-"/>
+                                    </StackPanel>
+                                    <TextBlock Grid.Row="1" Text="{Binding Path=Game.GameEnd, Converter={StaticResource GameStartConverter}}"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=AppResources.Difficulty, Source={StaticResource LocalizedStrings}}" Margin="0,0,10,0" FontWeight="Bold" />
+                                <TextBlock Text="{Binding Path=Game.Difficulty, Converter={StaticResource DifficultyConverter}}" />
+                            </StackPanel>
+                            <!-- DESCRIPTION -->
+                            <TextBlock Grid.Row="4" Text="{Binding Path=Game.Description}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMedium}"/>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </ScrollViewer>
             </controls:PivotItem>
 
             <!--Pivot item two-->
             <controls:PivotItem Header="{Binding Path=AppResources.Prizes, Source={StaticResource LocalizedStrings}}">
-                <ScrollViewer Margin="14,0,0,0">
+                <ScrollViewer Margin="14,0,0,0" Background="Transparent">
                     <TextBlock Text="{Binding Path=Game.Prizes}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeLarge}" LineHeight="50" LineStackingStrategy="BlockLineHeight"/>
                 </ScrollViewer>
             </controls:PivotItem>

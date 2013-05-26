@@ -20,6 +20,7 @@ namespace UrbanGame.ViewModels
                                     IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
         {
+            _appbarManager = appbarManager;
         }
 
         protected override void OnViewReady(object view)
@@ -31,6 +32,7 @@ namespace UrbanGame.ViewModels
 
         private List<AppbarItem> BasicAppbar = new List<AppbarItem>()
         {
+            new AppbarItem() {  Text = Localization.AppResources.AbandonGame,Message="AbandonGame" } 
         };
 
         private List<AppbarItem> DescriptionAppbar = new List<AppbarItem>()
@@ -185,9 +187,9 @@ namespace UrbanGame.ViewModels
 
         #region GameHighScores
 
-        private BindableCollection<IHighScore> _gameHighScores;
+        private BindableCollection<PositionedHighScores> _gameHighScores;
 
-        public BindableCollection<IHighScore> GameHighScores
+        public BindableCollection<PositionedHighScores> GameHighScores
         {
             get
             {
@@ -229,6 +231,11 @@ namespace UrbanGame.ViewModels
 
         #region operations
 
+        public void ShowTask(ITask task)
+        {
+            _navigationService.UriFor<TaskViewModel>().WithParam(t => t.TaskId, task.Id).Navigate();
+        }
+
         public void ChangeAppbarButtons(SelectionChangedEventArgs args)
         {
             _activeSection = ((FrameworkElement)args.AddedItems[0]).Name;
@@ -239,20 +246,20 @@ namespace UrbanGame.ViewModels
         {
             if (_activeSection == "Description")
             {
-                _appbarManager.ConfigureAppbar(DescriptionAppbar);
+                //_appbarManager.ConfigureAppbar(DescriptionAppbar);
             }
             else
             {
-                _appbarManager.ConfigureAppbar(BasicAppbar);
+                //_appbarManager.ConfigureAppbar(BasicAppbar);
             }
         }
 
-        public void ShowMore()
+        public void ShowMoreDescription()
         {
             ShowsMore = true;
         }
 
-        public void ShowLess()
+        public void ShowLessDescription()
         {
             ShowsMore = false;
         }
@@ -269,9 +276,15 @@ namespace UrbanGame.ViewModels
         {
             IQueryable<IHighScore> highScores = _unitOfWorkLocator().GetRepository<IHighScore>().All();
 
-            GameHighScores = new BindableCollection<IHighScore>(highScores.Where(h => h.Game.Id == GameId)
+            BindableCollection<IHighScore> GameHighScoresTemp = new BindableCollection<IHighScore>(highScores.Where(h => h.Game.Id == GameId)
                                                                                 .OrderBy(h => h.Points)
                                                                                 .AsEnumerable());
+
+            GameHighScores = new BindableCollection<PositionedHighScores>();
+            for (int i = 0; i < GameHighScoresTemp.Count; i++)
+            {
+                GameHighScores.Add(new PositionedHighScores() { Position = i + 1, Entity = GameHighScoresTemp.ElementAt(i) });
+            }
         }
 
         public void RefreshActiveTasks()
