@@ -65,9 +65,12 @@ namespace UrbanGame.ViewModels
         private void SetAppBarContent()
         {
             Deployment.Current.Dispatcher.BeginInvoke(() =>
-            {
+            {                
                 if (_gameWebService.IsAuthorized)
                 {
+                    if (Game == null)
+                        RefreshGame().Wait();
+
                     _appbarManager.ShowAppbar();
                     if (Game.GameState == GameState.Joined)
                     {
@@ -195,13 +198,13 @@ namespace UrbanGame.ViewModels
             if (MessageBox.Show("join in", "join in", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
-                {                   
+                {
+                    var gameToDelete = uow.GetRepository<IGame>().All().FirstOrDefault(x => x.Id == Game.Id);
+
                     //remove a game if stored in the db(it can be inactive)
-                    if (uow.GetRepository<IGame>().All().ToArray<IGame>().Count() > 0)
-                    {
-                        var gameToDelete = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
+                    if (gameToDelete != null)                        
                         uow.GetRepository<IGame>().MarkForDeletion(gameToDelete);
-                    }
+                   
                     //store game into the db
                     var games = uow.GetRepository<IGame>();                   
                     games.MarkForAdd(CreateInstance(GameState.Joined, uow));
