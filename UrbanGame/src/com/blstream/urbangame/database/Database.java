@@ -628,9 +628,11 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		Cursor cursor = db.query(USER_TABLE_NAME, playerColumns, USER_KEY_EMAIL + "=?", new String[] { email }, null,
 			null, null, null);
 		
-		Player player;
-		if (cursor != null && cursor.moveToFirst()) {
-			player = new Player(cursor.getString(0), cursor.getString(3), cursor.getString(1), cursor.getString(2));
+		Player player = null;
+		if (cursor != null) {
+		    if (cursor.moveToFirst()) {
+		        player = new Player(cursor.getString(0), cursor.getString(3), cursor.getString(1), cursor.getString(2));
+		    }
 			cursor.close();
 		}
 		else {
@@ -708,10 +710,12 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			USER_GAMES_SPECIFIC_KEY_EMAIL + "=? AND " + USER_GAMES_SPECIFIC_KEY_GAME_ID + "=?", new String[] { email,
 				gameID.longValue() + "" }, null, null, null, null);
 		
-		PlayerGameSpecific playerGameSpecific;
-		if (cursor != null && cursor.moveToFirst()) {
-			playerGameSpecific = new PlayerGameSpecific(cursor.getInt(2), cursor.getString(0), cursor.getLong(1),
-				cursor.getInt(3));
+		PlayerGameSpecific playerGameSpecific = null;
+		if (cursor != null) {
+		        if(cursor.moveToFirst()) {
+		            playerGameSpecific = new PlayerGameSpecific(cursor.getInt(2), cursor.getString(0), cursor.getLong(1),
+		                    cursor.getInt(3));
+		        }
 			cursor.close();
 		}
 		else {

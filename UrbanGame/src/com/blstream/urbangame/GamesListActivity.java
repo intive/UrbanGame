@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import android.R.bool;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class GamesListActivity extends MenuListActivity {
 	private static final String TAG = "GamesListActivity";
 	
 	private GamesListAdapter adapter;
+	private static boolean initFinished = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,10 +42,13 @@ public class GamesListActivity extends MenuListActivity {
 		setSupportProgressBarVisibility(true);
 		
 		// FIXME remove mock data when it is no longer needed
-		adapter = new GamesListAdapter(this, R.layout.list_item_game, mockData());
-		setListAdapter(adapter);
-		// FIXME remove mock when it is no longer needed
-		putMockDataToDatabase();
+    		adapter = new GamesListAdapter(this, R.layout.list_item_game, mockData());
+    		setListAdapter(adapter);
+    		// FIXME remove mock when it is no longer needed
+    		if (!initFinished) {
+        		putMockDataToDatabase();
+        		initFinished = true;
+    		}
 	}
 	
 	/************************
@@ -78,8 +83,8 @@ public class GamesListActivity extends MenuListActivity {
 		Date endDate = new Date(2013, 8, 5);
 		database.insertGameShortInfo(new UrbanGameShortInfo(MOCK_GAME_ID, "Looking for dwarwes", "City hall", 5, 100,
 			startDate, endDate, true, "Wroclaw", null, null, "details"));
-		database.insertUser(new Player(MOCK_PLAYER_EMAIL, "", "Name", ""));
-		database.setLoggedPlayer(MOCK_PLAYER_EMAIL);
+		//database.insertUser(new Player(MOCK_PLAYER_EMAIL, "", "Name", ""));
+		//database.setLoggedPlayer(MOCK_PLAYER_EMAIL);
 		for (Task element : getMockTaskList()) {
 			database.insertTaskForGame(MOCK_GAME_ID, element);
 		}

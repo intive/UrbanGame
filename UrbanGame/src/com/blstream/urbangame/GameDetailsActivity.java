@@ -3,6 +3,7 @@ package com.blstream.urbangame;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
+import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.example.ExampleData;
 
@@ -26,6 +28,8 @@ public class GameDetailsActivity extends MenuActivity implements OnClickListener
 	public static final String GAME_KEY = "gameID";
 	public static final Long GAME_NOT_FOUND = -1L;
 	public static boolean isDialogCompleted = true;
+	private static boolean isSomeoneLogged = false;
+	private static boolean isPlayerAParticipantOfCurrentGame = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +38,44 @@ public class GameDetailsActivity extends MenuActivity implements OnClickListener
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		Button joinLeaveButton = (Button) (findViewById(R.id.buttonJoinLeaveGame));
 		joinLeaveButton.setOnClickListener(this);
+		
 		if (!isDialogCompleted) {
 			showDialog();
 		}
+		
 	}
 	
-	@Override
-	protected void onResume() {
-		super.onResume();
+	//setting button text
+	private void setJoinLeaveButtonText(Button joinLeaveButton) {
+		if (isPlayerAParticipantOfCurrentGame) {
+			joinLeaveButton.setText(R.string.button_leave);
+		}
+		else {
+			joinLeaveButton.setText(R.string.button_join);
+		}
+	}
+	
+	//checks is player a participant of current game
+	private void checkIsPlayerIsLogedAndIsParticipantOfCurrentGame(Long idOfSelectedGame) {
+		DatabaseInterface database = new Database(getApplicationContext());
+		String loggedPlayerEmail = database.getLoggedPlayerID();
+		if (loggedPlayerEmail != null) {
+			isSomeoneLogged = true;
+			PlayerGameSpecific playerGameSpecific = database.getUserGameSpecific(loggedPlayerEmail, idOfSelectedGame);
+			if (playerGameSpecific != null) {// if player has that it means he has joined in game previously
+				isPlayerAParticipantOfCurrentGame = true;
+				return;
+			}
+		}
+		else {
+			isSomeoneLogged = false;
+		}
+		isPlayerAParticipantOfCurrentGame = false;
+		database.closeDatabase();
+	}
+	
+	//gets game id from intent
+	private Long getSelectedGameID() {
 		Intent intent = getIntent();
 		Long idOfSelectedGame = GAME_NOT_FOUND;
 		if (intent != null) {
@@ -50,6 +84,15 @@ public class GameDetailsActivity extends MenuActivity implements OnClickListener
 				idOfSelectedGame = extras.getLong(GAME_KEY, GAME_NOT_FOUND);
 			}
 		}
+		return idOfSelectedGame;
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Long idOfSelectedGame = getSelectedGameID();
+		checkIsPlayerIsLogedAndIsParticipantOfCurrentGame(idOfSelectedGame); //after this step we know is player logged and is he participates a game in class's fields isSomeoneLogged and isPlayerAParticipantOfCurrentGame 
+		setJoinLeaveButtonText((Button) findViewById(R.id.buttonJoinLeaveGame));
 		
 		/* FIXME 
 		 * If clause below should be rewritten, when listview will be finished.
@@ -148,29 +191,126 @@ public class GameDetailsActivity extends MenuActivity implements OnClickListener
 		isDialogCompleted = false;
 		Log.i("UrbanGame", "Clicked view: " + v);
 		if (v == findViewById(R.id.buttonJoinLeaveGame)) {
-			showDialog();
+			if (!isPlayerAParticipantOfCurrentGame) {//join game
+				Log.i(TAG, "Joining the game button clicked");
+				showDialog();
+			}
+			else { //leave game
+				Log.i(TAG, "Leaving the game");
+				showDialog();
+			}
 		}
 	}
 	
 	public void showDialog() {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-		dialogBuilder.setTitle(R.string.dialog_join_title);
-		dialogBuilder.setMessage(R.string.dialog_join_message);
+		dialogBuilder.setTitle(!isPlayerAParticipantOfCurrentGame ? R.string.dialog_join_title
+			: R.string.dialog_leave_title);
+		dialogBuilder.setMessage(R.string.dialog_join_leave_message);
 		dialogBuilder.setCancelable(false);
-		dialogBuilder.setPositiveButton(R.string.dialog_join_positive_button, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Log.i("UrbanGame", "Dialog: clicked positibe button");
-				isDialogCompleted = true;
-			}
-		});
-		dialogBuilder.setNegativeButton(R.string.dialog_join_negative_button, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Log.i("UrbanGame", "Dialog: clicked negative button");
-				isDialogCompleted = true;
-			}
-		});
+		dialogBuilder.setPositiveButton(R.string.dialog_join_leave_positive_button,
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Log.i("UrbanGame", "Dialog: clicked positive button");
+					isDialogCompleted = true;
+					
+					if (isSomeoneLogged) {
+						if (isPlayerAParticipantOfCurrentGame) {
+							leavePlayerFromGame();
+						}
+						else {
+							Log.i(TAG, "There's already logged player");
+							joinPlayerToTheGame();
+						}
+					}
+					else {
+						Log.i(TAG, "There's no one logged");
+						//starts login activity
+						Intent intent = new Intent(GameDetailsActivity.this, LoginRegisterActivity.class);
+						intent.putExtra(LoginRegisterActivity.ACTION_AFTER_LOGIN,
+							LoginRegisterActivity.ACTION_RETURN_LOGIN_RESULT);
+						startActivityForResult(intent, LoginRegisterActivity.LOGIN_REQUEST_CODE);
+					}
+				}
+			});
+		dialogBuilder.setNegativeButton(R.string.dialog_join_leave_negative_button,
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Log.i("UrbanGame", "Dialog: clicked negative button");
+					isDialogCompleted = true;
+				}
+			});
 		dialogBuilder.show();
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == LoginRegisterActivity.LOGIN_REQUEST_CODE) {
+			if (resultCode == Activity.RESULT_OK) {
+				Log.i(TAG, "Logged properly");
+				joinPlayerToTheGame();
+			}
+			else if (resultCode == Activity.RESULT_CANCELED) {
+				Log.i(TAG, "NOT Logged properly");
+			}
+		}
+	}
+	
+	private void joinPlayerToTheGame() {
+		Log.i(TAG, "Joning the game");
+		// FIXME invocation to server should occur here
+		//******************//
+		//					//
+		//	   M O C K		//
+		//					//
+		//******************//
+		DatabaseInterface db = new Database(getApplicationContext());
+		String playerEmail = db.getLoggedPlayerID();
+		Long gameID = getSelectedGameID();
+		Log.i(TAG, "Sending information to server that player " + playerEmail + " want to join the game " + gameID);
+		
+		// FIXME code below should be invoked after positive response from server [move that code when appropriate class is ready]
+		int rankFromServer = 10;
+		PlayerGameSpecific playerGameInfo = new PlayerGameSpecific(rankFromServer, playerEmail, gameID);
+		db.insertUserGameSpecific(playerGameInfo);
+		db.closeDatabase();
+		//******************//
+		//					//
+		//	M O C K  E N D	//
+		//					//
+		//******************//
+		isPlayerAParticipantOfCurrentGame = true;
+		startActivityAfterCompletedJoinAction();
+	}
+	
+	private void startActivityAfterCompletedJoinAction() {
+		Intent intent = new Intent(GameDetailsActivity.this, MyGamesActivity.class);
+		startActivity(intent);
+	}
+	
+	private void leavePlayerFromGame() {
+		// FIXME invocation to server should occur here
+		//******************//
+		//					//
+		//	   M O C K		//
+		//					//
+		//******************//
+		DatabaseInterface db = new Database(getApplicationContext());
+		String playerEmail = db.getLoggedPlayerID();
+		Long gameID = getSelectedGameID();
+		Log.i(TAG, "Sending information to server that player " + playerEmail + " leaved the game " + gameID);
+		
+		// FIXME code below should be invoked after positive response from server [move that code when appropriate class is ready]
+		db.deleteUserGameSpecific(playerEmail, gameID);
+		db.closeDatabase();
+		((Button) findViewById(R.id.buttonJoinLeaveGame)).setText(R.string.button_join);
+		//******************//
+		//					//
+		//	M O C K  E N D	//
+		//					//
+		//******************//
+		isPlayerAParticipantOfCurrentGame = false;
 	}
 }
