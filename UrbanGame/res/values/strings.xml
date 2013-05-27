@@ -39,7 +39,7 @@
     <string name="menu_refresh">Refresh</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_feedback">Send feedback</string>
-    <string name="menu_logout">Logout</string> 
+    <string name="menu_logout">Logout</string>
     <string name="menu_login">Login</string>
     <string name="menu_messages">Messages</string>
     <string name="menu_more">More</string>
@@ -131,12 +131,11 @@
     <string name="checkbox_show_password">Show password</string>
     <string name="button_register">Register</string>
     <string name="button_login">Login</string>
+    <string name="button_correct">Correct</string>
     <string name="dialog_register_title">Account registered</string>
-    <string name="dialog_register_message">An e-mail with verification link has been sent to E-mail</string>
-    <string name="dialog_register_button_positive">OK</string>
-    <string name="invalid_data_tittle">Invalid data</string>
-    <string name="invalid_data_message">E-mail or password is incorrect</string>
-    <string name="invalid_data_button">OK</string>
+    <string name="dialog_register_message">Verification link has been sent your email address</string>
+    <string name="dialog_data_invalid_tittle">Invalid data</string>
+    <string name="dialog_data_invalid_message">Some of provided data is incorrect</string>
     <string name="tabTitle_login">LOGIN</string>
     <string name="tabTitle_register">CREATE NEW ACCOUNT</string>
 
@@ -147,9 +146,5 @@
         <item>Gallery</item>
         <item>Camera</item>
     </string-array>
-
-    <string name="invalid_data_tittle">Invalid data</string>
-    <string name="invalid_data_message">E-mail or password is incorrect</string>
-    <string name="invalid_data_button">OK</string>
 
 </resources>

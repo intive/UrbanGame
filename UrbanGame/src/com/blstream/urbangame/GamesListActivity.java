@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -28,10 +27,11 @@ import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
-import com.blstream.urbangame.menuitem.MenuItemHelper;
+import com.blstream.urbangame.session.LoginManager;
 
-public class MainActivity extends SherlockListActivity {
-	private static final String TAG = "MainActivity";
+public class GamesListActivity extends MenuListActivity {
+	private static final String TAG = "GamesListActivity";
+	
 	private GamesListAdapter adapter;
 	
 	@Override
@@ -157,21 +157,21 @@ public class MainActivity extends SherlockListActivity {
 		Long selectedGameId = (game == null ? -1 : game.getID());
 		bundle.putLong(GameDetailsActivity.GAME_KEY, selectedGameId);
 		
-		Intent intent = new Intent(MainActivity.this, GameDetailsActivity.class);
+		Intent intent = new Intent(GamesListActivity.this, GameDetailsActivity.class);
 		intent.putExtras(bundle);
 		startActivity(intent);
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_games_list, menu);
-		menuInflater.inflate(R.menu.top_bar_menu_more, menu);
-		Log.i(TAG, "onCreateOptionsMenu");
-		MenuItemHelper.initLogoutMenuItem(this, menu);
 		
-		configureSearchAction(menu);
 		configureLoginAction(menu);
+		configureSearchAction(menu);
+		
 		return true;
 	}
 	
@@ -185,13 +185,21 @@ public class MainActivity extends SherlockListActivity {
 	private void configureLoginAction(Menu menu) {
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);
 		loginItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
+
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				Log.i(TAG, "onMenuItemClick(): " + item.getTitleCondensed());
-				Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
+				Intent intent = getLoginIntent();
 				startActivity(intent);
 				return true;
+			}
+			
+			private Intent getLoginIntent() {
+				LoginManager loginManager = LoginManager.getInstance(GamesListActivity.this);
+				boolean isUserLoggedIn = loginManager.isUserLoggedIn();
+				Intent intent = new Intent(GamesListActivity.this, isUserLoggedIn ? MyGamesActivity.class
+					: LoginRegisterActivity.class);
+				return intent;
 			}
 		});
 	}
@@ -200,7 +208,7 @@ public class MainActivity extends SherlockListActivity {
 		final MenuItem moreItem = menu.findItem(R.id.menu_more);;
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);
 		
-		MenuItem searchItem = menu.findItem(R.id.menu_search);
+		MenuItem searchItem = menu.findItem(R.id.menu_list_search);
 		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
 			@Override
 			public boolean onMenuItemActionExpand(MenuItem item) {
@@ -229,16 +237,5 @@ public class MainActivity extends SherlockListActivity {
 				return true;
 			}
 		});
-	}
-	
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		int itemId = item.getItemId();
-		switch (itemId) {
-			case R.id.menu_logout:
-				MenuItemHelper.invokeActionLogoutMenuItem(this);
-				break;
-		}
-		return true;
 	}
 }

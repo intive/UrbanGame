@@ -4,6 +4,7 @@
     <item
         android:id="@+id/menu_more"
         android:icon="@drawable/abs__ic_menu_moreoverflow_holo_light"
+        android:orderInCategory="1"
         android:showAsAction="always"
         android:title="@string/menu_more">
         <menu>
@@ -26,7 +27,7 @@
             <item
                 android:id="@+id/menu_logout"
                 android:showAsAction="always|withText"
-                android:title="@string/menu_logout"/> 
+                android:title="@string/menu_logout"/>
         </menu>
     </item>
 
