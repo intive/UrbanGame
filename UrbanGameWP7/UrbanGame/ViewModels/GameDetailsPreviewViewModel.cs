@@ -68,11 +68,8 @@ namespace UrbanGame.ViewModels
             {                
                 if (_gameWebService.IsAuthorized)
                 {
-                    if (Game == null)
-                        RefreshGame().Wait();
-
                     _appbarManager.ShowAppbar();
-                    if (Game.GameState == GameState.Joined)
+                    if (Game != null && Game.GameState == GameState.Joined)
                     {
                         _appbarManager.ConfigureAppbar(AuthorizedAndJoinedAppbar);
                     }
@@ -190,6 +187,8 @@ namespace UrbanGame.ViewModels
                 {
                     Game = _gameWebService.GetGameInfo(GameId);
                 }
+
+                SetAppBarContent();
             });
         }
 
