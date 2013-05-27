@@ -39,11 +39,11 @@ public class MainActivity extends SherlockListActivity {
 		super.onCreate(savedInstanceState);
 		setSupportProgressBarVisibility(true);
 		
-		// FIXME remove mock data when it is no longer needed
-		adapter = new GamesListAdapter(this, R.layout.list_item_game, mockData());
-		setListAdapter(adapter);
 		// FIXME remove mock when it is no longer needed
 		putMockDataToDatabase();
+		// FIXME remove mock data when it is no longer needed
+		adapter = new GamesListAdapter(this, R.layout.list_item_game);
+		setListAdapter(adapter);
 	}
 	
 	/************************
@@ -76,16 +76,20 @@ public class MainActivity extends SherlockListActivity {
 		DatabaseInterface database = new Database(this);
 		Date startDate = new Date(2013, 7, 5);
 		Date endDate = new Date(2013, 8, 5);
-		database.insertGameShortInfo(new UrbanGameShortInfo(MOCK_GAME_ID, "Looking for dwarwes", "City hall", 5, 100,
-			startDate, endDate, true, "Wroclaw", null, null, "details"));
-		database.insertUser(new Player(MOCK_PLAYER_EMAIL, "", "Name", ""));
-		database.setLoggedPlayer(MOCK_PLAYER_EMAIL);
-		for (Task element : getMockTaskList()) {
-			database.insertTaskForGame(MOCK_GAME_ID, element);
+		if (database.insertUser(new Player(MOCK_PLAYER_EMAIL, "", "Name", ""))) {
+			database.insertGameShortInfo(new UrbanGameShortInfo(MOCK_GAME_ID, "Looking for dwarwes", "City hall", 5,
+				100, startDate, endDate, true, "Wroclaw", Base64ImageCoder.convertImage(getResources().getDrawable(
+					R.drawable.ic_launcher_big)), Base64ImageCoder.convertImage(getResources().getDrawable(
+					R.drawable.mock_logo_operator)), "details"));
+			database.setLoggedPlayer(MOCK_PLAYER_EMAIL);
+			for (Task element : getMockTaskList()) {
+				database.insertTaskForGame(MOCK_GAME_ID, element);
+			}
+			for (PlayerTaskSpecific element : getPlayerTaskSpecificListMock()) {
+				database.insertPlayerTaskSpecific(element);
+			}
 		}
-		for (PlayerTaskSpecific element : getPlayerTaskSpecificListMock()) {
-			database.insertPlayerTaskSpecific(element);
-		}
+		database.closeDatabase();
 	}
 	
 	private ArrayList<Task> getMockTaskList() {
@@ -134,7 +138,7 @@ public class MainActivity extends SherlockListActivity {
 	public void onDestroy() {
 		super.onDestroy();
 		DatabaseInterface database = new Database(this);
-		for (int i = 100050; i <= 100058; i++) {
+		for (int i = 100050; i <= 100060; i++) {
 			database.deletePlayerTaskSpecific(Long.valueOf(i), MOCK_PLAYER_EMAIL);
 			database.deleteTask(MOCK_GAME_ID, Long.valueOf(i));
 		}
@@ -142,6 +146,7 @@ public class MainActivity extends SherlockListActivity {
 		database.deleteTask(MOCK_GAME_ID, Long.valueOf(100060));
 		database.deleteGameInfoAndShortInfo(MOCK_GAME_ID);
 		database.deletePlayer(MOCK_PLAYER_EMAIL);
+		database.closeDatabase();
 	}
 	
 	/************************
