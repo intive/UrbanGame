@@ -18,7 +18,7 @@ public class DatabaseGameSpecificUpdateTest extends AndroidTestCase {
 		if (database == null) {
 			database = new Database(mContext);
 		}
-		playerSpecific = new PlayerGameSpecific(12, "em@em.em", 2L, PlayerGameSpecific.GAME_ACTIVE);
+		playerSpecific = new PlayerGameSpecific(12, "em@em.em", 2L, PlayerGameSpecific.GAME_ACTIVE, "email changed");
 	}
 	
 	@Override
@@ -31,7 +31,7 @@ public class DatabaseGameSpecificUpdateTest extends AndroidTestCase {
 	/* ------------------------ UPDATE ------------------------ */
 	public void testUpdateAll() {
 		database.insertUserGameSpecific(playerSpecific);
-		playerSpecific = new PlayerGameSpecific(1, "em@em.em", 2L, PlayerGameSpecific.GAME_OBSERVED);
+		playerSpecific = new PlayerGameSpecific(1, "em@em.em", 2L, PlayerGameSpecific.GAME_OBSERVED, "city changed");
 		database.updateUserGameSpecific(playerSpecific);
 		PlayerGameSpecific p = database.getUserGameSpecific("em@em.em", 2L);
 		assertNotNull(p);
@@ -39,11 +39,12 @@ public class DatabaseGameSpecificUpdateTest extends AndroidTestCase {
 		assertEquals(2L, p.getGameID().longValue());
 		assertEquals(PlayerGameSpecific.GAME_OBSERVED, p.getState().intValue());
 		assertEquals(1, p.getRank().intValue());
+		assertEquals("city changed", p.getChanges());
 	}
 	
 	public void testUpdateNothing() {
 		database.insertUserGameSpecific(playerSpecific);
-		playerSpecific = new PlayerGameSpecific(null, "em@em.em", 2L, null);
+		playerSpecific = new PlayerGameSpecific(null, "em@em.em", 2L, null, null);
 		database.updateUserGameSpecific(playerSpecific);
 		PlayerGameSpecific p = database.getUserGameSpecific("em@em.em", 2L);
 		assertNotNull(p);
@@ -51,6 +52,7 @@ public class DatabaseGameSpecificUpdateTest extends AndroidTestCase {
 		assertEquals(2L, p.getGameID().longValue());
 		assertEquals(PlayerGameSpecific.GAME_ACTIVE, p.getState().intValue());
 		assertEquals(12, p.getRank().intValue());
+		assertEquals("email changed", p.getChanges());
 	}
 	/* ------------------------ UPDATE END ------------------------ */
 }
