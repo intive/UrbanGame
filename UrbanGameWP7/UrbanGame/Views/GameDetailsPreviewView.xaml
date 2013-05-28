@@ -20,7 +20,7 @@
         <!--Pivot Control-->
         <controls:Pivot>
             <controls:Pivot.Background>
-                <ImageBrush ImageSource="/Images/PivoPage.png" />
+                <ImageBrush ImageSource="/Images/PivotPage.png" />
             </controls:Pivot.Background>
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>

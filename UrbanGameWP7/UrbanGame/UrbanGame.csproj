@@ -194,7 +194,9 @@
     <Content Include="Images\appbarSearch.png" />
     <Content Include="Images\GameviewPanorama.png" />
     <Content Include="Images\MainPanorama.png" />
-    <Content Include="Images\PivotPage.png" />
+    <Content Include="Images\PivotPage.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
