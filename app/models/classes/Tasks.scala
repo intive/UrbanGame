@@ -42,5 +42,6 @@ object Tasks extends Table[TasksDetails]("TASKS") {
 }
 
 trait Tasks { this: ImplicitSession =>
-
+  def getRowsNo: Int = (for {t <- Tasks} yield t.length).first
+  def getGameTasksNo(gid: Int): Int = (for {t <- Tasks if t.gameId === gid} yield t.length).first
 }

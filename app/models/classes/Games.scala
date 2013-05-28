@@ -19,10 +19,9 @@ import play.api.db.slick.DB
 import play.api.db.slick.Config.driver.simple._
 import java.sql.Timestamp
 import scala.language.postfixOps
-import models.mutils._
 import com.github.tototoshi.slick.JodaSupport._
 import com.github.nscala_time.time.Imports._
-
+import models.mutils._
 
 object Games extends Table[GamesDetails]("GAMES") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
@@ -65,6 +64,9 @@ object Games extends Table[GamesDetails]("GAMES") {
 }
 
 trait Games { this: ImplicitSession =>
+  import scala.util.{ Try, Success, Failure }
+  import models.dal._
+  import play.api.Logger
 
   def getRowsNo: Int = (for {g <- Games} yield g.length).first
 
@@ -79,52 +81,83 @@ trait Games { this: ImplicitSession =>
       if g.status === "published" && g.startTime <= DateTime.now
     } yield g.status
 
-    q update "finished"
-    p update "online"
+    Try(q.update("finished"))
+    Try(p.update("online"))
+  }
+
+  def getGame(id: Int): Try[GamesDetails] = {
+    val q = for {
+      g <- Games if g.id === id.bind
+    } yield g
+
+    Try(q.first)
   }
 
   def getOperatorGamesList(id: Int): List[GamesList] = {
-    checkGamesStatus
+    checkGamesStatus match {
+      case Success(a) => 
+      case Failure(e) => Logger.error("Check game status error: ", e)
+    }
+
     val q = for {
       g <- Games 
       if g.operatorId === id.bind 
       if g.status =!= "finished"
     } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status, g.image)
     q.list map {
-      case (id, name, ver, loc, st, et, stat, img) => GamesList(Some(id), name, ver, loc, st, et, stat, img)
+      case (id, name, ver, loc, st, et, stat, img) => GamesList(Some(id), name, ver, loc, st, et, stat, img, Bridges.Tasks.getGameTasksNo(id))
     }
   }
 
   def getOperatorGamesArchive(id: Int): List[GamesList] = {
+    checkGamesStatus match {
+      case Success(a) => 
+      case Failure(e) => Logger.error("Check game status error: ", e)
+    }
+
     val q = for {
       g <- Games 
       if g.operatorId === id.bind 
       if g.status === "finished"
     } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status, g.image)
     q.list map {
-      case (id, name, ver, loc, st, et, stat, img) => GamesList(Some(id), name, ver, loc, st, et, stat, img)
+      case (id, name, ver, loc, st, et, stat, img) => GamesList(Some(id), name, ver, loc, st, et, stat, img, Bridges.Tasks.getGameTasksNo(id))
     }
   }
 
-  def createGame(gd: GamesDetails): Int = Games.forInsert returning Games.id insert gd
+  def createGame(gd: GamesDetails): Try[Int] = Try(Games.forInsert returning Games.id insert gd)
 
-  def updateGame(gid: Int, gd: GamesDetails): Int = {
+  def updateGame(gid: Int, gd: GamesDetails): Try[Int] = {
     val q = for {
       g <- Games if g.id === gid
     } yield g
 
-    q.update(gd)
+    Try(q.update(gd))
   }
 
-  def deleteGame(gid: Int): Int = {
+  def deleteGame(gid: Int): Try[Int] = {
     val q = for {
       g <- Games if g.id === gid
     } yield g
 
-    q.delete
+    Try(q.delete)
   }
 
   def checkName(name: String): Int = (for {g <- Games if g.name === name} yield g.length).first
+
+  def changeStatus(gid: Int, flag: String): Try[Int] = {
+    val (statS, statE): (String, String) = flag match {
+      case "cancel" => ("published", "project")
+      case "publish" => ("project", "published")
+    }
+    
+    val q = for {
+      g <- Games 
+      if g.status === statS && g.id === gid.bind
+    } yield g.status
+
+    Try(q.update(statE))
+  }
 
 }
 

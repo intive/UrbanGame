@@ -1,11 +1,11 @@
 -#
     *Copyright 2013 BLStream, BLStream's Patronage Program Contributors
-    * 		 http://blstream.github.com/UrbanGame/
+    *        http://blstream.github.com/UrbanGame/
     * 
     * Licensed under the Apache License, Version 2.0 (the "License");
     * you may not use this file except in compliance with the License.
     * You may obtain a copy of the License at
-    * 		 http://www.apache.org/licenses/LICENSE-2.0
+    *        http://www.apache.org/licenses/LICENSE-2.0
     * 
     * Unless required by applicable law or agreed to in writing, software
     * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,14 +18,16 @@
 
 .control-group.row-fluid.form-style
     %div(id="formDiv")
-        %h3=Messages("newgame.step1title")(lan)
-        %em=Messages("newgame.step1subtitle")(lan)
+        %h4
+            %span.step = Messages("newgame.step1")(lan) 
+            = Messages("newgame.step1title")(lan)
+        %em = Messages("newgame.step1subtitle")(lan)
         {{gameid}}
     .span12.slight-padding-top
         .span6.pull-left.slight-padding-right
             .controls.slight-padding-top
                 %label(for="gName")
-                    %strong=Messages("newgame.gamenamelabel")(lan)
+                    %strong = Messages("newgame.gamenamelabel")(lan)
                 .control
                     %input.input-xlarge(type="text" maxlength="100" id='nameInput' required name="gName" ng-model="game.name" tooltip={Messages("newgame.ttgamename")(lan)} tooltip-animation="true" tooltip-placement="right") 
                 .alert.alert-error.span11(ng-show="form.$error.nameunique" ng-cloak) = Messages("newgame.gnameinvaliderror")
@@ -69,7 +71,7 @@
                         %input.input-mini(type="text" id="endTime" required name="gEndTime" ng-model="game.endTime"  time tooltip-animation="true" tooltip={Messages("newgame.ttgameendtime")(lan)} tooltip-placement="left")
                         %span.pull-higher.gmt()
                             {{timezone}}
-                        %input.input-medium(type="text" name="gEndDate" id="endDate" required ng-model="game.endDate" ui-date=dateOpts  tooltip-animation="true" tooltip={Messages("newgame.ttgameenddate")(lan)} tooltip-placement="right")					
+                        %input.input-medium(type="text" name="gEndDate" id="endDate" required ng-model="game.endDate" ui-date=dateOpts  tooltip-animation="true" tooltip={Messages("newgame.ttgameenddate")(lan)} tooltip-placement="right")                    
                 .alert.alert-error.span11(ng-show="form.gEndTime.$error.time" ng-cloak) = Messages("newgame.gendtimeerror")
                 .alert.alert-error.span11(ng-show="form.$error.dates" ng-cloak) = Messages("newgame.dateorderinvalid")
                 .row-fluid

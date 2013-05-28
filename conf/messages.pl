@@ -19,10 +19,10 @@ menu.contact = Kontakt
 menu.help = Pomoc
 menu.faq = FAQ
 
-newgame.step1title = Krok 1
-newgame.step2title = Krok 2
-newgame.step3title = Krok 3
-newgame.step4title = Krok 4
+newgame.step1title = Informacje o grze
+newgame.step2title = Zadania
+newgame.step3title = Skórki
+newgame.step4title = Podsumowanie
 
 newgame.step1subtitle = Make your game easy to find. Complete the identity data of your game.
 newgame.gamenamelabel = Nazwa gry
