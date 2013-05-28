@@ -9,6 +9,7 @@ public class PlayerGameSpecific {
 	private String playerEmail;
 	private Long gameID;
 	private Integer state;
+	private final String changes;
 	
 	/**
 	 * use if user is participant in game
@@ -16,11 +17,13 @@ public class PlayerGameSpecific {
 	 * @param rank
 	 * @param playerEmail
 	 * @param gameID
+	 * @param changes
 	 */
-	public PlayerGameSpecific(Integer rank, String playerEmail, Long gameID) {
+	public PlayerGameSpecific(Integer rank, String playerEmail, Long gameID, String changes) {
 		this.rank = rank;
 		this.playerEmail = playerEmail;
 		this.gameID = gameID;
+		this.changes = changes;
 		this.setState(GAME_ACTIVE);
 	}
 	
@@ -29,11 +32,13 @@ public class PlayerGameSpecific {
 	 * 
 	 * @param playerEmail
 	 * @param gameID
+	 * @param changes
 	 */
-	public PlayerGameSpecific(String playerEmail, Long gameID) {
+	public PlayerGameSpecific(String playerEmail, Long gameID, String changes) {
 		this.rank = null;
 		this.playerEmail = playerEmail;
 		this.gameID = gameID;
+		this.changes = changes;
 		this.setState(GAME_OBSERVED);
 	}
 	
@@ -44,12 +49,14 @@ public class PlayerGameSpecific {
 	 * @param playerEmail
 	 * @param gameID
 	 * @param state
+	 * @param changes
 	 */
-	public PlayerGameSpecific(Integer rank, String playerEmail, Long gameID, Integer state) {
+	public PlayerGameSpecific(Integer rank, String playerEmail, Long gameID, Integer state, String changes) {
 		this.rank = rank;
 		this.playerEmail = playerEmail;
 		this.gameID = gameID;
 		this.state = state;
+		this.changes = changes;
 	}
 	
 	/**
@@ -106,5 +113,12 @@ public class PlayerGameSpecific {
 	 */
 	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	/**
+	 * @return the changes
+	 */
+	public String getChanges() {
+		return changes;
 	}
 }
