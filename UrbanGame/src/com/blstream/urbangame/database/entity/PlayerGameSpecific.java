@@ -9,7 +9,7 @@ public class PlayerGameSpecific {
 	private String playerEmail;
 	private Long gameID;
 	private Integer state;
-	private final String changes;
+	private String changes;
 	
 	/**
 	 * use if user is participant in game
@@ -114,11 +114,18 @@ public class PlayerGameSpecific {
 	public void setState(Integer state) {
 		this.state = state;
 	}
-
+	
 	/**
 	 * @return the changes
 	 */
 	public String getChanges() {
 		return changes;
+	}
+	
+	/**
+	 * @param changes the changes to set
+	 */
+	public void setChanges(String changes) {
+		this.changes = changes;
 	}
 }
