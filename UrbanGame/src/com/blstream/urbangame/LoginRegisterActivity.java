@@ -1,48 +1,69 @@
 package com.blstream.urbangame;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-import com.blstream.urbangame.menuitem.MenuItemHelper; 
 import com.blstream.urbangame.fragments.LoginRegisterPageAdapter;
+import com.blstream.urbangame.session.LoginManager;
+import com.blstream.urbangame.session.RegistrationManager;
 
-public class LoginRegisterActivity extends SherlockFragmentActivity {
-  private LoginRegisterPageAdapter sectionsPagerAdapter;
-  private ViewPager viewPager;
-  
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setSupportProgressBarVisibility(true);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    setContentView(R.layout.activity_login_register);
-    
-    sectionsPagerAdapter = new LoginRegisterPageAdapter(getSupportFragmentManager(), LoginRegisterActivity.this);
-    viewPager = (ViewPager) findViewById(R.id.view_pager);
-    viewPager.setAdapter(sectionsPagerAdapter);
-  }
-  
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater menuInflater = getSupportMenuInflater();
-    menuInflater.inflate(R.menu.top_bar_menu_more, menu);
-    MenuItemHelper.initLogoutMenuItem(this, menu);
-
-    return true;
-  }
-  
-  @Override
-  public boolean onMenuItemSelected(int featureId, MenuItem item) {
-    int itemId = item.getItemId();
-    switch (itemId) {
-      case android.R.id.home:
-        finish();
-        break;
-    }
-    return true;
-  }
+public class LoginRegisterActivity extends MenuActivity {
+	public final static String ACTION_RETURN_LOGIN_RESULT = "intent_open_games";
+	public final static String ACTION_AFTER_LOGIN = "intent_open";
+	public final static int LOGIN_REQUEST_CODE = 0x1;
+	
+	private LoginRegisterPageAdapter sectionsPagerAdapter;
+	private ViewPager viewPager;
+	
+	private LoginManager loginManager;
+	private RegistrationManager registrationManager;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setSupportProgressBarVisibility(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		setContentView(R.layout.activity_login_register);
+		
+		loginManager = LoginManager.getInstance(LoginRegisterActivity.this);
+		registrationManager = RegistrationManager.getInstance(LoginRegisterActivity.this);
+		sectionsPagerAdapter = new LoginRegisterPageAdapter(getSupportFragmentManager(), LoginRegisterActivity.this);
+		viewPager = (ViewPager) findViewById(R.id.view_pager);
+		viewPager.setAdapter(sectionsPagerAdapter);
+	}
+	
+	public void loginUser(String email) {
+		boolean loginResult = loginManager.loginUser(email);
+		handleLoginResult(loginResult);
+	}
+	
+	private void handleLoginResult(boolean loginResult) {
+		Intent intent = getIntent();
+		String action = intent.getStringExtra(ACTION_AFTER_LOGIN);
+		
+		if (ACTION_RETURN_LOGIN_RESULT.equals(action)) {
+			finishAndGoBackToGame(loginResult);
+		}
+		finishAndOpenProfileAcitivty();
+	}
+	
+	private void finishAndOpenProfileAcitivty() {
+		Intent openProfileActivity = new Intent(LoginRegisterActivity.this,
+			com.blstream.urbangame.ProfileActivity.class);
+		openProfileActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(openProfileActivity);
+		this.finish();
+	}
+	
+	private void finishAndGoBackToGame(boolean loginResult) {
+		setResult(loginResult ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+		this.finish();
+	}
+	
+	public void registerAndLoginUser(String email, String displayName, String password) {
+		registrationManager.registerUser(email, password, displayName, null);
+		loginUser(email);
+	}
 }
