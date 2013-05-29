@@ -44,11 +44,11 @@ public class GamesListActivity extends MenuListActivity {
 		if (!initFinished) {
 			putMockDataToDatabase();
 			initFinished = true;
-			
-			// FIXME remove mock data when it is no longer needed
-			adapter = new GamesListAdapter(this, R.layout.list_item_game, mockData());
-			setListAdapter(adapter);
 		}
+		
+		// FIXME remove mock data when it is no longer needed
+		adapter = new GamesListAdapter(this, R.layout.list_item_game, mockData());
+		setListAdapter(adapter);
 	}
 	
 	/************************
