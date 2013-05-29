@@ -101,6 +101,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String USER_TASKS_SPECIFIC_KEY_IS_FINISHED = "UTSIsFisnished";
 	private static final String USER_TASKS_SPECIFIC_KEY_ARE_CHANGES = "UTSAreChanges";
 	private static final String USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN = "UTSWasHidden";
+	private static final String USER_TASKS_SPECIFIC_KEY_CHANGES = "UTSChanges";
+	private static final String USER_TASKS_SPECIFIC_KEY_STATUS = "UTSStatus";
 	
 	// ---- Tasks ABCD
 	private static final String TASKS_ABCD_KEY_ID = "TAID";
@@ -152,9 +154,10 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		+ " (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + " TEXT, " + USER_TASKS_SPECIFIC_KEY_TASK_ID + " INTEGER, "
 		+ USER_TASKS_SPECIFIC_KEY_ARE_CHANGES + " TEXT, " + USER_TASKS_SPECIFIC_KEY_IS_FINISHED + " TEXT NOT NULL, "
 		+ USER_TASKS_SPECIFIC_KEY_POINTS + " INTEGER, " + USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN + " TEXT, "
-		+ "PRIMARY KEY (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ", " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "), "
-		+ " FOREIGN KEY (" + USER_TASKS_SPECIFIC_KEY_TASK_ID + ") REFERENCES " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID
-		+ "), " + " FOREIGN KEY (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ") REFERENCES " + USER_TABLE_NAME + " ("
+		+ USER_TASKS_SPECIFIC_KEY_CHANGES + " TEXT, " + USER_TASKS_SPECIFIC_KEY_STATUS + " INTEGER, " + "PRIMARY KEY ("
+		+ USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ", " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "), " + " FOREIGN KEY ("
+		+ USER_TASKS_SPECIFIC_KEY_TASK_ID + ") REFERENCES " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID + "), "
+		+ " FOREIGN KEY (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ") REFERENCES " + USER_TABLE_NAME + " ("
 		+ USER_KEY_EMAIL + ") " + ")";
 	
 	private static final String CREATE_TASKS_ABCD_TABLE = "CREATE TABLE " + TASKS_ABCD_TABLE_NAME + " ("
@@ -172,8 +175,6 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	public Database(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		SQLiteDatabase.loadLibs(context);
-		//		Uri path = Uri.parse("android.resource://com.blstream.urbangame/raw/icudt46l.zip");
-		//		SQLiteDatabase.loadLibs(context, new File(path.toString()));
 	}
 	
 	@Override
@@ -627,9 +628,11 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		Cursor cursor = db.query(USER_TABLE_NAME, playerColumns, USER_KEY_EMAIL + "=?", new String[] { email }, null,
 			null, null, null);
 		
-		Player player;
-		if (cursor != null && cursor.moveToFirst()) {
-			player = new Player(cursor.getString(0), cursor.getString(3), cursor.getString(1), cursor.getString(2));
+		Player player = null;
+		if (cursor != null) {
+		    if (cursor.moveToFirst()) {
+		        player = new Player(cursor.getString(0), cursor.getString(3), cursor.getString(1), cursor.getString(2));
+		    }
 			cursor.close();
 		}
 		else {
@@ -707,10 +710,12 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			USER_GAMES_SPECIFIC_KEY_EMAIL + "=? AND " + USER_GAMES_SPECIFIC_KEY_GAME_ID + "=?", new String[] { email,
 				gameID.longValue() + "" }, null, null, null, null);
 		
-		PlayerGameSpecific playerGameSpecific;
-		if (cursor != null && cursor.moveToFirst()) {
-			playerGameSpecific = new PlayerGameSpecific(cursor.getInt(2), cursor.getString(0), cursor.getLong(1),
-				cursor.getInt(3));
+		PlayerGameSpecific playerGameSpecific = null;
+		if (cursor != null) {
+		        if(cursor.moveToFirst()) {
+		            playerGameSpecific = new PlayerGameSpecific(cursor.getInt(2), cursor.getString(0), cursor.getLong(1),
+		                    cursor.getInt(3));
+		        }
 			cursor.close();
 		}
 		else {
@@ -778,8 +783,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		db.beginTransaction();
 		boolean isSuccesful = email != null;
-		Cursor c = db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_KEY_EMAIL }, null, null, null, null,
-			null);
+		Cursor c = db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_KEY_EMAIL }, null, null, null,
+			null, null);
 		isSuccesful = isSuccesful && c.getCount() == 0;
 		if (isSuccesful) {
 			ContentValues values = new ContentValues();
@@ -803,6 +808,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			playerEmail = cursor.getString(0);
 		}
 		cursor.close();
+		db.close();
 		return playerEmail;
 	}
 	
@@ -829,6 +835,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.isFinishedByUser()));
 			values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
 			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
+			values.put(USER_TASKS_SPECIFIC_KEY_CHANGES, taskSpecific.getChanges());
+			values.put(USER_TASKS_SPECIFIC_KEY_STATUS, taskSpecific.getStatus());
 			
 			boolean isInsertOK = db.insert(USER_TASKS_SPECIFIC_TABLE_NAME, null, values) != -1;
 			
@@ -847,7 +855,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		String[] taskColumns = { USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, USER_TASKS_SPECIFIC_KEY_TASK_ID,
 			USER_TASKS_SPECIFIC_KEY_POINTS, USER_TASKS_SPECIFIC_KEY_IS_FINISHED, USER_TASKS_SPECIFIC_KEY_ARE_CHANGES,
-			USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN };
+			USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, USER_TASKS_SPECIFIC_KEY_CHANGES, USER_TASKS_SPECIFIC_KEY_STATUS };
 		
 		Cursor cursor = db.query(USER_TASKS_SPECIFIC_TABLE_NAME, taskColumns, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL
 			+ "=? AND " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "=?",
@@ -860,6 +868,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		else {
 			taskSpecific = null;
 		}
+		if (cursor != null) {
+			cursor.close();
+		}
 		db.close();
 		return taskSpecific;
 	}
@@ -869,11 +880,12 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			cursor.getLong(TaskSpecificFields.TASK_ID.value), cursor.getInt(TaskSpecificFields.POINTS.value),
 			stringToBoolean(cursor.getString(TaskSpecificFields.IS_FINISHED.value)),
 			stringToBoolean(cursor.getString(TaskSpecificFields.ARE_CHANGES.value)),
-			stringToBoolean(cursor.getString(TaskSpecificFields.WAS_HIDDEN.value)));
+			stringToBoolean(cursor.getString(TaskSpecificFields.WAS_HIDDEN.value)),
+			cursor.getString(TaskSpecificFields.CHANGES.value), cursor.getInt(TaskSpecificFields.STATUS.value));
 	}
 	
 	private enum TaskSpecificFields {
-		PLAYER_EMAIL(0), TASK_ID(1), POINTS(2), IS_FINISHED(3), ARE_CHANGES(4), WAS_HIDDEN(5);
+		PLAYER_EMAIL(0), TASK_ID(1), POINTS(2), IS_FINISHED(3), ARE_CHANGES(4), WAS_HIDDEN(5), CHANGES(6), STATUS(7);
 		int value;
 		
 		private TaskSpecificFields(int x) {
@@ -917,6 +929,12 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		}
 		if (taskSpecific.getWasHidden() != null) {
 			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
+		}
+		if (taskSpecific.getChanges() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_CHANGES, taskSpecific.getChanges());
+		}
+		if (taskSpecific.getStatus() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_STATUS, taskSpecific.getStatus());
 		}
 	}
 	
@@ -1031,6 +1049,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			}
 			while (cursor.moveToNext());
 		}
+		if (cursor != null) {
+			cursor.close();
+		}
 		db.close();
 		return tasksList;
 	}
@@ -1051,6 +1072,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		}
 		else {
 			task = null;
+		}
+		if (cursor != null) {
+			cursor.close();
 		}
 		db.close();
 		return task;
@@ -1095,6 +1119,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 				idOfAnswerSet = cursorForABCDTasks.getLong(ABCDTaskFields.ID.value);
 			}
 			String[] answers = null;
+			cursorForABCDTasks.close();
 			
 			cursorForABCDTasks = db.query(TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME, taskAnswersTableColumns,
 				TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + "=?", new String[] { idOfAnswerSet + "" }, null, null, null);
