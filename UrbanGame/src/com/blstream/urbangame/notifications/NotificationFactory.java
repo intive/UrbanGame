@@ -1,10 +1,12 @@
 package com.blstream.urbangame.notifications;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
@@ -35,12 +37,12 @@ public class NotificationFactory {
 	}
 	
 	public Notification getNotificationGameNew(String gameName, Bitmap operatorLogo) {
-		createBuilderGame(gameName, operatorLogo, message_game_changed);
+		createBuilderGame(gameName, operatorLogo, message_game_new);
 		return notificationBuilderGame.build();
 	}
 	
 	public Notification getNotificationGameChanged(String gameName, Bitmap operatorLogo) {
-		createBuilderGame(gameName, operatorLogo, message_game_new);
+		createBuilderGame(gameName, operatorLogo, message_game_changed);
 		return notificationBuilderGame.build();
 	}
 	
@@ -73,20 +75,23 @@ public class NotificationFactory {
 		
 	}
 	
-	private Builder createNotification(String title, String message, Bitmap operatorLogo, int counter, Class<?> cls) {
+	private Builder createNotification(String gameName, String message, Bitmap operatorLogo, int counter, Class<?> cls) {
 		PendingIntent pendingIntent = getPendingIntent(cls);
-		return createNotification(title, message, operatorLogo, counter, pendingIntent);
+		return createNotification(gameName, message, operatorLogo, counter, pendingIntent);
 	}
 	
-	private Builder createNotification(String title, String message, Bitmap operatorLogo, int counter,
+	private Builder createNotification(String gameName, String message, Bitmap operatorLogo, int counter,
 		PendingIntent pendingIntent) {
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context);
-		notificationBuilder.setContentText(title);
-		notificationBuilder.setContentTitle(message);
-		notificationBuilder.setSmallIcon(R.drawable.prize);
+		notificationBuilder.setContentText(message);
+		notificationBuilder.setContentTitle(gameName);
+		notificationBuilder.setSmallIcon(R.drawable.ic_stat_notification);
 		notificationBuilder.setLargeIcon(operatorLogo);
 		notificationBuilder.setContentInfo(String.valueOf(counter));
 		notificationBuilder.setContentIntent(pendingIntent);
+		notificationBuilder.setAutoCancel(true);
+		notificationBuilder.setLights(Color.GREEN, 100, 200);
+		notificationBuilder.setDefaults(Notification.DEFAULT_ALL);
 		return notificationBuilder;
 	}
 	
@@ -103,7 +108,10 @@ public class NotificationFactory {
 		return getPendingIntentFromIntent(resultIntent);
 	}
 	
+	@SuppressLint("InlinedApi")
 	private PendingIntent getPendingIntentFromIntent(Intent resultIntent) {
+		resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		
 		// formatter:off
 		PendingIntent resultPendingIntent =
 		    PendingIntent.getActivity(
@@ -112,6 +120,7 @@ public class NotificationFactory {
 		    resultIntent,
 		    PendingIntent.FLAG_UPDATE_CURRENT
 		);
+
 		// formatter:on
 		
 		return resultPendingIntent;

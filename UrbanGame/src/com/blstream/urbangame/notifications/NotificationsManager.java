@@ -12,13 +12,13 @@ public class NotificationsManager implements NotificationInterface {
 	}
 	
 	@Override
-	public void notifyGameChanged(String gameName, Bitmap operatorLogo) {
-		showNotification(NotificationConstans.GAME_CHANGED, gameName, null, operatorLogo, -1);
+	public void notifyGameNew(String gameName, Bitmap operatorLogo) {
+		showNotification(NotificationConstans.GAME_NEW, gameName, null, operatorLogo, -1);
 	}
 	
 	@Override
-	public void notifyGameNew(String gameName, Bitmap operatorLogo) {
-		showNotification(NotificationConstans.GAME_NEW, gameName, null, operatorLogo, -1);
+	public void notifyGameChanged(String gameName, Bitmap operatorLogo) {
+		showNotification(NotificationConstans.GAME_CHANGED, gameName, null, operatorLogo, -1);
 	}
 	
 	@Override

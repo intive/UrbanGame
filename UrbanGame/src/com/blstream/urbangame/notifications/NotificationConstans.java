@@ -11,7 +11,7 @@ public class NotificationConstans {
 	public static final String NOTIFICATION_HIDE = "NOTIFICATION_HIDE";
 
 	public static final String NOTIFICATION_GAME_NAME = "NOTIFICATION_GAME_NAME";
-	public static final String NOTIFICATION_GAME_ID = "NOTIFICATION_GAME_NAME";
+	public static final String NOTIFICATION_GAME_ID = "NOTIFICATION_GAME_ID";
 	public static final String NOTIFICATION_TASK_NAME = "NOTIFICATION_TASK_NAME";
 	public static final String NOTIFICATION_OPERATOR_LOGO = "NOTIFICATION_OPERATOR_LOGO";
 	

@@ -15,6 +15,11 @@ public class NotificationService extends IntentService {
 	
 	public NotificationService() {
 		super(SERVICE_NAME);
+	}
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
 		this.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		this.notificationFactory = new NotificationFactory(this);
 	}
