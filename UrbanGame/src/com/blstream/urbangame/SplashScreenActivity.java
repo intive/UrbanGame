@@ -18,35 +18,28 @@ public class SplashScreenActivity extends Activity {
 	}
 	
 	private void startGamesActivity() {
-<<<<<<< HEAD
-		startGamesListActivity();
-=======
->>>>>>> upstream/android
 		openMyGamesIfUserLoggedIn();
-	}
-	
-	private void startGamesListActivity() {
-		startSpecificActivity(GamesListActivity.class);
 	}
 	
 	private void openMyGamesIfUserLoggedIn() {
 		if (isUserLoggedIn()) {
 			startMyGamesActivity();
 		}
-<<<<<<< HEAD
-=======
 		else {
-		      startGamesListActivity();
+			startGamesListActivity();
 		}
->>>>>>> upstream/android
-	}
-	
-	private boolean isUserLoggedIn() {
-		return loginManager.isUserLoggedIn();
 	}
 	
 	private void startMyGamesActivity() {
 		startSpecificActivity(MyGamesActivity.class);
+	}
+	
+	private void startGamesListActivity() {
+		startSpecificActivity(GamesListActivity.class);
+	}
+	
+	private boolean isUserLoggedIn() {
+		return loginManager.isUserLoggedIn();
 	}
 	
 	private void startSpecificActivity(Class<?> cls) {
