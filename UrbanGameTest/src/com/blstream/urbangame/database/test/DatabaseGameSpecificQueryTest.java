@@ -26,8 +26,8 @@ public class DatabaseGameSpecificQueryTest extends AndroidTestCase {
 		database = null;
 	}
 	
-	private void prepareData(Integer rank, String email, Long gameID, Integer status) {
-		PlayerGameSpecific player = new PlayerGameSpecific(rank, email, gameID, status);
+	private void prepareData(Integer rank, String email, Long gameID, Integer status, String changes) {
+		PlayerGameSpecific player = new PlayerGameSpecific(rank, email, gameID, status, changes);
 		database.insertUserGameSpecific(player);
 	}
 	
@@ -38,25 +38,26 @@ public class DatabaseGameSpecificQueryTest extends AndroidTestCase {
 	}
 	
 	public void testOneItemInDatabaseNoMatch() {
-		prepareData(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE);
+		prepareData(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE, "email changed");
 		PlayerGameSpecific p = database.getUserGameSpecific("a", 1L);
 		assertNull(p);
 	}
 	
 	public void testOneItemInDatabaseMatch() {
-		prepareData(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE);
+		prepareData(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE, "email changed");
 		PlayerGameSpecific p = database.getUserGameSpecific("em@em.em", 1L);
 		assertNotNull(p);
 		assertEquals(2, p.getRank().intValue());
 		assertEquals("em@em.em", p.getPlayerEmail());
 		assertEquals(1L, p.getGameID().longValue());
 		assertEquals(PlayerGameSpecific.GAME_ACTIVE, p.getState().intValue());
+		assertEquals("email changed", p.getChanges());
 	}
 	
 	public void testManyItemsInDatabaseNoMatch() {
 		for (int i = 0; i < 30; i++) {
 			prepareData(i + 1, "em@em.em" + i, (long) i * 2, i % 2 == 0 ? PlayerGameSpecific.GAME_ACTIVE
-				: PlayerGameSpecific.GAME_OBSERVED);
+				: PlayerGameSpecific.GAME_OBSERVED, "email changed" + i);
 		}
 		PlayerGameSpecific p = database.getUserGameSpecific("a", 2L);
 		assertNull(p);
@@ -65,7 +66,7 @@ public class DatabaseGameSpecificQueryTest extends AndroidTestCase {
 	public void testManyItemsInDatabaseMatch() {
 		for (int i = 0; i < 30; i++) {
 			prepareData(i + 1, "em@em.em" + i, (long) i * 2, i % 2 == 0 ? PlayerGameSpecific.GAME_ACTIVE
-				: PlayerGameSpecific.GAME_OBSERVED);
+				: PlayerGameSpecific.GAME_OBSERVED, "email changed" + i);
 		}
 		int tested = 13;
 		PlayerGameSpecific p = database.getUserGameSpecific("em@em.em" + tested, (long) tested * 2);
@@ -75,6 +76,7 @@ public class DatabaseGameSpecificQueryTest extends AndroidTestCase {
 		assertEquals((long) tested * 2, p.getGameID().longValue());
 		assertEquals(tested % 2 == 0 ? PlayerGameSpecific.GAME_ACTIVE : PlayerGameSpecific.GAME_OBSERVED, p.getState()
 			.intValue());
+		assertEquals("email changed" + tested, p.getChanges());
 	}
 	/* ------------------------ USER QUERIES END ------------------------ */
 }

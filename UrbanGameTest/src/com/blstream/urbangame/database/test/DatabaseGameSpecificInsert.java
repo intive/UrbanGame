@@ -18,7 +18,7 @@ public class DatabaseGameSpecificInsert extends AndroidTestCase {
 		if (database == null) {
 			database = new Database(mContext);
 		}
-		playerSpecific = new PlayerGameSpecific(12, "em@em.em", 2L, PlayerGameSpecific.GAME_ACTIVE);
+		playerSpecific = new PlayerGameSpecific(12, "em@em.em", 2L, PlayerGameSpecific.GAME_ACTIVE, "email changed");
 	}
 	
 	@Override
@@ -39,6 +39,13 @@ public class DatabaseGameSpecificInsert extends AndroidTestCase {
 	// allowed
 	public void testInsertNullState() {
 		playerSpecific.setState(null);
+		boolean ok = database.insertUserGameSpecific(playerSpecific);
+		assertTrue(ok);
+	}
+	
+	// allowed
+	public void testInsertNullChanges() {
+		playerSpecific.setChanges(null);
 		boolean ok = database.insertUserGameSpecific(playerSpecific);
 		assertTrue(ok);
 	}
