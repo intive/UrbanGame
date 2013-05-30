@@ -67,8 +67,11 @@ public class LoginManager extends SessionManager {
 		Log.i(TAG, database.getLoggedPlayerID() + " logging out");
 		
 		// FIXME connect with server and logout user
-		if (database.setNoOneLogged()) {
-			startMainActivity();
-		}
+<<<<<<< HEAD
+		database.setNoOneLogged();
+		startMainActivity();
+=======
+		if(database.setNoOneLogged()) startMainActivity();
+>>>>>>> upstream/android
 	}
 }

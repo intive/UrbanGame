@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
+import android.net.MailTo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -164,13 +165,13 @@ public class MyGamesActivity extends MenuActivity implements OnChildClickListene
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		// TODO Switch to all games
-		switch (itemPosition) {
-			case 1:
-				startActivity(new Intent(this, GamesListActivity.class));
-				break;
-			default:
-				break;
-		}
+	    switch (itemPosition) {
+            case 1:
+                startActivity(new Intent(this, GamesListActivity.class));
+                break;
+            default:
+                break;
+        }
 		return false;
 	}
 	

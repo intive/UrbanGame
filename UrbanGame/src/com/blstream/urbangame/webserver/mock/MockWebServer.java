@@ -14,6 +14,7 @@ import com.blstream.urbangame.database.entity.LocationTask;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
+import com.blstream.urbangame.webserver.helper.WebResponse;
 import com.blstream.urbangame.webserver.helper.WebResponse.QueryType;
 import com.google.gson.Gson;
 
@@ -92,7 +93,7 @@ public class MockWebServer {
 	public UrbanGame getMockUrbanGameDetails(long gid) {
 		UrbanGame urbanGame = null;
 		
-		for (UrbanGame mockUrbanGame : mockUrbanGameDetails)
+		for (UrbanGame mockUrbanGame: mockUrbanGameDetails) 
 			if (mockUrbanGame.getID() == gid) {
 				urbanGame = mockUrbanGame;
 				break;
@@ -109,7 +110,7 @@ public class MockWebServer {
 		Task task = null;
 		
 		if (taskList != null) {
-			for (Task mockTask : taskList) {
+			for (Task mockTask: taskList)  {
 				if (mockTask.getId() == tid) {
 					task = mockTask;
 					break;
@@ -125,28 +126,25 @@ public class MockWebServer {
 		// Method returns JSON string which is a server response for
 		// a queryString
 		
-		Log.i(TAG, "queryString " + queryString);
+		Log.i(TAG, "queryString " + queryString);	
 		Gson gson = new Gson();
-		StringBuilder stringBuilder = new StringBuilder();
+		StringBuilder stringBuilder = new StringBuilder();		
 		int i;
 		
 		switch (queryType) {
 			case GetUrbanGameDetails:
 				UrbanGame urbanGame = getMockUrbanGameDetails(gid);
-				if (urbanGame != null) {
-					stringBuilder.append(gson.toJson(urbanGame));
-				}
+				if (urbanGame != null) stringBuilder.append(gson.toJson(urbanGame));
 				
 				break;
 			
 			case GetUrbanGameBaseList:
 				stringBuilder.append("[");
 				
-				for (i = 0; i < mockAllUrbanGames.size() - 1; ++i) {
-					stringBuilder.append(gson.toJson(mockAllUrbanGames.get(i))).append(",");
-				}
+				for (i = 0; i < mockAllUrbanGames.size() - 1; ++i)
+					stringBuilder.append( gson.toJson(mockAllUrbanGames.get(i))).append(",");
 				
-				stringBuilder.append(gson.toJson(mockAllUrbanGames.get(i))).append("]");
+				stringBuilder.append( gson.toJson(mockAllUrbanGames.get(i))).append("]");
 				break;
 			
 			case GetTaskList:
@@ -155,9 +153,8 @@ public class MockWebServer {
 				if (taskList != null) {
 					stringBuilder.append("[");
 					
-					for (i = 0; i < taskList.size() - 1; ++i) {
+					for (i = 0; i < taskList.size() - 1; ++i)
 						stringBuilder.append(gson.toJson(taskList.get(i))).append(",");
-					}
 					
 					stringBuilder.append(gson.toJson(taskList.get(i))).append("]");
 				}
@@ -165,18 +162,17 @@ public class MockWebServer {
 			
 			case GetTask:
 				Task task = getMockSingleTask(gid, tid);
-				if (task != null) {
-					stringBuilder.append(gson.toJson(task));
-				}
+				if (task != null) stringBuilder.append( gson.toJson(task));
 				
 				break;
-			
+				
 			default:
 				Log.e(TAG, "Incorrect queryType " + queryType.toString());
 				break;
 		}
 		
-		if (stringBuilder.length() == 0) return null;
+		if( stringBuilder.length() == 0)
+			return null;
 		
 		return stringBuilder.toString();
 	}

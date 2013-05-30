@@ -30,7 +30,5 @@
         <activity android:name=".LoginRegisterActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".MyGamesActivity" />
-        <service android:name=".notifications.NotificationService" />
     </application>
-
 </manifest>
