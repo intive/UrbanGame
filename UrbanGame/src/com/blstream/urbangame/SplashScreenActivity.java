@@ -18,10 +18,6 @@ public class SplashScreenActivity extends Activity {
 	}
 	
 	private void startGamesActivity() {
-<<<<<<< HEAD
-		startGamesListActivity();
-=======
->>>>>>> upstream/android
 		openMyGamesIfUserLoggedIn();
 	}
 	
@@ -33,12 +29,9 @@ public class SplashScreenActivity extends Activity {
 		if (isUserLoggedIn()) {
 			startMyGamesActivity();
 		}
-<<<<<<< HEAD
-=======
 		else {
-		      startGamesListActivity();
+			startGamesListActivity();
 		}
->>>>>>> upstream/android
 	}
 	
 	private boolean isUserLoggedIn() {

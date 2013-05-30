@@ -15,7 +15,6 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.blstream.urbangame.ActiveTaskActivity;
 import com.blstream.urbangame.GameDetailsActivity;
-import com.blstream.urbangame.GamesListActivity;
 import com.blstream.urbangame.R;
 import com.blstream.urbangame.adapters.TaskListExpandableListAdapter;
 import com.blstream.urbangame.database.Database;
@@ -54,7 +53,7 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		}
 		database = new Database(getActivity());
 		// FIXME mock delete when not needed
-		gameID = GamesListActivity.MOCK_GAME_ID;
+		gameID = 1L;
 		
 		playerEmail = database.getLoggedPlayerID();
 	}

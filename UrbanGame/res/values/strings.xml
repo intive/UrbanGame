@@ -148,8 +148,11 @@
         <item>Camera</item>
     </string-array>
 
-<<<<<<< HEAD
+    <!-- Notifications -->
+    <string name="notification_game_new">New game</string>
+    <string name="notification_game_changed">Game changed</string>
+    <string name="notification_game_over">Game over</string>
+    <string name="notification_task_new">New task</string>
+    <string name="notification_task_changed">Task changed</string>
+
 </resources>
-=======
-</resources>
->>>>>>> upstream/android
