@@ -13,35 +13,63 @@
  * limitations under the License.
 ###
 
-app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', ($scope, $location, $timeout, Games) ->
+app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', '$dialog', ($scope, $location, $timeout, Games, $dialog) ->
 
     $scope.games = []
-    $scope.tasksNo = []
 
-    Games.query(
-        {},
-        (data) ->
-            $scope.games = data
-        (error) ->
-            console.log("Error occurred while getting list of games")
-    )
+    querygame = ->
+        Games.query(
+            {},
+            (data) ->
+                $scope.games = data
+            (error) ->
+                console.log("Error occurred while getting list of games")
+        )
+
+    querygame()
 
     $scope.showDetails = (idx) ->
-        window.location.pathname = "/my/games/" + $scope.games[idx].id if $scope.games[idx].status == 'online'
-        window.location.pathname = "/my/games/edit" + $scope.games[idx].id if $scope.games[idx].status == 'published' || $scope.games[idx].status == 'project'
+        games = $scope.games[idx]
+        window.location.pathname = "/my/games/" + games.id if games.status == 'online'
+        window.location.pathname = "/my/games/" + games.id + "/edit" if games.status == 'published' || games.status == 'project'
+
     $scope.delete = (idx) ->
-        if ($scope.games[idx].status == 'published' || $scope.games[idx].status == 'project')
-            Games.delete(
-                {gid: $scope.games[idx].id},
-                (data) ->
-                    alert("msg: " + data.msg)
-                    $scope.games.splice(idx, 1)
-                (error) ->
-                    alert("error: " + error)
-            ) 
+        games = $scope.games[idx]
+        if (games.status == 'project')
+            title = games.name
+            msg = 'Are you sure you want to delete this game?'
+            btns = [{result:'no', label: 'No'}, {result:'ok', label: 'Yes, delete this game', cssClass: 'btn-primary'}]
+
+            $dialog.messageBox(title, msg, btns)
+                .open()
+                .then (result) ->
+                    if(result == "ok")
+                        Games.delete(
+                            {gid: games.id},
+                            (data) ->
+                                $scope.games.splice(idx, 1)
+                            (error) ->
+                                alert("Error occured when deleting the game.")
+                        )
 
     $scope.cancel = (idx) ->
-        alert "Here the game with id: " + $scope.games[idx].id + " will be canceled"
+        games = $scope.games[idx]
+        if (games.status == 'published')
+            title = games.name
+            msg = 'Are you sure you want to cancel this game?'
+            btns = [{result:'no', label: 'No'}, {result:'ok', label: 'Yes, cancel this game', cssClass: 'btn-primary'}]
+
+            $dialog.messageBox(title, msg, btns)
+                .open()
+                .then (result) ->
+                    if(result == "ok")
+                        Games.cancel(
+                            {data: games.id},
+                            (data) ->
+                                $scope.games[idx].status = "project"
+                            (error) ->
+                                alert("Error occured when canceling the game.")
+                        )
 
     $scope.timeLeft = (sdate, edate) ->
         zeros = (x) -> 

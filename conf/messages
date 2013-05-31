@@ -21,12 +21,19 @@ menu.contact = Contact
 menu.help = Help
 menu.faq = FAQ
 
-newgame.step1title = Step 1
-newgame.step2title = Step 2
-newgame.step3title = Step 3
-newgame.step4title = Step 4
-
+newgame.step1 = Step 1.
+newgame.step2 = Step 2.
+newgame.step3 = Step 3.
+newgame.step4 = Finish.
+newgame.step1title = Game data
+newgame.step2title = Add tasks
+newgame.step3title = Customize skin
+newgame.step4title = Check your choice
 newgame.step1subtitle = Make your game easy to find. Complete the identity data of your game.
+newgame.step2subtitle = Create and manage your tasks.
+newgame.step3subtitle = Make your game looks like developed by you. Choose logo, colors and more.
+newgame.step4subtitle = Verify all data and if all are good publish game.
+
 newgame.gamenamelabel = Game name
 newgame.gamedesclabel = Description
 newgame.gameawardslabel = Awards
@@ -37,8 +44,12 @@ newgame.gameendlabel = End time/date
 newgame.gameplayersnumlabel = Number of players
 newgame.gamedifflabel = Level of difficulty
 newgame.gametype1 = Gather as many points as possible.
-newgame.gametype2 = Solve all tasks in shortest time. 
+newgame.gametype2 = Solve all tasks in shortest time.
 newgame.gamewinningnumlabel = Winners number
+newgame.gamestarttdlabel = Start time/date
+newgame.gameendtdlabel = End time/date
+newgame.gametasksnolabel = Number of tasks:
+newgame.gamedurationlabel = The duration of the game:
 
 newgame.ttgamename = *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! 
 newgame.ttgamedesc = x
@@ -66,6 +77,11 @@ newgame.diff.easy = Easy
 newgame.diff.medium = Medium
 newgame.diff.hard = Hard
 
+newgame.publish = Publish
+newgame.saveproject = Save project
+newgame.next = Next
+newgame.previous = Previous
+
 mygames.icon = Icon
 mygames.data = Data
 mygames.status = Status
@@ -74,6 +90,8 @@ mygames.title = Game list
 mygames.location = Location
 mygames.timestart = Start time
 mygames.tasks = Tasks
+mygames.delete = Delete
+mygames.cancel = Cancel
 
 language.pick = Pick a language
 language.en = English

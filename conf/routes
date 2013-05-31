@@ -11,11 +11,14 @@ POST    /register                   controllers.Application.register
 POST    /locale                     controllers.Application.changeLang
 
 # Json
-GET     /my/games/list              controllers.GamesCtrl.getGamesList
-POST    /my/games/checkName         controllers.GamesCtrl.checkName
-POST    /my/games                   controllers.GamesCtrl.saveGame
-PUT     /my/games/:gid              controllers.GamesCtrl.updateGame(gid: Int)
-DELETE  /my/games/:gid              controllers.GamesCtrl.deleteGame(gid: Int)
+GET     /my/games/json/list         controllers.GamesCtrl.getGamesList
+POST    /my/games/json/checkName    controllers.GamesCtrl.checkName
+POST    /my/games/json/cancel       controllers.GamesCtrl.cancelGame
+POST    /my/games/json/publish      controllers.GamesCtrl.publishGame
+POST    /my/games/json              controllers.GamesCtrl.saveGame
+GET     /my/games/json/:gid         controllers.GamesCtrl.getGame(gid: Int)
+PUT     /my/games/json/:gid         controllers.GamesCtrl.updateGame(gid: Int)
+DELETE  /my/games/json/:gid         controllers.GamesCtrl.deleteGame(gid: Int)
 
 # Authenticated
 GET     /my/options                 controllers.GamesCtrl.options

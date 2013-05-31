@@ -20,7 +20,7 @@ import play.api.db.slick.Config.driver.simple._
 import play.api.db.DB
 import scala.slick.session.Database
 import play.api.Play.current
-import models.mutils._
+import models.utils._
 import models.dal.Bridges._
 import play.api.data._
 import play.api.data.Forms._
@@ -71,6 +71,7 @@ object Application extends Controller with CookieLang {
     val filepaths: List[String] = List("app/initData/games.txt","app/initData/operators.txt")
     var cnt1 = 0
     var cnt2 = 0
+    var cnt3 = 0
         
     play.api.db.slick.DB.withSession { implicit session =>
       if (Operators.getRowsNo == 0) {
@@ -86,21 +87,28 @@ object Application extends Controller with CookieLang {
 
       if (Games.getRowsNo == 0) {
         Source.fromFile(filepaths(0)).getLines.foreach { line => 
-          val List(name, version, description, location, lat, lon, operatorId, 
-            created, startTime, endTime, started, ended, winning, nWins, difficulty, 
-            maxPlayers, awards, status, image) = line.split("::").map(_.toString).toList
+          val List(name, version, description, location, operatorId, created, startTime, 
+            endTime, started, ended, winning, nWins, difficulty, maxPlayers, awards, 
+            status, image) = line.split("::").map(_.toString).toList
 
-          val gd = GamesDetails(None, name, version.toInt, description, location, lat.toFloat, lon.toFloat, operatorId.toInt, 
-            new DateTime(created), DateTime.now, new DateTime(startTime), new DateTime(endTime), Some(new DateTime(started)), 
-            Some(new DateTime(ended)), winning, nWins.toInt, difficulty, maxPlayers.toInt, awards, status, image)
+          val gd = GamesDetails(None, name, version.toInt, description, location, operatorId.toInt, new DateTime(created), 
+            DateTime.now, new DateTime(startTime), new DateTime(endTime), Some(new DateTime(started)), Some(new DateTime(ended)), 
+            winning, nWins.toInt, difficulty, maxPlayers.toInt, awards, status, image)
 
           Games.createGame(gd)
           cnt1 = cnt1 + 1
         }
       }
+
+      if (Tasks.getRowsNo == 0) {
+        val td = TasksDetails(None, 1, 1, "Task1", "Task1 desc", DateTime.now + 2.days, 100, 20)
+
+        Tasks.createTask(td)
+        cnt3 = cnt3 + 1
+      }
     }
 
-    Ok("Inserted " + cnt1 + " games and " + cnt2 + " operators")
+    Ok("Inserted " + cnt1 + " game(s) and " + cnt2 + " operator(s) and " + cnt3 + " task(s)")
   }
 
 }

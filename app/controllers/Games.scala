@@ -17,8 +17,11 @@ package controllers
 import play.api._
 import play.api.mvc._
 import play.api.Logger
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+import scala.util.{ Try, Success, Failure }
 
-object GamesCtrl extends Controller with CookieLang {
+object GamesCtrl extends Controller with CookieLang with GamesCtrl {
 
   def newGame = Action { implicit request =>
     Ok(Scalate("newgame").render('title -> "Urban Game - Edit the game", 'request -> request))
@@ -60,100 +63,87 @@ object GamesCtrl extends Controller with CookieLang {
     Ok("Options")
   }
 
+  import scala.language.existentials
   import play.api.libs.json._
   import play.api.libs.functional.syntax._
-  import play.api.db.slick.Config.driver.simple._
-  import play.api.db.DB
-  import scala.slick.session.Database
-  import play.api.Play.current
-  import com.github.nscala_time.time.Imports._
-  import models.mutils._
   import models.dal.Bridges._
-  import scala.language.existentials
 
   def getGamesList = Action { implicit request =>
     val opId = 1 // will be set from session soon
 
-    val glist = play.api.db.slick.DB.withSession { implicit session =>
-      Games.getOperatorGamesList(opId)
-    }
+    val glist = gameList(opId)
 
     Ok(Json.toJson(glist))
   }
 
-  def saveGame = Action { implicit request =>
-    request.body.asJson.map { json =>
-      ( json \ "game").validate[GamePartData].fold (
-        valid = { res => 
-          val gd = GamesDetails(id = None, name = res.name, description = res.description, location = res.location, operatorId = 1, 
-            created = DateTime.now, startTime = combineDate(res.startDate, res.startTime), endTime = combineDate(res.endDate, res.endTime), 
-            winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards) 
-          
-          val gid: Int = play.api.db.slick.DB.withSession { implicit session =>
-            Games.createGame(gd)
-          }
+  def getGame(gid: Int) = Action { implicit request =>
+    game(gid) match {
+      case Success(a) => Ok(Json.toJson(a))
+      case Failure(e) => JsonBad(e.toString)
+    }
+  }
 
-          Ok(Json.toJson(Map("id" -> gid)))
-        },
-        invalid = ( e => BadRequest(e.toString) )
-      )
-    }.getOrElse{
-      BadRequest("Detected error, JSON expected.")
+  def saveGame = Action { implicit request =>
+    JsonData { res: GamePartData =>
+      matchResult(gameSave(res))
     }
   }
 
   def updateGame(gid: Int) = Action { implicit request =>
-    request.body.asJson.map { json =>
-      ( json \ "game").validate[GamePartData].fold (
-        valid = { res => 
-          val gd = GamesDetails(id = Some(gid), name = res.name, description = res.description, location = res.location, operatorId = 1, 
-            created = DateTime.now, startTime = combineDate(res.startDate, res.startTime), endTime = combineDate(res.endDate, res.endTime), 
-            winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards) 
-          
-          val ugid: Int = play.api.db.slick.DB.withSession { implicit session =>
-            Games.updateGame(gid, gd)
-          }
+    JsonData { res: GamePartData =>
+      matchResult(gameUpdate(res, gid))
+    }
+  }
 
-          Ok(Json.toJson(Map("id" -> ugid)))
-        },
-        invalid = ( e => BadRequest(e.toString) )
-      )
-    }.getOrElse{
-      BadRequest("Detected error, JSON expected.")
+  def deleteGame(gid: Int) = Action { implicit request =>
+    matchResult(gameDelete(gid))
+  }
+
+  def checkName = Action { implicit request =>
+    JsonData { res: String =>
+      matchResult(searchName(res), "Boolean")
+    }
+  }
+
+  def cancelGame = Action { implicit request =>
+    JsonData { res: Int =>
+      matchResult(gameChangeStatus(res, "cancel"))
+    }
+  }
+
+  def publishGame = Action { implicit request =>
+    JsonData { res: Int =>
+      matchResult(gameChangeStatus(res, "publish"))
+    }
+  }
+
+  private def JsonData[A] (f: A => Result) (implicit request: Request[AnyContent], r: Reads[A]) = 
+    request.body.asJson.map { json =>
+      ( json \ "data").validate (r) map (f) recoverTotal {e => JsonBad(e.toString)}
+    } getOrElse {
+      JsonBad("JSON expected")
+    }
+
+  private def matchResult(res: Try[Any], ctype: String = "Int") = res match {
+    case Success(a) => JsonOk(a, ctype)
+    case Failure(e) => JsonBad(e.toString)
+  }
+
+  private def JsonOk(x: Any, ctype: String) = {
+    ctype match {
+      case "String" => Ok(Json.toJson(Map("val" -> x.asInstanceOf[String])))
+      case "Int" => Ok(Json.toJson(Map("val" -> x.asInstanceOf[Int])))
+      case "Boolean" => Ok(Json.toJson(Map("val" -> x.asInstanceOf[Boolean])))
+      case _ => JsonBad("No such type value, can't cast to given type")
     }
     
   }
 
-  def deleteGame(gid: Int) = Action { implicit request =>
-    val dcnt: Int = play.api.db.slick.DB.withSession { implicit session =>
-      Games.deleteGame(gid)
-    }
-
-    if(dcnt > 0)
-      Ok(Json.toJson(Map("msg" -> "The game has been deleted")))
-    else
-      BadRequest("Detected error, the game could not be deleted")
+  private def JsonBad(x: String) = {
+    BadRequest(Json.toJson(Map("error" -> x.asInstanceOf[String])))
   }
+}
 
-  def checkName = Action { implicit request =>
-    request.body.asJson.map { json =>
-      ( json \ "name").validate[String].fold (
-        valid = { name => 
-          val cntName: Int = play.api.db.slick.DB.withSession { implicit session =>
-            Games.checkName(name)
-          }
-          
-          val isValidName: Boolean = cntName match {
-            case 0 => true
-            case _ => false
-          }
-          Ok(Json.toJson(Map("valid" -> isValidName)))
-        },
-        invalid = ( e => BadRequest(e.toString) )
-      )
-    }.getOrElse{
-      BadRequest("Detected error, JSON expected.")
-    }
-  }
+trait GamesCtrl {
 
 }

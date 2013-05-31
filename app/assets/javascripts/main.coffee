@@ -13,20 +13,23 @@
  * limitations under the License.
 ###
 
-app = angular.module 'web', ['ui.bootstrap','ui', 'ngResource']
+app = angular.module 'web', ['ui.bootstrap','ui', 'ui.bootstrap.dialog', 'ngResource']
 
-app.config ['$routeProvider', '$locationProvider', ($routeProvider, $location) ->
+app.config ['$routeProvider', '$locationProvider', '$dialogProvider', ($routeProvider, $location, $dialogProvider) ->
 
     $routeProvider.when('/', {template: 'index.scaml'})
     $routeProvider.when('/my/games/new', {template: 'newgame.scaml', controller: 'newGameCtrl'})
     $routeProvider.when('/my/games', {template: 'mygames.scaml', controller: 'myGamesCtrl'})
-    $routeProvider.when('/my/games/:gid')
+    $routeProvider.when('/my/games/:gid', {template: 'gameinfo.scaml'})
     $routeProvider.when('/my/games/:gid/tasks')
     $routeProvider.when('/my/games/:gid/tasks/:tid')
     $routeProvider.when('/my/games/archive')
     $routeProvider.when('/my/options')
+
+    $dialogProvider.options {backdropClick: false, dialogFade: true}
 ]
 
+# Change language
 $("select#chglang").on('change', (newVal) ->
     if !_.isUndefined(newVal)
         langform.submit() 
