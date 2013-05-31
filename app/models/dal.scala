@@ -17,7 +17,7 @@ package models
 
 import scala.slick.session._
 import scala.language.postfixOps
-import models.mutils._
+import models.utils._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import scala.slick.session.Database
@@ -53,7 +53,7 @@ object dal {
 
     def gameSave(res: GamePartData): Try[Int] = {
       val gd = GamesDetails(id = None, name = res.name, description = res.description, location = res.location, operatorId = 1, 
-        created = DateTime.now, startTime = models.mutils.mutils.combineDate(res.startDate, res.startTime), endTime = models.mutils.mutils.combineDate(res.endDate, res.endTime), 
+        created = DateTime.now, startTime = mutils.combineDate(res.startDate, res.startTime), endTime = mutils.combineDate(res.endDate, res.endTime), 
         winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards) 
           
       play.api.db.slick.DB.withSession { implicit session =>
@@ -63,7 +63,7 @@ object dal {
 
     def gameUpdate(res: GamePartData, gid: Int): Try[Int] = {
       val gd = GamesDetails(id = Some(gid), name = res.name, description = res.description, location = res.location, operatorId = 1, 
-        created = DateTime.now, startTime = models.mutils.mutils.combineDate(res.startDate, res.startTime), endTime = models.mutils.mutils.combineDate(res.endDate, res.endTime), 
+        created = DateTime.now, startTime = mutils.combineDate(res.startDate, res.startTime), endTime = mutils.combineDate(res.endDate, res.endTime), 
         winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards) 
           
       play.api.db.slick.DB.withSession { implicit session =>

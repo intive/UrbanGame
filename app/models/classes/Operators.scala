@@ -17,7 +17,7 @@ package models
 import play.api.Play.current
 import play.api.db.slick.DB
 import play.api.db.slick.Config.driver.simple._
-import models.mutils._
+import models.utils._
 
 object Operators extends Table[OperatorsData]("OPERATORS") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)

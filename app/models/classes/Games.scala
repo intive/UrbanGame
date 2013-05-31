@@ -21,7 +21,7 @@ import java.sql.Timestamp
 import scala.language.postfixOps
 import com.github.tototoshi.slick.JodaSupport._
 import com.github.nscala_time.time.Imports._
-import models.mutils._
+import models.utils._
 
 object Games extends Table[GamesDetails]("GAMES") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
@@ -45,18 +45,19 @@ object Games extends Table[GamesDetails]("GAMES") {
   def awards = column[String]("awards", O.NotNull)
   def status = column[String]("status", O.NotNull, O.Default("project"))
   def image = column[String]("image", O.NotNull, O.Default("games/gameicon.png"))
-  def * = id.? ~ name ~ version ~ description ~ location ~ lat ~ lon ~ operatorId ~ 
-    created ~ updated ~ startTime ~ endTime ~ started ~ ended ~ winning ~ nWins ~ 
-    difficulty ~ maxPlayers ~ awards ~ status ~ image <> (GamesDetails, GamesDetails.unapply _)
+  def tasksNo = column[Int]("tasksNo", O.NotNull, O.Default(0))
+  def * = id.? ~ name ~ version ~ description ~ location ~ operatorId ~ created ~ 
+    updated ~ startTime ~ endTime ~ started ~ ended ~ winning ~ nWins ~ difficulty ~ 
+    maxPlayers ~ awards ~ status ~ image ~ tasksNo <> (GamesDetails, GamesDetails.unapply _)
 
-  def forInsert = name ~ version ~ description ~ location ~ lat ~ lon ~ operatorId ~ 
+  def forInsert = name ~ version ~ description ~ location ~ operatorId ~ 
     created ~ updated ~ startTime ~ endTime ~ started ~ ended ~ winning ~ nWins ~ 
-    difficulty ~ maxPlayers ~ awards ~ status ~ image <> ({ t => 
+    difficulty ~ maxPlayers ~ awards ~ status ~ image ~ tasksNo <> ({ t => 
       GamesDetails(None, t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, 
-        t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17, t._18, t._19, t._20)}, 
-      { (gd: GamesDetails) => Some((gd.name, gd.version, gd.description, gd.location, gd.lat, 
-        gd.lon, gd.operatorId, gd.updated, gd.created, gd.startTime, gd.endTime, gd.started, gd.ended, 
-        gd.winning, gd.nWins, gd.difficulty, gd.maxPlayers, gd.awards, gd.status, gd.image))
+        t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17, t._18, t._19)}, 
+      { (gd: GamesDetails) => Some((gd.name, gd.version, gd.description, gd.location, gd.operatorId, 
+        gd.updated, gd.created, gd.startTime, gd.endTime, gd.started, gd.ended, gd.winning, gd.nWins, 
+        gd.difficulty, gd.maxPlayers, gd.awards, gd.status, gd.image, gd.tasksNo))
       })
 
   def operator = foreignKey("OP_FK", operatorId, Operators)(_.id)
@@ -103,9 +104,9 @@ trait Games { this: ImplicitSession =>
       g <- Games 
       if g.operatorId === id.bind 
       if g.status =!= "finished"
-    } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status, g.image)
+    } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status, g.image, g.tasksNo)
     q.list map {
-      case (id, name, ver, loc, st, et, stat, img) => GamesList(Some(id), name, ver, loc, st, et, stat, img, Bridges.Tasks.getGameTasksNo(id))
+      case (id, name, ver, loc, st, et, stat, img, tasksNo) => GamesList(id, name, ver, loc, st, et, stat, img, tasksNo)
     }
   }
 
@@ -119,9 +120,9 @@ trait Games { this: ImplicitSession =>
       g <- Games 
       if g.operatorId === id.bind 
       if g.status === "finished"
-    } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status, g.image)
+    } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status, g.image, g.tasksNo)
     q.list map {
-      case (id, name, ver, loc, st, et, stat, img) => GamesList(Some(id), name, ver, loc, st, et, stat, img, Bridges.Tasks.getGameTasksNo(id))
+      case (id, name, ver, loc, st, et, stat, img, tasksNo) => GamesList(id, name, ver, loc, st, et, stat, img, tasksNo)
     }
   }
 
@@ -157,6 +158,13 @@ trait Games { this: ImplicitSession =>
     } yield g.status
 
     Try(q.update(statE))
+  }
+
+  def updateTasksNo(gid: Int, tno: Int) = {
+    val q = for {
+      g <- Games if g.id === gid.bind
+    } yield g.tasksNo
+    q.update(tno)
   }
 
 }

@@ -19,7 +19,7 @@ import play.api.db.slick.DB
 import play.api.db.slick.Config.driver.simple._
 import java.sql.Timestamp
 import scala.language.postfixOps
-import models.mutils._
+import models.utils._
 import com.github.tototoshi.slick.JodaSupport._
 import com.github.nscala_time.time.Imports._
 
@@ -38,10 +38,23 @@ object Tasks extends Table[TasksDetails]("TASKS") {
       { (td: TasksDetails) => Some((td.gameId, td.version, td.name, td.description, td.deadline, td.maxpoints, td.maxattempts))
       })
 
-  def game = foreignKey("GM_FK", gameId, Games)(_.id)
+  def game = foreignKey("GMT_FK", gameId, Games)(_.id)
 }
 
 trait Tasks { this: ImplicitSession =>
+  import scala.util.{ Try, Success, Failure }
+  import models.dal._
+
   def getRowsNo: Int = (for {t <- Tasks} yield t.length).first
   def getGameTasksNo(gid: Int): Int = (for {t <- Tasks if t.gameId === gid} yield t.length).first
+  def createTask(td: TasksDetails): Try[Int] = {
+    val in = Try(Tasks.forInsert returning Tasks.id insert td)
+
+    in match {
+      case Success(a) => Bridges.Games.updateTasksNo(td.gameId, getGameTasksNo(td.gameId))
+      case Failure(e) => 
+    }
+
+    in
+  }
 }

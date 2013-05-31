@@ -22,7 +22,7 @@ import java.sql.Timestamp
 import scala.language.postfixOps
 import com.github.tototoshi.slick.JodaSupport._
 import com.github.nscala_time.time.Imports._
-import models.mutils._
+import models.utils._
 
 object Skins extends Table[SkinsDetails]("SKINS") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)

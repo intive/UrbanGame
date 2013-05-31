@@ -19,7 +19,7 @@ import org.specs2.mutable._
 import play.api.test._
 import play.api.test.Helpers._
 import com.github.nscala_time.time.Imports._
-import models.mutils._
+import models.utils._
 
 class UnitTestSpec extends Specification {
   "Model utils" should {

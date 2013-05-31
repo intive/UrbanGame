@@ -22,7 +22,7 @@ import play.api.libs.json._
 import scala.slick.session.Database
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
-import models.mutils._
+import models.utils._
 import models.dal.Bridges._
 
 /**
@@ -99,7 +99,7 @@ class ApplicationSpec extends Specification {
 
         Thread.sleep(10 * 1000)
         status(fill) must equalTo(OK)
-        contentAsString(fill) must contain ("Inserted 6 games and 2 operators")
+        contentAsString(fill) must contain ("Inserted 6 game(s) and 2 operator(s) and 1 task(s)")
       }
     }
 
