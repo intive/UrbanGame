@@ -10,6 +10,7 @@ using Common;
 using WebService;
 using UrbanGame.Storage;
 using UrbanGame.Utilities;
+using UrbanGame.Localization;
 
 namespace UrbanGame
 {
@@ -18,16 +19,22 @@ namespace UrbanGame
         PhoneContainer container;
         protected override void Configure()
         {
+            Dictionary<string, string> localization = new Dictionary<string, string>();
+            localization.Add("SolutionStatusChanged", AppResources.SolutionStatusChanged);
+            localization.Add("Accepted", AppResources.Accepted);
+            localization.Add("Rejected", AppResources.Rejected);            
+
             container = new PhoneContainer(RootFrame);
             container.RegisterPhoneServices();
             container.PerRequest<GameDetailsPreviewViewModel>();
             container.PerRequest<GameDetailsViewModel>();
             container.PerRequest<GamesListViewModel>();
             container.PerRequest<TaskViewModel>();
-            container.PerRequest<IUnitOfWork, UnitOfWork>();
+            container.Instance<Dictionary<string, string>>(localization);
+            container.PerRequest<IUnitOfWork, UnitOfWork>();       
             container.Singleton<IGameWebService, GameWebServiceMock>();
             container.Singleton<IGameChangesManager, GameChangesManager>();
-            container.PerRequest<IAppbarManager, AppbarManager>();
+            container.PerRequest<IAppbarManager, AppbarManager>();            
 
             container.Handler<UrbanGameDataContext>((sc) =>
             {
@@ -47,7 +54,7 @@ namespace UrbanGame
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
-            base.OnStartup(sender, e);
+            base.OnStartup(sender, e);           
             App.GameChangesManager = IoC.Get<IGameChangesManager>();
         }
 

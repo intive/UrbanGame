@@ -248,8 +248,31 @@ namespace UrbanGame.ViewModels
             newGame.Difficulty = Game.Difficulty;
             newGame.Prizes = Game.Prizes;
 
-            foreach (var task in Game.Tasks)
+            foreach (var t in Game.Tasks)
+            {
+                GameTask task = new GameTask()
+                {
+                    AdditionalText = t.AdditionalText,
+                    Description = t.Description,
+                    EndDate = t.EndDate,
+                    Game = (Game)newGame,
+                    GameId = newGame.Id,
+                    Id = t.Id,
+                    IsRepeatable = t.IsRepeatable,
+                    MaxPoints = t.MaxPoints,
+                    Name = t.Name,
+                    Picture = t.Picture,
+                    SolutionStatus = t.SolutionStatus,
+                    State = t.State,
+                    Type = t.Type,
+                    UserPoints = t.UserPoints,
+                    Version = t.Version
+                };
+                foreach (var a in t.ABCDPossibleAnswers)
+                    task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { Answer = a.Answer, Id = a.Id, Task = task, TaskId = task.Id });
+
                 newGame.Tasks.Add(task);
+            }
 
             return newGame;
         }

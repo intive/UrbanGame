@@ -331,4 +331,13 @@
   <data name="Urban" xml:space="preserve">
     <value>URBAN</value>
   </data>
+  <data name="Accepted" xml:space="preserve">
+    <value>accepted</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>rejected</value>
+  </data>
+  <data name="SolutionStatusChanged" xml:space="preserve">
+    <value>Solution status has changed to</value>
+  </data>
 </root>
