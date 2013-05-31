@@ -13,13 +13,14 @@
  * limitations under the License.
 ###
 
-newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', 'Games', ($scope, $location, $route, $rootScope, Games) ->
+newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', 'Games', '$dialog', ($scope, $location, $route, $rootScope, Games, $dialog) ->
     $scope.steps = [
         {no: 1, name: 'Data'},
         {no: 2, name: 'Tasks'},
         {no: 3, name: 'Skin'},
         {no: 4, name: 'Publish'}
     ]
+
     $scope.gameid = null
     
     $scope.game = {
@@ -36,6 +37,43 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         playersNum: null,
         awards: ""
     }
+
+    $scope.tasks = []
+
+    loadModelData = (data) ->
+        $scope.game = {
+            name: data.name,
+            description: data.description,
+            location: data.location,
+            startTime: new Date(data.startTime).toLocaleTimeString(),
+            startDate: new Date(data.startTime),
+            endTime: new Date(data.endTime).toLocaleTimeString(),
+            endDate: new Date(data.endTime),
+            winning: data.winning,
+            winningNum: data.nWins,
+            diff: data.difficulty,
+            playersNum: if (data.maxPlayers == 1000000) then null else data.maxPlayers,
+            awards: data.awards
+        }
+
+    isEdit = (gameid) ->
+        if (/\/my\/games\/\d+\/edit/gi.test(window.location.pathname))
+            $scope.gameid = parseInt(/(\d+)/.exec(window.location.pathname)[1])
+            true
+        else
+            false
+
+    fillGameModel = ->
+        if isEdit($scope.gameid)
+            Games.get(
+                {gid: $scope.gameid},
+                (data) ->
+                    loadModelData(data)
+                (error) ->
+                    alert "Error occured while querying the data."
+            )
+
+    fillGameModel()
     
     $scope.selection = $scope.steps[0]
 
@@ -64,7 +102,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
     $scope.incrementStepIfValid = ->
         $scope.incrementStep() if (!$scope.form.$invalid)
     
-      $scope.incrementStep = ->
+    $scope.incrementStep = ->
         (
             stepIndex = $scope.getCurrentStepIndex()
             if stepIndex == 0
@@ -85,46 +123,68 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 $scope.onTab1Switch() 
         ) if ( $scope.hasPreviousStep() )
 
-     $scope.savegame = ->
+    $scope.savegame = ->
         if $scope.game.playersNum == null
             $scope.game.playersNum = 1000000
-            notSetByUser=true 
+            notSetByUser = true 
 
         if ($scope.gameid == null || _.isUndefined($scope.gameid))
             Games.save(
-                {game: $scope.game},
+                {data: $scope.game},
                 (data) ->
-                    $scope.gameid = data.id
+                    $scope.gameid = data.val
+
+                    if $scope.getCurrentStepIndex() == 3
+                        window.location = "/my/games"
+                    
                     $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
                 (error) ->
-                    alert("Error occured while saving a game " + error)
+                    alert "Error occured while saving a game."
             )
         else
             Games.update(
-                {id: $scope.gameid, game: $scope.game},
+                {id: $scope.gameid, data: $scope.game},
                 (data) ->
-                    $scope.gameid = data.id
+                    if $scope.getCurrentStepIndex() == 3
+                        window.location = "/my/games"
+
                     $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
                 (error) ->
-                    alert("Error occured while updating a game " + error)
+                    alert "Error occured while updating a game."
             )
         if notSetByUser
             $scope.game.playersNum = null
 
     $scope.publishgame = ->
-        alert "published"
+        if ($scope.gameid != null && !_.isUndefined($scope.gameid))
+            title = $scope.game.name
+            msg = 'Are you sure you want to publish this game?'
+            btns = [{result:'no', label: 'No'}, {result:'ok', label: 'Yes, publish this game', cssClass: 'btn-primary'}]
+
+            $dialog.messageBox(title, msg, btns)
+                .open()
+                .then (result) ->
+                    if(result == "ok")
+                        Games.publish(
+                            {data: $scope.gameid},
+                            (data) ->
+                                window.location = "/my/games"
+                            (error) ->
+                                alert "Error occured when publishing the game."
+                        )
     
      $scope.isValidName = ->
-        Games.checkName(
-            {name: $scope.game.name},
-            (result) ->
-                if result.valid
-                    $scope.form.$setValidity "nameunique", true
-                else
-                    $scope.form.$setValidity "nameunique", false
-            (error) ->
-                alert("Error occured while checking if game name is unique " + error)
-        )
+        if ($scope.gameid == null || _.isUndefined($scope.gameid))
+            Games.checkName(
+                {data: $scope.game.name},
+                (result) ->
+                    if result.val
+                        $scope.form.$setValidity "nameunique", true
+                    else
+                        $scope.form.$setValidity "nameunique", false
+                (error) ->
+                    alert("Error occured while checking if game name is unique " + error)
+            )
 
     $scope.incrementPlayersNum = ->
         if  $scope.game.playersNum==null
@@ -146,8 +206,9 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         $scope.game.winningNum-=1 if $scope.game.winningNum>1
         
     $scope.timezone = "GMT" + ((if new Date().getTimezoneOffset() > 0 then "" else "+")) + (new Date().getTimezoneOffset() / (-60))
-    
-  
+
+    $scope.gameduration = ->
+        $scope.game.endDate - $scope.game.startDate
     
     $scope.$watch '[game.winningNum, game.playersNum]', ->
         if $scope.game.winningNum==undefined

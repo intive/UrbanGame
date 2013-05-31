@@ -16,7 +16,6 @@
 - attributes("scripts") = capture
     %script(src={uri("/assets/javascripts/controllers/myGamesCtrl.min.js")} type="text/javascript")
     %script(src={uri("/assets/javascripts/services/games.min.js")} type="text/javascript")
-    %script(src={uri("/assets/javascripts/directives/animations.min.js")} type="text/javascript")
 
 .row.span12
     %h3 = Messages("mygames.title")
@@ -46,7 +45,7 @@
                     .row
                         %span
                             = Messages("mygames.tasks")
-                        {{tasksNo}}
+                        {{game.tasksNo}}
                 %td
                     .row
                         %span(class="{{game.status}}") {{game.status | uppercase}}
@@ -65,6 +64,6 @@
                     {{game.version}}
                 %td
                     .row(ng-show="game.status == 'project' || game.status == 'online'")
-                        %button.btn.btn-small(type="button" ng-class="{disabled: game.status == 'online'}" ng-click="delete($index); $event.stopPropagation();") Delete
+                        %button.btn.btn-small(type="button" ng-class="{disabled: game.status == 'online'}" ng-click="delete($index); $event.stopPropagation();") = Messages("mygames.delete")(lan)
                     .row(ng-show="game.status == 'published'")
-                        %button.btn.btn-small(type="button" ng-click="cancel($index); $event.stopPropagation();") Cancel
+                        %button.btn.btn-small(type="button" ng-click="cancel($index); $event.stopPropagation();") = Messages("mygames.cancel")(lan)

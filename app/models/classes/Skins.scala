@@ -12,28 +12,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package models
 
 import play.api.Play.current
 import play.api.db.slick.DB
 import play.api.db.slick.Config.driver.simple._
+import java.sql.Timestamp
+import scala.language.postfixOps
+import com.github.tototoshi.slick.JodaSupport._
+import com.github.nscala_time.time.Imports._
 import models.utils._
 
-object Operators extends Table[OperatorsData]("OPERATORS") {
+object Skins extends Table[SkinsDetails]("SKINS") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-  def login = column[String]("login", O.NotNull)
-  def pass_hash = column[String]("pass_hash", O.NotNull)
-  def * = id.? ~ login ~ pass_hash <> (OperatorsData, OperatorsData.unapply _)
-  def forInsert = login ~ pass_hash <> ({ t => 
-      OperatorsData(None, t._1, t._2)}, 
-      { (od: OperatorsData) => Some((od.login, od.pass_hash))
-      })
+  def gameId = column[Int]("gameId", O.NotNull)
+  def icon = column[String]("icon", O.NotNull, O.Default("games/gameicon.png"))
+  def * = id.? ~ gameId ~ icon <> (SkinsDetails, SkinsDetails.unapply _)
+
+  def forInsert = gameId ~ icon <> ({ t => 
+      SkinsDetails(None, t._1, t._2)}, 
+      { (sd: SkinsDetails) => Some((sd.gameId, sd.icon)) })
+
+  def game = foreignKey("GM_FK", gameId, Games)(_.id)
+
 }
 
-trait Operators { this: ImplicitSession =>
+trait Skins { this: ImplicitSession =>
 
-  def getRowsNo: Int = (for {op <- Operators} yield op.length).first
+  def getRowsNo: Int = (for {s <- Skins} yield s.length).first
 
-  def createAccount(od: OperatorsData): Int = Operators.forInsert returning Operators.id insert od
-  
+  def getGameSkins(gid: Int): SkinsDetails = {
+    val q = for {
+      s <- Skins if s.gameId === gid.bind
+    } yield s
+    q.first
+  }
 }

@@ -19,6 +19,11 @@ import org.specs2.mutable._
 import play.api.test._
 import play.api.test.Helpers._
 import play.api.libs.json._
+import scala.slick.session.Database
+import play.api.db.slick.Config.driver.simple._
+import play.api.Play.current
+import models.utils._
+import models.dal.Bridges._
 
 /**
  * Add your spec here.
@@ -88,11 +93,26 @@ class ApplicationSpec extends Specification {
       }
     }
     
-    "send an id in Json object when saving the game" in {
-      running(FakeApplication()) {
+    "fill database with example data" in {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+        val fill = route(FakeRequest(GET, "/filldb")).get
+
+        Thread.sleep(10 * 1000)
+        status(fill) must equalTo(OK)
+        contentAsString(fill) must contain ("Inserted 6 game(s) and 2 operator(s) and 1 task(s)")
+      }
+    }
+
+     "send an id in Json object when saving the game" in {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val gid: Int = play.api.db.slick.DB.withSession { implicit session =>
+          Operators.createAccount(OperatorsData(None, "test", "test"))
+        }
+
         val json: JsValue = Json.parse("""
         { 
-          "game": {
+          "data": {
             "name" : "gametest1",
             "description" : "gametest desc",
             "location" : "somewhere",
@@ -108,11 +128,11 @@ class ApplicationSpec extends Specification {
           } 
         }
         """)
-        val gameid = route(FakeRequest(POST, "/my/games").withJsonBody(json)).get
+        val gameid = route(FakeRequest(POST, "/my/games/json").withJsonBody(json)).get
         
         Thread.sleep(10 * 1000)
         status(gameid) must equalTo(OK)
-        contentAsString(gameid) must contain ("id")
+        contentAsString(gameid) must contain ("val")
       }
     }
 	
