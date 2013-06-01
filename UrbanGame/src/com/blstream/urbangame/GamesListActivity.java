@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
+import com.blstream.urbangame.listeners.GpsLocationListener;
 import com.blstream.urbangame.session.LoginManager;
 
 public class GamesListActivity extends MenuListActivity {
@@ -34,6 +37,8 @@ public class GamesListActivity extends MenuListActivity {
 	
 	private GamesListAdapter adapter;
 	private static boolean initFinished = false;
+	private LocationManager locationManager;
+	private GpsLocationListener gpsLocationListener;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,11 @@ public class GamesListActivity extends MenuListActivity {
 			putMockDataToDatabase();
 			initFinished = true;
 		}
+		
+		//gps, I think we need it all the time, my idea is to pass it through intent to all classes that need it
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		gpsLocationListener = new GpsLocationListener();
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, gpsLocationListener);
 		
 		// FIXME remove mock data when it is no longer needed
 		adapter = new GamesListAdapter(this, R.layout.list_item_game, mockData());
@@ -166,6 +176,7 @@ public class GamesListActivity extends MenuListActivity {
 		UrbanGameShortInfo game = adapter.getItem(posViewInList);
 		Long selectedGameId = (game == null ? -1 : game.getID());
 		bundle.putLong(GameDetailsActivity.GAME_KEY, selectedGameId);
+		bundle.putParcelable(GpsLocationListener.GPS_LISTENER_KEY, gpsLocationListener);
 		
 		Intent intent = new Intent(GamesListActivity.this, GameDetailsActivity.class);
 		intent.putExtras(bundle);
