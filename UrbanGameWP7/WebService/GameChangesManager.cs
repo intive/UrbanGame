@@ -23,16 +23,16 @@ namespace WebService
         IGameWebService _gameWebService;
         IEventAggregator _gameEventAggregator;
         Func<IUnitOfWork> _unitOfWorkLocator;
-        Dictionary<string, string> _localizationResources;
+        ILocalizationService _localizationService;
         Timer _mockTimer;        
 
         public GameChangesManager(IGameWebService gameWebService, IEventAggregator gameEventAggregator,
-                                  Func<IUnitOfWork> unitOfWorkLocator, Dictionary<string, string> localizationResources)
+                                  Func<IUnitOfWork> unitOfWorkLocator, ILocalizationService localizationService)
         {
             _gameWebService = gameWebService;
             _gameEventAggregator = gameEventAggregator;
             _unitOfWorkLocator = unitOfWorkLocator;
-            _localizationResources = localizationResources;
+            _localizationService = localizationService;
 
             _mockTimer = new Timer(new TimerCallback(RandomChange), null, 5000, 5000);
         }
@@ -122,8 +122,8 @@ namespace WebService
                                     Background = new SolidColorBrush(Colors.Green),
                                     TextWrapping = System.Windows.TextWrapping.Wrap,
                                     MillisecondsUntilHidden = 5000,
-                                    Message = _localizationResources["SolutionStatusChanged"] + " " +
-                                              (toUpdate.SolutionStatus == SolutionStatus.Accepted ? _localizationResources["Accepted"] : _localizationResources["Rejected"])
+                                    Message = _localizationService.GetText("SolutionStatusChanged") + " " +
+                                              (toUpdate.SolutionStatus == SolutionStatus.Accepted ? _localizationService.GetText("Accepted") : _localizationService.GetText("Rejected"))
                                 }.Show());
                         }
                     }

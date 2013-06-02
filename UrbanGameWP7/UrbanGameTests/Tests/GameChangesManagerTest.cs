@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using UrbanGame.Localization;
 using UrbanGame.Storage;
+using UrbanGame.Utilities;
 using UrbanGameTests.Mocks;
 using WebService;
 
@@ -34,13 +35,8 @@ namespace UrbanGameTests.Tests
             HandlerClass handler = new HandlerClass();
             aggregator.Subscribe(handler);
 
-            Dictionary<string, string> localization = new Dictionary<string, string>();
-            localization.Add("SolutionStatusChanged", AppResources.SolutionStatusChanged);
-            localization.Add("Accepted", AppResources.Accepted);
-            localization.Add("Rejected", AppResources.Rejected);   
-
             IDatabaseMock database = new DatabaseMock();
-            IGameChangesManager notifier = new GameChangesManager(webService, aggregator, () => new UnitOfWorkMock(database), localization);
+            IGameChangesManager notifier = new GameChangesManager(webService, aggregator, () => new UnitOfWorkMock(database), new LocalizationService());
             System.Threading.Thread.Sleep(8000);
 
             Assert.IsTrue(handler.handled);

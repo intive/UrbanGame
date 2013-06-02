@@ -19,18 +19,13 @@ namespace UrbanGame
         PhoneContainer container;
         protected override void Configure()
         {
-            Dictionary<string, string> localization = new Dictionary<string, string>();
-            localization.Add("SolutionStatusChanged", AppResources.SolutionStatusChanged);
-            localization.Add("Accepted", AppResources.Accepted);
-            localization.Add("Rejected", AppResources.Rejected);            
-
             container = new PhoneContainer(RootFrame);
             container.RegisterPhoneServices();
             container.PerRequest<GameDetailsPreviewViewModel>();
             container.PerRequest<GameDetailsViewModel>();
             container.PerRequest<GamesListViewModel>();
             container.PerRequest<TaskViewModel>();
-            container.Instance<Dictionary<string, string>>(localization);
+            container.Singleton<ILocalizationService, LocalizationService>();
             container.PerRequest<IUnitOfWork, UnitOfWork>();       
             container.Singleton<IGameWebService, GameWebServiceMock>();
             container.Singleton<IGameChangesManager, GameChangesManager>();
