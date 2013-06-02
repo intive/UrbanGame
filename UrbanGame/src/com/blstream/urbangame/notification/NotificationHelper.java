@@ -28,41 +28,20 @@ public class NotificationHelper {
 	
 	private final static String TAG = NotificationHelper.class.getSimpleName();
 	
-	//	FIXME this class should be a singleton - but for purpose of mocking it needs context so it cannot be singleton for now
-	//	private final NotificationHelper instance = new NotificationHelper();
+	private final NotificationHelper instance = new NotificationHelper();
 	private final List<NotificationInterface> observators;
 	private final Handler mHandler;
 	private Runnable serverQuery;
 	
 	private static long timeToNextQuery = 5 * 60 * 1000; // 5 minutes
 	
-	//**********************//
-	//						//
-	//		M O C K			//
-	//						//
-	//**********************//
-	//context needed for database changes purpose 
-	private final Context contextMOCK; //FIXME for mocking only, delete
+	private Context context;
 	
-	public NotificationHelper(Context context) {
-		contextMOCK = context;
+	private NotificationHelper() {
 		observators = new ArrayList<NotificationHelper.NotificationInterface>();
 		mHandler = new Handler();
 		setServerQuery();
 	}
-	
-	//**********************//
-	//						//
-	//	M O C K		E N D	//
-	//						//
-	//**********************//
-	
-	//	FIXME uncomment and delete mock contructor
-	//	private NotificationHelper() {
-	//		observators = new ArrayList<NotificationHelper.NotificationInterface>();
-	//		mHandler = new Handler();
-	//		setServerQuery();
-	//	}
 	
 	private void setServerQuery() {
 		serverQuery = new Runnable() {
@@ -74,7 +53,7 @@ public class NotificationHelper {
 				//		M O C K			//
 				//						//
 				//**********************//
-				DatabaseInterface db = new Database(contextMOCK);
+				DatabaseInterface db = new Database(context);
 				String loggedPlayer = db.getLoggedPlayerID();
 				List<UrbanGame> gameList = db.getAllUserGames(loggedPlayer);
 				Random r = new Random();
@@ -138,15 +117,17 @@ public class NotificationHelper {
 		};
 	}
 	
-	//FIXME uncomment
-	//	public NotificationHelper getInstance() {
-	//		return instance;
-	//	}
+	public NotificationHelper getInstance() {
+		return instance;
+	}
 	
 	public synchronized void addOnNotificationListener(NotificationInterface onNotification) {
 		observators.add(onNotification);
 		if (observators.size() == 1) { //when there were nothing before add
 			mHandler.postDelayed(serverQuery, 100);
+		}
+		if (context == null && onNotification != null) {
+			context = onNotification.getApplicationContext();
 		}
 	}
 	
@@ -167,6 +148,15 @@ public class NotificationHelper {
 	 * Interface for notification listener
 	 */
 	public interface NotificationInterface {
+		/**
+		 * This method must return activity context in order to notifications
+		 * work properly
+		 */
+		public Context getApplicationContext();
+		
+		/**
+		 * @see NotificationEvent for details
+		 */
 		public void onNotification(NotificationEvent type);
 	}
 	
