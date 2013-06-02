@@ -60,6 +60,7 @@
     <Compile Include="HighScores\IHighScore.cs" />
     <Compile Include="Tasks\TaskChangedEvent.cs" />
     <Compile Include="Tasks\TaskState.cs" />
+    <Compile Include="Utilities\ILocalizationService.cs" />
     <Compile Include="WebService\AuthorizeState.cs" />
     <Compile Include="Collections\IEntityEnumerable.cs" />
     <Compile Include="Collections\EntityEnumerable.cs" />

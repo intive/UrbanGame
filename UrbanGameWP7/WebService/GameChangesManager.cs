@@ -7,6 +7,9 @@ using Common;
 using Caliburn.Micro;
 using System.Threading.Tasks;
 using System.Threading;
+using Coding4Fun.Toolkit.Controls;
+using System.Windows;
+using System.Windows.Media;
 
 namespace WebService
 {
@@ -20,14 +23,16 @@ namespace WebService
         IGameWebService _gameWebService;
         IEventAggregator _gameEventAggregator;
         Func<IUnitOfWork> _unitOfWorkLocator;
+        ILocalizationService _localizationService;
         Timer _mockTimer;        
 
-        public GameChangesManager(IGameWebService gameWebService, IEventAggregator gameEventAggregator, 
-                                  Func<IUnitOfWork> unitOfWorkLocator)
+        public GameChangesManager(IGameWebService gameWebService, IEventAggregator gameEventAggregator,
+                                  Func<IUnitOfWork> unitOfWorkLocator, ILocalizationService localizationService)
         {
             _gameWebService = gameWebService;
             _gameEventAggregator = gameEventAggregator;
             _unitOfWorkLocator = unitOfWorkLocator;
+            _localizationService = localizationService;
 
             _mockTimer = new Timer(new TimerCallback(RandomChange), null, 5000, 5000);
         }
@@ -68,8 +73,8 @@ namespace WebService
                         _unitOfWorkLocator().Commit();
                     }
 
-                    _gameEventAggregator.Publish(new GameChangedEvent() { Id = gid });                                      
-                });      
+                    _gameEventAggregator.Publish(new GameChangedEvent() { Id = gid });                    
+                });
         }
 
         static List<SubmittedSolution> SubmittedSolutions = new List<SubmittedSolution>();
@@ -97,7 +102,7 @@ namespace WebService
                 {
                     IRepository<ITask> repo = _unitOfWorkLocator().GetRepository<ITask>();
 
-                    foreach (SubmittedSolution solution in SubmittedSolutions)
+                    foreach (SubmittedSolution solution in SubmittedSolutions.ToList())
                     {
                         ITask toUpdate = repo.All().FirstOrDefault(t => t.Id == solution.TaskId);
 
@@ -108,6 +113,18 @@ namespace WebService
 
                             _unitOfWorkLocator().Commit();
                             _gameEventAggregator.Publish(new SolutionStatusChanged() { Id = 1, TaskId = solution.TaskId, Status = toUpdate.SolutionStatus });
+
+                            
+                            System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
+                                new ToastPrompt()
+                                {
+                                    Title = toUpdate.Name,
+                                    Background = new SolidColorBrush(Colors.Green),
+                                    TextWrapping = System.Windows.TextWrapping.Wrap,
+                                    MillisecondsUntilHidden = 5000,
+                                    Message = _localizationService.GetText("SolutionStatusChanged") + " " +
+                                              (toUpdate.SolutionStatus == SolutionStatus.Accepted ? _localizationService.GetText("Accepted") : _localizationService.GetText("Rejected"))
+                                }.Show());
                         }
                     }
                 };
