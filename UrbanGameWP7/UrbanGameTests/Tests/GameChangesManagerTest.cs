@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UrbanGame.Localization;
 using UrbanGame.Storage;
+using UrbanGame.Utilities;
 using UrbanGameTests.Mocks;
 using WebService;
 
@@ -34,7 +36,7 @@ namespace UrbanGameTests.Tests
             aggregator.Subscribe(handler);
 
             IDatabaseMock database = new DatabaseMock();
-            IGameChangesManager notifier =  new GameChangesManager(webService, aggregator, () => new UnitOfWorkMock(database));
+            IGameChangesManager notifier = new GameChangesManager(webService, aggregator, () => new UnitOfWorkMock(database), new LocalizationService());
             System.Threading.Thread.Sleep(8000);
 
             Assert.IsTrue(handler.handled);

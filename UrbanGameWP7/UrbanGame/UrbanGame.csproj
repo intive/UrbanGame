@@ -138,6 +138,7 @@
     <Compile Include="Tombstoning\TombstoningContainer.cs" />
     <Compile Include="Tombstoning\TombstoningVariables.cs" />
     <Compile Include="Utilities\AppbarManager.cs" />
+    <Compile Include="Utilities\LocalizationService.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsPreviewViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsViewModel.cs" />

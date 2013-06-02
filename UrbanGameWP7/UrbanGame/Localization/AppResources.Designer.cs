@@ -98,6 +98,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to accepted.
+        /// </summary>
+        public static string Accepted {
+            get {
+                return ResourceManager.GetString("Accepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to accomplished.
         /// </summary>
         public static string Accomplished {
@@ -611,6 +620,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to rejected.
+        /// </summary>
+        public static string Rejected {
+            get {
+                return ResourceManager.GetString("Rejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to high scores.
         /// </summary>
         public static string Scores {
@@ -625,6 +643,15 @@ namespace UrbanGame.Localization {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Solution status has changed to.
+        /// </summary>
+        public static string SolutionStatusChanged {
+            get {
+                return ResourceManager.GetString("SolutionStatusChanged", resourceCulture);
             }
         }
         
