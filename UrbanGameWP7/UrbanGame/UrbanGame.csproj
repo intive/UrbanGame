@@ -104,6 +104,7 @@
     <Compile Include="Converters\DifficultyConverter.cs" />
     <Compile Include="Converters\GPSToVisibilityConverter.cs" />
     <Compile Include="Converters\IntToSlashIntConverter.cs" />
+    <Compile Include="Converters\IsRepeatableConverter.cs" />
     <Compile Include="Converters\NullableToNumberConverter.cs" />
     <Compile Include="Converters\OpositeBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\OpositeDateToVisibilityConverter.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="Storage\Game.cs" />
     <Compile Include="Storage\GameAlert.cs" />
     <Compile Include="Storage\GameHighScore.cs" />
-    <Compile Include="Storage\PositionedHighScores.cs" />
+    <Compile Include="Storage\PositionedHighScore.cs" />
     <Compile Include="Storage\Repository.cs" />
     <Compile Include="Storage\GameTask.cs" />
     <Compile Include="Storage\TaskSolution.cs" />

@@ -331,4 +331,19 @@
   <data name="Urban" xml:space="preserve">
     <value>URBAN</value>
   </data>
+  <data name="PointsUpCase" xml:space="preserve">
+    <value>POINTS:</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>TIME LEFT:</value>
+  </data>
+  <data name="NotRepeatable" xml:space="preserve">
+    <value>not repeatable</value>
+  </data>
+  <data name="PointsShort" xml:space="preserve">
+    <value>p.</value>
+  </data>
+  <data name="Repeatable" xml:space="preserve">
+    <value>repeatable</value>
+  </data>
 </root>

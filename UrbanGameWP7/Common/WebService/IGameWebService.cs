@@ -108,5 +108,40 @@ namespace Common
         /// <returns></returns>
         IGame[] UsersInactiveGames();
 
+        /// <summary>
+        /// Method returns array of tasks in which are still active
+        /// </summary>
+        /// <returns></returns>
+        ITask[] ActiveTasks();
+
+        /// <summary>
+        /// Method returns array of tasks in which are inactive
+        /// </summary>
+        /// <returns></returns>
+        ITask[] InactiveTasks();
+
+        /// <summary>
+        /// Method returns array of tasks in which are accomplished
+        /// </summary>
+        /// <returns></returns>
+        ITask[] AccomplishedTasks();
+
+        /// <summary>
+        /// Method returns array of tasks in which are cancelled
+        /// </summary>
+        /// <returns></returns>
+        ITask[] CancelledTasks();
+
+        /// <summary>
+        /// Method returns array of alerts
+        /// </summary>
+        /// <returns></returns>
+        IAlert[] Alerts();
+
+        /// <summary>
+        /// Method returns array of high scores
+        /// </summary>
+        /// <returns></returns>
+        IHighScore[] HighScores();
     }
 }
