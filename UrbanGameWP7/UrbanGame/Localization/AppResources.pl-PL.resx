@@ -324,4 +324,19 @@
   <data name="SolutionStatusChanged" xml:space="preserve">
     <value>Status rozwiązania zmienił się na</value>
   </data>
+  <data name="PointsUpCase" xml:space="preserve">
+    <value>POINTS:</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>TIME LEFT:</value>
+  </data>
+  <data name="NotRepeatable" xml:space="preserve">
+    <value>nie powtarzalne</value>
+  </data>
+  <data name="PointsShort" xml:space="preserve">
+    <value>p.</value>
+  </data>
+  <data name="Repeatable" xml:space="preserve">
+    <value>powtarzalne</value>
+  </data>
 </root>

@@ -127,7 +127,18 @@ namespace WebService
         #region GetTaskDetails
         public ITask GetTaskDetails(int gid, int tid)
         {
-            return GetTasks(gid).FirstOrDefault(task => task.Id == tid);
+            return new TaskMock()
+            {
+                Id = gid,
+                Name = "Where is he",
+                IsRepeatable = true,
+                Description = "Lorem ipsum dolor sit amet, consecteturadipiscing elit. Aliquam sit amet elementum nulla. Aliquam sed labortis libero. In id orci ac turpis adipiscing lictus. Liquam sed lobortis libero. In id orci ac turpis adipiscing luctus.",
+                Picture = "/ApplicationIcon.png",
+                UserPoints = 0,
+                MaxPoints = 12,
+                EndDate = DateTime.Now.AddHours(21).AddDays(4),
+                Type = TaskType.GPS
+            };
         }
         #endregion
 
@@ -217,6 +228,61 @@ namespace WebService
             return new IGame[] {
                 new GameMock(){Name = "Wilqu!", GameType = GameType.ScoreAttack, Id = 9, GameLogo = "/ApplicationIcon.png", GameState = GameState.Ended, Rank = 4},
                 new GameMock(){Name = "Torghal", GameType = GameType.Race, Id = 10, GameLogo = "/ApplicationIcon.png", GameState = GameState.Withdraw, Rank = null}};
+        }
+        #endregion
+
+        #region ActiveTasks
+        public ITask[] ActiveTasks()
+        {
+            return new ITask[] {
+                new TaskMock(){Id = 1, Name="Suprise", Description = "Where am I", Picture = "/ApplicationIcon.png", IsRepeatable = true, EndDate = DateTime.Now.AddHours(5), State = TaskState.Active, MaxPoints = 20, UserPoints = 10, Type = TaskType.ABCD},
+                new TaskMock(){Id = 2, Name="Second", Description = "Where am I", Picture = "/ApplicationIcon.png", IsRepeatable = false, EndDate = DateTime.Now.AddDays(1), State = TaskState.Active, MaxPoints = 5, UserPoints = 0 , Type = TaskType.GPS}};
+        }
+        #endregion
+
+        #region InactiveTasks
+        public ITask[] InactiveTasks()
+        {
+            return new ITask[] {
+                new TaskMock(){Id = 5, Name="Quest", Description = "Don't cross the river", Picture = "/ApplicationIcon.png", State = TaskState.Inactive },
+                new TaskMock(){Id = 6, Name="Second", Description = "Where am I", IsRepeatable = false, Picture = "/ApplicationIcon.png", EndDate = DateTime.Now.AddHours(5), State = TaskState.Inactive, MaxPoints = 5 }};
+        }
+        #endregion
+
+        #region AccomplishedTasks
+        public ITask[] AccomplishedTasks()
+        {
+            return new ITask[] {
+                new TaskMock(){Id = 7, Name="Poison for Ass", Description = "Poison ...", State = TaskState.Accomplished, Picture = "/ApplicationIcon.png", MaxPoints = 34, UserPoints = 12 },
+                new TaskMock(){Id = 8, Name="Poison for Ass", Description = "Poison ...", State = TaskState.Accomplished, Picture = "/ApplicationIcon.png", MaxPoints = 34, UserPoints = 12 }};
+        }
+        #endregion
+
+        #region CancelledTasks
+        public ITask[] CancelledTasks()
+        {
+            return new ITask[] {
+                new TaskMock(){Id = 8, Name="Where am I?", Description = "Poison ...", Picture = "/ApplicationIcon.png", State = TaskState.Cancelled },
+                new TaskMock(){Id = 9, Name="Where am I?", Description = "Poison ...", Picture = "/ApplicationIcon.png", State = TaskState.Cancelled }};
+        }
+        #endregion
+
+        #region Alerts
+        public IAlert[] Alerts()
+        {
+            return new IAlert[] {
+                new AlertMock(){Id = 1, Topic = "Unreal alert title", Description = "Sth happened at route 27"},
+                new AlertMock(){Id = 2, Topic = "Unreal alert title", Description = "Sth happened at route 27"}};
+        }
+        #endregion
+
+        #region HighScores
+        public IHighScore[] HighScores()
+        {
+            return new IHighScore[]{
+                new HighScoreMock(){Id = 1, UserLogin = "Korona", Points =199},
+                new HighScoreMock(){Id = 1, UserLogin = "Amanda99", Points =99},
+                new HighScoreMock(){Id = 2, UserLogin = "LoganXxX", Points =299}};
         }
         #endregion
     }

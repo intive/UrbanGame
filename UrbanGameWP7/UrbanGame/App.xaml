@@ -29,6 +29,7 @@
         <conv:TaskEndConverter x:Key="TaskEndConverter" />
         <conv:ToUpperCaseConverter x:Key="ToUpperCaseConverter" />
         <conv:DurationTimeConverter x:Key="DurationTimeConverter" />
+        <conv:IsRepeatableConverter x:Key="IsRepeatableConverter" />
         
         <Style x:Key="ItemStyle" TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -54,5 +55,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <SolidColorBrush x:Key="FontColorGreen">#A1E438</SolidColorBrush>
+        <SolidColorBrush x:Key="FontColorWhite">#ffffff</SolidColorBrush>
     </Application.Resources>
 </Application>

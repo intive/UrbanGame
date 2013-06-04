@@ -6,7 +6,7 @@ using System.Text;
 
 namespace UrbanGame.Storage
 {
-    public class PositionedHighScores
+    public class PositionedHighScore
     {
         public int Position { get; set; }
         public IHighScore Entity { get; set; }
