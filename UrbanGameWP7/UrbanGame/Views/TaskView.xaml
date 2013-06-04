@@ -25,7 +25,7 @@
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
                     <ContentPresenter>
-                        <TextBlock Text="{Binding}" FontSize="72" Margin="0,8,-5,-10" Foreground="{StaticResource Color1}" />
+                        <TextBlock Text="{Binding}" FontSize="72" Margin="0,8,-5,-10" Foreground="{StaticResource FontColorGreen}" />
                     </ContentPresenter>
                 </DataTemplate>
             </controls:Pivot.HeaderTemplate>
@@ -47,7 +47,7 @@
 
                         <TextBlock Text="{Binding Path=AppResources.PoweredBy, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.Column="0"  FontSize="{StaticResource PhoneFontSizeMedium}" Margin="120,0,10,0"/>
                         <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" FontSize="{StaticResource PhoneFontSizeLarge}" FontWeight="Bold" Margin="-20,0,0,0"/>
-                        <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource Color1}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}" FontWeight="Bold"/>
                     </Grid>
                 </StackPanel>
             </controls:Pivot.Title>
@@ -110,7 +110,7 @@
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Description}" Grid.Row="0" Foreground="{StaticResource Color2}"/>
+                            <TextBlock Text="{Binding Description}" Grid.Row="0" Foreground="{StaticResource FontColorWhite}"/>
                             <ListBox Grid.Row="1" ItemsSource="{Binding CurrentTask.ABCDPossibleAnswers}" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>

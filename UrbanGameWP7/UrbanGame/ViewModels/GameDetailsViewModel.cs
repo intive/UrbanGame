@@ -301,23 +301,9 @@ namespace UrbanGame.ViewModels
             {
                 IQueryable<IAlert> alerts = _unitOfWorkLocator().GetRepository<IAlert>().All();
 
-                if(alerts.Count() > 0)
-                    GameAlerts = new BindableCollection<IAlert>(alerts.Where(a => a.Game.Id == GameId).AsEnumerable());
-                else
-                    GameAlerts = new BindableCollection<IAlert>(_gameWebService.Alerts());
+                GameAlerts = new BindableCollection<IAlert>(alerts.Where(a => a.Game.Id == GameId).AsEnumerable());
             });
         }
-
-        /*public void RefreshAlerts()
-        {
-            IQueryable<IAlert> alerts = _unitOfWorkLocator().GetRepository<IAlert>().All();
-
-            GameAlerts.Clear();
-            GameAlerts = new BindableCollection<IAlert>(_gameWebService.Alerts());
-
-            /*GameAlerts = new BindableCollection<IAlert>(alerts.Where(a => a.Game.Id == GameId)
-                                                                    .AsEnumerable());
-        }*/
 
         public async Task RefreshHighScores()
         {
@@ -326,12 +312,10 @@ namespace UrbanGame.ViewModels
                 IQueryable<IHighScore> highScores = _unitOfWorkLocator().GetRepository<IHighScore>().All();
                 BindableCollection<IHighScore> GameHighScoresTemp;
 
-                if (highScores.Count() > 0)
-                    GameHighScoresTemp = new BindableCollection<IHighScore>(highScores.Where(h => h.Game.Id == GameId)
+                GameHighScoresTemp = new BindableCollection<IHighScore>(highScores.Where(h => h.Game.Id == GameId)
                                                                                 .OrderByDescending(h => h.Points)
                                                                                 .AsEnumerable());
-                else
-                    GameHighScoresTemp = new BindableCollection<IHighScore>(_gameWebService.HighScores().OrderByDescending(h => h.Points));
+
 
                 GameHighScores = new BindableCollection<PositionedHighScore>();
                 for (int i = 0; i < GameHighScoresTemp.Count; i++)
@@ -347,13 +331,10 @@ namespace UrbanGame.ViewModels
             {
                 IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
 
-                if (tasks.Where(t => t.State == TaskState.Active).Count() > 0)
-                    ActiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Active)
+                ActiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Active)
                                                                      .Where(t => t.Game.Id == GameId)
                                                                                 .OrderBy(t => t.EndDate)
                                                                                 .AsEnumerable());
-                else
-                    ActiveTasks = new BindableCollection<ITask>(_gameWebService.ActiveTasks().OrderBy(t => t.EndDate));
             });
         }
 
@@ -363,13 +344,11 @@ namespace UrbanGame.ViewModels
             {
                 IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
 
-                if (tasks.Where(t => t.State == TaskState.Inactive).Count() > 0)
-                    InactiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Inactive)
+                InactiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Inactive)
                                                                                             .Where(t => t.Game.Id == GameId)
                                                                                                     .OrderBy(t => t.EndDate)
                                                                                                     .AsEnumerable());
-                else
-                    InactiveTasks = new BindableCollection<ITask>(_gameWebService.InactiveTasks());
+
             });
         }
 
@@ -379,13 +358,10 @@ namespace UrbanGame.ViewModels
             {
                 IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
 
-                if (tasks.Where(t => t.State == TaskState.Accomplished).Count() > 0)
-                    AccomplishedTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Accomplished)
+                AccomplishedTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Accomplished)
                                                                         .Where(t => t.Game.Id == GameId)
                                                                                 .OrderBy(t => t.EndDate)
                                                                                 .AsEnumerable());
-                else
-                    AccomplishedTasks = new BindableCollection<ITask>(_gameWebService.AccomplishedTasks());
             });
         }
 
@@ -395,13 +371,10 @@ namespace UrbanGame.ViewModels
             {
                 IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
 
-                if (tasks.Where(t => t.State == TaskState.Cancelled).Count() > 0)
-                    CancelledTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Cancelled)
+                CancelledTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Cancelled)
                                                                         .Where(t => t.Game.Id == GameId)
                                                                                 .OrderBy(t => t.EndDate)
                                                                                 .AsEnumerable());
-                else
-                    CancelledTasks = new BindableCollection<ITask>(_gameWebService.CancelledTasks());
             });
 
         }
