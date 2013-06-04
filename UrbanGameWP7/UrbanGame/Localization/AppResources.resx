@@ -340,7 +340,7 @@
   <data name="SolutionStatusChanged" xml:space="preserve">
     <value>Solution status has changed to</value>
   </data>
-</root>  <data name="PointsUpCase" xml:space="preserve">
+  <data name="PointsUpCase" xml:space="preserve">
     <value>POINTS:</value>
   </data>
   <data name="TimeLeft" xml:space="preserve">
