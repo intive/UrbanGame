@@ -61,7 +61,7 @@ object Games extends Table[GamesDetails]("GAMES") {
       })
 
   def operator = foreignKey("OP_FK", operatorId, Operators)(_.id)
-
+  def nameUnique = index("g_idx1", name, unique = true)
 }
 
 trait Games { this: ImplicitSession =>

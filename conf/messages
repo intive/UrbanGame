@@ -6,10 +6,13 @@ register.submit = Register
 
 login.name = Login
 login.password = Password
-
 login.login = Login
 login.logout = Logout
+
 dateformat = "yy-dd-mm"
+dateformatlong = yyyy-dd-MM
+
+easy = Easy
 
 general.archive = Archive
 general.options = Options
@@ -32,7 +35,7 @@ newgame.step4title = Check your choice
 newgame.step1subtitle = Make your game easy to find. Complete the identity data of your game.
 newgame.step2subtitle = Create and manage your tasks.
 newgame.step3subtitle = Make your game looks like developed by you. Choose logo, colors and more.
-newgame.step4subtitle = Verify all data and if all are good publish game.
+newgame.step4subtitle = Verify all data and if all are good publish this game.
 
 newgame.gamenamelabel = Game name
 newgame.gamedesclabel = Description
@@ -78,12 +81,13 @@ newgame.diff.medium = Medium
 newgame.diff.hard = Hard
 
 newgame.publish = Publish
+newgame.save = Save
 newgame.saveproject = Save project
 newgame.next = Next
 newgame.previous = Previous
 
 mygames.icon = Icon
-mygames.data = Data
+mygames.data = Game info
 mygames.status = Status
 mygames.version = Version
 mygames.title = Game list
@@ -96,3 +100,14 @@ mygames.cancel = Cancel
 language.pick = Pick a language
 language.en = English
 language.pl = Polski
+
+js.newgame.tab.step1title = Data
+js.newgame.tab.step2title = Tasks
+js.newgame.tab.step3title = Skin
+js.newgame.tab.step4title = Publish
+js.errors.ajax = Error occured while {0} the game.
+js.errors.name = Error occured while checking if the game name is unique 
+js.errors.gameslist = Error occurred while getting list of games.
+js.errors.sure = Are you sure you want to {0} this game?
+js.no = No
+js.yes = Yes, {0} this game

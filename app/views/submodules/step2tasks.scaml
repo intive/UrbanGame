@@ -21,5 +21,6 @@
             %span.step = Messages("newgame.step2")(lan) 
             = Messages("newgame.step2title")(lan)
         %em = Messages("newgame.step2subtitle")(lan)
+        .alert.alert-error(ng-show="error != null") {{error}}
     .span12.slight-padding-top
         

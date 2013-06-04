@@ -13,13 +13,21 @@
     * See the License for the specific language governing permissions and
     * limitations under the License.
 
-.row.gametitle
-    TITLE OF THE GAME
-.row
-    .span4
-        Menu
-    .span8
-        .span5
-            Left content
-        .span3
-            Right content
+- attributes("scripts") = capture
+    %script(src={uri("/assets/javascripts/controllers/manageGameCtrl.min.js")} type="text/javascript")
+    %script(src={uri("/assets/javascripts/services/games.min.js")} type="text/javascript")
+    %script(src={uri("/assets/javascripts/services/utilities.min.js")} type="text/javascript")
+
+-@ val app: Application
+
+.span12(ng-controller="manageGameCtrl")
+    .row.gametitle
+        %h4 {{game.name | uppercase}}
+    .row
+        .span4
+            Menu
+        .span8
+            .span5
+                Left content
+            .span3
+                Right content

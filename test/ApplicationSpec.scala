@@ -99,7 +99,7 @@ class ApplicationSpec extends Specification {
 
         Thread.sleep(10 * 1000)
         status(fill) must equalTo(OK)
-        contentAsString(fill) must contain ("Inserted 6 game(s) and 2 operator(s) and 1 task(s)")
+        contentAsString(fill) must contain ("Inserted 11 game(s) and 2 operator(s) and 1 task(s)")
       }
     }
 
@@ -114,6 +114,7 @@ class ApplicationSpec extends Specification {
         { 
           "data": {
             "name" : "gametest1",
+            "version" : 1,
             "description" : "gametest desc",
             "location" : "somewhere",
             "startTime" : "20:20",
@@ -124,7 +125,9 @@ class ApplicationSpec extends Specification {
             "winningNum" : 2,
             "diff" : "medium",
             "playersNum" : 300,
-            "awards" : "some awards"
+            "awards" : "some awards",
+            "status" : "project",
+            "tasksNo" : 2
           } 
         }
         """)

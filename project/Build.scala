@@ -14,11 +14,17 @@ object ApplicationBuild extends Build {
     "org.fusesource.scalate" % "scalate-core_2.10" % "1.6.1",
     "commons-codec" % "commons-codec" % "1.6",
     "com.github.nscala-time" %% "nscala-time" % "0.4.0",
-    "com.github.tototoshi" %% "slick-joda-mapper" % "0.2.1"
+    "com.github.tototoshi" %% "slick-joda-mapper" % "0.2.1",
+    "com.github.julienrf" %% "play-jsmessages" % "1.4.2",
+    "jp.t2v" %% "play2.auth" % "0.9",
+    "jp.t2v" %% "play2.auth.test" % "0.9" % "test"
   )
 
 
   val main = play.Project(appName, appVersion, appDependencies)
+  .settings(
+    resolvers += "julienrf.github.com" at "http://julienrf.github.com/repo/"
+  )
   .settings(
     coffeescriptOptions := Seq("bare")
   )

@@ -22,7 +22,7 @@
             %span.step = Messages("newgame.step1")(lan) 
             = Messages("newgame.step1title")(lan)
         %em = Messages("newgame.step1subtitle")(lan)
-        {{gameid}}
+        .alert.alert-error(ng-show="error != null") {{error}}
     .span12.slight-padding-top
         .span6.pull-left.slight-padding-right
             .controls.slight-padding-top

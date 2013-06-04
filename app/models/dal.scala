@@ -51,10 +51,15 @@ object dal {
       Games.getOperatorGamesList(opId)
     }
 
+    def gameArchives(opId: Int): List[GamesList] = play.api.db.slick.DB.withSession { implicit session =>
+      Games.getOperatorGamesArchive(opId)
+    }
+
     def gameSave(res: GamePartData): Try[Int] = {
       val gd = GamesDetails(id = None, name = res.name, description = res.description, location = res.location, operatorId = 1, 
         created = DateTime.now, startTime = mutils.combineDate(res.startDate, res.startTime), endTime = mutils.combineDate(res.endDate, res.endTime), 
-        winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards) 
+        winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards, status = res.status, 
+        tasksNo = res.tasksNo) 
           
       play.api.db.slick.DB.withSession { implicit session =>
         Games.createGame(gd)
@@ -64,7 +69,8 @@ object dal {
     def gameUpdate(res: GamePartData, gid: Int): Try[Int] = {
       val gd = GamesDetails(id = Some(gid), name = res.name, description = res.description, location = res.location, operatorId = 1, 
         created = DateTime.now, startTime = mutils.combineDate(res.startDate, res.startTime), endTime = mutils.combineDate(res.endDate, res.endTime), 
-        winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards) 
+        winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards, status = res.status, 
+        tasksNo = res.tasksNo) 
           
       play.api.db.slick.DB.withSession { implicit session =>
         Games.updateGame(gid, gd)
@@ -89,8 +95,10 @@ object dal {
 }
 
 trait Bridges {
-  case class GamePartData(name: String, description: String, location: String, startTime: String, startDate: String, 
-    endTime: String, endDate: String, winning: String, winningNum: Int, diff: String, playersNum: Int, awards: String)
+  case class GamePartData(name: String, version: Int, description: String, location: String, startTime: String, startDate: String, 
+    endTime: String, endDate: String, winning: String, winningNum: Int, diff: String, playersNum: Int, awards: String, 
+    status: String, tasksNo: Int)
+
   def game(gid: Int): Try[GamesDetails]
   def gameList(opId: Int): List[GamesList]
   def gameSave(res: GamePartData): Try[Int]
