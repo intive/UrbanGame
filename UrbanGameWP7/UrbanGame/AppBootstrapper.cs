@@ -10,6 +10,7 @@ using Common;
 using WebService;
 using UrbanGame.Storage;
 using UrbanGame.Utilities;
+using UrbanGame.Localization;
 
 namespace UrbanGame
 {
@@ -24,10 +25,11 @@ namespace UrbanGame
             container.PerRequest<GameDetailsViewModel>();
             container.PerRequest<GamesListViewModel>();
             container.PerRequest<TaskViewModel>();
-            container.PerRequest<IUnitOfWork, UnitOfWork>();
+            container.Singleton<ILocalizationService, LocalizationService>();
+            container.PerRequest<IUnitOfWork, UnitOfWork>();       
             container.Singleton<IGameWebService, GameWebServiceMock>();
             container.Singleton<IGameChangesManager, GameChangesManager>();
-            container.PerRequest<IAppbarManager, AppbarManager>();
+            container.PerRequest<IAppbarManager, AppbarManager>();            
 
             container.Handler<UrbanGameDataContext>((sc) =>
             {
@@ -47,7 +49,7 @@ namespace UrbanGame
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
-            base.OnStartup(sender, e);
+            base.OnStartup(sender, e);           
             App.GameChangesManager = IoC.Get<IGameChangesManager>();
         }
 
