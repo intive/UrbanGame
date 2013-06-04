@@ -539,6 +539,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to not repeatable.
+        /// </summary>
+        public static string NotRepeatable {
+            get {
+                return ResourceManager.GetString("NotRepeatable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Operator.
         /// </summary>
         public static string Operator {
@@ -584,6 +593,24 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to p..
+        /// </summary>
+        public static string PointsShort {
+            get {
+                return ResourceManager.GetString("PointsShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to POINTS:.
+        /// </summary>
+        public static string PointsUpCase {
+            get {
+                return ResourceManager.GetString("PointsUpCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to powered by.
         /// </summary>
         public static string PoweredBy {
@@ -625,6 +652,15 @@ namespace UrbanGame.Localization {
         public static string Rejected {
             get {
                 return ResourceManager.GetString("Rejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to repeatable.
+        /// </summary>
+        public static string Repeatable {
+            get {
+                return ResourceManager.GetString("Repeatable", resourceCulture);
             }
         }
         
@@ -688,6 +724,15 @@ namespace UrbanGame.Localization {
         public static string Tasks {
             get {
                 return ResourceManager.GetString("Tasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TIME LEFT:.
+        /// </summary>
+        public static string TimeLeft {
+            get {
+                return ResourceManager.GetString("TimeLeft", resourceCulture);
             }
         }
         

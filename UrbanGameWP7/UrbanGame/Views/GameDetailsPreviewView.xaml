@@ -26,7 +26,7 @@
                 <DataTemplate>
                     <ContentPresenter>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding}" FontSize="60" Margin="0,8,0,-10" Foreground="Green" />
+                            <TextBlock Text="{Binding}" FontSize="60" Margin="0,8,0,-10" Foreground="{StaticResource FontColorGreen}" />
                         </StackPanel>
                     </ContentPresenter>
                 </DataTemplate>
@@ -37,8 +37,8 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="-30,15,15,0" FontWeight="Bold" Foreground="Green"/>
-                    <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Column="0" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,15,15,0" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="-30,15,15,0" FontWeight="Bold" Foreground="{StaticResource FontColorGreen}"/>
+                    <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Column="0" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,15,15,0" FontWeight="Bold" Foreground="{StaticResource FontColorWhite}"/>
                 </Grid>
             </controls:Pivot.Title>
 
@@ -61,7 +61,7 @@
                             <Grid.Resources>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="TextTrimming" Value="WordEllipsis" />
-                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
                                 </Style>
                             </Grid.Resources>
 
@@ -71,10 +71,10 @@
                                 <TextBlock Text="{Binding Path=Game.Name}" FontSize="{StaticResource PhoneFontSizeLarge}" FontWeight="Bold" />
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{Binding Path=AppResources.ByOperatorUpCase, Source={StaticResource LocalizedStrings}}" 
-                                           Margin="0,0,10,0" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center" Foreground="White"/>
-                                    <TextBlock Text="{Binding Path=Game.OperatorName}" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center" Foreground="White"/>
+                                           Margin="0,0,10,0" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center" Foreground="{StaticResource FontColorWhite}"/>
+                                    <TextBlock Text="{Binding Path=Game.OperatorName}" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center" Foreground="{StaticResource FontColorWhite}"/>
                                 </StackPanel>
-                                <TextBlock Text="{Binding Path=Game.Localization}" Foreground="White"/>
+                                <TextBlock Text="{Binding Path=Game.Localization}" Foreground="{StaticResource FontColorWhite}"/>
                             </StackPanel>
                         </Grid>
 
@@ -89,7 +89,7 @@
                             <Grid.Resources>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Margin" Value="0,0,0,5" />
-                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
                                 </Style>
                                 <Style TargetType="StackPanel">
                                     <Setter Property="Margin" Value="0,5,0,5" />
@@ -131,7 +131,7 @@
             </controls:PivotItem>
 
             <!--Pivot item two-->
-            <controls:PivotItem Header="{Binding Path=AppResources.Prizes, Source={StaticResource LocalizedStrings}}">
+            <controls:PivotItem Header="{Binding Path=AppResources.Prizes, Source={StaticResource LocalizedStrings}}" Foreground="{StaticResource FontColorGreen}">
                 <ScrollViewer Margin="14,0,0,0" Background="Transparent">
                     <TextBlock Text="{Binding Path=Game.Prizes}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeLarge}" LineHeight="50" LineStackingStrategy="BlockLineHeight"/>
                 </ScrollViewer>

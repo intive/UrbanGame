@@ -45,7 +45,7 @@ namespace UrbanGame.ViewModels
         #region IHandle<GameChangedEvent>
         public void Handle(GameChangedEvent game)
         {
-
+            RefreshGame();
         }
         #endregion
 
@@ -77,6 +77,27 @@ namespace UrbanGame.ViewModels
             }
         }
 
+        #endregion
+
+        #region Game
+
+        private IGame _game;
+
+        public IGame Game
+        {
+            get
+            {
+                return _game;
+            }
+            set
+            {
+                if (_game != value)
+                {
+                    _game = value;
+                    NotifyOfPropertyChange(() => Game);
+                }
+            }
+        }
         #endregion
 
         #region ActiveTasks
@@ -187,9 +208,9 @@ namespace UrbanGame.ViewModels
 
         #region GameHighScores
 
-        private BindableCollection<PositionedHighScores> _gameHighScores;
+        private BindableCollection<PositionedHighScore> _gameHighScores;
 
-        public BindableCollection<PositionedHighScores> GameHighScores
+        public BindableCollection<PositionedHighScore> GameHighScores
         {
             get
             {
@@ -224,7 +245,7 @@ namespace UrbanGame.ViewModels
             RefreshAccomplishedTasks();
             RefreshCancelledTasks();
             RefreshHighScores();
-            RefreshAlerts();
+            await RefreshAlerts();
         }
 
         #endregion
@@ -264,63 +285,98 @@ namespace UrbanGame.ViewModels
             ShowsMore = false;
         }
 
-        public void RefreshAlerts()
+        public async Task RefreshGame()
         {
-            IQueryable<IAlert> alerts = _unitOfWorkLocator().GetRepository<IAlert>().All();
-
-            GameAlerts = new BindableCollection<IAlert>(alerts.Where(a => a.Game.Id == GameId)
-                                                                    .AsEnumerable());
-        }
-
-        public void RefreshHighScores()
-        {
-            IQueryable<IHighScore> highScores = _unitOfWorkLocator().GetRepository<IHighScore>().All();
-
-            BindableCollection<IHighScore> GameHighScoresTemp = new BindableCollection<IHighScore>(highScores.Where(h => h.Game.Id == GameId)
-                                                                                .OrderBy(h => h.Points)
-                                                                                .AsEnumerable());
-
-            GameHighScores = new BindableCollection<PositionedHighScores>();
-            for (int i = 0; i < GameHighScoresTemp.Count; i++)
+            await Task.Factory.StartNew(() =>
             {
-                GameHighScores.Add(new PositionedHighScores() { Position = i + 1, Entity = GameHighScoresTemp.ElementAt(i) });
-            }
+                IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
+                Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
+            });
         }
 
-        public void RefreshActiveTasks()
-        {
-            IQueryable<ITask> task = _unitOfWorkLocator().GetRepository<ITask>().All();
 
-            ActiveTasks = new BindableCollection<ITask>(task.Where(t => t.State == TaskState.Active)
-                                                                                .OrderBy(t => t.EndDate)
-                                                                                .AsEnumerable());
+        public async Task RefreshAlerts()
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                IQueryable<IAlert> alerts = _unitOfWorkLocator().GetRepository<IAlert>().All();
+
+                GameAlerts = new BindableCollection<IAlert>(alerts.Where(a => a.Game.Id == GameId).AsEnumerable());
+            });
         }
 
-        public void RefreshInactiveTasks()
+        public async Task RefreshHighScores()
         {
-            IQueryable<ITask> task = _unitOfWorkLocator().GetRepository<ITask>().All();
+            await Task.Factory.StartNew(() =>
+            {
+                IQueryable<IHighScore> highScores = _unitOfWorkLocator().GetRepository<IHighScore>().All();
+                BindableCollection<IHighScore> GameHighScoresTemp;
 
-            InactiveTasks = new BindableCollection<ITask>(task.Where(t => t.State == TaskState.Inactive)
-                                                                                .OrderBy(t => t.EndDate)
+                GameHighScoresTemp = new BindableCollection<IHighScore>(highScores.Where(h => h.Game.Id == GameId)
+                                                                                .OrderByDescending(h => h.Points)
                                                                                 .AsEnumerable());
+
+
+                GameHighScores = new BindableCollection<PositionedHighScore>();
+                for (int i = 0; i < GameHighScoresTemp.Count; i++)
+                {
+                    GameHighScores.Add(new PositionedHighScore() { Position = i + 1, Entity = GameHighScoresTemp.ElementAt(i) });
+                }
+            });
         }
 
-        public void RefreshAccomplishedTasks()
+        public async Task RefreshActiveTasks()
         {
-            IQueryable<ITask> task = _unitOfWorkLocator().GetRepository<ITask>().All();
+            await Task.Factory.StartNew(() =>
+            {
+                IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
 
-            AccomplishedTasks = new BindableCollection<ITask>(task.Where(t => t.State == TaskState.Accomplished)
+                ActiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Active)
+                                                                     .Where(t => t.Game.Id == GameId)
                                                                                 .OrderBy(t => t.EndDate)
                                                                                 .AsEnumerable());
+            });
         }
 
-        public void RefreshCancelledTasks()
+        public async Task RefreshInactiveTasks()
         {
-            IQueryable<ITask> task = _unitOfWorkLocator().GetRepository<ITask>().All();
+            await Task.Factory.StartNew(() =>
+            {
+                IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
 
-            CancelledTasks = new BindableCollection<ITask>(task.Where(t => t.State == TaskState.Cancelled)
+                InactiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Inactive)
+                                                                                            .Where(t => t.Game.Id == GameId)
+                                                                                                    .OrderBy(t => t.EndDate)
+                                                                                                    .AsEnumerable());
+
+            });
+        }
+
+        public async Task RefreshAccomplishedTasks()
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
+
+                AccomplishedTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Accomplished)
+                                                                        .Where(t => t.Game.Id == GameId)
                                                                                 .OrderBy(t => t.EndDate)
                                                                                 .AsEnumerable());
+            });
+        }
+
+        public async Task RefreshCancelledTasks()
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
+
+                CancelledTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Cancelled)
+                                                                        .Where(t => t.Game.Id == GameId)
+                                                                                .OrderBy(t => t.EndDate)
+                                                                                .AsEnumerable());
+            });
+
         }
 
         #endregion
