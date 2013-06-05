@@ -29,17 +29,6 @@ object ApplicationBuild extends Build {
     coffeescriptOptions := Seq("bare")
   )
   .settings(
-    jasmineSettings : _*
-  )
-  .settings(
-    // Jasmine configuration, overridden as we don't follow the default project structure sbt-jasmine expects
-    appJsDir <+= baseDirectory( _ / "target" / "scala-2.10" / "resource_managed" / "main" / "public" / "javascripts"),
-    appJsLibDir <+= baseDirectory( _ / "public" / "javascripts" / "lib"),
-    jasmineTestDir <+= baseDirectory( _ / "test" / "assets"),
-    jasmineConfFile <+= baseDirectory( _ / "test" / "assets" / "test.dependencies.js"),
-    (test in Test) <<= (test in Test) dependsOn (jasmine)
-  )
-  .settings(
     scalacOptions ++= Seq("-deprecation","-unchecked","-feature")
   )
   .dependsOn(RootProject( uri("git://github.com/freekh/play-slick.git") ))
