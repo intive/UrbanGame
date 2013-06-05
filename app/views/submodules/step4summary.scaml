@@ -21,48 +21,49 @@
             %span.step = Messages("newgame.step4")(lan) 
             = Messages("newgame.step4title")(lan)
         %em = Messages("newgame.step4subtitle")(lan)
+        .alert.alert-error(ng-show="error != null") {{error}}
     .span12.slight-padding-top
         .span6.pull-left.slight-padding-right
             .slight-padding-top
-                .row
-                    .span3.slight-padding-right
-                        %img(ng-src="/assets/images/{{game.image}}")/
-                    .span3
-                        {{game.name | uppercase}}
-                .row
+                .row.sum
+                    .span4
+                        %img(ng-src="/assets/images/{{skin.image}}")/
+                    .span8
+                        %h4 {{game.name | uppercase}}
+                .row.sum
                     %p.bold = Messages("newgame.gamedesclabel")(lan)
                     %p {{game.description}}
-                .row
+                .row.sum
                     %p.bold = Messages("newgame.gameawardslabel")(lan)
                     %p {{game.awards}}
         .span6.pull-right.slight-padding-left
             .slight-padding-top
                 .row
                     %p.bold = Messages("newgame.gametypelabel")(lan)
-                    %p {{game.winning}}
+                    %p {{getWinStrMsg()}}
                 .row
                     %p.bold = Messages("newgame.gamelocationlabel")(lan)
                     %p {{game.location}}
                 .row
                     %p.bold = Messages("newgame.gamestarttdlabel")(lan)
                     %p 
+                        {{game.startDate | date: dateFormat}}
                         {{game.startTime}} 
                         {{timezone}} 
-                        {{game.startDate}}
                 .row
                     %p.bold = Messages("newgame.gameendtdlabel")(lan)
                     %p 
+                        {{game.endDate | date: dateFormat}}
                         {{game.endTime}} 
                         {{timezone}} 
-                        {{game.endDate}}
                 .row
                     %p.bold = Messages("newgame.gamedifflabel")(lan)
                     %p {{game.diff}}
                 .row
                     %p 
                         %span.bold = Messages("newgame.gametasksnolabel")(lan)
-                        {{tasks.no}}
+                        {{game.tasksNo}}
                 .row
                     %p 
                         %span.bold = Messages("newgame.gamedurationlabel")(lan)
-                        {{gameduration}}
+                        {{gameduration()}}

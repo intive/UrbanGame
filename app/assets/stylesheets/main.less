@@ -1,3 +1,18 @@
+/**Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+ *       http://blstream.github.com/UrbanGame/
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+
 /* heights, widths */
 @contwidth: 940px;
 @wizminheight: 200px;
@@ -161,6 +176,10 @@ input[type="radio"] {
 	padding-left: @slightpadding;
 }
 
+.slight-padding-bottom {
+	padding-left: @slightpadding;
+}
+
 textarea {
 	height: @tareaheight;
 	resize: none;
@@ -174,12 +193,27 @@ textarea {
 	cursor: help;
 }
 
+input.search-query {
+    border-radius: 15px 0 0 15px;
+    padding: 4px 14px;
+    border-right-style: none;
+}
+
+.input-append .add-on:last-child {
+    border-radius: 0 15px 15px 0;
+    -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    border-left-style: none;
+}
+
 #gamelist {
 	tbody tr td {
 		border-top: none;
 	}
 
-	thead tr td {
+	thead tr th {
 		border-top: 1px double @lightgray;
 		border-bottom: 3px double @lightgray;
 		font-weight: bold;
@@ -284,30 +318,14 @@ form#registration {
 	z-index: 9999 !important;
 }
 
-tr {
-  transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -webkit-transition: all 0.5s ease;
-}
-
-tr.ui-animate {
-  opacity: 0;
-  max-height: 0;
-  padding: 0 5px;
-}
-
-tr.ui-animate-out {
-  transition: all 0.01s ease;
-  -o-transition: all 0.01s ease;
-  -moz-transition: all 0.01s ease;
-  -webkit-transition: all 0.01s ease;
-}
-
 .step {
-	text-transform: uppercase;
+	text-transform: capitalize;
 }
 
 .bold {
 	font-weight: bold;
+}
+
+.row.sum {
+	margin-bottom: 10px;
 }

@@ -16,14 +16,9 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import play.api.db.slick.Config.driver.simple._
-import play.api.db.DB
-import scala.slick.session.Database
-import play.api.Play.current
-import models.utils._
-import models.dal.Bridges._
 import play.api.data._
 import play.api.data.Forms._
+import play.api.Play.current
 
 object Application extends Controller with CookieLang {
   
@@ -39,6 +34,10 @@ object Application extends Controller with CookieLang {
   )
 
   def login = Action { implicit request =>
+    Ok("login")
+  }
+
+  def processLogin = Action { implicit request =>
     loginForm.bindFromRequest.fold(
       errors => BadRequest(Scalate("index").render('title -> "Urban Game", 'errors -> errors)),
       { case (login, password) => 
@@ -47,10 +46,16 @@ object Application extends Controller with CookieLang {
     )
   }
 
-  def logout = Action {
-    Ok(Scalate("logout").render('title -> "Urban Game - Logout"))
+  def logout = Action { implicit request =>
+    Ok(Scalate("logout").render('title -> "Urban Game - Logout", 'request -> request))
   }
 
+  import play.api.db.slick.Config.driver.simple._
+  import play.api.db.DB
+  import play.api.Play.current
+  import scala.slick.session.Database
+  import models.utils._
+  import models.dal.Bridges._
   import play.api.libs.json._
   import play.api.libs.functional.syntax._
   
@@ -109,6 +114,11 @@ object Application extends Controller with CookieLang {
     }
 
     Ok("Inserted " + cnt1 + " game(s) and " + cnt2 + " operator(s) and " + cnt3 + " task(s)")
+  }
+
+  def jsMessages = Action { implicit request =>
+    import jsmessages.api.JsMessages
+    Ok(JsMessages.apply(Some("Messages"))).as(JAVASCRIPT)
   }
 
 }

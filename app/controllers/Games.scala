@@ -20,8 +20,9 @@ import play.api.Logger
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import scala.util.{ Try, Success, Failure }
+import play.api.Play.current
 
-object GamesCtrl extends Controller with CookieLang with GamesCtrl {
+object GamesCtrl extends Controller with CookieLang {
 
   def newGame = Action { implicit request =>
     Ok(Scalate("newgame").render('title -> "Urban Game - Edit the game", 'request -> request))
@@ -56,7 +57,7 @@ object GamesCtrl extends Controller with CookieLang with GamesCtrl {
   }
 
   def gameArchive = Action { implicit request =>
-    Ok("Archive")
+    Ok(Scalate("mygames").render('title -> "Urban Game - My games", 'request -> request))
   }
 
   def options = Action { implicit request =>
@@ -74,6 +75,14 @@ object GamesCtrl extends Controller with CookieLang with GamesCtrl {
     val glist = gameList(opId)
 
     Ok(Json.toJson(glist))
+  }
+
+  def getGamesArchive = Action { implicit request =>
+    val opId = 1 // will be set from session soon
+
+    val garchive = gameArchives(opId)
+
+    Ok(Json.toJson(garchive))
   }
 
   def getGame(gid: Int) = Action { implicit request =>
@@ -144,6 +153,4 @@ object GamesCtrl extends Controller with CookieLang with GamesCtrl {
   }
 }
 
-trait GamesCtrl {
-
-}
+case class QueryParams(rpp: Int)

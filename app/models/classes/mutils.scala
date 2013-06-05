@@ -8,7 +8,7 @@ import scala.util.matching.Regex
 case class GamesDetails(id: Option[Int], name: String, version: Int = 1, description: String, location: String, 
   operatorId: Int, created: DateTime, updated: DateTime = DateTime.now, startTime: DateTime = DateTime.now, 
   endTime: DateTime, started: Option[DateTime] = None, ended: Option[DateTime] = None, winning: String = "max_points", 
-  nWins: Int = 1, difficulty: String = "easy", maxPlayers: Int = 1000000, awards: String, status: String = "project", 
+  nWins: Int = 1, difficulty: String = "easy", maxPlayers: Int = 1000000, awards: String, status: String, 
   image: String="games/gameicon.png", tasksNo: Int = 0)
 case class TasksDetails(id: Option[Int], gameId: Int, version: Int, name: String, description: String, 
   deadline: DateTime, maxpoints: Int, maxattempts: Int)

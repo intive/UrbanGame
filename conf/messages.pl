@@ -9,6 +9,9 @@ login.password = Hasło
 login.login = Zaloguj
 login.logout = Wyloguj
 
+dateformat = "yy-dd-mm"
+dateformatlong = dd-MM-yyyy
+
 general.archive = Archiwum
 general.options = Opcje
 
@@ -38,7 +41,7 @@ newgame.gametype1 = Zdobądź najwięcej punktów.
 newgame.gametype2 = Ukończ wszystkie zadania w najkrótszym czasie. 
 newgame.gamewinningnumlabel = Liczba zwycięzców
 
-newgame.ttgamename = *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! 
+newgame.ttgamename = *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! *Im a tooltip!* A long one! *I'm a tooltip!* A long one! *I'm a tooltip!* A long one! 
 newgame.ttgamedesc = x
 newgame.ttgameawards = x
 newgame.ttgametype1 = x
@@ -52,8 +55,12 @@ newgame.ttgameplayersnum = x
 newgame.ttgamediff = x
 newgame.ttgamewinningnum = x
 
+newgame.diff.easy = Łatwy
+newgame.diff.medium = Średni
+newgame.diff.hard = Trudny
+
 mygames.icon = Ikona
-mygames.data = Dane
+mygames.data = Informacje o grze
 mygames.status = Status
 mygames.version = Wersja
 mygames.title = Lista gier
@@ -64,3 +71,8 @@ mygames.tasks = Zadania
 language.pick = Wybierz język
 language.en = English
 language.pl = Polski
+
+js.newgame.tab.step1title = Dane
+js.newgame.tab.step2title = Zadania
+js.newgame.tab.step3title = Skórka
+js.newgame.tab.step4title = Publikuj
