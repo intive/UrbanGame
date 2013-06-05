@@ -16,16 +16,43 @@ package webapi.models
 
 import play.api._
 import play.api.mvc._
+import com.github.nscala_time.time.Imports._
 
-case class User(id: Int)
-case class GameSummary(gid: Int, name: String)
-case class GameStatic (gid: Int, name: String)
-case class GameDynamic(gid: Int, version: Int)
-case class TaskSummary(gid: Int, tid: Int, name: String)
-case class TaskStatic (gid: Int, tid: Int, name: String)
+case class User(id: Int, login: String)
+case class GameSummary(
+    gid: Int, version: Int, name: String, 
+    startTime: DateTime, endTime: DateTime,
+    difficulty: String, operatorName: String
+)
+case class GameStatic(
+    gid: Int, version: Int, name: String, description: String,
+    location: String,
+    operatorName: String,
+    created: DateTime, updated: DateTime,
+    startTime: DateTime, endTime: DateTime,
+    started: Option[DateTime], ended: Option[DateTime],
+    winning: String, nWins: Int,
+    difficulty: String,
+    maxPlayers: Int,
+    awards: String,
+    status: String,
+    image: String
+)
+case class GameDynamic(gid: Int, version: Int, status: String, free: Int)
+case class TaskSummary(gid: Int, tid: Int, version: Int,  name: String)
+case class TaskStatic(
+    gid: Int, tid: Int, version: Int,
+    name: String, description: String,
+    deadline: DateTime,
+    maxpoints: Int,
+    maxattempts: Int
+);
 case class TaskDynamic(gid: Int, tid: Int, version: Int)
-case class UserGameStatus (gid: Int, points: Int)
-case class UserTaskStatus (gid: Int, tid: Int, points: Int)
+case class UserGameSummary(
+  gid: Int, version: Int, started: DateTime, finished: Option[DateTime], points: Int
+)
+case class UserGameStatus(gid: Int, points: Int)
+case class UserTaskStatus(gid: Int, tid: Int, points: Int)
 
 abstract class UserAnswer
 case class GPSAnswer(lat: Double, lon: Double) extends UserAnswer
@@ -39,10 +66,11 @@ trait GamesService {
   def getTaskStatic(gid: Int, tid: Int): TaskStatic
   def getTaskDynamic(gid: Int, tid: Int): TaskDynamic
   def getUserOpt(login: String, password: String): Option[User]
+  def findUserOpt(login: String): Option[User]
   def createUser(login: String, password: String)
   def joinGame(user: User, gid: Int)
   def leaveGame(user: User, gid: Int)
-  def listUserGames(user: User): List[GameSummary]
+  def listUserGames(user: User): List[UserGameSummary]
   def getUserGameStatus(user: User, gid: Int): UserGameStatus
   def getUserTaskStatus(user: User, gid: Int, tid: Int): UserTaskStatus
   def checkUserAnswer(user: User, gid: Int, tid: Int, ans: UserAnswer)
