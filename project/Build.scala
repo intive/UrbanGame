@@ -31,5 +31,8 @@ object ApplicationBuild extends Build {
   .settings(
     scalacOptions ++= Seq("-deprecation","-unchecked","-feature")
   )
+  .settings(
+    sbt.Keys.fork in Test := false
+  )
   .dependsOn(RootProject( uri("git://github.com/freekh/play-slick.git") ))
 }
