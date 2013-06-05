@@ -26,6 +26,7 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
     $scope.itemsPerPage = 5
     $scope.pagedItems = []
     $scope.currentPage = 0
+    $scope.isArchive = false
 
     querygames = ->
         Games.query(
@@ -48,6 +49,7 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
         )
 
     if (/\/my\/games\/archive/gi.test(window.location.pathname))
+        $scope.isArchive = true
         queryarchives()
     else
         querygames()
