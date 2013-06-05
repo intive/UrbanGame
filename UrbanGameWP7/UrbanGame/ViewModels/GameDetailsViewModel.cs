@@ -26,18 +26,27 @@ namespace UrbanGame.ViewModels
         protected override void OnViewReady(object view)
         {
             ChangeAppbarButtons();
+            RemovePreviewFromStack();
+        }
+
+        private void RemovePreviewFromStack()
+        {
+            if (_navigationService.BackStack.First().Source.ToString().Contains("GameDetailsPreviewView"))
+            {
+                _navigationService.RemoveBackEntry();
+            }
         }
 
         #region appbar configurations
 
         private List<AppbarItem> BasicAppbar = new List<AppbarItem>()
         {
-            new AppbarItem() {  Text = Localization.AppResources.AbandonGame,Message="AbandonGame" } 
+            new AppbarItem() {  Text = Localization.AppResources.AbandonGame,Message="Leave" } 
         };
 
         private List<AppbarItem> DescriptionAppbar = new List<AppbarItem>()
         {
-            new AppbarItem() {  Text = Localization.AppResources.AbandonGame,Message="AbandonGame" } 
+            new AppbarItem() {  Text = Localization.AppResources.AbandonGame,Message="Leave" } 
         };
 
         #endregion
@@ -267,11 +276,11 @@ namespace UrbanGame.ViewModels
         {
             if (_activeSection == "Description")
             {
-                //_appbarManager.ConfigureAppbar(DescriptionAppbar);
+                _appbarManager.ConfigureAppbar(DescriptionAppbar);
             }
             else
             {
-                //_appbarManager.ConfigureAppbar(BasicAppbar);
+                _appbarManager.ConfigureAppbar(BasicAppbar);
             }
         }
 
@@ -377,6 +386,20 @@ namespace UrbanGame.ViewModels
                                                                                 .AsEnumerable());
             });
 
+        }
+
+        public async void Leave()
+        {
+            if (MessageBox.Show("leave", "leave", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                using (IUnitOfWork uow = _unitOfWorkLocator())
+                {
+                    uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id).GameState = GameState.Inactive;
+                    uow.Commit();
+                }
+                await RefreshGame();
+                _navigationService.GoBack();
+            }
         }
 
         #endregion
