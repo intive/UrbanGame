@@ -18,14 +18,15 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
 
     # ------------------- INITIAL DATA LOADING
     $scope.games = []
-    $scope.sortOrder = ['startDate', 'startTime', 'status']
-    $scope.order = ['startDate', 'startTime', 'status']
+    $scope.sortOrder = ['startDate']
+    $scope.order = ['startDate']
     $scope.reverse = false
     $scope.filteredItems = []
     $scope.groupedItems = null
     $scope.itemsPerPage = 5
     $scope.pagedItems = []
     $scope.currentPage = 0
+    $scope.isArchive = false
 
     querygames = ->
         Games.query(
@@ -48,6 +49,7 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
         )
 
     if (/\/my\/games\/archive/gi.test(window.location.pathname))
+        $scope.isArchive = true
         queryarchives()
     else
         querygames()
@@ -59,9 +61,9 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
         window.location.pathname = "/my/games/" + games.id + "/edit" if (games.status == 'published' || games.status == 'project')
 
     $scope.delete = (idx) ->
-        games = $scope.pagedItems[$scope.currentPage][idx]
-        if (games.status == 'project')
-            title = games.name
+        game = $scope.pagedItems[$scope.currentPage][idx]
+        if (game.status == 'project')
+            title = game.name
             msg = Messages("js.errors.sure", "delete")
             btns = [{result:'no', label: Messages("js.no")}, {result:'ok', label: Messages("js.yes", "delete"), cssClass: 'btn-primary'}]
 
@@ -70,7 +72,7 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
                 .then (result) ->
                     if(result == "ok")
                         Games.delete(
-                            {gid: games.id},
+                            {gid: game.id},
                             (data) ->
                                 i = _.indexOf($scope.games, $scope.pagedItems[$scope.currentPage][idx])
                                 curP = $scope.currentPage
@@ -82,9 +84,9 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
                         )
 
     $scope.cancel = (idx) ->
-        games = $scope.pagedItems[$scope.currentPage][idx]
-        if (games.status == 'published')
-            title = games.name
+        game = $scope.pagedItems[$scope.currentPage][idx]
+        if (game.status == 'published')
+            title = game.name
             msg = Messages("js.errors.sure", "cancel")
             btns = [{result:'no', label: Messages("js.no")}, {result:'ok', label: Messages("js.yes", "cancel"), cssClass: 'btn-primary'}]
 
@@ -93,7 +95,7 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
                 .then (result) ->
                     if(result == "ok")
                         Games.cancel(
-                            {data: games.id},
+                            {data: game.id},
                             (data) ->
                                 i = _.indexOf($scope.games, $scope.pagedItems[$scope.currentPage][idx])
                                 curP = $scope.currentPage
@@ -125,6 +127,7 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
             $('th.'+newOrder+' i').removeClass().addClass('icon-chevron-up')
         else
             $('th.'+newOrder+' i').removeClass().addClass('icon-chevron-down')
+        $scope.search()
 
     # ------------------------------ SEARCHING
     searchMatch = (haystack, needle) ->

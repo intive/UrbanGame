@@ -97,6 +97,8 @@ mygames.tasks = Tasks
 mygames.delete = Delete
 mygames.cancel = Cancel
 
+archive.title = Games archive
+
 language.pick = Pick a language
 language.en = English
 language.pl = Polski
