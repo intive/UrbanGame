@@ -13,32 +13,57 @@
  * limitations under the License.
 ###
 
-app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', '$dialog', ($scope, $location, $timeout, Games, $dialog) ->
+# '------------------------------------------ GAMES LIST CTRL
+app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Utilities', '$dialog', '$filter', ($scope, $location, $timeout, Games, Utilities, $dialog, $filter) ->
 
+    # ------------------- INITIAL DATA LOADING
     $scope.games = []
+    $scope.sortOrder = ['startDate', 'startTime', 'status']
+    $scope.order = ['startDate', 'startTime', 'status']
+    $scope.reverse = false
+    $scope.filteredItems = []
+    $scope.groupedItems = null
+    $scope.itemsPerPage = 5
+    $scope.pagedItems = []
+    $scope.currentPage = 0
 
-    querygame = ->
+    querygames = ->
         Games.query(
             {},
             (data) ->
                 $scope.games = data
+                $scope.search()
             (error) ->
-                console.log("Error occurred while getting list of games")
+                alert Messages("js.errors.gameslist")
         )
 
-    querygame()
+    queryarchives = ->
+        Games.archive(
+            {},
+            (data) ->
+                $scope.games = data
+                $scope.search()
+            (error) ->
+                alert Messages("js.errors.gameslist")
+        )
 
+    if (/\/my\/games\/archive/gi.test(window.location.pathname))
+        queryarchives()
+    else
+        querygames()
+
+    # ------------------- GAME OPTIONS ACTIONS
     $scope.showDetails = (idx) ->
-        games = $scope.games[idx]
-        window.location.pathname = "/my/games/" + games.id if games.status == 'online'
-        window.location.pathname = "/my/games/" + games.id + "/edit" if games.status == 'published' || games.status == 'project'
+        games = $scope.pagedItems[$scope.currentPage][idx]
+        window.location.pathname = "/my/games/" + games.id if games.status == 'online' || games.status == 'finished'
+        window.location.pathname = "/my/games/" + games.id + "/edit" if (games.status == 'published' || games.status == 'project')
 
     $scope.delete = (idx) ->
-        games = $scope.games[idx]
+        games = $scope.pagedItems[$scope.currentPage][idx]
         if (games.status == 'project')
             title = games.name
-            msg = 'Are you sure you want to delete this game?'
-            btns = [{result:'no', label: 'No'}, {result:'ok', label: 'Yes, delete this game', cssClass: 'btn-primary'}]
+            msg = Messages("js.errors.sure", "delete")
+            btns = [{result:'no', label: Messages("js.no")}, {result:'ok', label: Messages("js.yes", "delete"), cssClass: 'btn-primary'}]
 
             $dialog.messageBox(title, msg, btns)
                 .open()
@@ -47,17 +72,21 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', '$dia
                         Games.delete(
                             {gid: games.id},
                             (data) ->
-                                $scope.games.splice(idx, 1)
+                                i = _.indexOf($scope.games, $scope.pagedItems[$scope.currentPage][idx])
+                                curP = $scope.currentPage
+                                $scope.games.splice(i, 1)
+                                $scope.search()
+                                $scope.currentPage = curP
                             (error) ->
-                                alert("Error occured when deleting the game.")
+                                alert Messages("js.errors.ajax", "deleting")
                         )
 
     $scope.cancel = (idx) ->
-        games = $scope.games[idx]
+        games = $scope.pagedItems[$scope.currentPage][idx]
         if (games.status == 'published')
             title = games.name
-            msg = 'Are you sure you want to cancel this game?'
-            btns = [{result:'no', label: 'No'}, {result:'ok', label: 'Yes, cancel this game', cssClass: 'btn-primary'}]
+            msg = Messages("js.errors.sure", "cancel")
+            btns = [{result:'no', label: Messages("js.no")}, {result:'ok', label: Messages("js.yes", "cancel"), cssClass: 'btn-primary'}]
 
             $dialog.messageBox(title, msg, btns)
                 .open()
@@ -66,32 +95,84 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', '$dia
                         Games.cancel(
                             {data: games.id},
                             (data) ->
-                                $scope.games[idx].status = "project"
+                                i = _.indexOf($scope.games, $scope.pagedItems[$scope.currentPage][idx])
+                                curP = $scope.currentPage
+                                $scope.games[i].status = "project"
+                                $scope.search()
+                                $scope.currentPage = curP
                             (error) ->
-                                alert("Error occured when canceling the game.")
+                                alert Messages("js.errors.ajax", "canceling")
                         )
 
-    $scope.timeLeft = (sdate, edate) ->
-        zeros = (x) -> 
-            ( if x < 10 then "0" else "") + x
-
-        dateStart = new Date(sdate)
-        dateEnd = new Date(edate)
-        now = new Date()
-        
-        diff = if now > dateStart then (dateEnd - now) else (dateStart - now)
-        days = parseInt(diff / (1000*60*60*24))
-        hours = parseInt((diff % (1000*60*60*24)) / (1000*60*60))
-        minutes = parseInt(((diff % (1000*60*60*24)) % (1000*60*60)) / (1000*60))
-        seconds = parseInt((((diff % (1000*60*60*24)) % (1000*60*60)) % (1000*60)) / 1000)
-
-        zeros(days) + "d:" + zeros(hours) + "h:" + zeros(minutes) + "min:" + zeros(seconds) + "sec"
-
+    # ------------------------------ UTILITY METHODS - TIME COUNTER
     $scope.mtimeLeft = [];
 
     intervalID = window.setInterval( ->
-        $scope.mtimeLeft[_i] = $scope.timeLeft i.startTime, i.endTime for i in $scope.games
+        $scope.mtimeLeft[_i] = Utilities.difference i.startTime, i.endTime, true for i in $scope.pagedItems[$scope.currentPage]
         $scope.$apply()
     , 1000)
 
+    # ------------------------------ SORTING
+    $scope.sortBy = (newOrder) ->
+        $scope.reverse = !$scope.reverse if $scope.sortOrder == newOrder
+
+        $scope.sortOrder = newOrder
+
+        $('th i').each ->
+            $(this).removeClass().addClass('icon-sort')
+
+        if $scope.reverse
+            $('th.'+newOrder+' i').removeClass().addClass('icon-chevron-up')
+        else
+            $('th.'+newOrder+' i').removeClass().addClass('icon-chevron-down')
+
+    # ------------------------------ SEARCHING
+    searchMatch = (haystack, needle) ->
+        if !needle
+            true 
+        else
+            haystack.toString().toLowerCase().indexOf(needle.toLowerCase()) != -1
+
+    $scope.search = ->
+        $scope.filteredItems = $filter('filter')($scope.games, (game) ->
+            for attr of game
+                if searchMatch(game[attr], $scope.query)
+                    return true 
+            return false
+        )
+
+        $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortOrder, $scope.reverse) if $scope.sortOrder != ''
+        $scope.currentPage = 0
+        $scope.groupToPages()
+
+    # ------------------------------ PAGINATING
+    $scope.groupToPages = ->
+        $scope.pagedItems = []
+        
+        for i in [0..$scope.filteredItems.length-1] by 1
+            if i % $scope.itemsPerPage == 0
+                $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)] = [ $scope.filteredItems[i] ]
+            else
+                $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)].push($scope.filteredItems[i])
+
+
+    $scope.range = (start, end) ->
+        ret = []
+        if (!end)
+            end = start
+            start = 0
+        for i in [start..end-1] by 1
+            ret.push(i)
+        ret
+    
+    $scope.prevPage = ->
+        if ($scope.currentPage > 0) 
+            $scope.currentPage--
+    
+    $scope.nextPage = ->
+        if ($scope.currentPage < $scope.pagedItems.length - 1)
+            $scope.currentPage++
+    
+    $scope.setPage = ->
+        $scope.currentPage = this.n
 ]

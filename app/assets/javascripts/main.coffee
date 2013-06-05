@@ -13,8 +13,10 @@
  * limitations under the License.
 ###
 
-app = angular.module 'web', ['ui.bootstrap','ui', 'ui.bootstrap.dialog', 'ngResource']
+# '------------------------------------- MAIN MODULE
+app = angular.module 'web', ['ui.bootstrap', 'ui', 'ui.bootstrap.dialog', 'ngResource']
 
+# ------------------------------------- CONFIGURATION
 app.config ['$routeProvider', '$locationProvider', '$dialogProvider', ($routeProvider, $location, $dialogProvider) ->
 
     $routeProvider.when('/', {template: 'index.scaml'})
@@ -29,7 +31,7 @@ app.config ['$routeProvider', '$locationProvider', '$dialogProvider', ($routePro
     $dialogProvider.options {backdropClick: false, dialogFade: true}
 ]
 
-# Change language
+# ------------------ CHANGE LANGUAGE ACTION
 $("select#chglang").on('change', (newVal) ->
     if !_.isUndefined(newVal)
         langform.submit() 

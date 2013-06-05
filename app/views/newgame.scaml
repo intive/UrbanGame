@@ -19,13 +19,17 @@
     %script(src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript")
     %script(src={uri("/assets/javascripts/controllers/newGameCtrl.js")} type="text/javascript")
     %script(src={uri("/assets/javascripts/services/games.min.js")} type="text/javascript")
-    
-.row.span12
-    .wizard(ng-controller="newGameCtrl" id="outer")
+    %script(src={uri("/assets/javascripts/services/utilities.min.js")} type="text/javascript")
+
+-@ val lan: Lang
+-@ val app: Application
+
+.row.span12(ng-controller="newGameCtrl" id="outer")
+    .wizard(ng-show="!isEdit() || editable")
         %form.form-vertical(name="form" class="css-form" novalidate)
             %ul.nav.nav-pills.nav-steps
                 %li(ng-repeat="step in steps" ng-class="{active: $index==getCurrentStepIndex(), disabled: isDisabled($index)}")
-                    %a(title="Step" href="javascript:void(0);" ng-click="isDisabled($index) || goToStep($index)") {{step.no}}. {{step.name}}
+                    %a(title="Step" href="javascript:void(0);" ng-click="") {{step.no}}. {{step.name}}
             %div.wizbody{"ng-switch on"=>"selection.no"}
                 %div(ng-switch-when="1")
                     -render("submodules/step1form.scaml")
@@ -52,7 +56,9 @@
                         = Messages("newgame.next")(lan) 
                         &rarr;
                 %li(ng-hide="!isLast()" ng-class="{disabled: !hasPreviousStep() || form.$invalid}")
-                    %a(href="javascript:void(0);" ng-click="savegame()")  = Messages("newgame.saveproject")(lan)
+                    %a(href="javascript:void(0);" ng-click="savegame()")  
+                        %span(ng-show="!isEdit()") = Messages("newgame.saveproject")(lan)
+                        %span(ng-hide="!isEdit()") = Messages("newgame.save")(lan)
                 %li(ng-hide="!isLast()")
                     %a(href="javascript:void(0);" ng-click="publishgame()") = Messages("newgame.publish")(lan)
             .clearfix

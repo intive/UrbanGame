@@ -1,17 +1,19 @@
 # Routes
-# Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
 # Public
 GET     /                           controllers.Application.index
+GET     /login                      controllers.Application.login
 GET     /logout                     controllers.Application.logout
-POST    /login                      controllers.Application.login
+POST    /login                      controllers.Application.processLogin
 POST    /register                   controllers.Application.register
 POST    /locale                     controllers.Application.changeLang
+GET     /messages.js                controllers.Application.jsMessages
 
 # Json
 GET     /my/games/json/list         controllers.GamesCtrl.getGamesList
+GET     /my/games/json/archive      controllers.GamesCtrl.getGamesArchive
 POST    /my/games/json/checkName    controllers.GamesCtrl.checkName
 POST    /my/games/json/cancel       controllers.GamesCtrl.cancelGame
 POST    /my/games/json/publish      controllers.GamesCtrl.publishGame
