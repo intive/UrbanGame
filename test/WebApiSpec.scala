@@ -21,6 +21,23 @@ import play.api.test.Helpers._
 import play.api.libs.json._
 
 class WebApiSpec extends Specification {
+
+  //prepare database for tests
+  running(FakeApplication()) {
+    import play.api.db.slick.DB
+    import models.{Users, UserGames}
+    import scala.slick.jdbc.{GetResult, StaticQuery => Q}
+    import Q.interpolation
+    import play.api.Play.current
+
+    DB withSession { implicit session =>
+      val uq = sql"""SELECT "id" FROM USERS WHERE "login" = 'new_user'""".as[Int] 
+      uq.firstOption map { uid =>
+        sqlu"""DELETE FROM USERGAMES WHERE "userId" = $uid""".execute
+        sqlu"""DELETE FROM USERS WHERE "id" = $uid""".execute
+      }
+    }
+  }
   
   "WebApi" should {
     
@@ -61,11 +78,7 @@ class WebApiSpec extends Specification {
       ("Authorization", "Basic "+Base64.encodeBase64String("new_user:pass" getBytes))
     )
 
-    val existingUser = (
-      ("Authorization", "Basic "+Base64.encodeBase64String("admin:pass" getBytes))
-    )
-
-    "send UNAUTHORIZED status for non-existing user on 'login' command" in {
+    "send UNAUTHORIZED status for loggining non-existing user" in {
       running(FakeApplication()) {
         val login = route(FakeRequest(GET, "/api/login").withHeaders(newUser)).get
         
@@ -80,21 +93,89 @@ class WebApiSpec extends Specification {
         status(register) must equalTo(OK)
       }
     }
-
-    "send OK status for existing user on 'login' command" in {
+    
+    "send CONFLICT status after register new user with existing login" in {
+      val json = Json.obj("login"->"new_user", "password"->"pass2")
       running(FakeApplication()) {
-        val login = route(FakeRequest(GET, "/api/login").withHeaders(existingUser)).get
-        
-        status(login) must equalTo(OK)
+        val register = route(FakeRequest(POST, "/api/register").withJsonBody(json)).get
+        status(register) must equalTo(CONFLICT)
       }
     }
 
     "send game info for logged user in Json format" in {
       running(FakeApplication()) {
-        val game = route(FakeRequest(GET, "/api/games/42/dynamic").withHeaders(existingUser)).get
+        val game = route(FakeRequest(GET, "/api/games/1/dynamic").withHeaders(newUser)).get
         
         status(game) must equalTo(OK)
         contentType(game) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
+      }
+    }
+
+    "send UNAUTHORIZED status on 'join game' command for non-logged user" in {
+      val json = Json.obj()
+      running(FakeApplication()) {
+        val join = route(FakeRequest(POST, "/api/games/1").withJsonBody(json)).get
+
+        status(join) must equalTo(UNAUTHORIZED)
+      }
+    }
+ 
+    "send OK status for loggining existing user" in {
+      running(FakeApplication()) {
+        val login = route(FakeRequest(GET, "/api/login").withHeaders(newUser)).get
+        
+        status(login) must equalTo(OK)
+      }
+    }
+   
+    "send OK status on 'join game' for logged user" in {
+      val json = Json.obj()
+      running(FakeApplication()) {
+        val join1 = route(FakeRequest(POST, "/api/games/1").withHeaders(newUser).withJsonBody(json)).get
+
+        status(join1) must equalTo(OK)
+      }
+    }
+ 
+    "send BAD_REQUEST status on 'join game' for user already joined" in {
+      val json = Json.obj()
+      running(FakeApplication()) {
+        val join = route(FakeRequest(POST, "/api/games/1").withHeaders(newUser).withJsonBody(json)).get
+
+        status(join) must equalTo(BAD_REQUEST)
+      }
+    }
+
+    "list user games" in {
+      running(FakeApplication()) {
+        val list = route(FakeRequest(GET, "/api/my/games").withHeaders(newUser)).get
+
+        status(list) must equalTo(OK)
+        contentType(list) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
+      }
+    }
+
+    "send OK status after leaving game" in {
+      running(FakeApplication()) {
+        val del = route(FakeRequest(DELETE, "/api/my/games/1").withHeaders(newUser)).get
+
+        status(del) must equalTo(OK)
+      }
+    }
+
+    "send BAD_REQUEST status after leaving game again" in {
+      running(FakeApplication()) {
+        val del = route(FakeRequest(DELETE, "/api/my/games/1").withHeaders(newUser)).get
+
+        status(del) must equalTo(BAD_REQUEST)
+      }
+    }
+    
+    "send BAD_REQUEST status when user try to join to game again after less than 30 min" in {
+      running(FakeApplication()) {
+        val del = route(FakeRequest(DELETE, "/api/my/games/1").withHeaders(newUser)).get
+
+        status(del) must equalTo(BAD_REQUEST)
       }
     }
   }
