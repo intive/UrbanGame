@@ -5,25 +5,15 @@ import webapi.models._
 import controllers._
 
 trait MainApiModule extends ControllerCache {
-  lazy val gamesService: GamesService = ???
+  import play.api.db.slick.DB
+  lazy val gamesService: GamesService = new impl.GamesServiceSlick(DB)
   lazy val userAuth: UserAuth = new impl.UserBasicAuth(gamesService)
   val webapiController = registerController(new WebApi(userAuth, gamesService))
 }
 
-trait TestApiModule extends MainApiModule {
-  override lazy val gamesService: GamesService = new impl.GamesServiceMock
-}
-
 object MainApiModule extends MainApiModule
-object TestApiModule extends TestApiModule
 
 object Global extends PlayControllerWiring {
   import play.api.Play.current
-
-  override lazy val module = if (Play.isTest)
-    TestApiModule
-  else if (Play.isDev)
-    TestApiModule
-  else
-    MainApiModule
+  override lazy val module = MainApiModule
 }
