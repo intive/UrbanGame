@@ -45,7 +45,7 @@
                         %i.icon-sort
                 %th = Messages("general.options")
         %tbody
-            %tr(ng-repeat="game in pagedItems[currentPage] | orderBy:order:reverse" ng-click="showDetails($index)")
+            %tr(ng-repeat="game in pagedItems[currentPage] | orderBy:sortOrder:reverse" ng-click="showDetails($index)")
                 %td
                     %img(ng-src="/assets/images/{{game.image}}")/
                 %td
