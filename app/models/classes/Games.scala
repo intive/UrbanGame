@@ -29,8 +29,6 @@ object Games extends Table[GamesDetails]("GAMES") {
   def version = column[Int]("version", O.NotNull, O.Default(1))
   def description = column[String]("description", O.NotNull)
   def location = column[String]("location", O.NotNull)
-  def lat = column[Float]("lat", O.NotNull)
-  def lon = column[Float]("lon", O.NotNull)
   def operatorId = column[Int]("operatorId", O.NotNull)
   def created = column[DateTime]("created", O.NotNull)
   def updated = column[DateTime]("updated", O.NotNull, O.Default(DateTime.now))

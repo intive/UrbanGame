@@ -11,7 +11,8 @@ trait MainApiModule extends ControllerCache {
 }
 
 trait TestApiModule extends MainApiModule {
-  override lazy val gamesService: GamesService = new impl.GamesServiceMock
+  import play.api.db.slick.DB
+  override lazy val gamesService: GamesService = new impl.GamesServiceSlick(DB)
 }
 
 object MainApiModule extends MainApiModule
