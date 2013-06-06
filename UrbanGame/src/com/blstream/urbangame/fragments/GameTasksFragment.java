@@ -15,7 +15,6 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.blstream.urbangame.ActiveTaskActivity;
 import com.blstream.urbangame.GameDetailsActivity;
-import com.blstream.urbangame.GamesListActivity;
 import com.blstream.urbangame.R;
 import com.blstream.urbangame.adapters.TaskListExpandableListAdapter;
 import com.blstream.urbangame.database.Database;
@@ -23,6 +22,7 @@ import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.datastructures.ExpandableListHeader;
+import com.blstream.urbangame.example.DemoData;
 
 public class GameTasksFragment extends SherlockFragment implements OnChildClickListener {
 	
@@ -54,7 +54,7 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		}
 		database = new Database(getActivity());
 		// FIXME mock delete when not needed
-		gameID = GamesListActivity.MOCK_GAME_ID;
+		gameID = DemoData.getGameId();
 		
 		playerEmail = database.getLoggedPlayerID();
 	}
