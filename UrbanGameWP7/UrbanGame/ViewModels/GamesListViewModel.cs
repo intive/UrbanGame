@@ -306,7 +306,8 @@ namespace UrbanGame.ViewModels
 
                     UserInactiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Ended ||
                                                                                        g.GameState == GameState.Won ||
-                                                                                       g.GameState == GameState.Withdraw)
+                                                                                       g.GameState == GameState.Withdraw ||
+                                                                                       g.GameState == GameState.Inactive )
                                                                            .OrderByDescending(g => g.GameStart)
                                                                            .AsEnumerable());
                 }
@@ -329,7 +330,13 @@ namespace UrbanGame.ViewModels
                 try
                 {
                     NearestGames.Clear();
-                    NearestGames = new BindableCollection<IGame>(_gameWebService.UserNearbyGames(new GeoCoordinate()).OrderBy(g => g.GameEnd));
+                    var allNearestGames = _gameWebService.UserNearbyGames(new GeoCoordinate()).OrderBy(g => g.GameEnd);
+                    using (var uow = _unitOfWorkLocator())
+                    {
+                        var loadedGames=uow.GetRepository<IGame>().All().Select(x=>x.Id);
+                        NearestGames = new BindableCollection<IGame>(allNearestGames.Where(x => !loadedGames.Contains(x.Id)));
+                    }
+                    
                 }
                 finally
                 {
