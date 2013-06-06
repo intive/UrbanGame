@@ -134,6 +134,12 @@ public interface DatabaseInterface {
 	public boolean insertUserGameSpecific(PlayerGameSpecific playerGameSpecific);
 	
 	/**
+	 * @param email - email of user that games are required
+	 * @return list of games, null if user don't have any game
+	 */
+	public List<UrbanGame> getAllUserGames(String email);
+	
+	/**
 	 * @param email - user identification
 	 * @param gameID - game identification
 	 * @return user data in game if successful, else null

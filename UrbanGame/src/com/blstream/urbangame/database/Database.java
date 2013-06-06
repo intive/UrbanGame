@@ -1291,4 +1291,69 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	public void closeDatabase() {
 		close();
 	}
+	
+	@Override
+	public List<UrbanGame> getAllUserGames(String email) {
+		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		String query = "SELECT " + GAMES_TABLE_NAME + "." + GAMES_KEY_ID + ", " + GAMES_TABLE_NAME + "."
+			+ GAMES_KEY_VERSION + ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_TITLE + ", " + GAMES_TABLE_NAME + "."
+			+ GAMES_KEY_DESCRIPTION + ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_GAME_ICON + ", " + GAMES_TABLE_NAME
+			+ "." + GAMES_KEY_OPERATOR_ICON + ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_OPERATOR_NAME + ", "
+			+ GAMES_TABLE_NAME + "." + GAMES_KEY_NUMBER_OF_PLAYERS + ", " + GAMES_TABLE_NAME + "."
+			+ GAMES_KEY_NUMBER_OF_MAX_PLAYERS + ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_DIFFICULTY + ", "
+			+ GAMES_TABLE_NAME + "." + GAMES_KEY_CITY_NAME + ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_START_DATE
+			+ ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_END_DATE + ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_COMMENTS
+			+ ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_REWARD + ", " + GAMES_TABLE_NAME + "."
+			+ GAMES_KEY_WINNING_STRATEGY + ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_PRIZE_INFO + ", "
+			+ GAMES_TABLE_NAME + "." + GAMES_KEY_DETAILS_LINK + " FROM " + GAMES_TABLE_NAME + " INNER JOIN "
+			+ USER_GAMES_SPECIFIC_TABLE_NAME + " ON " + USER_GAMES_SPECIFIC_TABLE_NAME + "."
+			+ USER_GAMES_SPECIFIC_KEY_GAME_ID + " = " + GAMES_TABLE_NAME + "." + GAMES_KEY_ID + " WHERE "
+			+ USER_GAMES_SPECIFIC_TABLE_NAME + "." + USER_GAMES_SPECIFIC_KEY_EMAIL + " = \"" + email + "\"";
+		
+		Cursor cursor = db.rawQuery(query, null);
+		
+		ArrayList<UrbanGame> gameList = null;
+		
+		if (cursor.moveToFirst()) {
+			gameList = new ArrayList<UrbanGame>();
+			do {
+				UrbanGame game = userGameInfoFromCursor(cursor);
+				gameList.add(game);
+			}
+			while (cursor.moveToNext());
+		}
+		cursor.close();
+		db.close();
+		return gameList;
+	}
+	
+	private UrbanGame userGameInfoFromCursor(Cursor cursor) {
+		UrbanGame game = new UrbanGame(cursor.getLong(UserGamesFields.ID.value),
+			cursor.getDouble(UserGamesFields.VERSION.value), cursor.getString(UserGamesFields.TITLE.value),
+			cursor.getString(UserGamesFields.OPERATOR_NAME.value),
+			cursor.getString(UserGamesFields.WINNING_STRATEGY.value),
+			cursor.getInt(UserGamesFields.NUMBER_OF_PLAYERS.value),
+			cursor.getInt(UserGamesFields.NUMBER_OF_MAX_PLAYERS.value),
+			longToDate(cursor.getLong(UserGamesFields.START_DATE.value)),
+			longToDate(cursor.getLong(UserGamesFields.END_DATE.value)),
+			cursor.getInt(UserGamesFields.DIFFICULTY.value),
+			stringToBoolean(cursor.getString(UserGamesFields.REWARD.value)),
+			cursor.getString(UserGamesFields.PRIZE_INFO.value), cursor.getString(UserGamesFields.DESCRIPTION.value),
+			cursor.getString(UserGamesFields.ICON.value), cursor.getString(UserGamesFields.OPERATOR_ICON.value),
+			cursor.getString(UserGamesFields.COMMENTS.value), cursor.getString(UserGamesFields.CITY_NAME.value),
+			cursor.getString(UserGamesFields.DETAILS_LINK.value));
+		
+		return game;
+	}
+	
+	private enum UserGamesFields {
+		ID(0), VERSION(1), TITLE(2), DESCRIPTION(3), ICON(4), OPERATOR_ICON(5), OPERATOR_NAME(6), NUMBER_OF_PLAYERS(7), NUMBER_OF_MAX_PLAYERS(
+			8), DIFFICULTY(9), CITY_NAME(10), START_DATE(11), END_DATE(12), COMMENTS(13), REWARD(14), WINNING_STRATEGY(
+			15), PRIZE_INFO(16), DETAILS_LINK(17);
+		int value;
+		
+		private UserGamesFields(int x) {
+			value = x;
+		}
+	}
 }
