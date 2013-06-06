@@ -62,17 +62,6 @@ namespace UrbanGameTests.Tests
             Assert.IsNotNull(vm.Game);
             Assert.AreNotEqual(vm.Game.Name, "FromDatabase");
             
-            
-            //handling operator's updates
-            //description changes each time in mock-up WebService results
-            string oldDesc = vm.Game.Description;
-            Thread.Sleep(1000);
-            eventAgg.Publish(new GameChangedEvent() { Id = 1 });
-            Thread.Sleep(1000);
-            Assert.AreNotEqual(vm.Game.Description, oldDesc);
-            
-
-            
             //if user is authorized, then game should be downloaded from database
             webService.IsAuthorized = true;
             await vm.RefreshGame();

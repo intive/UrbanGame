@@ -133,7 +133,7 @@ namespace WebService
 
         private void RandomChange(object obj)
         {
-            GameChanged(new Random().Next(1, 5));
+            GameChanged(new Random().Next(1, 2));
             UpdateSolutionStatus();
         }
     }
