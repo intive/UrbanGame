@@ -130,7 +130,7 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 		holder.textViewGameName.setText(gameInfo.getTitle());
 		holder.textViewLocation.setText(gameInfo.getLocation());
 		holder.textViewNumberOfCurrentPlayers.setText(gameInfo.getPlayers().toString());
-		if (gameInfo.getMaxPlayers() != null) {
+		if (gameInfo.getMaxPlayers() != null && gameInfo.getMaxPlayers() > 0) {
 			// If the game has limit for maximum number of players.
 			holder.textViewNumberOfTotalPlayers.setText(gameInfo.getMaxPlayers().toString());
 			holder.textViewDivider.setText("/");
