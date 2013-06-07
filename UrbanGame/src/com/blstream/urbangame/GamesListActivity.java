@@ -1,5 +1,8 @@
 package com.blstream.urbangame;
 
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,7 +71,6 @@ public class GamesListActivity extends MenuListActivity {
 	private void configureLoginAction(Menu menu) {
 		final MenuItem loginItem = menu.findItem(R.id.menu_login);
 		loginItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				Log.i(TAG, "onMenuItemClick(): " + item.getTitleCondensed());

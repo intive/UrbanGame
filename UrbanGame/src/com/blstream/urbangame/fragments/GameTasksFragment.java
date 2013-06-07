@@ -55,7 +55,6 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		database = new Database(getActivity());
 		// FIXME mock delete when not needed
 		gameID = DemoData.getGameId();
-		
 		playerEmail = database.getLoggedPlayerID();
 	}
 	
