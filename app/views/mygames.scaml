@@ -22,7 +22,8 @@
 
 .row.span12(ng-controller="myGamesCtrl")
     %h3 
-        = Messages("mygames.title")
+        %span(ng-show="!isArchive") = Messages("mygames.title")
+        %span(ng-hide="!isArchive") = Messages("archive.title")
         %span.input-append.pull-right
             %input.input-large.search-query(type="text" ng-model="query" ng-change="search()" placeholder="Search")
                 %span.add-on
@@ -45,7 +46,7 @@
                         %i.icon-sort
                 %th = Messages("general.options")
         %tbody
-            %tr(ng-repeat="game in pagedItems[currentPage] | orderBy:order:reverse" ng-click="showDetails($index)")
+            %tr(ng-repeat="game in pagedItems[currentPage] | orderBy:sortOrder:reverse" ng-click="showDetails($index)")
                 %td
                     %img(ng-src="/assets/images/{{game.image}}")/
                 %td
