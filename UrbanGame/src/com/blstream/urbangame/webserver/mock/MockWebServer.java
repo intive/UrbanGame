@@ -25,9 +25,9 @@ import com.google.gson.Gson;
 public class MockWebServer {
 	private final String TAG = "MockWebServer";
 	
-	private ArrayList<UrbanGameShortInfo> mockAllUrbanGames;
-	private ArrayList<UrbanGame> mockUrbanGameDetails;
-	private Hashtable<Long, ArrayList<Task>> mockTaskLists;
+	private final ArrayList<UrbanGameShortInfo> mockAllUrbanGames;
+	private final ArrayList<UrbanGame> mockUrbanGameDetails;
+	private final Hashtable<Long, ArrayList<Task>> mockTaskLists;
 	
 	//
 	// Constructor

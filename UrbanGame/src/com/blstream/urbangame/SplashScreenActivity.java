@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.blstream.urbangame.example.DemoData;
 import com.blstream.urbangame.session.LoginManager;
 
 public class SplashScreenActivity extends SherlockFragmentActivity {
@@ -12,6 +13,10 @@ public class SplashScreenActivity extends SherlockFragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//FIXME delete mock when not needed
+		DemoData mock = new DemoData(this);
+		mock.insertDataIntoDatabase();
 		
 		loginManager = LoginManager.getInstance(SplashScreenActivity.this);
 		startGamesActivity();

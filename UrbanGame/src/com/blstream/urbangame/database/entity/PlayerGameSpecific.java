@@ -4,6 +4,7 @@ public class PlayerGameSpecific {
 	
 	public static final int GAME_ACTIVE = 0;
 	public static final int GAME_OBSERVED = 1;
+	public static final int GAME_ENDED = 2;
 	
 	private Integer rank;
 	private String playerEmail;

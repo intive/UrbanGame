@@ -22,6 +22,7 @@ import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.datastructures.ExpandableListHeader;
+import com.blstream.urbangame.example.DemoData;
 
 public class GameTasksFragment extends SherlockFragment implements OnChildClickListener {
 	
@@ -53,8 +54,7 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		}
 		database = new Database(getActivity());
 		// FIXME mock delete when not needed
-		gameID = 1L;
-		
+		gameID = DemoData.getGameId();
 		playerEmail = database.getLoggedPlayerID();
 	}
 	
