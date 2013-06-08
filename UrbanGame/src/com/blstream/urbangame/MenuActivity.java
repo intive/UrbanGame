@@ -1,11 +1,13 @@
 package com.blstream.urbangame;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.blstream.urbangame.notifications.NotificationsManager;
 import com.blstream.urbangame.session.LoginManager;
 
 // formatter:off
@@ -27,10 +29,11 @@ import com.blstream.urbangame.session.LoginManager;
  * 
  * 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);	// adding menu "more"
 		
 		// HERE COMES OWN CODE
 		
-		return super.onCreateOptionsMenu(menu);	// adding menu "more"
+		return true;
 	}
 	
  ****************************************************
@@ -81,14 +84,29 @@ public class MenuActivity extends SherlockFragmentActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		int itemId = item.getItemId();
 		switch (itemId) {
+		
+		//******** MOCK ********
+			case R.id.menu_more:
+				NotificationsManager notificationsManager = new NotificationsManager(MenuActivity.this);
+				notificationsManager.notifyGameChanged("KRASNOLUDKI", null, -1L);
+				break;
+			//****** END MOCK ******
+			
 			case R.id.menu_logout:
 				loginManager.logoutUser();
-				finish();
+				finishAndStartGamesListActivity();
 				break;
 			case android.R.id.home:
 				finish();
 				break;
 		}
 		return true;
+	}
+	
+	private void finishAndStartGamesListActivity() {
+		Intent gamesListActivity = new Intent(MenuActivity.this, GamesListActivity.class);
+		gamesListActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(gamesListActivity);
+		finish();
 	}
 }
