@@ -34,10 +34,10 @@ public class NotificationsTest extends AndroidTestCase {
 	}
 	
 	public void testNotificationTaskNew() {
-		notificationsManager.notifyTaskNew(GAME_NAME, TASK_NAME, operatorLogo, GAME_ID);
+		notificationsManager.notifyTaskNew(GAME_NAME, operatorLogo, GAME_ID, TASK_NAME);
 	}
 	
 	public void testNotificationTaskChanged() {
-		notificationsManager.notifyTaskChanged(GAME_NAME, TASK_NAME, operatorLogo, GAME_ID);
+		notificationsManager.notifyTaskChanged(GAME_NAME, operatorLogo, GAME_ID, TASK_NAME);
 	}
 }

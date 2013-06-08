@@ -64,7 +64,7 @@ public class NotificationsManager implements NotificationInterface {
 			showNotification(NotificationConstans.TASK_NEW, gameName, taskName, operatorLogo, gameID);
 		}
 		else {
-			showAlertDialog(NotificationConstans.TASK_CHANGED, gameName, taskName, operatorLogo, gameID);
+			showAlertDialog(NotificationConstans.TASK_NEW, gameName, taskName, operatorLogo, gameID);
 		}
 	}
 	
@@ -88,10 +88,7 @@ public class NotificationsManager implements NotificationInterface {
 	 * @param gameID
 	 */
 	private void showNotification(int notificationID, String gameName, String taskName, Bitmap operatorLogo, long gameID) {
-		if (isAppRunningInBackground()) {
-			startService(NotificationConstans.NOTIFICATION_SHOW, notificationID, gameName, taskName, operatorLogo,
-				gameID);
-		}
+		startService(NotificationConstans.NOTIFICATION_SHOW, notificationID, gameName, taskName, operatorLogo, gameID);
 	}
 	
 	/**
