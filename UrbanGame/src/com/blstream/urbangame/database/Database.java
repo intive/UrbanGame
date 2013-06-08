@@ -74,6 +74,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String USER_GAMES_SPECIFIC_KEY_GAME_ID = "UGSGameID";
 	private static final String USER_GAMES_SPECIFIC_KEY_RANK = "UGSRank";
 	private static final String USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED = "UGSGameActiveObserved";
+	private static final String USER_GAMES_SPECIFIC_KEY_CHANGES = "UGSChanges";
 	
 	// ---- User logging table
 	private static final String USER_LOGGED_IN_KEY_EMAIL = "ULIEmail";
@@ -130,10 +131,10 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String CREATE_USER_GAMES_SPECIFIC_TABLE = "CREATE TABLE " + USER_GAMES_SPECIFIC_TABLE_NAME
 		+ " (" + USER_GAMES_SPECIFIC_KEY_EMAIL + " TEXT, " + USER_GAMES_SPECIFIC_KEY_GAME_ID + " INTEGER, "
 		+ USER_GAMES_SPECIFIC_KEY_RANK + " INTEGER, " + USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED + " INTEGER, "
-		+ "PRIMARY KEY (" + USER_GAMES_SPECIFIC_KEY_EMAIL + ", " + USER_GAMES_SPECIFIC_KEY_GAME_ID + ")"
-		+ " FOREIGN KEY (" + USER_GAMES_SPECIFIC_KEY_EMAIL + ") " + "REFERENCES " + USER_TABLE_NAME + " ("
-		+ USER_KEY_EMAIL + ") " + " FOREIGN KEY (" + USER_GAMES_SPECIFIC_KEY_GAME_ID + ") " + "REFERENCES "
-		+ GAMES_TABLE_NAME + " (" + GAMES_KEY_ID + ") " + ")";
+		+ USER_GAMES_SPECIFIC_KEY_CHANGES + " TEXT, " + "PRIMARY KEY (" + USER_GAMES_SPECIFIC_KEY_EMAIL + ", "
+		+ USER_GAMES_SPECIFIC_KEY_GAME_ID + ")" + " FOREIGN KEY (" + USER_GAMES_SPECIFIC_KEY_EMAIL + ") "
+		+ "REFERENCES " + USER_TABLE_NAME + " (" + USER_KEY_EMAIL + ") " + " FOREIGN KEY ("
+		+ USER_GAMES_SPECIFIC_KEY_GAME_ID + ") " + "REFERENCES " + GAMES_TABLE_NAME + " (" + GAMES_KEY_ID + ") " + ")";
 	
 	private static final String CREATE_USER_LOGGED_IN_TABLE = "CREATE TABLE " + USER_LOGGED_IN_TABLE_NAME + " ("
 		+ USER_LOGGED_IN_KEY_EMAIL + " TEXT PRIMARY KEY" + ")";
@@ -630,9 +631,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		
 		Player player = null;
 		if (cursor != null) {
-		    if (cursor.moveToFirst()) {
-		        player = new Player(cursor.getString(0), cursor.getString(3), cursor.getString(1), cursor.getString(2));
-		    }
+			if (cursor.moveToFirst()) {
+				player = new Player(cursor.getString(0), cursor.getString(3), cursor.getString(1), cursor.getString(2));
+			}
 			cursor.close();
 		}
 		else {
@@ -691,6 +692,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			values.put(USER_GAMES_SPECIFIC_KEY_GAME_ID, playerGameSpecific.getGameID());
 			values.put(USER_GAMES_SPECIFIC_KEY_RANK, playerGameSpecific.getRank());
 			values.put(USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED, playerGameSpecific.getState());
+			values.put(USER_GAMES_SPECIFIC_KEY_CHANGES, playerGameSpecific.getChanges());
 			
 			boolean isInsertOK = db.insert(USER_GAMES_SPECIFIC_TABLE_NAME, null, values) != -1;
 			db.close();
@@ -704,7 +706,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	public PlayerGameSpecific getUserGameSpecific(String email, Long gameID) {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		String[] playerGamesSpecificColumns = { USER_GAMES_SPECIFIC_KEY_EMAIL, USER_GAMES_SPECIFIC_KEY_GAME_ID,
-			USER_GAMES_SPECIFIC_KEY_RANK, USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED };
+			USER_GAMES_SPECIFIC_KEY_RANK, USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED, USER_GAMES_SPECIFIC_KEY_CHANGES };
 		
 		Cursor cursor = db.query(USER_GAMES_SPECIFIC_TABLE_NAME, playerGamesSpecificColumns,
 			USER_GAMES_SPECIFIC_KEY_EMAIL + "=? AND " + USER_GAMES_SPECIFIC_KEY_GAME_ID + "=?", new String[] { email,
@@ -712,10 +714,13 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		
 		PlayerGameSpecific playerGameSpecific = null;
 		if (cursor != null) {
-		        if(cursor.moveToFirst()) {
-		            playerGameSpecific = new PlayerGameSpecific(cursor.getInt(2), cursor.getString(0), cursor.getLong(1),
-		                    cursor.getInt(3));
-		        }
+			if (cursor.moveToFirst()) {
+				playerGameSpecific = new PlayerGameSpecific(cursor.getInt(PlayerGameSpecificFields.RANK.value),
+					cursor.getString(PlayerGameSpecificFields.EMAIL.value),
+					cursor.getLong(PlayerGameSpecificFields.GAME_ID.value),
+					cursor.getInt(PlayerGameSpecificFields.OBSERVED.value),
+					cursor.getString(PlayerGameSpecificFields.CHANGES.value));
+			}
 			cursor.close();
 		}
 		else {
@@ -723,6 +728,15 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		}
 		db.close();
 		return playerGameSpecific;
+	}
+	
+	private enum PlayerGameSpecificFields {
+		EMAIL(0), GAME_ID(1), RANK(2), OBSERVED(3), CHANGES(4);
+		int value;
+		
+		private PlayerGameSpecificFields(int x) {
+			value = x;
+		}
 	}
 	
 	@Override
@@ -744,6 +758,9 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			}
 			if (playerGameSpecific.getState() != null) {
 				values.put(USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED, playerGameSpecific.getState());
+			}
+			if (playerGameSpecific.getChanges() != null) {
+				values.put(USER_GAMES_SPECIFIC_KEY_CHANGES, playerGameSpecific.getChanges());
 			}
 			
 			updateOK = db.update(USER_GAMES_SPECIFIC_TABLE_NAME, values, USER_GAMES_SPECIFIC_KEY_EMAIL + "=? AND "
