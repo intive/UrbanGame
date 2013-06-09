@@ -9,7 +9,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.blstream.urbangame.fragments.TabManager;
-import com.blstream.urbangame.fragments.TaskAnswerFragment;
+import com.blstream.urbangame.fragments.ABCDTaskAnswerFragment;
 import com.blstream.urbangame.fragments.TaskDescriptionFragment;
 
 public class ActiveTaskActivity extends MenuActivity {
@@ -68,7 +68,7 @@ public class ActiveTaskActivity extends MenuActivity {
 		
 		String tagTasksAnswer = getString(R.string.tab_task_answer);
 		TabSpec tabAnswer = tabHost.newTabSpec(TAG_TAB_ANSWER).setIndicator(tagTasksAnswer);
-		tabManager.addTab(tabAnswer, TaskAnswerFragment.class, extras);
+		tabManager.addTab(tabAnswer, ABCDTaskAnswerFragment.class, extras);
 	}
 	
 	@Override
