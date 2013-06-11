@@ -14,7 +14,7 @@
 ###
 
 # '------------------------------------- NEW GAME CTRL
-newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', 'Games', 'Utilities', '$dialog', ($scope, $location, $route, $rootScope, Games, Utilities, $dialog) ->
+newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$rootScope', 'Games', 'Utilities', ($scope, $location, $route, $rootScope, Games, Utilities) ->
     
     # ------------------ INITIAL DATA FOR MODEL
     $scope.steps = [
@@ -44,12 +44,22 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
     $scope.skin = {
         image: "games/gameicon.png"
     }
-
     $scope.error = null
     $scope.editable = true
     $scope.dateFormat = Messages("dateformatlong")
 
-    # ------------------ MODEL DATA LOADER WHEN IN EDIT MODE
+    # ------------------ EDIT MODE
+    $scope.isEdit = ->
+        if (/\/my\/games\/\d+\/edit/gi.test(window.location.pathname))
+            $scope.gameid = parseInt(/(\d+)/.exec(window.location.pathname)[1])
+            true
+        else
+            false
+
+    fillGameModel = ->
+        if $scope.isEdit()
+            resource["get"]()
+
     loadModelData = (data) ->
         $scope.game = {
             name: data.name,
@@ -69,15 +79,9 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             version: data.version
         }
 
-    $scope.isEdit = ->
-        if (/\/my\/games\/\d+\/edit/gi.test(window.location.pathname))
-            $scope.gameid = parseInt(/(\d+)/.exec(window.location.pathname)[1])
-            true
-        else
-            false
-
-    fillGameModel = ->
-        if $scope.isEdit()
+    # ------------------ UTILITY METHODS
+    resource = {
+        "get": ->
             Games.get(
                 {gid: $scope.gameid},
                 (data) ->
@@ -90,8 +94,86 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 (error) ->
                     $scope.error = Messages("js.errors.ajax", "querying")
             )
+        ,
+        "publish": ->
+            Games.publish(
+                {data: $scope.gameid},
+                (data) ->
+                        window.location = "/my/games"
+                (error) ->
+                    $scope.error = Messages("js.errors.ajax", "publishing")
+            )
+        ,
+        "save": ->
+            Games.save(
+                {data: $scope.game},
+                (data) ->
+                    $scope.gameid = data.val
 
-    fillGameModel()
+                    if $scope.getCurrentStepIndex() == 3
+                        window.location = "/my/games"
+                    $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
+                    $scope.error = null
+                (error) ->
+                    $scope.error = Messages("js.errors.ajax", "saving")
+            )
+        ,
+        "update": ->
+            Games.update(
+                {id: $scope.gameid, data: $scope.game},
+                (data) ->
+                    if $scope.getCurrentStepIndex() == 3
+                        window.location = "/my/games"
+                    $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
+                    $scope.error = null
+                (error) ->
+                    $scope.error = Messages("js.errors.ajax", "updating")
+            )
+        ,
+        "checkName": ->
+            Games.checkName(
+                {data: $scope.game.name},
+                (result) ->
+                    if result.val
+                        $scope.form.$setValidity "nameunique", true
+                    else
+                        $scope.form.$setValidity "nameunique", false
+                    $scope.error = null
+                (error) ->
+                    $scope.error = Messages("js.errors.name") + error
+            )
+    }
+
+    # ------------------ BUTTONS ACTIONS HANDLING
+    $scope.savegame = ->
+        gid = $scope.gameid
+
+        if $scope.game.playersNum == null
+            $scope.game.playersNum = 1000000
+            notSetByUser = true 
+
+        if (gid == null || _.isUndefined(gid))
+            resource["save"]()
+        else
+            resource["update"]()
+
+        if notSetByUser
+            $scope.game.playersNum = null
+
+    $scope.publishgame = ->
+        gid = $scope.gameid
+        action = "publish"
+
+        if (gid != null && !_.isUndefined(gid))
+            Utilities.showDialog($scope.game.name, action)
+                .then (result) ->
+                    if(result == "ok")
+                        resource[action]()
+
+    # ------------------ GAME NAME VALIDATION
+    $scope.isValidName = ->
+        if ($scope.gameid == null || _.isUndefined($scope.gameid))
+            resource["checkName"]()
 
     # ------------------ STEPS SWITCHING
     $scope.selection = $scope.steps[0]
@@ -106,7 +188,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         !$scope.hasNextStep()
         
     $scope.goToStep = (index) ->
-            $scope.selection = $scope.steps[index] if ( !_.isUndefined($scope.steps[index]) )
+            $scope.selection = $scope.steps[index] if !_.isUndefined($scope.steps[index])
 
     $scope.hasNextStep = ->
         stepIndex = $scope.getCurrentStepIndex()
@@ -119,7 +201,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         !_.isUndefined($scope.steps[previousStep])
 
     $scope.incrementStepIfValid = ->
-        $scope.incrementStep() if (!$scope.form.$invalid)
+        $scope.incrementStep() if !$scope.form.$invalid
     
     $scope.incrementStep = ->
         (
@@ -128,10 +210,10 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 $scope.savegame()
             else
                 if stepIndex == 1
-                    !$scope.geolocationBound=false
+                    !$scope.geolocationBound = false
                 nextStep = stepIndex + 1
                 $scope.selection = $scope.steps[nextStep]
-        ) if ( $scope.hasNextStep() )
+        ) if $scope.hasNextStep()
         
     $scope.decrementStep = ->
         (
@@ -140,73 +222,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             $scope.selection = $scope.steps[previousStep]
             if ($scope.getCurrentStepIndex()==0)
                 $scope.onTab1Switch() 
-        ) if ( $scope.hasPreviousStep() )
-
-    # ------------------ BUTTONS ACTIONS HANDLING
-    $scope.savegame = ->
-        if $scope.game.playersNum == null
-            $scope.game.playersNum = 1000000
-            notSetByUser = true 
-
-        if ($scope.gameid == null || _.isUndefined($scope.gameid))
-            Games.save(
-                {data: $scope.game},
-                (data) ->
-                    $scope.gameid = data.val
-
-                    if $scope.getCurrentStepIndex() == 3
-                        window.location = "/my/games"
-                    $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
-                    $scope.error = null
-                (error) ->
-                    $scope.error = Messages("js.errors.ajax", "saving")
-            )
-        else
-            Games.update(
-                {id: $scope.gameid, data: $scope.game},
-                (data) ->
-                    if $scope.getCurrentStepIndex() == 3
-                        window.location = "/my/games"
-                    $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
-                    $scope.error = null
-                (error) ->
-                    $scope.error = Messages("js.errors.ajax", "updating")
-            )
-        if notSetByUser
-            $scope.game.playersNum = null
-
-    $scope.publishgame = ->
-        if ($scope.gameid != null && !_.isUndefined($scope.gameid))
-            title = $scope.game.name
-            msg = Messages("js.errors.sure", "publish")
-            btns = [{result:'no', label: Messages("js.no")}, {result:'ok', label: Messages("js.yes", "publish"), cssClass: 'btn-primary'}]
-
-            $dialog.messageBox(title, msg, btns)
-                .open()
-                .then (result) ->
-                    if(result == "ok")
-                        Games.publish(
-                            {data: $scope.gameid},
-                            (data) ->
-                                window.location = "/my/games"
-                            (error) ->
-                                $scope.error = Messages("js.errors.ajax", "publishing")
-                        )
-
-    # ------------------ GAME NAME VALIDATION
-    $scope.isValidName = ->
-        if ($scope.gameid == null || _.isUndefined($scope.gameid))
-            Games.checkName(
-                {data: $scope.game.name},
-                (result) ->
-                    if result.val
-                        $scope.form.$setValidity "nameunique", true
-                    else
-                        $scope.form.$setValidity "nameunique", false
-                    $scope.error = null
-                (error) ->
-                    $scope.error = Messages("js.errors.name") + error
-            )
+        ) if $scope.hasPreviousStep()
 
     # ------------------ PLAYERS ENUMERATOR
     $scope.incrementPlayersNum = ->
@@ -225,7 +241,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         $scope.game.winningNum += 1
    
     $scope.decrementWinningNum = ->
-        $scope.game.winningNum-=1 if $scope.game.winningNum > 1
+        $scope.game.winningNum -= 1 if $scope.game.winningNum > 1
         
     $scope.timezone = "GMT" + ((if new Date().getTimezoneOffset() > 0 then "" else "+")) + (new Date().getTimezoneOffset() / (-60))
 
@@ -243,19 +259,6 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             Messages("newgame.gametype1")
         else
             Messages("newgame.gametype2")
-    
-    $scope.$watch '[game.winningNum, game.playersNum]', ->
-        if $scope.game.winningNum == undefined
-            $scope.form.$setValidity "morewinnersthanplayers", false
-        else
-            if ($scope.game.playersNum!=null)
-                if ($scope.game.playersNum>$scope.game.winningNum)
-                    $scope.form.$setValidity "morewinnersthanplayers", true
-                else
-                    $scope.form.$setValidity "morewinnersthanplayers", false
-            else
-                $scope.form.$setValidity "morewinnersthanplayers", true
-    , true
     
     $scope.onTab1Switch = ->
         setTimeout (->
@@ -283,6 +286,23 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 else
                     $scope.form.$setValidity "dates", true
         ), 200
+
+    # ------------------ INIT
+    fillGameModel()
+
+    # ------------------ WATCH
+    $scope.$watch '[game.winningNum, game.playersNum]', ->
+        if _.isUndefined($scope.game.winningNum)
+            $scope.form.$setValidity "morewinnersthanplayers", false
+        else
+            if ($scope.game.playersNum != null)
+                if ($scope.game.playersNum > $scope.game.winningNum)
+                    $scope.form.$setValidity "morewinnersthanplayers", true
+                else
+                    $scope.form.$setValidity "morewinnersthanplayers", false
+            else
+                $scope.form.$setValidity "morewinnersthanplayers", true
+    , true
         
     $ ->
         $scope.onTab1Switch()
