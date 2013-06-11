@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.actionbarsherlock.view.Menu;
@@ -17,7 +19,7 @@ import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.session.LoginManager;
 
-public class GamesListActivity extends MenuListActivity {
+public class GamesListActivity extends MenuActivity implements OnItemClickListener {
 	private static final String TAG = "GamesListActivity";
 	
 	private GamesListAdapter adapter;
@@ -25,18 +27,25 @@ public class GamesListActivity extends MenuListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_games_list);
 		setSupportProgressBarVisibility(true);
 		
+		configureListView();
+	}
+	
+	private void configureListView() {
+		ListView gamesList = (ListView) findViewById(R.id.listViewGamesList);
 		adapter = new GamesListAdapter(this, R.layout.list_item_game);
-		setListAdapter(adapter);
+		
+		gamesList.setAdapter(adapter);
+		gamesList.setOnItemClickListener(this);
 	}
 	
 	@Override
-	protected void onListItemClick(ListView listView, View clickedView, int posViewInList, long idOfClickedItem) {
-		super.onListItemClick(listView, clickedView, posViewInList, idOfClickedItem);
+	public void onItemClick(AdapterView<?> adapter, View clickedView, int posViewInList, long idOfClickedItem) {
 		Bundle bundle = new Bundle();
 		
-		UrbanGameShortInfo game = adapter.getItem(posViewInList);
+		UrbanGameShortInfo game = (UrbanGameShortInfo) adapter.getItemAtPosition(posViewInList);
 		Long selectedGameId = (game == null ? -1 : game.getID());
 		bundle.putLong(GameDetailsActivity.GAME_KEY, selectedGameId);
 		

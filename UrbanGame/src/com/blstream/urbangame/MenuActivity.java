@@ -54,13 +54,31 @@ import com.blstream.urbangame.session.LoginManager;
 // formatter:on
 
 public class MenuActivity extends SherlockFragmentActivity {
+	private UrbanGameApplication urbanGameApplication;
 	private LoginManager loginManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		loginManager = LoginManager.getInstance(MenuActivity.this);
+		this.urbanGameApplication = (UrbanGameApplication) getApplication();
+		this.loginManager = LoginManager.getInstance(MenuActivity.this);
+	}
+	
+	/**
+	 * onResume() and onPause() from {@link UrbanGameApplication} methods are
+	 * invoked to set flag if application is running in background or not
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		urbanGameApplication.onResume();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		urbanGameApplication.onPause();
 	}
 	
 	@Override

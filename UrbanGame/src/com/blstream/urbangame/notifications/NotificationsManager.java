@@ -1,13 +1,10 @@
 package com.blstream.urbangame.notifications;
 
-import java.util.List;
-
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+
+import com.blstream.urbangame.UrbanGameApplication;
 
 /**
  * NotificationsManager helps to simply manage notifications in application. It
@@ -15,17 +12,14 @@ import android.graphics.Bitmap;
  * to inform user about them.
  */
 public class NotificationsManager implements NotificationInterface {
-	private ActivityManager activityManager;
-	private String urbanGamePackageName;
-	
+	private UrbanGameApplication urbanGameApplication;
 	private NotificationDialog notificationDialog;
 	private Context context;
 	
 	public NotificationsManager(Context context) {
 		this.context = context;
 		this.notificationDialog = new NotificationDialog(context);
-		this.activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		this.urbanGamePackageName = context.getPackageName();
+		this.urbanGameApplication = (UrbanGameApplication) context.getApplicationContext();
 	}
 	
 	@Override
@@ -137,16 +131,7 @@ public class NotificationsManager implements NotificationInterface {
 		context.startService(intent);
 	}
 	
-	/**
-	 * Checks if application is displayed on screen.
-	 * 
-	 * @return true if application is not visible on screen
-	 */
 	private boolean isAppRunningInBackground() {
-		List<RunningTaskInfo> topTask = activityManager.getRunningTasks(1);
-		ComponentName topActivity = topTask.get(0).topActivity;
-		String currentActivityPackageName = topActivity.getPackageName();
-		
-		return !currentActivityPackageName.equalsIgnoreCase(urbanGamePackageName);
+		return urbanGameApplication.isAppInBackground();
 	}
 }
