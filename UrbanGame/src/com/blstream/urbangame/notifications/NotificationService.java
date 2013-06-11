@@ -7,6 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
+/**
+ * NotificationService allows to display notifications in ApplicationBar. It is
+ * invoked from {@link NotificationsManager} and obtains notifications from
+ * {@link NotificationFactory}.
+ */
 public class NotificationService extends IntentService {
 	private final static String SERVICE_NAME = "NotificationService";
 	
