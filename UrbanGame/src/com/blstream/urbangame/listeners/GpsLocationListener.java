@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
-import android.util.Log;
 
 //Location;
 
@@ -22,13 +21,12 @@ public class GpsLocationListener implements LocationListener, Parcelable {
 	
 	private Location lastLocation;
 	private long lastUpdateTime;
-	private boolean isEnabled; //checks if listener wasn't removed
+	//private boolean isEnabled; //checks if listener wasn't removed
 	private static final long MAX_ACCEPTABLE_TIME = 5000; //if there were no updates during this time, we assume gps connection is lost
 	
 	public GpsLocationListener() {
 		//if getTimeFromLastUpdate is used before any updates it returns max possible time
 		lastUpdateTime = Long.MAX_VALUE;
-		isEnabled = false;
 	}
 	
 	public GpsLocationListener(Parcel in) {
@@ -47,14 +45,10 @@ public class GpsLocationListener implements LocationListener, Parcelable {
 	public void onStatusChanged(String provider, int status, Bundle extras) {}
 	
 	@Override
-	public void onProviderEnabled(String provider) {
-		isEnabled = true;
-	}
+	public void onProviderEnabled(String provider) {}
 	
 	@Override
-	public void onProviderDisabled(String provider) {
-		isEnabled = false;
-	}
+	public void onProviderDisabled(String provider) {}
 	
 	public Location getLastLocation() {
 		return lastLocation;
@@ -84,14 +78,6 @@ public class GpsLocationListener implements LocationListener, Parcelable {
 		
 	}
 	
-	public boolean isEnabled() {
-		return isEnabled;
-	}
-	
-	public void setEnabled(boolean isEnabled) {
-		this.isEnabled = isEnabled;
-	}
-	
 	public static final Parcelable.Creator<GpsLocationListener> CREATOR = new Parcelable.Creator<GpsLocationListener>() {
 		@Override
 		public GpsLocationListener createFromParcel(Parcel in) {
@@ -105,7 +91,6 @@ public class GpsLocationListener implements LocationListener, Parcelable {
 	};
 	
 	public boolean isGPSFix() {
-		Log.i("tm[", getTimeFromLastUpdate() + "");
 		return getTimeFromLastUpdate() < MAX_ACCEPTABLE_TIME;
 	}
 }

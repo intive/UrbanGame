@@ -39,11 +39,10 @@ public class ActiveTaskActivity extends MenuActivity {
 		long taskID = getSelectedTaskID();
 		databaseInterface = new Database(this);
 		this.task = databaseInterface.getTask(taskID);
-		Log.i("kkkkk", task + "");
 		configureActionBar();
 		setUpTabHost(savedInstanceState);
 		databaseInterface.closeDatabase();
-		Log.i("kkkkk", task + "");
+		
 	}
 	
 	@Override

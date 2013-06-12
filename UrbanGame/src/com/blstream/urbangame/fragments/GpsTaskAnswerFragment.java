@@ -2,7 +2,6 @@ package com.blstream.urbangame.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.blstream.urbangame.R;
@@ -34,8 +32,9 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	private Activity context;
 	private Button submitButton;
 	private GpsLocationListener gpsLocationListener;
-	private static final int GPS_UPDATE_TIME = 1000;
+	private static final int GPS_UPDATE_TIME = 3000;
 	private static final int GPS_UPDATE_LOCATION = 0;
+	private final String TAG = GpsTaskAnswerFragment.class.getSimpleName();
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -44,12 +43,6 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		context = activity;
 		
 		task = getArguments().getParcelable(Task.TASK_KEY);
-		
-		Intent activityIntent = activity.getIntent();
-		Bundle extras = null;
-		if (activityIntent != null) {
-			extras = activity.getIntent().getExtras();
-		}
 		
 		gpsLocationListener = new GpsLocationListener();
 		locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
@@ -60,7 +53,14 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		DatabaseInterface database = new Database(activity);
 		playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), database.getLoggedPlayerID());
 		database.closeDatabase();
-		Toast.makeText(activity, "pobrano taks sp: " + playerTaskSpecific, Toast.LENGTH_LONG).show();
+	}
+	
+	@Override
+	public void onDetach() {
+		
+		locationManager.removeUpdates(gpsLocationListener);
+		
+		super.onDetach();
 	}
 	
 	@Override
@@ -141,10 +141,13 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	
 	//check internet connection
 	public boolean isOnline() {
-		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		if (netInfo != null && netInfo.isConnectedOrConnecting()) return true;
-		return false;
+		ConnectivityManager connectivityManager = (ConnectivityManager) context
+			.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+		if (networkInfo == null) return false;
+		if (!networkInfo.isConnected()) return false;
+		if (!networkInfo.isAvailable()) return false;
+		return true;
 	}
 	
 }
