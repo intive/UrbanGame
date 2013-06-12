@@ -72,13 +72,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/TextViewDetails"
-                style="@style/styleHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:text="@string/header_details" />
+            <include
+                android:id="@+id/detailsHeader"
+                layout="@layout/expandable_lists_header" />
+            <!-- <TextView -->
+            <!-- android:id="@+id/TextViewDetails" -->
+            <!-- style="@style/styleHeader" -->
+            <!-- android:layout_width="match_parent" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:layout_marginTop="0dp" -->
+            <!-- android:text="@string/header_details" /> -->
 
             <RelativeLayout
                 android:id="@+id/relativeLayoutWrapperDetails"
@@ -187,10 +190,13 @@
                     style="@style/styleCustomRatingBar" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textViewHeaderPrizes"
-                style="@style/styleHeader"
-                android:text="@string/header_prizes" />
+            <include
+                android:id="@+id/PrizesHeader"
+                layout="@layout/expandable_lists_header" />
+            <!-- <TextView -->
+            <!-- android:id="@+id/textViewHeaderPrizes" -->
+            <!-- style="@style/styleHeader" -->
+            <!-- android:text="@string/header_prizes" /> -->
 
             <TextView
                 android:id="@+id/TextViewPrizes"
@@ -199,10 +205,13 @@
                 android:padding="@dimen/view_margin"
                 android:text="Nagroda pocieszenia - symboliczna nagroda nie przedstawiająca wartości materialnej, przyznawana w wyrazie uznania za wyróżniające się osiągnięcia tym konkurentom, którym nie udało się zdobyć nagrody głównej." />
 
-            <TextView
-                android:id="@+id/TextViewHeaderDescription"
-                style="@style/styleHeader"
-                android:text="@string/header_description" />
+            <include
+                android:id="@+id/descriptionHeader"
+                layout="@layout/expandable_lists_header" />
+            <!-- <TextView -->
+            <!-- android:id="@+id/TextViewHeaderDescription" -->
+            <!-- style="@style/styleHeader" -->
+            <!-- android:text="@string/header_description" /> -->
 
             <TextView
                 android:id="@+id/textViewGameDescription"

@@ -58,9 +58,9 @@
     <string name="label_difficulty">Difficulty:</string>
     <string name="button_leave">Leave</string>
     <string name="button_join">Join</string>
-    <string name="header_prizes">Prizes</string>
-    <string name="header_description">Description</string>
-    <string name="header_details">Details</string>
+    <string name="header_prizes">PRIZES</string>
+    <string name="header_description">DESCRIPTION</string>
+    <string name="header_details">DETAILS</string>
     <string name="dialog_join_title">Join to the game</string>
     <string name="dialog_leave_title">Leave game</string>
     <string name="dialog_join_leave_message">Are you sure?</string>
