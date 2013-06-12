@@ -16,7 +16,7 @@
 -@ val lan: Lang
 -@ val dateOpts: String = "{ dateFormat: " + Messages("dateformat") + "}"
 
-.control-group.row-fluid.form-style
+.control-group.row-fluid.container-style
     %div(id="formDiv")
         %h4
             %span.step = Messages("newgame.step1")(lan) 
@@ -28,8 +28,10 @@
             .controls.slight-padding-top
                 %label(for="gName")
                     %strong = Messages("newgame.gamenamelabel")(lan)
-                .control
-                    %input.input-xlarge(type="text" maxlength="100" id='nameInput' required name="gName" ng-model="game.name" tooltip={Messages("newgame.ttgamename")(lan)} tooltip-animation="true" tooltip-placement="right") 
+                .controls-row
+                    %input.pull-left.input-xlarge(type="text" maxlength="100" id='nameInput' required name="gName" ng-model="game.name" tooltip={Messages("newgame.ttgamename")(lan)} tooltip-animation="true" tooltip-placement="right")
+                    .slight-padding-left.pull-left
+                        %div(id="processing")
                 .alert.alert-error.span11(ng-show="form.$error.nameunique" ng-cloak) = Messages("newgame.gnameinvaliderror")
                 %label(for="gDesc")
                     %strong=Messages("newgame.gamedesclabel")(lan)

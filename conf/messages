@@ -97,7 +97,20 @@ mygames.tasks = Tasks
 mygames.delete = Delete
 mygames.cancel = Cancel
 
+
 archive.title = Games archive
+tasks.newtaskbtn = New task
+tasks.headername = Task details
+tasks.headertype = Type
+tasks.tablecaption = List of tasks
+tasks.headervisible = Conditions of visibility
+tasks.headeroptions = Options
+tasks.headerversion = Version
+tasks.edit = Edit
+tasks.delete = Delete
+tasks.visibilitytooltip = Task is visible always
+tasks.rewardtooltip = Maximum reward points:
+
 
 language.pick = Pick a language
 language.en = English

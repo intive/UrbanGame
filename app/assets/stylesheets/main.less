@@ -18,6 +18,7 @@
 @wizminheight: 200px;
 @tareaheight: 131px;
 @hfooter: 130px;
+@mapheight: 300px;
 
 /* margins, paddings */
 @mhmarginbottom: 20px;
@@ -242,7 +243,6 @@ input.search-query {
 		}
 	}
 }
-
 .finished {
 	tr& {
 		background-color: @finishedback;
@@ -253,7 +253,6 @@ input.search-query {
 		font-weight: bold;
 	}
 }
-
 .project {
 	tr& {
 		background-color: @projectback;
@@ -286,7 +285,9 @@ input.search-query {
 		font-weight: bold;
 	}
 }
-
+.no-margin{
+    margin:0 !importatnt;
+}
 
 form#registration {
 	margin-top: @slightpadding * 2;
@@ -304,7 +305,7 @@ form#registration {
   display: none !important;
 }
 
-.form-style{
+.container-style{
     border: 1px #b8b8b8 solid;
     border-radius: 5px;
     background-color: #faf9f9;
@@ -328,4 +329,39 @@ form#registration {
 
 .row.sum {
 	margin-bottom: 10px;
+}
+#processing{
+    width: 28px;
+    height: 28px;
+}
+.img-processing{
+    background-image: url("../images/ajax-loader.gif")
+}
+.img-ok{
+    background-image: url("../images/ajax-ok.jpg")
+}
+.img-error{
+    background-image: url("../images/ajax-error.png")
+}
+.cursor-pointer{
+    cursor:pointer;
+}
+caption{
+    font-size: 130%;
+    font-weight: bold;
+}
+google-map{
+    display: block;
+    height: @mapheight;
+    }
+#taskslist{
+    	thead tr th {
+            border-top: 1px double @lightgray;
+            border-bottom: 3px double @lightgray;
+            font-weight: bold;
+            text-align: center;
+        }
+        tbody tr td {
+            text-align:center;
+        }
 }

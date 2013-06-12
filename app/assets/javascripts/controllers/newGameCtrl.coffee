@@ -24,6 +24,8 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         {no: 4, name: Messages("js.newgame.tab.step4title")}
     ]
     $scope.gameid = null
+    $scope.previousname = null
+
     $scope.game = {
         name: "",
         description: "",
@@ -48,6 +50,22 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
     $scope.editable = true
     $scope.dateFormat = Messages("dateformatlong")
 
+    # ------------------ GOOGLE MAP
+    $scope.mapOpts = {
+        center: {
+            latitude: 51.108051,
+            longitude: 17.038532,
+        },
+        markers: [], 
+        zoom: 15
+    }
+    angular.extend $scope, $scope.mapOpts
+    
+    $scope.mapOpts.markers= [{
+            latitude: 51.108051,
+            longitude: 17.038532,
+        }]
+    
     # ------------------ EDIT MODE
     $scope.isEdit = ->
         if (/\/my\/games\/\d+\/edit/gi.test(window.location.pathname))
@@ -56,9 +74,13 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         else
             false
 
+
     fillGameModel = ->
         if $scope.isEdit()
             resource["get"]()
+
+    $scope.tasks = [{name:"taskOne", type:"GPS", visible:"None", version:1.0, maxPoints:7},{name:"taskOne", type:"GPS", visible:"None", version:1.0, maxPoints:10}]
+
 
     loadModelData = (data) ->
         $scope.game = {
@@ -87,6 +109,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 (data) ->
                     if data.status == 'published' || data.status == 'project'
                         loadModelData(data)
+                        $scope.previousname=data.name
                         $scope.error = null
                         $scope.editable = true
                     else
@@ -131,12 +154,15 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             )
         ,
         "checkName": ->
+            $("#processing").removeClass("img-ok img-error").addClass("img-processing")
             Games.checkName(
                 {data: $scope.game.name},
                 (result) ->
                     if result.val
+                        $("#processing").removeClass("img-processing").addClass("img-ok")
                         $scope.form.$setValidity "nameunique", true
                     else
+                        $("#processing").removeClass("img-processing").addClass("img-error")
                         $scope.form.$setValidity "nameunique", false
                     $scope.error = null
                 (error) ->
@@ -176,7 +202,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             resource["checkName"]()
 
     # ------------------ STEPS SWITCHING
-    $scope.selection = $scope.steps[0]
+    $scope.selection = $scope.steps[1]
 
     $scope.getCurrentStepIndex = ->
         _.indexOf($scope.steps, $scope.selection)
@@ -222,6 +248,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             $scope.selection = $scope.steps[previousStep]
             if ($scope.getCurrentStepIndex()==0)
                 $scope.onTab1Switch() 
+
         ) if $scope.hasPreviousStep()
 
     # ------------------ PLAYERS ENUMERATOR
