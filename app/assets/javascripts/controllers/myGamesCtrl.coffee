@@ -14,43 +14,76 @@
 ###
 
 # '------------------------------------------ GAMES LIST CTRL
-app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Utilities', '$dialog', '$filter', ($scope, $location, $timeout, Games, Utilities, $dialog, $filter) ->
+app.controller 'myGamesCtrl', ['$scope', '$location', 'Games', 'Utilities', '$filter', ($scope, $location, Games, Utilities, $filter) ->
 
     # ------------------- INITIAL DATA LOADING
     $scope.games = []
-    $scope.sortOrder = ['startDate', 'startTime', 'status']
-    $scope.order = ['startDate', 'startTime', 'status']
+    $scope.sortOrder = ['startDate']
     $scope.reverse = false
     $scope.filteredItems = []
     $scope.groupedItems = null
     $scope.itemsPerPage = 5
     $scope.pagedItems = []
     $scope.currentPage = 0
+    $scope.isArchive = false
+    $scope.error = null
 
-    querygames = ->
-        Games.query(
-            {},
-            (data) ->
-                $scope.games = data
-                $scope.search()
-            (error) ->
-                alert Messages("js.errors.gameslist")
-        )
-
-    queryarchives = ->
-        Games.archive(
-            {},
-            (data) ->
-                $scope.games = data
-                $scope.search()
-            (error) ->
-                alert Messages("js.errors.gameslist")
-        )
+    resource = {
+        "querygames": ->
+            Games.query(
+                {},
+                (data) ->
+                    $scope.games = data
+                    $scope.search()
+                (error) ->
+                    $scope.error = Messages("js.errors.gameslist")
+            )
+        ,
+        "queryarchives": ->
+            Games.archive(
+                {},
+                (data) ->
+                    $scope.games = data
+                    $scope.search()
+                (error) ->
+                    $scope.error = Messages("js.errors.gameslist")
+            )
+        ,
+        "delete": (idx) ->
+            game = $scope.pagedItems[$scope.currentPage][idx]
+            Games.delete(
+                {gid: game.id},
+                (data) ->
+                    i = _.indexOf($scope.games, game)
+                    curP = $scope.currentPage
+                    $scope.games.splice(i, 1)
+                    $scope.search()
+                    $scope.currentPage = curP
+                (error) ->
+                    $scope.error = Messages("js.errors.ajax", "deleting")
+            )
+        ,
+        "cancel": (idx) ->
+            game = $scope.pagedItems[$scope.currentPage][idx]
+            Games.cancel(
+                {data: game.id},
+                (data) ->
+                    i = _.indexOf($scope.games, game)
+                    curP = $scope.currentPage
+                    $scope.games[i].status = "project"
+                    $scope.search()
+                    $scope.currentPage = curP
+                (error) ->
+                    $scope.error = Messages("js.errors.ajax", "canceling")
+            )
+    }
+       
 
     if (/\/my\/games\/archive/gi.test(window.location.pathname))
-        queryarchives()
+        $scope.isArchive = true
+        resource["queryarchives"]()
     else
-        querygames()
+        resource["querygames"]()
 
     # ------------------- GAME OPTIONS ACTIONS
     $scope.showDetails = (idx) ->
@@ -59,56 +92,32 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
         window.location.pathname = "/my/games/" + games.id + "/edit" if (games.status == 'published' || games.status == 'project')
 
     $scope.delete = (idx) ->
-        games = $scope.pagedItems[$scope.currentPage][idx]
-        if (games.status == 'project')
-            title = games.name
-            msg = Messages("js.errors.sure", "delete")
-            btns = [{result:'no', label: Messages("js.no")}, {result:'ok', label: Messages("js.yes", "delete"), cssClass: 'btn-primary'}]
+        game = $scope.pagedItems[$scope.currentPage][idx]
+        action = "delete"
 
-            $dialog.messageBox(title, msg, btns)
-                .open()
+        if (game.status == 'project')
+            Utilities.showDialog(game.name, action)
                 .then (result) ->
                     if(result == "ok")
-                        Games.delete(
-                            {gid: games.id},
-                            (data) ->
-                                i = _.indexOf($scope.games, $scope.pagedItems[$scope.currentPage][idx])
-                                curP = $scope.currentPage
-                                $scope.games.splice(i, 1)
-                                $scope.search()
-                                $scope.currentPage = curP
-                            (error) ->
-                                alert Messages("js.errors.ajax", "deleting")
-                        )
-
+                        resource[action](idx)
+                        
     $scope.cancel = (idx) ->
-        games = $scope.pagedItems[$scope.currentPage][idx]
-        if (games.status == 'published')
-            title = games.name
-            msg = Messages("js.errors.sure", "cancel")
-            btns = [{result:'no', label: Messages("js.no")}, {result:'ok', label: Messages("js.yes", "cancel"), cssClass: 'btn-primary'}]
+        game = $scope.pagedItems[$scope.currentPage][idx]
+        action = "cancel"
 
-            $dialog.messageBox(title, msg, btns)
-                .open()
+        if (game.status == 'published')
+            Utilities.showDialog(game.name, action)
                 .then (result) ->
                     if(result == "ok")
-                        Games.cancel(
-                            {data: games.id},
-                            (data) ->
-                                i = _.indexOf($scope.games, $scope.pagedItems[$scope.currentPage][idx])
-                                curP = $scope.currentPage
-                                $scope.games[i].status = "project"
-                                $scope.search()
-                                $scope.currentPage = curP
-                            (error) ->
-                                alert Messages("js.errors.ajax", "canceling")
-                        )
+                        resource[action](idx)
 
     # ------------------------------ UTILITY METHODS - TIME COUNTER
     $scope.mtimeLeft = [];
 
     intervalID = window.setInterval( ->
-        $scope.mtimeLeft[_i] = Utilities.difference i.startTime, i.endTime, true for i in $scope.pagedItems[$scope.currentPage]
+        $scope.mtimeLeft[_i] = (
+            Utilities.difference i.startTime, i.endTime, true
+        ) for i in $scope.pagedItems[$scope.currentPage] if !_.isUndefined($scope.pagedItems[$scope.currentPage])
         $scope.$apply()
     , 1000)
 
@@ -125,6 +134,7 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
             $('th.'+newOrder+' i').removeClass().addClass('icon-chevron-up')
         else
             $('th.'+newOrder+' i').removeClass().addClass('icon-chevron-down')
+        $scope.search()
 
     # ------------------------------ SEARCHING
     searchMatch = (haystack, needle) ->
@@ -136,8 +146,14 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
     $scope.search = ->
         $scope.filteredItems = $filter('filter')($scope.games, (game) ->
             for attr of game
-                if searchMatch(game[attr], $scope.query)
-                    return true 
+                if attr != "endTime" && attr != "image"
+                    if attr == "startTime"
+                        res = $filter('date')(game[attr], 'dd MMM yyyy HH:mm')
+                    else
+                        res = game[attr]
+
+                    if searchMatch(res, $scope.query)
+                        return true 
             return false
         )
 
@@ -158,7 +174,7 @@ app.controller 'myGamesCtrl', ['$scope', '$location', '$timeout', 'Games', 'Util
 
     $scope.range = (start, end) ->
         ret = []
-        if (!end)
+        if !end
             end = start
             start = 0
         for i in [start..end-1] by 1

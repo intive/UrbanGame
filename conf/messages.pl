@@ -68,6 +68,8 @@ mygames.location = Lokalizacja
 mygames.timestart = Data rozpoczęcia
 mygames.tasks = Zadania
 
+archive.title = Archiwum gier
+
 language.pick = Wybierz język
 language.en = English
 language.pl = Polski

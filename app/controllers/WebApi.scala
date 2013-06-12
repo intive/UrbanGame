@@ -36,10 +36,10 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
     val list = gamesService.listGames(lat, lon, r)
     val embedded = list map { game => 
       val selfLink = HalLink("self", gameLink(game.gid).href)
-      val links = Seq(selfLink)
+      val links = Seq(selfLink, gameStaticLink(game.gid), gameDynamicLink(game.gid))
       HalJsonRes(links, Seq(), Json.toJson(game))
     }
-    val links = Seq(selfLink, gamesLink)
+    val links = Seq(selfLink, rootLink, loginLink, registerLink)
     ApiOk(HalJsonRes(links, embedded))
   }
 
@@ -50,12 +50,12 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
 
   def gameStatic(gid: Int) = ApiUserAction { implicit request => user =>
     val stat = gamesService.getGameStatic(gid)
-    val links = Seq(selfLink, gameLink(gid))
+    val links = Seq(selfLink)
     ApiOk(HalJsonRes(links, Seq(), Json.toJson(stat)))
   }
 
   def gameDynamic(gid: Int) = ApiUserAction { implicit request => user =>
-    val links = Seq(selfLink, gameLink(gid))
+    val links = Seq(selfLink)
     val dyna = gamesService.getGameDynamic(gid)
     ApiOk(HalJsonRes(links, Seq(), Json.toJson(dyna)))
   }
@@ -95,7 +95,7 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
 
   def register = ApiAction { implicit request =>
     withJsonArguments { a: RegisterArgs =>
-      gamesService.createUser(a.login, a.password)
+      gamesService.createUser(a.login.trim(), a.password.trim())
       val links = Seq(selfLink, loginLink)
       ApiOk(HalJsonRes(links))
     }
@@ -117,7 +117,7 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
     val list = gamesService.listUserGames(user)
     val embedded = list map { game => 
       val selfLink = HalLink("self", gameLink(game.gid).href)
-      val links = Seq(selfLink)
+      val links = Seq(selfLink, tasksLink(game.gid))
       HalJsonRes(links, Seq(), Json.toJson(game))
     }
     val links = Seq(selfLink, gamesLink)
@@ -145,7 +145,7 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
     ApiAction { request => 
       try { f (request) (auth(request)) } catch {
         case authEx: AuthException => 
-          Unauthorized(authEx.getMessage).withHeaders("WWW-Authenticate" -> "Basic realm=\"myrealm\"")
+          ApiErr(authEx).withHeaders("WWW-Authenticate" -> "Basic realm=\"myrealm\"")
       }
     }
 
@@ -154,11 +154,13 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
       //if (request.accepts("application/hal+json")) // it doesn't work
       if (true)
         try { f (request) } catch {
+          case apiEx: ApiException => 
+            ApiErr(apiEx)
           case ex: Exception => 
             InternalServerError(ex.getMessage)
         }
       else
-        BadRequest("Client must accept 'application/hal+json' type")
+        Status(406)("Client must accept 'application/hal+json' type")
     }
 
   private def withJsonArguments[A] (f: A => Result) (implicit request: Request[AnyContent], rds: Reads[A]) = {
@@ -173,13 +175,17 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
     Ok(Json.prettyPrint(Json.toJson(response))).as("application/json")
   }
 
+  def ApiErr(apiEx: ApiException) = {
+    val jsonMsg = Json.obj("code" -> apiEx.getCode, "message" -> apiEx.getMessage)
+    Status(apiEx.getCode)(Json.prettyPrint(jsonMsg)).as("application/json")
+  }
+
   case class GamesArgs(lat: Double, lon: Double, r: Double)
   case class RegisterArgs(login: String, password: String)
 
   implicit val gamesArgsReads    = Json.reads[GamesArgs]
   implicit val registerArgsReads = Json.reads[RegisterArgs]
 
-  implicit val userWritesWrites  = Json.writes[User]
   implicit val gameSummaryWrites = Json.writes[GameSummary]
   implicit val gameStaticWrites  = Json.writes[GameStatic]
   implicit val gameDynamicWrites = Json.writes[GameDynamic]
@@ -188,6 +194,7 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
   implicit val taskStaticWrites  = Json.writes[TaskStatic]
   implicit val taskDynamicWrites = Json.writes[TaskDynamic]
   implicit val taskStatusWrites  = Json.writes[UserTaskStatus]
+  implicit val userGameSummary   = Json.writes[UserGameSummary]
 
   implicit val halJsonResWrites = new Writes[HalJsonRes] {
     def writes(r: HalJsonRes): JsValue = {

@@ -14,7 +14,7 @@
 ###
 
 # '------------------------------------------ UTILITY FUNCTIONS
-app.factory 'Utilities', ->
+app.factory 'Utilities', ['$dialog', ($dialog) ->
     {
         difference: (sdate, edate, now) ->
             zeros = (x) -> 
@@ -34,4 +34,12 @@ app.factory 'Utilities', ->
             seconds = parseInt((((diff % (1000*60*60*24)) % (1000*60*60)) % (1000*60)) / 1000)
 
             zeros(days) + "d:" + zeros(hours) + "h:" + zeros(minutes) + "min:" + zeros(seconds) + "sec"
+
+        showDialog: (title, action) ->
+            msg = Messages("js.errors.sure", action)
+            btns = [{result:'no', label: Messages("js.no")}, {result:'ok', label: Messages("js.yes", action), cssClass: 'btn-primary'}]
+
+            $dialog.messageBox(title, msg, btns)
+                .open()
     }
+]
