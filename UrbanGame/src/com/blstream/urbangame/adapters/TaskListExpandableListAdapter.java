@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -112,7 +111,7 @@ public class TaskListExpandableListAdapter extends BaseExpandableListAdapter {
 			type = GameTasksFragment.HIDDEN_TASK_HEADER;
 		}
 		else {
-			layoutId = R.layout.expandable_lists_header_tasks;
+			layoutId = R.layout.expandable_lists_header;
 			textViewId = R.id.TextViewMyGamesHeader;
 			type = LIST;
 		}
@@ -145,10 +144,6 @@ public class TaskListExpandableListAdapter extends BaseExpandableListAdapter {
 			
 			groupViewHolder.textView.setText(getGroup(groupPosition).toString());
 		}
-		
-		// always expanded
-		ExpandableListView expandableListView = (ExpandableListView) parent;
-		expandableListView.expandGroup(groupPosition);
 		
 		return convertView;
 	}

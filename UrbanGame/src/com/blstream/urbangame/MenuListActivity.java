@@ -1,5 +1,6 @@
 package com.blstream.urbangame;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockListActivity;
@@ -16,6 +17,9 @@ public class MenuListActivity extends SherlockListActivity {
 		super.onCreate(savedInstanceState);
 		
 		loginManager = LoginManager.getInstance(MenuListActivity.this);
+		
+		getSupportActionBar().setBackgroundDrawable(
+			new ColorDrawable(getResources().getColor(R.color.action_bar_background)));
 	}
 	
 	@Override

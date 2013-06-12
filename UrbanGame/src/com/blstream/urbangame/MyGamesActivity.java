@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -70,8 +71,25 @@ public class MyGamesActivity extends MenuActivity implements OnChildClickListene
 		mArrayHeaders.add(parent);
 		
 		//sets the adapter that provides data to the list.
-		mExpandableList.setAdapter(new MyGamesExpandableListAdapter(MyGamesActivity.this, mArrayHeaders));
+		MyGamesExpandableListAdapter adapter = new MyGamesExpandableListAdapter(MyGamesActivity.this, mArrayHeaders);
+		mExpandableList.setAdapter(adapter);
 		
+		setPropertiesOfExpandableListView(adapter);
+	}
+	
+	private void setPropertiesOfExpandableListView(BaseExpandableListAdapter adapter) {
+		for (int i = 0; i < adapter.getGroupCount(); i++) {
+			mExpandableList.expandGroup(i);
+		}
+		
+		//disabling ability of collapsing group
+		mExpandableList.setOnGroupClickListener(new OnGroupClickListener() {
+			
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+				return true;
+			}
+		});
 	}
 	
 	@Override

@@ -90,7 +90,6 @@
                     android:id="@+id/textViewWinners"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/TextViewDetails"
                     android:layout_marginRight="@dimen/view_margin"
                     android:text="@string/label_winners" />
 

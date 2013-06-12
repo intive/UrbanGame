@@ -7,7 +7,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,8 +17,8 @@ import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.date.TimeLeftBuilder;
 
-public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
-	
+public class GamesListAdapter extends BaseExpandableListAdapter {//ArrayAdapter<UrbanGameShortInfo> {
+
 	private ArrayList<UrbanGameShortInfo> data;
 	private int viewResourceId;
 	private Context context;
@@ -39,17 +39,14 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 	}
 	
 	public GamesListAdapter(Context context, int viewResourceId) {
-		super(context, viewResourceId);
 		init(context, viewResourceId, null, null);
 	}
 	
 	public GamesListAdapter(Context context, int viewResourceId, DatabaseInterface interfaceDB) {
-		super(context, viewResourceId);
 		init(context, viewResourceId, null, interfaceDB);
 	}
 	
 	public GamesListAdapter(Context context, int viewResourceId, ArrayList<UrbanGameShortInfo> data) {
-		super(context, viewResourceId);
 		init(context, viewResourceId, data, null);
 	}
 	
@@ -72,28 +69,54 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 		else {
 			this.data = data;
 		}
+		database.closeDatabase();
 		
 	}
 	
-	@Override
-	public int getCount() {
-		if (data != null) return data.size();
-		return 0;
-	}
-	
-	@Override
-	public UrbanGameShortInfo getItem(int position) {
-		return data.get(position);
-	}
-	
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	private String timeLeft(Date startDate, Date endDate) {
 		
+		String timeString = null;
+		Date currentDate = new Date();
+		if (currentDate.before(startDate)) {
+			timeString = startDate.toString();
+		}
+		else {
+			TimeLeftBuilder timeLeftBuilder = new TimeLeftBuilder(context.getResources(), endDate);
+			timeString = timeLeftBuilder.getLeftTime();
+		}
+		return timeString;
+	}
+	
+	/**
+	 * Used to update games data from database.
+	 */
+	public void updateData() {
+		if (database == null) {
+			database = new Database(context);
+		}
+		data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
+		notifyDataSetChanged();
+	}
+	
+	@Override
+	public Object getChild(int groupPosition, int childPosition) {
+		return data.get(childPosition);
+	}
+	
+	@Override
+	public long getChildId(int groupPosition, int childPosition) {
+		return childPosition;
+	}
+	
+	@Override
+	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView,
+		ViewGroup parent) {
 		View row = null;
-		UrbanGameShortInfo gameInfo = data.get(position);
+		UrbanGameShortInfo gameInfo = data.get(childPosition);
 		
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			//LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = LayoutInflater.from(context);
 			row = inflater.inflate(viewResourceId, parent, false);
 			
 			final ViewHolder viewHolder = new ViewHolder();
@@ -146,29 +169,43 @@ public class GamesListAdapter extends ArrayAdapter<UrbanGameShortInfo> {
 		return row;
 	}
 	
-	private String timeLeft(Date startDate, Date endDate) {
-		
-		String timeString = null;
-		Date currentDate = new Date();
-		if (currentDate.before(startDate)) {
-			timeString = startDate.toString();
-		}
-		else {
-			TimeLeftBuilder timeLeftBuilder = new TimeLeftBuilder(context.getResources(), endDate);
-			timeString = timeLeftBuilder.getLeftTime();
-		}
-		return timeString;
+	@Override
+	public int getChildrenCount(int groupPosition) {
+		return data.size();
 	}
 	
-	/**
-	 * Used to update games data from database.
-	 */
-	public void updateData() {
-		if (database == null) {
-			database = new Database(context);
-		}
-		data = (ArrayList<UrbanGameShortInfo>) database.getAllGamesShortInfo();
-		notifyDataSetChanged();
+	@Override
+	public Object getGroup(int groupPosition) {
+		return data;
+	}
+	
+	@Override
+	public int getGroupCount() {
+		return 1;
+	}
+	
+	@Override
+	public long getGroupId(int groupPosition) {
+		return groupPosition;
+	}
+	
+	@Override
+	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+		LayoutInflater inflater = LayoutInflater.from(context);
+		convertView = inflater.inflate(R.layout.expandable_lists_header, parent, false);
+		TextView groupTitle = (TextView) convertView.findViewById(R.id.TextViewMyGamesHeader);
+		groupTitle.setText(R.string.header_nearby_games);
+		return convertView;
+	}
+	
+	@Override
+	public boolean hasStableIds() {
+		return true;
+	}
+	
+	@Override
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		return true;
 	}
 	
 }

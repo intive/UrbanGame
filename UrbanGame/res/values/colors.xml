@@ -4,5 +4,7 @@
     <color name="light_gray">#888</color>
     <color name="pagerTitleStrip_background">#D2D2D2</color>
     <color name="pagerTitleStrip_text">#666666</color>
+    <color name="action_bar_background">#8DB600</color>
+    <color name="expandable_list_header">#8DB600</color>
 
 </resources>
