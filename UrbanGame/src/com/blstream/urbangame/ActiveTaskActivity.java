@@ -12,6 +12,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.Task;
+import com.blstream.urbangame.fragments.ABCDTaskAnswerFragment;
 import com.blstream.urbangame.fragments.GpsTaskAnswerFragment;
 import com.blstream.urbangame.fragments.TabManager;
 import com.blstream.urbangame.fragments.TaskDescriptionFragment;
@@ -101,12 +102,12 @@ public class ActiveTaskActivity extends MenuActivity {
 		String tagTasksAnswer = getString(R.string.tab_task_answer);
 		TabSpec tabAnswer = tabHost.newTabSpec(TAG_TAB_ANSWER).setIndicator(tagTasksAnswer);
 		//check weather it should open gps or abcd task fragment
-		//		if (task != null && task.getType() == Task.TASK_TYPE_ABCD) {
-		//			tabManager.addTab(tabAnswer, AbcdTaskAnswerFragment.class, extras);
-		//		}
-		//		else {
-		tabManager.addTab(tabAnswer, GpsTaskAnswerFragment.class, extras);
-		//		}
+		if (task.getType() == Task.TASK_TYPE_ABCD) {
+			tabManager.addTab(tabAnswer, ABCDTaskAnswerFragment.class, extras);
+		}
+		else {
+			tabManager.addTab(tabAnswer, GpsTaskAnswerFragment.class, extras);
+		}
 	}
 	
 	@Override
