@@ -4,15 +4,15 @@
     xmlns:custom="http://schemas.android.com/apk/res/com.blstream.urbangame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" 
+    android:orientation="vertical"
     tools:ignore="HardcodedText" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:weightSum="10"
-        android:gravity="center" >
+        android:weightSum="10" >
 
         <TextView
             android:id="@+id/TextViewMyGamesHeader"
@@ -21,14 +21,21 @@
             android:layout_height="wrap_content"
             android:layout_weight="9"
             android:text="Header" />
-
-      
     </LinearLayout>
 
-     <com.blstream.urbangame.view.ExpandableListHeaderDivider
-         android:layout_width="match_parent"
-         android:layout_height="10dp"
-         custom:valueColor="@color/expandable_list_header"
-         custom:lineStroke="4" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="10" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:src="@drawable/header_line" />
+    </LinearLayout>
 
 </LinearLayout>
