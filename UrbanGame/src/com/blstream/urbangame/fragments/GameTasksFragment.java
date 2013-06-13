@@ -9,10 +9,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupClickListener;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.blstream.urbangame.ActiveTaskActivity;
@@ -25,6 +23,7 @@ import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.datastructures.ExpandableListHeader;
 import com.blstream.urbangame.example.DemoData;
+import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 
 public class GameTasksFragment extends SherlockFragment implements OnChildClickListener {
 	
@@ -108,25 +107,9 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		
 		expandableListViewTaskList.setOnChildClickListener(this);
 		
-		setPropertiesOfExpandableListView(expandableListViewTaskList, adapter);
+		ExpandableListViewPropertiesSetter.setPropertiesOfExpandableListView(adapter, expandableListViewTaskList);
 		
 		return view;
-	}
-	
-	private void setPropertiesOfExpandableListView(ExpandableListView expandableListView,
-		BaseExpandableListAdapter adapter) {
-		for (int i = 0; i < adapter.getGroupCount(); i++) {
-			expandableListView.expandGroup(i);
-		}
-		
-		//disabling ability of collapsing group
-		expandableListView.setOnGroupClickListener(new OnGroupClickListener() {
-			
-			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-				return true;
-			}
-		});
 	}
 	
 	@Override

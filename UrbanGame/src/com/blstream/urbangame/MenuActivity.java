@@ -22,7 +22,20 @@ import com.blstream.urbangame.session.LoginManager;
  *  just override this class.
  *  When you want to add your own menu items and handle
  *  menu items selection just override also this two methods
- * 
+ *  
+ ****************************************************
+ * onMenuItemSelected():
+ *
+ *  @Override
+  public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    int itemId = item.getItemId();
+    switch (itemId) {
+      case R.id.some_id:
+        doSomething();
+        break;
+    }
+    return super.onMenuItemSelected(featureId, item);  // handling menu "more" items
+  }
  **************************************************** */
 // formatter:on
 

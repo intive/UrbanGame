@@ -18,7 +18,6 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -30,6 +29,7 @@ import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
+import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 
 public class MyGamesActivity extends MenuActivity implements OnChildClickListener, OnNavigationListener {
 	
@@ -74,22 +74,7 @@ public class MyGamesActivity extends MenuActivity implements OnChildClickListene
 		MyGamesExpandableListAdapter adapter = new MyGamesExpandableListAdapter(MyGamesActivity.this, mArrayHeaders);
 		mExpandableList.setAdapter(adapter);
 		
-		setPropertiesOfExpandableListView(adapter);
-	}
-	
-	private void setPropertiesOfExpandableListView(BaseExpandableListAdapter adapter) {
-		for (int i = 0; i < adapter.getGroupCount(); i++) {
-			mExpandableList.expandGroup(i);
-		}
-		
-		//disabling ability of collapsing group
-		mExpandableList.setOnGroupClickListener(new OnGroupClickListener() {
-			
-			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-				return true;
-			}
-		});
+		ExpandableListViewPropertiesSetter.setPropertiesOfExpandableListView(adapter, mExpandableList);
 	}
 	
 	@Override

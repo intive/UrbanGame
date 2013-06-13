@@ -75,13 +75,6 @@
             <include
                 android:id="@+id/detailsHeader"
                 layout="@layout/expandable_lists_header" />
-            <!-- <TextView -->
-            <!-- android:id="@+id/TextViewDetails" -->
-            <!-- style="@style/styleHeader" -->
-            <!-- android:layout_width="match_parent" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:layout_marginTop="0dp" -->
-            <!-- android:text="@string/header_details" /> -->
 
             <RelativeLayout
                 android:id="@+id/relativeLayoutWrapperDetails"
@@ -193,10 +186,6 @@
             <include
                 android:id="@+id/PrizesHeader"
                 layout="@layout/expandable_lists_header" />
-            <!-- <TextView -->
-            <!-- android:id="@+id/textViewHeaderPrizes" -->
-            <!-- style="@style/styleHeader" -->
-            <!-- android:text="@string/header_prizes" /> -->
 
             <TextView
                 android:id="@+id/TextViewPrizes"
@@ -208,10 +197,6 @@
             <include
                 android:id="@+id/descriptionHeader"
                 layout="@layout/expandable_lists_header" />
-            <!-- <TextView -->
-            <!-- android:id="@+id/TextViewHeaderDescription" -->
-            <!-- style="@style/styleHeader" -->
-            <!-- android:text="@string/header_description" /> -->
 
             <TextView
                 android:id="@+id/textViewGameDescription"
