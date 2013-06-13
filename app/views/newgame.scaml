@@ -59,6 +59,6 @@
                     %a(href="javascript:void(0);" ng-click="savegame()")  
                         %span(ng-show="!isEdit()") = Messages("newgame.saveproject")(lan)
                         %span(ng-hide="!isEdit()") = Messages("newgame.save")(lan)
-                %li(ng-hide="!isLast()")
+                %li(ng-hide="!isLast() || game.status == 'published'")
                     %a(href="javascript:void(0);" ng-click="publishgame()") = Messages("newgame.publish")(lan)
             .clearfix
