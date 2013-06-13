@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"  >
+
+    <solid android:color="@color/expandable_list_header" />
+    <size android:height="@dimen/expandable_list_header_line_stroke"/>
+	
+</shape>

@@ -95,7 +95,7 @@ public class GamesListAdapterTest extends AndroidTestCase {
 	public void testGetView() {
 		View view = createEmptyView();
 		
-		view = gamesListAdapter.getView(0, null, null);
+		view = gamesListAdapter.getChildView(0, 0, true, null, null);
 		
 		assertEquals(GAME_NAME, getTextOfTextView(view, idTextViewGameName));
 		assertEquals(LOCATION, getTextOfTextView(view, idTextViewLocation));

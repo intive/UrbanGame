@@ -19,6 +19,7 @@
     <string name="label_daysLeft">Days left:</string>
     <string name="label_hoursLeft">Hours left:</string>
     <string name="label_minutesLeft">Minutes left:</string>
+    <string name="header_nearby_games">NEARBY GAMES</string>
 
     <!-- TasksListActivity -->
     <string name="label_points2">" pts"</string>
@@ -57,9 +58,9 @@
     <string name="label_difficulty">Difficulty:</string>
     <string name="button_leave">Leave</string>
     <string name="button_join">Join</string>
-    <string name="header_prizes">Prizes</string>
-    <string name="header_description">Description</string>
-    <string name="header_details">Details</string>
+    <string name="header_prizes">PRIZES</string>
+    <string name="header_description">DESCRIPTION</string>
+    <string name="header_details">DETAILS</string>
     <string name="dialog_join_title">Join to the game</string>
     <string name="dialog_leave_title">Leave game</string>
     <string name="dialog_join_leave_message">Are you sure?</string>
@@ -110,9 +111,9 @@
     <string name="button_skip">Skip</string>
 
     <!-- MyGamesActivity -->
-    <string name="header_active">Active</string>
-    <string name="header_ended">Ended</string>
-    <string name="header_observed">Observed</string>
+    <string name="header_active">ACTIVE</string>
+    <string name="header_ended">ENDED</string>
+    <string name="header_observed">OBSERVED</string>
 
     <!-- Content descriptions -->
     <string name="contentDescription_gameLogo">Game logo</string>

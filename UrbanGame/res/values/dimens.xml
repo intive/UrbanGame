@@ -3,5 +3,6 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="view_margin">7dp</dimen>
     <dimen name="expandable_list_header_margin">35dp</dimen>
+    <dimen name="expandable_list_header_line_stroke">2dp</dimen>
 
 </resources>

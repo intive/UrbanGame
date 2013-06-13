@@ -310,6 +310,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			}
 			while (cursor.moveToNext());
 		}
+		cursor.close();
 		db.close();
 		return gameList;
 	}
