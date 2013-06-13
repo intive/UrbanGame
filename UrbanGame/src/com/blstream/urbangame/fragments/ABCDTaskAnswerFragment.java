@@ -24,7 +24,6 @@ import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.dialogs.AnswerDialog;
 import com.blstream.urbangame.dialogs.AnswerDialog.DialogType;
 import com.blstream.urbangame.example.DemoData;
-import com.blstream.urbangame.webserver.mock.MockWebServer;
 
 public class ABCDTaskAnswerFragment extends SherlockFragment {
 	
@@ -34,13 +33,19 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 	private ArrayList<Answer> answers;
 	AnswerDialog dialog;
 	
+	public class ServerResponseToSendedAnswers {
+		public boolean noInternetConnection = false;
+		public ArrayList<String> correctAnswers = null;
+		public Integer points = 0;
+	}
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		
 		dialog = new AnswerDialog(activity);
 		
-		task = getTask();
+		task = getTask(); // FIXME change to getting task from parcel
 		DatabaseInterface database = new Database(activity);
 		playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), database.getLoggedPlayerID());
 		database.closeDatabase();
@@ -55,24 +60,20 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 			
 			@Override
 			public void onClick(View v) {
-				if (task.getType() == Task.TASK_TYPE_ABCD) {
-					onABCDAnswerSubmited(v);
-				}
+				onABCDAnswerSubmited(v);
 			}
 		});
 		
-		if (task.getType() == Task.TASK_TYPE_ABCD) {
-			TextView textViewQuestion = (TextView) view.findViewById(R.id.textViewQuestion);
-			textViewQuestion.setText(((ABCDTask) task).getQuestion());
-			
-			answers = new ArrayList<Answer>();
-			for (String element : ((ABCDTask) task).getAnswers()) {
-				answers.add(new Answer(element));
-			}
-			adapter = new AnswersAdapter(getActivity(), R.layout.list_item_answer, answers);
-			ListView list = (ListView) view.findViewById(R.id.listViewAnswers);
-			list.setAdapter(adapter);
+		TextView textViewQuestion = (TextView) view.findViewById(R.id.textViewQuestion);
+		textViewQuestion.setText(((ABCDTask) task).getQuestion());
+		
+		answers = new ArrayList<Answer>();
+		for (String element : ((ABCDTask) task).getAnswers()) {
+			answers.add(new Answer(element));
 		}
+		adapter = new AnswersAdapter(getActivity(), R.layout.list_item_answer, answers);
+		ListView list = (ListView) view.findViewById(R.id.listViewAnswers);
+		list.setAdapter(adapter);
 		
 		return view;
 	}
@@ -83,50 +84,49 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 			// If task is repeatable or user has not finished it yet.
 			ArrayList<String> answers = new ArrayList<String>();
 			for (Answer element : this.answers) {
-				if (element.isTrue()) {
+				if (element.isSelected()) {
 					answers.add(element.getAnswer());
 				}
 			}
 			
-			// FIXME mock replace with asking server
-			MockWebServer mockWebServer = new MockWebServer();
-			ArrayList<String> correctAnswers = mockWebServer.sendAnswers(getActivity(), (ABCDTask) task, answers);
+			ServerResponseToSendedAnswers serverResponse = sendAnswers((ABCDTask) task, answers);
 			
-			if (correctAnswers == null) {
+			if (serverResponse.noInternetConnection) {
 				// If there is no connection to the Internet.
 				dialog.showDialog(DialogType.NO_INTERNET_CONNECTION, null, null);
 			}
 			else {
+				playerTaskSpecific.setPoints(serverResponse.points);
+				playerTaskSpecific.setIsFinishedByUser(true);
+				
 				Database database = new Database(getActivity());
-				playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), database.getLoggedPlayerID());
+				database.updatePlayerTaskSpecific(playerTaskSpecific);
 				database.closeDatabase();
 				
-				Integer points = playerTaskSpecific.getPoints();
 				Integer maxPoints = task.getMaxPoints();
 				DialogType dialogType;
 				
-				if (points == 0) {
+				if (serverResponse.points == 0) {
 					dialogType = DialogType.WRONG_ANSWER;
 				}
-				else if (points == maxPoints) {
+				else if (serverResponse.points == maxPoints) {
 					dialogType = DialogType.RIGHT_ANSWER;
 				}
 				else {
 					dialogType = DialogType.PARTIALLY_RIGHT_ANSWER;
 				}
-				dialog.showDialog(dialogType, points, maxPoints);
+				dialog.showDialog(dialogType, serverResponse.points, maxPoints);
 				
 				if (!task.isRepetable()) {
 					//show answers
-					adapter.setCorrectAnswers(correctAnswers);
+					adapter.setCorrectAnswers(serverResponse.correctAnswers);
 				}
 			}
 		}
 	}
 	
 	private Task getTask() {
-		//FIXME mock
-		long taskID = DemoData.getTaskId();
+		long taskID = 0L;
 		Bundle arguments = getArguments();
 		if (arguments != null) {
 			taskID = arguments.getLong(ActiveTaskActivity.TASK_ID, taskID);
@@ -134,5 +134,43 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 		
 		DatabaseInterface database = new Database(getActivity());
 		return database.getTask(taskID);
+	}
+	
+	// MOCK
+	public ServerResponseToSendedAnswers sendAnswers(ABCDTask task, ArrayList<String> answers) {
+		
+		ServerResponseToSendedAnswers serverResponse = new ServerResponseToSendedAnswers();
+		
+		ArrayList<String> correctAnswers = null;
+		
+		correctAnswers = DemoData.getCorrectAnswers();
+		
+		if (correctAnswers != null) {
+			
+			int maxPoints = task.getMaxPoints();
+			int points = 0;
+			int numberOfCorrectAnswers = 0;
+			
+			for (String element : correctAnswers) {
+				if (answers.contains(element)) {
+					numberOfCorrectAnswers++;
+				}
+			}
+			
+			if (numberOfCorrectAnswers == correctAnswers.size()) {
+				points = maxPoints;
+			}
+			else {
+				points = maxPoints / correctAnswers.size() * numberOfCorrectAnswers;
+			}
+			
+			serverResponse.correctAnswers = correctAnswers;
+			serverResponse.points = points;
+		}
+		else {
+			serverResponse.noInternetConnection = true;
+		}
+		
+		return serverResponse;
 	}
 }

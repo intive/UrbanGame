@@ -3,16 +3,16 @@ package com.blstream.urbangame.database.entity;
 public class Answer {
 	
 	private String answer;
-	private boolean isTrue;
+	private boolean isSelected;
 	
-	public Answer(String answer, boolean isTrue) {
+	public Answer(String answer, boolean selected) {
 		setAnswer(answer);
-		setIsTrue(isTrue);
+		this.isSelected = selected;
 	}
 	
 	public Answer(String answer) {
 		setAnswer(answer);
-		setIsTrue(false);
+		this.isSelected = false;
 	}
 	
 	public void setAnswer(String answer) {
@@ -23,12 +23,11 @@ public class Answer {
 		return answer;
 	}
 	
-	public void setIsTrue(boolean isTrue) {
-		this.isTrue = isTrue;
+	public boolean isSelected() {
+		return isSelected;
 	}
 	
-	public boolean isTrue() {
-		return isTrue;
+	public void setSelected(boolean selected) {
+		this.isSelected = selected;
 	}
-
 }

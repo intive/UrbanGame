@@ -38,12 +38,13 @@ public class AnswersAdapter extends ArrayAdapter<Answer> {
 		
 		View row = null;
 		Answer answer = getItem(position);
+		ViewHolder viewHolder;
 		
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			row = inflater.inflate(viewResourceId, parent, false);
 			
-			final ViewHolder viewHolder = new ViewHolder();
+			viewHolder = new ViewHolder();
 			viewHolder.textViewAnswer = (TextView) row.findViewById(R.id.textViewAnswer);
 			viewHolder.checkBoxAnswer = (CheckBox) row.findViewById(R.id.checkBoxAnswer);
 			viewHolder.checkBoxAnswer.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -52,7 +53,7 @@ public class AnswersAdapter extends ArrayAdapter<Answer> {
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					int position = (Integer) buttonView.getTag();
 					Answer answer = AnswersAdapter.this.getItem(position);
-					answer.setIsTrue(isChecked);
+					answer.setSelected(isChecked);
 				}
 			});
 			
@@ -60,11 +61,11 @@ public class AnswersAdapter extends ArrayAdapter<Answer> {
 		}
 		else {
 			row = convertView;
+			viewHolder = (ViewHolder) row.getTag();
 		}
 		
-		ViewHolder viewHolder = (ViewHolder) row.getTag();
 		viewHolder.textViewAnswer.setText(answer.getAnswer());
-		viewHolder.checkBoxAnswer.setChecked(answer.isTrue());
+		viewHolder.checkBoxAnswer.setChecked(answer.isSelected());
 		viewHolder.checkBoxAnswer.setTag(Integer.valueOf(position));
 		
 		if (correctAnswers != null) {

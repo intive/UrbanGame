@@ -32,7 +32,7 @@ public class AnswerDialog implements DialogInterface.OnClickListener {
 		
 		int titleId = 0;
 		String message = "";
-		String possitiveButton = context.getString(R.string.answer_dialog_button_ok);
+		String possitiveButton = context.getString(android.R.string.ok);
 		
 		switch (dialogType) {
 			case RIGHT_ANSWER:
@@ -59,7 +59,7 @@ public class AnswerDialog implements DialogInterface.OnClickListener {
 				titleId = R.string.title_gps_off;
 				message = context.getString(R.string.message_gps_off);
 				possitiveButton = context.getString(R.string.answer_dialog_button_settings);
-				dialogBuilder.setNegativeButton(context.getString(R.string.answer_dialog_button_cancel), this);
+				dialogBuilder.setNegativeButton(context.getString(android.R.string.cancel), this);
 				break;
 		
 		}
@@ -73,14 +73,17 @@ public class AnswerDialog implements DialogInterface.OnClickListener {
 	
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
+		Intent intent;
 		
-		switch (which) {
-			case DialogInterface.BUTTON_POSITIVE:
-				if (dialogType == DialogType.GPS_OFF) {
-					Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		if (which == DialogInterface.BUTTON_POSITIVE) {
+			switch (dialogType) {
+				case GPS_OFF:
+				case NO_GPS_SIGNAL:
+					intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 					context.startActivity(intent);
-				}
-				break;
+					break;
+			
+			}
 		}
 	}
 }

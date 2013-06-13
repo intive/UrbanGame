@@ -7,17 +7,13 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
 
-import android.content.Context;
 import android.util.Log;
 
-import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.LocationTask;
-import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
-import com.blstream.urbangame.example.DemoData;
 import com.blstream.urbangame.webserver.helper.WebResponse.QueryType;
 import com.google.gson.Gson;
 
@@ -183,41 +179,5 @@ public class MockWebServer {
 		if (stringBuilder.length() == 0) return null;
 		
 		return stringBuilder.toString();
-	}
-	
-	public ArrayList<String> sendAnswers(Context context, ABCDTask task, ArrayList<String> answers) {
-		
-		ArrayList<String> correctAnswers = null;
-		
-		correctAnswers = DemoData.getCorrectAnswers();
-		
-		if (correctAnswers != null) {
-			Database database = new Database(context);
-			PlayerTaskSpecific playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(),
-				database.getLoggedPlayerID());
-			int maxPoints = task.getMaxPoints();
-			int points = 0;
-			int numberOfCorrectAnswers = 0;
-			
-			for (String element : correctAnswers) {
-				if (answers.contains(element)) {
-					numberOfCorrectAnswers++;
-				}
-			}
-			
-			if (numberOfCorrectAnswers == correctAnswers.size()) {
-				points = maxPoints;
-			}
-			else {
-				points = maxPoints / correctAnswers.size() * numberOfCorrectAnswers;
-			}
-			playerTaskSpecific.setPoints(points);
-			playerTaskSpecific.setIsFinishedByUser(true);
-			database.updatePlayerTaskSpecific(playerTaskSpecific);
-			
-			database.closeDatabase();
-		}
-		
-		return correctAnswers;
 	}
 }

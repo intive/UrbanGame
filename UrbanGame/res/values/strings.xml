@@ -166,8 +166,6 @@
     <string name="message_no_internet">Make sure you are connected to the Internet to submit the answer.</string>
     <string name="message_no_gps_signal">Please wait for a valid GPS signal.</string>
     <string name="message_gps_off">Turn on GPS in the settings to submit the answer.</string>
-    <string name="answer_dialog_button_ok">OK</string>
-    <string name="answer_dialog_button_cancel">Cancel</string>
     <string name="answer_dialog_button_settings">Settings</string>
 
 </resources>

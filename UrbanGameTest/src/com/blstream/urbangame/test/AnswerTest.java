@@ -26,13 +26,13 @@ public class AnswerTest extends TestCase {
 		assertEquals(ANSWER_1, answer.getAnswer());
 	}
 	
-	public void testSetIsTrue() {
-		answer.setIsTrue(true);
-		assertTrue(answer.isTrue());
+	public void testSetSelected() {
+		answer.setSelected(true);
+		assertTrue(answer.isSelected());
 	}
 	
 	public void testIsTrue() {
-		assertFalse(answer.isTrue());
+		assertFalse(answer.isSelected());
 	}
 	
 }
