@@ -13,7 +13,7 @@ import com.blstream.urbangame.fragments.GameTasksFragment;
 import com.blstream.urbangame.fragments.TabManager;
 
 public class ActiveGameActivity extends MenuActivity {
-	
+	//small test commit
 	private final String TAG = ActiveGameActivity.class.getSimpleName();
 	
 	public static final String GAME_ID = "game_id";
