@@ -22,22 +22,22 @@ public class NotificationsTest extends AndroidTestCase {
 	}
 	
 	public void testNotificationGameNew() {
-		notificationsManager.notifyGameNew(GAME_NAME, operatorLogo);
+		notificationsManager.notifyGameNew(GAME_NAME, operatorLogo, GAME_ID);
 	}
 	
 	public void testNotificationGameChanged() {
-		notificationsManager.notifyGameChanged(GAME_NAME, operatorLogo);
+		notificationsManager.notifyGameChanged(GAME_NAME, operatorLogo, GAME_ID);
 	}
 	
 	public void testNotificationGameOver() {
-		notificationsManager.notifyGameOver(GAME_NAME, operatorLogo);
+		notificationsManager.notifyGameOver(GAME_NAME, operatorLogo, GAME_ID);
 	}
 	
 	public void testNotificationTaskNew() {
-		notificationsManager.notifyTaskNew(GAME_NAME, TASK_NAME, operatorLogo, GAME_ID);
+		notificationsManager.notifyTaskNew(GAME_NAME, operatorLogo, GAME_ID, TASK_NAME);
 	}
 	
 	public void testNotificationTaskChanged() {
-		notificationsManager.notifyTaskChanged(GAME_NAME, TASK_NAME, operatorLogo, GAME_ID);
+		notificationsManager.notifyTaskChanged(GAME_NAME, operatorLogo, GAME_ID, TASK_NAME);
 	}
 }
