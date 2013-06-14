@@ -167,7 +167,7 @@
     <string name="message_no_gps_signal">Please wait for a valid GPS signal.</string>
     <string name="message_gps_off">Turn on GPS in the settings to submit the answer.</string>
     <string name="answer_dialog_button_settings">Settings</string>
-=======
+
     <string name="notification_title_game_new">New game</string>
     <string name="notification_title_game_changed">Game changed</string>
     <string name="notification_title_game_over">Game over</string>
