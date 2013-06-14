@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/menu_more"
-        android:icon="@drawable/abs__ic_menu_moreoverflow_holo_light"
+        android:icon="@drawable/abs__ic_menu_moreoverflow_holo_dark"
         android:orderInCategory="1"
         android:showAsAction="always"
         android:title="@string/menu_more">
