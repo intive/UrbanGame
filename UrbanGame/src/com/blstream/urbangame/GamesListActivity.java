@@ -1,8 +1,5 @@
 package com.blstream.urbangame;
 
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;

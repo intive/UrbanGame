@@ -3,6 +3,7 @@ package com.blstream.urbangame.fragments;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,8 +89,12 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 					answers.add(element.getAnswer());
 				}
 			}
+			ProgressDialog progressDialog = new ProgressDialog(getActivity());
+			progressDialog.show();
 			
 			ServerResponseToSendedAnswers serverResponse = sendAnswers((ABCDTask) task, answers);
+			
+			progressDialog.dismiss();
 			
 			if (serverResponse.noInternetConnection) {
 				// If there is no connection to the Internet.
