@@ -7,5 +7,10 @@
             <enum name="register" value="1" />
         </attr>
     </declare-styleable>
+    
+    <declare-styleable name="ExpandableListHeaderDivider">
+        <attr name="valueColor" format="color" />
+        <attr name="lineStroke" format="integer" />
+    </declare-styleable>
 
 </resources>

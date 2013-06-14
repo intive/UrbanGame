@@ -29,6 +29,7 @@ import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
+import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 
 public class MyGamesActivity extends MenuActivity implements OnChildClickListener, OnNavigationListener {
 	
@@ -70,8 +71,10 @@ public class MyGamesActivity extends MenuActivity implements OnChildClickListene
 		mArrayHeaders.add(parent);
 		
 		//sets the adapter that provides data to the list.
-		mExpandableList.setAdapter(new MyGamesExpandableListAdapter(MyGamesActivity.this, mArrayHeaders));
+		MyGamesExpandableListAdapter adapter = new MyGamesExpandableListAdapter(MyGamesActivity.this, mArrayHeaders);
+		mExpandableList.setAdapter(adapter);
 		
+		ExpandableListViewPropertiesSetter.setPropertiesOfExpandableListView(adapter, mExpandableList);
 	}
 	
 	@Override
