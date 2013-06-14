@@ -1,16 +1,20 @@
 package com.blstream.urbangame.database.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 public class ABCDTask extends Task {
 	
 	private String question;
-	private String[] answers;
+	private ArrayList<Answer> listOfAnswers;
 	
 	public ABCDTask() {
 		super();
 		question = null;
-		answers = null;
+		listOfAnswers = null;
 	}
 	
 	/**
@@ -31,21 +35,31 @@ public class ABCDTask extends Task {
 		super(id, Task.TASK_TYPE_ABCD, title, pictureBase64, description, isRepetable, isHidden, numberOfHidden,
 			endTime, maxPoints);
 		this.question = question;
-		this.answers = answers;
+		this.listOfAnswers = new ArrayList<Answer>();
+		for (String element : answers) {
+			listOfAnswers.add(new Answer(element));
+		}
 	}
 	
 	/**
 	 * @return the answers
 	 */
 	public String[] getAnswers() {
-		return answers;
+		String[] answersString = new String[listOfAnswers.size()];
+		for (int i = 0; i < listOfAnswers.size(); i++) {
+			answersString[i] = listOfAnswers.get(i).getAnswer();
+		}
+		return answersString;
 	}
 	
 	/**
 	 * @param answers the answers to set
 	 */
 	public void setAnswers(String[] answers) {
-		this.answers = answers;
+		this.listOfAnswers = new ArrayList<Answer>();
+		for (String element : answers) {
+			listOfAnswers.add(new Answer(element));
+		}
 	}
 	
 	/**
@@ -60,5 +74,45 @@ public class ABCDTask extends Task {
 	 */
 	public void setQuestion(String question) {
 		this.question = question;
+	}
+	
+	public ABCDTask(Parcel in) {
+		super(in);
+		question = in.readString();
+		int size = in.readInt();
+		listOfAnswers = new ArrayList<Answer>(size);
+		for (int i = 0; i < size; i++) {
+			listOfAnswers.add(new Answer(in));
+		}
+	}
+	
+	public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+		@Override
+		public Task createFromParcel(Parcel in) {
+			return new ABCDTask(in);
+		}
+		
+		@Override
+		public Task[] newArray(int size) {
+			return new Task[size];
+		}
+	};
+	
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		super.writeToParcel(out, flags);
+		out.writeString(question);
+		out.writeInt(listOfAnswers.size());
+		for (Answer answer : listOfAnswers) {
+			answer.writeToParcel(out, flags);
+		}
+	}
+	
+	public ArrayList<Answer> getAnswersList() {
+		return listOfAnswers;
+	}
+	
+	public void setAnswersList(ArrayList<Answer> answers) {
+		listOfAnswers = answers;
 	}
 }

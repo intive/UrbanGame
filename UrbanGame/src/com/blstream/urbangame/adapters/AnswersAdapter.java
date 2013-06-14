@@ -65,8 +65,8 @@ public class AnswersAdapter extends ArrayAdapter<Answer> {
 		}
 		
 		viewHolder.textViewAnswer.setText(answer.getAnswer());
-		viewHolder.checkBoxAnswer.setChecked(answer.isSelected());
 		viewHolder.checkBoxAnswer.setTag(Integer.valueOf(position));
+		viewHolder.checkBoxAnswer.setChecked(answer.isSelected());
 		
 		if (correctAnswers != null) {
 			if (correctAnswers.contains(answer.getAnswer())) {

@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.blstream.urbangame.ActiveTaskActivity;
 import com.blstream.urbangame.R;
 import com.blstream.urbangame.adapters.AnswersAdapter;
 import com.blstream.urbangame.database.Database;
@@ -29,7 +28,7 @@ import com.blstream.urbangame.example.DemoData;
 public class ABCDTaskAnswerFragment extends SherlockFragment {
 	
 	private AnswersAdapter adapter;
-	private Task task;
+	private ABCDTask task;
 	private PlayerTaskSpecific playerTaskSpecific;
 	private ArrayList<Answer> answers;
 	AnswerDialog dialog;
@@ -46,9 +45,13 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 		
 		dialog = new AnswerDialog(activity);
 		
-		task = getTask(); // FIXME change to getting task from parcel
+		task = getArguments().getParcelable(Task.TASK_KEY);
 		DatabaseInterface database = new Database(activity);
 		playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), database.getLoggedPlayerID());
+		if (playerTaskSpecific == null) {
+			playerTaskSpecific = new PlayerTaskSpecific(database.getLoggedPlayerID(), task.getId(), 0, false, false,
+				task.isHidden(), null, PlayerTaskSpecific.ACTIVE);
+		}
 		database.closeDatabase();
 	}
 	
@@ -66,12 +69,9 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 		});
 		
 		TextView textViewQuestion = (TextView) view.findViewById(R.id.textViewQuestion);
-		textViewQuestion.setText(((ABCDTask) task).getQuestion());
+		textViewQuestion.setText(task.getQuestion());
 		
-		answers = new ArrayList<Answer>();
-		for (String element : ((ABCDTask) task).getAnswers()) {
-			answers.add(new Answer(element));
-		}
+		answers = task.getAnswersList();
 		adapter = new AnswersAdapter(getActivity(), R.layout.list_item_answer, answers);
 		ListView list = (ListView) view.findViewById(R.id.listViewAnswers);
 		list.setAdapter(adapter);
@@ -92,7 +92,7 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 			ProgressDialog progressDialog = new ProgressDialog(getActivity());
 			progressDialog.show();
 			
-			ServerResponseToSendedAnswers serverResponse = sendAnswers((ABCDTask) task, answers);
+			ServerResponseToSendedAnswers serverResponse = sendAnswers(task, answers);
 			
 			progressDialog.dismiss();
 			
@@ -130,18 +130,7 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 		}
 	}
 	
-	private Task getTask() {
-		long taskID = 0L;
-		Bundle arguments = getArguments();
-		if (arguments != null) {
-			taskID = arguments.getLong(ActiveTaskActivity.TASK_ID, taskID);
-		}
-		
-		DatabaseInterface database = new Database(getActivity());
-		return database.getTask(taskID);
-	}
-	
-	// MOCK
+	// FIXME MOCK replace with sending answers to server
 	public ServerResponseToSendedAnswers sendAnswers(ABCDTask task, ArrayList<String> answers) {
 		
 		ServerResponseToSendedAnswers serverResponse = new ServerResponseToSendedAnswers();
