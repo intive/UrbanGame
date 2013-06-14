@@ -35,30 +35,35 @@ public class ABCDTask extends Task {
 		super(id, Task.TASK_TYPE_ABCD, title, pictureBase64, description, isRepetable, isHidden, numberOfHidden,
 			endTime, maxPoints);
 		this.question = question;
-		this.listOfAnswers = new ArrayList<Answer>();
-		for (String element : answers) {
-			listOfAnswers.add(new Answer(element));
-		}
+		setAnswers(answers);
 	}
 	
 	/**
 	 * @return the answers
 	 */
 	public String[] getAnswers() {
-		String[] answersString = new String[listOfAnswers.size()];
-		for (int i = 0; i < listOfAnswers.size(); i++) {
-			answersString[i] = listOfAnswers.get(i).getAnswer();
+		if (listOfAnswers == null) return null;
+		else {
+			String[] answersString = new String[listOfAnswers.size()];
+			for (int i = 0; i < listOfAnswers.size(); i++) {
+				answersString[i] = listOfAnswers.get(i).getAnswer();
+			}
+			return answersString;
 		}
-		return answersString;
 	}
 	
 	/**
 	 * @param answers the answers to set
 	 */
 	public void setAnswers(String[] answers) {
-		this.listOfAnswers = new ArrayList<Answer>();
-		for (String element : answers) {
-			listOfAnswers.add(new Answer(element));
+		if (answers == null) {
+			this.listOfAnswers = null;
+		}
+		else {
+			this.listOfAnswers = new ArrayList<Answer>();
+			for (String element : answers) {
+				listOfAnswers.add(new Answer(element));
+			}
 		}
 	}
 	
