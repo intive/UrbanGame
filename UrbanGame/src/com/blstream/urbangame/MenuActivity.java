@@ -7,7 +7,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.blstream.urbangame.notifications.NotificationsManager;
 import com.blstream.urbangame.session.LoginManager;
 
 // formatter:off
@@ -102,14 +101,6 @@ public class MenuActivity extends SherlockFragmentActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		int itemId = item.getItemId();
 		switch (itemId) {
-		
-		//******** MOCK ********
-			case R.id.menu_more:
-				NotificationsManager notificationsManager = new NotificationsManager(MenuActivity.this);
-				notificationsManager.notifyGameChanged("KRASNOLUDKI", null, -1L);
-				break;
-			//****** END MOCK ******
-			
 			case R.id.menu_logout:
 				loginManager.logoutUser();
 				finishAndStartGamesListActivity();
