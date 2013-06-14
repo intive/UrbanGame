@@ -15,6 +15,9 @@ import com.blstream.urbangame.GameDetailsActivity;
 import com.blstream.urbangame.R;
 import com.blstream.urbangame.SplashScreenActivity;
 
+/**
+ * NotificationFactory builds different kind of ApplicationBar notifications.
+ */
 public class NotificationFactory {
 	private Context context;
 	
@@ -29,11 +32,11 @@ public class NotificationFactory {
 	
 	public NotificationFactory(Context context) {
 		this.context = context;
-		this.message_game_new = context.getString(R.string.notification_game_new);
-		this.message_game_changed = context.getString(R.string.notification_game_changed);
-		this.message_game_over = context.getString(R.string.notification_game_over);
-		this.message_task_new = context.getString(R.string.notification_task_new);
-		this.message_task_changed = context.getString(R.string.notification_task_changed);
+		this.message_game_new = context.getString(R.string.notification_title_game_new);
+		this.message_game_changed = context.getString(R.string.notification_title_game_changed);
+		this.message_game_over = context.getString(R.string.notification_title_game_over);
+		this.message_task_new = context.getString(R.string.notification_title_task_new);
+		this.message_task_changed = context.getString(R.string.notification_title_task_changed);
 	}
 	
 	public Notification getNotificationGameNew(String gameName, Bitmap operatorLogo) {

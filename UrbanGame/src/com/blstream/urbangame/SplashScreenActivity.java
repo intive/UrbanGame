@@ -1,13 +1,13 @@
 package com.blstream.urbangame;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.blstream.urbangame.example.DemoData;
 import com.blstream.urbangame.session.LoginManager;
 
-public class SplashScreenActivity extends Activity {
+public class SplashScreenActivity extends SherlockFragmentActivity {
 	private LoginManager loginManager;
 	
 	@Override
