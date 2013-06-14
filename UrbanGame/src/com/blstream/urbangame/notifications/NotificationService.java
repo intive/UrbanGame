@@ -5,18 +5,17 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 
 /**
  * NotificationService allows to display notifications in ApplicationBar. It is
  * invoked from {@link NotificationsManager} and obtains notifications from
- * {@link NotificationFactory}.
+ * {@link NotificationApplicationBar}.
  */
 public class NotificationService extends IntentService {
 	private final static String SERVICE_NAME = "NotificationService";
 	
 	private NotificationManager notificationManager;
-	private NotificationFactory notificationFactory;
+	private NotificationApplicationBar notificationApplicationBar;
 	
 	public NotificationService() {
 		super(SERVICE_NAME);
@@ -26,7 +25,7 @@ public class NotificationService extends IntentService {
 	public void onCreate() {
 		super.onCreate();
 		this.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		this.notificationFactory = new NotificationFactory(this);
+		this.notificationApplicationBar = new NotificationApplicationBar(this);
 	}
 	
 	@Override
@@ -48,18 +47,18 @@ public class NotificationService extends IntentService {
 		if (notificationIdToShow != -1) {
 			String gameName = intent.getStringExtra(NotificationConstans.NOTIFICATION_GAME_NAME);
 			Long gameID = intent.getLongExtra(NotificationConstans.NOTIFICATION_GAME_ID, -1);
-			Bitmap operatorLogo = intent.getParcelableExtra(NotificationConstans.NOTIFICATION_OPERATOR_LOGO);
+			String operatorLogo = intent.getStringExtra(NotificationConstans.NOTIFICATION_OPERATOR_LOGO);
 			String taskName = intent.getStringExtra(NotificationConstans.NOTIFICATION_TASK_NAME);
 			
 			switch (notificationIdToShow) {
-				case NotificationConstans.GAME_NEW:
-					notifyGameNew(gameName, operatorLogo);
+				case NotificationConstans.GAME_WON:
+					notifyGameWon(gameName, operatorLogo, gameID);
+					break;
+				case NotificationConstans.GAME_LOST:
+					notifyGameLost(gameName, operatorLogo, gameID);
 					break;
 				case NotificationConstans.GAME_CHANGED:
-					notifyGameChanged(gameName, operatorLogo);
-					break;
-				case NotificationConstans.GAME_OVER:
-					notifyGameOver(gameName, operatorLogo);
+					notifyGameChanged(gameName, operatorLogo, gameID);
 					break;
 				case NotificationConstans.TASK_NEW:
 					notifyTaskNew(gameName, taskName, operatorLogo, gameID);
@@ -71,29 +70,32 @@ public class NotificationService extends IntentService {
 		}
 	}
 	
-	public void notifyGameNew(String gameName, Bitmap operatorLogo) {
-		Notification notificationGameNew = notificationFactory.getNotificationGameNew(gameName, operatorLogo);
-		showNotification(NotificationConstans.GAME_NEW, notificationGameNew);
-	}
-	
-	public void notifyGameChanged(String gameName, Bitmap operatorLogo) {
-		Notification notificationGameChanged = notificationFactory.getNotificationGameChanged(gameName, operatorLogo);
+	public void notifyGameChanged(String gameName, String operatorLogo, Long gameID) {
+		Notification notificationGameChanged = notificationApplicationBar.getNotificationGameChanged(gameName,
+			operatorLogo, gameID);
 		showNotification(NotificationConstans.GAME_CHANGED, notificationGameChanged);
 	}
 	
-	public void notifyGameOver(String gameName, Bitmap operatorLogo) {
-		Notification notificationGameOver = notificationFactory.getNotificationGameOver(gameName, operatorLogo);
-		showNotification(NotificationConstans.GAME_OVER, notificationGameOver);
+	public void notifyGameWon(String gameName, String operatorLogo, Long gameID) {
+		Notification notificationGameOver = notificationApplicationBar.getNotificationGameWon(gameName, operatorLogo,
+			gameID);
+		showNotification(NotificationConstans.GAME_WON, notificationGameOver);
 	}
 	
-	public void notifyTaskNew(String gameName, String taskName, Bitmap operatorLogo, Long gameID) {
-		Notification notificationTaskNew = notificationFactory.getNotificationTaskNew(gameName, taskName, operatorLogo,
+	public void notifyGameLost(String gameName, String operatorLogo, Long gameID) {
+		Notification notificationGameOver = notificationApplicationBar.getNotificationGameLost(gameName, operatorLogo,
 			gameID);
+		showNotification(NotificationConstans.GAME_LOST, notificationGameOver);
+	}
+	
+	public void notifyTaskNew(String gameName, String taskName, String operatorLogo, Long gameID) {
+		Notification notificationTaskNew = notificationApplicationBar.getNotificationTaskNew(gameName, taskName,
+			operatorLogo, gameID);
 		showNotification(NotificationConstans.TASK_NEW, notificationTaskNew);
 	}
 	
-	public void notifyTaskChanged(String gameName, String taskName, Bitmap operatorLogo, Long gameID) {
-		Notification notificationTask = notificationFactory.getNotificationTaskChanged(gameName, taskName,
+	public void notifyTaskChanged(String gameName, String taskName, String operatorLogo, Long gameID) {
+		Notification notificationTask = notificationApplicationBar.getNotificationTaskChanged(gameName, taskName,
 			operatorLogo, gameID);
 		showNotification(NotificationConstans.TASK_CHANGED, notificationTask);
 	}
