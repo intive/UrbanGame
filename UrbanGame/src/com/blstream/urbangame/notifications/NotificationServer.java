@@ -65,7 +65,7 @@ public class NotificationServer {
 	}
 	
 	public synchronized void registerNotificationListener(NotificationListener notificationListener) {
-		if (isObservatorListEmpty()) {
+		if (observators.isEmpty()) {
 			startCallback();
 		}
 		observators.add(notificationListener);
@@ -73,13 +73,9 @@ public class NotificationServer {
 	
 	public synchronized void unregisterNotificationListener(NotificationListener notificationListener) {
 		observators.remove(notificationListener);
-		if (isObservatorListEmpty()) {
+		if (observators.isEmpty()) {
 			cancellCallback();
 		}
-	}
-	
-	private boolean isObservatorListEmpty() {
-		return observators.size() == 0;
 	}
 	
 	private void startCallback() {
