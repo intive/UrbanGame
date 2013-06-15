@@ -23,6 +23,7 @@ import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.datastructures.ExpandableListHeader;
 import com.blstream.urbangame.example.DemoData;
+import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 
 public class GameTasksFragment extends SherlockFragment implements OnChildClickListener {
 	
@@ -106,8 +107,7 @@ public class GameTasksFragment extends SherlockFragment implements OnChildClickL
 		
 		expandableListViewTaskList.setOnChildClickListener(this);
 		
-		// Hide 'expand' arrow.
-		expandableListViewTaskList.setGroupIndicator(null);
+		ExpandableListViewPropertiesSetter.setPropertiesOfExpandableListView(adapter, expandableListViewTaskList);
 		
 		return view;
 	}

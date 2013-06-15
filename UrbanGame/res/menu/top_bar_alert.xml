@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/menu_alert"
-        android:icon="@drawable/alert"
+        android:icon="@drawable/ic_action_alert_dark"
         android:showAsAction="always"
         android:title="@string/menu_alert"/>
 

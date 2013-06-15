@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -19,10 +23,12 @@ import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.session.LoginManager;
 
-public class GamesListActivity extends MenuActivity implements OnItemClickListener {
+
+public class GamesListActivity extends MenuActivity implements OnChildClickListener {
 	private static final String TAG = "GamesListActivity";
 	
 	private GamesListAdapter adapter;
+	private ExpandableListView list;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -30,28 +36,42 @@ public class GamesListActivity extends MenuActivity implements OnItemClickListen
 		setContentView(R.layout.activity_games_list);
 		setSupportProgressBarVisibility(true);
 		
-		configureListView();
+		list = (ExpandableListView) findViewById(R.id.listViewAllGamesList);
+		
+		adapter = new GamesListAdapter(this, R.layout.list_item_game);
+		list.setAdapter(adapter);
+		list.setOnChildClickListener(this);
+		
+		setPropertiesOfExpandableListView(adapter);
 	}
 	
-	private void configureListView() {
-		ListView gamesList = (ListView) findViewById(R.id.listViewGamesList);
-		adapter = new GamesListAdapter(this, R.layout.list_item_game);
+	private void setPropertiesOfExpandableListView(BaseExpandableListAdapter adapter) {
+		for (int i = 0; i < adapter.getGroupCount(); i++) {
+			list.expandGroup(i);
+		}
 		
-		gamesList.setAdapter(adapter);
-		gamesList.setOnItemClickListener(this);
+		//disabling ability of collapsing group
+		list.setOnGroupClickListener(new OnGroupClickListener() {
+			
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+				return true;
+			}
+		});
 	}
 	
 	@Override
-	public void onItemClick(AdapterView<?> adapter, View clickedView, int posViewInList, long idOfClickedItem) {
+	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 		Bundle bundle = new Bundle();
 		
-		UrbanGameShortInfo game = (UrbanGameShortInfo) adapter.getItemAtPosition(posViewInList);
+		UrbanGameShortInfo game = (UrbanGameShortInfo) adapter.getChild(groupPosition, childPosition);
 		Long selectedGameId = (game == null ? -1 : game.getID());
 		bundle.putLong(GameDetailsActivity.GAME_KEY, selectedGameId);
 		
 		Intent intent = new Intent(GamesListActivity.this, GameDetailsActivity.class);
 		intent.putExtras(bundle);
 		startActivity(intent);
+		return true;
 	}
 	
 	@Override

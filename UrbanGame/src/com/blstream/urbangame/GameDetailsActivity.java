@@ -134,8 +134,19 @@ public class GameDetailsActivity extends MenuActivity implements OnClickListener
 		tvGameDesc.setText(selectedGame.getDescription());
 		tvWinningStrategy.setText(selectedGame.getWinningStrategy());
 		
+		//setting headers
+		setHeaderText(R.id.detailsHeader, R.string.header_details);
+		setHeaderText(R.id.PrizesHeader, R.string.header_prizes);
+		setHeaderText(R.id.descriptionHeader, R.string.header_description);
+		
 		this.supportInvalidateOptionsMenu();
 		Log.i(TAG, "onResume completed");
+	}
+	
+	private void setHeaderText(int headerID, int textID) {
+		View header = findViewById(headerID);
+		TextView headerText = (TextView) header.findViewById(R.id.TextViewMyGamesHeader);
+		headerText.setText(textID);
 	}
 	
 	private UrbanGame getMockGame() {

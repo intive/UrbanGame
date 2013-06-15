@@ -1,6 +1,7 @@
 package com.blstream.urbangame;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,24 +13,25 @@ import com.blstream.urbangame.notification.NotificationHelper;
 import com.blstream.urbangame.notifications.NotificationsManager;
 import com.blstream.urbangame.session.LoginManager;
 
-// formatter:off
+//formatter:off
 /* EXAMPLE OF USE:
- * 
- * When you want to add menu to your activity like:
- *  | Refresh
- *  | Settings
- *  | Help
- *  | Send feedback
- *  | [Logout]
- *  
- *  just override this class.
- *  When you want to add your own menu items and handle
- *  menu items selection just override also this two methods
- * 
- ****************************************************
- * onCreateOptionsMenu():
- * 
- * 	@Override
+* 
+* When you want to add menu to your activity like:
+*  | Refresh
+*  | Settings
+*  | Help
+*  | Send feedback
+*  | [Logout]
+*  
+*  just override this class.
+*  When you want to add your own menu items and handle
+*  menu items selection just override also this two methods
+<<<<<<< HEAD
+* 
+****************************************************
+* onCreateOptionsMenu():
+* 
+* 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);	// adding menu "more"
 		
@@ -38,22 +40,24 @@ import com.blstream.urbangame.session.LoginManager;
 		return true;
 	}
 	
- ****************************************************
- * onMenuItemSelected():
- *
- *	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		int itemId = item.getItemId();
-		switch (itemId) {
-			case R.id.some_id:
-				doSomething();
-				break;
-		}
-		return super.onMenuItemSelected(featureId, item);	// handling menu "more" items
-	}
- ****************************************************
- */
-// formatter:on
+=======
+*  
+>>>>>>> 8b040ff18476ea6f4160d75d45563096e138a1a1
+****************************************************
+* onMenuItemSelected():
+*
+*  @Override
+public boolean onMenuItemSelected(int featureId, MenuItem item) {
+ int itemId = item.getItemId();
+ switch (itemId) {
+   case R.id.some_id:
+     doSomething();
+     break;
+ }
+ return super.onMenuItemSelected(featureId, item);  // handling menu "more" items
+}
+**************************************************** */
+//formatter:on
 
 public class MenuActivity extends SherlockFragmentActivity {
 	private UrbanGameApplication urbanGameApplication;
@@ -63,10 +67,10 @@ public class MenuActivity extends SherlockFragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		this.urbanGameApplication = (UrbanGameApplication) getApplication();
 		this.loginManager = LoginManager.getInstance(MenuActivity.this);
-		urbanGameApplication.incremenetNumberOfRunningActivities();
+	    getSupportActionBar().setBackgroundDrawable(
+			new ColorDrawable(getResources().getColor(R.color.action_bar_background)));		urbanGameApplication.incremenetNumberOfRunningActivities();
 		Log.i(TAG, this.toString());
 	}
 	
@@ -85,6 +89,7 @@ public class MenuActivity extends SherlockFragmentActivity {
 	protected void onPause() {
 		super.onPause();
 		urbanGameApplication.onPause();
+		loginManager = LoginManager.getInstance(MenuActivity.this);
 	}
 	
 	@Override
