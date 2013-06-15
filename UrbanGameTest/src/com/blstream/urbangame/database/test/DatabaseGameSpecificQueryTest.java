@@ -31,8 +31,9 @@ public class DatabaseGameSpecificQueryTest extends AndroidTestCase {
 		database = null;
 	}
 	
-	private boolean prepareData(Integer rank, String email, Long gameID, Integer status, String changes) {
-		PlayerGameSpecific player = new PlayerGameSpecific(rank, email, gameID, status, changes);
+	private boolean prepareData(Integer rank, String email, Long gameID, Integer status, String changes,
+		Boolean hasChanges) {
+		PlayerGameSpecific player = new PlayerGameSpecific(rank, email, gameID, status, changes, hasChanges);
 		return database.insertUserGameSpecific(player);
 	}
 	
@@ -53,13 +54,13 @@ public class DatabaseGameSpecificQueryTest extends AndroidTestCase {
 	}
 	
 	public void testOneItemInDatabaseNoMatch() {
-		prepareData(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE, "email changed");
+		prepareData(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE, "email changed", true);
 		PlayerGameSpecific p = database.getUserGameSpecific("a", 1L);
 		assertNull(p);
 	}
 	
 	public void testOneItemInDatabaseMatch() {
-		prepareData(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE, "email changed");
+		prepareData(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE, "email changed", true);
 		PlayerGameSpecific p = database.getUserGameSpecific("em@em.em", 1L);
 		assertNotNull(p);
 		assertEquals(2, p.getRank().intValue());
@@ -67,12 +68,13 @@ public class DatabaseGameSpecificQueryTest extends AndroidTestCase {
 		assertEquals(1L, p.getGameID().longValue());
 		assertEquals(PlayerGameSpecific.GAME_ACTIVE, p.getState().intValue());
 		assertEquals("email changed", p.getChanges());
+		assertEquals(true, p.hasChanges().booleanValue());
 	}
 	
 	public void testManyItemsInDatabaseNoMatch() {
 		for (int i = 0; i < 30; i++) {
 			prepareData(i + 1, "em@em.em" + i, (long) i * 2, i % 2 == 0 ? PlayerGameSpecific.GAME_ACTIVE
-				: PlayerGameSpecific.GAME_OBSERVED, "email changed" + i);
+				: PlayerGameSpecific.GAME_OBSERVED, "email changed" + i, i % 2 == 0);
 		}
 		PlayerGameSpecific p = database.getUserGameSpecific("a", 2L);
 		assertNull(p);
@@ -81,7 +83,7 @@ public class DatabaseGameSpecificQueryTest extends AndroidTestCase {
 	public void testManyItemsInDatabaseMatch() {
 		for (int i = 0; i < 30; i++) {
 			prepareData(i + 1, "em@em.em" + i, (long) i * 2, i % 2 == 0 ? PlayerGameSpecific.GAME_ACTIVE
-				: PlayerGameSpecific.GAME_OBSERVED, "email changed" + i);
+				: PlayerGameSpecific.GAME_OBSERVED, "email changed" + i, i % 2 == 0);
 		}
 		int tested = 13;
 		PlayerGameSpecific p = database.getUserGameSpecific("em@em.em" + tested, (long) tested * 2);
@@ -92,6 +94,7 @@ public class DatabaseGameSpecificQueryTest extends AndroidTestCase {
 		assertEquals(tested % 2 == 0 ? PlayerGameSpecific.GAME_ACTIVE : PlayerGameSpecific.GAME_OBSERVED, p.getState()
 			.intValue());
 		assertEquals("email changed" + tested, p.getChanges());
+		assertEquals(tested % 2 == 0, p.hasChanges().booleanValue());
 	}
 	
 	public void testAllUserGamesNoMatch() {
@@ -108,7 +111,7 @@ public class DatabaseGameSpecificQueryTest extends AndroidTestCase {
 		}
 		for (int i = 0; i < 30; i++) {
 			prepareData(i + 1, "em@em.em" + i, (long) i * 2, i % 2 == 0 ? PlayerGameSpecific.GAME_ACTIVE
-				: PlayerGameSpecific.GAME_OBSERVED, "email changed" + i);
+				: PlayerGameSpecific.GAME_OBSERVED, "email changed" + i, i % 2 == 0);
 		}
 		List<UrbanGame> userGames = database.getAllUserGames("asdsad@asd.sd");
 		assertNull(userGames);
@@ -128,7 +131,7 @@ public class DatabaseGameSpecificQueryTest extends AndroidTestCase {
 		}
 		for (int i = 0; i < 30; i++) {
 			assertTrue(prepareData(i + 1, "em@em.em", (long) i, i % 2 == 0 ? PlayerGameSpecific.GAME_ACTIVE
-				: PlayerGameSpecific.GAME_OBSERVED, "email changed" + i));
+				: PlayerGameSpecific.GAME_OBSERVED, "email changed" + i, i % 2 == 0));
 		}
 		List<UrbanGame> userGames = database.getAllUserGames("em@em.em");
 		assertNotNull(userGames);

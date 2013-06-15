@@ -140,6 +140,14 @@ public interface DatabaseInterface {
 	public List<UrbanGame> getAllUserGames(String email);
 	
 	/**
+	 * @param email - email of user that games are required
+	 * @param state - state of game - observed/active/ended
+	 *        {@link #PlayerGameSpecific}
+	 * @return list of games, null if there are no games of specified type
+	 */
+	public List<UrbanGameShortInfo> getAllUserGamesShortInfoByItsState(String email, Integer state);
+	
+	/**
 	 * @param email - user identification
 	 * @param gameID - game identification
 	 * @return user data in game if successful, else null
