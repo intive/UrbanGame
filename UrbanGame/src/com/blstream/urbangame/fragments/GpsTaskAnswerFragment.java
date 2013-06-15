@@ -3,11 +3,13 @@ package com.blstream.urbangame.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,29 +25,31 @@ import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.dialogs.AnswerDialog;
 import com.blstream.urbangame.dialogs.AnswerDialog.DialogType;
-import com.blstream.urbangame.listeners.GpsLocationListener;
 import com.blstream.urbangame.webserver.mock.MockWebServer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
 public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickListener, ConnectionCallbacks,
-	OnConnectionFailedListener {
+	OnConnectionFailedListener, LocationListener, android.location.GpsStatus.Listener {
 	
 	private Task task;
 	private PlayerTaskSpecific playerTaskSpecific;
 	private Activity context;
 	private Button submitButton;
-	private GpsLocationListener gpsLocationListener;
 	private static final int GPS_UPDATE_TIME = 3000;
 	private final String TAG = GpsTaskAnswerFragment.class.getSimpleName();
 	private boolean hasGoogleServices;
 	private LocationClient mLocationClient;
 	private LocationRequest mLocationRequest;
-	private boolean mUpdatesRequested;
+	private Location mLastLocation;
+	private long mLastLocationMillis; //last location time
+	private boolean isGPSFix;
+	private static final long MAX_UPDATE_TIME = 5000;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -55,6 +59,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		
 		task = getArguments().getParcelable(Task.TASK_KEY);
 		
+		isGPSFix = false;
 		//Check for google play services
 		// Getting status
 		int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context.getBaseContext());
@@ -72,7 +77,6 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			dialog.show();
 		}
 		
-		gpsLocationListener = new GpsLocationListener();
 		DatabaseInterface database = new Database(activity);
 		playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), database.getLoggedPlayerID());
 		database.closeDatabase();
@@ -84,6 +88,9 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		
 		if (hasGoogleServices) {
 			mLocationClient = new LocationClient(context, this, this);
+			//I failed to find how to check if gps is off using LocationClient, please tell me if you know how to do it
+			LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+			locationManager.addGpsStatusListener(this);
 		}
 		
 		super.onCreate(savedInstanceState);
@@ -109,7 +116,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		if (hasGoogleServices) {
 			Log.i(TAG, "onStop");
 			if (mLocationClient.isConnected()) {
-				mLocationClient.removeLocationUpdates(gpsLocationListener);
+				mLocationClient.removeLocationUpdates(this);
 			}
 			
 			mLocationClient.disconnect();
@@ -133,7 +140,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	public void onClick(View v) {
 		if (hasGoogleServices) {
 			AnswerDialog dialog = new AnswerDialog(context);
-			
+			Location lastLocation;
 			//I failed to find how to check if gps is off using LocationClient, please tell me if you know how to do it
 			LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
 			//gps is off
@@ -141,7 +148,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 				dialog.showDialog(DialogType.GPS_OFF);
 			}
 			//no gps signal
-			else if (gpsLocationListener.getLastLocation() == null || !gpsLocationListener.isGPSFix()) {
+			else if (!isGPSFix) {
 				dialog.showDialog(DialogType.NO_GPS_SIGNAL);
 			}
 			//no network connection
@@ -151,9 +158,8 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			//everything went ok, we are sending data to server
 			else {
 				
-				Location location = gpsLocationListener.getLastLocation();
-				
-				int result = sendLocationForVeryfication(location);
+				//Location location = gpsLocationListener.getLastLocation();
+				int result = sendLocationForVerification(mLastLocation);
 				
 				int maxPoints = task.getMaxPoints();
 				
@@ -183,7 +189,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		}
 	}
 	
-	private int sendLocationForVeryfication(Location location) {
+	private int sendLocationForVerification(Location location) {
 		
 		//FIXME get real server data
 		MockWebServer mockWebServer = new MockWebServer();
@@ -204,7 +210,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	@Override
 	public void onConnected(Bundle arg0) {
 		
-		mLocationClient.requestLocationUpdates(mLocationRequest, gpsLocationListener);
+		mLocationClient.requestLocationUpdates(mLocationRequest, this);
 		Log.i(TAG, "onConnected");
 	}
 	
@@ -216,6 +222,37 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		Log.i(TAG, "onconnectionFailed ");
+		
+	}
+	
+	@Override
+	public void onLocationChanged(Location location) {
+		if (location == null) return;
+		Log.i(TAG, "onLocationChanged: " + location.getLatitude() + " " + location.getLongitude());
+		
+		mLastLocationMillis = SystemClock.elapsedRealtime();
+		
+		mLastLocation = location;
+	}
+	
+	@Override
+	public void onGpsStatusChanged(int event) {
+		Log.i(TAG, "Gps status listener");
+		switch (event) {
+			case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+				if (mLastLocation != null) {
+					isGPSFix = (SystemClock.elapsedRealtime() - mLastLocationMillis) < MAX_UPDATE_TIME;
+				}
+				Log.i(TAG, "GpsStatus.GPS_EVENT_SATELLITE_STATUS");
+				Log.i(TAG, "isGPSFix:" + isGPSFix);
+				
+				break;
+			case GpsStatus.GPS_EVENT_FIRST_FIX:
+				// Do something.
+				isGPSFix = true;
+				
+				break;
+		}
 		
 	}
 	
