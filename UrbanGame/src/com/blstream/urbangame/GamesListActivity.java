@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -22,7 +19,6 @@ import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.session.LoginManager;
-
 
 public class GamesListActivity extends MenuActivity implements OnChildClickListener {
 	private static final String TAG = "GamesListActivity";

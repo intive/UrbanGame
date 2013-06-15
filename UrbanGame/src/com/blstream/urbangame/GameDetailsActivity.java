@@ -284,7 +284,7 @@ public class GameDetailsActivity extends MenuActivity implements OnClickListener
 		
 		// FIXME code below should be invoked after positive response from server [move that code when appropriate class is ready]
 		int rankFromServer = 10;
-		PlayerGameSpecific playerGameInfo = new PlayerGameSpecific(rankFromServer, playerEmail, gameID, null);
+		PlayerGameSpecific playerGameInfo = new PlayerGameSpecific(rankFromServer, playerEmail, gameID, null, false);
 		db.insertUserGameSpecific(playerGameInfo);
 		db.closeDatabase();
 		//******************//
