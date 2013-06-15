@@ -148,13 +148,6 @@
         <item>Gallery</item>
         <item>Camera</item>
     </string-array>
-
-    <!-- Notifications -->
-    <string name="notification_game_new">New game</string>
-    <string name="notification_game_changed">Game changed</string>
-    <string name="notification_game_over">Game over</string>
-    <string name="notification_task_new">New task</string>
-    <string name="notification_task_changed">Task changed</string>
     
     <!-- Answer Dialog -->
     <string name="title_right">Correct</string>
@@ -169,6 +162,7 @@
     <string name="message_gps_off">Turn on GPS in the settings to submit the answer.</string>
     <string name="answer_dialog_button_settings">Settings</string>
 
+    <!-- Notifications -->
     <string name="notification_title_game_new">New game</string>
     <string name="notification_title_game_changed">Game changed</string>
     <string name="notification_title_game_over">Game over</string>
