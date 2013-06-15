@@ -186,9 +186,13 @@ public class MockWebServer {
 	//returns points
 	public int sendGPSLocation(Context context, Task task, Location location) {
 		
-		if (Math.random() > 0.5) return task.getMaxPoints();
-		else if (Math.random() > 0.5) return 0;
-		else return (int) (Math.random() * task.getMaxPoints());
+		double random = Math.random();
+		int points = task.getMaxPoints();
+		
+		if (random > 0.8) return points;
+		if (random < 0.2) return 0;
+		return (int) (points * random);
+		
 	}
 	
 }

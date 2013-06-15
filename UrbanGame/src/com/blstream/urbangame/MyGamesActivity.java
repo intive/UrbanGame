@@ -62,11 +62,13 @@ public class MyGamesActivity extends MenuActivity implements OnChildClickListene
 		parent.setTitle(resources.getString(R.string.header_active));
 		arrayChildren = new ArrayList<UrbanGameShortInfo>();
 		List<UrbanGame> urbanGameList = database.getAllUserGames(database.getLoggedPlayerID());
-		
-		for (UrbanGame game : urbanGameList) {
-			arrayChildren.add(game.getPrimaryInfo());
+		if (urbanGameList != null) {
+			for (UrbanGame game : urbanGameList) {
+				arrayChildren.add(game.getPrimaryInfo());
+			}
 		}
 		parent.setArrayChildren(arrayChildren);
+		
 		mArrayHeaders.add(parent);
 		
 		parent = new ExpandableListHeader();

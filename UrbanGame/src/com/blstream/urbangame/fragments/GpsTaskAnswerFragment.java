@@ -48,6 +48,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	private LocationRequest mLocationRequest;
 	private Location mLastLocation;
 	private long mLastLocationMillis; //last location time
+	private LocationManager mLocationManager;
 	private boolean isGPSFix;
 	private static final long MAX_UPDATE_TIME = 5000;
 	
@@ -89,8 +90,8 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		if (hasGoogleServices) {
 			mLocationClient = new LocationClient(context, this, this);
 			//I failed to find how to check if gps is off using LocationClient, please tell me if you know how to do it
-			LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
-			locationManager.addGpsStatusListener(this);
+			mLocationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+			mLocationManager.addGpsStatusListener(this);
 		}
 		
 		super.onCreate(savedInstanceState);
@@ -140,11 +141,10 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	public void onClick(View v) {
 		if (hasGoogleServices) {
 			AnswerDialog dialog = new AnswerDialog(context);
-			Location lastLocation;
-			//I failed to find how to check if gps is off using LocationClient, please tell me if you know how to do it
-			LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+			
+			mLocationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
 			//gps is off
-			if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				dialog.showDialog(DialogType.GPS_OFF);
 			}
 			//no gps signal
@@ -157,8 +157,6 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			}
 			//everything went ok, we are sending data to server
 			else {
-				
-				//Location location = gpsLocationListener.getLastLocation();
 				int result = sendLocationForVerification(mLastLocation);
 				
 				int maxPoints = task.getMaxPoints();
@@ -248,9 +246,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 				
 				break;
 			case GpsStatus.GPS_EVENT_FIRST_FIX:
-				// Do something.
 				isGPSFix = true;
-				
 				break;
 		}
 		
