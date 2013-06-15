@@ -9,7 +9,10 @@
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    
     <application
         android:name=".UrbanGameApplication"
         android:allowBackup="true"
@@ -20,7 +23,7 @@
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"
             android:noHistory="true"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+            android:theme="@style/Theme.Sherlock.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

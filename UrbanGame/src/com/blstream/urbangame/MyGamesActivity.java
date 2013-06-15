@@ -3,6 +3,7 @@ package com.blstream.urbangame;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import android.content.Context;
@@ -28,6 +29,9 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
+import com.blstream.urbangame.database.Database;
+import com.blstream.urbangame.database.DatabaseInterface;
+import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 
@@ -52,9 +56,16 @@ public class MyGamesActivity extends MenuActivity implements OnChildClickListene
 		
 		Resources resources = getResources();
 		
+		DatabaseInterface database = new Database(this);
+		
 		ExpandableListHeader parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_active));
-		arrayChildren = mockData();			//FIXME - put active games here
+		arrayChildren = new ArrayList<UrbanGameShortInfo>();
+		List<UrbanGame> urbanGameList = database.getAllUserGames(database.getLoggedPlayerID());
+		
+		for (UrbanGame game : urbanGameList) {
+			arrayChildren.add(game.getPrimaryInfo());
+		}
 		parent.setArrayChildren(arrayChildren);
 		mArrayHeaders.add(parent);
 		
