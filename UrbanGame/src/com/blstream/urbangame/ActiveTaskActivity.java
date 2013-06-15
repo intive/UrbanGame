@@ -1,5 +1,6 @@
 package com.blstream.urbangame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TabHost;
@@ -8,8 +9,12 @@ import android.widget.TabHost.TabSpec;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.blstream.urbangame.database.Database;
+import com.blstream.urbangame.database.DatabaseInterface;
+import com.blstream.urbangame.database.entity.Task;
+import com.blstream.urbangame.fragments.ABCDTaskAnswerFragment;
+import com.blstream.urbangame.fragments.GpsTaskAnswerFragment;
 import com.blstream.urbangame.fragments.TabManager;
-import com.blstream.urbangame.fragments.TaskAnswerFragment;
 import com.blstream.urbangame.fragments.TaskDescriptionFragment;
 
 public class ActiveTaskActivity extends MenuActivity {
@@ -23,14 +28,21 @@ public class ActiveTaskActivity extends MenuActivity {
 	
 	private TabHost tabHost;
 	private TabManager tabManager;
+	private Task task;	//I load it here, because otherwise I would have to load it twice
+	private DatabaseInterface databaseInterface;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabhost_layout);
 		
+		long taskID = getSelectedTaskID();
+		databaseInterface = new Database(this);
+		this.task = databaseInterface.getTask(taskID);
 		configureActionBar();
 		setUpTabHost(savedInstanceState);
+		databaseInterface.closeDatabase();
+		
 	}
 	
 	@Override
@@ -47,6 +59,17 @@ public class ActiveTaskActivity extends MenuActivity {
 		}
 	}
 	
+	private long getSelectedTaskID() {
+		long taskID = 0L;
+		
+		Bundle arguments = getIntent().getExtras();
+		if (arguments != null) {
+			taskID = arguments.getLong(ActiveTaskActivity.TASK_ID, taskID);
+		}
+		
+		return taskID;
+	}
+	
 	private void setUpTabHost(Bundle savedInstanceState) {
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
 		tabHost.setup();
@@ -60,7 +83,16 @@ public class ActiveTaskActivity extends MenuActivity {
 	
 	private void fillTabHost() {
 		tabManager = new TabManager(this, tabHost, R.id.realtabcontent);
-		Bundle extras = getIntent().getExtras();
+		Intent intent = getIntent();
+		Bundle extras = null;
+		if (intent != null) {
+			extras = intent.getExtras();
+		}
+		
+		if (extras == null) {
+			extras = new Bundle();
+		}
+		extras.putParcelable(Task.TASK_KEY, task);
 		
 		String tagTaskDescription = getString(R.string.tab_task_description);
 		TabSpec tabDescription = tabHost.newTabSpec(TAG_TAB_DESCRIPTION).setIndicator(tagTaskDescription);
@@ -68,7 +100,13 @@ public class ActiveTaskActivity extends MenuActivity {
 		
 		String tagTasksAnswer = getString(R.string.tab_task_answer);
 		TabSpec tabAnswer = tabHost.newTabSpec(TAG_TAB_ANSWER).setIndicator(tagTasksAnswer);
-		tabManager.addTab(tabAnswer, TaskAnswerFragment.class, extras);
+		//check weather it should open gps or abcd task fragment
+		if (task.getType() == Task.TASK_TYPE_ABCD) {
+			tabManager.addTab(tabAnswer, ABCDTaskAnswerFragment.class, extras);
+		}
+		else {
+			tabManager.addTab(tabAnswer, GpsTaskAnswerFragment.class, extras);
+		}
 	}
 	
 	@Override
