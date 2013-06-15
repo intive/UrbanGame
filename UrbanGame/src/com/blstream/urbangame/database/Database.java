@@ -309,6 +309,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 				gameList.add(game);
 			}
 			while (cursor.moveToNext());
+			cursor.close();
 		}
 		cursor.close();
 		db.close();
@@ -365,6 +366,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			game = new UrbanGame();
 			game.setPrimaryInfo(gameShortInfoFromCursor(cursor));
 			setRestOfDataForGameInfo(game, cursor);
+			cursor.close();
 		}
 		else {
 			game = null;

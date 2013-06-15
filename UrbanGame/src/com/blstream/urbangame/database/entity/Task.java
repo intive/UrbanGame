@@ -1,5 +1,6 @@
 package com.blstream.urbangame.database.entity;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import android.content.res.Resources;
@@ -214,5 +215,33 @@ public abstract class Task {
 	 */
 	public void setMaxPoints(Integer maxPoints) {
 		this.maxPoints = maxPoints;
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		
+		if (object == this) { return true; }
+		if (object == null || object.getClass() != this.getClass()) { return false; }
+		
+		Task task = (Task) object;
+		
+		if (getDescription().equals(task.getDescription()) && getEndTime().equals(task.getEndTime())
+			&& getId().equals(task.getId()) && getMaxPoints().equals(task.getMaxPoints())
+			&& getNumberOfHidden().equals(task.getNumberOfHidden())
+			&& getPictureBase64().equals(task.getPictureBase64()) && getTitle().equals(task.getTitle())
+			&& getType().equals(task.getType())) {
+			if (getType() == Task.TASK_TYPE_ABCD) {
+				ABCDTask thisABCDtask = (ABCDTask) this;
+				ABCDTask ABCDtask = (ABCDTask) task;
+				
+				if (thisABCDtask.getQuestion().equals(ABCDtask.getQuestion())
+					&& Arrays.equals(thisABCDtask.getAnswers(), ABCDtask.getAnswers())) return true;
+				else return false;
+			}
+			else return true;
+		}
+		
+		return false;
+		
 	}
 }

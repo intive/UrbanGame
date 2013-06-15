@@ -11,11 +11,29 @@ public class UrbanGameApplication extends Application {
 	private final static String TAG = "UrbanGameApplication";
 	
 	private boolean isAppInBackground;
+	private static int numberOfRunnigActivities = 0;
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		isAppInBackground = true;
+		Log.i(TAG, "numberOfRunnigActivitiesC " + numberOfRunnigActivities);
+	}
+	
+	public void incremenetNumberOfRunningActivities() {
+		++numberOfRunnigActivities;
+		Log.i(TAG, "incremenetNumberOfRunningActivities() " + numberOfRunnigActivities);
+	}
+	
+	public void decrementNumberOfRunningActivities() {
+		--numberOfRunnigActivities;
+		Log.i(TAG, "decrementNumberOfRunningActivities() " + numberOfRunnigActivities);
+	}
+	
+	public static boolean isApplicationRunning() {
+		Log.i(TAG, "numberOfRunnigActivities " + numberOfRunnigActivities);
+		if (numberOfRunnigActivities > 0) return true;
+		return false;
 	}
 	
 	public boolean isAppInBackground() {

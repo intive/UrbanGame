@@ -38,8 +38,8 @@ public class MockWebServer {
 		Date startDate = null;
 		Date endDate = null;
 		try {
-			startDate = curFormater.parse("04/05/2010");
-			endDate = curFormater.parse("04/06/2010");
+			startDate = curFormater.parse("04/05/2013");
+			endDate = curFormater.parse("04/06/2013");
 		}
 		catch (ParseException e) {
 			Log.e(TAG, "ParseException " + e.toString());
@@ -49,17 +49,16 @@ public class MockWebServer {
 		
 		for (int i = 0; i < 6; ++i) {
 			mockUrbanGameDetails.add(new UrbanGame(Long.valueOf(i), Double.valueOf(i), "MyGameTitle" + i,
-				"MyOperatorName" + i, "MyWinningStrategy" + i, i, i, startDate, endDate, i, true, "MyPrizesInfo" + i,
-				"MyDescription" + i, "MyGameLogoBase64" + i, "MyOperatorLogoBase64" + i, "MyComments" + i, "MyLocation"
-					+ i, "MyDetaisLink" + i));
+				"MyOperatorName" + i, "MyWinningStrategy" + i, i, i, startDate, endDate, i % 5, true, "MyPrizesInfo"
+					+ i, "MyDescription" + i, "gameLogoBase64", null, "MyComments" + i, "MyLocation" + i,
+				"MyDetaisLink" + i));
 		}
 		
 		mockAllUrbanGames = new ArrayList<UrbanGameShortInfo>();
 		
 		for (int i = 0; i < mockUrbanGameDetails.size(); ++i) {
 			mockAllUrbanGames.add(new UrbanGameShortInfo(Long.valueOf(i), "MyGameTitle" + i, "MyOperatorName" + i, i,
-				i, startDate, endDate, true, "MyLocation" + i, "MyGamelogoBase64" + i, "MyOperatorlogoBase64" + i,
-				"MyDetailsLink" + i));
+				i, startDate, endDate, true, "MyLocation" + i, "gameLogoBase64", null, "MyDetailsLink" + i));
 		}
 		
 		mockTaskLists = new Hashtable<Long, ArrayList<Task>>();

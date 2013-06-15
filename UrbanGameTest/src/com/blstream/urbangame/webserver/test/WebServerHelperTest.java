@@ -8,9 +8,6 @@ import java.util.concurrent.TimeUnit;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
-import com.blstream.urbangame.database.Database;
-import com.blstream.urbangame.database.DatabaseInterface;
-import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
@@ -93,9 +90,9 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 						break;
 					}
 					default:
-					  Log.e(TAG, "Incorrect queryType " + webResponse.getQueryType().toString());
-					  break;
-					
+						Log.e(TAG, "Incorrect queryType " + webResponse.getQueryType().toString());
+						break;
+				
 				}
 			}
 		}
@@ -124,54 +121,15 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 		}
 		
 		public void checkUrbanGamesEqual(UrbanGame expected, UrbanGame actual) {
-			
-			checkUrbanGameShortInfoEqual(expected.getPrimaryInfo(), actual.getPrimaryInfo());
-			
-			assertEquals(expected.getComments(), actual.getComments());
-			assertEquals(expected.getDescription(), actual.getDescription());
-			assertEquals(expected.getDifficulty(), actual.getDifficulty());
-			assertEquals(expected.getGameVersion(), actual.getGameVersion());
-			assertEquals(expected.getPrizesInfo(), actual.getPrizesInfo());
-			assertEquals(expected.getWinningStrategy(), actual.getWinningStrategy());
+			assertTrue(expected.equals(actual));
 		}
 		
 		public void checkUrbanGameShortInfoEqual(UrbanGameShortInfo expected, UrbanGameShortInfo actual) {
-			assertEquals(expected.getDetailsLink(), actual.getDetailsLink());
-			assertEquals(expected.getEndDate(), actual.getEndDate());
-			assertEquals(expected.getGameLogoBase64(), actual.getGameLogoBase64());
-			assertEquals(expected.getID(), actual.getID());
-			assertEquals(expected.getLocation(), actual.getLocation());
-			assertEquals(expected.getMaxPlayers(), actual.getMaxPlayers());
-			assertEquals(expected.getOperatorLogoBase64(), actual.getOperatorLogoBase64());
-			assertEquals(expected.getOperatorName(), actual.getOperatorName());
-			assertEquals(expected.getPlayers(), actual.getPlayers());
-			assertEquals(expected.getReward(), actual.getReward());
-			assertEquals(expected.getStartDate(), actual.getStartDate());
-			assertEquals(expected.getTitle(), actual.getTitle());
+			assertTrue(expected.equals(actual));
 		}
 		
 		public void checkTasksEqual(Task expected, Task actual) {
-			assertEquals(expected.getDescription(), actual.getDescription());
-			assertEquals(expected.getEndTime(), actual.getEndTime());
-			assertEquals(expected.getId(), actual.getId());
-			assertEquals(expected.getMaxPoints(), actual.getMaxPoints());
-			assertEquals(expected.getNumberOfHidden(), actual.getNumberOfHidden());
-			assertEquals(expected.getPictureBase64(), actual.getPictureBase64());
-			assertEquals(expected.getTitle(), actual.getTitle());
-			assertEquals(expected.getType(), actual.getType());
-			
-			if (expected.getType() == Task.TASK_TYPE_ABCD) {
-				ABCDTask expectedABCD = (ABCDTask) expected;
-				ABCDTask actualABCD = (ABCDTask) actual;
-				
-				String[] expectedAnswers = expectedABCD.getAnswers();
-				String[] actualAnswers = actualABCD.getAnswers();
-				
-				for (int i = 0; i < expectedAnswers.length; ++i)
-					assertEquals(expectedAnswers[i], actualAnswers[i]);
-				
-				assertEquals(expectedABCD.getQuestion(), actualABCD.getQuestion());
-			}
+			assertTrue(expected.equals(actual));
 		}
 		
 	}
@@ -252,7 +210,7 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 	public void testGetTaskList() throws Throwable {
 		// Get short information about all available games
 		ArrayList<UrbanGameShortInfo> mockAllUrbanGames = mockWebServer.getMockAllUrbanGames();
-				
+		
 		// For each game issue query to get Task list for the game
 		for (int i = 0; i < mockAllUrbanGames.size(); ++i) {
 			final long gameID = mockAllUrbanGames.get(i).getID();
@@ -269,30 +227,6 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 			Log.d(TAG, "testGetTaskList() completed");
 		}
 		
-	}
-	
-	public void testMockSimulateNewTaskAvailable() {
-		DatabaseInterface database = new Database(getInstrumentation().getTargetContext());
-		Task task = null;
-		
-		// simulate that new ABCDTask was created
-		task = WebServerHelper.mockSimulateNewTaskAvailable(Task.TASK_TYPE_ABCD, getInstrumentation()
-			.getTargetContext());
-		
-		// Check that ABCDTask was created correctly and is not stored in Database
-		assertNotNull(task);
-		assertEquals((Integer) Task.TASK_TYPE_ABCD, task.getType());
-		assertNull(database.getTask(task.getId()));
-		
-		// simulate that new LocationTask was created
-		task = WebServerHelper.mockSimulateNewTaskAvailable(Task.TASK_TYPE_LOCATION, getInstrumentation()
-			.getTargetContext());
-		
-		// Check that LocationTask was created correctly and is not stored in Database
-		assertNotNull(task);
-		assertEquals((Integer) Task.TASK_TYPE_LOCATION, task.getType());
-		assertNull(database.getTask(task.getId()));
-		Log.d(TAG, "testMockSimulateNewTaskAvailable() completed");
 	}
 	
 }

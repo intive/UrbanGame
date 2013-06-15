@@ -3,11 +3,13 @@ package com.blstream.urbangame;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.blstream.urbangame.notification.NotificationHelper;
 import com.blstream.urbangame.notifications.NotificationsManager;
 import com.blstream.urbangame.session.LoginManager;
 
@@ -60,14 +62,17 @@ public boolean onMenuItemSelected(int featureId, MenuItem item) {
 public class MenuActivity extends SherlockFragmentActivity {
 	private UrbanGameApplication urbanGameApplication;
 	private LoginManager loginManager;
+	private final String TAG = MenuActivity.class.getSimpleName();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.urbanGameApplication = (UrbanGameApplication) getApplication();
 		this.loginManager = LoginManager.getInstance(MenuActivity.this);
-		getSupportActionBar().setBackgroundDrawable(
+	    getSupportActionBar().setBackgroundDrawable(
 			new ColorDrawable(getResources().getColor(R.color.action_bar_background)));
+	    urbanGameApplication.incremenetNumberOfRunningActivities();
+		Log.i(TAG, this.toString());
 	}
 	
 	/**
@@ -78,6 +83,7 @@ public class MenuActivity extends SherlockFragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		urbanGameApplication.onResume();
+		NotificationHelper.getInstance().start(this);
 	}
 	
 	@Override
@@ -85,6 +91,12 @@ public class MenuActivity extends SherlockFragmentActivity {
 		super.onPause();
 		urbanGameApplication.onPause();
 		loginManager = LoginManager.getInstance(MenuActivity.this);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		urbanGameApplication.decrementNumberOfRunningActivities();
 	}
 	
 	@Override
