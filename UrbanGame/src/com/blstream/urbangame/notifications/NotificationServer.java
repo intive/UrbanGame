@@ -154,7 +154,8 @@ public class NotificationServer {
 				List<Task> taskList = db.getTasksForGame(game.getID());
 				Task task = taskList.get(r.nextInt(taskList.size()));
 				
-				// TODO add notifications
+				// FIXME to be implemented
+				// TODO add mock server behaviour to generate notifications 
 				
 				//**********************//
 				//						//

@@ -15,7 +15,7 @@ public class NotificationDiff {
 		StringBuilder diff = new StringBuilder();
 		
 		if (canTasksBeCompared(oldTask, newTask)) {
-			
+			// FIXME to be implemented in diff sub-task
 		}
 		return "\n\n" + diff.toString();
 	}
@@ -31,7 +31,7 @@ public class NotificationDiff {
 		StringBuilder diff = new StringBuilder();
 		
 		if (canGamesBeCompared(oldGame, newGame)) {
-			
+			// FIXME to be implemented in diff sub-task
 		}
 		return "\n\n" + diff.toString();
 	}
