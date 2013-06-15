@@ -31,8 +31,9 @@ public class DatabaseGameSpecificDeleteTest extends AndroidTestCase {
 		database = null;
 	}
 	
-	private void prepareDataUserSpecific(Integer rank, String email, Long gameID, Integer status, String changes) {
-		PlayerGameSpecific player = new PlayerGameSpecific(rank, email, gameID, status, changes);
+	private void prepareDataUserSpecific(Integer rank, String email, Long gameID, Integer status, String changes,
+		Boolean hasChanges) {
+		PlayerGameSpecific player = new PlayerGameSpecific(rank, email, gameID, status, changes, hasChanges);
 		database.insertUserGameSpecific(player);
 	}
 	
@@ -58,13 +59,13 @@ public class DatabaseGameSpecificDeleteTest extends AndroidTestCase {
 	}
 	
 	public void testOneItemInDatabaseNoMatch() {
-		prepareDataUserSpecific(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE, null);
+		prepareDataUserSpecific(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE, null, false);
 		boolean isSuccessful = database.deleteUserGameSpecific("a", 2L);
 		assertFalse(isSuccessful);
 	}
 	
 	public void testOneItemInDatabaseMatch() {
-		prepareDataUserSpecific(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE, "email changed");
+		prepareDataUserSpecific(2, "em@em.em", 1L, PlayerGameSpecific.GAME_ACTIVE, "email changed", true);
 		boolean isSuccessful = database.deleteUserGameSpecific("em@em.em", 1L);
 		assertTrue(isSuccessful);
 	}
@@ -72,7 +73,7 @@ public class DatabaseGameSpecificDeleteTest extends AndroidTestCase {
 	public void testManyItemsInDatabaseNoMatch() {
 		for (int i = 0; i < 30; i++) {
 			prepareDataUserSpecific(i, "em@em.em" + i, (long) i, i % 2 == 0 ? PlayerGameSpecific.GAME_ACTIVE
-				: PlayerGameSpecific.GAME_OBSERVED, "no changes");
+				: PlayerGameSpecific.GAME_OBSERVED, "no changes", false);
 		}
 		boolean isSuccessful = database.deleteUserGameSpecific("a", 3L);
 		assertFalse(isSuccessful);
@@ -81,7 +82,7 @@ public class DatabaseGameSpecificDeleteTest extends AndroidTestCase {
 	public void testManyItemsInDatabaseMatch() {
 		for (int i = 0; i < 30; i++) {
 			prepareDataUserSpecific(i, "em@em.em" + i, (long) i, i % 2 == 0 ? PlayerGameSpecific.GAME_ACTIVE
-				: PlayerGameSpecific.GAME_OBSERVED, "no changes");
+				: PlayerGameSpecific.GAME_OBSERVED, "no changes", false);
 		}
 		boolean isSuccessful = database.deleteUserGameSpecific("em@em.em" + 13, 13L);
 		assertTrue(isSuccessful);
@@ -102,7 +103,7 @@ public class DatabaseGameSpecificDeleteTest extends AndroidTestCase {
 		prepareDataUser("em@em.em", "123", "herbatnik", "ciastko");
 		for (int i = 0; i < 30; i++) {
 			prepareDataUserSpecific(i * 7, "em@em.em", (long) i, i % 2 == 0 ? PlayerGameSpecific.GAME_ACTIVE
-				: PlayerGameSpecific.GAME_OBSERVED, "no changes");
+				: PlayerGameSpecific.GAME_OBSERVED, "no changes", false);
 		}
 		boolean isSuccessful = database.wipeOutUserData("em@em.em");
 		assertTrue(isSuccessful);
