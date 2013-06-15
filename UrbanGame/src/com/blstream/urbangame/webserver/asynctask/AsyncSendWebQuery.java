@@ -66,11 +66,13 @@ public class AsyncSendWebQuery extends AsyncTask<Void, Void, WebResponse> {
 			
 			case GetTaskList:
 				createGetTaskListQuery();
+				webResponse.setGameId(gid);
 				break;
 			
 			case GetTask:
 				createGetTaskListQuery();
 				webQuery.appendPath(String.valueOf(tid));
+				webResponse.setGameId(gid);
 				break;
 			default:
 				Log.e(TAG, "Incorrect queryType " + queryType.toString());

@@ -2,11 +2,13 @@ package com.blstream.urbangame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.blstream.urbangame.notification.NotificationHelper;
 import com.blstream.urbangame.notifications.NotificationsManager;
 import com.blstream.urbangame.session.LoginManager;
 
@@ -56,6 +58,7 @@ import com.blstream.urbangame.session.LoginManager;
 public class MenuActivity extends SherlockFragmentActivity {
 	private UrbanGameApplication urbanGameApplication;
 	private LoginManager loginManager;
+	private final String TAG = MenuActivity.class.getSimpleName();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,8 @@ public class MenuActivity extends SherlockFragmentActivity {
 		
 		this.urbanGameApplication = (UrbanGameApplication) getApplication();
 		this.loginManager = LoginManager.getInstance(MenuActivity.this);
+		urbanGameApplication.incremenetNumberOfRunningActivities();
+		Log.i(TAG, this.toString());
 	}
 	
 	/**
@@ -73,12 +78,19 @@ public class MenuActivity extends SherlockFragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		urbanGameApplication.onResume();
+		NotificationHelper.getInstance().start(this);
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
 		urbanGameApplication.onPause();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		urbanGameApplication.decrementNumberOfRunningActivities();
 	}
 	
 	@Override

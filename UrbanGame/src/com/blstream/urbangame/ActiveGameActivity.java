@@ -30,7 +30,7 @@ public class ActiveGameActivity extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabhost_layout);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		setUpTabHost(savedInstanceState);
 	}
 	

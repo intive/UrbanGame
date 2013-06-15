@@ -18,10 +18,14 @@ import com.google.gson.reflect.TypeToken;
 
 public class WebResponse {
 	private final String TAG = "WebResponse";
-	public enum QueryType {GetUrbanGameDetails, GetUrbanGameBaseList,
-		                   GetTask, GetTaskList};	
+	
+	public enum QueryType {
+		GetUrbanGameDetails, GetUrbanGameBaseList, GetTask, GetTaskList
+	};
+	
 	private QueryType queryType;
 	private String jsonResponse;
+	private Long gameID;
 	
 	//
 	// Constructor
@@ -42,6 +46,14 @@ public class WebResponse {
 	//
 	// Public methods
 	//
+	public void setGameId(Long gameID) {
+		this.gameID = gameID;
+	}
+	
+	public Long getGameId() {
+		return gameID;
+	}
+	
 	public QueryType getQueryType() {
 		return queryType;
 	}
