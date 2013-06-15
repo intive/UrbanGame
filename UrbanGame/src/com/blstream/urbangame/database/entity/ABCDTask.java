@@ -2,6 +2,9 @@ package com.blstream.urbangame.database.entity;
 
 import java.util.Date;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 public class ABCDTask extends Task {
 	
 	private String question;
@@ -60,5 +63,30 @@ public class ABCDTask extends Task {
 	 */
 	public void setQuestion(String question) {
 		this.question = question;
+	}
+	
+	public ABCDTask(Parcel in) {
+		super(in);
+		question = in.readString();
+		in.readStringArray(answers);
+	}
+	
+	public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+		@Override
+		public Task createFromParcel(Parcel in) {
+			return new ABCDTask(in);
+		}
+		
+		@Override
+		public Task[] newArray(int size) {
+			return new Task[size];
+		}
+	};
+	
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		super.writeToParcel(out, flags);
+		out.writeString(question);
+		out.writeStringArray(answers);
 	}
 }

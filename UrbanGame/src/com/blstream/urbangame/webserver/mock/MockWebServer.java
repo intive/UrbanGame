@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
 
+import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 
 import com.blstream.urbangame.database.entity.ABCDTask;
@@ -179,6 +181,18 @@ public class MockWebServer {
 		if (stringBuilder.length() == 0) return null;
 		
 		return stringBuilder.toString();
+	}
+	
+	//returns points
+	public int sendGPSLocation(Context context, Task task, Location location) {
+		
+		double random = Math.random();
+		int points = task.getMaxPoints();
+		
+		if (random > 0.8) return points;
+		if (random < 0.2) return 0;
+		return (int) (points * random);
+		
 	}
 	
 }
