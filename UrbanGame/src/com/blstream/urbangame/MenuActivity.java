@@ -70,7 +70,8 @@ public class MenuActivity extends SherlockFragmentActivity {
 		this.urbanGameApplication = (UrbanGameApplication) getApplication();
 		this.loginManager = LoginManager.getInstance(MenuActivity.this);
 	    getSupportActionBar().setBackgroundDrawable(
-			new ColorDrawable(getResources().getColor(R.color.action_bar_background)));		urbanGameApplication.incremenetNumberOfRunningActivities();
+			new ColorDrawable(getResources().getColor(R.color.action_bar_background)));
+	    urbanGameApplication.incremenetNumberOfRunningActivities();
 		Log.i(TAG, this.toString());
 	}
 	
