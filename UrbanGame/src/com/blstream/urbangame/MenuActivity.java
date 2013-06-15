@@ -11,25 +11,25 @@ import com.actionbarsherlock.view.MenuItem;
 import com.blstream.urbangame.notifications.NotificationsManager;
 import com.blstream.urbangame.session.LoginManager;
 
-// formatter:off
+//formatter:off
 /* EXAMPLE OF USE:
- * 
- * When you want to add menu to your activity like:
- *  | Refresh
- *  | Settings
- *  | Help
- *  | Send feedback
- *  | [Logout]
- *  
- *  just override this class.
- *  When you want to add your own menu items and handle
- *  menu items selection just override also this two methods
+* 
+* When you want to add menu to your activity like:
+*  | Refresh
+*  | Settings
+*  | Help
+*  | Send feedback
+*  | [Logout]
+*  
+*  just override this class.
+*  When you want to add your own menu items and handle
+*  menu items selection just override also this two methods
 <<<<<<< HEAD
- * 
- ****************************************************
- * onCreateOptionsMenu():
- * 
- * 	@Override
+* 
+****************************************************
+* onCreateOptionsMenu():
+* 
+* 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);	// adding menu "more"
 		
@@ -39,23 +39,23 @@ import com.blstream.urbangame.session.LoginManager;
 	}
 	
 =======
- *  
+*  
 >>>>>>> 8b040ff18476ea6f4160d75d45563096e138a1a1
- ****************************************************
- * onMenuItemSelected():
- *
- *  @Override
-  public boolean onMenuItemSelected(int featureId, MenuItem item) {
-    int itemId = item.getItemId();
-    switch (itemId) {
-      case R.id.some_id:
-        doSomething();
-        break;
-    }
-    return super.onMenuItemSelected(featureId, item);  // handling menu "more" items
-  }
- **************************************************** */
-// formatter:on
+****************************************************
+* onMenuItemSelected():
+*
+*  @Override
+public boolean onMenuItemSelected(int featureId, MenuItem item) {
+ int itemId = item.getItemId();
+ switch (itemId) {
+   case R.id.some_id:
+     doSomething();
+     break;
+ }
+ return super.onMenuItemSelected(featureId, item);  // handling menu "more" items
+}
+**************************************************** */
+//formatter:on
 
 public class MenuActivity extends SherlockFragmentActivity {
 	private UrbanGameApplication urbanGameApplication;
@@ -66,6 +66,8 @@ public class MenuActivity extends SherlockFragmentActivity {
 		super.onCreate(savedInstanceState);
 		this.urbanGameApplication = (UrbanGameApplication) getApplication();
 		this.loginManager = LoginManager.getInstance(MenuActivity.this);
+		getSupportActionBar().setBackgroundDrawable(
+			new ColorDrawable(getResources().getColor(R.color.action_bar_background)));
 	}
 	
 	/**
@@ -83,8 +85,6 @@ public class MenuActivity extends SherlockFragmentActivity {
 		super.onPause();
 		urbanGameApplication.onPause();
 		loginManager = LoginManager.getInstance(MenuActivity.this);
-		getSupportActionBar().setBackgroundDrawable(
-			new ColorDrawable(getResources().getColor(R.color.action_bar_background)));
 	}
 	
 	@Override
