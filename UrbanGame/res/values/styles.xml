@@ -25,15 +25,15 @@
         <item name="android:expandableListViewStyle">@style/expandableListStyle</item>
 
 <!--         Sherlock Navigation List Customization -->
-        <item name="dropDownListViewStyle">@style/DropDownListView.Example</item>
+        <item name="dropDownListViewStyle">@style/DropDownListView.UrbanGame</item>
         <item name="actionBarItemBackground">@drawable/selectable_background</item>
 		<item name="spinnerItemStyle">@style/Widget.Sherlock.DropDownItem.Spinner.UrbanGame</item>
         
 <!--         Sherlock Tabs Customization -->
-        <item name="actionBarTabStyle">@style/ActionBarTabStyle.Example</item>
+        <item name="actionBarTabStyle">@style/ActionBarTabStyle.UrbanGame</item>
 
 <!--         Action Bar Customization -->
-		<item name="actionBarStyle">@style/ActionBar.Solid.Example</item>
+		<item name="actionBarStyle">@style/ActionBar.Solid.UrbanGame</item>
     </style>
     
     <!--         Expandable List Customization -->
@@ -57,17 +57,17 @@
     <style name="TextAppearance.Sherlock.Widget.DropDownItem.UrbanGame" parent="@style/TextAppearance.Sherlock.Widget.DropDownItem">
         <item name="android:textColor">@android:color/white</item>
     </style>
-    <style name="DropDownListView.Example" parent="@style/Widget.Sherlock.ListView.DropDown">
+    <style name="DropDownListView.UrbanGame" parent="@style/Widget.Sherlock.ListView.DropDown">
         <item name="android:listSelector">@drawable/selectable_background</item>
     </style>
     
     <!--         Sherlock Tabs Customization -->
-    <style name="ActionBarTabStyle.Example" parent="@style/Widget.Sherlock.ActionBar.TabView">
+    <style name="ActionBarTabStyle.UrbanGame" parent="@style/Widget.Sherlock.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator</item>
     </style>
 
     <!--         Action Bar Customization -->
-    <style name="ActionBar.Solid.Example" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+    <style name="ActionBar.Solid.UrbanGame" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="backgroundStacked">@drawable/ab_stacked_solid</item>
 		<item name="titleTextStyle">@style/ActionBar.Title</item>
     </style>
