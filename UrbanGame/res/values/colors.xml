@@ -7,5 +7,6 @@
     <color name="answer_green">#b0e02f</color>
     <color name="action_bar_background">#8DB600</color>
     <color name="expandable_list_header">#8DB600</color>
+    <color name="pressed">#CC99CC00</color>
 
 </resources>

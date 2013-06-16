@@ -26,7 +26,7 @@
 
 <!--         Sherlock Navigation List Customization -->
         <item name="dropDownListViewStyle">@style/DropDownListView.Example</item>
-        <item name="actionBarItemBackground">@drawable/selectable_background_example</item>
+        <item name="actionBarItemBackground">@drawable/selectable_background</item>
 		<item name="spinnerItemStyle">@style/Widget.Sherlock.DropDownItem.Spinner.UrbanGame</item>
         
 <!--         Sherlock Tabs Customization -->
@@ -58,17 +58,17 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
     <style name="DropDownListView.Example" parent="@style/Widget.Sherlock.ListView.DropDown">
-        <item name="android:listSelector">@drawable/selectable_background_example</item>
+        <item name="android:listSelector">@drawable/selectable_background</item>
     </style>
     
     <!--         Sherlock Tabs Customization -->
     <style name="ActionBarTabStyle.Example" parent="@style/Widget.Sherlock.ActionBar.TabView">
-        <item name="android:background">@drawable/tab_indicator_ab_example</item>
+        <item name="android:background">@drawable/tab_indicator</item>
     </style>
 
     <!--         Action Bar Customization -->
     <style name="ActionBar.Solid.Example" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-        <item name="backgroundStacked">@drawable/ab_stacked_solid_example</item>
+        <item name="backgroundStacked">@drawable/ab_stacked_solid</item>
 		<item name="titleTextStyle">@style/ActionBar.Title</item>
     </style>
     <style name="ActionBar.Title" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
