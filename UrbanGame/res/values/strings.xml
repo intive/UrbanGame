@@ -163,16 +163,16 @@
     <string name="answer_dialog_button_settings">Settings</string>
 
     <!-- Notifications -->
-    <string name="notification_title_game_new">New game</string>
     <string name="notification_title_game_changed">Game changed</string>
     <string name="notification_title_game_over">Game over</string>
+    <string name="notification_title_game_won">You won!</string>
+    <string name="notification_title_game_lost">You lost!</string>
     <string name="notification_title_task_new">New task</string>
     <string name="notification_title_task_changed">Task changed</string>
-    <string name="notification_message_game_new">New game %s is available</string>
-    <string name="notification_message_game_changed">Game %s has been changed</string>
-    <string name="notification_message_game_over">Game %s is over</string>
-    <string name="notification_message_task_new">New task %1$s in %2$s game is available</string>
-    <string name="notification_message_task_changed">Task %1$s in %2$s game has been changed</string>
+    <string name="notification_message_game_changed">Game %s has been changed.</string>
+    <string name="notification_message_game_over">Game %s is over.</string>
+    <string name="notification_message_task_new">New task %1$s in %2$s game is available.</string>
+    <string name="notification_message_task_changed">Task %1$s in %2$s game has been changed.</string>
     <string name="dialog_show">Show</string>
     <string name="dialog_dismiss">Dismiss</string>
 

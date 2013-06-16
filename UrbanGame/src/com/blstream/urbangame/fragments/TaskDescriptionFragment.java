@@ -5,9 +5,7 @@ import java.util.Date;
 import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +22,7 @@ import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
+import com.blstream.urbangame.database.helper.Base64ImageCoder;
 import com.blstream.urbangame.date.TimeLeftBuilder;
 
 public class TaskDescriptionFragment extends SherlockFragment implements OnClickListener {
@@ -134,15 +133,9 @@ public class TaskDescriptionFragment extends SherlockFragment implements OnClick
 	}
 	
 	private void setTaskImage() {
-		taskImageDrawable = getTaskBitmap();
+		taskImageDrawable = Base64ImageCoder.getBitmapFromStringBase64(task.getPictureBase64());
 		imageViewTaskImage.setImageBitmap(taskImageDrawable);
 		imageViewDialogTaskImage.setImageBitmap(taskImageDrawable);
-	}
-	
-	private Bitmap getTaskBitmap() {
-		String base64logo = task.getPictureBase64();
-		byte[] byteImage = Base64.decode(base64logo, Base64.DEFAULT);
-		return BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
 	}
 	
 	private void setTaskTypeIcon() {
