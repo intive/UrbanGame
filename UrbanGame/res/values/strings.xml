@@ -148,6 +148,19 @@
         <item>Gallery</item>
         <item>Camera</item>
     </string-array>
+    
+    <!-- Answer Dialog -->
+    <string name="title_right">Correct</string>
+    <string name="title_wrong">Wrong</string>
+    <string name="title_partially_right">Not so great</string>
+    <string name="title_no_internet">No Internet connection</string>
+    <string name="title_no_gps_signal">No GPS signal</string>
+    <string name="title_gps_off">GPS is off</string>
+    <string name="message_answer_score">%1$d/%2$d points</string>
+    <string name="message_no_internet">Make sure you are connected to the Internet to submit the answer.</string>
+    <string name="message_no_gps_signal">Please wait for a valid GPS signal.</string>
+    <string name="message_gps_off">Turn on GPS in the settings to submit the answer.</string>
+    <string name="answer_dialog_button_settings">Settings</string>
 
     <!-- Notifications -->
     <string name="notification_title_game_new">New game</string>

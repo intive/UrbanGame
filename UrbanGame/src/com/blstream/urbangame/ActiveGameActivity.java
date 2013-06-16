@@ -19,7 +19,7 @@ public class ActiveGameActivity extends MenuActivity {
 	public static final String GAME_ID = "game_id";
 	public static final String TAG_TAB_INFO = "fragment_info";
 	public static final String TAG_TAB_TASKS = "fragment_tasks";
-	public static final String TAG_TAB_RANKING = "fragment_tanking";
+	public static final String TAG_TAB_RANKING = "fragment_ranking";
 	private final String TAB_LAST_SELECTED = "tab";
 	
 	private TabHost tabHost;

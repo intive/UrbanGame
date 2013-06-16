@@ -37,6 +37,8 @@ public class DemoData {
 	private static final long FIRST_TASK_ID = 1000000L;
 	private final String TASK_DESCRIPTION = "Yet another dwarf got lost...";
 	
+	public static final String[] answers = { "Nothing", "Guitar", "Newspaper", "Cards" };
+	
 	private final Context context;
 	
 	private ArrayList<String> listOfGamesNames;
@@ -123,8 +125,7 @@ public class DemoData {
 		Task task;
 		PlayerTaskSpecific playerTaskSpecific;
 		
-		String question = "What this dwarf holding?";
-		String[] answers = { "Nothing", "Guitar", "Newspaper", "Cards" };
+		String question = "What this dwarf is holding?";
 		String picture = Base64ImageCoder.convertImage(context.getResources().getDrawable(R.drawable.mock_task_image));
 		boolean isRepetable;
 		boolean isHidden;
@@ -210,5 +211,22 @@ public class DemoData {
 	
 	public static Long getGameId() {
 		return Long.valueOf(FIRST_GAME_ID);
+	}
+	
+	public static Long getTaskId() {
+		return Long.valueOf(FIRST_TASK_ID);
+	}
+	
+	public static ArrayList<String> getCorrectAnswers() {
+		ArrayList<String> correctAnswers = null;
+		Random random = new Random();
+		
+		if (random.nextBoolean()) {
+			correctAnswers = new ArrayList<String>();
+			correctAnswers.add(answers[1]);
+			correctAnswers.add(answers[3]);
+		}
+		
+		return correctAnswers;
 	}
 }
