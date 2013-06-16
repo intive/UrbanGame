@@ -98,7 +98,7 @@ public class DemoData {
 				prizesInfo = PRIZE_INFO;
 				startDate = START_DATE_1;
 				playerGameSpecific = new PlayerGameSpecific(random.nextInt(20) + 1, USER, Long.valueOf(i
-					+ FIRST_GAME_ID), "");
+					+ FIRST_GAME_ID), "", false);
 			}
 			else {
 				maxNumberOfPlayers = null;
@@ -106,7 +106,7 @@ public class DemoData {
 				reward = false;
 				prizesInfo = "";
 				startDate = START_DATE_2;
-				playerGameSpecific = new PlayerGameSpecific(USER, Long.valueOf(i + FIRST_GAME_ID), "some changes");
+				playerGameSpecific = new PlayerGameSpecific(USER, Long.valueOf(i + FIRST_GAME_ID), "some changes", true);
 			}
 			
 			urbanGame = new UrbanGame(Long.valueOf(i + FIRST_GAME_ID), 1., listOfGamesNames.get((int) i), operatorName,

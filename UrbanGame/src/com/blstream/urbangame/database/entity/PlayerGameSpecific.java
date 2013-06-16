@@ -11,6 +11,7 @@ public class PlayerGameSpecific {
 	private Long gameID;
 	private Integer state;
 	private String changes;
+	private Boolean hasChanges;
 	
 	/**
 	 * use if user is participant in game
@@ -19,13 +20,15 @@ public class PlayerGameSpecific {
 	 * @param playerEmail
 	 * @param gameID
 	 * @param changes
+	 * @paran hasChanges
 	 */
-	public PlayerGameSpecific(Integer rank, String playerEmail, Long gameID, String changes) {
+	public PlayerGameSpecific(Integer rank, String playerEmail, Long gameID, String changes, Boolean hasChanges) {
 		this.rank = rank;
 		this.playerEmail = playerEmail;
 		this.gameID = gameID;
 		this.changes = changes;
 		this.setState(GAME_ACTIVE);
+		this.setHasChanges(hasChanges);
 	}
 	
 	/**
@@ -34,13 +37,15 @@ public class PlayerGameSpecific {
 	 * @param playerEmail
 	 * @param gameID
 	 * @param changes
+	 * @param hasChanges
 	 */
-	public PlayerGameSpecific(String playerEmail, Long gameID, String changes) {
+	public PlayerGameSpecific(String playerEmail, Long gameID, String changes, Boolean hasChanges) {
 		this.rank = null;
 		this.playerEmail = playerEmail;
 		this.gameID = gameID;
 		this.changes = changes;
 		this.setState(GAME_OBSERVED);
+		this.setHasChanges(hasChanges);
 	}
 	
 	/**
@@ -51,13 +56,16 @@ public class PlayerGameSpecific {
 	 * @param gameID
 	 * @param state
 	 * @param changes
+	 * @param hasChanges
 	 */
-	public PlayerGameSpecific(Integer rank, String playerEmail, Long gameID, Integer state, String changes) {
+	public PlayerGameSpecific(Integer rank, String playerEmail, Long gameID, Integer state, String changes,
+		Boolean hasChanges) {
 		this.rank = rank;
 		this.playerEmail = playerEmail;
 		this.gameID = gameID;
 		this.state = state;
 		this.changes = changes;
+		this.setHasChanges(hasChanges);
 	}
 	
 	/**
@@ -128,5 +136,19 @@ public class PlayerGameSpecific {
 	 */
 	public void setChanges(String changes) {
 		this.changes = changes;
+	}
+	
+	/**
+	 * @return the hasChanges
+	 */
+	public Boolean hasChanges() {
+		return hasChanges;
+	}
+	
+	/**
+	 * @param hasChanges the hasChanges to set
+	 */
+	public void setHasChanges(Boolean hasChanges) {
+		this.hasChanges = hasChanges;
 	}
 }

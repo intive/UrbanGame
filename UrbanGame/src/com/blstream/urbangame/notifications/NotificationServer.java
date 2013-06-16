@@ -281,7 +281,7 @@ public class NotificationServer {
 	
 	protected void changeGameStatus(UrbanGame game, String loggedPlayer, DatabaseInterface db) {
 		//changing database content
-		PlayerGameSpecific pgs = new PlayerGameSpecific(loggedPlayer, game.getID(), null);
+		PlayerGameSpecific pgs = new PlayerGameSpecific(loggedPlayer, game.getID(), null, false);
 		pgs.setState(PlayerGameSpecific.GAME_ENDED);
 		db.updateUserGameSpecific(pgs);
 	}
