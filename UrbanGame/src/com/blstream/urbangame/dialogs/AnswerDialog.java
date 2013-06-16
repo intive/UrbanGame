@@ -91,16 +91,4 @@ public class AnswerDialog implements DialogInterface.OnClickListener {
 		showDialog(dialogType, null, null);
 	}
 	
-	@Override
-	public void onClick(DialogInterface dialog, int which) {
-		
-		switch (which) {
-			case DialogInterface.BUTTON_POSITIVE:
-				if (dialogType == DialogType.GPS_OFF) {
-					Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-					context.startActivity(intent);
-				}
-				break;
-		}
-	}
 }

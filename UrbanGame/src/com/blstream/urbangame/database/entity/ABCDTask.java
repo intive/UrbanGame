@@ -89,7 +89,6 @@ public class ABCDTask extends Task {
 		for (int i = 0; i < size; i++) {
 			listOfAnswers.add(new Answer(in));
 		}
-		in.readStringArray(answers);
 	}
 	
 	public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
@@ -120,6 +119,5 @@ public class ABCDTask extends Task {
 	
 	public void setAnswersList(ArrayList<Answer> answers) {
 		listOfAnswers = answers;
-		out.writeStringArray(answers);
 	}
 }
