@@ -367,6 +367,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			game = new UrbanGame();
 			game.setPrimaryInfo(gameShortInfoFromCursor(cursor));
 			setRestOfDataForGameInfo(game, cursor);
+			cursor.close();
 		}
 		else {
 			game = null;
@@ -467,10 +468,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		return isOK;
 	}
 	
-	/**
-	 * @param date - date to be parsed into long
-	 * @return - date in long in format yyyymmddhhmmss
-	 */
+	/** @param date - date to be parsed into long
+	 * @return - date in long in format yyyymmddhhmmss */
 	private Long dateToLong(Date date) {
 		if (date == null) return null;
 		Calendar c = Calendar.getInstance();
@@ -478,10 +477,8 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		return c.getTimeInMillis();
 	}
 	
-	/**
-	 * @param longDate - long in format yyyymmddhhmmss
-	 * @return Date object derived from long parameter
-	 */
+	/** @param longDate - long in format yyyymmddhhmmss
+	 * @return Date object derived from long parameter */
 	private Date longToDate(long longDate) {
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(longDate);
