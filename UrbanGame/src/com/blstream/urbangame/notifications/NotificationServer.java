@@ -1,4 +1,4 @@
-package com.blstream.urbangame.notification;
+package com.blstream.urbangame.notifications;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,7 +7,6 @@ import java.util.Random;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
@@ -20,27 +19,120 @@ import com.blstream.urbangame.database.entity.UrbanGame;
 
 /**
  * This is a singleton notifier class. You can implement an observator interface
- * (NotificationInterface) when there will appear any change in game or task the
+ * (NotificationListener) when there will appear any change in game or task the
  * observator's interface method will be called.
  */
 
-public class NotificationHelper {
+public class NotificationServer {
+	private final static String TAG = NotificationServer.class.getSimpleName();
 	
-	private final static String TAG = NotificationHelper.class.getSimpleName();
-	
-	private final NotificationHelper instance = new NotificationHelper();
-	private final List<NotificationInterface> observators;
+	private NotificationServer instance;
+	private final List<NotificationListener> observators;
 	private final Handler mHandler;
+	private final DatabaseInterface database;
+	private final Context context;
+	private final String playerEmail;
+	
 	private Runnable serverQuery;
+	private final long timeToNextQuery = 5 * 60 * 1000; // 5 minutes
 	
-	private static long timeToNextQuery = 5 * 60 * 1000; // 5 minutes
+	public NotificationServer getInstance(Context context) {
+		if (instance == null) {
+			instance = new NotificationServer(context);
+		}
+		return instance;
+	}
 	
-	private Context context;
-	
-	private NotificationHelper() {
-		observators = new ArrayList<NotificationHelper.NotificationInterface>();
-		mHandler = new Handler();
+	private NotificationServer(Context context) {
+		this.observators = new ArrayList<NotificationListener>();
+		this.mHandler = new Handler();
+		this.context = context;
+		this.database = new Database(context);
+		this.playerEmail = database.getLoggedPlayerID();
+		
+		turnOnNotifications();
 		setServerQuery();
+	}
+	
+	public void turnOnNotifications() {
+		registerNotificationListener(new NotificationsManager(context));
+	}
+	
+	public void turnOffNotifications() {
+		for (NotificationListener notificationListener : observators) {
+			observators.remove(notificationListener);
+		}
+	}
+	
+	public synchronized void registerNotificationListener(NotificationListener notificationListener) {
+		if (observators.isEmpty()) {
+			startCallback();
+		}
+		observators.add(notificationListener);
+	}
+	
+	public synchronized void unregisterNotificationListener(NotificationListener notificationListener) {
+		observators.remove(notificationListener);
+		if (observators.isEmpty()) {
+			cancellCallback();
+		}
+	}
+	
+	private void startCallback() {
+		mHandler.postDelayed(serverQuery, 100);
+	}
+	
+	private void cancellCallback() {
+		mHandler.removeCallbacks(serverQuery);
+	}
+	
+	private synchronized void notifyGameWon(UrbanGame game) {
+		setGameHasChanges(game);
+		
+		for (NotificationListener notificationListener : observators) {
+			notificationListener.onGameWon(game);
+		}
+	}
+	
+	private synchronized void notifyGameLost(UrbanGame game) {
+		setGameHasChanges(game);
+		
+		for (NotificationListener notificationListener : observators) {
+			notificationListener.onGameLost(game);
+		}
+	}
+	
+	private synchronized void notifyGameChanged(UrbanGame oldGame, UrbanGame newGame) {
+		setGameHasChanges(newGame);
+		
+		for (NotificationListener notificationListener : observators) {
+			notificationListener.onGameChanged(oldGame, newGame);
+		}
+	}
+	
+	private void setGameHasChanges(UrbanGame newGame) {
+		// TODO SET IN DB GAME CHANGES
+	}
+	
+	private synchronized void notifyTaskNew(UrbanGame game, Task task) {
+		setTaskHasChanges(task);
+		
+		for (NotificationListener notificationListener : observators) {
+			notificationListener.onTaskNew(game, task);
+		}
+	}
+	
+	private synchronized void notifyTaskChanged(UrbanGame game, Task oldTask, Task newTask) {
+		setTaskHasChanges(newTask);
+		
+		for (NotificationListener notificationListener : observators) {
+			notificationListener.onTaskChanged(game, oldTask, newTask);
+		}
+	}
+	
+	private void setTaskHasChanges(Task task) {
+		PlayerTaskSpecific pts = database.getPlayerTaskSpecific(task.getId(), playerEmail);
+		pts.setAreChanges(true);
 	}
 	
 	private void setServerQuery() {
@@ -62,51 +154,9 @@ public class NotificationHelper {
 				List<Task> taskList = db.getTasksForGame(game.getID());
 				Task task = taskList.get(r.nextInt(taskList.size()));
 				
-				NotificationEvent event;
+				// FIXME to be implemented
+				// TODO add mock server behaviour to generate notifications 
 				
-				if (r.nextBoolean()) { //game
-					if (r.nextBoolean()) { //change status to end
-						Log.i(TAG, "GAME... changing status mock server query");
-						
-						changeGameStatus(game, loggedPlayer, db);
-						
-						//it notifies all listeners
-						event = new NotificationEvent(game.getID(), NotificationEvent.TYPE_GAME,
-							NotificationEvent.STATUS_UPDATED_STATUS);
-						notifyListeners(event);
-					}
-					else { //update something
-						Log.i(TAG, "GAME... updating some data server query");
-						
-						updateGameDataContent(r, game, db);
-						
-						//it notifies all listeners
-						event = new NotificationEvent(game.getID(), NotificationEvent.TYPE_GAME,
-							NotificationEvent.STATUS_CHANGED_DATA);
-						notifyListeners(event);
-					}
-				}
-				else { //task
-					if (r.nextBoolean()) { //change status
-						Log.i(TAG, "TASK... changing status mock server query");
-						
-						changeTaskStatus(r, task, loggedPlayer, db);
-						
-						//it notifies all listeners
-						event = new NotificationEvent(game.getID(), NotificationEvent.TYPE_TASK,
-							NotificationEvent.STATUS_UPDATED_STATUS);
-						notifyListeners(event);
-					}
-					else { //update something
-						Log.i(TAG, "TASK... updating some data mock server query");
-						
-						updateTaskDataContent(r, task, db);
-						
-						//it notifies all listeners
-						event = new NotificationEvent(task.getId(), NotificationEvent.TYPE_TASK,
-							NotificationEvent.STATUS_CHANGED_DATA);
-					}
-				}
 				//**********************//
 				//						//
 				//		M O C K	  END	//
@@ -115,93 +165,6 @@ public class NotificationHelper {
 				mHandler.postDelayed(this, timeToNextQuery);
 			}
 		};
-	}
-	
-	public NotificationHelper getInstance() {
-		return instance;
-	}
-	
-	public synchronized void addOnNotificationListener(NotificationInterface onNotification) {
-		observators.add(onNotification);
-		if (observators.size() == 1) { //when there were nothing before add
-			mHandler.postDelayed(serverQuery, 100);
-		}
-		if (context == null && onNotification != null) {
-			context = onNotification.getApplicationContext();
-		}
-	}
-	
-	public synchronized void removeOnNotificationListener(NotificationInterface onNotification) {
-		observators.remove(onNotification);
-		if (observators.size() == 0) { // when there is nothing
-			mHandler.removeCallbacks(serverQuery);
-		}
-	}
-	
-	public synchronized void notifyListeners(NotificationEvent event) {
-		for (NotificationInterface listener : observators) {
-			listener.onNotification(event);
-		}
-	}
-	
-	/**
-	 * Interface for notification listener
-	 */
-	public interface NotificationInterface {
-		/**
-		 * This method must return activity context in order to notifications
-		 * work properly
-		 */
-		public Context getApplicationContext();
-		
-		/**
-		 * @see NotificationEvent for details
-		 */
-		public void onNotification(NotificationEvent type);
-	}
-	
-	/**
-	 * It is an event that contains information about change obtained from
-	 * server. <br>
-	 * <br>
-	 * <b>getId()</b> - id of changed item (it may be game id or task id, to
-	 * determine which id it is check field type) <br>
-	 * <b>getType()</b> - type of notification event, may be only TYPE_GAME or
-	 * TYPE_TASK <br>
-	 * <b>getStatus()</b> - status of notification event, information is the
-	 * notification an update or change.
-	 */
-	public class NotificationEvent {
-		
-		public static final int TYPE_GAME = 0x1;
-		public static final int TYPE_TASK = 0x2;
-		
-		public static final int STATUS_UPDATED_STATUS = 0x11;
-		public static final int STATUS_CHANGED_DATA = 0x12;
-		
-		private final Long id;
-		private final int type;
-		private final int status;
-		
-		public NotificationEvent(Long id, int type, int status) {
-			super();
-			this.id = id;
-			this.type = type;
-			this.status = status;
-		}
-		
-		public Long getId() {
-			return id;
-		}
-		
-		public int getType() {
-			return type;
-		}
-		
-		public int getStatus() {
-			return status;
-		}
-		
 	}
 	
 	//**********************//
@@ -314,7 +277,6 @@ public class NotificationHelper {
 			newGame.setLocation(game.getLocation() + "NEW MOCK");
 		}
 		db.updateGame(newGame);
-		
 	}
 	
 	protected void changeGameStatus(UrbanGame game, String loggedPlayer, DatabaseInterface db) {
