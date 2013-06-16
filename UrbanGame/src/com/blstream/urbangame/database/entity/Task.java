@@ -1,5 +1,6 @@
 package com.blstream.urbangame.database.entity;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import android.content.res.Resources;
@@ -28,8 +29,7 @@ public abstract class Task implements Parcelable {
 	private Date endTime;
 	private Integer maxPoints;
 	
-	/**
-	 * @param id
+	/** @param id
 	 * @param type
 	 * @param title
 	 * @param pictureBase64
@@ -38,8 +38,7 @@ public abstract class Task implements Parcelable {
 	 * @param isHidden
 	 * @param numberOfHidden
 	 * @param endTime
-	 * @param maxPoints
-	 */
+	 * @param maxPoints */
 	public Task(Long id, Integer type, String title, String pictureBase64, String description, Boolean isRepetable,
 		Boolean isHidden, Integer numberOfHidden, Date endTime, Integer maxPoints) {
 		this.id = id;
@@ -71,66 +70,48 @@ public abstract class Task implements Parcelable {
 		this.maxPoints = in.readInt();
 	}
 	
-	/**
-	 * @return the id
-	 */
+	/** @return the id */
 	public Long getId() {
 		return id;
 	}
 	
-	/**
-	 * @param id the id to set
-	 */
+	/** @param id the id to set */
 	public void setId(Long id) {
 		this.id = id;
 	}
 	
-	/**
-	 * @return the type
-	 */
+	/** @return the type */
 	public Integer getType() {
 		return type;
 	}
 	
-	/**
-	 * @param type the type to set
-	 */
+	/** @param type the type to set */
 	public void setType(Integer type) {
 		this.type = type;
 	}
 	
-	/**
-	 * @return the title
-	 */
+	/** @return the title */
 	public String getTitle() {
 		return title;
 	}
 	
-	/**
-	 * @param title the title to set
-	 */
+	/** @param title the title to set */
 	public void setTitle(String title) {
 		this.title = title;
 	}
 	
-	/**
-	 * @return the pictureBase64
-	 */
+	/** @return the pictureBase64 */
 	public String getPictureBase64() {
 		return pictureBase64;
 	}
 	
-	/**
-	 * @param pictureBase64 the pictureBase64 to set
-	 */
+	/** @param pictureBase64 the pictureBase64 to set */
 	public void setPictureBase64(String pictureBase64) {
 		this.pictureBase64 = pictureBase64;
 	}
 	
-	/**
-	 * @param res - the resources obtained from getResources() [Activity method]
-	 * @return the pictureDrawable
-	 */
+	/** @param res - the resources obtained from getResources() [Activity method]
+	 * @return the pictureDrawable */
 	public Drawable getPictureDrawable(Resources res) {
 		Drawable ret = null;
 		if (pictureDrawable == null && pictureBase64 != null) {
@@ -139,96 +120,70 @@ public abstract class Task implements Parcelable {
 		return ret;
 	}
 	
-	/**
-	 * @deprecated - Shouldn't be used. Seting image only from server which is
-	 *             in base64 format
-	 * @param pictureDrawable the pictureDrawable to set
-	 */
+	/** @deprecated - Shouldn't be used. Seting image only from server which is
+	 * in base64 format
+	 * @param pictureDrawable the pictureDrawable to set */
 	@Deprecated
 	public void setPictureDrawable(Drawable pictureDrawable) {
 		this.pictureDrawable = pictureDrawable;
 	}
 	
-	/**
-	 * @return the description
-	 */
+	/** @return the description */
 	public String getDescription() {
 		return description;
 	}
 	
-	/**
-	 * @param description the description to set
-	 */
+	/** @param description the description to set */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 	
-	/**
-	 * @return the isRepetable
-	 */
+	/** @return the isRepetable */
 	public Boolean isRepetable() {
 		return isRepetable;
 	}
 	
-	/**
-	 * @param isRepetable the isRepetable to set
-	 */
+	/** @param isRepetable the isRepetable to set */
 	public void setIsRepetable(Boolean isRepetable) {
 		this.isRepetable = isRepetable;
 	}
 	
-	/**
-	 * @return the isHidden
-	 */
+	/** @return the isHidden */
 	public Boolean isHidden() {
 		return isHidden;
 	}
 	
-	/**
-	 * @param isHidden the isHidden to set
-	 */
+	/** @param isHidden the isHidden to set */
 	public void setIsHidden(Boolean isHidden) {
 		this.isHidden = isHidden;
 	}
 	
-	/**
-	 * @return the numberOfHidden
-	 */
+	/** @return the numberOfHidden */
 	public Integer getNumberOfHidden() {
 		return numberOfHidden;
 	}
 	
-	/**
-	 * @param numberOfHidden the numberOfHidden to set
-	 */
+	/** @param numberOfHidden the numberOfHidden to set */
 	public void setNumberOfHidden(Integer numberOfHidden) {
 		this.numberOfHidden = numberOfHidden;
 	}
 	
-	/**
-	 * @return the endTime
-	 */
+	/** @return the endTime */
 	public Date getEndTime() {
 		return endTime;
 	}
 	
-	/**
-	 * @param endTime the endTime to set
-	 */
+	/** @param endTime the endTime to set */
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
 	
-	/**
-	 * @return the maxPoints
-	 */
+	/** @return the maxPoints */
 	public Integer getMaxPoints() {
 		return maxPoints;
 	}
 	
-	/**
-	 * @param maxPoints the maxPoints to set
-	 */
+	/** @param maxPoints the maxPoints to set */
 	public void setMaxPoints(Integer maxPoints) {
 		this.maxPoints = maxPoints;
 	}
@@ -251,5 +206,33 @@ public abstract class Task implements Parcelable {
 		out.writeInt(numberOfHidden);
 		out.writeSerializable(endTime);
 		out.writeInt(maxPoints);
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		
+		if (object == this) return true;
+		if (object == null || object.getClass() != this.getClass()) return false;
+		
+		Task task = (Task) object;
+		
+		if (getDescription().equals(task.getDescription()) && getEndTime().equals(task.getEndTime())
+			&& getId().equals(task.getId()) && getMaxPoints().equals(task.getMaxPoints())
+			&& getNumberOfHidden().equals(task.getNumberOfHidden())
+			&& getPictureBase64().equals(task.getPictureBase64()) && getTitle().equals(task.getTitle())
+			&& getType().equals(task.getType())) {
+			if (getType() == Task.TASK_TYPE_ABCD) {
+				ABCDTask thisABCDtask = (ABCDTask) this;
+				ABCDTask ABCDtask = (ABCDTask) task;
+				
+				if (thisABCDtask.getQuestion().equals(ABCDtask.getQuestion())
+					&& Arrays.equals(thisABCDtask.getAnswers(), ABCDtask.getAnswers())) return true;
+				else return false;
+			}
+			else return true;
+		}
+		
+		return false;
+		
 	}
 }

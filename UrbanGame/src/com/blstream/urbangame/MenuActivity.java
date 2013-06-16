@@ -8,6 +8,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.blstream.urbangame.notifications.NotificationServer;
 import com.blstream.urbangame.session.LoginManager;
 
 //formatter:off
@@ -36,7 +37,7 @@ import com.blstream.urbangame.session.LoginManager;
 		
 		return true;
 	}
-	
+
 =======
 *  
 >>>>>>> 8b040ff18476ea6f4160d75d45563096e138a1a1
@@ -63,20 +64,25 @@ public class MenuActivity extends SherlockFragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		this.urbanGameApplication = (UrbanGameApplication) getApplication();
 		this.loginManager = LoginManager.getInstance(MenuActivity.this);
 		getSupportActionBar().setBackgroundDrawable(
 			new ColorDrawable(getResources().getColor(R.color.action_bar_background)));
+		urbanGameApplication.incremenetNumberOfRunningActivities();
+		// start notification server
+		NotificationServer.getInstance(this);
+		NotificationServer.getInstance(this).setApplication(urbanGameApplication);
+		
 	}
 	
-	/**
-	 * onResume() and onPause() from {@link UrbanGameApplication} methods are
-	 * invoked to set flag if application is running in background or not
-	 */
+	/** onResume() and onPause() from {@link UrbanGameApplication} methods are
+	 * invoked to set flag if application is running in background or not */
 	@Override
 	protected void onResume() {
 		super.onResume();
 		urbanGameApplication.onResume();
+		NotificationServer.getInstance(this).updateContext(this);
 	}
 	
 	@Override
@@ -84,6 +90,12 @@ public class MenuActivity extends SherlockFragmentActivity {
 		super.onPause();
 		urbanGameApplication.onPause();
 		loginManager = LoginManager.getInstance(MenuActivity.this);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		urbanGameApplication.decrementNumberOfRunningActivities();
 	}
 	
 	@Override
