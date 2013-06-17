@@ -1,5 +1,6 @@
 package com.blstream.urbangame;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -95,18 +96,37 @@ public class GamesListActivity extends MenuActivity implements OnChildClickListe
 		loginItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				Log.i(TAG, "onMenuItemClick(): " + item.getTitleCondensed());
-				Intent intent = getLoginIntent();
-				startActivity(intent);
+				boolean isUserLoggedIn = isUserLoggedIn();
+				startActivityDependOnUserState(isUserLoggedIn);
 				return true;
 			}
 			
-			private Intent getLoginIntent() {
+			private boolean isUserLoggedIn() {
 				LoginManager loginManager = LoginManager.getInstance(GamesListActivity.this);
 				boolean isUserLoggedIn = loginManager.isUserLoggedIn();
-				Intent intent = new Intent(GamesListActivity.this, isUserLoggedIn ? MyGamesActivity.class
-					: LoginRegisterActivity.class);
+				return isUserLoggedIn;
+			}
+			
+			private void startActivityDependOnUserState(boolean isUserLoggedIn) {
+				Intent intent = getActivityDependOnUserState(isUserLoggedIn);
+				startActivity(intent);
+				finish();
+			}
+			
+			private Intent getActivityDependOnUserState(boolean isUserLoggedIn) {
+				Intent intent = null;
+				if (isUserLoggedIn) {
+					intent = getIntentFromClass(MyGamesActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				}
+				else {
+					intent = getIntentFromClass(LoginRegisterActivity.class);
+				}
 				return intent;
+			}
+			
+			private Intent getIntentFromClass(Class<? extends Activity> cls) {
+				return new Intent(GamesListActivity.this, cls);
 			}
 		});
 	}

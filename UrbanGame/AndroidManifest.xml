@@ -8,11 +8,10 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".UrbanGameApplication"
         android:allowBackup="true"
@@ -35,7 +34,6 @@
         <activity android:name=".ActiveGameActivity" />
         <activity android:name=".ActiveTaskActivity" />
         <activity android:name=".LoginRegisterActivity" />
-        <activity android:name=".ProfileActivity" />
         <activity android:name=".MyGamesActivity" />
 
         <service android:name=".notifications.NotificationService" />
