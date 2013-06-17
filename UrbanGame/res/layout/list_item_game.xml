@@ -15,27 +15,36 @@
         android:contentDescription="@string/contentDescription_gameLogo"
         android:src="@drawable/ic_launcher_big" />
 
-    <TextView
-        android:id="@+id/textViewGameName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/imageViewGameLogo"
-        android:text="Krasnale Wrocławskie"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <ImageView
-        android:id="@+id/imageViewGamePrize"
+    <LinearLayout
+        android:id="@+id/listItemTitleContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:contentDescription="@string/contentDescription_prize"
-        android:src="@drawable/mock_prize" />
+        android:layout_toRightOf="@+id/imageViewGameLogo"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:id="@+id/textViewGameName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:text="Krasnale Wrocławskie"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageView
+            android:id="@+id/imageViewGamePrize"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/contentDescription_prize"
+            android:src="@drawable/mock_prize" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/imageViewOperatorLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewGameName"
+        android:layout_below="@+id/listItemTitleContainer"
         android:layout_marginBottom="@dimen/view_margin"
         android:layout_marginRight="@dimen/view_margin"
         android:layout_marginTop="@dimen/view_margin"
