@@ -48,11 +48,7 @@ public class ActiveGameActivity extends MenuActivity {
 	private void fillTabHost() {
 		tabManager = new TabManager(this, tabHost, R.id.realtabcontent);
 		Bundle extras = getIntent().getExtras();
-		
-		String tagGameInfo = getString(R.string.tab_game_gameInfo);
-		TabSpec tabGameInfo = tabHost.newTabSpec(TAG_TAB_INFO).setIndicator(tagGameInfo);
-		tabManager.addTab(tabGameInfo, GameInfoFragment.class, extras);
-		
+	
 		String tagTasks = getString(R.string.tab_game_tasks);
 		TabSpec tabTasks = tabHost.newTabSpec(TAG_TAB_TASKS).setIndicator(tagTasks);
 		tabManager.addTab(tabTasks, GameTasksFragment.class, extras);
@@ -60,6 +56,10 @@ public class ActiveGameActivity extends MenuActivity {
 		String tagRanking = getString(R.string.tab_game_ranking);
 		TabSpec tabRanking = tabHost.newTabSpec(TAG_TAB_RANKING).setIndicator(tagRanking);
 		tabManager.addTab(tabRanking, GameRankingFragment.class, extras);
+		
+		String tagGameInfo = getString(R.string.tab_game_gameInfo);
+		TabSpec tabGameInfo = tabHost.newTabSpec(TAG_TAB_INFO).setIndicator(tagGameInfo);
+		tabManager.addTab(tabGameInfo, GameInfoFragment.class, extras);
 	}
 	
 	@Override
