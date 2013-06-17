@@ -17,7 +17,7 @@ import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 
-public class GamesListActivity extends AbstractGamesList implements OnChildClickListener {
+public class GamesListActivity extends AbstractGamesListActivity implements OnChildClickListener {
 	private GamesListAdapter adapter;
 	private ExpandableListView list;
 	

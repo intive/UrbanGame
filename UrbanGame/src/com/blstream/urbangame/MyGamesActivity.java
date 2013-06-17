@@ -32,7 +32,7 @@ import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 
-public class MyGamesActivity extends AbstractGamesList implements OnChildClickListener, OnNavigationListener {
+public class MyGamesActivity extends AbstractGamesListActivity implements OnChildClickListener, OnNavigationListener {
 	private ExpandableListView mExpandableList;
 	private ArrayList<ExpandableListHeader> mArrayHeaders;
 	

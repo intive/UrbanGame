@@ -12,7 +12,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 
-public abstract class AbstractGamesList extends AbstractMenuActivity implements OnNavigationListener {
+public abstract class AbstractGamesListActivity extends AbstractMenuActivity implements OnNavigationListener {
 	private ArrayAdapter<CharSequence> spinnerAdapter;
 	
 	@Override
@@ -123,7 +123,7 @@ public abstract class AbstractGamesList extends AbstractMenuActivity implements 
 			}
 			
 			private Intent getIntentFromClass(Class<? extends Activity> cls) {
-				return new Intent(AbstractGamesList.this, cls);
+				return new Intent(AbstractGamesListActivity.this, cls);
 			}
 		});
 	}
