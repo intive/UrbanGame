@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
 import com.blstream.urbangame.fragments.LoginRegisterPageAdapter;
-import com.blstream.urbangame.session.LoginManager;
 import com.blstream.urbangame.session.RegistrationManager;
 
 public class LoginRegisterActivity extends MenuActivity {
@@ -17,7 +16,6 @@ public class LoginRegisterActivity extends MenuActivity {
 	private LoginRegisterPageAdapter sectionsPagerAdapter;
 	private ViewPager viewPager;
 	
-	private LoginManager loginManager;
 	private RegistrationManager registrationManager;
 	
 	@Override
@@ -27,7 +25,6 @@ public class LoginRegisterActivity extends MenuActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.activity_login_register);
 		
-		loginManager = LoginManager.getInstance(LoginRegisterActivity.this);
 		registrationManager = RegistrationManager.getInstance(LoginRegisterActivity.this);
 		sectionsPagerAdapter = new LoginRegisterPageAdapter(getSupportFragmentManager(), LoginRegisterActivity.this);
 		viewPager = (ViewPager) findViewById(R.id.view_pager);
@@ -47,15 +44,15 @@ public class LoginRegisterActivity extends MenuActivity {
 			finishAndGoBackToGame(loginResult);
 		}
 		else {
-			finishAndOpenProfileAcitivty();
+			finishAndOpenMyGamesAcitivty();
 		}
 	}
 	
-	private void finishAndOpenProfileAcitivty() {
-		Intent openProfileActivity = new Intent(LoginRegisterActivity.this,
-			com.blstream.urbangame.ProfileActivity.class);
-		openProfileActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(openProfileActivity);
+	private void finishAndOpenMyGamesAcitivty() {
+		Intent openMyGamesActivity = new Intent(LoginRegisterActivity.this,
+			com.blstream.urbangame.MyGamesActivity.class);
+		openMyGamesActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(openMyGamesActivity);
 		this.finish();
 	}
 	
@@ -67,5 +64,12 @@ public class LoginRegisterActivity extends MenuActivity {
 	public void registerAndLoginUser(String email, String displayName, String password) {
 		registrationManager.registerUser(email, password, displayName, null);
 		loginUser(email);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(LoginRegisterActivity.this, GamesListActivity.class);
+		startActivity(intent);
+		super.onBackPressed();
 	}
 }

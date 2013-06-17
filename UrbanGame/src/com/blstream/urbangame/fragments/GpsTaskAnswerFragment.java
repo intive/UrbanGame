@@ -200,9 +200,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		if (networkInfo == null) return false;
-		if (!networkInfo.isConnected()) return false;
-		if (!networkInfo.isAvailable()) return false;
-		return true;
+		return networkInfo.isAvailable() && networkInfo.isConnected();
 	}
 	
 	@Override
