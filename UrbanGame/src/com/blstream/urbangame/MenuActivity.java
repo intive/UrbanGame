@@ -60,6 +60,7 @@ public boolean onMenuItemSelected(int featureId, MenuItem item) {
 public class MenuActivity extends SherlockFragmentActivity {
 	private UrbanGameApplication urbanGameApplication;
 	private LoginManager loginManager;
+	private NotificationServer notificationServer;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +71,8 @@ public class MenuActivity extends SherlockFragmentActivity {
 		getSupportActionBar().setBackgroundDrawable(
 			new ColorDrawable(getResources().getColor(R.color.action_bar_background)));
 		urbanGameApplication.incremenetNumberOfRunningActivities();
-		// start notification server
-		NotificationServer.getInstance(this);
-		NotificationServer.getInstance(this).setApplication(urbanGameApplication);
-		
+		notificationServer = NotificationServer.getInstance(this);
+		notificationServer.setApplication(urbanGameApplication);
 	}
 	
 	/** onResume() and onPause() from {@link UrbanGameApplication} methods are
@@ -82,7 +81,7 @@ public class MenuActivity extends SherlockFragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		urbanGameApplication.onResume();
-		NotificationServer.getInstance(this).updateContext(this);
+		notificationServer.updateContext(this);
 	}
 	
 	@Override

@@ -2,6 +2,8 @@ package com.blstream.urbangame.database.entity;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
@@ -321,4 +323,18 @@ public class UrbanGame {
 		
 		return false;
 	}
+	
+	@Override
+	public int hashCode() {
+		HashCodeBuilder builder = new HashCodeBuilder();
+		builder.append(getPrimaryInfo());
+		builder.append(getComments());
+		builder.append(getDescription());
+		builder.append(getDifficulty());
+		builder.append(getGameVersion());
+		builder.append(getPrizesInfo());
+		builder.append(getWinningStrategy());
+		return builder.toHashCode();
+	}
+	
 }

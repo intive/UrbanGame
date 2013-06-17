@@ -3,13 +3,15 @@ package com.blstream.urbangame;
 import android.app.Application;
 import android.util.Log;
 
-/** UrbanGameApplication class is accessible within whole application as a global
- * object to store common data for all of the activities and fragments. */
+/** 
+ * UrbanGameApplication class is accessible within whole application as a global
+ * object to store common data for all of the activities and fragments.
+ *  */
 public class UrbanGameApplication extends Application {
 	private final static String TAG = "UrbanGameApplication";
 	
 	private boolean isAppInBackground;
-	private static int numberOfRunnigActivities = 0;
+	private int numberOfRunnigActivities = 0;
 	
 	@Override
 	public void onCreate() {

@@ -3,6 +3,8 @@ package com.blstream.urbangame.database.entity;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
@@ -218,8 +220,8 @@ public abstract class Task implements Parcelable {
 		
 		if (getDescription().equals(task.getDescription()) && getEndTime().equals(task.getEndTime())
 			&& getId().equals(task.getId()) && getMaxPoints().equals(task.getMaxPoints())
-			&& getNumberOfHidden().equals(task.getNumberOfHidden())
-			&& getPictureBase64().equals(task.getPictureBase64()) && getTitle().equals(task.getTitle())
+			&& isHidden().equals(task.isHidden()) && isRepetable().equals(task.isRepetable())
+			&& getNumberOfHidden().equals(task.getNumberOfHidden()) && getTitle().equals(task.getTitle())
 			&& getType().equals(task.getType())) {
 			if (getType() == Task.TASK_TYPE_ABCD) {
 				ABCDTask thisABCDtask = (ABCDTask) this;
@@ -235,4 +237,28 @@ public abstract class Task implements Parcelable {
 		return false;
 		
 	}
+	
+	@Override
+	public int hashCode() {
+		
+		HashCodeBuilder builder = new HashCodeBuilder();
+		
+		builder.append(getDescription());
+		builder.append(getEndTime());
+		builder.append(getId());
+		builder.append(isHidden());
+		builder.append(isRepetable());
+		builder.append(getMaxPoints());
+		builder.append(getNumberOfHidden());
+		builder.append(getTitle());
+		
+		if (getType() == Task.TASK_TYPE_ABCD) {
+			ABCDTask thisABCDtask = (ABCDTask) this;
+			builder.append(thisABCDtask.getQuestion());
+			builder.append(thisABCDtask.getAnswers());
+		}
+		
+		return builder.toHashCode();
+	}
+	
 }

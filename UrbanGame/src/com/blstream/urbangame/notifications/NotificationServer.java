@@ -596,7 +596,7 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 	
 	protected void setWebServerQuery() {
 		noWebServerQuery = false;
-		timeToNextQuery = 30 * 1000; // 3 minutes
+		timeToNextQuery = 3 * 60 * 1000; // 3 minutes
 		initQueryCountDownTimer(timeToNextQuery);
 	}
 	
