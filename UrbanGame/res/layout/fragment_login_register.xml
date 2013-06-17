@@ -7,6 +7,10 @@
     android:gravity="center"
     android:orientation="vertical" >
 
+    <!-- WARINGN -->
+    <!-- DELETE ALL HARDCODED STRINGS IN PRODUCTION (RELEASE) -->
+    <!-- THEY ONLY HELP US NOT TO PROVIDE THEM EACH TIME WE'RE TESTING APP -->
+
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="match_parent"
@@ -42,5 +46,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_login" />
+
+    <EditText>
+    </EditText>
 
 </LinearLayout>
