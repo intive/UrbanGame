@@ -15,16 +15,7 @@ gen/
 # Local configuration file (sdk path, etc)
 local.properties
 proguard-project.txt
-.classpath
-project.properties
 
 # Eclipse project files
 .settings/
 .metadata/
-
-# Other folders not revelant to project
-UX/
-
-# some configuration files
-UrbanGame/.classpath
-UrbanGame/lint.xml

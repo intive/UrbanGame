@@ -7,26 +7,22 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.blstream.urbangame.example.DemoData;
 import com.blstream.urbangame.session.LoginManager;
 
+/**
+ * SplashScreen for application, which is not kept in history stack.
+ */
 public class SplashScreenActivity extends SherlockFragmentActivity {
-	private LoginManager loginManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		//FIXME delete mock when not needed
-		DemoData mock = new DemoData(this);
-		mock.insertDataIntoDatabase();
+		new DemoData(this).insertDataIntoDatabase();
 		
-		loginManager = LoginManager.getInstance(SplashScreenActivity.this);
 		startGamesActivity();
 	}
 	
 	private void startGamesActivity() {
-		openMyGamesIfUserLoggedIn();
-	}
-	
-	private void openMyGamesIfUserLoggedIn() {
 		if (isUserLoggedIn()) {
 			startMyGamesActivity();
 		}
@@ -44,6 +40,7 @@ public class SplashScreenActivity extends SherlockFragmentActivity {
 	}
 	
 	private boolean isUserLoggedIn() {
+		LoginManager loginManager = LoginManager.getInstance(SplashScreenActivity.this);
 		return loginManager.isUserLoggedIn();
 	}
 	
