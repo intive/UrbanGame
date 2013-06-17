@@ -12,7 +12,7 @@ import com.blstream.urbangame.fragments.GameRankingFragment;
 import com.blstream.urbangame.fragments.GameTasksFragment;
 import com.blstream.urbangame.fragments.TabManager;
 
-public class ActiveGameActivity extends MenuActivity {
+public class ActiveGameActivity extends AbstractMenuActivity {
 	
 	private final String TAG = ActiveGameActivity.class.getSimpleName();
 	

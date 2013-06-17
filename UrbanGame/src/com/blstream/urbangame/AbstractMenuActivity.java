@@ -59,7 +59,7 @@ public boolean onMenuItemSelected(int featureId, MenuItem item) {
 **************************************************** */
 
 /**
- * MenuActivity is abstract super class for all of the activities in
+ * AbstractMenuActivity is abstract super class for all of the activities in
  * application. It provides the following features:
  * 		a) For the user there is overflow menu which
  * 		   allows to perform simple actions like:
@@ -73,9 +73,8 @@ public boolean onMenuItemSelected(int featureId, MenuItem item) {
  * 		c) Subclasses are also capable to finish themselves after receiving LOGOUT_ACTION intent
  */
 //formatter:on
-public abstract class MenuActivity extends SherlockFragmentActivity {
-	public final static String LOGOUT_ACTION = "com.blstream.urbangame.LOGOUT";
-	
+public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
+	protected final static String LOGOUT_ACTION = "com.blstream.urbangame.LOGOUT";
 	protected UrbanGameApplication urbanGameApplication;
 	protected LoginManager loginManager;
 	private LocalBroadcastManager localBroadcastManager;
@@ -84,7 +83,7 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.urbanGameApplication = (UrbanGameApplication) getApplication();
-		this.localBroadcastManager = LocalBroadcastManager.getInstance(MenuActivity.this);
+		this.localBroadcastManager = LocalBroadcastManager.getInstance(AbstractMenuActivity.this);
 		
 		setUpBroadcastReceiver();
 		setStyleToActionBar();
@@ -125,7 +124,7 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		urbanGameApplication.onResume();
-		loginManager = LoginManager.getInstance(MenuActivity.this);
+		loginManager = LoginManager.getInstance(AbstractMenuActivity.this);
 	}
 	
 	@Override
@@ -143,12 +142,16 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 	}
 	
 	private void configureLogoutMenuItem(Menu menu) {
-		if (loginManager.isUserLoggedIn()) {
+		if (isUserLoggedIn()) {
 			menu.findItem(R.id.menu_logout).setVisible(true);
 		}
 		else {
 			menu.findItem(R.id.menu_logout).setVisible(false);
 		}
+	}
+
+	protected boolean isUserLoggedIn() {
+		return loginManager.isUserLoggedIn();
 	}
 	
 	@Override
@@ -183,7 +186,7 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 	}
 	
 	private Intent getLogoutIntent() {
-		Intent gamesListActivity = new Intent(MenuActivity.this, GamesListActivity.class);
+		Intent gamesListActivity = new Intent(AbstractMenuActivity.this, GamesListActivity.class);
 		gamesListActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		gamesListActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		return gamesListActivity;

@@ -17,7 +17,7 @@ import com.blstream.urbangame.fragments.GpsTaskAnswerFragment;
 import com.blstream.urbangame.fragments.TabManager;
 import com.blstream.urbangame.fragments.TaskDescriptionFragment;
 
-public class ActiveTaskActivity extends MenuActivity {
+public class ActiveTaskActivity extends AbstractMenuActivity {
 	private final String TAG = ActiveTaskActivity.class.getSimpleName();
 	
 	public static final String TASK_ID = "task_id";

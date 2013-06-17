@@ -23,7 +23,7 @@ import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.example.ExampleData;
 
-public class GameDetailsActivity extends MenuActivity implements OnClickListener {
+public class GameDetailsActivity extends AbstractMenuActivity implements OnClickListener {
 	public static final String TAG = "GameDetailsActivity";
 	public static final String GAME_KEY = "gameID";
 	public static final Long GAME_NOT_FOUND = -1L;
