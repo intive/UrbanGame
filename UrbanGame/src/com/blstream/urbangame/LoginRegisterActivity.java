@@ -46,7 +46,9 @@ public class LoginRegisterActivity extends MenuActivity {
 		if (ACTION_RETURN_LOGIN_RESULT.equals(action)) {
 			finishAndGoBackToGame(loginResult);
 		}
-		finishAndOpenProfileAcitivty();
+		else {
+			finishAndOpenProfileAcitivty();
+		}
 	}
 	
 	private void finishAndOpenProfileAcitivty() {
