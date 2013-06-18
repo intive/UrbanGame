@@ -43,7 +43,9 @@ public class LoginRegisterActivity extends AbstractMenuActivity {
 		if (ACTION_RETURN_LOGIN_RESULT.equals(action)) {
 			finishAndGoBackToGame(loginResult);
 		}
-		finishAndOpenMyGamesAcitivty();
+		else {
+			finishAndOpenMyGamesAcitivty();
+		}
 	}
 	
 	private void finishAndOpenMyGamesAcitivty() {

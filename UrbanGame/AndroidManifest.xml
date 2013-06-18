@@ -22,10 +22,9 @@
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"
             android:noHistory="true"
-            android:theme="@style/Theme.Sherlock.NoActionBar" >
-            <intent-filter>
+            android:theme="@style/Theme.Sherlock.NoActionBar" >         
+               <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -35,7 +34,6 @@
         <activity android:name=".ActiveTaskActivity" />
         <activity android:name=".LoginRegisterActivity" />
         <activity android:name=".MyGamesActivity" />
-
         <service android:name=".notifications.NotificationService" />
     </application>
 
