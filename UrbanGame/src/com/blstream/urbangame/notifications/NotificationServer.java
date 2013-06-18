@@ -62,73 +62,18 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 			
 			// If query returned detailed information about single UrbanGame
 				case GetUrbanGameDetails:
-					
-					UrbanGame serverGame = webResponse.getUrbanGame();
-					if (serverGame != null) {
-						UrbanGame databaseGame = database.getGameInfo(serverGame.getID());
-						
-						// If serverGame is not in a database
-						if (databaseGame == null) {
-							notifyGameChanged(serverGame, serverGame);
-							Log.i(TAG, "web query new game " + serverGame.getID());
-						}
-						else {
-							if (!databaseGame.equals(serverGame)) {
-								notifyGameChanged(databaseGame, serverGame);
-								Log.i(TAG, "web query game changed " + serverGame.getID());
-							}
-							else {
-								Log.i(TAG, "server and database game equal " + serverGame.getID());
-							}
-						}
-						
-						// Database has got actual info for a game.
-						// Now issue query to get a task list for the game.
-						WebServerHelper.getTaskList(this, serverGame.getID().longValue());
-					}
-					
+					getUrbanGameDetails(webResponse);
 					break;
 				
 				// if query returned list of short info for all games
 				case GetUrbanGameBaseList: {
-					List<UrbanGameShortInfo> serverGames = webResponse.getUrbanGameShortInfoList();
-					
-					if (serverGames != null) {
-						// Get detailed information for every game from a server
-						for (UrbanGameShortInfo game : serverGames) {
-							WebServerHelper.getUrbanGameDetails(this, game.getID().longValue());
-						}
-					}
+					getUrbanGameBaseList(webResponse);
 					break;
 					
 				}
 				// if query returned list of Tasks for a particular game
 				case GetTaskList: {
-					
-					List<Task> serverTasks = webResponse.getTaskList();
-					if (serverTasks != null) {
-						Task databaseTask;
-						for (Task serverTask : serverTasks) {
-							databaseTask = database.getTask(serverTask.getId());
-							
-							// If serverTask is not in database
-							if (databaseTask == null) {
-								notifyTaskNew(database.getGameInfo(webResponse.getGameId()), serverTask);
-								Log.i(TAG, "web query new task " + serverTask.getId());
-							}
-							else {
-								if (!databaseTask.equals(serverTask)) {
-									notifyTaskChanged(database.getGameInfo(webResponse.getGameId()), databaseTask,
-										serverTask);
-									Log.i(TAG, "web query task changed " + serverTask.getId());
-								}
-								else {
-									Log.i(TAG, "server and database task equal " + serverTask.getId());
-								}
-							}
-						}
-					}
-					
+					getTaskList(webResponse);
 					break;
 				}
 				
@@ -307,9 +252,6 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 				};
 			});
 		}
-		else {
-			
-		}
 	}
 	
 	private void setTaskHasChanges(UrbanGame game, Task task) {
@@ -337,6 +279,68 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 				asyncNotificationQuery.execute();
 			}
 		};
+	}
+	
+	private void getUrbanGameDetails(WebResponse webResponse) {
+		UrbanGame serverGame = webResponse.getUrbanGame();
+		if (serverGame != null) {
+			UrbanGame databaseGame = database.getGameInfo(serverGame.getID());
+			
+			// If serverGame is not in a database
+			if (databaseGame == null) {
+				notifyGameChanged(serverGame, serverGame);
+				Log.i(TAG, "web query new game " + serverGame.getID());
+			}
+			else {
+				if (!databaseGame.equals(serverGame)) {
+					notifyGameChanged(databaseGame, serverGame);
+					Log.i(TAG, "web query game changed " + serverGame.getID());
+				}
+				else {
+					Log.i(TAG, "server and database game equal " + serverGame.getID());
+				}
+			}
+			
+			// Database has got actual info for a game.
+			// Now issue query to get a task list for the game.
+			WebServerHelper.getTaskList(this, serverGame.getID().longValue());
+		}
+	}
+	
+	private void getUrbanGameBaseList(WebResponse webResponse) {
+		List<UrbanGameShortInfo> serverGames = webResponse.getUrbanGameShortInfoList();
+		
+		if (serverGames != null) {
+			// Get detailed information for every game from a server
+			for (UrbanGameShortInfo game : serverGames) {
+				WebServerHelper.getUrbanGameDetails(this, game.getID().longValue());
+			}
+		}
+	}
+	
+	private void getTaskList(WebResponse webResponse) {
+		List<Task> serverTasks = webResponse.getTaskList();
+		if (serverTasks != null) {
+			Task databaseTask;
+			for (Task serverTask : serverTasks) {
+				databaseTask = database.getTask(serverTask.getId());
+				
+				// If serverTask is not in database
+				if (databaseTask == null) {
+					notifyTaskNew(database.getGameInfo(webResponse.getGameId()), serverTask);
+					Log.i(TAG, "web query new task " + serverTask.getId());
+				}
+				else {
+					if (!databaseTask.equals(serverTask)) {
+						notifyTaskChanged(database.getGameInfo(webResponse.getGameId()), databaseTask, serverTask);
+						Log.i(TAG, "web query task changed " + serverTask.getId());
+					}
+					else {
+						Log.i(TAG, "server and database task equal " + serverTask.getId());
+					}
+				}
+			}
+		}
 	}
 	
 	private class AsyncNotificationQuery extends AsyncTask<Void, Void, Void> {
