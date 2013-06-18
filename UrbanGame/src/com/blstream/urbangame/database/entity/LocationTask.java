@@ -1,11 +1,14 @@
 package com.blstream.urbangame.database.entity;
 
 import java.util.Date;
+import java.util.LinkedList;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class LocationTask extends Task {
+	
+	private LinkedList<LocationTaskAnswer> taskAnswers;
 	
 	public LocationTask() {
 		super();
@@ -29,8 +32,24 @@ public class LocationTask extends Task {
 			endTime, maxPoints);
 	}
 	
+	//TODO get Answers array
+	
 	public LocationTask(Parcel in) {
 		super(in);
+	}
+	
+	/**
+	 * @return task answers
+	 */
+	public LinkedList<LocationTaskAnswer> getTaskAnswers() {
+		return taskAnswers;
+	}
+	
+	/**
+	 * @param taskAnswers
+	 */
+	public void setTaskAnswers(LinkedList<LocationTaskAnswer> taskAnswers) {
+		this.taskAnswers = taskAnswers;
 	}
 	
 	public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
