@@ -19,6 +19,7 @@
 @tareaheight: 131px;
 @hfooter: 130px;
 @mapheight: 300px;
+@mapwidth: 350px;
 
 /* margins, paddings */
 @mhmarginbottom: 20px;
@@ -350,9 +351,18 @@ caption{
     font-size: 130%;
     font-weight: bold;
 }
-google-map{
-    display: block;
+.small-font{
+    font-size: 70%;
+}
+#gpsMap{
     height: @mapheight;
+    /* width: @mapwidth; */
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    margin: 0;
+    padding: 0;
     }
 #taskslist{
     	thead tr th {

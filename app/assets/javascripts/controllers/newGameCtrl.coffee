@@ -50,21 +50,51 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
     $scope.editable = true
     $scope.dateFormat = Messages("dateformatlong")
 
-    # ------------------ GOOGLE MAP
-    $scope.mapOpts = {
-        center: {
-            latitude: 51.108051,
-            longitude: 17.038532,
-        },
-        markers: [], 
-        zoom: 15
-    }
-    angular.extend $scope, $scope.mapOpts
+    # ------------------ MAP (task list)
+    map = null
+    overlays = []
+    latlngBounds = null
+    $scope.setMap = ->
+        mapOptions = {
+            zoom: 11,
+            center: new google.maps.LatLng(51.107885, 17.038538),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        map = new google.maps.Map(document.getElementById("gpsMap"), mapOptions);
     
-    $scope.mapOpts.markers= [{
-            latitude: 51.108051,
-            longitude: 17.038532,
-        }]
+    $scope.showMarkers = (taskIndex) ->
+        latlngBounds = new google.maps.LatLngBounds()
+        overlay.setMap(null) for overlay in overlays
+        overlays = []
+        task = $scope.tasks[taskIndex]
+        if task.type == "GPS"
+            $scope.createMarker loc, task.name for loc in task.locations
+            map.fitBounds(latlngBounds)
+        else
+            map.setCenter(new google.maps.LatLng(51.107885, 17.038538))
+            map.setZoom(7)
+                
+    $scope.createMarker = (loc,taskName) ->
+        marker = new google.maps.Marker {
+            position: new google.maps.LatLng(loc.lat,loc.lng)
+            }
+        circle =  new google.maps.Circle {
+            radius: loc.radius,
+            strokeColor: "#000000",
+            strokeOpacity: 1,
+            strokeWeight: 1.5,
+            fillColor: "#00FF00",
+            fillOpacity: 0.45,
+            center: marker.position
+        }
+        latlngBounds.extend(marker.position)
+        overlays.push(marker)
+        overlays.push(circle)
+        circle.setMap(map)
+        marker.setMap(map)
+    
+            
+            
     
     # ------------------ EDIT MODE
     $scope.isEdit = ->
@@ -79,7 +109,11 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         if $scope.isEdit()
             resource["get"]()
 
-    $scope.tasks = [{name:"taskOne", type:"GPS", visible:"None", version:1.0, maxPoints:7},{name:"taskOne", type:"GPS", visible:"None", version:1.0, maxPoints:10}]
+    $scope.tasks = [
+        {name:"taskOne", type:"GPS", visible:"None", locations: [{lat:51.107885,lng:17.042338,radius:232},{lat:51.107885,lng:17.028538,radius:122}], version:1.0, maxPoints:7},
+        {name:"taskTwo", type:"ABC", visible:"None", version:1.0, maxPoints:10},
+        {name:"taskThree", type:"GPS", visible:"None", locations: [{lat:51.10235,lng:17.042328,radius:43},{lat:51.137885,lng:17.038538,radius:222}], version:1.0, maxPoints:7}
+    ]
 
 
     loadModelData = (data) ->
@@ -148,6 +182,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                     if $scope.getCurrentStepIndex() == 3
                         window.location = "/my/games"
                     $scope.selection = $scope.steps[$scope.getCurrentStepIndex() + 1]
+                    $scope.stepSwitchedActions()
                     $scope.error = null
                 (error) ->
                     $scope.error = Messages("js.errors.ajax", "updating")
@@ -202,6 +237,13 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             resource["checkName"]()
 
     # ------------------ STEPS SWITCHING
+    $scope.stepSwitchedActions = ->
+        if ($scope.getCurrentStepIndex()==0)
+            $scope.onTab1Switch()
+        else 
+            if ($scope.getCurrentStepIndex()==1)
+                $scope.onTab2Switch()
+                
     $scope.selection = $scope.steps[1]
 
     $scope.getCurrentStepIndex = ->
@@ -215,7 +257,8 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         
     $scope.goToStep = (index) ->
             $scope.selection = $scope.steps[index] if !_.isUndefined($scope.steps[index])
-
+            $scope.stepSwitchedActions()
+            
     $scope.hasNextStep = ->
         stepIndex = $scope.getCurrentStepIndex()
         nextStep = stepIndex + 1
@@ -239,6 +282,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                     !$scope.geolocationBound = false
                 nextStep = stepIndex + 1
                 $scope.selection = $scope.steps[nextStep]
+                $scope.stepSwitchedActions()
         ) if $scope.hasNextStep()
         
     $scope.decrementStep = ->
@@ -246,8 +290,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             stepIndex = $scope.getCurrentStepIndex()
             previousStep = stepIndex - 1
             $scope.selection = $scope.steps[previousStep]
-            if ($scope.getCurrentStepIndex()==0)
-                $scope.onTab1Switch() 
+            $scope.stepSwitchedActions()
 
         ) if $scope.hasPreviousStep()
 
@@ -313,6 +356,11 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 else
                     $scope.form.$setValidity "dates", true
         ), 200
+        
+    $scope.onTab2Switch = ->
+        setTimeout (->
+            $scope.setMap()
+            ), 200
 
     # ------------------ INIT
     fillGameModel()
@@ -333,6 +381,9 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         
     $ ->
         $scope.onTab1Switch()
+        $scope.setMap()
+        
+    
 ]
 
 time_regexp = /^(20|21|22|23|[01]\d|\d)(:[0-5]\d)$/

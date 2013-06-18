@@ -14,7 +14,7 @@
 ###
 
 # '------------------------------------- MAIN MODULE
-app = angular.module 'web', ['ui.bootstrap', 'ui', 'ui.bootstrap.dialog', 'ngResource', 'google-maps']
+app = angular.module 'web', ['ui.bootstrap', 'ui', 'ui.bootstrap.dialog', 'ngResource',]
 
 # ------------------------------------- CONFIGURATION
 app.config ['$routeProvider', '$locationProvider', '$dialogProvider', ($routeProvider, $location, $dialogProvider) ->

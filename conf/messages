@@ -126,3 +126,4 @@ js.errors.gameslist = Error occurred while getting list of games.
 js.errors.sure = Are you sure you want to {0} this game?
 js.no = No
 js.yes = Yes, {0} this game
+js.gpstask.marker = Reach it to complete task.

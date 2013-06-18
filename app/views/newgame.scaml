@@ -24,7 +24,7 @@
 -@ val lan: Lang
 -@ val app: Application
 
-.row.span12(ng-controller="newGameCtrl" id="outer")
+.row.span12(ng-controller="newGameCtrl" ng-cloak id="outer")
     .wizard(ng-show="!isEdit() || editable")
         %form.form-vertical(name="form" class="css-form" novalidate)
             %ul.nav.nav-pills.nav-steps
