@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="UrbanGame___Theme" parent="AppBaseTheme">
+    <style name="UrbanGameTheme" parent="AppBaseTheme">
         <!-- Sherlock Navigation List Customization -->
         <item name="android:dropDownListViewStyle">@style/DropDownListView.UrbanGame</item>
         <item name="actionBarItemBackground">@drawable/selectable_background</item>

@@ -11,7 +11,7 @@
         -->
     </style>
 
-    <style name="UrbanGame___Theme" parent="AppBaseTheme">
+    <style name="UrbanGameTheme" parent="AppBaseTheme">
         <!-- Sherlock Navigation List Customization -->
         <item name="dropDownListViewStyle">@style/DropDownListView.UrbanGame</item>
         <item name="actionBarItemBackground">@drawable/selectable_background</item>
@@ -19,7 +19,7 @@
     </style>
     
     <!-- Application theme. -->
-    <style name="AppTheme" parent="UrbanGame___Theme">
+    <style name="AppTheme" parent="UrbanGameTheme">
 
         <!--
              All customizations that are NOT specific to a particular API-level 
