@@ -19,7 +19,6 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -32,7 +31,7 @@ import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 
-public class MyGamesActivity extends AbstractGamesListActivity implements OnChildClickListener, OnNavigationListener {
+public class MyGamesActivity extends AbstractGamesListActivity implements OnChildClickListener {
 	private ExpandableListView mExpandableList;
 	private ArrayList<ExpandableListHeader> mArrayHeaders;
 	

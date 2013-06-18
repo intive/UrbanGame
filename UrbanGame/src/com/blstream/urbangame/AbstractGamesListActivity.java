@@ -13,6 +13,9 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 
 public abstract class AbstractGamesListActivity extends AbstractMenuActivity implements OnNavigationListener {
+	public static final Class<GamesListActivity> ALL_GAMES_LIST_CLASS = GamesListActivity.class;
+	public static final Class<MyGamesActivity> MY_GAMES_LIST_CLASS = MyGamesActivity.class;
+	
 	private ArrayAdapter<CharSequence> spinnerAdapter;
 	
 	@Override
@@ -62,8 +65,8 @@ public abstract class AbstractGamesListActivity extends AbstractMenuActivity imp
 	}
 	
 	private Class<? extends Activity> getClassFromPosition(int position) {
-		if (position == 0) return MyGamesActivity.class;
-		if (position == 1) return GamesListActivity.class;
+		if (position == 0) return MY_GAMES_LIST_CLASS;
+		if (position == 1) return ALL_GAMES_LIST_CLASS;
 		return null;
 	}
 	
@@ -79,8 +82,8 @@ public abstract class AbstractGamesListActivity extends AbstractMenuActivity imp
 	}
 	
 	private int getPositionFromClass(Class<? extends Activity> cls) {
-		if (cls.equals(MyGamesActivity.class)) return 0;
-		if (cls.equals(GamesListActivity.class)) return 1;
+		if (cls.equals(MY_GAMES_LIST_CLASS)) return 0;
+		if (cls.equals(ALL_GAMES_LIST_CLASS)) return 1;
 		return -1;
 	}
 	
@@ -113,7 +116,7 @@ public abstract class AbstractGamesListActivity extends AbstractMenuActivity imp
 			private Intent getActivityDependOnUserState(boolean isUserLoggedIn) {
 				Intent intent = null;
 				if (isUserLoggedIn) {
-					intent = getIntentFromClass(MyGamesActivity.class);
+					intent = getIntentFromClass(MY_GAMES_LIST_CLASS);
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				}
 				else {
