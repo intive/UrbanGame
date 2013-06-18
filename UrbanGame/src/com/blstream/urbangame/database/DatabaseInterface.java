@@ -2,6 +2,7 @@ package com.blstream.urbangame.database;
 
 import java.util.List;
 
+import com.blstream.urbangame.database.entity.LocationTaskAnswer;
 import com.blstream.urbangame.database.entity.Player;
 import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
@@ -238,6 +239,19 @@ public interface DatabaseInterface {
 	 * @return true if successful
 	 */
 	public boolean deleteTask(Long gameID, Long taskID);
+	
+	/**
+	 * @param taskID - task ID to get answers from
+	 * @return list of answers for task
+	 */
+	public List<LocationTaskAnswer> getLocationTaskAnswers(Long taskID);
+	
+	/**
+	 * @param taskID
+	 * @param playerLocationTaskSpecificAnswer - one of the answers for task
+	 * @return true if successful
+	 */
+	public boolean insertLocationTaskAnswerForTask(Long taskID, LocationTaskAnswer locationTaskAnswer);
 	
 	// TASKS METHODS END
 	
