@@ -29,9 +29,13 @@ import com.blstream.urbangame.database.helper.Base64ImageCoder;
 import com.blstream.urbangame.webserver.helper.WebResponse;
 import com.blstream.urbangame.webserver.helper.WebServerHelper;
 
-/** This is a singleton notifier class. You can implement an observator interface
+/**
+ *  This is a singleton notifier class. You can implement an observator interface
  * (NotificationListener) when there will appear any change in game or task the
- * observator's interface method will be called. */
+ * observator's interface method will be called. 
+ * If you don't want to see notifications then comment 3 lines of code
+ * in MenuActivity (where NotificationServer is used).
+ * */
 
 public class NotificationServer implements WebServerHelper.WebServerResponseInterface {
 	private final static String TAG = NotificationServer.class.getSimpleName();
