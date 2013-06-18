@@ -8,8 +8,6 @@ import java.util.concurrent.TimeUnit;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
-import com.blstream.urbangame.database.Database;
-import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
@@ -93,9 +91,9 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 						break;
 					}
 					default:
-					  Log.e(TAG, "Incorrect queryType " + webResponse.getQueryType().toString());
-					  break;
-					
+						Log.e(TAG, "Incorrect queryType " + webResponse.getQueryType().toString());
+						break;
+				
 				}
 			}
 		}
@@ -167,8 +165,9 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 				String[] expectedAnswers = expectedABCD.getAnswers();
 				String[] actualAnswers = actualABCD.getAnswers();
 				
-				for (int i = 0; i < expectedAnswers.length; ++i)
+				for (int i = 0; i < expectedAnswers.length; ++i) {
 					assertEquals(expectedAnswers[i], actualAnswers[i]);
+				}
 				
 				assertEquals(expectedABCD.getQuestion(), actualABCD.getQuestion());
 			}
@@ -252,7 +251,7 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 	public void testGetTaskList() throws Throwable {
 		// Get short information about all available games
 		ArrayList<UrbanGameShortInfo> mockAllUrbanGames = mockWebServer.getMockAllUrbanGames();
-				
+		
 		// For each game issue query to get Task list for the game
 		for (int i = 0; i < mockAllUrbanGames.size(); ++i) {
 			final long gameID = mockAllUrbanGames.get(i).getID();
@@ -270,29 +269,4 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 		}
 		
 	}
-	
-	public void testMockSimulateNewTaskAvailable() {
-		DatabaseInterface database = new Database(getInstrumentation().getTargetContext());
-		Task task = null;
-		
-		// simulate that new ABCDTask was created
-		task = WebServerHelper.mockSimulateNewTaskAvailable(Task.TASK_TYPE_ABCD, getInstrumentation()
-			.getTargetContext());
-		
-		// Check that ABCDTask was created correctly and is not stored in Database
-		assertNotNull(task);
-		assertEquals((Integer) Task.TASK_TYPE_ABCD, task.getType());
-		assertNull(database.getTask(task.getId()));
-		
-		// simulate that new LocationTask was created
-		task = WebServerHelper.mockSimulateNewTaskAvailable(Task.TASK_TYPE_LOCATION, getInstrumentation()
-			.getTargetContext());
-		
-		// Check that LocationTask was created correctly and is not stored in Database
-		assertNotNull(task);
-		assertEquals((Integer) Task.TASK_TYPE_LOCATION, task.getType());
-		assertNull(database.getTask(task.getId()));
-		Log.d(TAG, "testMockSimulateNewTaskAvailable() completed");
-	}
-	
 }
