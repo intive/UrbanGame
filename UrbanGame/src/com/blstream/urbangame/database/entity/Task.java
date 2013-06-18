@@ -14,6 +14,14 @@ import com.blstream.urbangame.database.helper.Base64ImageCoder;
 
 public abstract class Task implements Parcelable {
 	
+	public static final String FIELD_NAME_TITLE = "Title";
+	public static final String FIELD_NAME_DESCRIPTION = "Description";
+	public static final String FIELD_NAME_IS_REPEATABLE = "Is repeatable";
+	public static final String FIELD_NAME_IS_HIDDEN = "Is hidden";
+	public static final String FIELD_NAME_NUMBER_HIDDEN = "Number of hidden";
+	public static final String FIELD_NAME_ENDTIME = "Endtime";
+	public static final String FIELD_NAME_MAX_POINTS = "Max points";
+	
 	public static final int TASK_TYPE_ABCD = 0;
 	public static final int TASK_TYPE_LOCATION = 1;
 	
