@@ -15,6 +15,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.blstream.urbangame.notifications.NotificationServer;
 import com.blstream.urbangame.session.LoginManager;
 
 //formatter:off
@@ -79,6 +80,7 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 	protected UrbanGameApplication urbanGameApplication;
 	protected LoginManager loginManager;
 	private LocalBroadcastManager localBroadcastManager;
+	private NotificationServer notificationServer;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,9 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 		
 		setUpBroadcastReceiver();
 		setStyleToActionBar();
+		urbanGameApplication.incremenetNumberOfRunningActivities();
+		notificationServer = NotificationServer.getInstance(this);
+		notificationServer.setApplication(urbanGameApplication);
 	}
 	
 	/**
@@ -126,12 +131,19 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 		super.onResume();
 		urbanGameApplication.onResume();
 		loginManager = LoginManager.getInstance(MenuActivity.this);
+		notificationServer.updateContext(this);
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
 		urbanGameApplication.onPause();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		urbanGameApplication.decrementNumberOfRunningActivities();
 	}
 	
 	@Override

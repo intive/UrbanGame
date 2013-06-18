@@ -36,12 +36,12 @@ public class MockWebServer {
 	//
 	public MockWebServer() {
 		
-		SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+		SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH);
 		Date startDate = null;
 		Date endDate = null;
 		try {
-			startDate = curFormater.parse("04/05/2010");
-			endDate = curFormater.parse("04/06/2010");
+			startDate = curFormater.parse("04/05/2013 08:40");
+			endDate = curFormater.parse("04/06/2013 13:40");
 		}
 		catch (ParseException e) {
 			Log.e(TAG, "ParseException " + e.toString());
@@ -52,8 +52,7 @@ public class MockWebServer {
 		for (int i = 0; i < 6; ++i) {
 			mockUrbanGameDetails.add(new UrbanGame(Long.valueOf(i), Double.valueOf(i), "MyGameTitle" + i,
 				"MyOperatorName" + i, "MyWinningStrategy" + i, i, i, startDate, endDate, i, true, "MyPrizesInfo" + i,
-				"MyDescription" + i, "MyGameLogoBase64" + i, "MyOperatorLogoBase64" + i, "MyComments" + i, "MyLocation"
-					+ i, "MyDetaisLink" + i));
+				"MyDescription" + i, null, null, "MyComments" + i, "MyLocation" + i, "MyDetaisLink" + i));
 		}
 		
 		mockAllUrbanGames = new ArrayList<UrbanGameShortInfo>();
@@ -72,7 +71,7 @@ public class MockWebServer {
 			
 			taskList.add(new ABCDTask(Long.valueOf(tid), "ABCDTaskTitle" + tid, "ABCDTaskImage" + tid,
 				"ABCDTaskDescription" + tid, true, true, tid, endDate, tid, "ABCDTaskQuestion" + tid, new String[] {
-					"A" + tid, "B" + tid, "C" + tid, "D" + tid }));
+					"A", "B", "C", "D" }));
 			++tid;
 			
 			taskList.add(new LocationTask(Long.valueOf(tid), "LocationTaskTitle" + tid, "LocationTaskImage1" + tid,
@@ -182,7 +181,7 @@ public class MockWebServer {
 		
 		return stringBuilder.toString();
 	}
-
+	
 	//returns points
 	public int sendGPSLocation(Context context, Task task, Location location) {
 		

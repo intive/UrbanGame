@@ -35,7 +35,8 @@ public class AsyncSendWebQuery extends AsyncTask<Void, Void, WebResponse> {
 		init(_webServerResponseListener, queryType);
 	}
 	
-	public AsyncSendWebQuery(WebServerResponseInterface _webServerResponseListener, QueryType queryType, long gid, long tid) {
+	public AsyncSendWebQuery(WebServerResponseInterface _webServerResponseListener, QueryType queryType, long gid,
+		long tid) {
 		this.gid = gid;
 		this.tid = tid;
 		init(_webServerResponseListener, queryType);
@@ -53,7 +54,6 @@ public class AsyncSendWebQuery extends AsyncTask<Void, Void, WebResponse> {
 		webQuery.authority(WebServerHelper.authority);
 		webQuery.path(WebServerHelper.basePath);
 		
-		
 		switch (queryType) {
 			case GetUrbanGameBaseList:
 				webQuery.appendPath(WebServerHelper.gameSubPath);
@@ -66,17 +66,18 @@ public class AsyncSendWebQuery extends AsyncTask<Void, Void, WebResponse> {
 			
 			case GetTaskList:
 				createGetTaskListQuery();
+				webResponse.setGameId(gid);
 				break;
 			
 			case GetTask:
 				createGetTaskListQuery();
 				webQuery.appendPath(String.valueOf(tid));
+				webResponse.setGameId(gid);
 				break;
 			default:
 				Log.e(TAG, "Incorrect queryType " + queryType.toString());
-				break;	
+				break;
 		}
-		
 		
 	}
 	
