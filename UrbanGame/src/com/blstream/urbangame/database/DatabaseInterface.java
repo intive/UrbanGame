@@ -242,9 +242,10 @@ public interface DatabaseInterface {
 	
 	/**
 	 * @param taskID - task ID to get answers from
+	 * @param userEmail - email of the user that made the answer
 	 * @return list of answers for task
 	 */
-	public List<LocationTaskAnswer> getLocationTaskAnswers(Long taskID);
+	public List<LocationTaskAnswer> getLocationTaskAnswers(Long taskID, String userEmail);
 	
 	/**
 	 * @param taskID
