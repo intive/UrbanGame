@@ -199,13 +199,15 @@ public class UrbanGameDialog extends DialogFragment {
 		
 		public void show() {
 			FragmentManager manager = context.getSupportFragmentManager();
-			FragmentTransaction transaction = manager.beginTransaction();
 			Fragment previous = manager.findFragmentByTag(TAG);
 			if (previous != null) {
+				FragmentTransaction transaction = manager.beginTransaction();
 				transaction.remove(previous);
+				transaction.commit();
+				manager.executePendingTransactions();
 			}
 			if ((isPositiveEnabled || isNegativeEnabled)) {
-				UrbanGameDialog.this.show(transaction, TAG);
+				UrbanGameDialog.this.show(manager, TAG);
 			}
 		}
 		
