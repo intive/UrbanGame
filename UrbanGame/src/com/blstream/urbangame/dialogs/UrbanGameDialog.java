@@ -151,8 +151,8 @@ public class UrbanGameDialog extends DialogFragment {
 			return this;
 		}
 		
-		public DialogBuilder setTitle(String tit) {
-			title = tit;
+		public DialogBuilder setTitle(String title) {
+			UrbanGameDialog.this.title = title;
 			return this;
 		}
 		
@@ -161,8 +161,8 @@ public class UrbanGameDialog extends DialogFragment {
 			return this;
 		}
 		
-		public DialogBuilder setMessage(String mess) {
-			message = mess;
+		public DialogBuilder setMessage(String message) {
+			UrbanGameDialog.this.message = message;
 			return this;
 		}
 		
