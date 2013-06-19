@@ -34,6 +34,7 @@ public class UrbanGameDialog extends DialogFragment {
 	
 	private boolean isPositiveEnabled;
 	private boolean isNegativeEnabled;
+	private boolean isCancelable;
 	
 	private static final String TITLE_KEY = "title";
 	private static final String MESSAGE_KEY = "message";
@@ -43,6 +44,7 @@ public class UrbanGameDialog extends DialogFragment {
 	private static final String BUTTON_NEGATIVE_LISTENER_KEY = "btn_negative_listener";
 	private static final String IS_POSITIVE_ENABLED_KEY = "is_positive_enabled";
 	private static final String IS_NEGATIVE_ENABLED_KEY = "is_negative_enabled";
+	private static final String IS_CANCELABLE = "is_cancelable";
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class UrbanGameDialog extends DialogFragment {
 		Dialog dialog = super.onCreateDialog(savedInstanceState);
 		
 		loadDataFromArguments();
+		setCancelable(isCancelable);
 		
 		dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		
@@ -109,6 +112,7 @@ public class UrbanGameDialog extends DialogFragment {
 		buttonNegativeListener = (UrbanGameDialogOnClickListener) b.getSerializable(BUTTON_NEGATIVE_LISTENER_KEY);
 		isPositiveEnabled = b.getBoolean(IS_POSITIVE_ENABLED_KEY);
 		isNegativeEnabled = b.getBoolean(IS_NEGATIVE_ENABLED_KEY);
+		isCancelable = b.getBoolean(IS_CANCELABLE);
 	}
 	
 	@Override
@@ -136,6 +140,7 @@ public class UrbanGameDialog extends DialogFragment {
 		
 		private boolean isPositiveEnabled;
 		private boolean isNegativeEnabled;
+		private boolean isCancelable;
 		
 		public DialogBuilder(Context context) {
 			this.context = (SherlockFragmentActivity) context;
@@ -188,7 +193,7 @@ public class UrbanGameDialog extends DialogFragment {
 		}
 		
 		public DialogBuilder setCancelable(boolean isCancelable) {
-			this.setCancelable(isCancelable);
+			this.isCancelable = isCancelable;
 			return this;
 		}
 		
@@ -205,6 +210,7 @@ public class UrbanGameDialog extends DialogFragment {
 				arugments.putSerializable(BUTTON_NEGATIVE_LISTENER_KEY, buttonNegativeListener);
 				arugments.putBoolean(IS_POSITIVE_ENABLED_KEY, isPositiveEnabled);
 				arugments.putBoolean(IS_NEGATIVE_ENABLED_KEY, isNegativeEnabled);
+				arugments.putBoolean(IS_CANCELABLE, isCancelable);
 				
 				UrbanGameDialog dial = new UrbanGameDialog();
 				dial.setArguments(arugments);
