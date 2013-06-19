@@ -9,18 +9,14 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -33,10 +29,7 @@ import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 
-public class MyGamesActivity extends MenuActivity implements OnChildClickListener, OnNavigationListener {
-	
-	private final String TAG = MyGamesActivity.class.getSimpleName();
-	
+public class MyGamesActivity extends AbstractGamesListActivity implements OnChildClickListener {
 	private ExpandableListView mExpandableList;
 	private ArrayList<ExpandableListHeader> mArrayHeaders;
 	
@@ -58,8 +51,6 @@ public class MyGamesActivity extends MenuActivity implements OnChildClickListene
 		HashMap<Integer, List<UrbanGameShortInfo>> dividedGamesInGroups = readGamesInfo();
 		
 		Resources resources = getResources();
-		
-		DatabaseInterface database = new Database(this);
 		
 		ExpandableListHeader parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_active));
@@ -113,22 +104,12 @@ public class MyGamesActivity extends MenuActivity implements OnChildClickListene
 	protected void onResume() {
 		super.onResume();
 		this.supportInvalidateOptionsMenu();
-		Log.i(TAG, "onResume completed");
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		Context context = getSupportActionBar().getThemedContext();
-		ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.menu_navigation_list,
-			R.layout.sherlock_spinner_item);
-		list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
-		
-		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		getSupportActionBar().setListNavigationCallbacks(list, this);
-		getSupportActionBar().setDisplayShowTitleEnabled(false);
-		
 		MenuInflater menuInflater = getSupportMenuInflater();
-		menuInflater.inflate(R.menu.top_bar_my_games_list, menu);
+		menuInflater.inflate(R.menu.top_bar_search, menu);
 		configureSearchAction(menu);
 		
 		return super.onCreateOptionsMenu(menu);
@@ -156,23 +137,10 @@ public class MyGamesActivity extends MenuActivity implements OnChildClickListene
 		return false;
 	}
 	
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		// TODO Switch to all games
-		switch (itemPosition) {
-			case 1:
-				startActivity(new Intent(this, GamesListActivity.class));
-				break;
-			default:
-				break;
-		}
-		return false;
-	}
-	
 	private void configureSearchAction(Menu menu) {
 		final MenuItem moreItem = menu.findItem(R.id.menu_more);
 		
-		MenuItem searchItem = menu.findItem(R.id.menu_search);
+		MenuItem searchItem = menu.findItem(R.id.menu_list_search);
 		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
 			@Override
 			public boolean onMenuItemActionExpand(MenuItem item) {

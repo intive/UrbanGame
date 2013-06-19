@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 import com.blstream.urbangame.fragments.LoginRegisterPageAdapter;
 import com.blstream.urbangame.session.RegistrationManager;
 
-public class LoginRegisterActivity extends MenuActivity {
+public class LoginRegisterActivity extends AbstractMenuActivity {
 	public final static String ACTION_RETURN_LOGIN_RESULT = "intent_open_games";
 	public final static String ACTION_AFTER_LOGIN = "intent_open";
 	public final static int LOGIN_REQUEST_CODE = 0x1;
