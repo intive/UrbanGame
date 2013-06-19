@@ -108,7 +108,6 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 		this.supportInvalidateOptionsMenu();
 		Log.i(TAG, "onResume completed");
 	}
->>>>>>> upstream/android
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
