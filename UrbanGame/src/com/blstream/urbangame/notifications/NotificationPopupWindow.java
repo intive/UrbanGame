@@ -1,8 +1,6 @@
 package com.blstream.urbangame.notifications;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,15 +9,17 @@ import android.os.Bundle;
 
 import com.blstream.urbangame.GameDetailsActivity;
 import com.blstream.urbangame.R;
+import com.blstream.urbangame.dialogs.UrbanGameDialog;
+import com.blstream.urbangame.dialogs.UrbanGameDialog.UrbanGameDialogOnClickListener;
 
 /**
  * Pop-up notification dialog do display notifications when application is
  * running. It allows do dismiss this notification or go directly to changed
  * game/task.
  */
-public class NotificationPopupWindow implements DialogInterface.OnClickListener {
-	private AlertDialog.Builder builder;
-	private Context context;
+public class NotificationPopupWindow implements UrbanGameDialogOnClickListener {
+	private final UrbanGameDialog.DialogBuilder builder;
+	private final Context context;
 	
 	private int notificationTitle;
 	private String notificationMessage;
@@ -27,7 +27,7 @@ public class NotificationPopupWindow implements DialogInterface.OnClickListener 
 	
 	public NotificationPopupWindow(Context context) {
 		this.context = context;
-		this.builder = new AlertDialog.Builder(context);
+		this.builder = new UrbanGameDialog().new DialogBuilder(context);
 	}
 	
 	public void showDialog(int notificationType, String gameName, String taskName, String diff, long gameID) {
@@ -90,7 +90,7 @@ public class NotificationPopupWindow implements DialogInterface.OnClickListener 
 		gameIntent.putExtras(bundle);
 	}
 	
-	private Dialog createDialog(String gameName, String taskName, String diff) {
+	private UrbanGameDialog.DialogBuilder createDialog(String gameName, String taskName, String diff) {
 		builder.setPositiveButton(R.string.dialog_show, this);
 		builder.setNegativeButton(R.string.dialog_dismiss, this);
 		

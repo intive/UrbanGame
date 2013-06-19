@@ -11,11 +11,12 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.blstream.urbangame.LoginRegisterActivity;
 import com.blstream.urbangame.R;
+import com.blstream.urbangame.dialogs.UrbanGameDialog;
 import com.blstream.urbangame.session.LoginManager;
 
 public class LoginFragment extends SherlockFragment implements OnClickListener {
 	private LoginRegisterView loginRegisterView;
-	private AlertDialog invalidDataAlertDialog;
+	private UrbanGameDialog.DialogBuilder invalidDataAlertDialog;
 	private LoginRegisterActivity activity;
 	
 	@Override
@@ -28,7 +29,7 @@ public class LoginFragment extends SherlockFragment implements OnClickListener {
 	// formatter:off
 	private void createAlertDialog() {
 		invalidDataAlertDialog = 
-			new AlertDialog.Builder(activity)
+			new UrbanGameDialog().new DialogBuilder(activity)
 				.setTitle(R.string.dialog_data_invalid_tittle)
 				.setMessage(R.string.dialog_data_invalid_message)
 				.setPositiveButton(R.string.button_correct, null)

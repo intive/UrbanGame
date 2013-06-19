@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +20,8 @@ import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 import com.blstream.urbangame.database.entity.UrbanGame;
+import com.blstream.urbangame.dialogs.UrbanGameDialog;
+import com.blstream.urbangame.dialogs.UrbanGameDialog.UrbanGameDialogOnClickListener;
 import com.blstream.urbangame.example.ExampleData;
 
 public class GameDetailsActivity extends MenuActivity implements OnClickListener {
@@ -214,13 +215,13 @@ public class GameDetailsActivity extends MenuActivity implements OnClickListener
 	}
 	
 	public void showDialog() {
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+		UrbanGameDialog.DialogBuilder dialogBuilder = new UrbanGameDialog().new DialogBuilder(this);
 		dialogBuilder.setTitle(!isPlayerAParticipantOfCurrentGame ? R.string.dialog_join_title
 			: R.string.dialog_leave_title);
 		dialogBuilder.setMessage(R.string.dialog_join_leave_message);
 		dialogBuilder.setCancelable(false);
 		dialogBuilder.setPositiveButton(R.string.dialog_join_leave_positive_button,
-			new DialogInterface.OnClickListener() {
+			new UrbanGameDialogOnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Log.i("UrbanGame", "Dialog: clicked positive button");
@@ -246,7 +247,7 @@ public class GameDetailsActivity extends MenuActivity implements OnClickListener
 				}
 			});
 		dialogBuilder.setNegativeButton(R.string.dialog_join_leave_negative_button,
-			new DialogInterface.OnClickListener() {
+			new UrbanGameDialogOnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Log.i("UrbanGame", "Dialog: clicked negative button");
