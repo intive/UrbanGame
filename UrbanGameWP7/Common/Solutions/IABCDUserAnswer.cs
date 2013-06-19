@@ -14,6 +14,8 @@ namespace Common
 
         IABCDSolution Solution { get; set; }
 
-        byte Answer { get; set; }
+        IABCDPossibleAnswer ABCDPossibleAnswer { get; set; }
+
+        bool Answer { get; set; }
     }
 }

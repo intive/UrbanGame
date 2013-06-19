@@ -108,12 +108,86 @@ namespace UrbanGame.Storage
         }
         #endregion
 
-        #region Answer
+        #region ABCDPossibleAnswerId
 
-        private byte _answer;
+        private int? _abcdPossibleAnswerId;
 
         [Column]
-        public byte Answer
+        public int? ABCDPossibleAnswerId
+        {
+            get
+            {
+                return _abcdPossibleAnswerId;
+            }
+            set
+            {
+                if (_abcdPossibleAnswerId != value)
+                {
+                    NotifyPropertyChanging("ABCDPossibleAnswerId");
+                    _abcdPossibleAnswerId = value;
+                    NotifyPropertyChanged("ABCDPossibleAnswerId");
+                }
+            }
+        }
+        #endregion
+
+        #region ABCDPossibleAnswer
+
+        private EntityRef<ABCDPossibleAnswer> _abcdPossibleAnswerRef = new EntityRef<ABCDPossibleAnswer>();
+
+        [Association(Name = "FK_ABCDPossibleAnswer_ABCDUserAnswers", Storage = "_abcdPossibleAnswerRef", ThisKey = "ABCDPossibleAnswerId", OtherKey = "Id", IsForeignKey = true)]
+        public ABCDPossibleAnswer ABCDPossibleAnswer
+        {
+            get
+            {
+                return _abcdPossibleAnswerRef.Entity;
+            }
+            set
+            {
+                ABCDPossibleAnswer previousValue = _abcdPossibleAnswerRef.Entity;
+                if (((previousValue != value) || (_abcdPossibleAnswerRef.HasLoadedOrAssignedValue == false)))
+                {
+                    _abcdPossibleAnswerRef.Entity = value;
+
+                    //remove task from previous game
+                    if (previousValue != null)
+                        previousValue.ABCUserAnswears.Remove(this);
+
+                    //add task to the new game
+                    if ((value != null))
+                    {
+                        value.ABCUserAnswears.Add(this);
+                        this.ABCDPossibleAnswerId = value.Id;
+                    }
+                    else
+                        this.ABCDPossibleAnswerId = default(Nullable<int>);
+                }
+            }
+        }
+        #endregion
+
+        #region IABCDUserAnswer.ABCDPossibleAnswer
+
+        IABCDPossibleAnswer IABCDUserAnswer.ABCDPossibleAnswer
+        {
+            get
+            {
+                return ABCDPossibleAnswer;
+            }
+
+            set
+            {
+                ABCDPossibleAnswer = (ABCDPossibleAnswer)value;
+            }
+        }
+        #endregion
+
+        #region Answer
+
+        private bool _answer;
+
+        [Column]
+        public bool Answer
         {
             get
             {

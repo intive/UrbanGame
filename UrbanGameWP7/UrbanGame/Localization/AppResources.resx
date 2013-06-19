@@ -355,4 +355,7 @@
   <data name="Repeatable" xml:space="preserve">
     <value>repeatable</value>
   </data>
+  <data name="Sending" xml:space="preserve">
+    <value>sending</value>
+  </data>
 </root>

@@ -152,6 +152,27 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
+        #region Answears
+
+        private BindableCollection<ABCDAnswear> _answears;
+
+        public BindableCollection<ABCDAnswear> Answears
+        {
+            get
+            {
+                return _answears;
+            }
+            set
+            {
+                if (_answears != value)
+                {
+                    _answears = value;
+                    NotifyOfPropertyChange(() => Answears);
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
         #region lifecycle
@@ -188,6 +209,28 @@ namespace UrbanGame.ViewModels
             {
                 IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
                 CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId) ?? _gameWebService.GetTaskDetails(GameId, TaskId);
+            });
+        }
+
+        public async Task RefreshAnswear()
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                Answears = new BindableCollection<ABCDAnswear>();
+
+                IQueryable<IABCDPossibleAnswer> possibleAnswers = _unitOfWorkLocator().GetRepository<IABCDPossibleAnswer>().All().Where(a => a.Task.Id == CurrentTask.Id);
+
+                foreach(IABCDPossibleAnswer possible in possibleAnswers.ToList())
+                {
+                    IABCDUserAnswer userAnswer = _unitOfWorkLocator().GetRepository<IABCDUserAnswer>().All().Where(a => a.ABCDPossibleAnswer.Id == possible.Id).Last();
+                    bool isChecked = false;
+                    if(userAnswer != null && userAnswer.Answer == true)
+                    {
+                        isChecked = true;
+                    }
+
+                    Answears.Add(new ABCDAnswear() { possibleAnswear = possible, isChecked = isChecked });
+                }
             });
         }
 

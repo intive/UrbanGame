@@ -8,6 +8,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+    xmlns:utils="clr-namespace:UrbanGame.Utilities"
+    utils:StateManager.VisualStateProperty="{Binding VisualStateName}"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -17,6 +19,38 @@
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="BackupStates">
+                <VisualState x:Name="Normal">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Toast">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Loading">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Toast">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid x:Name="Toast">
+            <Rectangle Width="480" Height="700" Opacity="0.5">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="White"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Width="480" Height="260">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="LightGreen"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <TextBlock Text="{Binding Path=AppResources.Sending, Source={StaticResource LocalizedStrings}}"/>
+            <ProgressBar />
+        </Grid>
         <!--Pivot Control-->
         <controls:Pivot>
             <controls:Pivot.Background>
@@ -111,12 +145,12 @@
                                 <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding Description}" Grid.Row="0" Foreground="{StaticResource FontColorWhite}"/>
-                            <ListBox Grid.Row="1" ItemsSource="{Binding CurrentTask.ABCDPossibleAnswers}" ItemContainerStyle="{StaticResource ItemStyle}">
+                            <ListBox Grid.Row="1" ItemsSource="{Binding Answears}" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>
                                             <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding Answer}" />
+                                            <TextBlock Grid.Column="1" Text="{Binding ABCDPossibleAnswer.Answer}" />
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>

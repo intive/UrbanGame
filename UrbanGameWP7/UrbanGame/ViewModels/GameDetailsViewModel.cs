@@ -25,6 +25,9 @@ namespace UrbanGame.ViewModels
 
         protected override void OnViewReady(object view)
         {
+            Task getGameTask = Task.Factory.StartNew(()=>RefreshGame());
+            getGameTask.Wait();
+
             ChangeAppbarButtons();
             RemovePreviewFromStack();
         }
@@ -249,12 +252,13 @@ namespace UrbanGame.ViewModels
         protected async override void OnActivate()
         {
             base.OnActivate();
-            RefreshActiveTasks();
-            RefreshInactiveTasks();
-            RefreshAccomplishedTasks();
-            RefreshCancelledTasks();
-            RefreshHighScores();
+            await RefreshActiveTasks();
+            await RefreshInactiveTasks();
+            await RefreshAccomplishedTasks();
+            await RefreshCancelledTasks();
+            await RefreshHighScores();
             await RefreshAlerts();
+
         }
 
         #endregion

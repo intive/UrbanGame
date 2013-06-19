@@ -123,6 +123,7 @@
     </Compile>
     <Compile Include="Localization\LocalizedStrings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Storage\ABCDAnswear.cs" />
     <Compile Include="Storage\ABCDPossibleAnswer.cs" />
     <Compile Include="Storage\BusinessTypeMapper.cs" />
     <Compile Include="Storage\ABCDUserAnswer.cs" />
@@ -140,6 +141,8 @@
     <Compile Include="Tombstoning\TombstoningVariables.cs" />
     <Compile Include="Utilities\AppbarManager.cs" />
     <Compile Include="Utilities\LocalizationService.cs" />
+    <Compile Include="Utilities\RelativeAnimatingContentControl.cs" />
+    <Compile Include="Utilities\StateManager.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsPreviewViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsViewModel.cs" />
