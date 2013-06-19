@@ -372,6 +372,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		else {
 			game = null;
 		}
+		cursor.close();
 		db.close();
 		return game;
 	}
@@ -468,8 +469,10 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		return isOK;
 	}
 	
-	/** @param date - date to be parsed into long
-	 * @return - date in long in format yyyymmddhhmmss */
+	/**
+	 * @param date - date to be parsed into long
+	 * @return - date in long in format yyyymmddhhmmss
+	 */
 	private Long dateToLong(Date date) {
 		if (date == null) return null;
 		Calendar c = Calendar.getInstance();
@@ -477,8 +480,10 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		return c.getTimeInMillis();
 	}
 	
-	/** @param longDate - long in format yyyymmddhhmmss
-	 * @return Date object derived from long parameter */
+	/**
+	 * @param longDate - long in format yyyymmddhhmmss
+	 * @return Date object derived from long parameter
+	 */
 	private Date longToDate(long longDate) {
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(longDate);
@@ -1361,5 +1366,34 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		private UserGamesFields(int x) {
 			value = x;
 		}
+	}
+	
+	@Override
+	public List<UrbanGameShortInfo> getAllUserGamesShortInfoByItsState(String email, Integer state) {
+		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		
+		String query = "SELECT " + GAMES_KEY_ID + ", " + GAMES_KEY_TITLE + ", " + GAMES_KEY_GAME_ICON + ", "
+			+ GAMES_KEY_OPERATOR_ICON + ", " + GAMES_KEY_OPERATOR_NAME + ", " + GAMES_KEY_NUMBER_OF_PLAYERS + ", "
+			+ GAMES_KEY_NUMBER_OF_MAX_PLAYERS + ", " + GAMES_KEY_CITY_NAME + ", " + GAMES_KEY_START_DATE + ", "
+			+ GAMES_KEY_END_DATE + ", " + GAMES_KEY_REWARD + ", " + GAMES_KEY_DETAILS_LINK + " FROM ( SELECT "
+			+ USER_GAMES_SPECIFIC_KEY_GAME_ID + ", " + USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED + " FROM "
+			+ USER_GAMES_SPECIFIC_TABLE_NAME + " WHERE " + USER_GAMES_SPECIFIC_KEY_EMAIL + "='" + email
+			+ "' ) AS UGS INNER JOIN " + GAMES_TABLE_NAME + " ON " + "UGS." + USER_GAMES_SPECIFIC_KEY_GAME_ID + "="
+			+ GAMES_TABLE_NAME + "." + GAMES_KEY_ID + " WHERE " + "UGS." + USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED
+			+ "=" + state;
+		
+		Cursor cursor = db.rawQuery(query, null);
+		ArrayList<UrbanGameShortInfo> gameList = null;
+		if (cursor.moveToFirst()) {
+			gameList = new ArrayList<UrbanGameShortInfo>();
+			do {
+				UrbanGameShortInfo game = gameShortInfoFromCursor(cursor);
+				gameList.add(game);
+			}
+			while (cursor.moveToNext());
+		}
+		cursor.close();
+		db.close();
+		return gameList;
 	}
 }
