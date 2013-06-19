@@ -188,6 +188,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CORRECT!.
+        /// </summary>
+        public static string Correct {
+            get {
+                return ResourceManager.GetString("Correct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to current rank:.
         /// </summary>
         public static string CurrentRank {
@@ -548,6 +557,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NOT SO GREAT!.
+        /// </summary>
+        public static string NotSoGreat {
+            get {
+                return ResourceManager.GetString("NotSoGreat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Operator.
         /// </summary>
         public static string Operator {
@@ -778,6 +796,15 @@ namespace UrbanGame.Localization {
         public static string Urban {
             get {
                 return ResourceManager.GetString("Urban", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WRONG!.
+        /// </summary>
+        public static string Wrong {
+            get {
+                return ResourceManager.GetString("Wrong", resourceCulture);
             }
         }
     }

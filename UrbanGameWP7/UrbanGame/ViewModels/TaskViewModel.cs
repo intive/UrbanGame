@@ -15,6 +15,8 @@ namespace UrbanGame.ViewModels
     {
 
         IAppbarManager _appbarManager;
+        string VisualStateName;
+
         public TaskViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
                                     IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
@@ -187,7 +189,7 @@ namespace UrbanGame.ViewModels
             base.OnActivate();
             await RefreshGame();
             await RefreshTask();
-
+            VisualStateName = "Normal";
         }
 
         #endregion
@@ -254,6 +256,8 @@ namespace UrbanGame.ViewModels
 
         public async Task SubmitGPS()
         {
+            VisualStateName = "Sending";
+
             await Task.Factory.StartNew(() =>
             {
                 GPSLocation gps = new GPSLocation();

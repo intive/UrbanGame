@@ -25,8 +25,12 @@ namespace UrbanGame.ViewModels
 
         protected override void OnViewReady(object view)
         {
-            Task getGameTask = Task.Factory.StartNew(()=>RefreshGame());
-            getGameTask.Wait();
+            if (Game == null)
+            {
+                RefreshGame();
+            }
+            //Task getGameTask = Task.Factory.StartNew(()=>RefreshGame());
+            //getGameTask.Wait();
 
             ChangeAppbarButtons();
             RemovePreviewFromStack();

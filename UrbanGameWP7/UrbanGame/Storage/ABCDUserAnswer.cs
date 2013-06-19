@@ -149,14 +149,14 @@ namespace UrbanGame.Storage
                 {
                     _abcdPossibleAnswerRef.Entity = value;
 
-                    //remove task from previous game
+                    //remove task from previous possibleAnswer
                     if (previousValue != null)
-                        previousValue.ABCUserAnswears.Remove(this);
+                        previousValue.ABCDUserAnswers.Remove(this);
 
-                    //add task to the new game
+                    //add task to the new possibleAnswer
                     if ((value != null))
                     {
-                        value.ABCUserAnswears.Add(this);
+                        value.ABCDUserAnswers.Add(this);
                         this.ABCDPossibleAnswerId = value.Id;
                     }
                     else

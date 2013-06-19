@@ -342,4 +342,13 @@
   <data name="Sending" xml:space="preserve">
     <value>wysyłanie</value>
   </data>
+  <data name="Correct" xml:space="preserve">
+    <value>POPRAWNIE!</value>
+  </data>
+  <data name="NotSoGreat" xml:space="preserve">
+    <value>NIE TAK DOBRZE!</value>
+  </data>
+  <data name="Wrong" xml:space="preserve">
+    <value>NIEPOPRAWNIE!</value>
+  </data>
 </root>

@@ -358,4 +358,13 @@
   <data name="Sending" xml:space="preserve">
     <value>sending</value>
   </data>
+  <data name="Correct" xml:space="preserve">
+    <value>CORRECT!</value>
+  </data>
+  <data name="NotSoGreat" xml:space="preserve">
+    <value>NOT SO GREAT!</value>
+  </data>
+  <data name="Wrong" xml:space="preserve">
+    <value>WRONG!</value>
+  </data>
 </root>

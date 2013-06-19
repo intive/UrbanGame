@@ -25,7 +25,7 @@ namespace UrbanGameTests.Tests
         #endregion
 
         #region CreateSampleEntities
-        private void CreateSampleEntities(out Game game, out GameTask task, out GameAlert alert, out GameHighScore highScore)
+        private void CreateSampleEntities(out Game game, out GameTask task, out GameAlert alert, out GameHighScore highScore, out ABCDPossibleAnswer possibleAnswer, out ABCDUserAnswer userAnswer)
         {
             game = new Game()
             {
@@ -73,21 +73,37 @@ namespace UrbanGameTests.Tests
                 Id = 1,
                 UserLogin = "LoganXxX",
                 Points = 130
-            };             
+            };
+
+            possibleAnswer = new ABCDPossibleAnswer()
+            {
+                Id = 1,
+                Answer = "The width of this spear is about 2m",
+            };
+
+            userAnswer = new ABCDUserAnswer()
+            {
+                Id = 1,
+                Answer = false
+            };
         }
 
-        private void CreateSampleEntities(out IGame game, out ITask task, out IAlert alert, out IHighScore highScore)
+        private void CreateSampleEntities(out IGame game, out ITask task, out IAlert alert, out IHighScore highScore, out IABCDPossibleAnswer possibleAnswer, out IABCDUserAnswer userAnswer)
         {
             Game g;
             GameTask t;
             GameAlert al;
             GameHighScore h;
-            CreateSampleEntities(out g, out t, out al, out h);
+            ABCDPossibleAnswer pa;
+            ABCDUserAnswer ua;
+            CreateSampleEntities(out g, out t, out al, out h, out pa, out ua);
 
             game = g;
             task = t;
             alert = al;
             highScore = h;
+            possibleAnswer = pa;
+            userAnswer = ua;
         }
         #endregion
 
@@ -212,8 +228,6 @@ namespace UrbanGameTests.Tests
         }
         #endregion
 
-
-
         #region DatabaseCreationTest
         [TestMethod]
         public void DatabaseCreationTest()
@@ -230,8 +244,9 @@ namespace UrbanGameTests.Tests
             GameTask task;
             GameAlert alert;
             GameHighScore highScore;
-            ABCDPossibleAnswer answer;            
-            CreateSampleEntities(out game, out task, out alert, out highScore);            
+            ABCDPossibleAnswer possibleAnswer;
+            ABCDUserAnswer userAnswer;
+            CreateSampleEntities(out game, out task, out alert, out highScore, out possibleAnswer, out userAnswer);            
 
             using (UrbanGameDataContext dataContext = RecreateDatabase())
             {
@@ -268,7 +283,7 @@ namespace UrbanGameTests.Tests
                 Assert.AreEqual(0, dataContext.GetTable<GameAlert>().Count());
                 Assert.AreEqual(0, dataContext.GetTable<GameHighScore>().Count());
 
-                CreateSampleEntities(out game, out task, out alert, out highScore);
+                CreateSampleEntities(out game, out task, out alert, out highScore, out possibleAnswer, out userAnswer);
 
                 //adding game to task
                 task.Game = game;
@@ -281,6 +296,13 @@ namespace UrbanGameTests.Tests
                 Assert.AreEqual(1, dataContext.GetTable<Game>().First(g => g.Id == 1).Tasks.Count);
                 Assert.IsNotNull(dataContext.GetTable<GameTask>().First(t => t.Id == 1).Game);
                 #endregion                
+                #region TaskSolution <-> ABCDUserAnswer relation
+
+                possibleAnswer.ABCDUserAnswers.Add(userAnswer);
+                Assert.AreSame(possibleAnswer, userAnswer.ABCDPossibleAnswer);
+
+
+                #endregion
             }
 
             #region Task <-> ABCDPossibleAnswer relation
@@ -329,8 +351,8 @@ namespace UrbanGameTests.Tests
 
             TestEntitiesRelationship<TaskSolution, ABCDUserAnswer>(sampleTaskSolution, sampleAnswer,
                                                                    solution => solution.ABCDUserAnswers,
-                                                                   userAnswer => userAnswer.Solution,
-                                                                   (userAnswer, solution) => userAnswer.Solution = solution);
+                                                                   ua => ua.Solution,
+                                                                   (ua, solution) => ua.Solution = solution);
 
             #endregion
 
@@ -452,6 +474,21 @@ namespace UrbanGameTests.Tests
                                                              t => t.Solutions,
                                                              s => s.Task,
                                                              (s, t) => s.Task = t);
+
+            #endregion
+
+            #region IABCDPossibleAnswer <-> IABCDUserAnswer relation
+
+            Func<IABCDUserAnswer> sampleUserAnswer = () => new ABCDUserAnswer
+            {
+                Id = 1,
+                Answer = false
+            };
+
+            TestInterfaceRelationship<IABCDPossibleAnswer, IABCDUserAnswer, ABCDPossibleAnswer, ABCDUserAnswer>(sampleABCDPossibleAnswer, sampleUserAnswer,
+                                                                    a => a.ABCDUserAnswers,
+                                                                    us => us.ABCDPossibleAnswer,
+                                                                    (us, a) => us.ABCDPossibleAnswer = a);
 
             #endregion
         }

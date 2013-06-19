@@ -11,6 +11,11 @@ namespace UrbanGame.Storage
     [Table]
     public class ABCDPossibleAnswer : EntityBase, IABCDPossibleAnswer
     {
+        public ABCDPossibleAnswer()
+        {
+            _abcdUserAnswerRefs = new EntitySet<ABCDUserAnswer>(OnABCDUserAnswerAdded, OnABCDUserAnswerRemoved);
+        }
+
         #region Id
 
         private int _id;
@@ -108,12 +113,12 @@ namespace UrbanGame.Storage
         }
         #endregion
 
-        #region ABCUserAnswers
+        #region ABCDUserAnswers
 
         private EntitySet<ABCDUserAnswer> _abcdUserAnswerRefs;
 
-        [Association(Name = "FK_ABCDUserAnswer_ABCDPossibleAnswers", Storage = "_abcdUserAnswerRefs", ThisKey = "Id", OtherKey = "ABCDPossibleAnswerId", DeleteRule = "CASCADE")]
-        public EntitySet<ABCDUserAnswer> ABCUserAnswears
+        [Association(Name = "FK_ABCDPossibleAnswer_ABCDUserAnswers", Storage = "_abcdUserAnswerRefs", ThisKey = "Id", OtherKey = "ABCDPossibleAnswerId", DeleteRule = "CASCADE")]
+        public EntitySet<ABCDUserAnswer> ABCDUserAnswers
         {
             get { return _abcdUserAnswerRefs; }
         }
