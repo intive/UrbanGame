@@ -3,8 +3,6 @@ package com.blstream.urbangame;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TabHost;
-import android.widget.TabHost.TabSpec;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -26,10 +24,9 @@ public class ActiveTaskActivity extends MenuActivity {
 	
 	private final String TAB_LAST_SELECTED = "tab";
 	
-	private TabHost tabHost;
 	private TabManager tabManager;
 	private Task task;	//I load it here, because otherwise I would have to load it twice
-
+	
 	private DatabaseInterface databaseInterface;
 	
 	@Override
@@ -40,7 +37,7 @@ public class ActiveTaskActivity extends MenuActivity {
 		long taskID = getSelectedTaskID();
 		databaseInterface = new Database(this);
 		this.task = databaseInterface.getTask(taskID);
-
+		
 		databaseInterface.closeDatabase();
 		configureActionBar();
 		setUpTabHost(savedInstanceState);
@@ -74,18 +71,16 @@ public class ActiveTaskActivity extends MenuActivity {
 	}
 	
 	private void setUpTabHost(Bundle savedInstanceState) {
-		tabHost = (TabHost) findViewById(android.R.id.tabhost);
-		tabHost.setup();
 		fillTabHost();
 		
 		if (savedInstanceState != null) {
-			String lastSelectedTabTag = savedInstanceState.getString(TAB_LAST_SELECTED);
-			tabHost.setCurrentTabByTag(lastSelectedTabTag);
+			int lastSelectedTabTag = savedInstanceState.getInt(TAB_LAST_SELECTED);
+			getSupportActionBar().setSelectedNavigationItem(lastSelectedTabTag);
 		}
 	}
 	
 	private void fillTabHost() {
-		tabManager = new TabManager(this, tabHost, R.id.realtabcontent);
+		tabManager = new TabManager(this, R.id.realtabcontent);
 		Intent intent = getIntent();
 		Bundle extras = null;
 		if (intent != null) {
@@ -98,11 +93,11 @@ public class ActiveTaskActivity extends MenuActivity {
 		extras.putParcelable(Task.TASK_KEY, task);
 		
 		String tagTaskDescription = getString(R.string.tab_task_description);
-		TabSpec tabDescription = tabHost.newTabSpec(TAG_TAB_DESCRIPTION).setIndicator(tagTaskDescription);
+		ActionBar.Tab tabDescription = tabManager.prepareTab(TAG_TAB_DESCRIPTION, tagTaskDescription);
 		tabManager.addTab(tabDescription, TaskDescriptionFragment.class, extras);
 		
 		String tagTasksAnswer = getString(R.string.tab_task_answer);
-		TabSpec tabAnswer = tabHost.newTabSpec(TAG_TAB_ANSWER).setIndicator(tagTasksAnswer);
+		ActionBar.Tab tabAnswer = tabManager.prepareTab(TAG_TAB_ANSWER, tagTasksAnswer);
 		//check weather it should open gps or abcd task fragment
 		if (task.getType() == Task.TASK_TYPE_ABCD) {
 			tabManager.addTab(tabAnswer, ABCDTaskAnswerFragment.class, extras);
@@ -115,7 +110,7 @@ public class ActiveTaskActivity extends MenuActivity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putString(TAB_LAST_SELECTED, tabHost.getCurrentTabTag());
+		outState.putInt(TAB_LAST_SELECTED, getSupportActionBar().getSelectedNavigationIndex());
 	}
 	
 	@Override
