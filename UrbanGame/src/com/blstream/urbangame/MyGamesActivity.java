@@ -52,8 +52,6 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 		
 		Resources resources = getResources();
 		
-		DatabaseInterface database = new Database(this);
-		
 		ExpandableListHeader parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_active));
 		arrayChildren = (ArrayList<UrbanGameShortInfo>) dividedGamesInGroups.get(ACTIVE_GAMES_KEY);
@@ -79,7 +77,7 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 		
 		ExpandableListViewPropertiesSetter.setPropertiesOfExpandableListView(adapter, mExpandableList);
 	}
-
+	
 	private HashMap<Integer, List<UrbanGameShortInfo>> readGamesInfo() {
 		DatabaseInterface database = new Database(getApplicationContext());
 		String email = database.getLoggedPlayerID();
@@ -106,7 +104,6 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 	protected void onResume() {
 		super.onResume();
 		this.supportInvalidateOptionsMenu();
-		Log.i(TAG, "onResume completed");
 	}
 	
 	@Override
