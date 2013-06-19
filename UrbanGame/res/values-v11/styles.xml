@@ -11,6 +11,12 @@
         
         <!-- Action Bar Customization -->
         <item name="android:actionBarStyle">@style/ActionBar.Solid.UrbanGame</item>
+        
+        <!-- EditText Customization -->
+        <item name="android:editTextBackground">@drawable/edit_text_urban_game_default</item>
+        
+        <!-- CheckBox Customization -->
+        <item name="android:listChoiceIndicatorMultiple">@drawable/btn_check_urban_game_default</item>
     </style>
 
     <!-- Action Bar Customization -->
