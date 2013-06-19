@@ -84,15 +84,15 @@ trait Games { this: ImplicitSession =>
     Try(p.update("online"))
   }
 
-  def getGame(id: Int): Try[GamesDetails] = {
+  def findGameById(gid: Int): Try[GamesDetails] = {
     val q = for {
-      g <- Games if g.id === id.bind
+      g <- Games if g.id === gid.bind
     } yield g
 
     Try(q.first)
   }
 
-  def getOperatorGamesList(id: Int): List[GamesList] = {
+  def findGamesListByOperatorId(oid: Int): List[GamesList] = {
     checkGamesStatus match {
       case Success(a) => 
       case Failure(e) => Logger.error("Check game status error: ", e)
@@ -100,7 +100,7 @@ trait Games { this: ImplicitSession =>
 
     val q = for {
       g <- Games 
-      if g.operatorId === id.bind 
+      if g.operatorId === oid.bind 
       if g.status =!= "finished"
     } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status, g.image, g.tasksNo)
     q.list map {
@@ -108,7 +108,7 @@ trait Games { this: ImplicitSession =>
     }
   }
 
-  def getOperatorGamesArchive(id: Int): List[GamesList] = {
+  def findGamesArchiveByOperatorId(oid: Int): List[GamesList] = {
     checkGamesStatus match {
       case Success(a) => 
       case Failure(e) => Logger.error("Check game status error: ", e)
@@ -116,7 +116,7 @@ trait Games { this: ImplicitSession =>
 
     val q = for {
       g <- Games 
-      if g.operatorId === id.bind 
+      if g.operatorId === oid.bind 
       if g.status === "finished"
     } yield (g.id, g.name, g.version, g.location, g.startTime, g.endTime, g.status, g.image, g.tasksNo)
     q.list map {
@@ -124,9 +124,9 @@ trait Games { this: ImplicitSession =>
     }
   }
 
-  def createGame(gd: GamesDetails): Try[Int] = Try(Games.forInsert returning Games.id insert gd)
+  def create(gd: GamesDetails): Try[Int] = Try(Games.forInsert returning Games.id insert gd)
 
-  def updateGame(gid: Int, gd: GamesDetails): Try[Int] = {
+  def update(gid: Int, gd: GamesDetails): Try[Int] = {
     val q = for {
       g <- Games if g.id === gid
     } yield g
@@ -134,7 +134,7 @@ trait Games { this: ImplicitSession =>
     Try(q.update(gd))
   }
 
-  def deleteGame(gid: Int): Try[Int] = {
+  def delete(gid: Int): Try[Int] = {
     val q = for {
       g <- Games if g.id === gid
     } yield g
@@ -163,6 +163,14 @@ trait Games { this: ImplicitSession =>
       g <- Games if g.id === gid.bind
     } yield g.tasksNo
     q.update(tno)
+  }
+
+  def findOperatorId(gid: Int) = {
+    val q = for {
+      g <- Games if g.id === gid.bind
+    } yield g.operatorId
+
+    q.first
   }
 
 }

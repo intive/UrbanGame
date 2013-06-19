@@ -24,6 +24,8 @@ import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
 import models.utils._
 import models.dal.Bridges._
+import controllers.AuthConfigImpl
+import jp.t2v.lab.play2.auth.test.Helpers._
 
 /**
  * Add your spec here.
@@ -31,6 +33,8 @@ import models.dal.Bridges._
  * For more information, consult the wiki.
  */
 class ApplicationSpec extends Specification {
+
+  object config extends AuthConfigImpl
   
   "Application" should {
     
@@ -51,9 +55,9 @@ class ApplicationSpec extends Specification {
       }
     }
     
-    "render the 'my games' page" in {
+    "render the 'my games' page for logged in user" in {
       running(FakeApplication()) {
-        val mgames = route(FakeRequest(GET, "/my/games")).get
+        val mgames = route(FakeRequest(GET, "/my/games").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
         status(mgames) must equalTo(OK)
@@ -62,9 +66,9 @@ class ApplicationSpec extends Specification {
       }
     }
     
-    "render the 'create new game' page" in {
+    "render the 'create new game' page for logged in user" in {
       running(FakeApplication()) {
-        val ngame = route(FakeRequest(GET, "/my/games/new")).get
+        val ngame = route(FakeRequest(GET, "/my/games/new").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
         status(ngame) must equalTo(OK)
@@ -73,9 +77,9 @@ class ApplicationSpec extends Specification {
       }
     }
     
-    "render the 'archive' page" in {
+    "render the 'archive' page for logged in user" in {
       running(FakeApplication()) {
-        val archive = route(FakeRequest(GET, "/my/games/archive")).get
+        val archive = route(FakeRequest(GET, "/my/games/archive").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
         status(archive) must equalTo(OK)
@@ -83,9 +87,9 @@ class ApplicationSpec extends Specification {
       }
     }
     
-    "render the 'options' page" in {
+    "render the 'options' page for logged in user" in {
       running(FakeApplication()) {
-        val ngame = route(FakeRequest(GET, "/my/options")).get
+        val ngame = route(FakeRequest(GET, "/my/options").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
         status(ngame) must equalTo(OK)
@@ -106,8 +110,10 @@ class ApplicationSpec extends Specification {
      "send an id in Json object when saving the game" in {
       running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
 
-        val gid: Int = play.api.db.slick.DB.withSession { implicit session =>
-          Operators.createAccount(OperatorsData(None, "test", "test"))
+        import scala.util.{ Try, Success, Failure }
+        val gid: Try[Int] = play.api.db.slick.DB.withSession { implicit session =>
+          Operators.create(Operator(id = None, email = "test@test.pl", password = "test", 
+      name = "Test1", permission = NormalUser, token = None))
         }
 
         val json: JsValue = Json.parse("""
@@ -131,7 +137,7 @@ class ApplicationSpec extends Specification {
           } 
         }
         """)
-        val gameid = route(FakeRequest(POST, "/my/games/json").withJsonBody(json)).get
+        val gameid = route(FakeRequest(POST, "/my/games/json").withJsonBody(json).withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
         status(gameid) must equalTo(OK)

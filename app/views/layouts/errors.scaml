@@ -1,0 +1,31 @@
+/
+    *Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+    *        http://blstream.github.com/UrbanGame/
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *        http://www.apache.org/licenses/LICENSE-2.0
+    * 
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+
+-@ var title: String = "Default title"
+-@ var body: String
+-@ val req: RequestHeader
+-@ val lan: Lang
+-@ val app: Application
+
+%html
+    %head
+        %title=title
+        %link(rel="shortcut icon" type="image/png" href={routes.Assets.at("images/favicon.png")})
+        -# Font Awsome
+        %link(href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet")
+        -# Main
+        %link(rel="stylesheet" media="screen" href={routes.Assets.at("stylesheets/main.min.css")})
+    %body
+        != body

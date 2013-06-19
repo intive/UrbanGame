@@ -88,15 +88,19 @@
                         %label(for="gWinningNum")
                             %strong=Messages("newgame.gamewinningnumlabel")(lan)
                         .input-append.input-prepend(tooltip={Messages("newgame.ttgamewinningnum")(lan)} tooltip-animation="true" tooltip-placement="right")
-                            %button.btn( ng-click="decrementWinningNum()") -
+                            %i.icon-minus-sign(ng-click="decrementWinningNum()")
                             %input.input-mini.text-center(type="number" min="1" winning required name="gWinningNum" ng-model="game.winningNum" )
-                            %button.btn( ng-click="incrementWinningNum()") +
+                            %i.icon-plus-sign(ng-click="incrementWinningNum()")
                 .alert.alert-error.span11(ng-show="form.$error.morewinnersthanplayers" ng-cloak) = Messages("newgame.gwinningerror")
                 %label(for="gDifficulty")
                     %strong=Messages("newgame.gamedifflabel")(lan)
-                %div.btn-group(id="btnsDiff" data-toggle="buttons-checkbox" tooltip={Messages("newgame.ttgamediff")(lan)} tooltip-animation="true" tooltip-placement="left")
-                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="'easy'") = Messages("newgame.diff.easy")(lan)
-                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="'medium'") = Messages("newgame.diff.medium")(lan)
-                    %button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="'hard'") = Messages("newgame.diff.hard")(lan)
+                %div.btn-group.rating(id="btnsDiff" data-toggle="buttons-checkbox" tooltip={Messages("newgame.ttgamediff")(lan)} tooltip-animation="true" tooltip-placement="left")
+                    -#%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="'easy'") = Messages("newgame.diff.easy")(lan)
+                    -#%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="'medium'") = Messages("newgame.diff.medium")(lan)
+                    -#%button.btn.btn-info(type="button" ng-model="game.diff" btn-radio="'hard'") = Messages("newgame.diff.hard")(lan)
+                    -# Reversed 'cause of CSS for 'rating' class
+                    %i.icon-circle(ng-class="{active: game.diff == 'hard'}" ng-click="game.diff='hard'")
+                    %i.icon-circle(ng-class="{active: game.diff == 'medium' || game.diff == 'hard'}" ng-click="game.diff='medium'")
+                    %i.icon-circle(ng-class="{active: game.diff == 'easy' || game.diff == 'medium' || game.diff == 'hard'}" ng-click="game.diff='easy'")
             
             

@@ -9,15 +9,18 @@ case class GamesDetails(id: Option[Int], name: String, version: Int = 1, descrip
   operatorId: Int, created: DateTime, updated: DateTime = DateTime.now, startTime: DateTime = DateTime.now, 
   endTime: DateTime, started: Option[DateTime] = None, ended: Option[DateTime] = None, winning: String = "max_points", 
   nWins: Int = 1, difficulty: String = "easy", maxPlayers: Int = 1000000, awards: String, status: String, 
-  image: String="games/gameicon.png", tasksNo: Int = 0)
+  image: String = "games/gameicon.png", tasksNo: Int = 0)
 case class TasksDetails(id: Option[Int], gameId: Int, version: Int, name: String, description: String, 
   deadline: DateTime, maxpoints: Int, maxattempts: Int)
-case class OperatorsData(id: Option[Int], login: String, pass_hash: String)
 case class SkinsDetails(id: Option[Int], gameId: Int, icon: String)
 
 case class GamesList(id: Int, name: String, version: Int, location: String, startTime: DateTime, 
   endTime: DateTime, status: String, image: String, tasksNo: Int)
 case class TasksList(id: Int, name: String, version: Int)
+
+case class Operator(id: Option[Int], email: String, password: String, name: String, 
+  logo: String = "users/logo.png", description: Option[String] = None, permission: Permission, 
+  created: DateTime = DateTime.now, validated: Boolean = false, token: Option[String])
 
 object mutils extends mutils {
 

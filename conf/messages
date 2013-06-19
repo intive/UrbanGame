@@ -4,10 +4,27 @@ register.password = Password
 register.captcha = Enter the code
 register.submit = Register
 
-login.name = Login
+register.sent = Your account has been created. The confirmation e-mail has been sent to: {0}.
+register.notSent = We could not sent the confirmation e-mail to: {0}. Please, try the link below to send it again or contact us.
+register.dbIssue = Technical problem occured. Your account has not been created. Please, try again later or contact us.
+
+email.signUpConfirm.subject = UrbanGame Sign Up Confirmation
+email.signUpConfirm.title = UrbanGame Sign Up Confirmation E-mail
+email.signUpConfirm.body = Please, confirm your registration by clicking in the link below
+
+confirm.okToken = Your e-mail address has been confirmed. Your account is now ready to use.
+confirm.badToken = Your token is not valid. We've sent another confirmation link to your e-mail address. Please, check it and try again. 
+confirm.noUser = There is no such e-mail in our database. Please, check your confirmation link or contact us.
+confirm.alreadyValidated = Your account does not need the validation.
+confirm.dbIssue = Technical problem occured.  Your account could not be validated. Please, try later or contact us.
+
+login.email = E-mail
 login.password = Password
 login.login = Login
 login.logout = Logout
+login.loggedInAs = You are logged in as:
+login.remember = Remember me
+login.forgotpass = Forgot password?
 
 dateformat = "yy-dd-mm"
 dateformatlong = yyyy-dd-MM
@@ -126,3 +143,5 @@ js.errors.gameslist = Error occurred while getting list of games.
 js.errors.sure = Are you sure you want to {0} this game?
 js.no = No
 js.yes = Yes, {0} this game
+
+errors.forbidden = No permission to access this source

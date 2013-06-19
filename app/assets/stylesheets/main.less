@@ -40,158 +40,274 @@
 @publishedtext: #66ccff;
 
 html, body {
-	height: 100%;
+    height: 100%;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.cursor-help {
+    cursor: help;
+}
+
+.cursor-pointer {
+    cursor:pointer;
+}
+
+.no-margin {
+    margin:0 !importatnt;
+}
+
+.no-wrap {
+    white-space: nowrap
+}
+
+.as-inline-block {
+    display: inline-block
+}
+
+.slight-padding-top {
+    padding-top: @slightpadding;
+}
+
+.slight-padding-right {
+    padding-right: @slightpadding;
+}
+
+.slight-padding-left {
+    padding-left: @slightpadding;
+}
+
+.slight-padding-bottom {
+    padding-left: @slightpadding;
+}
+
+.pull-higher {
+    margin-top: @pullhigher;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+
+.btn {
+    height: 26px;
+    padding: 2px 12px;
+}
+
+.first-two-letters {
+    color: #669900;
 }
 
 #wrap {
-	min-height: 100%;
-	height: auto !important;
-	height: 100%;
-	margin: 0 auto -@hfooter;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -@hfooter;
 
-	#push {
-		height: @roffset10 * 3;
-	}
-}
+    #push {
+        height: @roffset10 * 3;
+    }
 
-.myheader {
-	.navbar {
-		margin: 0;
-	}
-	.big-image {
-		text-align: center;
-		height: 200px;
-	}
+    .row {
+        margin-left: 0;
+    }
 }
 
 #footer {
-	height: @hfooter;
-	background-color: @lightgray;
-	text-align: center;
-	font-size: 11px;
-	padding: @slightpadding;
+    height: @hfooter;
+    background-color: @lightgray;
+    text-align: center;
+    font-size: 11px;
+    padding: @slightpadding;
 
-	.row {
-		text-align: left;
+    .row {
+        text-align: left;
 
-		p:nth-child(1) {
-			font-weight: bold;
-		}
-	}
+        p:nth-child(1) {
+            font-weight: bold;
+        }
+    }
 
-	form {
-		margin-bottom: 2px;
-	}
+    form {
+        margin-bottom: 2px;
+    }
 
-	select {
-		margin-top: @slightpadding;
-	}
+    select {
+        margin-top: @slightpadding;
+    }
 
-	.cicons {
-		text-align: left;
-	}
+    .cicons {
+        text-align: left;
+    }
 
-	#footmenu {
-		margin-bottom: @slightpadding;
-		margin-top: @hfooter * 0.7;
-	}
+    #footmenu {
+        margin-bottom: @slightpadding;
+        margin-top: @hfooter * 0.7;
+    }
 }
 
 @media (max-width: 767px) {
-	#footer {
-		margin-left: -20px;
-		margin-right: -20px;
-		padding-left: 20px;
-		padding-right: 20px;
-	}
+    #footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
 
 .masthead {
-	margin-bottom: @roffset10 * 3;
+    margin-bottom: @roffset10 * 3;
+    background-color: #f3f3f3;
 
-	.myheader {
-		background-color: @lightgray;
-		
-		.navbar {
-			margin-bottom: 0;
+    .topheader {
+        margin: 0 auto;
+        max-width: 940px;
+    }
 
-			.navbar-inner {
-				text-align: right;
-			}
-		}
-	}
+    .topheader, .topheader label {
+        font-size: 12px;
+    }
 
-	.loginform {
-		margin: @roffset10 - 5 @roffset10;
-	}
+    .myheader {
+        background-color: @lightgray;
+        
+        .navbar {
+            margin-bottom: 0;
 
+            .navbar-inner {
+                text-align: center;
+            }
+        }
+    }
+
+    .loginform {
+        margin: @roffset10 - 5 @roffset10;
+
+        form.navbar-form {
+            a, a:active, a:link {
+                color: #000;
+            }
+
+            a:hover {
+                text-decoration: none;
+                color: green;
+            }
+
+            a:hover [class^="icon-"] {
+                color: black;
+            }
+
+            input.btn.btn-small {
+                margin: 0 2px 0 5px;
+            }
+            .span {
+                margin-left: 5px;
+            }
+
+            input[type="text"], input[type="password"] {
+                height: 18px;
+            }
+
+            label, a {
+                padding-top: 2px;
+                margin-top: 2px;
+            }
+        }
+    }
+}
+
+.myheader {
+    .navbar {
+        margin: 0;
+    }
+    
+    .big-image {
+        text-align: center;
+        height: 200px;
+    }
 }
 
 .container-narrow {
-	margin: 0 auto;
-	max-width: @contwidth;
-	padding-bottom: @hfooter;
+    margin: 0 auto;
+    max-width: @contwidth;
+    padding-bottom: @hfooter;
+}
+
+.container-style {
+    border: 1px #b8b8b8 solid;
+    border-radius: 5px;
+    background-color: #faf9f9;
+    padding: 15px;
+    -moz-box-shadow: 0px 0px 3px 1px #e7e4e4;
+    -webkit-box-shadow: 0px 0px 3px 1px #e7e4e4;
+    box-shadow: 0px 0px 3px 1px #e7e4e4;
 }
 
 .navbar .nav,
 .navbar .nav > li {
-	float: none;
-	display: inline-block;
-	*display: inline; /* ie7 fix */
-	*zoom: 1; /* hasLayout ie7 trigger */
-	vertical-align: top;
-	margin: 0px;
+    float: none;
+    display: inline-block;
+    *display: inline; /* ie7 fix */
+    *zoom: 1; /* hasLayout ie7 trigger */
+    vertical-align: top;
+    margin: 0px;
 }
 
 .nav-steps {
-	min-width: @contwidth;
+    min-width: @contwidth;
 
-	li {
-		width: 25%;
-	}
+    li {
+        width: 25%;
+    }
 }
 
-input[type="radio"] {
-	margin-right: 7px;
-	margin-left: 3px;
-	margin-bottom: 3px;
-}
+.wizard {
+    .step {
+        text-transform: capitalize;
+    }
 
-.no-wrap {
-	white-space: nowrap
-}
+    textarea {
+        height: @tareaheight;
+        resize: none;
+    }
 
-.as-inline-block {
-	display: inline-block
-}
+    input[type="radio"] {
+        margin-right: 7px;
+        margin-left: 3px;
+        margin-bottom: 3px;
+    }
 
-.slight-padding-top {
-	padding-top: @slightpadding;
-}
+    .ui-datepicker { 
+        z-index: 9999 !important;
+    }
 
-.slight-padding-right {
-	padding-right: @slightpadding;
-}
+    .row.sum {
+        margin-bottom: 10px;
+    }
 
-.slight-padding-left {
-	padding-left: @slightpadding;
-}
+    [class^="icon-"] {
+        vertical-align: middle;
+        font-size: 15px;
+    }
 
-.slight-padding-bottom {
-	padding-left: @slightpadding;
-}
+    .rating {
+        unicode-bidi: bidi-override;
+        direction: rtl;
+        text-align: center;
 
-textarea {
-	height: @tareaheight;
-	resize: none;
-}
+        .icon-circle {
+            color: grey;
+            font-size: 15px;
+            margin: 0 3px;
+            vertical-align: top;
+        }
 
-.pull-higher {
-	margin-top: @pullhigher;
-}
-
-.cursor-help {
-	cursor: help;
+        .icon-circle:hover, .icon-circle.active, .icon-circle:hover~.icon-circle:before {
+            color: green;
+        }
+    }
 }
 
 input.search-query {
@@ -210,158 +326,135 @@ input.search-query {
 }
 
 #gamelist {
-	tbody tr td {
-		border-top: none;
-	}
+    tbody tr td {
+        border-top: none;
+    }
 
-	thead tr th {
-		border-top: 1px double @lightgray;
-		border-bottom: 3px double @lightgray;
-		font-weight: bold;
-		text-align: center;
-	}
+    thead tr th {
+        border-top: 1px double @lightgray;
+        border-bottom: 3px double @lightgray;
+        font-weight: bold;
+        text-align: center;
+    }
 
-	tbody tr {
-		td {
-			font-size: 13px;
-			vertical-align: middle;
-			padding-right: 10px;
-			padding-left: 10px;
-			text-align: center;
+    tbody tr {
+        td {
+            font-size: 13px;
+            vertical-align: middle;
+            padding-right: 10px;
+            padding-left: 10px;
+            text-align: center;
 
-			span {
-				font-weight: bold;
-			}
+            span {
+                font-weight: bold;
+            }
 
-			h4 {
-				margin: 2px 0;
-			}
-		}
+            h4 {
+                margin: 2px 0;
+            }
+        }
 
-		td:nth-child(2) {
-			text-align: left;
-		}
-	}
+        td:nth-child(2) {
+            text-align: left;
+        }
+    }
 }
+
 .finished {
-	tr& {
-		background-color: @finishedback;
-	}
+    tr& {
+        background-color: @finishedback;
+    }
 
-	span& {
-		color: @finishedtext;
-		font-weight: bold;
-	}
+    span& {
+        color: @finishedtext;
+        font-weight: bold;
+    }
 }
-.project {
-	tr& {
-		background-color: @projectback;
-	}
 
-	span& {
-		color: @projecttext;
-		font-weight: bold;
-	}
+.project {
+    tr& {
+        background-color: @projectback;
+    }
+
+    span& {
+        color: @projecttext;
+        font-weight: bold;
+    }
 }
 
 .online {
-	tr& {
-		background-color: @onlineback;
-	}
+    tr& {
+        background-color: @onlineback;
+    }
 
-	span& {
-		color: @onlinetext;
-		font-weight: bold;
-	}
+    span& {
+        color: @onlinetext;
+        font-weight: bold;
+    }
 }
 
 .published {
-	tr& {
-		background-color: @publishedback;
-	}
+    tr& {
+        background-color: @publishedback;
+    }
 
-	span& {
-		color: @publishedtext;
-		font-weight: bold;
-	}
-}
-.no-margin{
-    margin:0 !importatnt;
+    span& {
+        color: @publishedtext;
+        font-weight: bold;
+    }
 }
 
 form#registration {
-	margin-top: @slightpadding * 2;
+    margin-top: @slightpadding * 2;
 
-	input#captcha {
-		width: 100px;
-	}
+    input#captcha {
+        width: 100px;
+    }
 }
 
-.row {
-	margin-left: 0;
-}
-
-[ng\:cloak], [ng-cloak], .ng-cloak {
-  display: none !important;
-}
-
-.container-style{
-    border: 1px #b8b8b8 solid;
-    border-radius: 5px;
-    background-color: #faf9f9;
-    padding: 15px;
-    -moz-box-shadow: 0px 0px 3px 1px #e7e4e4;
-    -webkit-box-shadow: 0px 0px 3px 1px #e7e4e4;
-    box-shadow: 0px 0px 3px 1px #e7e4e4;
-}
-
-.ui-datepicker{ 
-	z-index: 9999 !important;
-}
-
-.step {
-	text-transform: capitalize;
-}
-
-.bold {
-	font-weight: bold;
-}
-
-.row.sum {
-	margin-bottom: 10px;
-}
-#processing{
+#processing {
     width: 28px;
     height: 28px;
 }
-.img-processing{
+
+.img-processing {
     background-image: url("../images/ajax-loader.gif")
 }
-.img-ok{
+
+.img-ok {
     background-image: url("../images/ajax-ok.jpg")
 }
-.img-error{
+
+.img-error {
     background-image: url("../images/ajax-error.png")
 }
-.cursor-pointer{
-    cursor:pointer;
-}
-caption{
+
+caption {
     font-size: 130%;
     font-weight: bold;
 }
-google-map{
+
+google-map {
     display: block;
     height: @mapheight;
+}
+
+#taskslist {
+    thead tr th {
+        border-top: 1px double @lightgray;
+        border-bottom: 3px double @lightgray;
+        font-weight: bold;
+        text-align: center;
     }
-#taskslist{
-    	thead tr th {
-            border-top: 1px double @lightgray;
-            border-bottom: 3px double @lightgray;
-            font-weight: bold;
-            text-align: center;
-        }
-        tbody tr td {
-            text-align:center;
-        }
+
+    tbody tr td {
+        text-align:center;
+    }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }

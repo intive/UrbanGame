@@ -6,10 +6,13 @@
 GET     /                           controllers.Application.index
 GET     /login                      controllers.Application.login
 GET     /logout                     controllers.Application.logout
-POST    /login                      controllers.Application.processLogin
+POST    /login                      controllers.Application.authenticate
 POST    /register                   controllers.Application.register
 POST    /locale                     controllers.Application.changeLang
+GET 	/notify						controllers.Application.notification
 GET     /messages.js                controllers.Application.jsMessages
+
+GET 	/confirm/:email/:token		controllers.Application.confirm(email: String, token: String)
 
 # Json
 GET     /my/games/json/list         controllers.GamesCtrl.getGamesList

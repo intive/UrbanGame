@@ -21,108 +21,121 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import scala.util.{ Try, Success, Failure }
 import play.api.Play.current
+import jp.t2v.lab.play2.auth._
+import play.api.cache.Cache
+import models.utils._
+import models.dal.Bridges._
 
-object GamesCtrl extends Controller with CookieLang {
+object GamesCtrl extends Controller with CookieLang with AuthElement with AuthConfigImpl {
 
-  def newGame = Action { implicit request =>
-    Ok(Scalate("newgame").render('title -> "Urban Game - Edit the game", 'request -> request))
+  def newGame = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+    val user = loggedIn
+    Ok(Scalate("newgame").render('title -> "Urban Game - Edit the game", 'user -> Some(user)))
   }
 
-  def editGame(gid: Int) = Action { implicit request =>
-    Ok(Scalate("newgame").render('title -> "Urban Game - Create new game", 'request -> request))
+  def myGames = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+    val user = loggedIn
+    Ok(Scalate("mygames").render('title -> "Urban Game - My games", 'user -> Some(user)))
   }
 
-  def myGames = Action { implicit request =>
-    Ok(Scalate("mygames").render('title -> "Urban Game - My games", 'request -> request))
+  def gameArchive = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+    val user = loggedIn
+    Ok(Scalate("mygames").render('title -> "Urban Game - My games", 'user -> Some(user)))
   }
 
-  def gameInfo(gid: Int) = Action { implicit request =>
-    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game informations", 'request -> request))
-  }
-
-  def gamePlayers(gid: Int) = Action { implicit request =>
-    Ok(Scalate("gameinfo").render('title -> "Urban Game - Players list", 'request -> request))
-  }
-
-  def gameTasks(gid: Int) = Action { implicit request =>
-    Ok(Scalate("gameinfo").render('title -> "Urban Game - Tasks list", 'request -> request))
-  }
-
-  def gameSkin(gid: Int) = Action { implicit request =>
-    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game skin", 'request -> request))
-  }
-
-  def gameMessages(gid: Int) = Action { implicit request =>
-    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game messages", 'request -> request))
-  }
-
-  def gameArchive = Action { implicit request =>
-    Ok(Scalate("mygames").render('title -> "Urban Game - My games", 'request -> request))
-  }
-
-  def options = Action { implicit request =>
+  def options = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+    val user = loggedIn
     Ok("Options")
+  }
+
+  def editGame(gid: Int) = authAndValidAction(NormalUser, gid) { user => implicit request =>
+    Ok(Scalate("newgame").render('title -> "Urban Game - Create new game", 'user -> Some(user)))
+  }
+
+  def gameInfo(gid: Int) = authAndValidAction(NormalUser, gid) { user => implicit request =>
+    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game informations", 'user -> Some(user)))
+  }
+
+  def gamePlayers(gid: Int) = authAndValidAction(NormalUser, gid) { user => implicit request =>
+    Ok(Scalate("gameinfo").render('title -> "Urban Game - Players list", 'user -> Some(user)))
+  }
+
+  def gameTasks(gid: Int) = authAndValidAction(NormalUser, gid) { user => implicit request =>
+    Ok(Scalate("gameinfo").render('title -> "Urban Game - Tasks list", 'user -> Some(user)))
+  }
+
+  def gameSkin(gid: Int) = authAndValidAction(NormalUser, gid) { user => implicit request =>
+    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game skin", 'user -> Some(user)))
+  }
+
+  def gameMessages(gid: Int) = authAndValidAction(NormalUser, gid) { user => implicit request =>
+    Ok(Scalate("gameinfo").render('title -> "Urban Game - Game messages", 'user -> Some(user)))
   }
 
   import scala.language.existentials
   import play.api.libs.json._
   import play.api.libs.functional.syntax._
-  import models.dal.Bridges._
 
-  def getGamesList = Action { implicit request =>
-    val opId = 1 // will be set from session soon
-
+  def getGamesList = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+    val opId = loggedIn.id.get
     val glist = gameList(opId)
 
     Ok(Json.toJson(glist))
   }
 
-  def getGamesArchive = Action { implicit request =>
-    val opId = 1 // will be set from session soon
-
+  def getGamesArchive = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+    val opId = loggedIn.id.get
     val garchive = gameArchives(opId)
 
     Ok(Json.toJson(garchive))
   }
 
-  def getGame(gid: Int) = Action { implicit request =>
+  def getGame(gid: Int) = authAndValidAction(NormalUser, gid) { user => implicit request =>
     game(gid) match {
       case Success(a) => Ok(Json.toJson(a))
       case Failure(e) => JsonBad(e.toString)
     }
   }
 
-  def saveGame = Action { implicit request =>
+  def saveGame = StackAction(AuthorityKey -> NormalUser) { implicit request =>
     JsonData { res: GamePartData =>
-      matchResult(gameSave(res))
+      val oid = loggedIn.id.get
+      matchResult(gameSave(res, oid))
     }
   }
 
-  def updateGame(gid: Int) = Action { implicit request =>
+  def updateGame(gid: Int) = StackAction(AuthorityKey -> NormalUser) { implicit request =>
     JsonData { res: GamePartData =>
-      matchResult(gameUpdate(res, gid))
+      val oid = loggedIn.id.get
+      matchResult(gameUpdate(res, gid, oid))
     }
   }
 
-  def deleteGame(gid: Int) = Action { implicit request =>
+  def deleteGame(gid: Int) = authAndValidAction(NormalUser, gid) { user => implicit request =>
     matchResult(gameDelete(gid))
   }
 
-  def checkName = Action { implicit request =>
+  def checkName = StackAction(AuthorityKey -> NormalUser) { implicit request =>
     JsonData { res: String =>
       matchResult(searchName(res), "Boolean")
     }
   }
 
-  def cancelGame = Action { implicit request =>
+  def cancelGame = StackAction(AuthorityKey -> NormalUser) { implicit request =>
     JsonData { res: Int =>
-      matchResult(gameChangeStatus(res, "cancel"))
+      if(checkOperator(res)(loggedIn))
+        matchResult(gameChangeStatus(res, "cancel"))
+      else
+        JsonBad("Access denied")
     }
   }
 
-  def publishGame = Action { implicit request =>
+  def publishGame = StackAction(AuthorityKey -> NormalUser) { implicit request =>
     JsonData { res: Int =>
-      matchResult(gameChangeStatus(res, "publish"))
+      if(checkOperator(res)(loggedIn))
+        matchResult(gameChangeStatus(res, "publish"))
+      else
+        JsonBad("Access denied")
     }
   }
 
@@ -143,14 +156,21 @@ object GamesCtrl extends Controller with CookieLang {
       case "String" => Ok(Json.toJson(Map("val" -> x.asInstanceOf[String])))
       case "Int" => Ok(Json.toJson(Map("val" -> x.asInstanceOf[Int])))
       case "Boolean" => Ok(Json.toJson(Map("val" -> x.asInstanceOf[Boolean])))
-      case _ => JsonBad("No such type value, can't cast to given type")
+      case _ => JsonBad("No such type value, can't cast to a given type")
     }
     
   }
 
-  private def JsonBad(x: String) = {
-    BadRequest(Json.toJson(Map("error" -> x.asInstanceOf[String])))
-  }
-}
+  private def JsonBad(x: String) = BadRequest(Json.toJson(Map("error" -> x.asInstanceOf[String])))
 
-case class QueryParams(rpp: Int)
+  private def checkOperator(gameId: Int)(operator: Operator): Boolean = findOperatorId(gameId) == operator.id.get
+
+  private def authAndValidAction(authority: Authority, gid: Int)(f: User => Request[AnyContent] => Result) =
+    StackAction(AuthorityKey -> authority) { implicit request =>
+      val user = loggedIn
+      if(checkOperator(gid)(user))
+        f(user)(request)
+      else
+        authorizationFailed(request)
+    }
+}

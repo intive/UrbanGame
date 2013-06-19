@@ -1,0 +1,42 @@
+/
+    *Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+    *        http://blstream.github.com/UrbanGame/
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *        http://www.apache.org/licenses/LICENSE-2.0
+    * 
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+
+-@ val req: RequestHeader
+-@ val lan: Lang
+-@ var user: Option[Operator]
+
+- if(user != None)
+    %form.navbar-form.pull-right(action={routes.Application.logout} method="get")
+        = Messages("login.loggedInAs")(lan)
+        %a(href="/my/options")
+            = user.get.name
+            %i.icon-user
+        %input.btn.btn-small(type="submit" value={Messages("login.logout")(lan)})
+- else
+    -if(req.uri != "/login")
+        %form.navbar-form(action={routes.Application.authenticate} method="post" name="loginForm")
+            .span
+                .row
+                    %input.input-medium(type="text" placeholder={Messages("login.email")(lan)} name="user.email")
+                .row
+                    %label.checkbox.inline
+                        %input(type="checkbox" name="remember" value="true") = Messages("login.remember")(lan)
+            .span
+                .row
+                    %input.input-medium(type="password" placeholder={Messages("login.password")(lan)} name="user.password")
+                .row
+                    %a.help-inline(href="/") = Messages("login.forgotpass")(lan)
+            .span
+                %input.btn.btn-success(type="submit" value={Messages("login.login")(lan)})

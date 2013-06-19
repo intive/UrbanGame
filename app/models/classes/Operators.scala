@@ -17,23 +17,72 @@ package models
 import play.api.Play.current
 import play.api.db.slick.DB
 import play.api.db.slick.Config.driver.simple._
+import com.github.tototoshi.slick.JodaSupport._
+import com.github.nscala_time.time.Imports._
+import org.mindrot.jbcrypt.BCrypt
 import models.utils._
 
-object Operators extends Table[OperatorsData]("OPERATORS") {
+object Operators extends Table[Operator]("OPERATORS") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-  def login = column[String]("login", O.NotNull)
-  def pass_hash = column[String]("pass_hash", O.NotNull)
-  def * = id.? ~ login ~ pass_hash <> (OperatorsData, OperatorsData.unapply _)
-  def forInsert = login ~ pass_hash <> ({ t => 
-      OperatorsData(None, t._1, t._2)}, 
-      { (od: OperatorsData) => Some((od.login, od.pass_hash))
+  def email = column[String]("email", O.NotNull)
+  def password = column[String]("password", O.NotNull)
+  def name = column[String]("name", O.NotNull)
+  def logo = column[String]("logo", O.NotNull, O.Default("users/logo.png"))
+  def description = column[Option[String]]("description")
+  def permission = column[Permission]("permission", O.NotNull)
+  def created = column[DateTime]("created", O.NotNull)
+  def validated = column[Boolean]("validated", O.NotNull, O.Default(false))
+  def token = column[Option[String]]("token")
+  def * = id.? ~ email ~ password ~ name ~ logo ~ description ~ permission ~ 
+    created ~ validated ~ token <> (Operator, Operator.unapply _)
+  def forInsert = email ~ password ~ name ~ logo ~ description ~ permission ~ 
+    created ~ validated ~ token <> ({ t => 
+      Operator(None, t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)}, 
+      { (op: Operator) => Some((op.email, BCrypt.hashpw(op.password, BCrypt.gensalt()), 
+        op.name, op.logo, op.description, op.permission, op.created, op.validated, op.token))
       })
+
+
+  implicit val permissionTypeMapper = MappedTypeMapper.base[Permission, String](
+    p => p match {
+      case Administrator => "Administrator"
+      case NormalUser => "NormalUser"
+    },
+    s => s match {
+      case "Administrator" => Administrator
+      case "NormalUser" => NormalUser
+    }
+  )
 }
 
 trait Operators { this: ImplicitSession =>
+  import scala.util.{ Try, Success, Failure }
 
   def getRowsNo: Int = (for {op <- Operators} yield op.length).first
 
-  def createAccount(od: OperatorsData): Int = Operators.forInsert returning Operators.id insert od
+  def create(op: Operator): Try[Int] = Try(Operators.forInsert returning Operators.id insert op)
+
+  def updateToken(email: String, token: Option[String]): Try[Int] = {
+    val q = for {
+      o <- Operators if o.email === email.bind
+    } yield (o.validated ~ o.token)
+
+    Try(q.update(if(token != None) false else true, token))
+
+  }
+
+  def authenticate(email: String, password: String): Option[Operator] = findByEmail(email).filter { operator => 
+    operator.validated && BCrypt.checkpw(password, operator.password)
+  }
+
+  def findByEmail(email: String): Option[Operator] = Query(Operators).filter(_.email === email).firstOption
+
+  def findById(id: Int): Option[Operator] = Query(Operators).filter(_.id === id).firstOption
+
+  def findAll: Seq[Operator] = Query(Operators).list
+
+  def findByCookie(cookie: String) = {
+    val q = Query(Operators).filter{ s => play.api.libs.Crypto.sign(s.email.toString) == cookie }
+  }
   
 }

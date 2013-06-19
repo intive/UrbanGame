@@ -15,58 +15,115 @@
 package controllers
 
 import play.api._
+import play.api.i18n._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.Play.current
+import jp.t2v.lab.play2.auth._
+import play.api.cache.Cache
+import scala.util.{ Try, Success, Failure }
+import models.utils._
+import models.dal.Bridges._
 
-object Application extends Controller with CookieLang {
+object Application extends Controller with CookieLang with OptionalAuthElement with LoginLogout with RememberMeElement with EmailConfirmation {
   
-  def index = Action { implicit request =>
-    Ok(Scalate("index").render('title -> "Urban Game"))
+  def index = StackAction { implicit request =>
+    val user: Option[User] = loggedIn
+    Ok(Scalate("index").render('title -> "Urban Game", 'user -> user))
   }
 
-  val loginForm = Form(
+  val loginForm = Form {
     tuple(
-      "login" -> nonEmptyText,
-      "password" -> nonEmptyText
+      "remember" -> boolean,
+      "user" -> mapping(
+        "email" -> email, 
+        "password" -> text
+      )(auth)(_.map(u => (u.email, "")))
+        .verifying("Invalid email or password", result => result.isDefined)
     )
-  )
-
-  def login = Action { implicit request =>
-    Ok("login")
   }
 
-  def processLogin = Action { implicit request =>
+  def login = StackAction { implicit request =>
+    val user: Option[User] = loggedIn
+    user match {
+      case Some(u) => Redirect(request.headers.get(REFERER).getOrElse(routes.GamesCtrl.myGames.url))
+      case _ => Ok(Scalate("login").render('title -> "Urban Game - Login", 'user -> None))
+    }
+  }
+
+  def authenticate = Action { implicit request =>
     loginForm.bindFromRequest.fold(
-      errors => BadRequest(Scalate("index").render('title -> "Urban Game", 'errors -> errors)),
-      { case (login, password) => 
-          Redirect(routes.GamesCtrl.myGames)
+      errors => {Console.printf(errors.toString)
+        BadRequest(Scalate("login").render('title -> "Urban Game", 'errors -> errors, 'user -> None))},
+      { case (remember, user) => {
+        if(remember) 
+          gotoLoginSucceeded(user.get.id.get).withCookies(Cookie(persistentCookieName, 
+            play.api.libs.Crypto.sign(user.get.email), Some(persistentSessionTimeout)))
+        else
+          gotoLoginSucceeded(user.get.id.get) 
+        }
       }
     )
   }
 
   def logout = Action { implicit request =>
-    Ok(Scalate("logout").render('title -> "Urban Game - Logout", 'request -> request))
+    gotoLogoutSucceeded.flashing(
+      "success" -> "You've been logged out"
+    )
   }
 
   import play.api.db.slick.Config.driver.simple._
-  import play.api.db.DB
-  import play.api.Play.current
-  import scala.slick.session.Database
-  import models.utils._
-  import models.dal.Bridges._
   import play.api.libs.json._
   import play.api.libs.functional.syntax._
+  import java.util.UUID
   
-  def register = Action { implicit request =>
-    val od = OperatorsData(None, "op", "pass")
+  def register = StackAction { implicit request =>
+    val user: Option[User] = loggedIn
+    val lan = request.cookies.get("PLAY_LANG").getOrElse(Cookie("PLAY_LANG", lang.code)).value.toString
+    val op = Operator(id = None, email = "anesq@gazeta.pl", password = "pass", 
+      name = "Name1", permission = NormalUser, token = None)
 
-    val opId = play.api.db.slick.DB.withSession { implicit session =>
-      Operators.createAccount(od)
+    val msg = operatorSave(op) match {
+      case Success(a) => sendToken(op.email, request) match {
+        case false => Messages("register.notSent")(Lang(lan))
+        case _ => Messages("register.sent", op.email)(Lang(lan))
+      }
+      case Failure(e) => Messages("register.dbIssue")(Lang(lan))
     }
 
-    Ok(Json.toJson(opId))
+    Redirect(routes.Application.notification).flashing(
+      "notification" -> msg
+    )
+  }
+
+  def notification = StackAction { implicit request =>
+    val user = loggedIn
+    flash.get("notification") match {
+      case Some(msg) => Ok(Scalate("confirmations").render('title -> "Urban Game - E-mail confirmation", 'user -> user, 'message -> msg))
+      case None => Redirect(routes.Application.index)
+    }
+  }
+
+  def confirm(email: String, token: String) = StackAction { implicit request =>
+    val user: Option[User] = loggedIn
+    val lan = request.cookies.get("PLAY_LANG").getOrElse(Cookie("PLAY_LANG", lang.code)).value.toString
+    val op = findByEmail(email)
+
+    val msg: String = true match {
+      case _ if(op == None) => Messages("confirm.noUser")(Lang(lan))
+      case _ if(op.get.validated) => Messages("confirm.alreadyValidated")(Lang(lan))
+      case _ if(op.get.token.get == token) => updateSignUpToken(op.get.email, None) match {
+        case Success(a) => Messages("confirm.okToken")(Lang(lan))
+        case Failure(e) => Messages("confirm.dbIssue")(Lang(lan))
+      }
+      case _ if(op.get.token.get != token) => {
+        sendToken(op.get.email, request)
+        Messages("confirm.badToken")(Lang(lan))
+      }
+    }
+
+    Ok(Scalate("confirmations").render('title -> "Urban Game - E-mail confirmation", 'user -> user, 'message -> msg))
   }
 
   def fillDatabase = Action { implicit request =>
@@ -81,11 +138,12 @@ object Application extends Controller with CookieLang {
     play.api.db.slick.DB.withSession { implicit session =>
       if (Operators.getRowsNo == 0) {
         Source.fromFile(filepaths(1)).getLines.foreach { line => 
-          val List(uname, pass) = line.split("::").map(_.toString).toList
+          val List(email, pass, name, permission) = line.split("::").map(_.toString).toList
 
-          val od = OperatorsData(None, uname, pass)
+          val od = Operator(id = None, email = email, password = pass, name = name, 
+            permission = Permission.valueOf(permission), validated = true, token = None)
 
-          Operators.createAccount(od)
+          Operators.create(od)
           cnt2 = cnt2 + 1
         }
       }
@@ -100,7 +158,7 @@ object Application extends Controller with CookieLang {
             DateTime.now, new DateTime(startTime), new DateTime(endTime), Some(new DateTime(started)), Some(new DateTime(ended)), 
             winning, nWins.toInt, difficulty, maxPlayers.toInt, awards, status, image)
 
-          Games.createGame(gd)
+          Games.create(gd)
           cnt1 = cnt1 + 1
         }
       }
@@ -119,6 +177,14 @@ object Application extends Controller with CookieLang {
   def jsMessages = Action { implicit request =>
     import jsmessages.api.JsMessages
     Ok(JsMessages.apply(Some("Messages"))).as(JAVASCRIPT)
+  }
+
+  private def sendToken(email: String, request: RequestHeader) = {
+    val token = UUID.randomUUID.toString
+    updateSignUpToken(email, Some(token)) match {
+      case Success(a) => sendSignUpConfirmation(email, token, request)
+      case Failure(e) => false
+    }
   }
 
 }

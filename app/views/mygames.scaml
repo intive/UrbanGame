@@ -90,9 +90,9 @@
             %td(colspan="5")
                 %div.pagination.pull-right
                     %ul
-                        %li(ng-class="{disabled: currentPage == 0}")
+                        %li(ng-class="{disabled: currentPage == 0 || pagedItems.length == 0}")
                             %a(ng-click="prevPage()") « Prev
                         %li(ng-repeat="n in range(pagedItems.length)" ng-class="{active: n == currentPage}" ng-click="setPage()")
                             %a(ng-bind="n + 1") 1
-                        %li(ng-class="{disabled: currentPage == pagedItems.length - 1}")
+                        %li(ng-class="{disabled: currentPage == pagedItems.length - 1 || pagedItems.length == 0}")
                             %a(ng-click="nextPage()") Next »

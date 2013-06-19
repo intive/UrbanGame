@@ -4,10 +4,15 @@ register.password = Hasło
 register.captcha = Wprowadź kod
 register.submit = Rejestruj
 
+email.signUpConfirm.subject = UrbanGame Potwierdzenie rejestracji
+email.signUpConfirm.title = UrbanGame E-mail potwierdzający rejestrację
+email.signUpConfirm.body = Proszę potwierdzić swoją rezerwację klikając link poniżej
+
 login.name = Login
 login.password = Hasło
 login.login = Zaloguj
 login.logout = Wyloguj
+login.loggedInAs = Jesteś zalogowany jako:
 
 dateformat = "yy-dd-mm"
 dateformatlong = dd-MM-yyyy

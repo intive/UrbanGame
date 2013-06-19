@@ -36,13 +36,19 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         endDate: null,
         winning: "max_points",
         winningNum: 1,
-        diff: 'easy',
+        diff: null,
         playersNum: null,
         awards: "",
         tasksNo: 0,
         status: "project",
         version: 1
     }
+
+    $scope.tasks = [
+        { name:"taskOne", type:"GPS", visible:"None", version:1.0, maxPoints:7 }
+        { name:"taskOne", type:"GPS", visible:"None", version:1.0, maxPoints:10 }
+    ]
+
     $scope.skin = {
         image: "games/gameicon.png"
     }
@@ -74,13 +80,9 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         else
             false
 
-
     fillGameModel = ->
         if $scope.isEdit()
             resource["get"]()
-
-    $scope.tasks = [{name:"taskOne", type:"GPS", visible:"None", version:1.0, maxPoints:7},{name:"taskOne", type:"GPS", visible:"None", version:1.0, maxPoints:10}]
-
 
     loadModelData = (data) ->
         $scope.game = {
@@ -202,7 +204,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             resource["checkName"]()
 
     # ------------------ STEPS SWITCHING
-    $scope.selection = $scope.steps[1]
+    $scope.selection = $scope.steps[0]
 
     $scope.getCurrentStepIndex = ->
         _.indexOf($scope.steps, $scope.selection)
