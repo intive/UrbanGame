@@ -54,7 +54,7 @@ public class ActiveGameActivity extends MenuActivity {
 		tabManager.addTab(tabRanking, GameRankingFragment.class, extras);
 		
 		String tagGameInfo = getString(R.string.tab_game_gameInfo);
-		TabSpec tabGameInfo = tabHost.newTabSpec(TAG_TAB_INFO).setIndicator(tagGameInfo);
+		ActionBar.Tab tabGameInfo = tabManager.prepareTab(TAG_TAB_INFO, tagGameInfo);
 		tabManager.addTab(tabGameInfo, GameInfoFragment.class, extras);
 	}
 	
