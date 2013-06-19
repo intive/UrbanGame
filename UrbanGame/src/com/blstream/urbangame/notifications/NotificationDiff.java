@@ -1,7 +1,5 @@
 package com.blstream.urbangame.notifications;
 
-import java.util.Arrays;
-
 import android.util.Log;
 
 import com.blstream.urbangame.database.entity.ABCDTask;
@@ -18,8 +16,11 @@ public class NotificationDiff {
 	
 	private final String arraySeparator = ", ";
 	private final String fieldSeparator = ": ";
+	private final String endDiffSeprator = ". ";
 	private final String newLine = "\n";
 	private final String emptyString = "";
+	private final String fieldAdded = "Added";
+	private final String fieldRemoved = "Removed";
 	
 	/*************************************
 	 ********** TASK COMPARISON **********
@@ -88,44 +89,85 @@ public class NotificationDiff {
 	 ********* COMMON COMPARISON *********
 	 *************************************/
 	
-	private String calculateDiff(String fieldName, Object oldObject, Object newObject) {
-		if (oldObject == null) return emptyString;
-		if (newObject == null) return emptyString;
-		
-		if (oldObject.equals(newObject)) return emptyString;
+	public String calculateDiff(String diffName, Object oldObject, Object newObject) {
+		if (oldObject == null || newObject == null || oldObject.equals(newObject)) return String.valueOf(emptyString);
 		
 		StringBuilder diffBuilder = new StringBuilder();
-		diffBuilder.append(fieldName);
-		diffBuilder.append(fieldSeparator);
+		diffBuilder.append(seperateDiff(diffName, diffBuilder));
 		diffBuilder.append(newObject.toString());
 		diffBuilder.append(newLine);
 		
 		return diffBuilder.toString();
 	}
 	
-	private String calculateArrayDiff(String fieldName, Object[] oldObject, Object[] newObject) {
-		if (oldObject == null) return emptyString;
-		if (newObject == null) return emptyString;
+	public String calculateArrayDiff(String diffName, Object[] oldArray, Object[] newArray) {
 		
-		if (oldObject.length != newObject.length || Arrays.equals(oldObject, newObject)) return emptyString;
+		if (oldArray == null || newArray == null) return emptyString;
 		
 		StringBuilder arrayDiffBuilder = new StringBuilder();
+		int min = oldArray.length < newArray.length ? oldArray.length : newArray.length;
 		
-		for (int i = 0; i < oldObject.length; ++i) {
-			if (!oldObject[i].equals(newObject[i])) {
-				if (arrayDiffBuilder.length() == 0) {
-					arrayDiffBuilder.append(fieldName);
-					arrayDiffBuilder.append(fieldSeparator);
-				}
-				else {
-					arrayDiffBuilder.append(arraySeparator);
-				}
-				
-				arrayDiffBuilder.append(newObject[i]);
+		for (int i = 0; i < min; ++i) {
+			if (!oldArray[i].equals(newArray[i])) {
+				arrayDiffBuilder.append(seperateDiff(diffName, arrayDiffBuilder));
+				arrayDiffBuilder.append(newArray[i]);
 			}
 		}
+		
+		// information about added values
+		if (oldArray.length < newArray.length) {
+			arrayDiffBuilder.append(calculateAddedOrRemovedArrayDiff(diffName, fieldAdded, oldArray, newArray,
+				arrayDiffBuilder));
+		}
+		
+		// information about removed values
+		if (oldArray.length > newArray.length) {
+			arrayDiffBuilder.append(calculateAddedOrRemovedArrayDiff(diffName, fieldRemoved, newArray, oldArray,
+				arrayDiffBuilder));
+		}
+		
+		if (arrayDiffBuilder.length() == 0) return emptyString;
 		
 		arrayDiffBuilder.append(newLine);
 		return arrayDiffBuilder.toString();
 	}
+	
+	private String seperateDiff(String diffName, StringBuilder stringBuilder) {
+		StringBuilder seperateDiffBuilder = new StringBuilder();
+		if (stringBuilder.length() == 0) {
+			seperateDiffBuilder.append(diffName);
+			seperateDiffBuilder.append(fieldSeparator);
+		}
+		else {
+			seperateDiffBuilder.append(arraySeparator);
+		}
+		return seperateDiffBuilder.toString();
+	}
+	
+	private String calculateAddedOrRemovedArrayDiff(String diffName, String actionDiffName, Object[] shorterArray,
+		Object[] longerArray, StringBuilder stringBuilder) {
+		StringBuilder diffBuilder = new StringBuilder();
+		
+		if (longerArray.length > shorterArray.length) {
+			
+			if (stringBuilder.length() == 0) {
+				diffBuilder.append(diffName);
+			}
+			diffBuilder.append(endDiffSeprator);
+			diffBuilder.append(actionDiffName);
+			diffBuilder.append(fieldSeparator);
+			
+			for (int i = shorterArray.length; i < longerArray.length; ++i) {
+				diffBuilder.append(longerArray[i]);
+				if (i + 1 < longerArray.length) {
+					diffBuilder.append(seperateDiff(diffName, diffBuilder));
+				}
+			}
+		}
+		
+		if (diffBuilder.length() == 0) return emptyString;
+		
+		return diffBuilder.toString();
+	}
+	
 }

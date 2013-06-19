@@ -86,4 +86,51 @@ public class NotificationDiffTest extends TestCase {
 		assertTrue(LocationTaskDiff.contains(newLocationTask.isRepetable().toString()));
 	}
 	
+	public void testCalculateDiff() {
+		String oldString = "oldString";
+		String newString = "newString";
+		
+		String diffString = notificationDiff.calculateDiff("diff", oldString, newString);
+		Log.d(TAG, "calculateDiff " + diffString);
+		assertTrue(diffString.contains(newString));
+	}
+	
+	public void testCalculateArrayDiff() {
+		
+		String[] oldArray = new String[] { "OldA", "OldB", "OldC" };
+		String[] newArray = new String[] { "OldA", "OldB", "OldC" };
+		
+		String diffString = notificationDiff.calculateArrayDiff("diff", oldArray, newArray);
+		Log.d(TAG, "testCalculateArrayDiff " + diffString);
+		assertTrue(diffString.isEmpty());
+		
+		oldArray = new String[] { "OldA", "OldB", "OldC" };
+		newArray = new String[] { "OldB", "OldA", "NewC" };
+		diffString = notificationDiff.calculateArrayDiff("diff", oldArray, newArray);
+		Log.d(TAG, "testCalculateArrayDiff " + diffString);
+		assertFalse(diffString.isEmpty());
+		assertTrue(diffString.contains("OldA"));
+		assertTrue(diffString.contains("OldB"));
+		assertTrue(diffString.contains("NewC"));
+		
+		oldArray = new String[] { "OldA", "OldB", "OldC" };
+		newArray = new String[] { "NewD", "OldB", "OldA", "NewC" };
+		diffString = notificationDiff.calculateArrayDiff("diff", oldArray, newArray);
+		Log.d(TAG, "testCalculateArrayDiff " + diffString);
+		assertFalse(diffString.isEmpty());
+		assertTrue(diffString.contains("NewD"));
+		assertFalse(diffString.contains("OldB"));
+		assertTrue(diffString.contains("OldA"));
+		assertTrue(diffString.contains("NewC"));
+		
+		oldArray = new String[] { "OldA", "OldB", "OldC" };
+		newArray = new String[] { "NewD", "OldA" };
+		diffString = notificationDiff.calculateArrayDiff("diff", oldArray, newArray);
+		Log.d(TAG, "testCalculateArrayDiff " + diffString);
+		assertFalse(diffString.isEmpty());
+		assertTrue(diffString.contains("NewD"));
+		assertTrue(diffString.contains("OldA"));
+		assertTrue(diffString.contains("OldC"));
+	}
+	
 }

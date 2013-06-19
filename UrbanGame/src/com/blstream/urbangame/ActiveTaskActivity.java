@@ -28,8 +28,8 @@ public class ActiveTaskActivity extends MenuActivity {
 	
 	private TabHost tabHost;
 	private TabManager tabManager;
-	private Task task;	//I load it here, because otherwise I would have to load it twice
-
+	private Task task; //I load it here, because otherwise I would have to load it twice
+	
 	private DatabaseInterface databaseInterface;
 	
 	@Override
@@ -40,7 +40,7 @@ public class ActiveTaskActivity extends MenuActivity {
 		long taskID = getSelectedTaskID();
 		databaseInterface = new Database(this);
 		this.task = databaseInterface.getTask(taskID);
-
+		
 		databaseInterface.closeDatabase();
 		configureActionBar();
 		setUpTabHost(savedInstanceState);
