@@ -1,0 +1,9 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Action Bar Customization -->
+    <style name="ActionBar.Solid.UrbanGame" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid</item>
+        <item name="android:titleTextStyle">@style/ActionBar.Title</item>
+    </style>
+
+</resources>
