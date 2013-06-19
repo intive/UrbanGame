@@ -62,7 +62,7 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 		if (loggedPlayerEmail != null) {
 			isSomeoneLogged = true;
 			PlayerGameSpecific playerGameSpecific = database.getUserGameSpecific(loggedPlayerEmail, idOfSelectedGame);
-			if (playerGameSpecific != null) {// if player has that it means he has joined in game previously
+			if (playerGameSpecific != null && playerGameSpecific.getState() == PlayerGameSpecific.GAME_ACTIVE) {// if player has that it means he has joined in game previously
 				isPlayerAParticipantOfCurrentGame = true;
 				return;
 			}
@@ -285,7 +285,14 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 		// FIXME code below should be invoked after positive response from server [move that code when appropriate class is ready]
 		int rankFromServer = 10;
 		PlayerGameSpecific playerGameInfo = new PlayerGameSpecific(rankFromServer, playerEmail, gameID, null, false);
-		db.insertUserGameSpecific(playerGameInfo);
+		playerGameInfo.setState(PlayerGameSpecific.GAME_ACTIVE);
+		PlayerGameSpecific actual = db.getUserGameSpecific(playerEmail, gameID);
+		if (actual == null) {
+			db.insertUserGameSpecific(playerGameInfo);
+		}
+		else {
+			db.updateUserGameSpecific(playerGameInfo);
+		}
 		db.closeDatabase();
 		//******************//
 		//					//

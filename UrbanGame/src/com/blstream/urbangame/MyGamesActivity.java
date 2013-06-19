@@ -1,10 +1,8 @@
 package com.blstream.urbangame;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,13 +25,17 @@ import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
-import com.blstream.urbangame.database.entity.UrbanGame;
+import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 
 public class MyGamesActivity extends AbstractGamesListActivity implements OnChildClickListener {
 	private ExpandableListView mExpandableList;
 	private ArrayList<ExpandableListHeader> mArrayHeaders;
+	
+	private static final Integer ACTIVE_GAMES_KEY = 0x1;
+	private static final Integer OBSERVED_GAMES_KEY = 0x2;
+	private static final Integer ENDED_GAMES_KEY = 0x3;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,8 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 		mExpandableList.setOnChildClickListener(this);
 		
 		mArrayHeaders = new ArrayList<ExpandableListHeader>();
-		ArrayList<UrbanGameShortInfo> arrayChildren = new ArrayList<UrbanGameShortInfo>();	//FIXME change to class containing game after login
+		ArrayList<UrbanGameShortInfo> arrayChildren = new ArrayList<UrbanGameShortInfo>();
+		HashMap<Integer, List<UrbanGameShortInfo>> dividedGamesInGroups = readGamesInfo();
 		
 		Resources resources = getResources();
 		
@@ -53,26 +56,20 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 		
 		ExpandableListHeader parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_active));
-		arrayChildren = new ArrayList<UrbanGameShortInfo>();
-		List<UrbanGame> urbanGameList = database.getAllUserGames(database.getLoggedPlayerID());
-		if (urbanGameList != null) {
-			for (UrbanGame game : urbanGameList) {
-				arrayChildren.add(game.getPrimaryInfo());
-			}
-		}
+		arrayChildren = (ArrayList<UrbanGameShortInfo>) dividedGamesInGroups.get(ACTIVE_GAMES_KEY);
 		parent.setArrayChildren(arrayChildren);
 		
 		mArrayHeaders.add(parent);
 		
 		parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_observed));
-		arrayChildren = mockData();			//FIXME - put observed games here
+		arrayChildren = (ArrayList<UrbanGameShortInfo>) dividedGamesInGroups.get(OBSERVED_GAMES_KEY);
 		parent.setArrayChildren(arrayChildren);
 		mArrayHeaders.add(parent);
 		
 		parent = new ExpandableListHeader();
 		parent.setTitle(resources.getString(R.string.header_ended));
-		arrayChildren = mockData();			//FIXME - put ended games here
+		arrayChildren = (ArrayList<UrbanGameShortInfo>) dividedGamesInGroups.get(ENDED_GAMES_KEY);
 		parent.setArrayChildren(arrayChildren);
 		mArrayHeaders.add(parent);
 		
@@ -82,46 +79,36 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 		
 		ExpandableListViewPropertiesSetter.setPropertiesOfExpandableListView(adapter, mExpandableList);
 	}
-	
-	/************************
-	 ***** START MOCKING ****
-	 ************************/
-	
-	private ArrayList<UrbanGameShortInfo> mockData() {
-		ArrayList<HashMap<String, String>> data = getMockData();
+
+	private HashMap<Integer, List<UrbanGameShortInfo>> readGamesInfo() {
+		DatabaseInterface database = new Database(getApplicationContext());
+		String email = database.getLoggedPlayerID();
+		HashMap<Integer, List<UrbanGameShortInfo>> gamesList = new HashMap<Integer, List<UrbanGameShortInfo>>();
 		
-		ArrayList<UrbanGameShortInfo> gameItems = new ArrayList<UrbanGameShortInfo>();
-		for (HashMap<String, String> map : data) {
-			gameItems.add(new UrbanGameShortInfo(map.get("game_name"), map.get("operator_name"), Integer.parseInt(map
-				.get("current_players")), Integer.parseInt(map.get("total_players")), new Date(), new Date(), true, map
-				.get("location"), null, null, null));
-		}
+		List<UrbanGameShortInfo> gameStateList = database.getAllUserGamesShortInfoByItsState(email,
+			PlayerGameSpecific.GAME_ACTIVE);
+		gamesList.put(ACTIVE_GAMES_KEY, nullToEmptyArrayList(gameStateList));
 		
-		return gameItems;
+		gameStateList = database.getAllUserGamesShortInfoByItsState(email, PlayerGameSpecific.GAME_OBSERVED);
+		gamesList.put(OBSERVED_GAMES_KEY, nullToEmptyArrayList(gameStateList));
+		
+		gameStateList = database.getAllUserGamesShortInfoByItsState(email, PlayerGameSpecific.GAME_ENDED);
+		gamesList.put(ENDED_GAMES_KEY, nullToEmptyArrayList(gameStateList));
+		
+		return gamesList;
 	}
 	
-	public ArrayList<HashMap<String, String>> getMockData() {
-		ArrayList<HashMap<String, String>> listOfMap = new ArrayList<HashMap<String, String>>();
-		HashMap<String, String> map = null;
-		Random random = new Random();
-		
-		for (int i = 0; i < 10; i++) {
-			map = new HashMap<String, String>();
-			map.put("game_name", "Krasnale Wrocławskie");
-			map.put("operator_name", "BLStream");
-			map.put("location", "Wroclaw");
-			map.put("start_time", "Mon, Apr 1, 2013 9:00 AM");
-			map.put("current_players", String.valueOf(random.nextInt(50)));
-			map.put("total_players", String.valueOf(random.nextInt(50)));
-			listOfMap.add(map);
-		}
-		
-		return listOfMap;
+	private <E> List<E> nullToEmptyArrayList(List<E> list) {
+		return list == null ? new ArrayList<E>() : list;
 	}
 	
-	/************************
-	 ****** END MOCKING *****
-	 ************************/
+	@Override
+	protected void onResume() {
+		super.onResume();
+		this.supportInvalidateOptionsMenu();
+		Log.i(TAG, "onResume completed");
+	}
+>>>>>>> upstream/android
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,9 +124,9 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 		Intent intent;
 		ExpandableListHeader header = mArrayHeaders.get(groupPosition);
 		Bundle bundle = new Bundle();
-		//UrbanGameShortInfo game = header.getArrayChildren().get(childPosition);	//FIXME change to class containing game after login
-		//Long selectedGameId = (game == null ? -1 : game.getID());	//FIXME uncomment when getID won't be null (class comes from database)
-		bundle.putLong(GameDetailsActivity.GAME_KEY, -1);
+		UrbanGameShortInfo game = header.getArrayChildren().get(childPosition);
+		Long selectedGameId = (game == null ? -1 : game.getID());
+		bundle.putLong(GameDetailsActivity.GAME_KEY, selectedGameId);
 		
 		if (header.getTitle().equals(getResources().getString(R.string.header_observed))) {
 			intent = new Intent(MyGamesActivity.this, GameDetailsActivity.class);
