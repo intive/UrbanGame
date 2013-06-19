@@ -9,8 +9,7 @@
         style="@style/DialogTitleStyle"
         android:id="@+id/textViewDialogTitleTwoButtons"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dialog title" />
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -22,8 +21,7 @@
         android:id="@+id/textViewDialogContentTwoButtons"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Dialog content" />
+        android:layout_weight="1" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -39,8 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/selectable_background"
-            android:text="Negative" />
+            android:background="@drawable/selectable_background" />
 
         <ImageView
             android:layout_width="1dp"
@@ -52,8 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/selectable_background"
-            android:text="Positive" />
+            android:background="@drawable/selectable_background" />
 
     </LinearLayout>
 
