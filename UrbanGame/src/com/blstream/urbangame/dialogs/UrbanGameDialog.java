@@ -144,6 +144,7 @@ public class UrbanGameDialog extends DialogFragment {
 		
 		public DialogBuilder(Context context) {
 			this.context = (SherlockFragmentActivity) context;
+			isCancelable = true;
 		}
 		
 		public DialogBuilder setTitle(int resourceID) {
