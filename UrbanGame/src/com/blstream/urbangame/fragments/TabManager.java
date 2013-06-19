@@ -2,14 +2,15 @@ package com.blstream.urbangame.fragments;
 
 import java.util.HashMap;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.widget.TabHost;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.ActionBar.TabListener;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 /**
  * This is a helper class that implements a generic mechanism for associating
@@ -21,20 +22,20 @@ import android.widget.TabHost;
  * to changes in tabs, and takes care of switch to the correct fragment shown in
  * a separate content area whenever the selected tab changes.
  */
-public class TabManager implements TabHost.OnTabChangeListener {
+public class TabManager implements TabListener { //TabHost.OnTabChangeListener, 
 	private final FragmentManager fragmentManager;
-	private final FragmentActivity activity;
-	private final TabHost tabHost;
+	private final SherlockFragmentActivity activity;
+	private final ActionBar actionBar;
 	private final int containerId;
 	private final HashMap<String, TabInfo> tabsMap = new HashMap<String, TabInfo>();
 	private TabInfo lastTabInfo;
 	
-	public TabManager(FragmentActivity activity, TabHost tabHost, int containerId) {
+	public TabManager(SherlockFragmentActivity activity, int containerId) {
 		this.activity = activity;
-		this.tabHost = tabHost;
 		this.containerId = containerId;
 		this.fragmentManager = activity.getSupportFragmentManager();
-		tabHost.setOnTabChangedListener(this);
+		actionBar = activity.getSupportActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	}
 	
 	static final class TabInfo {
@@ -50,25 +51,10 @@ public class TabManager implements TabHost.OnTabChangeListener {
 		}
 	}
 	
-	static class DummyTabFactory implements TabHost.TabContentFactory {
-		private final Context context;
+	public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
+		String tag = (String) tab.getTag();
+		tab.setTabListener(this);
 		
-		public DummyTabFactory(Context context) {
-			this.context = context;
-		}
-		
-		@Override
-		public View createTabContent(String tag) {
-			View v = new View(context);
-			v.setMinimumWidth(0);
-			v.setMinimumHeight(0);
-			return v;
-		}
-	}
-	
-	public void addTab(TabHost.TabSpec tabSpec, Class<?> clss, Bundle args) {
-		tabSpec.setContent(new DummyTabFactory(activity));
-		String tag = tabSpec.getTag();
 		TabInfo newTabInfo = new TabInfo(tag, clss, args);
 		
 		// Check to see if we already have a fragment for this tab, probably
@@ -82,12 +68,20 @@ public class TabManager implements TabHost.OnTabChangeListener {
 		}
 		
 		tabsMap.put(tag, newTabInfo);
-		tabHost.addTab(tabSpec);
+		actionBar.addTab(tab);
+	}
+	
+	public ActionBar.Tab prepareTab(String tag, String text) {
+		ActionBar.Tab tab = actionBar.newTab();
+		tab.setText(text);
+		tab.setTag(tag);
+		return tab;
 	}
 	
 	@Override
-	public void onTabChanged(String tabId) {
-		TabInfo newTabInfo = tabsMap.get(tabId);
+	public void onTabSelected(Tab tab, FragmentTransaction ftOther) {
+		String tag = (String) tab.getTag();
+		TabInfo newTabInfo = tabsMap.get(tag);
 		
 		if (lastTabInfo != newTabInfo) { // if tab has been switched
 			FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -112,4 +106,10 @@ public class TabManager implements TabHost.OnTabChangeListener {
 			fragmentManager.executePendingTransactions();
 		}
 	}
+	
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {}
+	
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {}
 }
