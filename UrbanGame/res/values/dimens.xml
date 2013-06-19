@@ -6,5 +6,6 @@
     <dimen name="expandable_list_header_line_stroke">2dp</dimen>
     <dimen name="dialogTitlePadding">15dp</dimen>
     <dimen name="dialogContentTopBottomPadding">10dp</dimen>
+    <dimen name="dialogButtonBarHeight">40dp</dimen>
 
 </resources>
