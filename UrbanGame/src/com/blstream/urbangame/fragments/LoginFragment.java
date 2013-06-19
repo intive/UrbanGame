@@ -29,7 +29,7 @@ public class LoginFragment extends SherlockFragment implements OnClickListener {
 	// formatter:off
 	private void createAlertDialog() {
 		invalidDataAlertDialog = 
-			new UrbanGameDialog().new DialogBuilder(activity)
+			new UrbanGameDialog.DialogBuilder(activity)
 				.setTitle(R.string.dialog_data_invalid_tittle)
 				.setMessage(R.string.dialog_data_invalid_message)
 				.setPositiveButton(R.string.button_correct, null)

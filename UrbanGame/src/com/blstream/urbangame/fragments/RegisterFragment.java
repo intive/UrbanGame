@@ -35,7 +35,7 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 	
 	// formatter:off
 	private void createRegisterCompleteAlertDialog() {
-		registerCompleteAlertDialog = new UrbanGameDialog().new DialogBuilder(activity)
+		registerCompleteAlertDialog = new UrbanGameDialog.DialogBuilder(activity)
 			.setTitle(R.string.dialog_register_title)
 			.setMessage(R.string.dialog_register_message)
 			.setPositiveButton(android.R.string.ok, registerSuccessfulListener)
@@ -43,7 +43,7 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 	}
 	
 	private void createInvalidDataAlertDialog() {
-		invalidDataAlertDialog = new UrbanGameDialog().new DialogBuilder(activity)
+		invalidDataAlertDialog = new UrbanGameDialog.DialogBuilder(activity)
 			.setTitle(R.string.dialog_data_invalid_tittle)
 			.setMessage(R.string.dialog_data_invalid_message)
 			.setPositiveButton(R.string.button_correct, null)

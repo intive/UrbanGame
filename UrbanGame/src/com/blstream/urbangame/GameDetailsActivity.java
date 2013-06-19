@@ -215,7 +215,7 @@ public class GameDetailsActivity extends MenuActivity implements OnClickListener
 	}
 	
 	public void showDialog() {
-		UrbanGameDialog.DialogBuilder dialogBuilder = new UrbanGameDialog().new DialogBuilder(this);
+		UrbanGameDialog.DialogBuilder dialogBuilder = new UrbanGameDialog.DialogBuilder(this);
 		dialogBuilder.setTitle(!isPlayerAParticipantOfCurrentGame ? R.string.dialog_join_title
 			: R.string.dialog_leave_title);
 		dialogBuilder.setMessage(R.string.dialog_join_leave_message);

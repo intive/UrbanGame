@@ -27,7 +27,7 @@ public class NotificationPopupWindow implements UrbanGameDialogOnClickListener {
 	
 	public NotificationPopupWindow(Context context) {
 		this.context = context;
-		this.builder = new UrbanGameDialog().new DialogBuilder(context);
+		this.builder = new UrbanGameDialog.DialogBuilder(context);
 	}
 	
 	public void showDialog(int notificationType, String gameName, String taskName, String diff, long gameID) {

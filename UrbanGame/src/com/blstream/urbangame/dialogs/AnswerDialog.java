@@ -28,7 +28,7 @@ public class AnswerDialog implements UrbanGameDialogOnClickListener {
 	public void showDialog(DialogType dialogType, Integer points, Integer maxPoints) {
 		this.dialogType = dialogType;
 		
-		dialogBuilder = new UrbanGameDialog().new DialogBuilder(context);
+		dialogBuilder = new UrbanGameDialog.DialogBuilder(context);
 		
 		int titleId = 0;
 		String message = "";

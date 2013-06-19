@@ -7,9 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -49,11 +47,9 @@ public class UrbanGameDialog extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		
-		Dialog dialog = super.onCreateDialog(savedInstanceState);//new Dialog(getActivity());
+		Dialog dialog = super.onCreateDialog(savedInstanceState);
 		
-		if (savedInstanceState != null) {
-			loadData(savedInstanceState);
-		}
+		loadDataFromArguments();
 		
 		dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		
@@ -103,30 +99,16 @@ public class UrbanGameDialog extends DialogFragment {
 		return dialog;
 	}
 	
-	private void loadData(Bundle savedInstanceState) {
-		title = savedInstanceState.getString(TITLE_KEY);
-		message = savedInstanceState.getString(MESSAGE_KEY);
-		buttonPositive = savedInstanceState.getString(BUTTON_POSITIVE_KEY);
-		buttonPositiveListener = (UrbanGameDialogOnClickListener) savedInstanceState
-			.getSerializable(BUTTON_POSITIVE_LISTENER_KEY);
-		buttonNegative = savedInstanceState.getString(BUTTON_NEGATIVE_KEY);
-		buttonNegativeListener = (UrbanGameDialogOnClickListener) savedInstanceState
-			.getSerializable(BUTTON_NEGATIVE_LISTENER_KEY);
-		isPositiveEnabled = savedInstanceState.getBoolean(IS_POSITIVE_ENABLED_KEY);
-		isNegativeEnabled = savedInstanceState.getBoolean(IS_NEGATIVE_ENABLED_KEY);
-	}
-	
-	@Override
-	public void onSaveInstanceState(Bundle out) {
-		super.onSaveInstanceState(out);
-		out.putString(TITLE_KEY, title);
-		out.putString(MESSAGE_KEY, message);
-		out.putString(BUTTON_POSITIVE_KEY, buttonPositive);
-		out.putSerializable(BUTTON_POSITIVE_LISTENER_KEY, buttonPositiveListener);
-		out.putString(BUTTON_NEGATIVE_KEY, buttonNegative);
-		out.putSerializable(BUTTON_NEGATIVE_LISTENER_KEY, buttonNegativeListener);
-		out.putBoolean(IS_POSITIVE_ENABLED_KEY, isPositiveEnabled);
-		out.putBoolean(IS_NEGATIVE_ENABLED_KEY, isNegativeEnabled);
+	private void loadDataFromArguments() {
+		Bundle b = getArguments();
+		title = b.getString(TITLE_KEY);
+		message = b.getString(MESSAGE_KEY);
+		buttonPositive = b.getString(BUTTON_POSITIVE_KEY);
+		buttonPositiveListener = (UrbanGameDialogOnClickListener) b.getSerializable(BUTTON_POSITIVE_LISTENER_KEY);
+		buttonNegative = b.getString(BUTTON_NEGATIVE_KEY);
+		buttonNegativeListener = (UrbanGameDialogOnClickListener) b.getSerializable(BUTTON_NEGATIVE_LISTENER_KEY);
+		isPositiveEnabled = b.getBoolean(IS_POSITIVE_ENABLED_KEY);
+		isNegativeEnabled = b.getBoolean(IS_NEGATIVE_ENABLED_KEY);
 	}
 	
 	@Override
@@ -136,11 +118,24 @@ public class UrbanGameDialog extends DialogFragment {
 		getDialog().getWindow().setLayout(width, LayoutParams.WRAP_CONTENT);
 	}
 	
-	public final String TAG = DialogBuilder.class.getSimpleName();
+	private static long dialogID = 0;
 	
-	public class DialogBuilder {
+	public static class DialogBuilder {
+		
+		public final String TAG = DialogBuilder.class.getSimpleName();
 		
 		private final SherlockFragmentActivity context;
+		private String title;
+		private String message;
+		
+		private String buttonPositive;
+		private UrbanGameDialogOnClickListener buttonPositiveListener;
+		
+		private String buttonNegative;
+		private UrbanGameDialogOnClickListener buttonNegativeListener;
+		
+		private boolean isPositiveEnabled;
+		private boolean isNegativeEnabled;
 		
 		public DialogBuilder(Context context) {
 			this.context = (SherlockFragmentActivity) context;
@@ -152,7 +147,7 @@ public class UrbanGameDialog extends DialogFragment {
 		}
 		
 		public DialogBuilder setTitle(String title) {
-			UrbanGameDialog.this.title = title;
+			this.title = title;
 			return this;
 		}
 		
@@ -162,7 +157,7 @@ public class UrbanGameDialog extends DialogFragment {
 		}
 		
 		public DialogBuilder setMessage(String message) {
-			UrbanGameDialog.this.message = message;
+			this.message = message;
 			return this;
 		}
 		
@@ -193,21 +188,29 @@ public class UrbanGameDialog extends DialogFragment {
 		}
 		
 		public DialogBuilder setCancelable(boolean isCancelable) {
-			UrbanGameDialog.this.setCancelable(isCancelable);
+			this.setCancelable(isCancelable);
 			return this;
 		}
 		
 		public void show() {
 			FragmentManager manager = context.getSupportFragmentManager();
-			Fragment previous = manager.findFragmentByTag(TAG);
-			if (previous != null) {
-				FragmentTransaction transaction = manager.beginTransaction();
-				transaction.remove(previous);
-				transaction.commit();
-				manager.executePendingTransactions();
-			}
 			if ((isPositiveEnabled || isNegativeEnabled)) {
-				UrbanGameDialog.this.show(manager, TAG);
+				
+				Bundle arugments = new Bundle();
+				arugments.putString(TITLE_KEY, title);
+				arugments.putString(MESSAGE_KEY, message);
+				arugments.putString(BUTTON_POSITIVE_KEY, buttonPositive);
+				arugments.putSerializable(BUTTON_POSITIVE_LISTENER_KEY, buttonPositiveListener);
+				arugments.putString(BUTTON_NEGATIVE_KEY, buttonNegative);
+				arugments.putSerializable(BUTTON_NEGATIVE_LISTENER_KEY, buttonNegativeListener);
+				arugments.putBoolean(IS_POSITIVE_ENABLED_KEY, isPositiveEnabled);
+				arugments.putBoolean(IS_NEGATIVE_ENABLED_KEY, isNegativeEnabled);
+				
+				UrbanGameDialog dial = new UrbanGameDialog();
+				dial.setArguments(arugments);
+				
+				dial.show(manager, TAG + dialogID);
+				dialogID++;
 			}
 		}
 		
