@@ -1,24 +1,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="UrbanGameTheme" parent="AppBaseTheme">
-        <!-- Sherlock Navigation List Customization -->
-        <item name="android:dropDownListViewStyle">@style/DropDownListView.UrbanGame</item>
-        <item name="actionBarItemBackground">@drawable/selectable_background</item>
-        <item name="android:spinnerItemStyle">@style/Widget.Sherlock.DropDownItem.Spinner.UrbanGame</item>
-        
-        <!-- Sherlock Tabs Customization -->
-        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.UrbanGame</item>
-        
-        <!-- Action Bar Customization -->
-        <item name="android:actionBarStyle">@style/ActionBar.Solid.UrbanGame</item>
-        
-        <!-- EditText Customization -->
-        <item name="android:editTextBackground">@drawable/edit_text_urban_game_default</item>
-        
-        <!-- CheckBox Customization -->
-        <item name="android:listChoiceIndicatorMultiple">@drawable/btn_check_urban_game_default</item>
-    </style>
-
     <!-- Action Bar Customization -->
     <style name="ActionBar.Solid.UrbanGame" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="backgroundStacked">@drawable/ab_stacked_solid</item>

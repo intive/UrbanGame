@@ -1,0 +1,67 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+         Base application theme, dependent on API level. This theme is replaced 
+		by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="Theme.Sherlock.Light">
+        <!--
+             Theme customizations available in newer API levels can go in res/values-vXX/styles.xml, 
+			while customizations related to backward-compatibility can go here.        -->
+    </style>
+
+    <style name="UrbanGameTheme.Base" parent="AppBaseTheme">
+
+        <!-- Sherlock Navigation List Customization -->
+        <item name="dropDownListViewStyle">@style/DropDownListView.UrbanGame</item>
+        <item name="actionBarItemBackground">?attr/selectable_background</item>
+        <item name="spinnerItemStyle">@style/Widget.Sherlock.DropDownItem.Spinner.UrbanGame</item>
+
+        <!-- EditText Customization -->
+        <item name="android:editTextStyle">@style/EditText.UrbanGame</item>
+
+        <!-- CheckBox Customization -->
+        <item name="android:checkboxStyle">@style/CheckBox.UrbanGame</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="UrbanGameTheme" parent="UrbanGameTheme.Base">
+
+        <!--
+             All customizations that are NOT specific to a particular API-level 
+			can go here.
+        -->
+
+        <!-- Expandable List Customization -->
+        <item name="android:expandableListViewStyle">@style/expandableListStyle</item>
+
+        <!-- Sherlock Tabs Customization -->
+        <item name="actionBarTabStyle">@style/ActionBarTabStyle.UrbanGame</item>
+
+        <!-- Action Bar Customization -->
+        <item name="actionBarStyle">@style/ActionBar.Solid.UrbanGame</item>
+    </style>
+
+    <!-- Default Green Theme -->
+    <style name="UrbanGameTheme.Default" parent="UrbanGameTheme">
+        <item name="@attr/header_color">@color/header_color_default</item>
+        <item name="@attr/header_separator_drawable">@drawable/header_line_default</item>
+        <item name="@attr/action_bar_color">@color/action_bar_background_default</item>
+        <item name="@attr/selectable_background">@drawable/selectable_background_default</item>
+        <item name="@attr/tab_indicator">@drawable/tab_indicator_default</item>
+        <item name="@attr/edit_text_background">@drawable/edit_text_urban_game_default</item>
+        <item name="@attr/check_box_background">@drawable/btn_check_urban_game_default</item>
+    </style>
+    
+    <!-- Blue Theme -->
+    <style name="UrbanGameTheme.Blue" parent="UrbanGameTheme">
+        <item name="@attr/header_color">@color/header_color_blue</item>
+        <item name="@attr/header_separator_drawable">@drawable/header_line_blue</item>
+        <item name="@attr/action_bar_color">@color/action_bar_background_blue</item>
+        <item name="@attr/selectable_background">@drawable/selectable_background_blue</item>
+        <item name="@attr/tab_indicator">@drawable/tab_indicator_blue</item>
+        <item name="@attr/edit_text_background">@drawable/edit_text_urban_game_blue</item>
+        <item name="@attr/check_box_background">@drawable/btn_check_urban_game_blue</item>
+    </style>
+
+</resources>
