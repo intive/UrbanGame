@@ -14,7 +14,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:src="@drawable/header_line" />
+        android:src="?attr/header_separator_drawable" />
 
     <TextView
         style="@style/DialogContentStyle"
@@ -33,11 +33,11 @@
         android:layout_height="@dimen/dialogButtonBarHeight" >
 
         <Button
+            style="@style/DialogButtonStyle"
             android:id="@+id/buttonDialogNegative"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selectable_background" />
+            android:layout_weight="1" />
 
         <ImageView
             android:layout_width="1dp"
@@ -45,11 +45,11 @@
             android:src="@drawable/dialog_button_divider" />
 
         <Button
+            style="@style/DialogButtonStyle"
             android:id="@+id/buttonDialogPositive"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selectable_background" />
+            android:layout_weight="1" />
 
     </LinearLayout>
 
