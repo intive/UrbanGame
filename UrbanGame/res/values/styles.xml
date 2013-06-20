@@ -1,51 +1,16 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--
-         Base application theme, dependent on API level. This theme is replaced 
-		by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-    -->
-    <style name="AppBaseTheme" parent="Theme.Sherlock.Light">
-        <!--
-             Theme customizations available in newer API levels can go in res/values-vXX/styles.xml, 
-			while customizations related to backward-compatibility can go here.
-        -->
-    </style>
-
-    <style name="UrbanGameTheme" parent="AppBaseTheme">
-        <!-- Sherlock Navigation List Customization -->
-        <item name="dropDownListViewStyle">@style/DropDownListView.UrbanGame</item>
-        <item name="actionBarItemBackground">@drawable/selectable_background</item>
-        <item name="spinnerItemStyle">@style/Widget.Sherlock.DropDownItem.Spinner.UrbanGame</item>
-    </style>
-    
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="UrbanGameTheme">
-
-        <!--
-             All customizations that are NOT specific to a particular API-level 
-			can go here.
-        -->
-
-        <!-- Expandable List Customization -->
-        <item name="android:expandableListViewStyle">@style/expandableListStyle</item>
-
-        <!-- Sherlock Tabs Customization -->
-        <item name="actionBarTabStyle">@style/ActionBarTabStyle.UrbanGame</item>
-
-        <!-- Action Bar Customization -->
-        <item name="actionBarStyle">@style/ActionBar.Solid.UrbanGame</item>
-    </style>
-
     <!-- Expandable List Customization -->
     <style name="expandableListStyle">
         <item name="android:groupIndicator">@null</item>
+        <item name="android:listSelector">?attr/selectable_background</item>
     </style>
 
     <style name="styleExpandableListHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@android:color/white</item>
-        <item name="android:textColor">@color/expandable_list_header</item>
+        <item name="android:textColor">?attr/header_color</item>
         <item name="android:padding">@dimen/view_margin</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
@@ -61,22 +26,35 @@
     </style>
 
     <style name="DropDownListView.UrbanGame" parent="@style/Widget.Sherlock.ListView.DropDown">
-        <item name="android:listSelector">@drawable/selectable_background</item>
+        <item name="android:listSelector">?attr/selectable_background</item>
     </style>
 
     <!-- Sherlock Tabs Customization -->
     <style name="ActionBarTabStyle.UrbanGame" parent="@style/Widget.Sherlock.ActionBar.TabView">
-        <item name="android:background">@drawable/tab_indicator</item>
+        <item name="android:background">?attr/tab_indicator</item>
     </style>
 
     <!-- Action Bar Customization -->
     <style name="ActionBar.Solid.UrbanGame" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="backgroundStacked">@drawable/ab_stacked_solid</item>
         <item name="titleTextStyle">@style/ActionBar.Title</item>
+        <item name="android:background">?attr/action_bar_color</item>
+        <item name="background">?attr/action_bar_color</item>
     </style>
 
     <style name="ActionBar.Title" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <!-- EditText Customization -->
+    <style name="EditText.UrbanGame" parent="android:Widget.EditText">
+        <item name="android:background">?attr/edit_text_background</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <!-- CheckBox Customization -->
+    <style name="CheckBox.UrbanGame" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:button">?attr/check_box_background</item>
     </style>
 
     <style name="styleHeader">
@@ -99,18 +77,23 @@
         <item name="android:isIndicator">true</item>
     </style>
 
-<!--     Dialog Customization Styles -->
+    <!-- Dialog Customization Styles -->
     <style name="DialogTitleStyle">
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-        <item name="android:textColor">@color/expandable_list_header</item>
+        <item name="android:textColor">?attr/header_color</item>
         <item name="android:padding">@dimen/dialogTitlePadding</item>
     </style>
+
     <style name="DialogContentStyle">
         <item name="android:paddingLeft">@dimen/dialogTitlePadding</item>
         <item name="android:paddingRight">@dimen/dialogTitlePadding</item>
         <item name="android:paddingTop">@dimen/dialogContentTopBottomPadding</item>
         <item name="android:paddingBottom">@dimen/dialogContentTopBottomPadding</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+    
+    <style name="DialogButtonStyle">
+        <item name="android:background">?attr/selectable_background</item> 
     </style>
 
 </resources>

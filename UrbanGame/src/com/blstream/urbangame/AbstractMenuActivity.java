@@ -83,12 +83,12 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		setTheme(themeRES); //TODO delete only demonstration feature
 		super.onCreate(savedInstanceState);
 		this.urbanGameApplication = (UrbanGameApplication) getApplication();
 		this.localBroadcastManager = LocalBroadcastManager.getInstance(AbstractMenuActivity.this);
 		
 		setUpBroadcastReceiver();
-		setStyleToActionBar();
 		urbanGameApplication.incremenetNumberOfRunningActivities();
 		notificationServer = NotificationServer.getInstance(this);
 		notificationServer.setApplication(urbanGameApplication);
@@ -110,15 +110,6 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 		IntentFilter finishIntentFilter = new IntentFilter(LOGOUT_ACTION);
 		
 		localBroadcastManager.registerReceiver(finishBroadcastReceiver, finishIntentFilter);
-	}
-	
-	private void setStyleToActionBar() {
-		Resources resources = getResources();
-		int actionBarColor = resources.getColor(R.color.action_bar_background);
-		ColorDrawable actionBarColorDrawable = new ColorDrawable(actionBarColor);
-		
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setBackgroundDrawable(actionBarColorDrawable);
 	}
 	
 	/**
@@ -166,10 +157,16 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 		return loginManager.isUserLoggedIn();
 	}
 	
+	private static int themeRES = R.style.UrbanGameTheme_Default; //TODO delete only demonstration feature
+	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		int itemId = item.getItemId();
 		switch (itemId) {
+			case R.id.menu_refresh:		//TODO delete only demonstration feature
+				themeRES = themeRES == R.style.UrbanGameTheme_Default ? R.style.UrbanGameTheme_Blue : R.style.UrbanGameTheme_Default;
+				break;
+			//TODO end delete section
 			case R.id.menu_logout:
 				loginManager.logoutUser();
 				finishAndStartGamesListActivity();
