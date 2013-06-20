@@ -99,4 +99,18 @@
         <item name="android:isIndicator">true</item>
     </style>
 
+<!--     Dialog Customization Styles -->
+    <style name="DialogTitleStyle">
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textColor">@color/expandable_list_header</item>
+        <item name="android:padding">@dimen/dialogTitlePadding</item>
+    </style>
+    <style name="DialogContentStyle">
+        <item name="android:paddingLeft">@dimen/dialogTitlePadding</item>
+        <item name="android:paddingRight">@dimen/dialogTitlePadding</item>
+        <item name="android:paddingTop">@dimen/dialogContentTopBottomPadding</item>
+        <item name="android:paddingBottom">@dimen/dialogContentTopBottomPadding</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
 </resources>

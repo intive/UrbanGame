@@ -28,7 +28,7 @@ public class ActiveGameActivity extends AbstractMenuActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tabhost_layout);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+		
 		setUpTabHost(savedInstanceState);
 	}
 	
@@ -45,10 +45,6 @@ public class ActiveGameActivity extends AbstractMenuActivity {
 		tabManager = new TabManager(this, R.id.realtabcontent);
 		Bundle extras = getIntent().getExtras();
 		
-		String tagGameInfo = getString(R.string.tab_game_gameInfo);
-		ActionBar.Tab tabGameInfo = tabManager.prepareTab(TAG_TAB_INFO, tagGameInfo);
-		tabManager.addTab(tabGameInfo, GameInfoFragment.class, extras);
-		
 		String tagTasks = getString(R.string.tab_game_tasks);
 		ActionBar.Tab tabTasks = tabManager.prepareTab(TAG_TAB_TASKS, tagTasks);
 		tabManager.addTab(tabTasks, GameTasksFragment.class, extras);
@@ -56,6 +52,10 @@ public class ActiveGameActivity extends AbstractMenuActivity {
 		String tagRanking = getString(R.string.tab_game_ranking);
 		ActionBar.Tab tabRanking = tabManager.prepareTab(TAG_TAB_RANKING, tagRanking);
 		tabManager.addTab(tabRanking, GameRankingFragment.class, extras);
+		
+		String tagGameInfo = getString(R.string.tab_game_gameInfo);
+		ActionBar.Tab tabGameInfo = tabManager.prepareTab(TAG_TAB_INFO, tagGameInfo);
+		tabManager.addTab(tabGameInfo, GameInfoFragment.class, extras);
 	}
 	
 	@Override

@@ -8,5 +8,6 @@
     <color name="action_bar_background">#669900</color>
     <color name="expandable_list_header">#99cc00</color>
     <color name="pressed">#cc99cc00</color>
+    <color name="dialogButtonDivider">#cfcfcf</color>
 
 </resources>
