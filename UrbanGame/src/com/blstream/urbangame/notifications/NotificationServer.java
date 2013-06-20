@@ -454,10 +454,17 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 			newTask = new LocationTask();
 		}
 		newTask.setId(task.getId());
+		newTask.setType(task.getType());
+		
 		switch (task.getType()) {
 			case Task.TASK_TYPE_ABCD:
 				ABCDTask abcdTask = (ABCDTask) newTask;
-				abcdTask.setQuestion(((ABCDTask) task).getQuestion() + " NEW MOCK");
+				if (r.nextBoolean()) {
+					abcdTask.setQuestion(((ABCDTask) task).getQuestion() + " NEW MOCK");
+				}
+				if (r.nextBoolean()) {
+					abcdTask.setAnswers(new String[] { "MockA", "MockB", "MockC", "MockD" });
+				}
 			default:
 				if (r.nextBoolean()) {
 					newTask.setTitle(task.getTitle() + " NEW MOCK");
