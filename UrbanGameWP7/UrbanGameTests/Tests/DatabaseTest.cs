@@ -72,7 +72,7 @@ namespace UrbanGameTests.Tests
             {
                 Id = 1,
                 UserLogin = "LoganXxX",
-                Points = 130
+                Points = 130                
             };
 
             possibleAnswer = new ABCDPossibleAnswer()
@@ -108,8 +108,8 @@ namespace UrbanGameTests.Tests
         #endregion
 
         #region TestEntitiesRelationship
-        private void TestEntitiesRelationship<TParent, TChild>(Func<TParent> createSampleParent, 
-                                                               Func<TChild> createSampleChild,                                                               
+        private void TestEntitiesRelationship<TParent, TChild>(Func<TParent> createSampleParent,
+                                                               Func<TChild> createSampleChild,
                                                                Func<TParent, EntitySet<TChild>> getChildren,
                                                                Func<TChild, TParent> getParent,
                                                                Action<TChild, TParent> setParent)
@@ -296,6 +296,7 @@ namespace UrbanGameTests.Tests
                 Assert.AreEqual(1, dataContext.GetTable<Game>().First(g => g.Id == 1).Tasks.Count);
                 Assert.IsNotNull(dataContext.GetTable<GameTask>().First(t => t.Id == 1).Game);
                 #endregion                
+
                 #region TaskSolution <-> ABCDUserAnswer relation
 
                 possibleAnswer.ABCDUserAnswers.Add(userAnswer);

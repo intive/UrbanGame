@@ -141,6 +141,7 @@
     <Compile Include="Tombstoning\TombstoningVariables.cs" />
     <Compile Include="Utilities\AppbarManager.cs" />
     <Compile Include="Utilities\LocalizationService.cs" />
+    <Compile Include="Utilities\PhoneTextBox.cs" />
     <Compile Include="Utilities\RelativeAnimatingContentControl.cs" />
     <Compile Include="Utilities\StateManager.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
@@ -156,6 +157,9 @@
     </Compile>
     <Compile Include="Views\GamesListView.xaml.cs">
       <DependentUpon>GamesListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginAndRegistrerView.xaml.cs">
+      <DependentUpon>LoginAndRegistrerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TaskView.xaml.cs">
       <DependentUpon>TaskView.xaml</DependentUpon>
@@ -177,6 +181,10 @@
     <Page Include="Views\GamesListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LoginAndRegistrerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TaskView.xaml">
       <SubType>Designer</SubType>

@@ -42,7 +42,7 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GreenRectangle">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GreatText">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CorrectText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="NotSoGreatText">
@@ -53,7 +53,7 @@
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
-                <VisualState x:Name="Great">
+                <VisualState x:Name="Correct">
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Toast">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
@@ -67,7 +67,7 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GreenRectangle">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GreatText">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CorrectText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="NotSoGreatText">
@@ -92,7 +92,7 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GreenRectangle">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GreatText">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CorrectText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="NotSoGreatText">
@@ -117,7 +117,7 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GreenRectangle">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GreatText">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CorrectText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="NotSoGreatText">
@@ -254,7 +254,7 @@
             </controls:PivotItem>
         </controls:Pivot>
 
-        <Grid x:Name="Toast" Visibility="Collapsed">
+        <Grid x:Name="Toast" Visibility="Visible">
             <Rectangle Width="480" Height="700" Opacity="0.5">
                 <Rectangle.Fill>
                     <SolidColorBrush Color="{StaticResource SolidColorBrushBlack}"/>
@@ -266,7 +266,7 @@
                 </Rectangle.Fill>
             </Rectangle>
             <TextBlock x:Name="SendingText" Text="{Binding Path=AppResources.Sending, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <ProgressBar x:Name="PerformanceProgressBar"  Style="{StaticResource PerformanceProgressBar}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,50"/>
+            <ProgressBar x:Name="PerformanceProgressBar" IsIndeterminate="true" Style="{StaticResource PerformanceProgressBar}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,50" Width="450" Height="100" Foreground="{StaticResource FontColorGreen}"/>
             <TextBlock x:Name="CorrectText" Text="{Binding Path=AppResources.Correct, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>
             <TextBlock x:Name="NotSoGreatText" Text="{Binding Path=AppResources.NotSoGreat, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>
             <TextBlock x:Name="WrongText" Text="{Binding Path=AppResources.Wrong, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>

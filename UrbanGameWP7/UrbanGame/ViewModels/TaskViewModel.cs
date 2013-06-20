@@ -8,14 +8,14 @@ using System.Windows;
 using System.Windows.Controls;
 using UrbanGame.Storage;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace UrbanGame.ViewModels
 {
     public class TaskViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<TaskChangedEvent>, IHandle<SolutionStatusChanged>
     {
-
         IAppbarManager _appbarManager;
-        string VisualStateName;
 
         public TaskViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
                                     IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
@@ -154,25 +154,47 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
-        #region Answears
+        #region Answers
 
-        private BindableCollection<ABCDAnswear> _answears;
+        private BindableCollection<ABCDAnswear> _answers;
 
-        public BindableCollection<ABCDAnswear> Answears
+        public BindableCollection<ABCDAnswear> Answers
         {
             get
             {
-                return _answears;
+                return _answers;
             }
             set
             {
-                if (_answears != value)
+                if (_answers != value)
                 {
-                    _answears = value;
-                    NotifyOfPropertyChange(() => Answears);
+                    _answers = value;
+                    NotifyOfPropertyChange(() => Answers);
                 }
             }
         }
+        #endregion
+
+        #region VisualStateName
+
+        private string _visualStateName;
+
+        public string VisualStateName
+        {
+            get
+            {
+                return _visualStateName;
+            }
+            set
+            {
+                if (_visualStateName != value)
+                {
+                    _visualStateName = value;
+                    NotifyOfPropertyChange(() => VisualStateName);
+                }
+            }
+        }
+
         #endregion
 
         #endregion
@@ -218,7 +240,7 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-                Answears = new BindableCollection<ABCDAnswear>();
+                Answers = new BindableCollection<ABCDAnswear>();
 
                 IQueryable<IABCDPossibleAnswer> possibleAnswers = _unitOfWorkLocator().GetRepository<IABCDPossibleAnswer>().All().Where(a => a.Task.Id == CurrentTask.Id);
 
@@ -231,7 +253,7 @@ namespace UrbanGame.ViewModels
                         isChecked = true;
                     }
 
-                    Answears.Add(new ABCDAnswear() { possibleAnswear = possible, isChecked = isChecked });
+                    Answers.Add(new ABCDAnswear() { possibleAnswear = possible, isChecked = isChecked });
                 }
             });
         }
@@ -254,38 +276,55 @@ namespace UrbanGame.ViewModels
             Solution = solution;
         }
 
-        public async Task SubmitGPS()
+        public void SubmitGPS()
         {
             VisualStateName = "Sending";
 
-            await Task.Factory.StartNew(() =>
+            GPSLocation gps = new GPSLocation();
+            
+            gps.GetCurrentCoordinates(coords =>
             {
-                GPSLocation gps = new GPSLocation();
-                gps.GetCurrentCoordinates(coords =>
-                {
-                    IGPSSolution solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
-                    SubmitSolution(solution);
-                });
-            });
-        }
-
-        public async Task SubmitABCD()
-        {
-            await Task.Factory.StartNew(() =>
-            {
-                IABCDSolution solution = new TaskSolution() { TaskType = TaskType.ABCD };
-
-                /* when the view will be finished, then it should be there something like this:
-                 
-                foreach (var check in ABCDAnswers)
-                {
-                    IABCDUserAnswer answer = new ABCDUserAnswer() { Answer = check.LP, Solution = solution };
-                    solution.ABCDUserAnswers.Add(answer);
-                }
-                */
-
+                IGPSSolution solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
                 SubmitSolution(solution);
             });
+
+            
+            // wait for 3 second or less, after that if you have a solution than show it else go to normal state
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Tick +=
+            delegate(object s, EventArgs args)
+            {
+                VisualStateName = "Normal";
+            };
+
+            timer.Interval = new TimeSpan(0, 0, 3); // one second
+            timer.Start();
+        }
+
+        public void SubmitABCD()
+        {
+            VisualStateName = "Sending";
+
+            IABCDSolution solution = new TaskSolution() { TaskType = TaskType.ABCD };
+                 
+            foreach (var check in Answers)
+            {
+                IABCDUserAnswer answer = new ABCDUserAnswer() { Answer = check.isChecked, Solution = new TaskSolution() { TextAnswer =  check.possibleAnswear.Answer, TaskId = check.possibleAnswear.Task.Id, TaskType = TaskType.ABCD }};
+                solution.ABCDUserAnswers.Add(answer);
+            }
+
+            SubmitSolution(solution);
+
+            // wait for 3 second or less, after that if you have a solution than show it else go to normal state
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Tick +=
+            delegate(object s, EventArgs args)
+            {
+                VisualStateName = "Normal";
+            };
+
+            timer.Interval = new TimeSpan(0, 0, 3); // one second
+            timer.Start();
         }
 
         #endregion        

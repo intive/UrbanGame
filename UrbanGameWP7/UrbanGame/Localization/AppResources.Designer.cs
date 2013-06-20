@@ -278,6 +278,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to email.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to end:.
         /// </summary>
         public static string GameEnd {
@@ -422,6 +431,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to join.
+        /// </summary>
+        public static string Join {
+            get {
+                return ResourceManager.GetString("Join", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Join in.
         /// </summary>
         public static string JoinIn {
@@ -463,6 +481,15 @@ namespace UrbanGame.Localization {
         public static string LogIn {
             get {
                 return ResourceManager.GetString("LogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to login.
+        /// </summary>
+        public static string LoginLabel {
+            get {
+                return ResourceManager.GetString("LoginLabel", resourceCulture);
             }
         }
         
@@ -584,6 +611,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to password.
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to players:.
         /// </summary>
         public static string Players {
@@ -679,6 +715,15 @@ namespace UrbanGame.Localization {
         public static string Repeatable {
             get {
                 return ResourceManager.GetString("Repeatable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to repeat password.
+        /// </summary>
+        public static string RepeatPassword {
+            get {
+                return ResourceManager.GetString("RepeatPassword", resourceCulture);
             }
         }
         

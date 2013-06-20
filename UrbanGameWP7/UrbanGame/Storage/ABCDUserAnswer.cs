@@ -149,11 +149,11 @@ namespace UrbanGame.Storage
                 {
                     _abcdPossibleAnswerRef.Entity = value;
 
-                    //remove task from previous possibleAnswer
+                    //remove task from previous game
                     if (previousValue != null)
                         previousValue.ABCDUserAnswers.Remove(this);
 
-                    //add task to the new possibleAnswer
+                    //add task to the new game
                     if ((value != null))
                     {
                         value.ABCDUserAnswers.Add(this);
@@ -181,7 +181,7 @@ namespace UrbanGame.Storage
             }
         }
         #endregion
-
+        
         #region Answer
 
         private bool _answer;

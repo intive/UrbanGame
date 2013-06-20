@@ -123,14 +123,14 @@ namespace UrbanGame.Storage
             get { return _abcdUserAnswerRefs; }
         }
 
-        private void OnABCDUserAnswerAdded(ABCDUserAnswer abcdUserAnswer)
+        private void OnABCDUserAnswerAdded(ABCDUserAnswer abcd)
         {
-            abcdUserAnswer.ABCDPossibleAnswer = this;
+            abcd.ABCDPossibleAnswer = this;
         }
 
-        private void OnABCDUserAnswerRemoved(ABCDUserAnswer abcdUserAnswer)
+        private void OnABCDUserAnswerRemoved(ABCDUserAnswer abcd)
         {
-            abcdUserAnswer.ABCDPossibleAnswer = null;
+            abcd.ABCDPossibleAnswer = null;
         }
 
         #endregion

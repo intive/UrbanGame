@@ -351,4 +351,19 @@
   <data name="Wrong" xml:space="preserve">
     <value>NIEPOPRAWNIE!</value>
   </data>
+  <data name="Email" xml:space="preserve">
+    <value>email</value>
+  </data>
+  <data name="Join" xml:space="preserve">
+    <value>dołącz</value>
+  </data>
+  <data name="LoginLabel" xml:space="preserve">
+    <value>login</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>hasło</value>
+  </data>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>powtórz hasło</value>
+  </data>
 </root>
