@@ -2,29 +2,37 @@
 
     <!--
          Base application theme, dependent on API level. This theme is replaced 
-		by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+		by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="Theme.Sherlock.Light">
         <!--
              Theme customizations available in newer API levels can go in res/values-vXX/styles.xml, 
-			while customizations related to backward-compatibility can go here.
+			while customizations related to backward-compatibility can go here.
         -->
     </style>
 
     <style name="UrbanGameTheme" parent="AppBaseTheme">
+
         <!-- Sherlock Navigation List Customization -->
         <item name="dropDownListViewStyle">@style/DropDownListView.UrbanGame</item>
         <item name="actionBarItemBackground">@drawable/selectable_background</item>
         <item name="spinnerItemStyle">@style/Widget.Sherlock.DropDownItem.Spinner.UrbanGame</item>
+
+        <!-- EditText Customization -->
+        <item name="android:editTextStyle">@style/EditText.UrbanGame</item>
+
+        <!-- CheckBox Customization -->
+		<item name="android:checkboxStyle">@style/CheckBox.UrbanGame</item>
     </style>
-    
+
     <!-- Application theme. -->
     <style name="AppTheme" parent="UrbanGameTheme">
 
         <!--
              All customizations that are NOT specific to a particular API-level 
-			can go here.
+			can go here.
         -->
+
 
         <!-- Expandable List Customization -->
         <item name="android:expandableListViewStyle">@style/expandableListStyle</item>
@@ -79,6 +87,17 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <!-- EditText Customization -->
+    <style name="EditText.UrbanGame" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/edit_text_urban_game_default</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <!-- CheckBox Customization -->
+    <style name="CheckBox.UrbanGame" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/btn_check_urban_game_default</item>
+    </style>
+
     <style name="styleHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -99,12 +118,13 @@
         <item name="android:isIndicator">true</item>
     </style>
 
-<!--     Dialog Customization Styles -->
+    <!-- Dialog Customization Styles -->
     <style name="DialogTitleStyle">
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
         <item name="android:textColor">@color/expandable_list_header</item>
         <item name="android:padding">@dimen/dialogTitlePadding</item>
     </style>
+
     <style name="DialogContentStyle">
         <item name="android:paddingLeft">@dimen/dialogTitlePadding</item>
         <item name="android:paddingRight">@dimen/dialogTitlePadding</item>
