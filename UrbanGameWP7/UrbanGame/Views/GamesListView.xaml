@@ -18,7 +18,7 @@
     <Grid x:Name="LayoutRoot">
         <controls:Panorama cal:Message.Attach="[Event SelectionChanged]=[Action ChangeAppbarButtons($eventArgs)]">
             <controls:Panorama.Background>
-                <ImageBrush ImageSource="/Images/MainPanorama.png"/>
+                <ImageBrush ImageSource="/Images/MainPanorama.png" Stretch="UniformToFill"/>
             </controls:Panorama.Background>
             <controls:Panorama.Title>
                 <Grid Background="Transparent" Margin="0,100,0,0">

@@ -10,6 +10,7 @@ using UrbanGame.Storage;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Threading;
+using UrbanGame.Models;
 
 namespace UrbanGame.ViewModels
 {
@@ -276,55 +277,40 @@ namespace UrbanGame.ViewModels
             Solution = solution;
         }
 
-        public void SubmitGPS()
+        public async void SubmitGPS()
         {
             VisualStateName = "Sending";
 
-            GPSLocation gps = new GPSLocation();
-            
-            gps.GetCurrentCoordinates(coords =>
+            await Task.Factory.StartNew(() =>
             {
-                IGPSSolution solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
+                GPSLocation gps = new GPSLocation();
+
+                gps.GetCurrentCoordinates(coords =>
+                {
+                    IGPSSolution solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
+                    SubmitSolution(solution);
+                });
+            });
+
+            VisualStateName = "Normal";
+        }
+
+        public async void SubmitABCD()
+        {
+            VisualStateName = "Sending";
+            await Task.Factory.StartNew(() =>
+            {
+                IABCDSolution solution = new TaskSolution() { TaskType = TaskType.ABCD };
+
+                foreach (var check in Answers)
+                {
+                    IABCDUserAnswer answer = new ABCDUserAnswer() { Answer = check.isChecked, Solution = new TaskSolution() { TextAnswer = check.possibleAnswear.Answer, TaskId = check.possibleAnswear.Task.Id, TaskType = TaskType.ABCD } };
+                    solution.ABCDUserAnswers.Add(answer);
+                }
                 SubmitSolution(solution);
             });
 
-            
-            // wait for 3 second or less, after that if you have a solution than show it else go to normal state
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Tick +=
-            delegate(object s, EventArgs args)
-            {
-                VisualStateName = "Normal";
-            };
-
-            timer.Interval = new TimeSpan(0, 0, 3); // one second
-            timer.Start();
-        }
-
-        public void SubmitABCD()
-        {
-            VisualStateName = "Sending";
-
-            IABCDSolution solution = new TaskSolution() { TaskType = TaskType.ABCD };
-                 
-            foreach (var check in Answers)
-            {
-                IABCDUserAnswer answer = new ABCDUserAnswer() { Answer = check.isChecked, Solution = new TaskSolution() { TextAnswer =  check.possibleAnswear.Answer, TaskId = check.possibleAnswear.Task.Id, TaskType = TaskType.ABCD }};
-                solution.ABCDUserAnswers.Add(answer);
-            }
-
-            SubmitSolution(solution);
-
-            // wait for 3 second or less, after that if you have a solution than show it else go to normal state
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Tick +=
-            delegate(object s, EventArgs args)
-            {
-                VisualStateName = "Normal";
-            };
-
-            timer.Interval = new TimeSpan(0, 0, 3); // one second
-            timer.Start();
+            VisualStateName = "Normal";
         }
 
         #endregion        

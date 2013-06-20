@@ -5,6 +5,7 @@
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
@@ -159,8 +160,8 @@
                         <TextBlock Text="{Binding Path=Game.Name}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontFamily="100"/>
 
                         <TextBlock Text="{Binding Path=AppResources.PoweredBy, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.Column="0"  FontSize="{StaticResource PhoneFontSizeMedium}" Margin="120,0,10,0"/>
-                        <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" FontSize="{StaticResource PhoneFontSizeLarge}" FontWeight="Bold" Margin="-20,0,0,0"/>
-                        <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="-20,0,0,0"/>
+                        <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}"/>
                     </Grid>
                 </StackPanel>
             </controls:Pivot.Title>
@@ -266,7 +267,7 @@
                 </Rectangle.Fill>
             </Rectangle>
             <TextBlock x:Name="SendingText" Text="{Binding Path=AppResources.Sending, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <ProgressBar x:Name="PerformanceProgressBar" IsIndeterminate="true" Style="{StaticResource PerformanceProgressBar}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,50" Width="450" Height="100" Foreground="{StaticResource FontColorGreen}"/>
+            <toolkit:PerformanceProgressBar IsIndeterminate="True" Foreground="{StaticResource FontColorGreen}" Margin="0,0,0,50" Width="450" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock x:Name="CorrectText" Text="{Binding Path=AppResources.Correct, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>
             <TextBlock x:Name="NotSoGreatText" Text="{Binding Path=AppResources.NotSoGreat, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>
             <TextBlock x:Name="WrongText" Text="{Binding Path=AppResources.Wrong, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>

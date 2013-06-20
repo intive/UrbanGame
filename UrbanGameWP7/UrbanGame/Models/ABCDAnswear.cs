@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Common;
 
-namespace UrbanGame.Storage
+namespace UrbanGame.Models
 {
     public class ABCDAnswear
     {

@@ -60,6 +60,7 @@
     <Compile Include="HighScores\IHighScore.cs" />
     <Compile Include="Tasks\TaskChangedEvent.cs" />
     <Compile Include="Tasks\TaskState.cs" />
+    <Compile Include="User\IUser.cs" />
     <Compile Include="Utilities\ILocalizationService.cs" />
     <Compile Include="WebService\AuthorizeState.cs" />
     <Compile Include="Collections\IEntityEnumerable.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solutions\SolutionStatus.cs" />
     <Compile Include="Tasks\TaskType.cs" />
+    <Compile Include="WebService\SubmitResult.cs" />
     <Compile Include="WebService\WebEnum.cs" />
     <Compile Include="WebService\WebException.cs" />
   </ItemGroup>

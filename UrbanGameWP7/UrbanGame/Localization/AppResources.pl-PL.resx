@@ -366,4 +366,31 @@
   <data name="RepeatPassword" xml:space="preserve">
     <value>powtórz hasło</value>
   </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>KONTO UTWORZONE!</value>
+  </data>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>email z potwierdzeniem został wysłany</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>tworzenie konta</value>
+  </data>
+  <data name="EmptyLogin" xml:space="preserve">
+    <value>Musisz podać login!</value>
+  </data>
+  <data name="IncorrectEmail" xml:space="preserve">
+    <value>Niepoprawny email!</value>
+  </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Jesteś zalogowany!</value>
+  </data>
+  <data name="LogginIn" xml:space="preserve">
+    <value>logowanie</value>
+  </data>
+  <data name="EmptyPassword" xml:space="preserve">
+    <value>Muszisz podać hasło!</value>
+  </data>
+  <data name="RepeatYourPassword" xml:space="preserve">
+    <value>Musisz podać dwukrotnie to samo hasło</value>
+  </data>
 </root>

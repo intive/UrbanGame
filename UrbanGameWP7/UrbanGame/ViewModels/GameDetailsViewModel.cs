@@ -29,8 +29,6 @@ namespace UrbanGame.ViewModels
             {
                 RefreshGame();
             }
-            //Task getGameTask = Task.Factory.StartNew(()=>RefreshGame());
-            //getGameTask.Wait();
 
             ChangeAppbarButtons();
             RemovePreviewFromStack();

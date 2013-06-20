@@ -382,4 +382,31 @@
   <data name="RepeatPassword" xml:space="preserve">
     <value>repeat password</value>
   </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>ACCOUNT CREATED!</value>
+  </data>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>confirmation email has been sent</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>creating account</value>
+  </data>
+  <data name="EmptyLogin" xml:space="preserve">
+    <value>You must enter login!</value>
+  </data>
+  <data name="EmptyPassword" xml:space="preserve">
+    <value>You must enter password!</value>
+  </data>
+  <data name="IncorrectEmail" xml:space="preserve">
+    <value>Incorrect email!</value>
+  </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>You are logged in!</value>
+  </data>
+  <data name="LogginIn" xml:space="preserve">
+    <value>logging in</value>
+  </data>
+  <data name="RepeatYourPassword" xml:space="preserve">
+    <value>You must enter twice the same password</value>
+  </data>
 </root>
