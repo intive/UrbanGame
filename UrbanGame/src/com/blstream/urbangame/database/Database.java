@@ -11,10 +11,12 @@ import net.sqlcipher.database.SQLiteOpenHelper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.location.Location;
 import android.util.Log;
 
 import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.LocationTask;
+import com.blstream.urbangame.database.entity.LocationTaskAnswer;
 import com.blstream.urbangame.database.entity.Player;
 import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
@@ -41,6 +43,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String USER_TASKS_SPECIFIC_TABLE_NAME = "userTasksSpecific";
 	private static final String TASKS_ABCD_TABLE_NAME = "tasksABCD";
 	private static final String TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME = "tasksPossibleAnswersABCD";
+	private static final String LOCATION_TASK_ANSWERS_TABLE_NAME = "locationTaskAnswersTableName";
 	
 	// tables columns
 	// ---- Games
@@ -115,6 +118,14 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	private static final String TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID = "TAPAID";
 	private static final String TASKS_ABCD_POSSIBLE_ANSWERS_KEY_TASK_POSSIBLE_ANSWER = "TAPAtaskPossibleAnswer";
 	
+	// ---- Location Task answers
+	private static final String LOCATION_TASK_ANSWER_KEY_TASK_ID = "TaskAnswerTaskID";
+	private static final String LOCATION_TASK_ANSWER_KEY_LOCATION_LATITUDE = "TaskAnswerLocationLatitude";
+	private static final String LOCATION_TASK_ANSWER_KEY_LOCATION_LONGITUDE = "TaskAnswerLocationLongitude";
+	private static final String LOCATION_TASK_ANSWER_KEY_USER_EMAIL = "TaskAnswerLocationUserEmail";
+	private static final String LOCATION_TASK_ANSWER_KEY_DATE = "TaskAnswerDate";
+	private static final String LOCATION_TASK_ANSWER_KEY_ID = "TaskAnswerID";
+	
 	// tables creation strings
 	private static final String CREATE_GAMES_TABLE = "CREATE TABLE " + GAMES_TABLE_NAME + " (" + GAMES_KEY_ID
 		+ " INTEGER PRIMARY KEY, " + GAMES_KEY_VERSION + " REAL, " + GAMES_KEY_TITLE + " TEXT, "
@@ -175,6 +186,13 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		+ "FOREIGN KEY (" + TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + ") " + "REFERENCES " + TASKS_ABCD_TABLE_NAME + " ("
 		+ TASKS_ABCD_KEY_ID + ") " + ")";
 	
+	private static final String CREATE_LOCATION_TASK_ANSWER_TABLE = "CREATE TABLE " + LOCATION_TASK_ANSWERS_TABLE_NAME
+		+ " (" + LOCATION_TASK_ANSWER_KEY_ID + " INTEGER PRIMARY_KEY, " + LOCATION_TASK_ANSWER_KEY_LOCATION_LATITUDE
+		+ " REAL, " + LOCATION_TASK_ANSWER_KEY_LOCATION_LONGITUDE + " REAL, " + LOCATION_TASK_ANSWER_KEY_DATE
+		+ " INTEGER, " + LOCATION_TASK_ANSWER_KEY_TASK_ID + " INTEGER, " + LOCATION_TASK_ANSWER_KEY_USER_EMAIL
+		+ " TEXT, FOREIGN KEY (" + LOCATION_TASK_ANSWER_KEY_TASK_ID + ") REFERENCES " + TASKS_TABLE_NAME + " ("
+		+ TASKS_KEY_ID + "))";
+	
 	public Database(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		SQLiteDatabase.loadLibs(context);
@@ -192,12 +210,14 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.execSQL(CREATE_USER_TASKS_SPECIFIC_TABLE);
 		db.execSQL(CREATE_TASKS_ABCD_TABLE);
 		db.execSQL(CREATE_TASKS_ABCD_POSSIBLE_ANSWERS_TABLE);
+		db.execSQL(CREATE_LOCATION_TASK_ANSWER_TABLE);
 	}
 	
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.w(Database.class.getName(), "Upgrading database from version " + oldVersion + " to " + newVersion
 			+ ", which will destroy all old data");
+		db.execSQL("DROP TABLE IF EXISTS " + CREATE_LOCATION_TASK_ANSWER_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + CREATE_TASKS_ABCD_POSSIBLE_ANSWERS_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + CREATE_TASKS_ABCD_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + CREATE_USER_TASKS_SPECIFIC_TABLE);
@@ -206,7 +226,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		db.execSQL("DROP TABLE IF EXISTS " + USER_GAMES_SPECIFIC_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + GAMES_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + CREATE_USER_LOGGED_IN_TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + LOCATION_TASK_ANSWERS_TABLE_NAME);
 		onCreate(db);
 	}
 	
@@ -1395,5 +1415,78 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		cursor.close();
 		db.close();
 		return gameList;
+	}
+	
+	@Override
+	public boolean insertLocationTaskAnswerForTask(Long taskID, LocationTaskAnswer locationTaskAnswer) {
+		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		
+		boolean isDataOk = taskID != null && isTaskAnswerOk(locationTaskAnswer);
+		if (isDataOk) {
+			Location location = locationTaskAnswer.getAnsweredLocation();
+			
+			ContentValues values = new ContentValues();
+			values.put(LOCATION_TASK_ANSWER_KEY_TASK_ID, taskID);
+			values.put(LOCATION_TASK_ANSWER_KEY_DATE, dateToLong(locationTaskAnswer.getAnswerDate()));
+			values.put(LOCATION_TASK_ANSWER_KEY_LOCATION_LATITUDE, location.getLatitude());
+			values.put(LOCATION_TASK_ANSWER_KEY_LOCATION_LONGITUDE, location.getLongitude());
+			values.put(LOCATION_TASK_ANSWER_KEY_USER_EMAIL, locationTaskAnswer.getUserEmail());
+			boolean isInsertOK = db.insert(LOCATION_TASK_ANSWERS_TABLE_NAME, null, values) != -1;
+			
+			db.close();
+			
+			return isInsertOK;
+		}
+		else return false;
+	}
+	
+	private boolean isTaskAnswerOk(LocationTaskAnswer locationTaskAnswer) {
+		return locationTaskAnswer.getAnsweredLocation() != null && locationTaskAnswer.getAnswerDate() != null;
+	}
+	
+	private LocationTaskAnswer locationTaskAnswerFromCursor(Cursor cursor) {
+		Location location = new Location("");
+		location.setLatitude(cursor.getDouble(LocationTaskAnswerFields.LATITUDE.value));
+		location.setLongitude(cursor.getDouble(LocationTaskAnswerFields.LONGITUDE.value));
+		LocationTaskAnswer answer = new LocationTaskAnswer(location,
+			longToDate(cursor.getLong(LocationTaskAnswerFields.DATE.value)),
+			cursor.getString(LocationTaskAnswerFields.USER_EMAIL.value));
+		
+		return answer;
+	}
+	
+	@Override
+	public List<LocationTaskAnswer> getLocationTaskAnswers(Long taskID, String userEmail) {
+		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		String query = "SELECT " + LOCATION_TASK_ANSWER_KEY_TASK_ID + ", " + LOCATION_TASK_ANSWER_KEY_LOCATION_LATITUDE
+			+ ", " + LOCATION_TASK_ANSWER_KEY_LOCATION_LONGITUDE + ", " + LOCATION_TASK_ANSWER_KEY_DATE + ", "
+			+ LOCATION_TASK_ANSWER_KEY_USER_EMAIL + " FROM " + LOCATION_TASK_ANSWERS_TABLE_NAME + " WHERE "
+			+ LOCATION_TASK_ANSWER_KEY_TASK_ID + " = " + taskID + " AND " + LOCATION_TASK_ANSWER_KEY_USER_EMAIL
+			+ " = \"" + userEmail + "\";";
+		
+		Cursor cursor = db.rawQuery(query, null);
+		
+		ArrayList<LocationTaskAnswer> locationList = null;
+		
+		if (cursor.moveToFirst()) {
+			locationList = new ArrayList<LocationTaskAnswer>();
+			do {
+				LocationTaskAnswer answer = locationTaskAnswerFromCursor(cursor);
+				locationList.add(answer);
+			}
+			while (cursor.moveToNext());
+		}
+		cursor.close();
+		db.close();
+		return locationList;
+	}
+	
+	private enum LocationTaskAnswerFields {
+		LATITUDE(1), LONGITUDE(2), DATE(3), USER_EMAIL(4);
+		int value;
+		
+		private LocationTaskAnswerFields(int x) {
+			value = x;
+		}
 	}
 }

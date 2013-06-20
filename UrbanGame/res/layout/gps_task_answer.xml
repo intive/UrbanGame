@@ -25,4 +25,11 @@
         android:layout_centerHorizontal="true"
         android:text="@string/button_submit" />
 
+    <fragment
+        android:id="@+id/mapLocationAnswers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonGpsTaskAnswerSubmit"
+        class="com.google.android.gms.maps.SupportMapFragment" />
+    
 </RelativeLayout>
