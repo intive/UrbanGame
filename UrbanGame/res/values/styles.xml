@@ -9,7 +9,6 @@
     <style name="styleExpandableListHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@android:color/white</item>
         <item name="android:textColor">?attr/header_color</item>
         <item name="android:padding">@dimen/view_margin</item>
         <item name="android:textStyle">bold</item>
