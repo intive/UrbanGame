@@ -26,6 +26,7 @@ public abstract class AbstractGamesListActivity extends AbstractMenuActivity imp
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 		if (isUserLoggedIn()) {
 			configureUserGamesFlow();
 		}
@@ -33,7 +34,7 @@ public abstract class AbstractGamesListActivity extends AbstractMenuActivity imp
 			configureUserLoginFlow(menu);
 		}
 		
-		return super.onCreateOptionsMenu(menu);
+		return true;
 	}
 	
 	protected void configureUserGamesFlow() {
