@@ -5,12 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -152,7 +149,7 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 			menu.findItem(R.id.menu_logout).setVisible(false);
 		}
 	}
-
+	
 	protected boolean isUserLoggedIn() {
 		return loginManager.isUserLoggedIn();
 	}
@@ -164,7 +161,8 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 		int itemId = item.getItemId();
 		switch (itemId) {
 			case R.id.menu_refresh:		//TODO delete only demonstration feature
-				themeRES = themeRES == R.style.UrbanGameTheme_Default ? R.style.UrbanGameTheme_Blue : R.style.UrbanGameTheme_Default;
+				themeRES = themeRES == R.style.UrbanGameTheme_Default ? R.style.UrbanGameTheme_Blue
+					: R.style.UrbanGameTheme_Default;
 				break;
 			//TODO end delete section
 			case R.id.menu_logout:

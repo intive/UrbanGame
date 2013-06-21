@@ -226,8 +226,8 @@ public class UrbanGameDialog extends DialogFragment {
 		}
 	}
 	
-	@SuppressWarnings("serial")
 	private class ButtonOnClickToDialogOnClickAdapter implements OnClickListener, Serializable {
+		private static final long serialVersionUID = 1L;
 		
 		private final UrbanGameDialogOnClickListener dialogInterfaceListener;
 		private final int which;
