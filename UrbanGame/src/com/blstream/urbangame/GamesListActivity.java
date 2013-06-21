@@ -3,10 +3,8 @@ package com.blstream.urbangame;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupClickListener;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -16,6 +14,7 @@ import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
+import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 
 public class GamesListActivity extends AbstractGamesListActivity implements OnChildClickListener {
 	private GamesListAdapter adapter;
@@ -33,22 +32,7 @@ public class GamesListActivity extends AbstractGamesListActivity implements OnCh
 		list.setAdapter(adapter);
 		list.setOnChildClickListener(this);
 		
-		setPropertiesOfExpandableListView(adapter);
-	}
-	
-	private void setPropertiesOfExpandableListView(BaseExpandableListAdapter adapter) {
-		for (int i = 0; i < adapter.getGroupCount(); i++) {
-			list.expandGroup(i);
-		}
-		
-		//disabling ability of collapsing group
-		list.setOnGroupClickListener(new OnGroupClickListener() {
-			
-			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-				return true;
-			}
-		});
+		ExpandableListViewPropertiesSetter.setPropertiesOfExpandableListView(adapter, list);
 	}
 	
 	@Override

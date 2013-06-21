@@ -108,11 +108,13 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		
 		MenuInflater menuInflater = getSupportMenuInflater();
 		menuInflater.inflate(R.menu.top_bar_search, menu);
 		configureSearchAction(menu);
 		
-		return super.onCreateOptionsMenu(menu);
+		return true;
 	}
 	
 	@Override
