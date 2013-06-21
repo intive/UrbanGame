@@ -7,7 +7,7 @@ namespace Common
 {
     public enum GameDifficulty
     {
-        Difficult,
+        Hard,
         Medium,
         Easy
     }

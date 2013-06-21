@@ -170,6 +170,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BY.
+        /// </summary>
+        public static string ByOperatorUpCase {
+            get {
+                return ResourceManager.GetString("ByOperatorUpCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to cancelled.
         /// </summary>
         public static string Cancelled {

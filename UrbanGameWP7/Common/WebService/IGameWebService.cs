@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Device.Location;
+using System.Threading.Tasks;
 
 namespace Common
 {
@@ -11,13 +12,6 @@ namespace Common
     /// </summary>
     public interface IGameWebService
     {
-
-        /// <summary>
-        /// Method returns an array of existing games(partially filled in)
-        /// </summary>
-        /// <returns>Array of IGame</returns>
-        IGame[] GetGames();
-
         /// <summary>
         /// Method responses for signing up user into the game
         /// </summary>
@@ -30,7 +24,7 @@ namespace Common
         /// </summary>
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <returns></returns>
-        IGame GetGameInfo(int gid);
+        Task<IGame> GetGameInfo(int gid);
 
         /// <summary>
         /// Method returns an array of game's tasks
@@ -100,7 +94,7 @@ namespace Common
         /// Method returns array of the nearest games(only needed fields filled in)
         /// </summary>
         /// <returns></returns>
-        IGame[] UserNearbyGames(GeoCoordinate coordinate);
+        Task<IGame[]> UserNearbyGames(GeoCoordinate coordinate);
 
         /// <summary>
         /// Method returns array of games in which user played(only needed fields filled in)
