@@ -65,6 +65,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	private static final long MAX_UPDATE_TIME = 5000;
 	private GoogleMap mMap;
 	private SupportMapFragment mapFragment; //I have to remove it in onDestroy
+	private boolean isAnswered;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -91,6 +92,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, context, requestCode);
 			dialog.show();
 		}
+		isAnswered = false;
 		
 		DatabaseInterface database = new Database(activity);
 		playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), database.getLoggedPlayerID());
@@ -159,11 +161,11 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			
 			mLocationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
 			//task is alredy finished
-			if (task.getEndTime().before(new Date())) {
+			if (task.getEndTime().before(new Date()) || !task.isRepetable() && isAnswered) {
 				
 			}
 			//gps is off
-			if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			else if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				dialog.showDialog(DialogType.GPS_OFF);
 			}
 			//no gps signal
@@ -249,7 +251,11 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 						new LatLng(answer.getAnsweredLocation().getLatitude(), answer.getAnsweredLocation()
 							.getLongitude())).icon(
 						BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+				isAnswered = true;
 			}
+		}
+		else {
+			isAnswered = false;
 		}
 	}
 	
