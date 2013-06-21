@@ -212,7 +212,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	// GAMES METHODS
 	@Override
-	public boolean insertGameShortInfo(UrbanGameShortInfo game) {
+	public synchronized boolean insertGameShortInfo(UrbanGameShortInfo game) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		boolean isDataOk = true;
 		
@@ -242,7 +242,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean insertGameInfo(UrbanGame game) {
+	public synchronized boolean insertGameInfo(UrbanGame game) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
 		boolean isDataOk = true;
@@ -319,18 +319,18 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	// OK
 	@Override
-	public List<UrbanGameShortInfo> getAllGamesShortInfo() {
+	public synchronized List<UrbanGameShortInfo> getAllGamesShortInfo() {
 		return getAllGamesShortInfoParameterized("");
 	}
 	
 	@Override
-	public List<UrbanGameShortInfo> getAllGamesShortInfoOrderedByStartTime(int beforeFirst, int howMany) {
+	public synchronized List<UrbanGameShortInfo> getAllGamesShortInfoOrderedByStartTime(int beforeFirst, int howMany) {
 		String orderingLimitingQuery = " ORDER BY " + GAMES_KEY_START_DATE + " LIMIT " + beforeFirst + ", " + howMany;
 		return getAllGamesShortInfoParameterized(orderingLimitingQuery);
 	}
 	
 	@Override
-	public UrbanGameShortInfo getGameShortInfo(Long gameID) {
+	public synchronized UrbanGameShortInfo getGameShortInfo(Long gameID) {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		String[] gamesColumns = { GAMES_KEY_ID, GAMES_KEY_TITLE, GAMES_KEY_GAME_ICON, GAMES_KEY_OPERATOR_ICON,
 			GAMES_KEY_OPERATOR_NAME, GAMES_KEY_NUMBER_OF_PLAYERS, GAMES_KEY_NUMBER_OF_MAX_PLAYERS, GAMES_KEY_CITY_NAME,
@@ -351,7 +351,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public UrbanGame getGameInfo(Long gameID) {
+	public synchronized UrbanGame getGameInfo(Long gameID) {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		String[] gamesColumns = { GAMES_KEY_ID, GAMES_KEY_TITLE, GAMES_KEY_GAME_ICON, GAMES_KEY_OPERATOR_ICON,
 			GAMES_KEY_OPERATOR_NAME, GAMES_KEY_NUMBER_OF_PLAYERS, GAMES_KEY_NUMBER_OF_MAX_PLAYERS, GAMES_KEY_CITY_NAME,
@@ -378,7 +378,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean updateGameShortInfo(UrbanGameShortInfo game) {
+	public synchronized boolean updateGameShortInfo(UrbanGameShortInfo game) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
 		boolean isDataOk = areShortGameInfoFieldsOK(game);
@@ -395,7 +395,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean updateGame(UrbanGame game) {
+	public synchronized boolean updateGame(UrbanGame game) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
 		boolean isDataOk = areGameInfoFieldsOK(game);
@@ -413,7 +413,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean deleteGameInfoAndShortInfo(Long gameID) {
+	public synchronized boolean deleteGameInfoAndShortInfo(Long gameID) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		db.beginTransaction();
 		String userTaskSpecificDeletionSQL = "DELETE FROM " + USER_TASKS_SPECIFIC_TABLE_NAME + " WHERE "
@@ -604,7 +604,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	// USER METHODS
 	@Override
-	public boolean insertUser(Player player) {
+	public synchronized boolean insertUser(Player player) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
 		boolean isDataOk = true;
@@ -627,7 +627,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public Player getPlayer(String email) {
+	public synchronized Player getPlayer(String email) {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		String[] playerColumns = { USER_KEY_EMAIL, USER_KEY_DISPLAY_NAME, USER_KEY_AVATAR, USER_KEY_PASSWORD };
 		
@@ -649,7 +649,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean updatePlayer(Player player) {
+	public synchronized boolean updatePlayer(Player player) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
 		boolean isDataOk = player.getEmail() != null;
@@ -676,7 +676,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean deletePlayer(String email) {
+	public synchronized boolean deletePlayer(String email) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		boolean isSucessful = db.delete(USER_TABLE_NAME, USER_KEY_EMAIL + "=?", new String[] { email }) != 0;
 		db.close();
@@ -684,7 +684,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean insertUserGameSpecific(PlayerGameSpecific playerGameSpecific) {
+	public synchronized boolean insertUserGameSpecific(PlayerGameSpecific playerGameSpecific) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
 		boolean isDataOk = true;
@@ -709,7 +709,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public PlayerGameSpecific getUserGameSpecific(String email, Long gameID) {
+	public synchronized PlayerGameSpecific getUserGameSpecific(String email, Long gameID) {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		String[] playerGamesSpecificColumns = { USER_GAMES_SPECIFIC_KEY_EMAIL, USER_GAMES_SPECIFIC_KEY_GAME_ID,
 			USER_GAMES_SPECIFIC_KEY_RANK, USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED,
@@ -748,7 +748,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean updateUserGameSpecific(PlayerGameSpecific playerGameSpecific) {
+	public synchronized boolean updateUserGameSpecific(PlayerGameSpecific playerGameSpecific) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
 		boolean isDataOk = playerGameSpecific.getPlayerEmail() != null && playerGameSpecific.getGameID() != null;
@@ -783,7 +783,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean deleteUserGameSpecific(String email, Long gameID) {
+	public synchronized boolean deleteUserGameSpecific(String email, Long gameID) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		boolean isSucessful = db.delete(USER_GAMES_SPECIFIC_TABLE_NAME, USER_GAMES_SPECIFIC_KEY_EMAIL + "=? AND "
 			+ USER_GAMES_SPECIFIC_KEY_GAME_ID + "=?", new String[] { email, gameID.longValue() + "" }) != 0;
@@ -792,7 +792,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean wipeOutUserData(String email) {
+	public synchronized boolean wipeOutUserData(String email) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		db.beginTransaction();
 		boolean isSucessful = db.delete(USER_GAMES_SPECIFIC_TABLE_NAME, USER_GAMES_SPECIFIC_KEY_EMAIL + "=?",
@@ -807,7 +807,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean setLoggedPlayer(String email) {
+	public synchronized boolean setLoggedPlayer(String email) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		db.beginTransaction();
 		boolean isSuccesful = email != null;
@@ -827,7 +827,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public String getLoggedPlayerID() {
+	public synchronized String getLoggedPlayerID() {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		Cursor cursor = db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_KEY_EMAIL }, null, null,
 			null, null, null);
@@ -841,7 +841,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean setNoOneLogged() {
+	public synchronized boolean setNoOneLogged() {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		int count = db.delete(USER_LOGGED_IN_TABLE_NAME, null, null);
 		boolean successful = count == 1 || count == 0;
@@ -849,7 +849,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean insertPlayerTaskSpecific(PlayerTaskSpecific taskSpecific) {
+	public synchronized boolean insertPlayerTaskSpecific(PlayerTaskSpecific taskSpecific) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
 		boolean isDataOk;
@@ -879,7 +879,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public PlayerTaskSpecific getPlayerTaskSpecific(Long taskID, String playerEmail) {
+	public synchronized PlayerTaskSpecific getPlayerTaskSpecific(Long taskID, String playerEmail) {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		String[] taskColumns = { USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, USER_TASKS_SPECIFIC_KEY_TASK_ID,
 			USER_TASKS_SPECIFIC_KEY_POINTS, USER_TASKS_SPECIFIC_KEY_IS_FINISHED, USER_TASKS_SPECIFIC_KEY_ARE_CHANGES,
@@ -922,7 +922,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean updatePlayerTaskSpecific(PlayerTaskSpecific taskSpecific) {
+	public synchronized boolean updatePlayerTaskSpecific(PlayerTaskSpecific taskSpecific) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
 		boolean isDataOk = isTaskSpecificOk(taskSpecific);
@@ -967,7 +967,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean deletePlayerTaskSpecific(Long taskID, String playerEmail) {
+	public synchronized boolean deletePlayerTaskSpecific(Long taskID, String playerEmail) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		boolean isSucessful = db
 			.delete(USER_TASKS_SPECIFIC_TABLE_NAME, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + "=? AND "
@@ -980,7 +980,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	// TASKS METHODS
 	@Override
-	public boolean insertTaskForGame(Long gameID, Task task) {
+	public synchronized boolean insertTaskForGame(Long gameID, Task task) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
 		boolean isDataOk;
@@ -1056,7 +1056,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public List<Task> getTasksForGame(Long gameID) {
+	public synchronized List<Task> getTasksForGame(Long gameID) {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		
 		String query = "SELECT " + TASKS_KEY_ID + ", " + TASKS_KEY_TYPE + ", " + TASKS_KEY_TITLE + ", "
@@ -1085,7 +1085,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public Task getTask(Long taskID) {
+	public synchronized Task getTask(Long taskID) {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		String[] taskColumns = { TASKS_KEY_ID, TASKS_KEY_TYPE, TASKS_KEY_TITLE, TASKS_KEY_MAX_POINTS,
 			TASKS_KEY_REPETABLE, TASKS_KEY_IS_HIDDEN, TASKS_KEY_NUMBER_OF_HIDDEN, TASKS_KEY_END_TIME,
@@ -1178,7 +1178,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean updateTask(Task task) {
+	public synchronized boolean updateTask(Task task) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		
 		boolean isDataOk = task.getId() != null;
@@ -1270,7 +1270,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean deleteTask(Long gameID, Long taskID) {
+	public synchronized boolean deleteTask(Long gameID, Long taskID) {
 		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
 		db.beginTransaction();
 		String userTaskSpecificDeletionSQL = "DELETE FROM " + USER_TASKS_SPECIFIC_TABLE_NAME + " WHERE "
@@ -1299,12 +1299,12 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	// TASKS METHODS END
 	
 	@Override
-	public void closeDatabase() {
+	public synchronized void closeDatabase() {
 		close();
 	}
 	
 	@Override
-	public List<UrbanGame> getAllUserGames(String email) {
+	public synchronized List<UrbanGame> getAllUserGames(String email) {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		String query = "SELECT " + GAMES_TABLE_NAME + "." + GAMES_KEY_ID + ", " + GAMES_TABLE_NAME + "."
 			+ GAMES_KEY_VERSION + ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_TITLE + ", " + GAMES_TABLE_NAME + "."
@@ -1369,7 +1369,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	}
 	
 	@Override
-	public List<UrbanGameShortInfo> getAllUserGamesShortInfoByItsState(String email, Integer state) {
+	public synchronized List<UrbanGameShortInfo> getAllUserGamesShortInfoByItsState(String email, Integer state) {
 		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
 		
 		String query = "SELECT " + GAMES_KEY_ID + ", " + GAMES_KEY_TITLE + ", " + GAMES_KEY_GAME_ICON + ", "
