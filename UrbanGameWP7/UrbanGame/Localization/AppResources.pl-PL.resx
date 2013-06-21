@@ -339,4 +339,7 @@
   <data name="Repeatable" xml:space="preserve">
     <value>powtarzalne</value>
   </data>
+  <data name="ByOperatorUpCase" xml:space="preserve">
+    <value>OD</value>
+  </data>
 </root>

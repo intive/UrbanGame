@@ -163,16 +163,16 @@ namespace UrbanGame.ViewModels
 
         public async Task RefreshGame()
         {
-            await Task.Factory.StartNew(() =>
+            await Task.Factory.StartNew(async () =>
             {
                 if (_gameWebService.IsAuthorized)
                 {
                     IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
-                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
+                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
                 }
                 else
                 {
-                    Game = _gameWebService.GetGameInfo(GameId);
+                    Game = await _gameWebService.GetGameInfo(GameId);
                 }
 
                 SetAppBarContent();
