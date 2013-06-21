@@ -11,6 +11,11 @@ import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 
 public interface DatabaseInterface {
 	
+	/**
+	 * @return - returns database name
+	 */
+	public String getDatabaseName();
+	
 	// GAMES METHOD
 	/**
 	 * @param gameShortInfo - all you need for game list view, only short info
