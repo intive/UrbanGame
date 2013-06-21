@@ -13,6 +13,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.blstream.urbangame.R;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
@@ -61,7 +63,8 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	private LocationManager mLocationManager;
 	private boolean isGPSFix;
 	private static final long MAX_UPDATE_TIME = 5000;
-	GoogleMap mMap;
+	private GoogleMap mMap;
+	private SupportMapFragment mapFragment; //I have to remove it in onDestroy
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -213,28 +216,27 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		// Do a null check to confirm that we have not already instantiated the map.
 		if (mMap == null) {
 			// Try to obtain the map from the SupportMapFragment.
-			//SherlockFragmentActivity activity = (SherlockFragmentActivity) context;
-			SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(
-				R.id.mapLocationAnswers);
+			
+			mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.mapLocationAnswers);
 			Log.i(TAG, mapFragment + "");
 			mMap = mapFragment.getMap();
 			// Check if we were successful in obtaining the map.
 			if (mMap != null) {
 				
-				//setting map init zoom and position
-				
-				Location location = mLocationClient.getLastLocation();
-				if (mLocationClient.getLastLocation() != null) {
-					mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location
-						.getLongitude())));
-				}
-				mMap.animateCamera(CameraUpdateFactory.zoomTo(14f));
 				setUpMap();
 			}
 		}
 	}
 	
 	private void setUpMap() {
+		
+		//setting map init zoom and position
+		
+		Location location = mLocationClient.getLastLocation();
+		if (mLocationClient.getLastLocation() != null) {
+			mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+			mMap.animateCamera(CameraUpdateFactory.zoomTo(14f));
+		}
 		
 		DatabaseInterface database = new Database(context);
 		ArrayList<LocationTaskAnswer> answers = (ArrayList<LocationTaskAnswer>) database.getLocationTaskAnswers(
@@ -249,6 +251,19 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 						BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 			}
 		}
+	}
+	
+	@Override
+	public void onDestroyView() {
+		try {
+			SherlockFragmentActivity activity = (SherlockFragmentActivity) context;
+			FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+			ft.remove(mapFragment);
+			ft.commit();
+			mMap = null;
+		}
+		catch (Exception e) {}
+		super.onDestroyView();
 	}
 	
 	private int sendLocationForVerification(Location location) {
