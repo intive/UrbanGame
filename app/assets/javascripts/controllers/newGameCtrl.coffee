@@ -244,7 +244,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             if ($scope.getCurrentStepIndex()==1)
                 $scope.onTab2Switch()
                 
-    $scope.selection = $scope.steps[1]
+    $scope.selection = $scope.steps[0]
 
     $scope.getCurrentStepIndex = ->
         _.indexOf($scope.steps, $scope.selection)
@@ -276,6 +276,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         (
             stepIndex = $scope.getCurrentStepIndex()
             if stepIndex == 0
+                $scope.game.location = $("#locationInput").val()
                 $scope.savegame()
             else
                 if stepIndex == 1
@@ -339,10 +340,6 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             $("#nameInput").on 'keyup', ->
                 if $scope.game.name!=undefined
                     $scope.isValidName()
-            $("#locationInput").on 'click', -> $("#locationInput").bind 'propertychange blur input paste', (event)->
-                setTimeout (->
-                    $scope.game.loc = $("#locationInput").val()
-                ), 500
             $("#startTime, #startDate, #endTime, #endDate").bind 'input blur', (event)->
                 if $scope.game.startDate instanceof Date && $scope.game.endDate instanceof Date && $scope.form.gStartTime.$valid && $scope.form.gEndTime.$valid
                     from = new Date($scope.game.startDate.getTime())
