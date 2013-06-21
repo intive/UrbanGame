@@ -24,12 +24,21 @@
         android:layout_below="@+id/textViewGpsTaskAnswerText"
         android:layout_centerHorizontal="true"
         android:text="@string/button_submit" />
-
+    
+    <TextView
+        android:id="@+id/textViewYourAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/buttonGpsTaskAnswerSubmit"
+        android:text="@string/label_your_answer"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
     <fragment
         android:id="@+id/mapLocationAnswers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonGpsTaskAnswerSubmit"
+        android:layout_below="@+id/textViewYourAnswer"
         class="com.google.android.gms.maps.SupportMapFragment" />
     
 </RelativeLayout>

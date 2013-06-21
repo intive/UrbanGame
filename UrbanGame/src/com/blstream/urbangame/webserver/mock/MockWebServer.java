@@ -193,4 +193,11 @@ public class MockWebServer {
 		return (int) (points * random);
 		
 	}
+	
+	public Location getCorrectGpsLocation(Task task) {
+		Location location = new Location("correct location");
+		location.setLatitude(51.103428);
+		location.setLongitude(17.021685);
+		return location;
+	}
 }

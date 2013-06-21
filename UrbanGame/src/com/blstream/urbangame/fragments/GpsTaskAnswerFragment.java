@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -66,6 +67,8 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	private GoogleMap mMap;
 	private SupportMapFragment mapFragment; //I have to remove it in onDestroy
 	private boolean isAnswered;
+	private boolean isFinished;
+	private TextView textViewYourAnswer;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -92,11 +95,12 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, context, requestCode);
 			dialog.show();
 		}
-		isAnswered = false;
 		
 		DatabaseInterface database = new Database(activity);
 		playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), database.getLoggedPlayerID());
 		database.closeDatabase();
+		
+		playerTaskSpecific.getStatus();
 		
 	}
 	
@@ -150,6 +154,11 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		
 		submitButton = (Button) view.findViewById(R.id.buttonGpsTaskAnswerSubmit);
 		submitButton.setOnClickListener(this);
+		textViewYourAnswer = (TextView) view.findViewById(R.id.textViewYourAnswer);
+		if (playerTaskSpecific.getStatus() != PlayerTaskSpecific.ACTIVE) {
+			submitButton.setVisibility(View.GONE);
+		}
+		
 		return view;
 	}
 	
@@ -160,12 +169,9 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			AnswerDialog dialog = new AnswerDialog(context);
 			
 			mLocationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
-			//task is alredy finished
-			if (task.getEndTime().before(new Date()) || !task.isRepetable() && isAnswered) {
-				
-			}
+			
 			//gps is off
-			else if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				dialog.showDialog(DialogType.GPS_OFF);
 			}
 			//no gps signal
@@ -207,9 +213,19 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 					new Date(), database.getLoggedPlayerID()));
 				database.closeDatabase();
 				if (mMap != null) {
-					mMap.addMarker(new MarkerOptions().position(new LatLng(mLastLocation.getLatitude(), mLastLocation
-						.getLongitude())));
+					mMap.addMarker(new MarkerOptions().position(
+						new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())).icon(
+						BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 				}
+				mapFragment.getView().setVisibility(View.VISIBLE);
+				textViewYourAnswer.setVisibility(View.VISIBLE);
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+					new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 14f));
+				if (!task.isRepetable()) {
+					submitButton.setVisibility(View.GONE);
+					addCorrectAnswerMarker(getCorrectLocationFromServer());
+				}
+				
 			}
 		}
 	}
@@ -245,6 +261,19 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			task.getId(), database.getLoggedPlayerID());
 		database.closeDatabase();
 		if (answers != null) {
+			mapFragment.getView().setVisibility(View.VISIBLE);
+			textViewYourAnswer.setVisibility(View.VISIBLE);
+			if (!task.isRepetable()) { //task is answered and cant be repeated
+			
+				location = getCorrectLocationFromServer();
+				addCorrectAnswerMarker(location);
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+					new LatLng(location.getLatitude(), location.getLongitude()), 14f));
+				
+				submitButton.setVisibility(View.GONE);
+				addCorrectAnswerMarker(getCorrectLocationFromServer());
+				
+			}
 			for (LocationTaskAnswer answer : answers) {
 				mMap.addMarker(new MarkerOptions()
 					.position(
@@ -254,8 +283,21 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 				isAnswered = true;
 			}
 		}
-		else {
+		else if (playerTaskSpecific.getStatus() == PlayerTaskSpecific.ACTIVE) {	//task is active and has no answers
 			isAnswered = false;
+			mapFragment.getView().setVisibility(View.GONE);
+			textViewYourAnswer.setVisibility(View.GONE);
+		}
+		else	//task is Finished but has no answer
+		{
+			mapFragment.getView().setVisibility(View.VISIBLE);
+			textViewYourAnswer.setVisibility(View.VISIBLE);
+			
+			location = getCorrectLocationFromServer();
+			addCorrectAnswerMarker(location);
+			mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+				new LatLng(location.getLatitude(), location.getLongitude()), 14f));
+			
 		}
 	}
 	
@@ -336,4 +378,14 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		
 	}
 	
+	private void addCorrectAnswerMarker(Location location) {
+		mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).icon(
+			BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+		
+	}
+	
+	private Location getCorrectLocationFromServer() {
+		//FIXME replace mock
+		return new MockWebServer().getCorrectGpsLocation(task);
+	}
 }
