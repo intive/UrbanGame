@@ -116,7 +116,6 @@ public class ActiveTaskActivity extends AbstractMenuActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = getSupportMenuInflater();
-		menuInflater.inflate(R.menu.top_bar_alert, menu);
 		menuInflater.inflate(R.menu.top_bar_message, menu);
 		
 		return super.onCreateOptionsMenu(menu);
