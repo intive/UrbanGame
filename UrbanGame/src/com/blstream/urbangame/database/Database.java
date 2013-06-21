@@ -31,7 +31,7 @@ import com.blstream.urbangame.database.helper.SQLiteHelper;
 public class Database implements DatabaseInterface {
 	
 	//This is a flag that tells which database should be used (encrypted or without encryption)
-	public static boolean use_encryption_flag = false;
+	public static boolean use_encryption_flag = true;
 	
 	SQLInterface databasebHelper;
 	
