@@ -33,7 +33,6 @@ public abstract class AbstractGamesListActivity extends AbstractMenuActivity imp
 		else {
 			configureUserLoginFlow(menu);
 		}
-		
 		return true;
 	}
 	
