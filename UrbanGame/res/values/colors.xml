@@ -5,7 +5,16 @@
     <color name="pagerTitleStrip_background">#D2D2D2</color>
     <color name="pagerTitleStrip_text">#666666</color>
     <color name="answer_green">#b0e02f</color>
-    <color name="action_bar_background">#8DB600</color>
-    <color name="expandable_list_header">#8DB600</color>
-
+    <color name="dialogButtonDivider">#cfcfcf</color>
+    
+    <!-- Default Green Theme Colors -->
+    <color name="header_color_default">#99cc00</color>
+    <color name="action_bar_background_default">#669900</color>
+    <color name="pressed_default">#cc99cc00</color>
+    
+    <!-- Blue Theme Colors -->
+	<color name="header_color_blue">#0099cc</color>
+	<color name="action_bar_background_blue">#006699</color>
+	<color name="pressed_blue">#cc0099cc</color>
+	
 </resources>

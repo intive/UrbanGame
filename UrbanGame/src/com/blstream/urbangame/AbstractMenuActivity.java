@@ -5,12 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -60,7 +57,7 @@ public boolean onMenuItemSelected(int featureId, MenuItem item) {
 **************************************************** */
 
 /**
- * MenuActivity is abstract super class for all of the activities in
+ * AbstractMenuActivity is abstract super class for all of the activities in
  * application. It provides the following features:
  * 		a) For the user there is overflow menu which
  * 		   allows to perform simple actions like:
@@ -74,9 +71,8 @@ public boolean onMenuItemSelected(int featureId, MenuItem item) {
  * 		c) Subclasses are also capable to finish themselves after receiving LOGOUT_ACTION intent
  */
 //formatter:on
-public abstract class MenuActivity extends SherlockFragmentActivity {
-	public final static String LOGOUT_ACTION = "com.blstream.urbangame.LOGOUT";
-	
+public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
+	protected final static String LOGOUT_ACTION = "com.blstream.urbangame.LOGOUT";
 	protected UrbanGameApplication urbanGameApplication;
 	protected LoginManager loginManager;
 	private LocalBroadcastManager localBroadcastManager;
@@ -84,12 +80,12 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		setTheme(themeRES); //TODO delete only demonstration feature
 		super.onCreate(savedInstanceState);
 		this.urbanGameApplication = (UrbanGameApplication) getApplication();
-		this.localBroadcastManager = LocalBroadcastManager.getInstance(MenuActivity.this);
+		this.localBroadcastManager = LocalBroadcastManager.getInstance(AbstractMenuActivity.this);
 		
 		setUpBroadcastReceiver();
-		setStyleToActionBar();
 		urbanGameApplication.incremenetNumberOfRunningActivities();
 		notificationServer = NotificationServer.getInstance(this);
 		notificationServer.setApplication(urbanGameApplication);
@@ -113,15 +109,6 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 		localBroadcastManager.registerReceiver(finishBroadcastReceiver, finishIntentFilter);
 	}
 	
-	private void setStyleToActionBar() {
-		Resources resources = getResources();
-		int actionBarColor = resources.getColor(R.color.action_bar_background);
-		ColorDrawable actionBarColorDrawable = new ColorDrawable(actionBarColor);
-		
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setBackgroundDrawable(actionBarColorDrawable);
-	}
-	
 	/**
 	 * onResume() and onPause() from {@link UrbanGameApplication} methods are
 	 * invoked to set flag if application is running in background or not
@@ -130,7 +117,7 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		urbanGameApplication.onResume();
-		loginManager = LoginManager.getInstance(MenuActivity.this);
+		loginManager = LoginManager.getInstance(AbstractMenuActivity.this);
 		notificationServer.updateContext(this);
 	}
 	
@@ -155,7 +142,7 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 	}
 	
 	private void configureLogoutMenuItem(Menu menu) {
-		if (loginManager.isUserLoggedIn()) {
+		if (isUserLoggedIn()) {
 			menu.findItem(R.id.menu_logout).setVisible(true);
 		}
 		else {
@@ -163,10 +150,21 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 		}
 	}
 	
+	protected boolean isUserLoggedIn() {
+		return loginManager.isUserLoggedIn();
+	}
+	
+	private static int themeRES = R.style.UrbanGameTheme_Default; //TODO delete only demonstration feature
+	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		int itemId = item.getItemId();
 		switch (itemId) {
+			case R.id.menu_refresh:		//TODO delete only demonstration feature
+				themeRES = themeRES == R.style.UrbanGameTheme_Default ? R.style.UrbanGameTheme_Blue
+					: R.style.UrbanGameTheme_Default;
+				break;
+			//TODO end delete section
 			case R.id.menu_logout:
 				loginManager.logoutUser();
 				finishAndStartGamesListActivity();
@@ -195,7 +193,7 @@ public abstract class MenuActivity extends SherlockFragmentActivity {
 	}
 	
 	private Intent getLogoutIntent() {
-		Intent gamesListActivity = new Intent(MenuActivity.this, GamesListActivity.class);
+		Intent gamesListActivity = new Intent(AbstractMenuActivity.this, GamesListActivity.class);
 		gamesListActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		gamesListActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		return gamesListActivity;

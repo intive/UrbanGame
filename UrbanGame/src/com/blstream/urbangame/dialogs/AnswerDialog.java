@@ -1,20 +1,20 @@
 package com.blstream.urbangame.dialogs;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
 import com.blstream.urbangame.R;
+import com.blstream.urbangame.dialogs.UrbanGameDialog.UrbanGameDialogOnClickListener;
 
 /**
  * Used to show dialogs displayed after submit button was clicked in
  * TaskAnswerFragment.
  */
-public class AnswerDialog implements DialogInterface.OnClickListener {
+public class AnswerDialog implements UrbanGameDialogOnClickListener {
 	
 	private final Context context;
-	private AlertDialog.Builder dialogBuilder;
+	private UrbanGameDialog.DialogBuilder dialogBuilder;
 	private DialogType dialogType;
 	
 	public enum DialogType {
@@ -28,7 +28,7 @@ public class AnswerDialog implements DialogInterface.OnClickListener {
 	public void showDialog(DialogType dialogType, Integer points, Integer maxPoints) {
 		this.dialogType = dialogType;
 		
-		dialogBuilder = new AlertDialog.Builder(context);
+		dialogBuilder = new UrbanGameDialog.DialogBuilder(context);
 		
 		int titleId = 0;
 		String message = "";
@@ -86,7 +86,7 @@ public class AnswerDialog implements DialogInterface.OnClickListener {
 			}
 		}
 	}
-
+	
 	public void showDialog(DialogType dialogType) {
 		showDialog(dialogType, null, null);
 	}

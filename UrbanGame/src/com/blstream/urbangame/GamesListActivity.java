@@ -1,29 +1,22 @@
 package com.blstream.urbangame;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupClickListener;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
-import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
-import com.blstream.urbangame.session.LoginManager;
+import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 
-public class GamesListActivity extends MenuActivity implements OnChildClickListener {
-	private static final String TAG = "GamesListActivity";
-	
+public class GamesListActivity extends AbstractGamesListActivity implements OnChildClickListener {
 	private GamesListAdapter adapter;
 	private ExpandableListView list;
 	
@@ -39,22 +32,7 @@ public class GamesListActivity extends MenuActivity implements OnChildClickListe
 		list.setAdapter(adapter);
 		list.setOnChildClickListener(this);
 		
-		setPropertiesOfExpandableListView(adapter);
-	}
-	
-	private void setPropertiesOfExpandableListView(BaseExpandableListAdapter adapter) {
-		for (int i = 0; i < adapter.getGroupCount(); i++) {
-			list.expandGroup(i);
-		}
-		
-		//disabling ability of collapsing group
-		list.setOnGroupClickListener(new OnGroupClickListener() {
-			
-			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-				return true;
-			}
-		});
+		ExpandableListViewPropertiesSetter.setPropertiesOfExpandableListView(adapter, list);
 	}
 	
 	@Override
@@ -76,78 +54,26 @@ public class GamesListActivity extends MenuActivity implements OnChildClickListe
 		super.onCreateOptionsMenu(menu);
 		
 		MenuInflater menuInflater = getSupportMenuInflater();
-		menuInflater.inflate(R.menu.top_bar_games_list, menu);
-		
-		configureLoginAction(menu);
+		menuInflater.inflate(R.menu.top_bar_search, menu);
 		configureSearchAction(menu);
 		
 		return true;
 	}
 	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		this.supportInvalidateOptionsMenu();
-		Log.i(TAG, "onResume completed");
-	}
-	
-	private void configureLoginAction(Menu menu) {
-		final MenuItem loginItem = menu.findItem(R.id.menu_login);
-		loginItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				boolean isUserLoggedIn = isUserLoggedIn();
-				startActivityDependOnUserState(isUserLoggedIn);
-				return true;
-			}
-			
-			private boolean isUserLoggedIn() {
-				LoginManager loginManager = LoginManager.getInstance(GamesListActivity.this);
-				boolean isUserLoggedIn = loginManager.isUserLoggedIn();
-				return isUserLoggedIn;
-			}
-			
-			private void startActivityDependOnUserState(boolean isUserLoggedIn) {
-				Intent intent = getActivityDependOnUserState(isUserLoggedIn);
-				startActivity(intent);
-				finish();
-			}
-			
-			private Intent getActivityDependOnUserState(boolean isUserLoggedIn) {
-				Intent intent = null;
-				if (isUserLoggedIn) {
-					intent = getIntentFromClass(MyGamesActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				}
-				else {
-					intent = getIntentFromClass(LoginRegisterActivity.class);
-				}
-				return intent;
-			}
-			
-			private Intent getIntentFromClass(Class<? extends Activity> cls) {
-				return new Intent(GamesListActivity.this, cls);
-			}
-		});
-	}
-	
 	private void configureSearchAction(Menu menu) {
 		final MenuItem moreItem = menu.findItem(R.id.menu_more);;
-		final MenuItem loginItem = menu.findItem(R.id.menu_login);
 		
 		MenuItem searchItem = menu.findItem(R.id.menu_list_search);
 		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
 			@Override
 			public boolean onMenuItemActionExpand(MenuItem item) {
 				moreItem.setVisible(false);
-				loginItem.setVisible(false);
 				return true;
 			}
 			
 			@Override
 			public boolean onMenuItemActionCollapse(MenuItem item) {
 				moreItem.setVisible(true);
-				loginItem.setVisible(true);
 				return true;
 			}
 		});

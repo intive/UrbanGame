@@ -1,7 +1,6 @@
 package com.blstream.urbangame.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,12 +11,14 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.blstream.urbangame.LoginRegisterActivity;
 import com.blstream.urbangame.R;
+import com.blstream.urbangame.dialogs.UrbanGameDialog;
+import com.blstream.urbangame.dialogs.UrbanGameDialog.UrbanGameDialogOnClickListener;
 import com.blstream.urbangame.session.RegistrationManager;
 
 public class RegisterFragment extends SherlockFragment implements OnClickListener {
 	private LoginRegisterView loginRegisterView;
-	private AlertDialog invalidDataAlertDialog;
-	private AlertDialog registerCompleteAlertDialog;
+	private UrbanGameDialog.DialogBuilder invalidDataAlertDialog;
+	private UrbanGameDialog.DialogBuilder registerCompleteAlertDialog;
 	private LoginRegisterActivity activity;
 	
 	private String email;
@@ -34,22 +35,21 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 	
 	// formatter:off
 	private void createRegisterCompleteAlertDialog() {
-		registerCompleteAlertDialog = 
-			new AlertDialog.Builder(activity)
-				.setTitle(R.string.dialog_register_title)
-				.setMessage(R.string.dialog_register_message)
-				.setPositiveButton(android.R.string.ok, registerSuccessfulListener)
-				.create();
+		registerCompleteAlertDialog = new UrbanGameDialog.DialogBuilder(activity)
+			.setTitle(R.string.dialog_register_title)
+			.setMessage(R.string.dialog_register_message)
+			.setPositiveButton(android.R.string.ok, registerSuccessfulListener)
+			.create();
 	}
 	
 	private void createInvalidDataAlertDialog() {
-		invalidDataAlertDialog = 
-			new AlertDialog.Builder(activity)
-				.setTitle(R.string.dialog_data_invalid_tittle)
-				.setMessage(R.string.dialog_data_invalid_message)
-				.setPositiveButton(R.string.button_correct, null)
-				.create();
+		invalidDataAlertDialog = new UrbanGameDialog.DialogBuilder(activity)
+			.setTitle(R.string.dialog_data_invalid_tittle)
+			.setMessage(R.string.dialog_data_invalid_message)
+			.setPositiveButton(R.string.button_correct, null)
+			.create();
 	}
+	
 	// formatter:on
 	
 	@Override
@@ -91,7 +91,7 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 		return RegistrationManager.getInstance(activity).doesPlayerExist(email);
 	}
 	
-	private final DialogInterface.OnClickListener registerSuccessfulListener = new DialogInterface.OnClickListener() {
+	private final UrbanGameDialogOnClickListener registerSuccessfulListener = new UrbanGameDialogOnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			activity.registerAndLoginUser(email, displayName, password);

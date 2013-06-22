@@ -8,6 +8,9 @@ import android.os.Parcelable;
 
 public class ABCDTask extends Task {
 	
+	public static final String FIELD_NAME_QUESTION = "Question";
+	public static final String FIELD_NAME_ANSWERS = "Answers";
+	
 	private String question;
 	private ArrayList<Answer> listOfAnswers;
 	
