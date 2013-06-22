@@ -1,5 +1,8 @@
 package com.blstream.urbangame.fragments;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -10,17 +13,21 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.blstream.urbangame.R;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
+import com.blstream.urbangame.database.entity.LocationTaskAnswer;
 import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.dialogs.AnswerDialog;
@@ -33,6 +40,12 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickListener, ConnectionCallbacks,
 	OnConnectionFailedListener, LocationListener, android.location.GpsStatus.Listener {
@@ -51,6 +64,11 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	private LocationManager mLocationManager;
 	private boolean isGPSFix;
 	private static final long MAX_UPDATE_TIME = 5000;
+	private GoogleMap mMap;
+	private SupportMapFragment mapFragment; //I have to remove it in onDestroy
+	private boolean isAnswered;
+	private boolean isFinished;
+	private TextView textViewYourAnswer;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -82,6 +100,8 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), database.getLoggedPlayerID());
 		database.closeDatabase();
 		
+		playerTaskSpecific.getStatus();
+		
 	}
 	
 	@Override
@@ -108,6 +128,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			// Use high accuracy
 			mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 			mLocationRequest.setInterval(GPS_UPDATE_TIME);
+			
 		}
 		super.onStart();
 	}
@@ -133,6 +154,11 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		
 		submitButton = (Button) view.findViewById(R.id.buttonGpsTaskAnswerSubmit);
 		submitButton.setOnClickListener(this);
+		textViewYourAnswer = (TextView) view.findViewById(R.id.textViewYourAnswer);
+		if (playerTaskSpecific.getStatus() != PlayerTaskSpecific.ACTIVE) {
+			submitButton.setVisibility(View.GONE);
+		}
+		
 		return view;
 	}
 	
@@ -143,6 +169,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			AnswerDialog dialog = new AnswerDialog(context);
 			
 			mLocationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+			
 			//gps is off
 			if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				dialog.showDialog(DialogType.GPS_OFF);
@@ -182,9 +209,109 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 				
 				DatabaseInterface database = new Database(context);
 				database.updatePlayerTaskSpecific(playerTaskSpecific);
+				database.insertLocationTaskAnswerForTask(task.getId(), new LocationTaskAnswer(mLastLocation,
+					new Date(), database.getLoggedPlayerID()));
 				database.closeDatabase();
+				if (mMap != null) {
+					mMap.addMarker(new MarkerOptions().position(
+						new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())).icon(
+						BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+				}
+				mapFragment.getView().setVisibility(View.VISIBLE);
+				textViewYourAnswer.setVisibility(View.VISIBLE);
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+					new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 14f));
+				if (!task.isRepetable()) {
+					submitButton.setVisibility(View.GONE);
+					addCorrectAnswerMarker(getCorrectLocationFromServer());
+				}
+				
 			}
 		}
+	}
+	
+	private void setUpMapIfNeeded() {
+		// Do a null check to confirm that we have not already instantiated the map.
+		if (mMap == null) {
+			// Try to obtain the map from the SupportMapFragment.
+			
+			mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.mapLocationAnswers);
+			Log.i(TAG, mapFragment + "");
+			mMap = mapFragment.getMap();
+			// Check if we were successful in obtaining the map.
+			if (mMap != null) {
+				
+				setUpMap();
+			}
+		}
+	}
+	
+	private void setUpMap() {
+		
+		//setting map init zoom and position
+		
+		Location location = mLocationClient.getLastLocation();
+		if (mLocationClient.getLastLocation() != null) {
+			mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+			mMap.animateCamera(CameraUpdateFactory.zoomTo(14f));
+		}
+		
+		DatabaseInterface database = new Database(context);
+		ArrayList<LocationTaskAnswer> answers = (ArrayList<LocationTaskAnswer>) database.getLocationTaskAnswers(
+			task.getId(), database.getLoggedPlayerID());
+		database.closeDatabase();
+		if (answers != null) {
+			mapFragment.getView().setVisibility(View.VISIBLE);
+			textViewYourAnswer.setVisibility(View.VISIBLE);
+			if (!task.isRepetable()) { //task is answered and cant be repeated
+			
+				location = getCorrectLocationFromServer();
+				addCorrectAnswerMarker(location);
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+					new LatLng(location.getLatitude(), location.getLongitude()), 14f));
+				
+				submitButton.setVisibility(View.GONE);
+				addCorrectAnswerMarker(getCorrectLocationFromServer());
+				
+			}
+			for (LocationTaskAnswer answer : answers) {
+				mMap.addMarker(new MarkerOptions()
+					.position(
+						new LatLng(answer.getAnsweredLocation().getLatitude(), answer.getAnsweredLocation()
+							.getLongitude())).icon(
+						BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+				isAnswered = true;
+			}
+		}
+		else if (playerTaskSpecific.getStatus() == PlayerTaskSpecific.ACTIVE) {	//task is active and has no answers
+			isAnswered = false;
+			mapFragment.getView().setVisibility(View.GONE);
+			textViewYourAnswer.setVisibility(View.GONE);
+		}
+		else	//task is Finished but has no answer
+		{
+			mapFragment.getView().setVisibility(View.VISIBLE);
+			textViewYourAnswer.setVisibility(View.VISIBLE);
+			
+			location = getCorrectLocationFromServer();
+			addCorrectAnswerMarker(location);
+			mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+				new LatLng(location.getLatitude(), location.getLongitude()), 14f));
+			
+		}
+	}
+	
+	@Override
+	public void onDestroyView() {
+		try {
+			SherlockFragmentActivity activity = (SherlockFragmentActivity) context;
+			FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+			ft.remove(mapFragment);
+			ft.commit();
+			mMap = null;
+		}
+		catch (Exception e) {}
+		super.onDestroyView();
 	}
 	
 	private int sendLocationForVerification(Location location) {
@@ -207,6 +334,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	public void onConnected(Bundle arg0) {
 		
 		mLocationClient.requestLocationUpdates(mLocationRequest, this);
+		setUpMapIfNeeded();
 		Log.i(TAG, "onConnected");
 	}
 	
@@ -250,4 +378,14 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		
 	}
 	
+	private void addCorrectAnswerMarker(Location location) {
+		mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).icon(
+			BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+		
+	}
+	
+	private Location getCorrectLocationFromServer() {
+		//FIXME replace mock
+		return new MockWebServer().getCorrectGpsLocation(task);
+	}
 }
