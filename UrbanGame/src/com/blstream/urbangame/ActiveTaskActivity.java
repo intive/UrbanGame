@@ -3,15 +3,20 @@ package com.blstream.urbangame;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
+import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
+import com.blstream.urbangame.date.TimeLeftBuilder;
 import com.blstream.urbangame.fragments.ABCDTaskAnswerFragment;
 import com.blstream.urbangame.fragments.GpsTaskAnswerFragment;
 import com.blstream.urbangame.fragments.TabManager;
@@ -29,23 +34,41 @@ public class ActiveTaskActivity extends MenuActivity {
 	private TabHost tabHost;
 	private TabManager tabManager;
 	private Task task;	//I load it here, because otherwise I would have to load it twice
-
+	private PlayerTaskSpecific playerTaskSpecific;
+	
 	private DatabaseInterface databaseInterface;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tabhost_layout);
-		
 		long taskID = getSelectedTaskID();
 		databaseInterface = new Database(this);
 		this.task = databaseInterface.getTask(taskID);
-
-		databaseInterface.closeDatabase();
-		configureActionBar();
-		setUpTabHost(savedInstanceState);
-		databaseInterface.closeDatabase();
+		this.playerTaskSpecific = databaseInterface
+			.getPlayerTaskSpecific(taskID, databaseInterface.getLoggedPlayerID());
 		
+		if (playerTaskSpecific != null) {
+			switch (playerTaskSpecific.getStatus()) {
+				case PlayerTaskSpecific.ACTIVE:
+					setContentView(R.layout.tabhost_layout);
+					setUpTabHost(savedInstanceState);
+					break;
+				case PlayerTaskSpecific.CANCELED:
+				case PlayerTaskSpecific.FINISHED:
+				case PlayerTaskSpecific.INACTIVE:
+					setContentView(R.layout.activity_active_task);
+					setUpDisplay(playerTaskSpecific.getStatus());
+					break;
+			}
+		}
+		else {
+			// FIXME for test when playerTaskSpecific could be null
+			setContentView(R.layout.tabhost_layout);
+			setUpTabHost(savedInstanceState);
+		}
+		
+		configureActionBar();
+		databaseInterface.closeDatabase();
 	}
 	
 	@Override
@@ -125,5 +148,109 @@ public class ActiveTaskActivity extends MenuActivity {
 		menuInflater.inflate(R.menu.top_bar_message, menu);
 		
 		return super.onCreateOptionsMenu(menu);
+	}
+	
+	private void setUpDisplay(int status) {
+		View listItem = findViewById(R.id.included_list_item_task);
+		
+		ImageView imageViewTaskLogo = (ImageView) listItem.findViewById(R.id.imageViewTaskLogo);
+		ImageView imageViewNewTaskIndicator = (ImageView) listItem.findViewById(R.id.imageViewNewTaskIndicator);
+		TextView textViewMaximalTaskPoints = (TextView) listItem.findViewById(R.id.textViewMaximalTaskPoints);
+		TextView textViewTaskPoints = (TextView) listItem.findViewById(R.id.textViewTaskPoints);
+		TextView textViewTaskRepeatable = (TextView) listItem.findViewById(R.id.textViewTaskRepeatable);
+		TextView textViewTaskTimeLeft = (TextView) listItem.findViewById(R.id.textViewTasksTimeLeft);
+		TextView textViewTaskTitle = (TextView) listItem.findViewById(R.id.textViewTaskTitle);
+		
+		textViewTaskTitle.setText(task.getTitle());
+		if (task.getType() == Task.TASK_TYPE_ABCD) {
+			imageViewTaskLogo.setImageResource(R.drawable.task_abcd_icon);
+		}
+		else {
+			imageViewTaskLogo.setImageResource(R.drawable.task_gps_icon);
+		}
+		textViewTaskTimeLeft.setText((new TimeLeftBuilder(getResources(), task.getEndTime())).getLeftTime());
+		textViewMaximalTaskPoints.setText(task.getMaxPoints().toString());
+		if (task.isRepetable()) {
+			textViewTaskRepeatable.setText(getText(R.string.label_taksRepeatable));
+		}
+		else {
+			textViewTaskRepeatable.setText(getText(R.string.label_taskNon_repeatable));
+		}
+		
+		if (playerTaskSpecific == null) {
+			imageViewNewTaskIndicator.setImageDrawable(null);
+			textViewTaskPoints.setText("0");
+		}
+		else {
+			if (playerTaskSpecific.getAreChanges()) {
+				imageViewNewTaskIndicator.setImageResource(R.drawable.new_task_indicator);
+			}
+			else {
+				imageViewNewTaskIndicator.setImageDrawable(null);
+			}
+			textViewTaskPoints.setText(playerTaskSpecific.getPoints().toString());
+		}
+		
+		String statusString = "";
+		String headerDescription = "";
+		String descriptionString = "";
+		
+		TextView textViewPointsInfo = (TextView) findViewById(R.id.textViewActiveTaskActivityPointsInfo);
+		
+		switch (status) {
+			case PlayerTaskSpecific.CANCELED:
+				descriptionString = task.getDescription();
+				statusString = getResources().getString(R.string.info_task_canceled);
+				headerDescription = getResources().getString(R.string.header_description);
+				textViewPointsInfo.setText(getResources().getString(R.string.info_task_canceled_points));
+				break;
+			case PlayerTaskSpecific.FINISHED:
+				descriptionString = task.getDescription();
+				statusString = getResources().getString(R.string.info_task_finished);
+				headerDescription = getResources().getString(R.string.header_description);
+				break;
+			case PlayerTaskSpecific.INACTIVE:
+				statusString = getResources().getString(R.string.info_task_inactive);
+				headerDescription = getResources().getString(R.string.header_prerequisites);
+				
+				descriptionString = prerequesites();
+				break;
+		}
+		
+		TextView textViewStatus = (TextView) findViewById(R.id.textViewActiveTaskActivityStatus);
+		textViewStatus.setText(statusString);
+		
+		View emptyHeader = findViewById(R.id.includeActiveTaskDescriptionHeader);
+		((TextView) emptyHeader.findViewById(R.id.TextViewMyGamesHeader)).setText(headerDescription);
+		
+		TextView textViewDescription = (TextView) findViewById(R.id.textViewActiveTaskDescription);
+		textViewDescription.setText(descriptionString);
+	}
+	
+	private String prerequesites() {
+		
+		String checkMark = "\u2714 ";
+		String crossedMark = "\u2718 ";
+		
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		// FIXME mock data 2 lines
+		String[] mockData = { "First prerequisite", "Second prerequisite", "Third prerequisite" };
+		boolean isPrerequisiteCompleted = true;
+		
+		for (String element : mockData) { // FIXME replace mockData with list of prerequisites
+			if (isPrerequisiteCompleted) { // FIXME replace with method that checks if given prerequisite is satisfied
+				stringBuilder.append(checkMark);
+			}
+			else {
+				stringBuilder.append(crossedMark);
+			}
+			stringBuilder.append(element);
+			stringBuilder.append("\n\n");
+			
+			isPrerequisiteCompleted = !isPrerequisiteCompleted; // FIXME  mock  delete
+		}
+		
+		return stringBuilder.toString();
 	}
 }
