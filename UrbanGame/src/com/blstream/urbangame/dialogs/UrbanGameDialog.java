@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -122,8 +123,6 @@ public class UrbanGameDialog extends DialogFragment {
 		getDialog().getWindow().setLayout(width, LayoutParams.WRAP_CONTENT);
 	}
 	
-	private static long dialogID = 0;
-	
 	public static class DialogBuilder {
 		
 		public final String TAG = DialogBuilder.class.getSimpleName();
@@ -200,6 +199,11 @@ public class UrbanGameDialog extends DialogFragment {
 		
 		public void show() {
 			FragmentManager manager = context.getSupportFragmentManager();
+			Fragment fragment = manager.findFragmentByTag(TAG);
+			if (fragment != null) {
+				manager.beginTransaction().remove(fragment).commit();
+				manager.executePendingTransactions();
+			}
 			if ((isPositiveEnabled || isNegativeEnabled)) {
 				
 				Bundle arugments = new Bundle();
@@ -216,8 +220,7 @@ public class UrbanGameDialog extends DialogFragment {
 				UrbanGameDialog dial = new UrbanGameDialog();
 				dial.setArguments(arugments);
 				
-				dial.show(manager, TAG + dialogID);
-				dialogID++;
+				dial.show(manager, TAG);
 			}
 		}
 		

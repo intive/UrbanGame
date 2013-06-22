@@ -105,7 +105,8 @@
     <string name="label_taksRepeatable">repeatable</string>
     <string name="label_taskNon_repeatable">non-repeatable</string>
     <string name="button_submit">Submit</string>
-
+ 	<string name="label_your_answer">Your Answer:</string>
+ 	
     <!-- ProfileActivity -->
     <string name="button_save">Save</string>
     <string name="button_skip">Skip</string>
