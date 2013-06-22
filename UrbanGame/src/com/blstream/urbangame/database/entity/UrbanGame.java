@@ -7,7 +7,11 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
+import com.blstream.urbangame.webserver.deserialization.Links;
+
 public class UrbanGame {
+	
+	private Links _links;
 	
 	// holds very basic info about game(list view info) - that gives less code,
 	// but little less clarity
@@ -307,6 +311,10 @@ public class UrbanGame {
 	/** @param detailsLink the detailsLink to set */
 	public void setDetailsLink(String detailsLink) {
 		primaryInfo.setDetailsLink(detailsLink);
+	}
+	
+	public String getLinkFromResource(String resourceName) {
+		return _links.getLinkFromResource(resourceName);
 	}
 	
 	@Override

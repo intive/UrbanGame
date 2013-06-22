@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
-import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
@@ -101,6 +100,7 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 		//
 		// Public methods
 		//
+		
 		public void issueGetUrbanGameDetails(long _gid) {
 			gid = _gid;
 			WebServerHelper.getUrbanGameDetails(this, gid);
@@ -122,55 +122,15 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 		}
 		
 		public void checkUrbanGamesEqual(UrbanGame expected, UrbanGame actual) {
-			
-			checkUrbanGameShortInfoEqual(expected.getPrimaryInfo(), actual.getPrimaryInfo());
-			
-			assertEquals(expected.getComments(), actual.getComments());
-			assertEquals(expected.getDescription(), actual.getDescription());
-			assertEquals(expected.getDifficulty(), actual.getDifficulty());
-			assertEquals(expected.getGameVersion(), actual.getGameVersion());
-			assertEquals(expected.getPrizesInfo(), actual.getPrizesInfo());
-			assertEquals(expected.getWinningStrategy(), actual.getWinningStrategy());
+			assertTrue(expected.equals(actual));
 		}
 		
 		public void checkUrbanGameShortInfoEqual(UrbanGameShortInfo expected, UrbanGameShortInfo actual) {
-			assertEquals(expected.getDetailsLink(), actual.getDetailsLink());
-			assertEquals(expected.getEndDate(), actual.getEndDate());
-			assertEquals(expected.getGameLogoBase64(), actual.getGameLogoBase64());
-			assertEquals(expected.getID(), actual.getID());
-			assertEquals(expected.getLocation(), actual.getLocation());
-			assertEquals(expected.getMaxPlayers(), actual.getMaxPlayers());
-			assertEquals(expected.getOperatorLogoBase64(), actual.getOperatorLogoBase64());
-			assertEquals(expected.getOperatorName(), actual.getOperatorName());
-			assertEquals(expected.getPlayers(), actual.getPlayers());
-			assertEquals(expected.getReward(), actual.getReward());
-			assertEquals(expected.getStartDate(), actual.getStartDate());
-			assertEquals(expected.getTitle(), actual.getTitle());
+			assertTrue(expected.equals(actual));
 		}
 		
 		public void checkTasksEqual(Task expected, Task actual) {
-			assertEquals(expected.getDescription(), actual.getDescription());
-			assertEquals(expected.getEndTime(), actual.getEndTime());
-			assertEquals(expected.getId(), actual.getId());
-			assertEquals(expected.getMaxPoints(), actual.getMaxPoints());
-			assertEquals(expected.getNumberOfHidden(), actual.getNumberOfHidden());
-			assertEquals(expected.getPictureBase64(), actual.getPictureBase64());
-			assertEquals(expected.getTitle(), actual.getTitle());
-			assertEquals(expected.getType(), actual.getType());
-			
-			if (expected.getType() == Task.TASK_TYPE_ABCD) {
-				ABCDTask expectedABCD = (ABCDTask) expected;
-				ABCDTask actualABCD = (ABCDTask) actual;
-				
-				String[] expectedAnswers = expectedABCD.getAnswers();
-				String[] actualAnswers = actualABCD.getAnswers();
-				
-				for (int i = 0; i < expectedAnswers.length; ++i) {
-					assertEquals(expectedAnswers[i], actualAnswers[i]);
-				}
-				
-				assertEquals(expectedABCD.getQuestion(), actualABCD.getQuestion());
-			}
+			assertTrue(expected.equals(actual));
 		}
 		
 	}
@@ -269,4 +229,5 @@ public class WebServerHelperTest extends InstrumentationTestCase {
 		}
 		
 	}
+	
 }

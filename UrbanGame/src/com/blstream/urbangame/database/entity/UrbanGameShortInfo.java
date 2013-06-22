@@ -8,8 +8,11 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
+import com.blstream.urbangame.webserver.deserialization.Links;
 
 public class UrbanGameShortInfo {
+	
+	private Links _links;
 	
 	private Long ID;
 	private String title;
@@ -253,6 +256,10 @@ public class UrbanGameShortInfo {
 	/** @param logoDrawable the logoDrawable to set */
 	public void setOperatorLogoDrawable(Drawable logoDrawable) {
 		this.operatorLogoDrawable = logoDrawable;
+	}
+	
+	public String getLinkFromResource(String resourceName) {
+		return _links.getLinkFromResource(resourceName);
 	}
 	
 	@Override

@@ -7,10 +7,12 @@ import android.util.Log;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
+import com.blstream.urbangame.webserver.deserialization.GamesResponse;
+import com.blstream.urbangame.webserver.deserialization.GsonTaskAdapter;
+import com.blstream.urbangame.webserver.deserialization.TasksResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 
 /* WebResponse is an auxiliary class which contains information about response
  * from web server: what kind of query was send to web server and JSON message
@@ -24,7 +26,7 @@ public class WebResponse {
 	};
 	
 	private final QueryType queryType;
-	private String jsonResponse;
+	private String jsonString;
 	private Long gameID;
 	
 	//
@@ -58,8 +60,12 @@ public class WebResponse {
 		return queryType;
 	}
 	
-	public void setJsonResponse(String _jsonResponse) {
-		jsonResponse = _jsonResponse;
+	public String getJsonString() {
+		return jsonString;
+	}
+	
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
 	}
 	
 	public UrbanGame getUrbanGame() {
@@ -67,23 +73,23 @@ public class WebResponse {
 		Gson gson = new Gson();
 		
 		try {
-			UrbanGame urbanGame = gson.fromJson(jsonResponse, UrbanGame.class);
+			UrbanGame urbanGame = gson.fromJson(jsonString, UrbanGame.class);
 			return urbanGame;
 		}
 		catch (JsonSyntaxException e) {
 			Log.e(TAG, "parseResponseToUrbanGame() exception " + e.toString());
 		}
+		
 		return null;
 	}
 	
 	public List<UrbanGameShortInfo> getUrbanGameShortInfoList() {
-		// try to parse response JSON string to list of UrbanGame objects
+		// try to parse response JSON string to GamesResponse
 		Gson gson = new Gson();
 		
 		try {
-			List<UrbanGameShortInfo> urbanGames = gson.fromJson(jsonResponse,
-				new TypeToken<List<UrbanGameShortInfo>>() {}.getType());
-			return urbanGames;
+			GamesResponse gamesResponse = gson.fromJson(jsonString, GamesResponse.class);
+			return gamesResponse.getUrbanGameShortInfoList();
 		}
 		catch (JsonSyntaxException e) {
 			Log.e(TAG, "parseResponseToUrbanGameList() exception " + e.toString());
@@ -93,17 +99,16 @@ public class WebResponse {
 	}
 	
 	public List<Task> getTaskList() {
-		// try to parse response JSON string to list of Task objects
+		// try to parse response JSON string to TasksResponse
 		Gson gson = initalizeGsonTaskAdapter();
 		
 		try {
-			List<Task> taskList = gson.fromJson(jsonResponse, new TypeToken<List<Task>>() {}.getType());
-			return taskList;
+			TasksResponse tasksResponse = gson.fromJson(jsonString, TasksResponse.class);
+			return tasksResponse.getTaskList();
 		}
 		catch (JsonSyntaxException e) {
-			Log.e(TAG, "parseResponseToTaskList() exception " + e.toString());
+			Log.e(TAG, "parseResponseToUrbanGameList() exception " + e.toString());
 		}
-		
 		return null;
 	}
 	
@@ -112,7 +117,7 @@ public class WebResponse {
 		Gson gson = initalizeGsonTaskAdapter();
 		
 		try {
-			Task task = gson.fromJson(jsonResponse, Task.class);
+			Task task = gson.fromJson(jsonString, Task.class);
 			return task;
 		}
 		catch (JsonSyntaxException e) {

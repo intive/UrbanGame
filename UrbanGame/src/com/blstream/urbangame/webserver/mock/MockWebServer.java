@@ -16,6 +16,7 @@ import com.blstream.urbangame.database.entity.LocationTask;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
+import com.blstream.urbangame.webserver.helper.WebResource;
 import com.blstream.urbangame.webserver.helper.WebResponse.QueryType;
 import com.google.gson.Gson;
 
@@ -83,6 +84,35 @@ public class MockWebServer {
 		
 	}
 	
+	private String removeBracesFromJson(String jsonString) {
+		
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(jsonString);
+		stringBuilder.delete(0, 1);
+		stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+		return stringBuilder.toString();
+	}
+	
+	private String createJsonLink(String resource, String link) {
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		stringBuilder.append("\"");
+		stringBuilder.append(resource);
+		stringBuilder.append("\": { \"href\": \"");
+		stringBuilder.append(link);
+		stringBuilder.append("\"},");
+		return stringBuilder.toString();
+	}
+	
+	private String createSingleLink(String resourceName, String link) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("{_links:{");
+		stringBuilder.append(createJsonLink(resourceName, link));
+		stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+		stringBuilder.append("},");
+		return stringBuilder.toString();
+	}
+	
 	//
 	// Public methods
 	//
@@ -122,59 +152,102 @@ public class MockWebServer {
 		
 	}
 	
-	public String getResponse(String queryString, QueryType queryType, long gid, long tid) {
+	public String getResponse(String url, String resourceName, QueryType queryType, long gid, long tid) {
 		// Method returns JSON string which is a server response for
 		// a queryString
 		
-		Log.i(TAG, "queryString " + queryString);
+		if (url == null) {
+			Log.e(TAG, "uri NULL");
+			return null;
+		}
+		
+		Log.i(TAG, "url: " + url);
+		Log.i(TAG, "resourceName " + resourceName);
+		
 		Gson gson = new Gson();
 		StringBuilder stringBuilder = new StringBuilder();
 		int i;
 		
-		switch (queryType) {
-			case GetUrbanGameDetails:
+		if (resourceName.equals(WebResource.RESOURCE_ROOT)) {
+			stringBuilder.append("{_links:{");
+			stringBuilder.append(createJsonLink("self", "/"));
+			stringBuilder.append(createJsonLink("games", "/games"));
+			stringBuilder.append(createJsonLink("login", "/login"));
+			stringBuilder.append(createJsonLink("register", "/register"));
+			stringBuilder.append(createJsonLink("userGames", "/my/games"));
+			stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+			stringBuilder.append("}}");
+		}
+		else if (resourceName.equals(WebResource.RESOURCE_GAMES)) {
+			stringBuilder.append("{_links:{");
+			stringBuilder.append(createJsonLink("self", "/games"));
+			stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+			stringBuilder.append("},\"_embedded\":[");
+			
+			for (i = 0; i < mockAllUrbanGames.size(); ++i) {
+				stringBuilder.append(createSingleLink("self", "/games/" + mockAllUrbanGames.get(i).getID()));
+				stringBuilder.append(removeBracesFromJson(gson.toJson(mockAllUrbanGames.get(i))));
+				stringBuilder.append("},");
+			}
+			
+			stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+			stringBuilder.append("]}");
+		}
+		else if (resourceName.equals(WebResource.RESOURCE_SELF)) {
+			if (url.contains("game") && !url.contains("task")) {
+				
+				stringBuilder.append("{_links:{");
+				stringBuilder.append(createJsonLink("self", "/game/" + gid));
+				stringBuilder.append(createJsonLink("gameStatic", "/game/" + gid + "/static"));
+				stringBuilder.append(createJsonLink("gameDynamic", "/game/" + gid + "/dynamic"));
+				stringBuilder.append(createJsonLink("userGameStatus", "/my/games/" + gid + "/dynamic"));
+				stringBuilder.append(createJsonLink("tasks", "/games/" + gid + "/tasks"));
+				stringBuilder.append(createJsonLink("games", "/games"));
+				stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+				stringBuilder.append("},");
+				
 				UrbanGame urbanGame = getMockUrbanGameDetails(gid);
 				if (urbanGame != null) {
-					stringBuilder.append(gson.toJson(urbanGame));
+					stringBuilder.append(removeBracesFromJson(gson.toJson(urbanGame)));
 				}
+				stringBuilder.append("}");
+			}
+			else if (url.contains("game") && url.contains("task")) {
+				stringBuilder.append("{_links:{");
+				stringBuilder.append(createJsonLink("self", "/games/" + gid + "/tasks/" + tid));
+				stringBuilder.append(createJsonLink("game", "/games/" + gid));
+				stringBuilder.append(createJsonLink("taskStatic", "/game/" + gid + "/tasks/" + tid + "/static"));
+				stringBuilder.append(createJsonLink("taskDynamic", "/game/" + gid + "/tasks/" + tid + "/dynamic"));
+				stringBuilder
+					.append(createJsonLink("userTaskStatus", "/my/games/" + gid + "/tasks/" + tid + "/dynamic"));
+				stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+				stringBuilder.append("},");
 				
-				break;
-			
-			case GetUrbanGameBaseList:
-				stringBuilder.append("[");
-				
-				for (i = 0; i < mockAllUrbanGames.size() - 1; ++i) {
-					stringBuilder.append(gson.toJson(mockAllUrbanGames.get(i))).append(",");
-				}
-				
-				stringBuilder.append(gson.toJson(mockAllUrbanGames.get(i))).append("]");
-				break;
-			
-			case GetTaskList:
-				
-				ArrayList<Task> taskList = mockTaskLists.get(gid);
-				if (taskList != null) {
-					stringBuilder.append("[");
-					
-					for (i = 0; i < taskList.size() - 1; ++i) {
-						stringBuilder.append(gson.toJson(taskList.get(i))).append(",");
-					}
-					
-					stringBuilder.append(gson.toJson(taskList.get(i))).append("]");
-				}
-				break;
-			
-			case GetTask:
 				Task task = getMockSingleTask(gid, tid);
 				if (task != null) {
-					stringBuilder.append(gson.toJson(task));
+					stringBuilder.append(removeBracesFromJson(gson.toJson(task)));
 				}
-				
-				break;
+				stringBuilder.append("}");
+			}
+		}
+		
+		else if (resourceName.equals(WebResource.RESOURCE_TASKS)) {
+			stringBuilder.append("{_links:{");
+			stringBuilder.append(createJsonLink("self", "/games/" + gid + "/tasks"));
+			stringBuilder.append(createJsonLink("game", "/game/" + gid));
+			stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+			stringBuilder.append("},\"_embedded\":[");
 			
-			default:
-				Log.e(TAG, "Incorrect queryType " + queryType.toString());
-				break;
+			ArrayList<Task> taskList = mockTaskLists.get(gid);
+			for (i = 0; i < taskList.size(); ++i) {
+				stringBuilder.append(createSingleLink("self", "/games/" + mockAllUrbanGames.get(i).getID() + "/task/"
+					+ taskList.get(i).getId()));
+				stringBuilder.append(removeBracesFromJson(gson.toJson(taskList.get(i))));
+				stringBuilder.append("},");
+			}
+			
+			stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+			stringBuilder.append("]}");
 		}
 		
 		if (stringBuilder.length() == 0) return null;
