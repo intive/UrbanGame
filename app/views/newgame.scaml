@@ -26,10 +26,10 @@
 
 .row.span12(ng-controller="newGameCtrl" ng-cloak id="outer")
     .wizard(ng-show="!isEdit() || editable")
-        %form.form-vertical(name="form" class="css-form" novalidate)
+        %form.form-vertical(name="form" class="css-form" novalidate )
             %ul.nav.nav-pills.nav-steps
                 %li(ng-repeat="step in steps" ng-class="{active: $index==getCurrentStepIndex(), disabled: isDisabled($index)}")
-                    %a(title="Step" href="javascript:void(0);" ng-click="") {{step.no}}. {{step.name}}
+                    %a(title="Step" href="javascript:void(0);" ng-click="goToStep($index)") {{step.no}}. {{step.name}}
             %div.wizbody{"ng-switch on"=>"selection.no"}
                 %div(ng-switch-when="1")
                     -render("submodules/step1form.scaml")
