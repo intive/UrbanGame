@@ -31,7 +31,7 @@ object Games extends Table[GamesDetails]("GAMES") {
   def location = column[String]("location", O.NotNull)
   def operatorId = column[Int]("operatorId", O.NotNull)
   def created = column[DateTime]("created", O.NotNull)
-  def updated = column[DateTime]("updated", O.NotNull, O.Default(DateTime.now))
+  def updated = column[DateTime]("updated", O.NotNull)
   def startTime = column[DateTime]("startTime", O.NotNull)
   def endTime = column[DateTime]("endTime", O.NotNull)
   def started = column[Option[DateTime]]("started")

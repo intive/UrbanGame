@@ -47,13 +47,14 @@
                                 %i.icon-sort
                         %th =Messages("tasks.headeroptions")
                 %tbody
-                    %tr(ng-repeat="task in tasks")
+                    %tr.cursor-pointer(ng-repeat="task in tasks" ng-click="showMarkers($index);")
                         %td
                             {{task.name}}
                         %td
                             -@ val ttd: String = tt+" {{task.maxPoints}}"
                             %span(tooltip={ttd} tooltip-placement="top" tooltip-animation="true")
                                 {{task.type}}
+                                
                         %td
                             %span(tooltip={Messages("tasks.visibilitytooltip")(lan)} tooltip-placement="top" tooltip-animation="true")
                                 {{task.visible}}
@@ -67,5 +68,5 @@
                                     =Messages("tasks.delete")
                                     %icon.icon-trash
         .span5.pull-right.no-margin(style="padding-right:25px;")
-            %google-map(center="center" class="" draggable="true" zoom="zoom" markers="markers"  mark-click="true" )
+            %div(id="gpsMap")
     

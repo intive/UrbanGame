@@ -19,8 +19,8 @@ case class GamesList(id: Int, name: String, version: Int, location: String, star
 case class TasksList(id: Int, name: String, version: Int)
 
 case class Operator(id: Option[Int], email: String, password: String, name: String, 
-  logo: String = "users/logo.png", description: Option[String] = None, permission: Permission, 
-  created: DateTime = DateTime.now, validated: Boolean = false, token: Option[String])
+  logo: String = "users/logo.png", description: Option[String] = None, permission: Permission = NormalUser, 
+  created: DateTime = DateTime.now, modified: DateTime = DateTime.now, validated: Boolean = false, token: Option[String] = None)
 
 object mutils extends mutils {
 

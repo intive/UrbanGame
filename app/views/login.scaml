@@ -15,5 +15,37 @@
 
 -attributes("layout") = ("layouts/home.scaml")
 
+-@ val lan: Lang
+-@ var loginForm: play.api.data.Form[(Boolean, Option[models.utils.Operator])]
+
 .span12
-    Logowanie
+    .row
+        - if(loginForm.hasErrors)
+            .alert.alert-error
+                = loginForm.errors.map 
+                    - { error =>
+                        = Messages(error.message)(lan)
+                        %br/
+                    - }
+    .row
+        .span6.padd-right
+            %form#auth.form-login.form-horizontal(action={routes.Application.authenticate} method="post" name="loginForm")
+                .control-group
+                    %label.control-label(for="user.email") = Messages("email")(lan)
+                    .controls
+                        %input.input-large(type="text" placeholder={Messages("email")(lan)} name="user.email" id="user.email" 
+                            value={if(loginForm.data.contains("user.email")) loginForm.data("user.email")})
+                .control-group
+                    %label.control-label(for="user.password") = Messages("password")(lan)
+                    .controls
+                        %input.input-large(type="password" placeholder={Messages("password")(lan)} name="user.password" id="user.password")
+                .control-group
+                    .controls
+                        %label.checkbox
+                            %input(type="checkbox" name="remember" value="true" checked={if(loginForm.data.contains("remember")) true else false} disabled) = Messages("remember")(lan)
+                        %input.btn.btn-success.pull-right(type="submit" value={Messages("login")(lan)})
+        .span6.padd-left
+            .row
+                %a.help-inline(href="/") = Messages("forgotpass")(lan)
+            .row
+                %a.help-inline(href="/") = Messages("login.register")(lan)

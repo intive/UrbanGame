@@ -64,23 +64,6 @@ trait AuthConfigImpl extends AuthConfig {
 
 }
 
-import jp.t2v.lab.play2.stackc.{RequestAttributeKey, RequestWithAttributes, StackableController}
-
-trait RememberMeElement extends StackableController with AuthConfigImpl {
-  self: Controller =>
-
-  val persistentCookieName = "UG_RememberMe"
-
-  val persistentSessionTimeout = 31536000
-
-  def checkCookie(request: Request[AnyContent]) = true
-
-  override def proceed[A](request: RequestWithAttributes[A])(f: RequestWithAttributes[A] => Result): Result = {
-    //checkCookie(request)
-    super.proceed(request)(f)
-  }
-}
-
 trait EmailConfirmation {
   import com.typesafe.plugin._
   import play.api.i18n._
@@ -103,8 +86,8 @@ trait EmailConfirmation {
     mail.setSubject(subject)
     mail.addRecipient(email)
     mail.addFrom(from)
-    //mail.sendHtml(msg)
-    Console.printf(msg)
+    mail.sendHtml(msg)
+    //Console.printf(msg)
   }
 
 }

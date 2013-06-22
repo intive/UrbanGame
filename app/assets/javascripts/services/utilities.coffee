@@ -36,7 +36,7 @@ app.factory 'Utilities', ['$dialog', ($dialog) ->
             zeros(days) + "d:" + zeros(hours) + "h:" + zeros(minutes) + "min:" + zeros(seconds) + "sec"
 
         showDialog: (title, action) ->
-            msg = Messages("js.errors.sure", action)
+            msg = Messages("js.sure", action) + " " + Messages("js.aftereffects." + action)
             btns = [{result:'no', label: Messages("js.no")}, {result:'ok', label: Messages("js.yes", action), cssClass: 'btn-primary'}]
 
             $dialog.messageBox(title, msg, btns)

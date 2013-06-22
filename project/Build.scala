@@ -19,8 +19,8 @@ object ApplicationBuild extends Build {
     "org.mindrot" % "jbcrypt" % "0.3m",
     "jp.t2v" %% "play2.auth" % "0.9",
     "jp.t2v" %% "play2.auth.test" % "0.9" % "test",
-    "jp.t2v" %% "stackable-controller" % "0.2",
-    "com.typesafe" %% "play-plugins-mailer" % "2.1.0"
+    "com.typesafe" %% "play-plugins-mailer" % "2.1.0",
+    "net.tanesha.recaptcha4j" % "recaptcha4j" % "0.0.7"
   )
 
 

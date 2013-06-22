@@ -19,24 +19,24 @@
 
 - if(user != None)
     %form.navbar-form.pull-right(action={routes.Application.logout} method="get")
-        = Messages("login.loggedInAs")(lan)
+        = Messages("loggedInAs")(lan)
         %a(href="/my/options")
             = user.get.name
             %i.icon-user
-        %input.btn.btn-small(type="submit" value={Messages("login.logout")(lan)})
+        %input.btn.btn-small(type="submit" value={Messages("logout")(lan)})
 - else
     -if(req.uri != "/login")
         %form.navbar-form(action={routes.Application.authenticate} method="post" name="loginForm")
             .span
                 .row
-                    %input.input-medium(type="text" placeholder={Messages("login.email")(lan)} name="user.email")
+                    %input.input-medium(type="text" placeholder={Messages("email")(lan)} name="user.email")
                 .row
                     %label.checkbox.inline
-                        %input(type="checkbox" name="remember" value="true") = Messages("login.remember")(lan)
+                        %input(type="checkbox" name="remember" value="true" disabled) = Messages("remember")(lan)
             .span
                 .row
-                    %input.input-medium(type="password" placeholder={Messages("login.password")(lan)} name="user.password")
+                    %input.input-medium(type="password" placeholder={Messages("password")(lan)} name="user.password")
                 .row
-                    %a.help-inline(href="/") = Messages("login.forgotpass")(lan)
+                    %a.help-inline(href="/") = Messages("forgotpass")(lan)
             .span
-                %input.btn.btn-success(type="submit" value={Messages("login.login")(lan)})
+                %input.btn.btn-success(type="submit" value={Messages("login")(lan)})

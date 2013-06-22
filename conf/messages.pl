@@ -13,6 +13,12 @@ login.password = Hasło
 login.login = Zaloguj
 login.logout = Wyloguj
 login.loggedInAs = Jesteś zalogowany jako:
+login.remember = Zapamiętaj mnie
+login.forgotpass = Zapomniałeś hasła?
+login.register = Nie masz jeszcze konta? Załóż je!
+login.invalid.data = Nieprawidłowy e-mail lub hasło
+login.password.required = Hasło jest wymagane
+error.email = Niepoprawny format e-mail
 
 dateformat = "yy-dd-mm"
 dateformatlong = dd-MM-yyyy
@@ -20,6 +26,7 @@ dateformatlong = dd-MM-yyyy
 general.archive = Archiwum
 general.options = Opcje
 
+menu.home = Główna
 menu.newgame = Nowa gra
 menu.mygames = Moje gry
 menu.about = O nas

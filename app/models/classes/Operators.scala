@@ -31,15 +31,16 @@ object Operators extends Table[Operator]("OPERATORS") {
   def description = column[Option[String]]("description")
   def permission = column[Permission]("permission", O.NotNull)
   def created = column[DateTime]("created", O.NotNull)
+  def modified = column[DateTime]("modified", O.NotNull)
   def validated = column[Boolean]("validated", O.NotNull, O.Default(false))
   def token = column[Option[String]]("token")
   def * = id.? ~ email ~ password ~ name ~ logo ~ description ~ permission ~ 
-    created ~ validated ~ token <> (Operator, Operator.unapply _)
+    created ~ modified ~ validated ~ token <> (Operator, Operator.unapply _)
   def forInsert = email ~ password ~ name ~ logo ~ description ~ permission ~ 
-    created ~ validated ~ token <> ({ t => 
-      Operator(None, t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)}, 
+    created ~ modified ~ validated ~ token <> ({ t => 
+      Operator(None, t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10)}, 
       { (op: Operator) => Some((op.email, BCrypt.hashpw(op.password, BCrypt.gensalt()), 
-        op.name, op.logo, op.description, op.permission, op.created, op.validated, op.token))
+        op.name, op.logo, op.description, op.permission, op.created, op.modified, op.validated, op.token))
       })
 
 
@@ -72,7 +73,7 @@ trait Operators { this: ImplicitSession =>
   }
 
   def authenticate(email: String, password: String): Option[Operator] = findByEmail(email).filter { operator => 
-    operator.validated && BCrypt.checkpw(password, operator.password)
+    BCrypt.checkpw(password, operator.password)
   }
 
   def findByEmail(email: String): Option[Operator] = Query(Operators).filter(_.email === email).firstOption

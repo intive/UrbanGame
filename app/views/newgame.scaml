@@ -24,7 +24,7 @@
 -@ val lan: Lang
 -@ val app: Application
 
-.row.span12(ng-controller="newGameCtrl" id="outer")
+.row.span12(ng-controller="newGameCtrl" ng-cloak id="outer")
     .wizard(ng-show="!isEdit() || editable")
         %form.form-vertical(name="form" class="css-form" novalidate)
             %ul.nav.nav-pills.nav-steps
@@ -46,19 +46,12 @@
                 %div(ng-switch-when="4")
                     -render("submodules/step4summary.scaml")
             .clearfix
-            %ul.pager.pull-right
-                %li(ng-class="{disabled: !hasPreviousStep()}")
-                    %a(href="javascript:void(0);" ng-click="decrementStep()") 
-                        &larr;  
-                        = Messages("newgame.previous")(lan)
-                %li(ng-show="!isLast()" ng-class="{disabled: (!hasNextStep() || form.$invalid)}")
-                    %a(href="javascript:void(0);" ng-click="incrementStepIfValid()") 
-                        = Messages("newgame.next")(lan) 
-                        &rarr;
-                %li(ng-hide="!isLast()" ng-class="{disabled: !hasPreviousStep() || form.$invalid}")
-                    %a(href="javascript:void(0);" ng-click="savegame()")  
-                        %span(ng-show="!isEdit()") = Messages("newgame.saveproject")(lan)
-                        %span(ng-hide="!isEdit()") = Messages("newgame.save")(lan)
-                %li(ng-hide="!isLast() || game.status == 'published'")
-                    %a(href="javascript:void(0);" ng-click="publishgame()") = Messages("newgame.publish")(lan)
+            .pull-right
+                %button.btn(ng-class="{disabled: !hasPreviousStep()}" ng-click="decrementStep()") = Messages("newgame.previous")(lan)
+                %button.btn.btn-success(ng-show="!isLast()" ng-class="{disabled: (!hasNextStep() || form.$invalid)}" ng-click="incrementStepIfValid()") 
+                    = Messages("newgame.next")(lan)
+                %button.btn.btn-inverse(ng-hide="!isLast()" ng-class="{disabled: !hasPreviousStep() || form.$invalid}" ng-click="savegame()")
+                    %span(ng-show="!isEdit()") = Messages("newgame.saveproject")(lan)
+                    %span(ng-hide="!isEdit()") = Messages("newgame.save")(lan)
+                %button.btn.btn-info(ng-hide="!isLast() || game.status == 'published'" ng-click="publishgame()") = Messages("newgame.publish")(lan)
             .clearfix
