@@ -12,10 +12,12 @@ import android.os.Parcelable;
 
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
 import com.blstream.urbangame.webserver.deserialization.Links;
+import com.google.gson.annotations.SerializedName;
 
 public abstract class Task implements Parcelable {
 	
-	private Links _links;
+	@SerializedName("_links")
+	private Links links;
 	
 	public static final String FIELD_NAME_TITLE = "Title";
 	public static final String FIELD_NAME_DESCRIPTION = "Description";
@@ -222,7 +224,7 @@ public abstract class Task implements Parcelable {
 	}
 	
 	public String getLinkFromResource(String resourceName) {
-		return _links.getLinkFromResource(resourceName);
+		return links.getLinkFromResource(resourceName);
 	}
 	
 	@Override

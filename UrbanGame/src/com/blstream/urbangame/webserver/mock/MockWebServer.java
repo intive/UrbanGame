@@ -21,9 +21,9 @@ import com.blstream.urbangame.webserver.helper.WebResponse.QueryType;
 import com.google.gson.Gson;
 
 /* MockWebServer class is simulating web server behaviour. Try to not use this
- * class directly in code anywhere else then in tests, so there will be less
- * code to correct once a real web server is used. To access data kept in
- * MockWebServer use WebServerHelper class instead. */
+* class directly in code anywhere else then in tests, so there will be less
+* code to correct once a real web server is used. To access data kept in
+* MockWebServer use WebServerHelper class instead. */
 
 public class MockWebServer {
 	private final String TAG = "MockWebServer";

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.blstream.urbangame.database.entity.Task;
+import com.google.gson.annotations.SerializedName;
 
 /*
  * This class is an auxiliary class to make it easy to deserialize
@@ -12,12 +13,13 @@ import com.blstream.urbangame.database.entity.Task;
 
 public class TasksResponse extends JsonResponse {
 	
-	private Task[] _embedded;
+	@SerializedName("_embedded")
+	private Task[] embedded;
 	
 	public List<Task> getTaskList() {
 		ArrayList<Task> taskList = new ArrayList<Task>();
 		
-		for (Task task : _embedded) {
+		for (Task task : embedded) {
 			taskList.add(task);
 		}
 		

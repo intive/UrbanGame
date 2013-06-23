@@ -9,10 +9,12 @@ import android.graphics.drawable.Drawable;
 
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
 import com.blstream.urbangame.webserver.deserialization.Links;
+import com.google.gson.annotations.SerializedName;
 
 public class UrbanGameShortInfo {
 	
-	private Links _links;
+	@SerializedName("_links")
+	private Links links;
 	
 	private Long ID;
 	private String title;
@@ -259,7 +261,7 @@ public class UrbanGameShortInfo {
 	}
 	
 	public String getLinkFromResource(String resourceName) {
-		return _links.getLinkFromResource(resourceName);
+		return links.getLinkFromResource(resourceName);
 	}
 	
 	@Override

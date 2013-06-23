@@ -86,7 +86,7 @@ public class AsyncSendWebQuery extends AsyncTask<Void, Void, WebResponse> {
 		String url = WebResource.ROOT_URL;
 		if (!nextResource.equals(WebResource.RESOURCE_ROOT)) {
 			
-			if (nextResource == WebResource.RESOURCE_SELF) {
+			if (nextResource.equals(WebResource.RESOURCE_SELF)) {
 				
 				if (webResponse.getQueryType() == QueryType.GetTask && webResource.isLastResource()) {
 					List<Task> tasks = webResponse.getTaskList();
@@ -100,7 +100,7 @@ public class AsyncSendWebQuery extends AsyncTask<Void, Void, WebResponse> {
 				}
 				else if (webResponse.getQueryType() == QueryType.GetTask && !webResource.isLastResource()
 					|| webResponse.getQueryType() == QueryType.GetTaskList && !webResource.isLastResource()
-					|| webResponse.getQueryType() == QueryType.GetUrbanGameDetails && webResource.isLastResource()) {
+					|| webResponse.getQueryType() == QueryType.GetUrbanGameDetails) {
 					List<UrbanGameShortInfo> games = webResponse.getUrbanGameShortInfoList();
 					
 					for (UrbanGameShortInfo urbanGameShortInfo : games) {
