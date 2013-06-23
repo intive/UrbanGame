@@ -169,7 +169,7 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
     var cnt3 = 0
         
     play.api.db.slick.DB.withSession { implicit session =>
-      if (Operators.getRowsNo == 0) {
+      if (Operators.findAll.isEmpty) {
         Source.fromFile(filepaths(1)).getLines.foreach { line => 
           val List(email, pass, name, permission) = line.split("::").map(_.toString).toList
 
@@ -181,7 +181,7 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
         }
       }
 
-      if (Games.getRowsNo == 0) {
+      if (Games.findAll.isEmpty) {
         Source.fromFile(filepaths(0)).getLines.foreach { line => 
           val List(name, version, description, location, operatorId, created, startTime, 
             endTime, started, ended, winning, nWins, difficulty, maxPlayers, awards, 
@@ -196,7 +196,7 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
         }
       }
 
-      if (Tasks.getRowsNo == 0) {
+      if (Tasks.findAll.isEmpty) {
         val td = TasksDetails(None, 1, 1, "Task1", "Task1 desc", DateTime.now + 2.days, 100, 20)
 
         Tasks.createTask(td)

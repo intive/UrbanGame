@@ -72,8 +72,6 @@ trait RememberMeElement extends StackableController with AuthConfigImpl {
   val persistentCookieName = "UG_RememberMe"
 
   val persistentSessionTimeout = 31536000
-
-  def checkCookie(request: Request[AnyContent])
 }
 
 trait EmailConfirmation {

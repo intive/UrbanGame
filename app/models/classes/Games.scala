@@ -173,6 +173,8 @@ trait Games { this: ImplicitSession =>
     q.first
   }
 
+  def findAll: Seq[GamesDetails] = Query(Games).list
+
 }
 
 
