@@ -45,12 +45,12 @@
                 .topheader
                     .row
                         %h3.pull-left.logo 
-                            %a(href={routes.Application.index}) LOGO
+                            %a(href={routes.Application.index}) 
+                                %img(src={routes.Assets.at("images/logo.png")})
                         .loginform.pull-right
                             - render("submodules/loginform.scaml")
                 .row.myheader
                     .row.big-image
-                        BIG IMAGE HERE
 
             .container-narrow
                 .row-fluid
@@ -75,7 +75,6 @@
 -# Bootstrap Lightbox
 %script(src={routes.Assets.at("javascripts/lib/bootstrap/bootstrap-lightbox.min.js")} type="text/javascript")
 -# Angular directive for google-maps
-%script(src={routes.Assets.at("javascripts/lib/angular-ui/angular-google-maps.js")} type="text/javascript")
 %script(src="http://maps.googleapis.com/maps/api/js?sensor=false&language=en" type="text/javascript")
 -# Main
 %script(src={routes.Assets.at("javascripts/main.min.js")} type="text/javascript")

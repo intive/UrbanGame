@@ -47,11 +47,16 @@
                     -render("submodules/step4summary.scaml")
             .clearfix
             .pull-right
-                %button.btn(ng-class="{disabled: !hasPreviousStep()}" ng-click="decrementStep()") = Messages("newgame.previous")(lan)
-                %button.btn.btn-success(ng-show="!isLast()" ng-class="{disabled: (!hasNextStep() || form.$invalid)}" ng-click="incrementStepIfValid()") 
+                %button.btn(ng-class="{disabled: !hasPreviousStep()}" ng-click="decrementStep()") 
+                    %i.icon-arrow-left
+                    = Messages("newgame.previous")(lan)
+                %button.btn.btn-success-light(ng-show="!isLast()" ng-class="{disabled: (!hasNextStep() || form.$invalid)}" ng-click="incrementStepIfValid()") 
                     = Messages("newgame.next")(lan)
-                %button.btn.btn-inverse(ng-hide="!isLast()" ng-class="{disabled: !hasPreviousStep() || form.$invalid}" ng-click="savegame()")
+                    %i.icon-arrow-right
+                %button.btn.btn-success-light(ng-hide="!isLast()" ng-class="{disabled: !hasPreviousStep() || form.$invalid}" ng-click="savegame()")
                     %span(ng-show="!isEdit()") = Messages("newgame.saveproject")(lan)
                     %span(ng-hide="!isEdit()") = Messages("newgame.save")(lan)
-                %button.btn.btn-info(ng-hide="!isLast() || game.status == 'published'" ng-click="publishgame()") = Messages("newgame.publish")(lan)
+                %button.btn.btn-success(ng-hide="!isLast() || game.status == 'published'" ng-click="publishgame()") 
+                    = Messages("newgame.publish")(lan)
+                    %i.icon-globe
             .clearfix

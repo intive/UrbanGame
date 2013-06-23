@@ -21,35 +21,30 @@
 -@ val app: Application
 
 .row.span12(ng-controller="myGamesCtrl")
-    %h3 
+    %h3.section-title.upper
         %span(ng-show="!isArchive") = Messages("mygames.title")
         %span(ng-hide="!isArchive") = Messages("archive.title")
-        %span.input-append.pull-right
-            %input.input-large.search-query(type="text" ng-model="query" ng-change="search()" placeholder="Search")
-                %span.add-on
-                    %i.icon-search
+    %span.input-append.pull-right
+        %input.input-large.search-query(type="text" ng-model="query" ng-change="search()" placeholder="Search")
+            %span.add-on
+                %i.icon-search
     .alert.alert-error(ng-show="error != null") {{error}}
-    %table#gamelist.table.table-hover.table-striped
+    %table#gamelist.table.table-hover.table-bordered
         %thead
             %tr
                 %th 
+                    = Messages("mygames.logo")
                 %th
-                    = Messages("mygames.data")
                     %a(href="" ng-click="sortBy('name')")
-                        %i.icon-sort
+                        = Messages("mygames.data")
                 %th 
-                    = Messages("mygames.status")
                     %a(href="" ng-click="sortBy('status')")
-                        %i.icon-sort
-                %th 
-                    = Messages("mygames.version")
-                    %a(href="" ng-click="sortBy('version')")
-                        %i.icon-sort
+                        = Messages("mygames.status")
                 %th = Messages("general.options")
         %tbody
             %tr.cursor-pointer(ng-repeat="game in pagedItems[currentPage] | orderBy:sortOrder:reverse" ng-click="showDetails($index)")
                 %td
-                    %img(ng-src="/assets/images/{{game.image}}")/
+                    %img(ng-src="/assets/images/{{game.image}}" title={Messages("mygames.logo")})/
                 %td
                     .row
                         %h4 {{game.name | uppercase}}
@@ -67,7 +62,7 @@
                         {{game.tasksNo}}
                 %td
                     .row
-                        %span(class="{{game.status}}") {{game.status | uppercase}}
+                        %span(class="{{game.status}}") {{translate("status." + game.status) | uppercase}}
                     .row(ng-show="game.status == 'online'")
                         %p 
                             to END left
@@ -78,21 +73,20 @@
                             to START left
                             %br/
                             {{mtimeLeft[$index]}}
-
-                %td 
-                    {{game.version}}
                 %td
-                    .row(ng-show="game.status == 'project' || game.status == 'online'")
-                        %button.btn.btn-small(type="button" ng-class="{disabled: game.status == 'online'}" ng-click="delete($index); $event.stopPropagation();") = Messages("mygames.delete")(lan)
-                    .row(ng-show="game.status == 'published'")
-                        %button.btn.btn-small(type="button" ng-click="cancel($index); $event.stopPropagation();") = Messages("mygames.cancel")(lan)
-        %tfoot
-            %td(colspan="5")
-                %div.pagination.pull-right
-                    %ul
-                        %li(ng-class="{disabled: currentPage == 0 || pagedItems.length == 0}")
-                            %a(ng-click="prevPage()") « Prev
-                        %li(ng-repeat="n in range(pagedItems.length)" ng-class="{active: n == currentPage}" ng-click="setPage()")
-                            %a(ng-bind="n + 1") 1
-                        %li(ng-class="{disabled: currentPage == pagedItems.length - 1 || pagedItems.length == 0}")
-                            %a(ng-click="nextPage()") Next »
+                    .row
+                        %button.btn.btn-small.btn-flat-dark.upper(type="button" ng-click="showDetails($index); $event.stopPropagation();" title={Messages("mygames.details")})
+                            %i.icon-pencil
+                        %button.btn.btn-small.btn-flat-light.upper(ng-show="game.status == 'project' || game.status == 'online'" type="button" ng-class="{disabled: game.status == 'online'}" ng-click="delete($index); $event.stopPropagation();" title={Messages("mygames.delete")}) = Messages("mygames.delete")(lan)
+                        %button.btn.btn-small.btn-flat-light.upper(ng-show="game.status == 'published'" type="button" ng-click="cancel($index); $event.stopPropagation();" title={Messages("mygames.cancel")}) = Messages("mygames.cancel")(lan)
+                    .row
+                        = Messages("mygames.ver")
+                        {{game.version | number: 1}}
+    %div.pagination.pull-right
+        %ul
+            %li(ng-class="{disabled: currentPage == 0 || pagedItems.length == 0}")
+                %a(ng-click="prevPage()") « Prev
+            %li(ng-repeat="n in range(pagedItems.length)" ng-class="{active: n == currentPage}" ng-click="setPage()")
+                %a(ng-bind="n + 1") 1
+            %li(ng-class="{disabled: currentPage == pagedItems.length - 1 || pagedItems.length == 0}")
+                %a(ng-click="nextPage()") Next »

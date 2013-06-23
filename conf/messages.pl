@@ -71,14 +71,23 @@ newgame.diff.easy = Łatwy
 newgame.diff.medium = Średni
 newgame.diff.hard = Trudny
 
-mygames.icon = Ikona
-mygames.data = Informacje o grze
+mygames.logo = Logo gry
+mygames.data = Szczegóły
 mygames.status = Status
 mygames.version = Wersja
+mygames.ver = wer.
 mygames.title = Lista gier
 mygames.location = Lokalizacja
 mygames.timestart = Data rozpoczęcia
 mygames.tasks = Zadania
+mygames.details = Szczegóły
+mygames.delete = Usuń
+mygames.cancel = Anuluj
+
+status.published = Opublikowana
+status.online = Rozpoczęta
+status.project = Projekt
+status.finished = Zakończona
 
 archive.title = Archiwum gier
 

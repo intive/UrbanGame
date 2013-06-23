@@ -27,7 +27,7 @@ import scala.util.{ Try, Success, Failure }
 import models.utils._
 import models.dal.Bridges._
 
-object Application extends Controller with CookieLang with OptionalAuthElement with LoginLogout with EmailConfirmation with AuthConfigImpl {
+object Application extends Controller with CookieLang with OptionalAuthElement with LoginLogout with RememberMeElement with EmailConfirmation {
 
   def registrationForm(implicit request: RequestHeader) = Form {
     mapping(
@@ -80,7 +80,11 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
       errors => BadRequest(Scalate("login").render('title -> "Urban Game", 'user -> None, 'loginForm -> errors)),
       { case (remember, user) => {
           if(user.get.validated)
-            gotoLoginSucceeded(user.get.id.get) 
+            if(remember) 
+              gotoLoginSucceeded(user.get.id.get).withCookies(Cookie(persistentCookieName, 
+                play.api.libs.Crypto.sign(user.get.email), Some(persistentSessionTimeout)))
+            else
+              gotoLoginSucceeded(user.get.id.get) 
           else {
             val msg = Messages("notify.login.novalidated", routes.Application.newToken("signup", user.get.email))(Lang(lan))
             Ok(Scalate("confirmations").render('title -> "Urban Game - E-mail confirmation", 'user -> None, 

@@ -16,7 +16,7 @@
 -@ val lan: Lang
 -@ val dateOpts: String = "{ dateFormat: " + Messages("dateformat") + "}"
 
-.control-group.row-fluid.container-style
+.control-group.row-fluid
     %div(id="formDiv")
         %h4
             %span.step = Messages("newgame.step1")(lan) 
@@ -59,8 +59,6 @@
                     %input.input-xlarge(type="text" id="locationInput" geo-complete maxlength="100" required name="gName" ng-model="game.location" tooltip-animation="true" tooltip={Messages("newgame.ttgamelocation")(lan)} tooltip-placement="left")
                 .controls-group(time-check)
                     .controls-group
-                        {{game.playersNum}}
-                        {{game.winningNum}}
                         %label(for="gStartTime")
                             %strong=Messages("newgame.gamestartlabel")(lan)
                         .controls-row()

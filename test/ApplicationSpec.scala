@@ -16,6 +16,7 @@ package test
 
 import org.specs2.mutable._
 
+import play.api.mvc._
 import play.api.test._
 import play.api.test.Helpers._
 import play.api.libs.json._
@@ -55,7 +56,7 @@ class ApplicationSpec extends Specification {
       }
     }
     
-    "render the 'my games' page for logged in user" in {
+    "render the 'my games' page for logged user" in {
       running(FakeApplication()) {
         val mgames = route(FakeRequest(GET, "/my/games").withLoggedIn(config)(1)).get
         
@@ -66,7 +67,7 @@ class ApplicationSpec extends Specification {
       }
     }
     
-    "render the 'create new game' page for logged in user" in {
+    "render the 'create new game' page for logged user" in {
       running(FakeApplication()) {
         val ngame = route(FakeRequest(GET, "/my/games/new").withLoggedIn(config)(1)).get
         
@@ -77,7 +78,7 @@ class ApplicationSpec extends Specification {
       }
     }
     
-    "render the 'archive' page for logged in user" in {
+    "render the 'archive' page for logged user" in {
       running(FakeApplication()) {
         val archive = route(FakeRequest(GET, "/my/games/archive").withLoggedIn(config)(1)).get
         
@@ -87,7 +88,7 @@ class ApplicationSpec extends Specification {
       }
     }
     
-    "render the 'options' page for logged in user" in {
+    "render the 'options' page for logged user" in {
       running(FakeApplication()) {
         val ngame = route(FakeRequest(GET, "/my/options").withLoggedIn(config)(1)).get
         
@@ -97,11 +98,41 @@ class ApplicationSpec extends Specification {
       }
     }
     
+    "render notification page with a proper flashing message" in {
+      running(FakeApplication()) {
+        val notif = route(FakeRequest(GET, "/notify").withFlash(("notification", "Test message"))).get
+        
+        Thread.sleep(10 * 1000)
+        status(notif) must equalTo(OK)
+        contentAsString(notif) must contain ("Test message")
+      }
+    }
+    
+    "confirm given token when data is valid" in {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        import scala.util.{ Try, Success, Failure }
+        import java.util._
+
+        val gid: Try[Int] = play.api.db.slick.DB.withSession { implicit session =>
+          Operators.create(Operator(id = None, email = "test@test.pl", password = "test", 
+            name = "Test1", permission = NormalUser, token = None))
+        }
+        val token = UUID.randomUUID.toString
+        updateSignUpToken("test@test.pl", Some(token))
+
+        val notif = route(FakeRequest(GET, "/confirm/test@test.pl/" + token)).get
+        
+        Thread.sleep(10 * 1000)
+        status(notif) must equalTo(OK)
+        contentAsString(notif) must contain ("Your e-mail address has been confirmed. Your account is now ready to use.")
+      }
+    }
+    
     "fill database with example data" in {
       running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
         val fill = route(FakeRequest(GET, "/filldb")).get
 
-        Thread.sleep(10 * 1000)
         status(fill) must equalTo(OK)
         contentAsString(fill) must contain ("Inserted 11 game(s) and 2 operator(s) and 1 task(s)")
       }
@@ -139,7 +170,6 @@ class ApplicationSpec extends Specification {
         """)
         val gameid = route(FakeRequest(POST, "/my/games/json").withJsonBody(json).withLoggedIn(config)(1)).get
         
-        Thread.sleep(10 * 1000)
         status(gameid) must equalTo(OK)
         contentAsString(gameid) must contain ("val")
       }

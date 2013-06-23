@@ -33,9 +33,8 @@
     -}
 
 .row
-    Register for free
-    %br/
-    The application is a web interface that allows to create a game. When the game is created, the organizer can add different tasks for players. We are assuming that many tasks will be related to position on the map and finding something in
+    %p.upper.h1.bold Register for free
+    %p The application is a web interface that allows to create a game. When the game is created, the organizer can add different tasks for players. We are assuming that many tasks will be related to position on the map and finding something in
 .row(ng-controller="registrationCtrl")
     %form.form-register.form-horizontal(action={routes.Application.register} method="post" name="registration" class="css-form" id="auth")
         .control-group

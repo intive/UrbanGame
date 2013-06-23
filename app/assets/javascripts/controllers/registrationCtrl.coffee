@@ -13,7 +13,7 @@
  * limitations under the License.
 ###
 
-# '------------------------------------- NEW GAME CTRL
+# '------------------------------------- REGISTRATION CTRL
 registrationCtrl = app.controller 'registrationCtrl', ['$scope', ($scope) ->
     $scope.signupForm = {
         name: "",

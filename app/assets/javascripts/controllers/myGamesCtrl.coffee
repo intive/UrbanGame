@@ -191,4 +191,7 @@ app.controller 'myGamesCtrl', ['$scope', '$location', 'Games', 'Utilities', '$fi
     
     $scope.setPage = ->
         $scope.currentPage = this.n
+
+    $scope.translate = (code) ->
+        Messages(code)
 ]

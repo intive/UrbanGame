@@ -124,16 +124,23 @@ newgame.saveproject = Save project
 newgame.next = Next
 newgame.previous = Previous
 
-mygames.icon = Icon
-mygames.data = Game info
+mygames.logo = Game logo
+mygames.data = Details
 mygames.status = Status
 mygames.version = Version
+mygames.ver = ver.
 mygames.title = Game list
 mygames.location = Location
 mygames.timestart = Start time
 mygames.tasks = Tasks
+mygames.details = Details
 mygames.delete = Delete
 mygames.cancel = Cancel
+
+status.published = Published
+status.online = Online
+status.project = Project
+status.finished = Finished
 
 
 archive.title = Games archive
