@@ -10,8 +10,7 @@
 	<classpathentry kind="lib" path="libs/gson-2.2.2.jar"/>
 	<classpathentry kind="lib" path="libs/guava-r09.jar"/>
 	<classpathentry kind="lib" path="libs/sqlcipher.jar"/>
-	<classpathentry kind="src" path="/ActionBarSherlock"/>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry exported="true" kind="src" path="/ActionBarSherlock"/>
 	<classpathentry exported="true" kind="lib" path="/google-play-services_lib/libs/google-play-services.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
