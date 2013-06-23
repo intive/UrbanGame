@@ -409,4 +409,10 @@
   <data name="RepeatYourPassword" xml:space="preserve">
     <value>You must enter twice the same password</value>
   </data>
+  <data name="Incorrect" xml:space="preserve">
+    <value>Incorrect</value>
+  </data>
+  <data name="IncorrectLogin" xml:space="preserve">
+    <value>Provided login or password are incorrect</value>
+  </data>
 </root>

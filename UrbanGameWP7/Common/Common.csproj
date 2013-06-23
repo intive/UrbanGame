@@ -53,6 +53,7 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorizationService\IGameAuthorizationService.cs" />
     <Compile Include="Location\GPSLocation.cs" />
     <Compile Include="Solutions\IABCDUserAnswer.cs" />
     <Compile Include="Solutions\SolutionStatusChanged.cs" />
@@ -60,7 +61,6 @@
     <Compile Include="HighScores\IHighScore.cs" />
     <Compile Include="Tasks\TaskChangedEvent.cs" />
     <Compile Include="Tasks\TaskState.cs" />
-    <Compile Include="User\IUser.cs" />
     <Compile Include="Utilities\ILocalizationService.cs" />
     <Compile Include="WebService\AuthorizeState.cs" />
     <Compile Include="Collections\IEntityEnumerable.cs" />

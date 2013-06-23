@@ -139,7 +139,7 @@
         </controls:Pivot>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar>
+        <shell:ApplicationBar BackgroundColor="{StaticResource SolidColorBrushGreen}">
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
     <!-- LOCALIZED APPLICATIONBAR IS IN GameDetailsView.xaml.cs -->

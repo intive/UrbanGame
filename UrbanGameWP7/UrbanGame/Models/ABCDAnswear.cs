@@ -8,7 +8,7 @@ namespace UrbanGame.Models
 {
     public class ABCDAnswear
     {
-        public IABCDPossibleAnswer possibleAnswear;
-        public bool isChecked;
+        public IABCDPossibleAnswer possibleAnswear { get; set; }
+        public bool isChecked { get; set; }
     }
 }

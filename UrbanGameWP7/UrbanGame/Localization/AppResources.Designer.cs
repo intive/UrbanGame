@@ -476,11 +476,29 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incorrect.
+        /// </summary>
+        public static string Incorrect {
+            get {
+                return ResourceManager.GetString("Incorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incorrect email!.
         /// </summary>
         public static string IncorrectEmail {
             get {
                 return ResourceManager.GetString("IncorrectEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provided login or password are incorrect.
+        /// </summary>
+        public static string IncorrectLogin {
+            get {
+                return ResourceManager.GetString("IncorrectLogin", resourceCulture);
             }
         }
         

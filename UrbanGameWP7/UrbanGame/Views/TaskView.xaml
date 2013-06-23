@@ -276,8 +276,7 @@
         
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar BackgroundColor="OliveDrab" Mode="Minimized">
+        <shell:ApplicationBar BackgroundColor="{StaticResource SolidColorBrushGreen}">
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
-    <!-- LOCALIZED APPLICATIONBAR IS IN GameDetailsView.xaml.cs -->
 </phone:PhoneApplicationPage>

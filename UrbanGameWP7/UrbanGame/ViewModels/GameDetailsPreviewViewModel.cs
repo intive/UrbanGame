@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using UrbanGame.Storage;
 using System.Threading.Tasks;
+using UrbanGame.Authorization;
 
 namespace UrbanGame.ViewModels
 {
@@ -147,13 +148,13 @@ namespace UrbanGame.ViewModels
 
             if (!_gameWebService.IsAuthorized)
             {
-                _gameWebService.Authorize("username", "password");
-                await RefreshGame();
-                SetAppBarContent();
+                _navigationService.UriFor<LoginAndRegistrerViewModel>().Navigate();
             }
             else
             {
-                //to do implement login logout
+                GameAuthorizationService authorizationService = new GameAuthorizationService();
+                authorizationService.ClearIsolatedStorage();
+
                 _gameWebService.IsAuthorized = false;
                 SetAppBarContent();
             }

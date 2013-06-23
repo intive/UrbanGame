@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Common;
+using UrbanGame.Authorization;
 using UrbanGame.Utilities;
 using System.Text;
 using Caliburn.Micro;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
+using System.Windows.Controls;
 
 namespace UrbanGame.ViewModels
 {
@@ -21,6 +23,29 @@ namespace UrbanGame.ViewModels
         {
             _appbarManager = appbarManager;
         }
+
+        protected override void OnViewReady(object view)
+        {
+            SetAppBarContent();
+        }
+
+        #region appbar
+
+        public void RefreshMenuItemText()
+        {
+
+        }
+
+        private void SetAppBarContent()
+        {
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                RefreshMenuItemText();
+            });
+            _appbarManager.HideAppbar();
+        }
+
+        #endregion
 
         #region bindable properties
 
@@ -68,7 +93,6 @@ namespace UrbanGame.ViewModels
 
         #endregion
 
-
         #region Email
 
         private string _email;
@@ -85,50 +109,6 @@ namespace UrbanGame.ViewModels
                 {
                     _email = value;
                     NotifyOfPropertyChange(() => Email);
-                }
-            }
-        }
-
-        #endregion
-
-        #region Password
-
-        private string _password;
-
-        public string Password
-        {
-            get
-            {
-                return _password;
-            }
-            set
-            {
-                if (_password != value)
-                {
-                    _password = value;
-                    NotifyOfPropertyChange(() => Password);
-                }
-            }
-        }
-
-        #endregion
-
-        #region PasswordConfirmation
-
-        private string _passwordConfirmation;
-
-        public string PasswordConfirmation
-        {
-            get
-            {
-                return _passwordConfirmation;
-            }
-            set
-            {
-                if (_passwordConfirmation != value)
-                {
-                    _passwordConfirmation = value;
-                    NotifyOfPropertyChange(() => PasswordConfirmation);
                 }
             }
         }
@@ -161,19 +141,24 @@ namespace UrbanGame.ViewModels
                    @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,6}))$");
         }
 
-        public void LogIn()
+        public void LogIn(string Password)
         {
-            if (!string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password))
+            if (!string.IsNullOrWhiteSpace(Email) && IsValidEmail(Email) && !string.IsNullOrWhiteSpace(Password) && _gameWebService.Authorize(Login, Password) == AuthorizeState.Success)
             {
-                //chceck if email and password are correct in system
+                GameAuthorizationService authorization = new GameAuthorizationService();
+                authorization.ClearIsolatedStorage();
+
+                authorization.SaveToIsolatedStorage("Username" + " " + Password + " " + Email);
+
+                _navigationService.GoBack();
             }
             else
             {
-                MessageBox.Show("Provided password or e-mail are incorrect", "Incorrect", MessageBoxButton.OK);
+                MessageBox.Show(Localization.AppResources.IncorrectLogin, Localization.AppResources.Incorrect, MessageBoxButton.OK);
             }
         }
 
-        public void CreateAccount()
+        public void CreateAccount(string Password, string PasswordConfirmation)
         {
             if (string.IsNullOrWhiteSpace(Login))
             {

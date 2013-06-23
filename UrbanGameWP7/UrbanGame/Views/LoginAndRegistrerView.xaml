@@ -7,7 +7,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
     xmlns:utils="clr-namespace:UrbanGame.Utilities"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     utils:StateManager.VisualStateProperty="{Binding VisualStateName}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -192,11 +194,18 @@
                         </Style>
                     </Grid.Resources>
                     <TextBlock Text="{Binding Path=AppResources.Email, Source={StaticResource LocalizedStrings}}" Grid.Row="0"/>
-                    <utils:PhoneTextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1" />
+                    <utils:PhoneTextBox Text="{Binding Email, Mode=TwoWay}" Grid.Row="1" InputScope="EmailUserName"/>
                     <TextBlock Text="{Binding Path=AppResources.Password, Source={StaticResource LocalizedStrings}}" Grid.Row="2"/>
-                    <PasswordBox Password="{Binding Password, Mode=TwoWay}" />
-                    <TextBox Grid.Row="3"/>
-                    <Button Content="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="4" Width="250" Height="75" HorizontalAlignment="Right" Background="{StaticResource FontColorGreen}" BorderBrush="Transparent"/>
+                    <PasswordBox x:Name="Password" Grid.Row="3" />
+                    <Button Content="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="4" Width="250" Height="75" HorizontalAlignment="Right" Background="{StaticResource FontColorGreen}" BorderBrush="Transparent">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <cal:ActionMessage MethodName="LogIn">
+                                    <cal:Parameter Value="{Binding ElementName=Password, Path=Password}" />
+                                </cal:ActionMessage>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
                 </Grid>
             </controls:PivotItem>
             
@@ -225,12 +234,21 @@
                     <TextBlock Text="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="0"/>
                     <utils:PhoneTextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1"/>
                     <TextBlock Text="{Binding Path=AppResources.Email, Source={StaticResource LocalizedStrings}}" Grid.Row="2"/>
-                    <utils:PhoneTextBox Text="{Binding Email, Mode=TwoWay}" Grid.Row="3"/>
+                    <utils:PhoneTextBox Text="{Binding Email, Mode=TwoWay}" Grid.Row="3" InputScope="EmailUserName"/>
                     <TextBlock Text="{Binding Path=AppResources.Password, Source={StaticResource LocalizedStrings}}" Grid.Row="4"/>
-                    <PasswordBox Password="{Binding Password,Mode=TwoWay}" Grid.Row="5" />
+                    <PasswordBox x:Name="RPassword" Grid.Row="5" />
                     <TextBlock Text="{Binding Path=AppResources.RepeatPassword, Source={StaticResource LocalizedStrings}}" Grid.Row="6"/>
-                    <PasswordBox Password="{Binding PasswordConfirmation,Mode=TwoWay}" Grid.Row="7" />
-                    <Button Content="{Binding Path=AppResources.Join, Source={StaticResource LocalizedStrings}}" Grid.Row="8" Width="250" Height="75" HorizontalAlignment="Right" Background="{StaticResource FontColorGreen}" BorderBrush="Transparent"/>
+                    <PasswordBox x:Name="RConfirmationPassword" Grid.Row="7" />
+                    <Button Content="{Binding Path=AppResources.Join, Source={StaticResource LocalizedStrings}}" Grid.Row="8" Width="250" Height="75" HorizontalAlignment="Right" Background="{StaticResource FontColorGreen}" BorderBrush="Transparent">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <cal:ActionMessage MethodName="LogIn">
+                                    <cal:Parameter Value="{Binding ElementName=RPassword, Path=Password}" />
+                                    <cal:Parameter Value="{Binding ElementName=RConfirmationPassword, Path=Password}" />
+                                </cal:ActionMessage>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
                 </Grid>
             </controls:PivotItem>
         </controls:Pivot>
@@ -259,5 +277,8 @@
             <TextBlock x:Name="LoggedInText" Text="{Binding Path=AppResources.LoggedIn, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"/>
         </Grid>
     </Grid>
-
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar BackgroundColor="{StaticResource SolidColorBrushGreen}">
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>
