@@ -41,6 +41,8 @@
 
     .span4.offset1
         %ul#footmenu.inline
+            %li(ng-class="{active: location == '/'}")
+                %a(href="/") = Messages("menu.home")(lan)
             %li(ng-class="{active: location == '/about'}")
                 %a(href="/about") = Messages("menu.about")(lan)
             %li(ng-class="{active: location == '/contact'}")

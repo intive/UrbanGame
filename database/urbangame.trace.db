@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-
-<!-- saved from url=(0073)https://raw.github.com/blstream/UrbanGame/web/database/urbangame.trace.db -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">06-05 12:54:22 jdbc[5]: exception
-org.h2.jdbc.JdbcSQLException: Tablela "PLAY_EVOLUTIONS" nie istnieje
-Table "PLAY_EVOLUTIONS" not found; SQL statement:
-=======
-06-05 23:33:45 jdbc[5]: exception
+06-24 18:31:45 jdbc[5]: exception
 org.h2.jdbc.JdbcSQLException: Table "PLAY_EVOLUTIONS" not found; SQL statement:
->>>>>>> e31eb8cba4e385d6a5ecaf367f90a06f498c3ed3
 select id, hash, apply_script, revert_script, state, last_problem from play_evolutions where state like 'applying_%' [42102-168]
-</pre></body></html>

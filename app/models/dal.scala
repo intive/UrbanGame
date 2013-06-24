@@ -35,61 +35,90 @@ object dal {
     implicit val gamesDetailsReads = Json.reads[GamesDetails]
     implicit val gamesDetailsWrites = Json.writes[GamesDetails]
     implicit val gamesReads = Json.reads[GamePartData]
-    implicit val operatorsDataReads = Json.reads[OperatorsData]
-    implicit val operatorsDataWrites = Json.writes[OperatorsData]
 
     def Games(implicit session: Session) = new ImplicitSession with Games { override val implicitSession = session }
     def Operators(implicit session: Session) = new ImplicitSession with Operators { override val implicitSession = session }
     def Tasks(implicit session: Session) = new ImplicitSession with Tasks { override val implicitSession = session }
     def Skins(implicit session: Session) = new ImplicitSession with Skins { override val implicitSession = session }
+    def Notifications(implicit session: Session) = new ImplicitSession with Notifications { override val implicitSession = session }
 
-    def game(gid: Int): Try[GamesDetails] = play.api.db.slick.DB.withSession { implicit session =>
-      Games.getGame(gid)
+    val db = play.api.db.slick.DB
+
+    def game(gid: Int): Try[GamesDetails] = db.withSession { implicit session =>
+      Games.findGameById(gid)
     }
 
-    def gameList(opId: Int): List[GamesList] = play.api.db.slick.DB.withSession { implicit session =>
-      Games.getOperatorGamesList(opId)
+    def gameList(opId: Int): List[GamesList] = db.withSession { implicit session =>
+      Games.findGamesListByOperatorId(opId)
     }
 
-    def gameArchives(opId: Int): List[GamesList] = play.api.db.slick.DB.withSession { implicit session =>
-      Games.getOperatorGamesArchive(opId)
+    def gameArchives(opId: Int): List[GamesList] = db.withSession { implicit session =>
+      Games.findGamesArchiveByOperatorId(opId)
     }
 
-    def gameSave(res: GamePartData): Try[Int] = {
-      val gd = GamesDetails(id = None, name = res.name, description = res.description, location = res.location, operatorId = 1, 
+    def gameSave(res: GamePartData, oid: Int): Try[Int] = {
+      val gd = GamesDetails(id = None, name = res.name, description = res.description, location = res.location, operatorId = oid, 
         created = DateTime.now, startTime = mutils.combineDate(res.startDate, res.startTime), endTime = mutils.combineDate(res.endDate, res.endTime), 
         winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards, status = res.status, 
         tasksNo = res.tasksNo) 
           
-      play.api.db.slick.DB.withSession { implicit session =>
-        Games.createGame(gd)
+      db.withSession { implicit session =>
+        Games.create(gd)
       }
     }
 
-    def gameUpdate(res: GamePartData, gid: Int): Try[Int] = {
-      val gd = GamesDetails(id = Some(gid), name = res.name, description = res.description, location = res.location, operatorId = 1, 
+    def gameUpdate(res: GamePartData, gid: Int, oid: Int): Try[Int] = {
+      val gd = GamesDetails(id = Some(gid), name = res.name, description = res.description, location = res.location, operatorId = oid, 
         created = DateTime.now, startTime = mutils.combineDate(res.startDate, res.startTime), endTime = mutils.combineDate(res.endDate, res.endTime), 
         winning = res.winning, nWins = res.winningNum, difficulty = res.diff, maxPlayers = res.playersNum, awards = res.awards, status = res.status, 
         tasksNo = res.tasksNo) 
           
-      play.api.db.slick.DB.withSession { implicit session =>
-        Games.updateGame(gid, gd)
+      db.withSession { implicit session =>
+        Games.update(gid, gd)
       }
     }
 
-    def gameDelete(gid: Int): Try[Int] = play.api.db.slick.DB.withSession { implicit session =>
-      Games.deleteGame(gid)
+    def gameDelete(gid: Int): Try[Int] = db.withSession { implicit session =>
+      Games.delete(gid)
     }
 
     def searchName(name: String): Try[Boolean] = {
-      val cntName: Int = play.api.db.slick.DB.withSession { implicit session =>
+      val cntName: Int = db.withSession { implicit session =>
         Games.checkName(name)
       }
       Try(cntName == 0)
     }
 
-    def gameChangeStatus(id: Int, flag: String): Try[Int] = play.api.db.slick.DB.withSession { implicit session =>
+    def gameChangeStatus(id: Int, flag: String): Try[Int] = db.withSession { implicit session =>
       Games.changeStatus(id, flag)
+    }
+
+    def findOperatorId(gid: Int): Int = db.withSession { implicit session =>
+      Games.findOperatorId(gid)
+    }
+
+    def findById(oid: Int): Option[Operator] =db.withSession { implicit session =>
+      Operators.findById(oid)
+    }
+
+    def findByEmail(email: String): Option[Operator] = db.withSession { implicit session =>
+      Operators.findByEmail(email)
+    }
+
+    def auth(email: String, password: String): Option[Operator] = db.withSession { implicit session =>
+      Operators.authenticate(email, password)
+    }
+
+    def updateSignUpToken(email: String, token: Option[String]): Try[Int] = db.withSession { implicit session =>
+      Operators.updateToken(email, token)
+    }
+
+    def operatorSave(op: Operator): Try[Int] = db.withSession { implicit session =>
+      Operators.create(op)
+    }
+
+    def findOperatorByCookie(cookie: String) = db.withSession { implicit session =>
+      Operators.findByCookie(cookie)
     }
   }
 }
@@ -101,11 +130,16 @@ trait Bridges {
 
   def game(gid: Int): Try[GamesDetails]
   def gameList(opId: Int): List[GamesList]
-  def gameSave(res: GamePartData): Try[Int]
-  def gameUpdate(res: GamePartData, gid: Int): Try[Int]
+  def gameSave(res: GamePartData, oid: Int): Try[Int]
+  def gameUpdate(res: GamePartData, gid: Int, oid: Int): Try[Int]
   def gameDelete(gid: Int): Try[Int]
   def searchName(name: String): Try[Boolean]
   def gameChangeStatus(id: Int, flag: String): Try[Int]
+  def findOperatorId(gid: Int): Int
+  def findById(oid: Int): Option[Operator]
+  def findByEmail(email: String): Option[Operator]
+  def updateSignUpToken(email: String, token: Option[String]): Try[Int]
+  def findOperatorByCookie(cookie: String)
 }
 
 

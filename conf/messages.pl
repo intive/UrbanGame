@@ -4,10 +4,21 @@ register.password = Hasło
 register.captcha = Wprowadź kod
 register.submit = Rejestruj
 
+email.signUpConfirm.subject = UrbanGame Potwierdzenie rejestracji
+email.signUpConfirm.title = UrbanGame E-mail potwierdzający rejestrację
+email.signUpConfirm.body = Proszę potwierdzić swoją rezerwację klikając link poniżej
+
 login.name = Login
 login.password = Hasło
 login.login = Zaloguj
 login.logout = Wyloguj
+login.loggedInAs = Jesteś zalogowany jako:
+login.remember = Zapamiętaj mnie
+login.forgotpass = Zapomniałeś hasła?
+login.register = Nie masz jeszcze konta? Załóż je!
+login.invalid.data = Nieprawidłowy e-mail lub hasło
+login.password.required = Hasło jest wymagane
+error.email = Niepoprawny format e-mail
 
 dateformat = "yy-dd-mm"
 dateformatlong = dd-MM-yyyy
@@ -15,6 +26,7 @@ dateformatlong = dd-MM-yyyy
 general.archive = Archiwum
 general.options = Opcje
 
+menu.home = Główna
 menu.newgame = Nowa gra
 menu.mygames = Moje gry
 menu.about = O nas
@@ -59,14 +71,23 @@ newgame.diff.easy = Łatwy
 newgame.diff.medium = Średni
 newgame.diff.hard = Trudny
 
-mygames.icon = Ikona
-mygames.data = Informacje o grze
+mygames.logo = Logo gry
+mygames.data = Szczegóły
 mygames.status = Status
 mygames.version = Wersja
+mygames.ver = wer.
 mygames.title = Lista gier
 mygames.location = Lokalizacja
 mygames.timestart = Data rozpoczęcia
 mygames.tasks = Zadania
+mygames.details = Szczegóły
+mygames.delete = Usuń
+mygames.cancel = Anuluj
+
+status.published = Opublikowana
+status.online = Rozpoczęta
+status.project = Projekt
+status.finished = Zakończona
 
 archive.title = Archiwum gier
 

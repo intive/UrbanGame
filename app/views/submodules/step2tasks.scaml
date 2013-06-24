@@ -14,13 +14,59 @@
     * limitations under the License.
 
 -@ val lan: Lang
-
+-@ val tt: String = Messages("tasks.rewardtooltip")(lan)
 .row-fluid
-    %div(id="formDiv")
+    %div(id="tasksDiv")
         %h4
             %span.step = Messages("newgame.step2")(lan) 
             = Messages("newgame.step2title")(lan)
         %em = Messages("newgame.step2subtitle")(lan)
         .alert.alert-error(ng-show="error != null") {{error}}
+        {{mapOpts.markers}}
     .span12.slight-padding-top
-        
+        .span7.pull-left
+            %a.btn()
+                %i.icon-plus
+                =Messages("tasks.newtaskbtn")(lan)
+            %table.table.table-hover.slight-padding-top(id="taskslist")
+                %caption 
+                    =Messages("tasks.tablecaption")(lan)
+                %thead
+                    %tr
+                        %th 
+                            =Messages("tasks.headername")
+                            %a(href="" ng-click="sortBy('name')")
+                                %i.icon-sort
+                        %th 
+                            =Messages("tasks.headertype")
+                            %a(href="" ng-click="sortBy('type')")
+                                %i.icon-sort
+                        %th 
+                            =Messages("tasks.headervisible")
+                            %a(href="" ng-click="sortBy('visibility')")
+                                %i.icon-sort
+                        %th =Messages("tasks.headeroptions")
+                %tbody
+                    %tr.cursor-pointer(ng-repeat="task in tasks" ng-click="showMarkers($index);")
+                        %td
+                            {{task.name}}
+                        %td
+                            -@ val ttd: String = tt+" {{task.maxPoints}}"
+                            %span(tooltip={ttd} tooltip-placement="top" tooltip-animation="true")
+                                {{task.type}}
+                                
+                        %td
+                            %span(tooltip={Messages("tasks.visibilitytooltip")(lan)} tooltip-placement="top" tooltip-animation="true")
+                                {{task.visible}}
+                        %td
+                            .row
+                                %button.btn.btn-mini(ng-click="editTask($index); $event.stopPropagation();" type="button")
+                                    =Messages("tasks.edit")
+                                    %icon.icon-pencil
+                                |
+                                %button.btn.btn-mini(ng-click="deleteTask($index); $event.stopPropagation();" type="button")
+                                    =Messages("tasks.delete")
+                                    %icon.icon-trash
+        .span5.pull-right.no-margin(style="padding-right:25px;")
+            %div(id="gpsMap" task-list-map )
+    

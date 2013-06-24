@@ -24,12 +24,12 @@
 -@ val lan: Lang
 -@ val app: Application
 
-.row.span12(ng-controller="newGameCtrl" id="outer")
+.row.span12(ng-controller="newGameCtrl" ng-cloak id="outer")
     .wizard(ng-show="!isEdit() || editable")
-        %form.form-vertical(name="form" class="css-form" novalidate)
+        %form.form-vertical(name="form" class="css-form" novalidate )
             %ul.nav.nav-pills.nav-steps
                 %li(ng-repeat="step in steps" ng-class="{active: $index==getCurrentStepIndex(), disabled: isDisabled($index)}")
-                    %a(title="Step" href="javascript:void(0);" ng-click="") {{step.no}}. {{step.name}}
+                    %a(title="Step" href="javascript:void(0);" ng-click="goToStep($index)") {{step.no}}. {{step.name}}
             %div.wizbody{"ng-switch on"=>"selection.no"}
                 %div(ng-switch-when="1")
                     -render("submodules/step1form.scaml")
@@ -46,19 +46,17 @@
                 %div(ng-switch-when="4")
                     -render("submodules/step4summary.scaml")
             .clearfix
-            %ul.pager.pull-right
-                %li(ng-class="{disabled: !hasPreviousStep()}")
-                    %a(href="javascript:void(0);" ng-click="decrementStep()") 
-                        &larr;  
-                        = Messages("newgame.previous")(lan)
-                %li(ng-show="!isLast()" ng-class="{disabled: (!hasNextStep() || form.$invalid)}")
-                    %a(href="javascript:void(0);" ng-click="incrementStepIfValid()") 
-                        = Messages("newgame.next")(lan) 
-                        &rarr;
-                %li(ng-hide="!isLast()" ng-class="{disabled: !hasPreviousStep() || form.$invalid}")
-                    %a(href="javascript:void(0);" ng-click="savegame()")  
-                        %span(ng-show="!isEdit()") = Messages("newgame.saveproject")(lan)
-                        %span(ng-hide="!isEdit()") = Messages("newgame.save")(lan)
-                %li(ng-hide="!isLast() || game.status == 'published'")
-                    %a(href="javascript:void(0);" ng-click="publishgame()") = Messages("newgame.publish")(lan)
+            .pull-right
+                %button.btn(ng-class="{disabled: !hasPreviousStep()}" ng-click="decrementStep()") 
+                    %i.icon-arrow-left
+                    = Messages("newgame.previous")(lan)
+                %button.btn.btn-success-light(ng-show="!isLast()" ng-class="{disabled: (!hasNextStep() || form.$invalid)}" ng-click="incrementStepIfValid()") 
+                    = Messages("newgame.next")(lan)
+                    %i.icon-arrow-right
+                %button.btn.btn-success-light(ng-hide="!isLast()" ng-class="{disabled: !hasPreviousStep() || form.$invalid}" ng-click="savegame()")
+                    %span(ng-show="!isEdit()") = Messages("newgame.saveproject")(lan)
+                    %span(ng-hide="!isEdit()") = Messages("newgame.save")(lan)
+                %button.btn.btn-success(ng-hide="!isLast() || game.status == 'published'" ng-click="publishgame()") 
+                    = Messages("newgame.publish")(lan)
+                    %i.icon-globe
             .clearfix

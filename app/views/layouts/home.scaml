@@ -17,6 +17,7 @@
 -@ var body: String
 -@ var scripts: String = ""
 -@ var head: String = ""
+-@ val req: RequestHeader
 -@ val lan: Lang
 -@ val app: Application
 
@@ -41,17 +42,15 @@
     %body(ng-cloak class="ng-cloak")
         #wrap
             .masthead
-                .row
-                    %h3.pull-left.offset1.logo 
-                        %a(href="/") LOGO
-                    .pull-right.loginform
-                        %form.navbar-form.pull-right(action={routes.Application.processLogin} method="post" name="loginForm")
-                            %input.span2(type="text" placeholder={Messages("login.name")(lan)} name="login")
-                            %input.span2(type="password" placeholder={Messages("login.password")(lan)} name="password")
-                            %input.btn(type="submit" value={Messages("login.login")(lan)})
+                .topheader
+                    .row
+                        %h3.pull-left.logo 
+                            %a(href={routes.Application.index}) 
+                                %img(src={routes.Assets.at("images/logo.png")})
+                        .loginform.pull-right
+                            - render("submodules/loginform.scaml")
                 .row.myheader
                     .row.big-image
-                        BIG IMAGE HERE
 
             .container-narrow
                 .row-fluid
@@ -75,6 +74,8 @@
 %script(src="http://angular-ui.github.com/bootstrap/ui-bootstrap-tpls-0.3.0.js" type="text/javascript")
 -# Bootstrap Lightbox
 %script(src={routes.Assets.at("javascripts/lib/bootstrap/bootstrap-lightbox.min.js")} type="text/javascript")
+-# Angular directive for google-maps
+%script(src="http://maps.googleapis.com/maps/api/js?sensor=false&language=en" type="text/javascript")
 -# Main
 %script(src={routes.Assets.at("javascripts/main.min.js")} type="text/javascript")
 %script(src={routes.Assets.at("javascripts/controllers/menuCtrl.min.js")} type="text/javascript")
