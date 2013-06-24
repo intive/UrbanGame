@@ -18,6 +18,8 @@ import com.blstream.urbangame.dialogs.UrbanGameDialog.UrbanGameDialogOnClickList
  * game/task.
  */
 public class NotificationPopupWindow implements UrbanGameDialogOnClickListener {
+	private static final long serialVersionUID = 1L;
+	
 	private final UrbanGameDialog.DialogBuilder builder;
 	private final Context context;
 	
@@ -34,6 +36,7 @@ public class NotificationPopupWindow implements UrbanGameDialogOnClickListener {
 		setType(notificationType);
 		formatMessage(gameName, taskName);
 		createIntentToChangedContent(gameID);
+		
 		createDialog(gameName, taskName, diff).show();
 	}
 	

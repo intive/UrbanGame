@@ -12,6 +12,7 @@ import com.blstream.urbangame.dialogs.UrbanGameDialog.UrbanGameDialogOnClickList
  * TaskAnswerFragment.
  */
 public class AnswerDialog implements UrbanGameDialogOnClickListener {
+	private static final long serialVersionUID = 1L;
 	
 	private final Context context;
 	private UrbanGameDialog.DialogBuilder dialogBuilder;
@@ -82,7 +83,8 @@ public class AnswerDialog implements UrbanGameDialogOnClickListener {
 					intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 					context.startActivity(intent);
 					break;
-			
+				default:
+					break;
 			}
 		}
 	}
@@ -90,5 +92,4 @@ public class AnswerDialog implements UrbanGameDialogOnClickListener {
 	public void showDialog(DialogType dialogType) {
 		showDialog(dialogType, null, null);
 	}
-	
 }
