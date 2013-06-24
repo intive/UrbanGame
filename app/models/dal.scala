@@ -40,6 +40,7 @@ object dal {
     def Operators(implicit session: Session) = new ImplicitSession with Operators { override val implicitSession = session }
     def Tasks(implicit session: Session) = new ImplicitSession with Tasks { override val implicitSession = session }
     def Skins(implicit session: Session) = new ImplicitSession with Skins { override val implicitSession = session }
+    def Notifications(implicit session: Session) = new ImplicitSession with Notifications { override val implicitSession = session }
 
     val db = play.api.db.slick.DB
 
