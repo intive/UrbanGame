@@ -30,11 +30,11 @@ import com.blstream.urbangame.webserver.helper.WebResponse;
 import com.blstream.urbangame.webserver.helper.WebServerHelper;
 
 /**
- *  This is a singleton notifier class. You can implement an observator interface
+ * This is a singleton notifier class. You can implement an observator interface
  * (NotificationListener) when there will appear any change in game or task the
- * observator's interface method will be called. 
- * If you don't want to see notifications then comment 3 lines of code
- * in MenuActivity (where NotificationServer is used).
+ * observator's interface method will be called. If you don't want to see
+ * notifications then comment 3 lines of code in MenuActivity (where
+ * NotificationServer is used).
  * */
 
 public class NotificationServer implements WebServerHelper.WebServerResponseInterface {
@@ -54,6 +54,7 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 	private NotificationsManager notificationManager;
 	private UrbanGameApplication urbanGameApplication;
 	
+	@Override
 	public void onWebServerResponse(WebResponse webResponse) {
 		
 		// If there was correct response from web server
@@ -272,8 +273,10 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 	
 	private void initQueryCountDownTimer(long time) {
 		queryCountDownTimer = new CountDownTimer(time, time) {
+			@Override
 			public void onTick(long millisUntilFinished) {}
 			
+			@Override
 			public void onFinish() {
 				asyncNotificationQuery = new AsyncNotificationQuery();
 				asyncNotificationQuery.execute();
@@ -460,17 +463,17 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 			case Task.TASK_TYPE_ABCD:
 				ABCDTask abcdTask = (ABCDTask) newTask;
 				if (r.nextBoolean()) {
-					abcdTask.setQuestion(((ABCDTask) task).getQuestion() + " NEW MOCK");
+					abcdTask.setQuestion(((ABCDTask) task).getQuestion() + " NOTIFICATION");
 				}
 				if (r.nextBoolean()) {
 					abcdTask.setAnswers(new String[] { "MockA", "MockB", "MockC", "MockD" });
 				}
 			default:
 				if (r.nextBoolean()) {
-					newTask.setTitle(task.getTitle() + " NEW MOCK");
+					newTask.setTitle(task.getTitle() + " NOTIFICATION");
 				}
 				if (r.nextBoolean()) {
-					newTask.setDescription(task.getDescription() + " NEW MOCK");
+					newTask.setDescription(task.getDescription() + " NOTIFICATION");
 				}
 				if (r.nextBoolean()) {
 					newTask.setIsRepetable(task.isRepetable() ? false : true);
@@ -498,13 +501,13 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 			game.setGameVersion(r.nextDouble());
 		}
 		if (r.nextBoolean()) {
-			game.setTitle(game.getTitle() + " NEW MOCK");
+			game.setTitle(game.getTitle() + " NOTIFICATION");
 		}
 		if (r.nextBoolean()) {
-			game.setOperatorName(game.getOperatorName() + " NEW MOCK");
+			game.setOperatorName(game.getOperatorName() + " NOTIFICATION");
 		}
 		if (r.nextBoolean()) {
-			game.setWinningStrategy(game.getWinningStrategy() + " NEW MOCK");
+			game.setWinningStrategy(game.getWinningStrategy() + " NOTIFICATION");
 		}
 		if (r.nextBoolean()) {
 			game.setDifficulty(r.nextInt(5));
@@ -513,16 +516,16 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 			game.setReward(game.getReward() ? false : true);
 		}
 		if (r.nextBoolean()) {
-			game.setPrizesInfo(game.getPrizesInfo() + " NEW MOCK");
+			game.setPrizesInfo(game.getPrizesInfo() + " NOTIFICATION");
 		}
 		if (r.nextBoolean()) {
-			game.setDescription(game.getDescription() + " NEW MOCK");
+			game.setDescription(game.getDescription() + " NOTIFICATION");
 		}
 		if (r.nextBoolean()) {
-			game.setComments(game.getComments() + " NEW MOCK");
+			game.setComments(game.getComments() + " NOTIFICATION");
 		}
 		if (r.nextBoolean()) {
-			game.setLocation(game.getLocation() + " NEW MOCK");
+			game.setLocation(game.getLocation() + " NOTIFICATION");
 		}
 		
 		return game;
@@ -617,10 +620,12 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 	
 	public void executeTestWebServerQuery() {
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
 				
 				Looper.prepare();
 				new Handler().post(new Runnable() {
+					@Override
 					public void run() {
 						WebServerHelper.getUrbanGameBaseList(getInstance(context));
 					}
