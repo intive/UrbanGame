@@ -144,10 +144,9 @@ status.finished = Finished
 
 
 archive.title = Games archive
-tasks.newtaskbtn = New task
+tasks.newtaskbtn = CREATE NEW TASK
 tasks.headername = Task details
 tasks.headertype = Type
-tasks.tablecaption = List of tasks
 tasks.headervisible = Conditions of visibility
 tasks.headeroptions = Options
 tasks.headerversion = Version
