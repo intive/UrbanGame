@@ -2,7 +2,6 @@ package com.blstream.urbangame;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +20,6 @@ import com.blstream.urbangame.fragments.TabManager;
 import com.blstream.urbangame.fragments.TaskDescriptionFragment;
 
 public class ActiveTaskActivity extends AbstractMenuActivity {
-	private final String TAG = ActiveTaskActivity.class.getSimpleName();
 	
 	public static final String TASK_ID = "task_id";
 	public static final String TAG_TAB_DESCRIPTION = "fragment_description";
@@ -66,13 +64,6 @@ public class ActiveTaskActivity extends AbstractMenuActivity {
 		
 		configureActionBar();
 		databaseInterface.closeDatabase();
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		this.supportInvalidateOptionsMenu();
-		Log.i(TAG, "onResume completed");
 	}
 	
 	private void configureActionBar() {
@@ -172,19 +163,13 @@ public class ActiveTaskActivity extends AbstractMenuActivity {
 			textViewTaskRepeatable.setText(getText(R.string.label_taskNon_repeatable));
 		}
 		
-		if (playerTaskSpecific == null) {
-			imageViewNewTaskIndicator.setImageDrawable(null);
-			textViewTaskPoints.setText("0");
+		if (playerTaskSpecific.getAreChanges()) {
+			imageViewNewTaskIndicator.setImageResource(R.drawable.new_task_indicator);
 		}
 		else {
-			if (playerTaskSpecific.getAreChanges()) {
-				imageViewNewTaskIndicator.setImageResource(R.drawable.new_task_indicator);
-			}
-			else {
-				imageViewNewTaskIndicator.setImageDrawable(null);
-			}
-			textViewTaskPoints.setText(playerTaskSpecific.getPoints().toString());
+			imageViewNewTaskIndicator.setImageDrawable(null);
 		}
+		textViewTaskPoints.setText(playerTaskSpecific.getPoints().toString());
 		
 		String statusString = "";
 		String headerDescription = "";
@@ -215,8 +200,8 @@ public class ActiveTaskActivity extends AbstractMenuActivity {
 		TextView textViewStatus = (TextView) findViewById(R.id.textViewActiveTaskActivityStatus);
 		textViewStatus.setText(statusString);
 		
-		View emptyHeader = findViewById(R.id.includeActiveTaskDescriptionHeader);
-		((TextView) emptyHeader.findViewById(R.id.TextViewMyGamesHeader)).setText(headerDescription);
+		TextView header = (TextView) findViewById(R.id.textViewActiveTaskDescriptionHeader);
+		header.setText(headerDescription);
 		
 		TextView textViewDescription = (TextView) findViewById(R.id.textViewActiveTaskDescription);
 		textViewDescription.setText(descriptionString);

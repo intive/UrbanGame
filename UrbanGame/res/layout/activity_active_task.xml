@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/view_margin"
+    android:layout_marginLeft="@dimen/margin_16"
+    android:layout_marginRight="@dimen/margin_16"
     android:orientation="vertical"
     tools:ignore="HardcodedText" >
 
@@ -11,74 +12,52 @@
         android:id="@+id/included_list_item_task"
         layout="@layout/list_item_task" />
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/imageView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="10" >
+        android:src="?attr/header_separator_drawable" />
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="9"
-            android:src="?attr/header_separator_drawable" />
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/textViewActiveTaskActivityStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="10" >
+        android:paddingLeft="@dimen/margin_8"
+        android:paddingRight="@dimen/margin_8"
+        android:paddingTop="@dimen/margin_8"
+        android:text="canceled"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+id/textViewActiveTaskActivityStatus"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="9"
-            android:padding="@dimen/view_margin"
-            android:text="canceled"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/textViewActiveTaskActivityPointsInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="10" >
+        android:paddingBottom="@dimen/margin_8"
+        android:paddingLeft="@dimen/margin_8"
+        android:paddingRight="@dimen/margin_8"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <TextView
-            android:id="@+id/textViewActiveTaskActivityPointsInfo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="9"
-            android:padding="@dimen/view_margin"
-            android:text=""
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-    </LinearLayout>
-  
-    <include
-        android:id="@+id/includeActiveTaskDescriptionHeader"
-        layout="@layout/expandable_lists_header" />
-
-    <LinearLayout
-        android:id="@+id/linearLayoutActiveTaskDescription"
+    <TextView
+        android:id="@+id/textViewActiveTaskDescriptionHeader"
+        style="@style/styleExpandableListHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="10" >
+        android:paddingLeft="@dimen/margin_8"
+        android:paddingRight="@dimen/margin_8"
+        android:text="Header" />
 
-        <TextView
-            android:id="@+id/textViewActiveTaskDescription"
-            android:layout_width="0dp"
-            android:layout_weight="9"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/view_margin"
-            android:text="description" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="?attr/header_separator_drawable" />
+
+    <TextView
+        android:id="@+id/textViewActiveTaskDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_8"
+        android:text="description" />
 
 </LinearLayout>
