@@ -29,6 +29,8 @@ import com.blstream.urbangame.database.helper.SQLCipherHelper;
 import com.blstream.urbangame.database.helper.SQLInterface;
 import com.blstream.urbangame.database.helper.SQLiteHelper;
 
+
+
 public class Database implements DatabaseInterface {
 	
 	//This is a flag that tells which database should be used (encrypted or without encryption)
@@ -704,6 +706,8 @@ public class Database implements DatabaseInterface {
 			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
 			values.put(USER_TASKS_SPECIFIC_KEY_CHANGES, taskSpecific.getChanges());
 			values.put(USER_TASKS_SPECIFIC_KEY_STATUS, taskSpecific.getStatus());
+			values.put(USER_TASKS_SPECIFIC_KEY_SELECTED_ANSWERS,
+				booleanArrayToString(taskSpecific.getSelectedAnswers()));
 			
 			boolean isInsertOK = db.insert(USER_TASKS_SPECIFIC_TABLE_NAME, null, values) != -1;
 			
@@ -711,6 +715,36 @@ public class Database implements DatabaseInterface {
 			return isInsertOK;
 		}
 		else return false;
+	}
+	
+	//needed for transformation from boolean array to string and backwards
+	private static char SELECTED_ANSWER = 'v';
+	private static char UNSELECTED_ANSWER = 'x';
+	
+	private String booleanArrayToString(boolean[] selectedAnswers) {
+		if (selectedAnswers == null) return null;
+		
+		StringBuilder builder = new StringBuilder();
+		for (boolean selectedAnswer : selectedAnswers) {
+			if (selectedAnswer) {
+				builder.append(SELECTED_ANSWER);
+			}
+			else {
+				builder.append(UNSELECTED_ANSWER);
+			}
+		}
+		return builder.toString();
+	}
+	
+	private boolean[] stringToBooleanArray(String selections) {
+		if (selections == null) return null;
+		
+		boolean[] selectedArray = new boolean[selections.length()];
+		
+		for (int i = 0; i < selections.length(); i++) {
+			selectedArray[i] = selections.charAt(i) == SELECTED_ANSWER;
+		}
+		return selectedArray;
 	}
 	
 	private boolean isTaskSpecificOk(PlayerTaskSpecific taskSpecific) {
@@ -722,7 +756,8 @@ public class Database implements DatabaseInterface {
 		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		String[] taskColumns = { USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, USER_TASKS_SPECIFIC_KEY_TASK_ID,
 			USER_TASKS_SPECIFIC_KEY_POINTS, USER_TASKS_SPECIFIC_KEY_IS_FINISHED, USER_TASKS_SPECIFIC_KEY_ARE_CHANGES,
-			USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, USER_TASKS_SPECIFIC_KEY_CHANGES, USER_TASKS_SPECIFIC_KEY_STATUS };
+			USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, USER_TASKS_SPECIFIC_KEY_CHANGES, USER_TASKS_SPECIFIC_KEY_STATUS,
+			USER_TASKS_SPECIFIC_KEY_SELECTED_ANSWERS };
 		
 		Cursor cursor = db.query(USER_TASKS_SPECIFIC_TABLE_NAME, taskColumns, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL
 			+ "=? AND " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "=?",
@@ -748,11 +783,13 @@ public class Database implements DatabaseInterface {
 			stringToBoolean(cursor.getString(TaskSpecificFields.IS_FINISHED.value)),
 			stringToBoolean(cursor.getString(TaskSpecificFields.ARE_CHANGES.value)),
 			stringToBoolean(cursor.getString(TaskSpecificFields.WAS_HIDDEN.value)),
-			cursor.getString(TaskSpecificFields.CHANGES.value), cursor.getInt(TaskSpecificFields.STATUS.value));
+			cursor.getString(TaskSpecificFields.CHANGES.value), cursor.getInt(TaskSpecificFields.STATUS.value),
+			stringToBooleanArray(cursor.getString(TaskSpecificFields.SELECTED_ANSWERS.value)));
 	}
 	
 	private enum TaskSpecificFields {
-		PLAYER_EMAIL(0), TASK_ID(1), POINTS(2), IS_FINISHED(3), ARE_CHANGES(4), WAS_HIDDEN(5), CHANGES(6), STATUS(7);
+		PLAYER_EMAIL(0), TASK_ID(1), POINTS(2), IS_FINISHED(3), ARE_CHANGES(4), WAS_HIDDEN(5), CHANGES(6), STATUS(7), SELECTED_ANSWERS(
+			8);
 		int value;
 		
 		private TaskSpecificFields(int x) {
@@ -802,6 +839,10 @@ public class Database implements DatabaseInterface {
 		}
 		if (taskSpecific.getStatus() != null) {
 			values.put(USER_TASKS_SPECIFIC_KEY_STATUS, taskSpecific.getStatus());
+		}
+		if (taskSpecific.getSelectedAnswers() != null) {
+			values.put(USER_TASKS_SPECIFIC_KEY_SELECTED_ANSWERS,
+				booleanArrayToString(taskSpecific.getSelectedAnswers()));
 		}
 	}
 	

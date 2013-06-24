@@ -19,7 +19,7 @@ public class DatabaseTaskSpecificUpdateTest extends AndroidTestCase {
 			database = new Database(mContext);
 		}
 		playerTaskSpecific = new PlayerTaskSpecific("em@em.em", 1L, 10, false, false, false, "something",
-			PlayerTaskSpecific.ACTIVE);
+			PlayerTaskSpecific.ACTIVE, null);
 	}
 	
 	@Override
@@ -34,7 +34,7 @@ public class DatabaseTaskSpecificUpdateTest extends AndroidTestCase {
 		boolean isOK = database.insertPlayerTaskSpecific(playerTaskSpecific);
 		assertTrue(isOK);
 		playerTaskSpecific = new PlayerTaskSpecific("em@em.em", 1L, 20, true, true, true, "other",
-			PlayerTaskSpecific.CANCELED);
+			PlayerTaskSpecific.CANCELED, null);
 		isOK = database.updatePlayerTaskSpecific(playerTaskSpecific);
 		assertTrue(isOK);
 		PlayerTaskSpecific ptsNew = database.getPlayerTaskSpecific(1L, "em@em.em");

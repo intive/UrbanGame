@@ -19,7 +19,7 @@ public class DatabaseTaskSpecificInsertTest extends AndroidTestCase {
 			database = new Database(mContext);
 		}
 		playerTaskSpecific = new PlayerTaskSpecific("em@em.em", 1L, 10, false, false, false, "no",
-			PlayerTaskSpecific.ACTIVE);
+			PlayerTaskSpecific.ACTIVE, null);
 	}
 	
 	@Override

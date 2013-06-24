@@ -1,6 +1,5 @@
 package com.blstream.urbangame.database.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import android.os.Parcel;
@@ -12,12 +11,12 @@ public class ABCDTask extends Task {
 	public static final String FIELD_NAME_ANSWERS = "Answers";
 	
 	private String question;
-	private ArrayList<Answer> listOfAnswers;
+	private String[] answers;
 	
 	public ABCDTask() {
 		super();
 		question = null;
-		listOfAnswers = null;
+		answers = null;
 	}
 	
 	/**
@@ -45,29 +44,14 @@ public class ABCDTask extends Task {
 	 * @return the answers
 	 */
 	public String[] getAnswers() {
-		if (listOfAnswers == null) return null;
-		else {
-			String[] answersString = new String[listOfAnswers.size()];
-			for (int i = 0; i < listOfAnswers.size(); i++) {
-				answersString[i] = listOfAnswers.get(i).getAnswer();
-			}
-			return answersString;
-		}
+		return answers;
 	}
 	
 	/**
 	 * @param answers the answers to set
 	 */
 	public void setAnswers(String[] answers) {
-		if (answers == null) {
-			this.listOfAnswers = null;
-		}
-		else {
-			this.listOfAnswers = new ArrayList<Answer>();
-			for (String element : answers) {
-				listOfAnswers.add(new Answer(element));
-			}
-		}
+		this.answers = answers;
 	}
 	
 	/**
@@ -88,9 +72,9 @@ public class ABCDTask extends Task {
 		super(in);
 		question = in.readString();
 		int size = in.readInt();
-		listOfAnswers = new ArrayList<Answer>(size);
+		answers = new String[size];
 		for (int i = 0; i < size; i++) {
-			listOfAnswers.add(new Answer(in));
+			answers[i] = in.readString();
 		}
 	}
 	
@@ -110,17 +94,9 @@ public class ABCDTask extends Task {
 	public void writeToParcel(Parcel out, int flags) {
 		super.writeToParcel(out, flags);
 		out.writeString(question);
-		out.writeInt(listOfAnswers.size());
-		for (Answer answer : listOfAnswers) {
-			answer.writeToParcel(out, flags);
+		out.writeInt(answers.length);
+		for (String answer : answers) {
+			out.writeString(answer);
 		}
-	}
-	
-	public ArrayList<Answer> getAnswersList() {
-		return listOfAnswers;
-	}
-	
-	public void setAnswersList(ArrayList<Answer> answers) {
-		listOfAnswers = answers;
 	}
 }
