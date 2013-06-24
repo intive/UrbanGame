@@ -15,6 +15,7 @@ public class PlayerTaskSpecific {
 	private Boolean wasHidden; //true if it was a hidden task
 	private String changes;
 	private Integer status;
+	private Boolean[] selectedAnswers;
 	
 	/**
 	 * @param playerEmail
@@ -25,9 +26,10 @@ public class PlayerTaskSpecific {
 	 * @param wasHidden
 	 * @param changes
 	 * @param status
+	 * @param selectedAnswers
 	 */
 	public PlayerTaskSpecific(String playerEmail, Long taskID, Integer points, Boolean isFinishedByUser,
-		Boolean areChanges, Boolean wasHidden, String changes, Integer status) {
+		Boolean areChanges, Boolean wasHidden, String changes, Integer status, Boolean[] selectedAnswers) {
 		this.playerEmail = playerEmail;
 		this.taskID = taskID;
 		this.points = points;
@@ -36,10 +38,11 @@ public class PlayerTaskSpecific {
 		this.wasHidden = wasHidden;
 		this.changes = changes;
 		this.status = status;
+		this.selectedAnswers = selectedAnswers;
 	}
 	
 	public PlayerTaskSpecific() {
-		this(null, null, null, null, null, null, null, null);
+		this(null, null, null, null, null, null, null, null, null);
 	}
 	
 	/**
@@ -152,5 +155,19 @@ public class PlayerTaskSpecific {
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	
+	/**
+	 * @return the selectedAnswers
+	 */
+	public Boolean[] getSelectedAnswers() {
+		return selectedAnswers;
+	}
+	
+	/**
+	 * @param selections the selections to set
+	 */
+	public void setSelectedAnswers(Boolean[] selections) {
+		this.selectedAnswers = selections;
 	}
 }

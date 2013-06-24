@@ -14,30 +14,36 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.blstream.urbangame.R;
-import com.blstream.urbangame.database.entity.Answer;
+import com.blstream.urbangame.helpers.Pair;
 
-public class AnswersAdapter extends ArrayAdapter<Answer> {
+public class AnswersAdapter extends ArrayAdapter<Pair<String, Boolean>> {
 	
 	private final Context context;
 	private final int viewResourceId;
 	private ArrayList<String> correctAnswers = null;
+	private final List<Pair<String, Boolean>> items;
 	
 	private class ViewHolder {
 		public TextView textViewAnswer;
 		public CheckBox checkBoxAnswer;
 	}
 	
-	public AnswersAdapter(Context context, int viewResourceId, List<Answer> objects) {
+	public AnswersAdapter(Context context, int viewResourceId, List<Pair<String, Boolean>> objects) {
 		super(context, viewResourceId, objects);
 		this.context = context;
 		this.viewResourceId = viewResourceId;
+		this.items = objects;
+	}
+	
+	public List<Pair<String, Boolean>> getItems() {
+		return items;
 	}
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
 		View row = null;
-		Answer answer = getItem(position);
+		Pair<String, Boolean> answer = getItem(position);
 		ViewHolder viewHolder;
 		
 		if (convertView == null) {
@@ -52,8 +58,8 @@ public class AnswersAdapter extends ArrayAdapter<Answer> {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					int position = (Integer) buttonView.getTag();
-					Answer answer = AnswersAdapter.this.getItem(position);
-					answer.setSelected(isChecked);
+					Pair<String, Boolean> answer = AnswersAdapter.this.getItem(position);
+					answer.second = isChecked;
 				}
 			});
 			
@@ -64,12 +70,12 @@ public class AnswersAdapter extends ArrayAdapter<Answer> {
 			viewHolder = (ViewHolder) row.getTag();
 		}
 		
-		viewHolder.textViewAnswer.setText(answer.getAnswer());
+		viewHolder.textViewAnswer.setText(answer.first);
 		viewHolder.checkBoxAnswer.setTag(Integer.valueOf(position));
-		viewHolder.checkBoxAnswer.setChecked(answer.isSelected());
+		viewHolder.checkBoxAnswer.setChecked(answer.second);
 		
 		if (correctAnswers != null) {
-			if (correctAnswers.contains(answer.getAnswer())) {
+			if (correctAnswers.contains(answer.first)) {
 				viewHolder.textViewAnswer.setTextColor(context.getResources().getColor(R.color.answer_green));
 			}
 			else {

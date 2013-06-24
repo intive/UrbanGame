@@ -1,6 +1,7 @@
 package com.blstream.urbangame.fragments;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,19 +19,20 @@ import com.blstream.urbangame.adapters.AnswersAdapter;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.ABCDTask;
-import com.blstream.urbangame.database.entity.Answer;
 import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.dialogs.AnswerDialog;
 import com.blstream.urbangame.dialogs.AnswerDialog.DialogType;
 import com.blstream.urbangame.example.DemoData;
+import com.blstream.urbangame.helpers.Pair;
 
 public class ABCDTaskAnswerFragment extends SherlockFragment {
 	
 	private AnswersAdapter adapter;
 	private ABCDTask task;
 	private PlayerTaskSpecific playerTaskSpecific;
-	private ArrayList<Answer> answers;
+	private String[] answers;
+	private Boolean[] selections;
 	AnswerDialog dialog;
 	
 	public class ServerResponseToSendedAnswers {
@@ -50,7 +52,7 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 		playerTaskSpecific = database.getPlayerTaskSpecific(task.getId(), database.getLoggedPlayerID());
 		if (playerTaskSpecific == null) {
 			playerTaskSpecific = new PlayerTaskSpecific(database.getLoggedPlayerID(), task.getId(), 0, false, false,
-				task.isHidden(), null, PlayerTaskSpecific.ACTIVE);
+				task.isHidden(), null, PlayerTaskSpecific.ACTIVE, null);
 		}
 		database.closeDatabase();
 	}
@@ -71,12 +73,53 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 		TextView textViewQuestion = (TextView) view.findViewById(R.id.textViewQuestion);
 		textViewQuestion.setText(task.getQuestion());
 		
-		answers = task.getAnswersList();
-		adapter = new AnswersAdapter(getActivity(), R.layout.list_item_answer, answers);
+		answers = task.getAnswers();
+		selections = playerTaskSpecific.getSelectedAnswers();
+		List<Pair<String, Boolean>> adapterAnswersAndSelectionsList = makeListFromArrays(answers, selections);
+		adapter = new AnswersAdapter(getActivity(), R.layout.list_item_answer, adapterAnswersAndSelectionsList);
 		ListView list = (ListView) view.findViewById(R.id.listViewAnswers);
 		list.setAdapter(adapter);
 		
 		return view;
+	}
+	
+	private List<Pair<String, Boolean>> makeListFromArrays(String[] answers, Boolean[] selections) {
+		List<Pair<String, Boolean>> list = new ArrayList<Pair<String, Boolean>>();
+		if (selections == null || answers.length != selections.length) { //this is when some task update could provide more or less answers in task update
+			for (String answer : answers) {
+				list.add(new Pair<String, Boolean>(answer, false));
+			}
+		}
+		else {
+			for (int i = 0; i < answers.length; i++) {
+				list.add(new Pair<String, Boolean>(answers[i], selections[i]));
+			}
+		}
+		return list;
+	}
+	
+	@Override
+	public void onDestroyView() {
+		
+		List<Pair<String, Boolean>> list = adapter.getItems();
+		Boolean[] selections = new Boolean[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			selections[i] = list.get(i).second;
+		}
+		
+		//database update
+		PlayerTaskSpecific updatePlayerTaskSpecific = new PlayerTaskSpecific();
+		updatePlayerTaskSpecific.setPlayerEmail(playerTaskSpecific.getPlayerEmail());
+		updatePlayerTaskSpecific.setTaskID(playerTaskSpecific.getTaskID());
+		updatePlayerTaskSpecific.setSelectedAnswers(selections);
+		DatabaseInterface db = new Database(getActivity());
+		db.updatePlayerTaskSpecific(updatePlayerTaskSpecific);
+		db.closeDatabase();
+		
+		// parcelable content update
+		playerTaskSpecific.setSelectedAnswers(selections);
+		
+		super.onDestroyView();
 	}
 	
 	private void onABCDAnswerSubmited(View view) {
@@ -84,9 +127,9 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 		if (task.isRepetable() || (!playerTaskSpecific.isFinishedByUser())) {
 			// If task is repeatable or user has not finished it yet.
 			ArrayList<String> answers = new ArrayList<String>();
-			for (Answer element : this.answers) {
-				if (element.isSelected()) {
-					answers.add(element.getAnswer());
+			for (int i = 0; i < this.answers.length; i++) {
+				if (selections[i]) {
+					answers.add(this.answers[i]);
 				}
 			}
 			ProgressDialog progressDialog = new ProgressDialog(getActivity());
