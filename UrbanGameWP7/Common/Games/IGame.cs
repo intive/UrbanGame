@@ -20,6 +20,8 @@ namespace Common
 
         string GameLogo { get; set; }
 
+        string GameLogoFullUrl { get; }
+
         DateTime GameStart { get; set; }
 
         DateTime GameEnd { get; set; }

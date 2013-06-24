@@ -4,22 +4,26 @@ using System.Linq;
 using System.Text;
 using Common;
 using System.Data.Linq;
+using Newtonsoft.Json;
 
 namespace WebService.BOMock
 {
     public class GameMock : BOBase, IGame
     {
+        const string imagesUrl = "http://urbangame.patronage.blstream.com/assets/images/";
+
         public GameMock()
         {
             _tasks = new EntityEnumerable<ITask, TaskMock>(new EntitySet<TaskMock>(OnTaskAdded, OnTaskRemoved));
             _alerts = new EntityEnumerable<IAlert, AlertMock>(new EntitySet<AlertMock>(OnAlertAdded, OnAlertRemoved));
             _highScores = new EntityEnumerable<IHighScore, HighScoreMock>(new EntitySet<HighScoreMock>(OnHighScoreAdded, OnHighScoreRemoved));
         }
-
+        //points, maxpoints, numberOfCompletedTasks, numberOfPlayers, (gameLat, gameLon - ale tego ponoc ma nie byc), rank, 
         #region Id
 
         private int _id;
 
+        [JsonProperty(PropertyName = "gid")]
         public int Id
         {
             get
@@ -86,6 +90,7 @@ namespace WebService.BOMock
 
         private string _localization;
 
+        [JsonProperty(PropertyName="location")]
         public string Localization
         {
             get
@@ -108,6 +113,7 @@ namespace WebService.BOMock
 
         private string _gameLogo;
 
+        [JsonProperty(PropertyName = "image")]
         public string GameLogo
         {
             get
@@ -121,7 +127,18 @@ namespace WebService.BOMock
                     NotifyPropertyChanging("GameLogo");
                     _gameLogo = value;
                     NotifyPropertyChanged("GameLogo");
+                    NotifyPropertyChanged("GameLogoFullUrl");
                 }
+            }
+        }
+        #endregion
+
+        #region GameLogoFullUrl
+        public string GameLogoFullUrl
+        {
+            get
+            {
+                return imagesUrl + GameLogo;
             }
         }
         #endregion
@@ -130,6 +147,7 @@ namespace WebService.BOMock
 
         private DateTime _gameStart;
 
+        [JsonProperty(PropertyName="startTime")]
         public DateTime GameStart
         {
             get
@@ -152,6 +170,7 @@ namespace WebService.BOMock
 
         private DateTime _gameEnd;
 
+        [JsonProperty(PropertyName = "endTime")]
         public DateTime GameEnd
         {
             get
@@ -174,6 +193,7 @@ namespace WebService.BOMock
 
         private GameType _gameType;
 
+        [JsonProperty(PropertyName = "winning")]
         public GameType GameType
         {
             get
@@ -306,6 +326,7 @@ namespace WebService.BOMock
 
         private int _numberOfSlots;
 
+        [JsonProperty(PropertyName="maxPlayers")]
         public int NumberOfSlots
         {
             get
@@ -460,6 +481,7 @@ namespace WebService.BOMock
 
         private string _prizes;
 
+        [JsonProperty(PropertyName = "awards")]
         public string Prizes
         {
             get

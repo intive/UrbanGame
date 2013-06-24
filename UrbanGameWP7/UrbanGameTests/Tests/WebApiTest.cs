@@ -21,18 +21,6 @@ namespace UrbanGameTests.Tests
         }
         #endregion
 
-        #region GetGamesTest
-        [TestMethod]
-        public void GetGamesTest()
-        {
-            var ggwsm = GetGameWebServiceMock();
-            var games = new IGame[] { new Game() { Id = 1 }, new Game() { Id = 2 }, new Game() { Id = 3 }, new Game() { Id = 4 }, new Game() { Id = 5 } };
-            ggwsm.ListOfGames.AddRange(games);
-            var result = ggwsm.GetGames();
-            Assert.IsTrue(result.Length == 5);
-        }
-        #endregion
-
         #region GetTasksTest
         [TestMethod]
         public void GetTasksTest()
@@ -58,19 +46,6 @@ namespace UrbanGameTests.Tests
             ggwsm.ListOfGames.AddRange(games);
             var result = ggwsm.GetTasks(1);
             Assert.IsTrue(result[0] == task);
-        }
-        #endregion
-
-        #region GameChangedTest
-        [TestMethod]
-        public void GameChangedTest()
-        {
-            var ggwsm = GetGameWebServiceMock();
-            var games = new IGame[] { new Game() { Id = 1 }, new Game() { Id = 2 }, new Game() { Id = 3 }, new Game() { Id = 4 }, new Game() { Id = 5 } };
-            ggwsm.ListOfGames.AddRange(games);
-            ggwsm.ChangeGame(1);
-            var result = ggwsm.GetGames();
-            Assert.IsTrue(result[0].NumberOfCompletedTasks == 1);
         }
         #endregion
     }

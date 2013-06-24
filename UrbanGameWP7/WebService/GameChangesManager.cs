@@ -39,9 +39,9 @@ namespace WebService
 
         public void GameChanged(int gid)
         {
-            Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(async () =>
                 {
-                    IGame newGame = _gameWebService.GetGameInfo(gid);
+                    IGame newGame = await _gameWebService.GetGameInfo(gid);
                     IRepository<IGame> repo = _unitOfWorkLocator().GetRepository<IGame>();
                     IGame toUpdate = repo.All().FirstOrDefault(g => g.Id == gid);
 

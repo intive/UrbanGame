@@ -16,7 +16,7 @@ namespace UrbanGame.Converters
             {
                 case GameDifficulty.Easy : return AppResources.Easy;
                 case GameDifficulty.Medium : return AppResources.Medium;
-                case GameDifficulty.Difficult : return AppResources.Hard;
+                case GameDifficulty.Hard : return AppResources.Hard;
                 default: return AppResources.Undefinied;
             }
         }
