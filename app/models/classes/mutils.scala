@@ -13,6 +13,7 @@ case class GamesDetails(id: Option[Int], name: String, version: Int = 1, descrip
 case class TasksDetails(id: Option[Int], gameId: Int, version: Int, name: String, description: String, 
   deadline: DateTime, maxpoints: Int, maxattempts: Int)
 case class SkinsDetails(id: Option[Int], gameId: Int, icon: String)
+case class Notification(id: Option[Int], gameId: Int, version: Int, notification: String, date: DateTime)
 
 case class GamesList(id: Int, name: String, version: Int, location: String, startTime: DateTime, 
   endTime: DateTime, status: String, image: String, tasksNo: Int)

@@ -45,6 +45,7 @@
 @blacky: #000;
 @whitey: #fff;
 @lightgray: #ddd;
+@gray: #8A8989;
 @darkgray: #6e6e6e;
 @btndarkgray: #6e6e6e;
 @btnlightgray: #b5b5b5;
@@ -446,7 +447,6 @@ a:hover>[class^="icon-"] {
         form.navbar-form {
             a, a:active, a:link {
                 color: @blacky;
-                font-weight: bold;
             }
 
             a:hover {
@@ -473,6 +473,11 @@ a:hover>[class^="icon-"] {
                 padding-top: 2px;
                 margin-top: 2px;
             }
+        }
+
+        form.navbar-form a.help-inline, form.navbar-form a.help-inline:link, 
+        form.navbar-form a.help-inline:active, form.navbar-form label.checkbox {
+            color: @gray;
         }
     }
 }
@@ -556,11 +561,12 @@ a:hover>[class^="icon-"] {
         unicode-bidi: bidi-override;
         direction: rtl;
         text-align: center;
+        margin-top: 5px;
 
         .icon-circle {
             color: @darkgray;
             font-size: 15px;
-            margin: 0 3px;
+            margin: 0 7px;
             vertical-align: top;
         }
 

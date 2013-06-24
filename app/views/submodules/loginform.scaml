@@ -20,7 +20,7 @@
 - if(user != None)
     %form.navbar-form.pull-right(action={routes.Application.logout} method="get")
         = Messages("loggedInAs")(lan)
-        %a(href="/my/options")
+        %a.bold(href="/my/options")
             = user.get.name
             %i.icon-user
         %input.btn.btn-small(type="submit" value={Messages("logout")(lan)})
@@ -31,12 +31,12 @@
                 .row
                     %input.input-medium(type="text" placeholder={Messages("email")(lan)} name="user.email")
                 .row
-                    %label.checkbox.inline
+                    %label.checkbox.inline.lower
                         %input(type="checkbox" name="remember" value="true" disabled) = Messages("remember")(lan)
             .span
                 .row
                     %input.input-medium(type="password" placeholder={Messages("password")(lan)} name="user.password")
                 .row
-                    %a.help-inline(href="/") = Messages("forgotpass")(lan)
+                    %a.help-inline.lower(href="/") = Messages("forgotpass")(lan)
             .span
                 %input.btn.btn-success(type="submit" value={Messages("login")(lan)})
