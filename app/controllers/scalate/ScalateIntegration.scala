@@ -47,9 +47,10 @@ object Scalate {
     engine.classLoader = Play.classloader
     engine.importStatements = List(
       "import controllers._",
-      "import play.api.i18n.Messages",
-      "import play.api.i18n.Lang",
-      "import play.api.Application"
+      "import play.api.i18n._",
+      "import play.api.Application",
+      "import models.utils._",
+      "import play.api.mvc._"
     )
     ScamlOptions.format = ScamlOptions.Format.html5
     engine
@@ -58,14 +59,15 @@ object Scalate {
   def apply(template: String, myformat: String = format) = Template(template + "." + myformat)
 
   case class Template(name: String) {
-    def render(args: (Symbol, Any)*)(implicit lang: play.api.i18n.Lang, app: play.api.Application) = {
+    def render(args: (Symbol, Any)*)(implicit request: play.api.mvc.RequestHeader, lang: play.api.i18n.Lang, app: play.api.Application) = {
         
       import scala.language.postfixOps
 
-      val extraBindings: Traversable[Binding] = Traversable(Binding(name="lan", className="play.api.i18n.Lang", isImplicit=true), Binding(name="app", className="play.api.Application", isImplicit=true))
+      val extraBindings: Traversable[Binding] = Traversable(Binding(name="req", className="play.api.mvc.RequestHeader", isImplicit=true), 
+        Binding(name="lan", className="play.api.i18n.Lang", isImplicit=true), Binding(name="app", className="play.api.Application", isImplicit=true))
       val bindings = args.map {
             case (k, v) => k.name -> v
-      }.toMap + (("lan", lang),("app", app))
+      }.toMap + (("req", request),("lan", lang),("app", app))
 
       ScalateContent{
         scalateEngine.layout(name, bindings, extraBindings)

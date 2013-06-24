@@ -17,13 +17,14 @@
 
 -@ val app: Application
 
-.span6
+.span6.padd-right
     -render("submodules/registration.scaml")
-.span6
-    .row
-        Last created games
-        %br/
-        play the game for free
+.span6.padd-left
+    .row.parheader
+        %p
+            %span.h1 Last created games
+            %br/
+            %span.lower Play the game for free
     .row
         .row
             .span6

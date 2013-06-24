@@ -14,10 +14,10 @@
     * limitations under the License.
 
 -@ var title: String = "Default title"
--@ val request: play.api.mvc.Request[Any]
 -@ var body: String
 -@ var scripts: String = ""
 -@ var head: String = ""
+-@ val req: RequestHeader
 -@ val lan: Lang
 -@ val app: Application
 
@@ -31,7 +31,7 @@
         %link(rel="stylesheet" media="screen" href={routes.Assets.at("stylesheets/bootstrap-responsive.min.css")})
         -# Bootstrap Lightbox
         %link(rel="stylesheet" media="screen" href={routes.Assets.at("stylesheets/bootstrap-lightbox.min.css")})
-        -# Font Awsome
+        -# Font Awesome
         %link(href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet")
         -# Jquery ui css
         %link(rel="stylesheet" media="screen" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css")
@@ -43,26 +43,34 @@
     %body(ng-cloak class="ng-cloak")
         #wrap
             .masthead
-                .row.pull-right.loginform
-                    %form.navbar-form.pull-right
-                        You are logged in as SamplerUser
-                        %input.btn(type="submit" value={Messages("login.logout")(lan)})
+                .row.loghead
+                    .pull-right.loginform
+                        - render("submodules/loginform.scaml")
                 .clearfix
                 .row.myheader
                     %h3.offset1.logo 
-                        %a(href="/") LOGO
+                        %a(href={routes.GamesCtrl.myGames})
+                            %img(src={routes.Assets.at("images/logo.png")})
                     %ul.navbar
                         .navbar-inner
                             .container
                                 %ul.nav.nav-tabs(ng-controller="menuCtrl")
                                     %li(ng-class="{active: location == '/my/games/new'}")
-                                        %a(href="/my/games/new") = Messages("menu.newgame")
+                                        %a(href="/my/games/new") 
+                                            %i.icon-plus
+                                            = Messages("menu.newgame")
                                     %li(ng-class="{active: checkGameLocation() || location == '/my/games'}")
-                                        %a(href="/my/games") = Messages("menu.mygames")
+                                        %a(href="/my/games") 
+                                            %i.icon-home
+                                            = Messages("menu.mygames")
                                     %li(ng-class="{active: location == '/my/games/archive'}")
-                                        %a(href="/my/games/archive") = Messages("general.archive")
+                                        %a(href="/my/games/archive") 
+                                            %i.icon-briefcase
+                                            = Messages("general.archive")
                                     %li(ng-class="{active: location == '/my/options'}")
-                                        %a(href="/my/options") = Messages("general.options")
+                                        %a(href="/my/options") 
+                                            %i.icon-wrench
+                                            = Messages("general.options")
 
             .container-narrow
                 .row-fluid

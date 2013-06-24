@@ -1,0 +1,51 @@
+-#
+    *Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+    *        http://blstream.github.com/UrbanGame/
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *        http://www.apache.org/licenses/LICENSE-2.0
+    * 
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+
+-attributes("layout") = ("layouts/home.scaml")
+
+-@ val lan: Lang
+-@ var loginForm: play.api.data.Form[(Boolean, Option[models.utils.Operator])]
+
+.span12
+    .row
+        - if(loginForm.hasErrors)
+            .alert.alert-error
+                = loginForm.errors.map 
+                    - { error =>
+                        = Messages(error.message)(lan)
+                        %br/
+                    - }
+    .row
+        .span6.padd-right
+            %form#auth.form-login.form-horizontal(action={routes.Application.authenticate} method="post" name="loginForm")
+                .control-group
+                    %label.control-label(for="user.email") = Messages("email")(lan)
+                    .controls
+                        %input.input-large(type="text" placeholder={Messages("email")(lan)} name="user.email" id="user.email" 
+                            value={if(loginForm.data.contains("user.email")) loginForm.data("user.email")})
+                .control-group
+                    %label.control-label(for="user.password") = Messages("password")(lan)
+                    .controls
+                        %input.input-large(type="password" placeholder={Messages("password")(lan)} name="user.password" id="user.password")
+                .control-group
+                    .controls
+                        %label.checkbox
+                            %input(type="checkbox" name="remember" value="true" checked={if(loginForm.data.contains("remember")) true else false} disabled) = Messages("remember")(lan)
+                        %input.btn.btn-success.pull-right(type="submit" value={Messages("login")(lan)})
+        .span6.padd-left
+            .row
+                %a.help-inline(href="/") = Messages("forgotpass")(lan)
+            .row
+                %a.help-inline(href="/") = Messages("login.register")(lan)

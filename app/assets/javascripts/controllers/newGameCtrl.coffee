@@ -24,6 +24,8 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         {no: 4, name: Messages("js.newgame.tab.step4title")}
     ]
     $scope.gameid = null
+    $scope.previousname = null
+
     $scope.game = {
         name: "",
         description: "",
@@ -34,20 +36,28 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         endDate: null,
         winning: "max_points",
         winningNum: 1,
-        diff: 'easy',
+        diff: null,
         playersNum: null,
         awards: "",
         tasksNo: 0,
         status: "project",
         version: 1
     }
+
+    $scope.tasks = [
+        {name:"taskOne", type:"GPS", visible:"None", locations: [{lat:51.107885,lng:17.042338,radius:232},{lat:51.107885,lng:17.028538,radius:122}], version:1.0, maxPoints:7},
+        {name:"taskTwo", type:"ABC", visible:"None", version:1.0, maxPoints:10},
+        {name:"taskThree", type:"GPS", visible:"None", locations: [{lat:51.10235,lng:17.042328,radius:43},{lat:51.137885,lng:17.038538,radius:222}], version:1.0, maxPoints:7}
+    ]
+
     $scope.skin = {
         image: "games/gameicon.png"
     }
+
     $scope.error = null
     $scope.editable = true
     $scope.dateFormat = Messages("dateformatlong")
-
+    
     # ------------------ EDIT MODE
     $scope.isEdit = ->
         if (/\/my\/games\/\d+\/edit/gi.test(window.location.pathname))
@@ -87,6 +97,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 (data) ->
                     if data.status == 'published' || data.status == 'project'
                         loadModelData(data)
+                        $scope.previousname=data.name
                         $scope.error = null
                         $scope.editable = true
                     else
@@ -101,7 +112,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 (data) ->
                         window.location = "/my/games"
                 (error) ->
-                    $scope.error = Messages("js.errors.ajax", "publishing")
+                    $scope.error = Messages("js.errors.ajax", "publishing") + " " + Messages("js.errors.aftereffects")
             )
         ,
         "save": ->
@@ -131,13 +142,19 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             )
         ,
         "checkName": ->
+            $("#processing").removeClass("img-ok img-error").addClass("img-processing")
+            $scope.form.$setValidity "nameuniqueunknown", false
             Games.checkName(
                 {data: $scope.game.name},
                 (result) ->
                     if result.val
+                        $("#processing").removeClass("img-processing").addClass("img-ok")
                         $scope.form.$setValidity "nameunique", true
+                        
                     else
+                        $("#processing").removeClass("img-processing").addClass("img-error")
                         $scope.form.$setValidity "nameunique", false
+                    $scope.form.$setValidity "nameuniqueunknown", true
                     $scope.error = null
                 (error) ->
                     $scope.error = Messages("js.errors.name") + error
@@ -172,8 +189,51 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
 
     # ------------------ GAME NAME VALIDATION
     $scope.isValidName = ->
-        if ($scope.gameid == null || _.isUndefined($scope.gameid))
+        if ($scope.gameid == null || _.isUndefined($scope.gameid) || $scope.game.name != $scope.previousname)
             resource["checkName"]()
+
+    # ------------------ MAP (task list)
+    map = null
+    overlays = []
+    latlngBounds = null
+    $scope.setMap = ->
+        mapOptions = {
+            zoom: 11,
+            center: new google.maps.LatLng(51.107885, 17.038538),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        map = new google.maps.Map(document.getElementById("gpsMap"), mapOptions);
+    
+    $scope.showMarkers = (taskIndex) ->
+        latlngBounds = new google.maps.LatLngBounds()
+        overlay.setMap(null) for overlay in overlays
+        overlays = []
+        task = $scope.tasks[taskIndex]
+        if task.type == "GPS"
+            $scope.createMarker loc, task.name for loc in task.locations
+            map.fitBounds(latlngBounds)
+        else
+            map.setCenter(new google.maps.LatLng(51.107885, 17.038538))
+            map.setZoom(7)
+                
+    $scope.createMarker = (loc,taskName) ->
+        marker = new google.maps.Marker {
+            position: new google.maps.LatLng(loc.lat,loc.lng)
+            }
+        circle =  new google.maps.Circle {
+            radius: loc.radius,
+            strokeColor: "#000000",
+            strokeOpacity: 1,
+            strokeWeight: 1.5,
+            fillColor: "#00FF00",
+            fillOpacity: 0.45,
+            center: marker.position
+        }
+        latlngBounds.extend(marker.position)
+        overlays.push(marker)
+        overlays.push(circle)
+        circle.setMap(map)
+        marker.setMap(map)
 
     # ------------------ STEPS SWITCHING
     $scope.selection = $scope.steps[0]
@@ -182,14 +242,14 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         _.indexOf($scope.steps, $scope.selection)
 
     $scope.isDisabled = (index) ->
-        true if ((index > $scope.getCurrentStepIndex()+1) || ($scope.form.$invalid && index > $scope.getCurrentStepIndex()))
+        true if ((index > $scope.getCurrentStepIndex() + 1) || ($scope.form.$invalid && index > $scope.getCurrentStepIndex()))
 
     $scope.isLast = ->
         !$scope.hasNextStep()
         
     $scope.goToStep = (index) ->
-            $scope.selection = $scope.steps[index] if !_.isUndefined($scope.steps[index])
-
+            $scope.selection = $scope.steps[index] if !_.isUndefined($scope.steps[index]) && !$scope.isDisabled(index)
+            
     $scope.hasNextStep = ->
         stepIndex = $scope.getCurrentStepIndex()
         nextStep = stepIndex + 1
@@ -207,10 +267,9 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         (
             stepIndex = $scope.getCurrentStepIndex()
             if stepIndex == 0
+                $scope.game.location = $("#locationInput").val()
                 $scope.savegame()
             else
-                if stepIndex == 1
-                    !$scope.geolocationBound = false
                 nextStep = stepIndex + 1
                 $scope.selection = $scope.steps[nextStep]
         ) if $scope.hasNextStep()
@@ -220,13 +279,12 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             stepIndex = $scope.getCurrentStepIndex()
             previousStep = stepIndex - 1
             $scope.selection = $scope.steps[previousStep]
-            if ($scope.getCurrentStepIndex()==0)
-                $scope.onTab1Switch() 
+
         ) if $scope.hasPreviousStep()
 
     # ------------------ PLAYERS ENUMERATOR
     $scope.incrementPlayersNum = ->
-        if  $scope.game.playersNum == null
+        if  $scope.game.playersNum == null || $scope.game.playersNum < 2 
             $scope.game.playersNum = 2
         else
             $scope.game.playersNum += 1
@@ -238,13 +296,20 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             $scope.game.playersNum = null
         
     $scope.incrementWinningNum = ->
-        $scope.game.winningNum += 1
+        if $scope.game.winningNum < 1
+            $scope.game.winningNum = 1
+        else
+            $scope.game.winningNum += 1
    
     $scope.decrementWinningNum = ->
-        $scope.game.winningNum -= 1 if $scope.game.winningNum > 1
+        if $scope.game.winningNum <= 1
+            $scope.game.winningNum = 1
+        else
+            $scope.game.winningNum -= 1
         
+    # ------------------- UTILS
     $scope.timezone = "GMT" + ((if new Date().getTimezoneOffset() > 0 then "" else "+")) + (new Date().getTimezoneOffset() / (-60))
-
+    
     $scope.gameduration = ->
         if !$scope.isEdit()
             sdate = new Date($scope.game.startDate.toDateString() + " " + $scope.game.startTime)
@@ -259,40 +324,14 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             Messages("newgame.gametype1")
         else
             Messages("newgame.gametype2")
-    
-    $scope.onTab1Switch = ->
-        setTimeout (->
-            $("#locationInput").on 'click', -> 
-                if (!$scope.geolocationBound) 
-                    $("#locationInput").geocomplete types: ['(cities)']
-                    $scope.geolocationBound=true
-            $("#nameInput").on 'keyup', ->
-                if $scope.game.name!=undefined
-                    $scope.isValidName()
-            $("#locationInput").on 'click', -> $("#locationInput").bind 'propertychange blur input paste', (event)->
-                setTimeout (->
-                    $scope.game.loc = $("#locationInput").val()
-                ), 500
-            $("#startTime, #startDate, #endTime, #endDate").bind 'input blur', (event)->
-                if $scope.game.startDate instanceof Date && $scope.game.endDate instanceof Date && $scope.form.gStartTime.$valid && $scope.form.gEndTime.$valid
-                    from = new Date($scope.game.startDate.getTime())
-                    to = new Date($scope.game.endDate.getTime())
-                    from.setHours(parseInt($scope.game.startTime.split(":")[0]),parseInt($scope.game.startTime.split(":")[1]))
-                    to.setHours(parseInt($scope.game.endTime.split(":")[0]),parseInt($scope.game.endTime.split(":")[1]))
-                    if from.getTime()>to.getTime()
-                        $scope.form.$setValidity "dates", false
-                    else
-                        $scope.form.$setValidity "dates", true
-                else
-                    $scope.form.$setValidity "dates", true
-        ), 200
-
+        
     # ------------------ INIT
-    fillGameModel()
+    $ ->
+        fillGameModel()
 
     # ------------------ WATCH
     $scope.$watch '[game.winningNum, game.playersNum]', ->
-        if _.isUndefined($scope.game.winningNum)
+        if _.isUndefined($scope.game.winningNum) || $scope.game.winningNum < 1
             $scope.form.$setValidity "morewinnersthanplayers", false
         else
             if ($scope.game.playersNum != null)
@@ -303,15 +342,13 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             else
                 $scope.form.$setValidity "morewinnersthanplayers", true
     , true
-        
-    $ ->
-        $scope.onTab1Switch()
+    
 ]
 
 time_regexp = /^(20|21|22|23|[01]\d|\d)(:[0-5]\d)$/
 
 app.directive 'time', ->
-    require: "ngModel"
+    require: "ngModel",
     link: (scope, elm, attr, ctrl) ->
         ctrl.$parsers.unshift (viewValue) ->
             if (time_regexp.test(viewValue))
@@ -321,5 +358,38 @@ app.directive 'time', ->
                 ctrl.$setValidity "time", false
                 undefined
 
+app.directive 'taskListMap', ->
+    restrict: 'A',
+    link: (scope, elm, attr) ->
+        scope.setMap()
+        undefined
+        
+app.directive 'gameName', ->
+    restrict: 'A',
+    link: (scope, elm, attr) ->
+        elm.on 'keyup', ->
+            if scope.game.name!=undefined
+                scope.isValidName()
+        
+app.directive 'geoComplete', ->
+    restrict: 'A',
+    link: (scope, elm, attr) ->
+            elm.geocomplete types: ['(cities)']
             
+app.directive 'timeCheck', ->
+    restrict: 'A',
+    link: (scope, elm, attr) ->
+        $("#startTime, #startDate, #endTime, #endDate").bind 'input blur', (event)->
+            if scope.game.startDate instanceof Date && scope.game.endDate instanceof Date && scope.form.gStartTime.$valid && scope.form.gEndTime.$valid
+                from = new Date(scope.game.startDate.getTime())
+                to = new Date(scope.game.endDate.getTime())
+                from.setHours(parseInt(scope.game.startTime.split(":")[0]),parseInt(scope.game.startTime.split(":")[1]))
+                to.setHours(parseInt(scope.game.endTime.split(":")[0]),parseInt(scope.game.endTime.split(":")[1]))
+                if from.getTime()>to.getTime()
+                    scope.form.$setValidity "dates", false
+                else
+                    scope.form.$setValidity "dates", true
+            else
+                scope.form.$setValidity "dates", true
+    
 

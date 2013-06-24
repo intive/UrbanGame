@@ -182,13 +182,16 @@ app.controller 'myGamesCtrl', ['$scope', '$location', 'Games', 'Utilities', '$fi
         ret
     
     $scope.prevPage = ->
-        if ($scope.currentPage > 0) 
-            $scope.currentPage--
+        $scope.currentPage-- if $scope.currentPage > 0
+            
     
     $scope.nextPage = ->
-        if ($scope.currentPage < $scope.pagedItems.length - 1)
-            $scope.currentPage++
+        $scope.currentPage++ if $scope.currentPage < $scope.pagedItems.length - 1
+            
     
     $scope.setPage = ->
         $scope.currentPage = this.n
+
+    $scope.translate = (code) ->
+        Messages(code)
 ]

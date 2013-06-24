@@ -1,4 +1,4 @@
-/
+-#
     *Copyright 2013 BLStream, BLStream's Patronage Program Contributors
     *        http://blstream.github.com/UrbanGame/
     * 
@@ -13,42 +13,90 @@
     * See the License for the specific language governing permissions and
     * limitations under the License.
 
--import controllers._
--import play.api.i18n.Messages
--import play.api.i18n.Lang
+- attributes("scripts") = capture
+    %script(src={uri("/assets/javascripts/controllers/registrationCtrl.min.js")} type="text/javascript")
 
 -@ val lan: Lang
+-@ var registrationForm: play.api.data.Form[(String, String, (String, String), (String, String), Boolean)]
+
+- def showMsg(key: String) = 
+    -{
+        -if(registrationForm.error(key).isDefined)
+            .alert.alert-error
+                - var args = ""
+                - val len = registrationForm.error(key).get.args.length
+                - if(len > 0)
+                    - for(i <- 0 to len - 1) 
+                        - args = args + registrationForm.error(key).get.args(i) + ","
+                    - args = args.substring(0, args.length - 1)
+                = Messages(registrationForm.error(key).get.message, args)(lan)
+    -}
 
 .row
-    Register for free
-    %br/
-    The application is a web interface that allows to create a game. When the game is created, the organizer can add different tasks for players. We are assuming that many tasks will be related to position on the map and finding something in
-.row
-    %form.form-horizontal(action={routes.Application.register} method="post" name="registration" class="css-form" id="registration")
-        .controls-row
-            .controls-group
-                %label.control-label = Messages("register.name")(lan)
+    %p.upper.h1.bold Register for free
+    %p The application is a web interface that allows to create a game. When the game is created, the organizer can add different tasks for players. We are assuming that many tasks will be related to position on the map and finding something in
+.row(ng-controller="registrationCtrl")
+    %form.form-register.form-horizontal(action={routes.Application.register} method="post" name="registration" class="css-form" id="auth")
+        .control-group
+            %label.control-label = Messages("register.name")(lan)
+            .controls
+                %input(type="text" name="name" id="name" placeholder={Messages("name")(lan)} 
+                    value={if(registrationForm.data.contains("name")) registrationForm.data("name")})
+                != showMsg("name")
+        .control-group
+            %label.control-label = Messages("email")(lan)
+            .controls
+                %input(type="text" name="email" id="email" placeholder={Messages("email")(lan)}
+                    value={if(registrationForm.data.contains("email")) registrationForm.data("email")})
+                != showMsg("email")
+        .control-group
+            %label.control-label = Messages("password")(lan)
+            .controls
+                %input(type="password" name="password.main" id="password.main" placeholder={Messages("password")(lan)})
+                != showMsg("password.main")
+        .control-group
+            %label.control-label = Messages("password.confirm")(lan)
+            .controls
+                %input(type="password" name="password.confirm" id="password.confirm" placeholder={Messages("password.confirm")(lan)})
+                != showMsg("password.confirm")
+        %script(type="text/javascript")
+            var RecaptchaOptions = {theme : 'custom', custom_theme_widget: 'recaptcha_widget'};
+        #recaptcha_widget(style="display:none")
+            .control-group
                 .controls
-                    %input(type="text" name="name" id="name" placeholder={Messages("register.name")(lan)})
-            .controls-group
-                %label.control-label = Messages("register.email")(lan)
+                    %span.pull-left
+                        %a#recaptcha_image.thumbnail(href="#")
+                    %span.pull-left.icons-vertical
+                        %a(href="javascript:Recaptcha.reload()")
+                            %i.icon-refresh(title={Messages("refresh")(lan)})
+                        %a.recaptcha_only_if_image(href="javascript:Recaptcha.switch_type('audio')")
+                            %i.icon-headphones(title={Messages("captcha.getaudio")(lan)})
+                        %a.recaptcha_only_if_audio(href="javascript:Recaptcha.switch_type('image')")
+                            %i.icon-picture(title={Messages("captcha.getimage")(lan)})
+                        %a(href="javascript:Recaptcha.showhelp()")
+                            %i.icon-question-sign(title={Messages("help")(lan)})
+            .control-group
+                %label.control-label = Messages("captcha")(lan)
                 .controls
-                    %input(type="text" name="email" id="email" placeholder={Messages("register.email")(lan)})
-            .controls-group
-                %label.control-label = Messages("register.password")(lan)
-                .controls
-                    %input(type="password" name="password" id="password" placeholder={Messages("register.password")(lan)})
-            .controls-group
-                %label.control-label = Messages("register.captcha")(lan)
-                .controls
-                    %input(type="text" name="captcha" id="captcha" placeholder={Messages("register.captcha")(lan)})
-                    %img(src={routes.Assets.at("images/captcha.png")})
-            .controls-group
-                .controls
-                    %label.checkbox
-                        %input(type="checkbox" name="terms" id="terms") 
-                            I agree to 
-                            %a(href="") Terms of Service 
-                            and 
-                            %a(href="") Privacy Policy
-                    %input.btn.pull-right(type="submit" name="regbtn" id="regbtn" value={Messages("register.submit")(lan)})
+                    %input#recaptcha_response_field(type="text" name="captcha.recaptcha_response_field" placeholder={Messages("captcha")(lan)})
+                    != showMsg("captcha.recaptcha_response_field")
+                    != showMsg("captcha")
+
+        - var pubkey: String = play.api.Play.current.configuration.getString("captcha.publicKey").getOrElse("6LcfKOMSAAAAALG6fl-dfWhb8Dj5E96iwHtkhkL_")
+        - var url: String = "https://www.google.com/recaptcha/api/challenge?k=" + pubkey
+        %script(type="text/javascript" src={url})
+        %noscript
+            %iframe(src="http://www.google.com/recaptcha/api/noscript?k=your_public_key" height="300" width="500" frameborder="0")
+            %br/
+            %textarea(name="recaptcha_challenge_field" rows="3" cols="40")
+            %input(type="hidden" name="captcha.recaptcha_response_field" value="manual_challenge")
+        .control-group
+            .controls
+                %label.checkbox.checkbox-terms
+                    %input(type="checkbox" name="accept" id="accept" value="true" checked={if(registrationForm.data.contains("accept")) true else false}) 
+                        I agree to 
+                        %a(href="") Terms of Service 
+                        and 
+                        %a(href="") Privacy Policy
+                    != showMsg("accept")
+                %input.btn.btn-success.pull-right(type="submit" name="regbtn" id="regbtn" value={Messages("register.submit")(lan)} ng-click="send()")

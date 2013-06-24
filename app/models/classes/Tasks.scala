@@ -46,7 +46,9 @@ trait Tasks { this: ImplicitSession =>
   import models.dal._
 
   def getRowsNo: Int = (for {t <- Tasks} yield t.length).first
+
   def getGameTasksNo(gid: Int): Int = (for {t <- Tasks if t.gameId === gid} yield t.length).first
+
   def createTask(td: TasksDetails): Try[Int] = {
     val in = Try(Tasks.forInsert returning Tasks.id insert td)
 
@@ -57,4 +59,6 @@ trait Tasks { this: ImplicitSession =>
 
     in
   }
+
+  def findAll: Seq[TasksDetails] = Query(Tasks).list
 }

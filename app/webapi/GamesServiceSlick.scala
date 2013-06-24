@@ -31,7 +31,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
       val q = for (
         (g, o) <- GamesView
         if g.status === "published" || g.status === "online"
-      ) yield (g.id, g.version, g.name, g.startTime, g.endTime, g.difficulty, o.login)
+      ) yield (g.id, g.version, g.name, g.startTime, g.endTime, g.difficulty, o.email)
 
       q.elements map { GameSummary.tupled(_) } toList
     }
@@ -43,7 +43,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
         (g, o) <- GamesView if g.id === gid
       ) yield (
         g.id, g.version, g.name, g.description, g.location,
-        o.login, g.created, g.updated, g.startTime, g.endTime,
+        o.email, g.created, g.updated, g.startTime, g.endTime,
         g.started, g.ended, g.winning, g.nWins,
         g.difficulty, g.maxPlayers, g.awards,
         g.status, g.image

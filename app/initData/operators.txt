@@ -1,2 +1,2 @@
-operator1::haslo1
-operator2::haslo2
+operator1@wp.pl::haslo1::op1name::NormalUser
+operator2@wp.pl::haslo2::op2name::Administrator
