@@ -27,7 +27,7 @@ public class DatabaseGamesQueryTest extends AndroidTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		mContext.deleteDatabase(Database.DATABASE_NAME);
+		mContext.deleteDatabase(database.getDatabaseName());
 		database = null;
 	}
 	

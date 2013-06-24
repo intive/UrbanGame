@@ -1,19 +1,21 @@
 package com.blstream.urbangame.database;
 
+//formatter: off
+import static com.blstream.urbangame.database.DatabaseDefinitions.*;
+//formatter: on
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteOpenHelper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.location.Location;
-import android.util.Log;
 
+import com.blstream.urbangame.database.dbobjects.DBWrapper;
 import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.LocationTask;
 import com.blstream.urbangame.database.entity.LocationTaskAnswer;
@@ -23,217 +25,35 @@ import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
-//import android.database.sqlite.SQLiteDatabase;
-//import android.database.sqlite.SQLiteOpenHelper;
+import com.blstream.urbangame.database.helper.SQLCipherHelper;
+import com.blstream.urbangame.database.helper.SQLInterface;
+import com.blstream.urbangame.database.helper.SQLiteHelper;
 
-public class Database extends SQLiteOpenHelper implements DatabaseInterface {
+public class Database implements DatabaseInterface {
 	
-	// database standard info
-	public static final String DATABASE_NAME = "urban_game";
-	private static final int DATABASE_VERSION = 1;
-	private static final String DATABASE_PASS = "adslkfnalskgfasdqwfuaiheofidjkslfa";
+	//This is a flag that tells which database should be used (encrypted or without encryption)
+	public static boolean use_encryption_flag = true;
 	
-	// tables
-	private static final String GAMES_TABLE_NAME = "games";
-	private static final String USER_TABLE_NAME = "user";
-	private static final String USER_GAMES_SPECIFIC_TABLE_NAME = "userGamesSpecific";
-	private static final String USER_LOGGED_IN_TABLE_NAME = "userLoggedIn";
-	private static final String TASKS_TABLE_NAME = "tasks";
-	private static final String GAMES_TASKS_TABLE_NAME = "gamesTasks";
-	private static final String USER_TASKS_SPECIFIC_TABLE_NAME = "userTasksSpecific";
-	private static final String TASKS_ABCD_TABLE_NAME = "tasksABCD";
-	private static final String TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME = "tasksPossibleAnswersABCD";
-	private static final String LOCATION_TASK_ANSWERS_TABLE_NAME = "locationTaskAnswersTableName";
-	
-	// tables columns
-	// ---- Games
-	private static final String GAMES_KEY_ID = "gid";
-	private static final String GAMES_KEY_VERSION = "GVersion";
-	private static final String GAMES_KEY_TITLE = "GTitle";
-	private static final String GAMES_KEY_DESCRIPTION = "GDescription";
-	private static final String GAMES_KEY_GAME_ICON = "GIcon";
-	private static final String GAMES_KEY_OPERATOR_ICON = "GIconOperator";
-	private static final String GAMES_KEY_OPERATOR_NAME = "GOperatorName";
-	private static final String GAMES_KEY_NUMBER_OF_PLAYERS = "GNumberOfPlayers";
-	private static final String GAMES_KEY_NUMBER_OF_MAX_PLAYERS = "GNumberOfMAXPlayers";
-	private static final String GAMES_KEY_DIFFICULTY = "GDifficulty";
-	private static final String GAMES_KEY_CITY_NAME = "GCityName";
-	private static final String GAMES_KEY_START_DATE = "GStartDate";
-	private static final String GAMES_KEY_END_DATE = "GEndDate";
-	private static final String GAMES_KEY_COMMENTS = "GComments";
-	private static final String GAMES_KEY_REWARD = "GReward";
-	private static final String GAMES_KEY_WINNING_STRATEGY = "GWinningStrategy";
-	private static final String GAMES_KEY_PRIZE_INFO = "GPrizeInfo";
-	private static final String GAMES_KEY_DETAILS_LINK = "GDetailsLink";
-	
-	// ---- User
-	private static final String USER_KEY_EMAIL = "UEmail";
-	private static final String USER_KEY_PASSWORD = "UPassword";
-	private static final String USER_KEY_DISPLAY_NAME = "UDispName";
-	private static final String USER_KEY_AVATAR = "UAvatar";
-	
-	// ---- User games specific
-	private static final String USER_GAMES_SPECIFIC_KEY_EMAIL = "UGSEmail";
-	private static final String USER_GAMES_SPECIFIC_KEY_GAME_ID = "UGSGameID";
-	private static final String USER_GAMES_SPECIFIC_KEY_RANK = "UGSRank";
-	private static final String USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED = "UGSGameActiveObserved";
-	private static final String USER_GAMES_SPECIFIC_KEY_CHANGES = "UGSChanges";
-	private static final String USER_GAMES_SPECIFIC_KEY_HAS_CHANGES = "UGSHasChanges";
-	
-	// ---- User logging table
-	private static final String USER_LOGGED_IN_KEY_EMAIL = "ULIEmail";
-	
-	// ---- Tasks
-	private static final String TASKS_KEY_ID = "tid";
-	private static final String TASKS_KEY_TYPE = "TType";
-	private static final String TASKS_KEY_TITLE = "TTitle";
-	private static final String TASKS_KEY_MAX_POINTS = "TMaxPoints";
-	private static final String TASKS_KEY_REPETABLE = "TRepetable";
-	private static final String TASKS_KEY_IS_HIDDEN = "THidden";
-	private static final String TASKS_KEY_NUMBER_OF_HIDDEN = "TNumberOfHidden";
-	private static final String TASKS_KEY_END_TIME = "TEndTime";
-	private static final String TASKS_KEY_PICTURE = "TPicture";
-	private static final String TASKS_KEY_DESCRIPTION = "TDescription";
-	
-	// ---- Games Tasks
-	private static final String GAMES_TASKS_KEY_GAME_ID = "GTgid";
-	private static final String GAMES_TASKS_KEY_TASK_ID = "GTtid";
-	
-	// ---- Users tasks specific
-	private static final String USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL = "UTSPlayerEmail";
-	private static final String USER_TASKS_SPECIFIC_KEY_TASK_ID = "UTSTaskID";
-	private static final String USER_TASKS_SPECIFIC_KEY_POINTS = "UTSPoints";
-	private static final String USER_TASKS_SPECIFIC_KEY_IS_FINISHED = "UTSIsFisnished";
-	private static final String USER_TASKS_SPECIFIC_KEY_ARE_CHANGES = "UTSAreChanges";
-	private static final String USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN = "UTSWasHidden";
-	private static final String USER_TASKS_SPECIFIC_KEY_CHANGES = "UTSChanges";
-	private static final String USER_TASKS_SPECIFIC_KEY_STATUS = "UTSStatus";
-	
-	// ---- Tasks ABCD
-	private static final String TASKS_ABCD_KEY_ID = "TAID";
-	private static final String TASKS_ABCD_KEY_TASK_ID = "TAtaskID";
-	private static final String TASKS_ABCD_KEY_QUESTION = "TAtaskQuestion";
-	
-	// ---- Task ABCD answers
-	private static final String TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID = "TAPAID";
-	private static final String TASKS_ABCD_POSSIBLE_ANSWERS_KEY_TASK_POSSIBLE_ANSWER = "TAPAtaskPossibleAnswer";
-	
-	// ---- Location Task answers
-	private static final String LOCATION_TASK_ANSWER_KEY_TASK_ID = "TaskAnswerTaskID";
-	private static final String LOCATION_TASK_ANSWER_KEY_LOCATION_LATITUDE = "TaskAnswerLocationLatitude";
-	private static final String LOCATION_TASK_ANSWER_KEY_LOCATION_LONGITUDE = "TaskAnswerLocationLongitude";
-	private static final String LOCATION_TASK_ANSWER_KEY_USER_EMAIL = "TaskAnswerLocationUserEmail";
-	private static final String LOCATION_TASK_ANSWER_KEY_DATE = "TaskAnswerDate";
-	private static final String LOCATION_TASK_ANSWER_KEY_ID = "TaskAnswerID";
-	
-	// tables creation strings
-	private static final String CREATE_GAMES_TABLE = "CREATE TABLE " + GAMES_TABLE_NAME + " (" + GAMES_KEY_ID
-		+ " INTEGER PRIMARY KEY, " + GAMES_KEY_VERSION + " REAL, " + GAMES_KEY_TITLE + " TEXT, "
-		+ GAMES_KEY_DESCRIPTION + " TEXT, " + GAMES_KEY_GAME_ICON + " TEXT, " + GAMES_KEY_OPERATOR_ICON + " TEXT, "
-		+ GAMES_KEY_OPERATOR_NAME + " TEXT, " + GAMES_KEY_NUMBER_OF_PLAYERS + " INTEGER, "
-		+ GAMES_KEY_NUMBER_OF_MAX_PLAYERS + " INTEGER, " + GAMES_KEY_DIFFICULTY + " INTEGER, " + GAMES_KEY_CITY_NAME
-		+ " TEXT, " + GAMES_KEY_START_DATE + " INTEGER, " + GAMES_KEY_WINNING_STRATEGY + " TEXT, " + GAMES_KEY_END_DATE
-		+ " INTEGER, " + GAMES_KEY_COMMENTS + " TEXT, " + GAMES_KEY_REWARD + " TEXT, " + GAMES_KEY_PRIZE_INFO
-		+ " TEXT, " + GAMES_KEY_DETAILS_LINK + " TEXT" + ")";
-	
-	private static final String CREATE_USER_TABLE = "CREATE TABLE " + USER_TABLE_NAME + " (" + USER_KEY_EMAIL
-		+ " TEXT PRIMARY KEY, " + USER_KEY_PASSWORD + " TEXT, " + USER_KEY_DISPLAY_NAME + " TEXT," + USER_KEY_AVATAR
-		+ " TEXT" + ")";
-	
-	private static final String CREATE_USER_GAMES_SPECIFIC_TABLE = "CREATE TABLE " + USER_GAMES_SPECIFIC_TABLE_NAME
-		+ " (" + USER_GAMES_SPECIFIC_KEY_EMAIL + " TEXT, " + USER_GAMES_SPECIFIC_KEY_GAME_ID + " INTEGER, "
-		+ USER_GAMES_SPECIFIC_KEY_RANK + " INTEGER, " + USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED + " INTEGER, "
-		+ USER_GAMES_SPECIFIC_KEY_CHANGES + " TEXT, " + USER_GAMES_SPECIFIC_KEY_HAS_CHANGES + " TEXT, "
-		+ "PRIMARY KEY (" + USER_GAMES_SPECIFIC_KEY_EMAIL + ", " + USER_GAMES_SPECIFIC_KEY_GAME_ID + ")"
-		+ " FOREIGN KEY (" + USER_GAMES_SPECIFIC_KEY_EMAIL + ") " + "REFERENCES " + USER_TABLE_NAME + " ("
-		+ USER_KEY_EMAIL + ") " + " FOREIGN KEY (" + USER_GAMES_SPECIFIC_KEY_GAME_ID + ") " + "REFERENCES "
-		+ GAMES_TABLE_NAME + " (" + GAMES_KEY_ID + ") " + ")";
-	
-	private static final String CREATE_USER_LOGGED_IN_TABLE = "CREATE TABLE " + USER_LOGGED_IN_TABLE_NAME + " ("
-		+ USER_LOGGED_IN_KEY_EMAIL + " TEXT PRIMARY KEY" + ")";
-	
-	private static final String CREATE_TASKS_TABLE = "CREATE TABLE " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID
-		+ " INTEGER PRIMARY KEY, " + TASKS_KEY_DESCRIPTION + " TEXT NOT NULL, " + TASKS_KEY_END_TIME + " INTEGER, "
-		+ TASKS_KEY_IS_HIDDEN + " INTEGER, " + TASKS_KEY_MAX_POINTS + " INTEGER NOT NULL, "
-		+ TASKS_KEY_NUMBER_OF_HIDDEN + " INTEGER, " + TASKS_KEY_PICTURE + " TEXT, " + TASKS_KEY_REPETABLE
-		+ " INTEGER NOT NULL, " + TASKS_KEY_TITLE + " TEXT, " + TASKS_KEY_TYPE + " INTEGER" + ")";
-	
-	private static final String CREATE_GAMES_TASKS_TABLE = "CREATE TABLE " + GAMES_TASKS_TABLE_NAME + " ("
-		+ GAMES_TASKS_KEY_GAME_ID + " INTEGER, " + GAMES_TASKS_KEY_TASK_ID + " INTEGER, " + "PRIMARY KEY ("
-		+ GAMES_TASKS_KEY_GAME_ID + ", " + GAMES_TASKS_KEY_TASK_ID + ")" + " FOREIGN KEY (" + GAMES_TASKS_KEY_GAME_ID
-		+ ") REFERENCES " + GAMES_TABLE_NAME + " (" + GAMES_KEY_ID + "), " + " FOREIGN KEY (" + GAMES_TASKS_KEY_TASK_ID
-		+ ") REFERENCES " + TASKS_TABLE_NAME + "(" + TASKS_KEY_ID + ")" + ")";
-	
-	private static final String CREATE_USER_TASKS_SPECIFIC_TABLE = "CREATE TABLE " + USER_TASKS_SPECIFIC_TABLE_NAME
-		+ " (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + " TEXT, " + USER_TASKS_SPECIFIC_KEY_TASK_ID + " INTEGER, "
-		+ USER_TASKS_SPECIFIC_KEY_ARE_CHANGES + " TEXT, " + USER_TASKS_SPECIFIC_KEY_IS_FINISHED + " TEXT NOT NULL, "
-		+ USER_TASKS_SPECIFIC_KEY_POINTS + " INTEGER, " + USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN + " TEXT, "
-		+ USER_TASKS_SPECIFIC_KEY_CHANGES + " TEXT, " + USER_TASKS_SPECIFIC_KEY_STATUS + " INTEGER, " + "PRIMARY KEY ("
-		+ USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ", " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "), " + " FOREIGN KEY ("
-		+ USER_TASKS_SPECIFIC_KEY_TASK_ID + ") REFERENCES " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID + "), "
-		+ " FOREIGN KEY (" + USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + ") REFERENCES " + USER_TABLE_NAME + " ("
-		+ USER_KEY_EMAIL + ") " + ")";
-	
-	private static final String CREATE_TASKS_ABCD_TABLE = "CREATE TABLE " + TASKS_ABCD_TABLE_NAME + " ("
-		+ TASKS_ABCD_KEY_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " + TASKS_ABCD_KEY_TASK_ID + " INTEGER, "
-		+ TASKS_ABCD_KEY_QUESTION + " TEXT NOT NULL, " + "FOREIGN KEY (" + TASKS_ABCD_KEY_TASK_ID + ") "
-		+ "REFERENCES " + TASKS_TABLE_NAME + " (" + TASKS_KEY_ID + ") " + ")";
-	
-	private static final String CREATE_TASKS_ABCD_POSSIBLE_ANSWERS_TABLE = "CREATE TABLE "
-		+ TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME + " (" + TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + " INTEGER, "
-		+ TASKS_ABCD_POSSIBLE_ANSWERS_KEY_TASK_POSSIBLE_ANSWER + " INTEGER, " + "PRIMARY KEY ("
-		+ TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + ", " + TASKS_ABCD_POSSIBLE_ANSWERS_KEY_TASK_POSSIBLE_ANSWER + "), "
-		+ "FOREIGN KEY (" + TASKS_ABCD_POSSIBLE_ANSWERS_KEY_ID + ") " + "REFERENCES " + TASKS_ABCD_TABLE_NAME + " ("
-		+ TASKS_ABCD_KEY_ID + ") " + ")";
-	
-	private static final String CREATE_LOCATION_TASK_ANSWER_TABLE = "CREATE TABLE " + LOCATION_TASK_ANSWERS_TABLE_NAME
-		+ " (" + LOCATION_TASK_ANSWER_KEY_ID + " INTEGER PRIMARY_KEY, " + LOCATION_TASK_ANSWER_KEY_LOCATION_LATITUDE
-		+ " REAL, " + LOCATION_TASK_ANSWER_KEY_LOCATION_LONGITUDE + " REAL, " + LOCATION_TASK_ANSWER_KEY_DATE
-		+ " INTEGER, " + LOCATION_TASK_ANSWER_KEY_TASK_ID + " INTEGER, " + LOCATION_TASK_ANSWER_KEY_USER_EMAIL
-		+ " TEXT, FOREIGN KEY (" + LOCATION_TASK_ANSWER_KEY_TASK_ID + ") REFERENCES " + TASKS_TABLE_NAME + " ("
-		+ TASKS_KEY_ID + "))";
+	SQLInterface databasebHelper;
 	
 	public Database(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		SQLiteDatabase.loadLibs(context);
+		if (use_encryption_flag) {
+			databasebHelper = new SQLCipherHelper(context);
+		}
+		else {
+			databasebHelper = new SQLiteHelper(context);
+		}
 	}
 	
 	@Override
-	public synchronized void onCreate(SQLiteDatabase db) {
-		db.execSQL("PRAGMA key = " + DATABASE_PASS);
-		db.execSQL(CREATE_GAMES_TABLE);
-		db.execSQL(CREATE_USER_TABLE);
-		db.execSQL(CREATE_USER_GAMES_SPECIFIC_TABLE);
-		db.execSQL(CREATE_USER_LOGGED_IN_TABLE);
-		db.execSQL(CREATE_TASKS_TABLE);
-		db.execSQL(CREATE_GAMES_TASKS_TABLE);
-		db.execSQL(CREATE_USER_TASKS_SPECIFIC_TABLE);
-		db.execSQL(CREATE_TASKS_ABCD_TABLE);
-		db.execSQL(CREATE_TASKS_ABCD_POSSIBLE_ANSWERS_TABLE);
-		db.execSQL(CREATE_LOCATION_TASK_ANSWER_TABLE);
-	}
-	
-	@Override
-	public synchronized void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.w(Database.class.getName(), "Upgrading database from version " + oldVersion + " to " + newVersion
-			+ ", which will destroy all old data");
-		db.execSQL("DROP TABLE IF EXISTS " + LOCATION_TASK_ANSWERS_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + TASKS_ABCD_POSSIBLE_ANSWERS_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + TASKS_ABCD_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + USER_TASKS_SPECIFIC_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + GAMES_TASKS_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + TASKS_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + USER_GAMES_SPECIFIC_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + GAMES_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + USER_LOGGED_IN_TABLE_NAME);
-		onCreate(db);
+	public String getDatabaseName() {
+		return databasebHelper.getDatabaseName();
 	}
 	
 	// GAMES METHODS
 	@Override
 	public synchronized boolean insertGameShortInfo(UrbanGameShortInfo game) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		boolean isDataOk = true;
 		
 		isDataOk = areShortGameInfoFieldsOK(game);
@@ -263,8 +83,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean insertGameInfo(UrbanGame game) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
-		
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		boolean isDataOk = true;
 		
 		isDataOk = areGameInfoFieldsOK(game);
@@ -321,7 +140,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			+ GAMES_KEY_END_DATE + ", " + GAMES_KEY_REWARD + ", " + GAMES_KEY_DETAILS_LINK + " FROM "
 			+ GAMES_TABLE_NAME + orderLimitQuery;
 		
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
 		
 		if (cursor.moveToFirst()) {
@@ -351,13 +170,13 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized UrbanGameShortInfo getGameShortInfo(Long gameID) {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		String[] gamesColumns = { GAMES_KEY_ID, GAMES_KEY_TITLE, GAMES_KEY_GAME_ICON, GAMES_KEY_OPERATOR_ICON,
 			GAMES_KEY_OPERATOR_NAME, GAMES_KEY_NUMBER_OF_PLAYERS, GAMES_KEY_NUMBER_OF_MAX_PLAYERS, GAMES_KEY_CITY_NAME,
 			GAMES_KEY_START_DATE, GAMES_KEY_END_DATE, GAMES_KEY_REWARD, GAMES_KEY_DETAILS_LINK };
 		
 		Cursor cursor = db.query(GAMES_TABLE_NAME, gamesColumns, GAMES_KEY_ID + "=?", new String[] { gameID.longValue()
-			+ "" }, null, null, null, null);
+			+ "" }, null, null, null);
 		
 		UrbanGameShortInfo game;
 		if (cursor != null && cursor.moveToFirst()) {
@@ -372,7 +191,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized UrbanGame getGameInfo(Long gameID) {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		String[] gamesColumns = { GAMES_KEY_ID, GAMES_KEY_TITLE, GAMES_KEY_GAME_ICON, GAMES_KEY_OPERATOR_ICON,
 			GAMES_KEY_OPERATOR_NAME, GAMES_KEY_NUMBER_OF_PLAYERS, GAMES_KEY_NUMBER_OF_MAX_PLAYERS, GAMES_KEY_CITY_NAME,
 			GAMES_KEY_START_DATE, GAMES_KEY_END_DATE, GAMES_KEY_REWARD, GAMES_KEY_DETAILS_LINK, GAMES_KEY_VERSION,
@@ -380,7 +199,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 			GAMES_KEY_COMMENTS };
 		
 		Cursor cursor = db.query(GAMES_TABLE_NAME, gamesColumns, GAMES_KEY_ID + "=?", new String[] { gameID.longValue()
-			+ "" }, null, null, null, null);
+			+ "" }, null, null, null);
 		
 		UrbanGame game;
 		if (cursor != null && cursor.moveToFirst()) {
@@ -399,7 +218,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean updateGameShortInfo(UrbanGameShortInfo game) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		
 		boolean isDataOk = areShortGameInfoFieldsOK(game);
 		boolean updateOK = false;
@@ -416,7 +235,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean updateGame(UrbanGame game) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		
 		boolean isDataOk = areGameInfoFieldsOK(game);
 		boolean isUpdateOk = false;
@@ -434,7 +253,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean deleteGameInfoAndShortInfo(Long gameID) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		db.beginTransaction();
 		String userTaskSpecificDeletionSQL = "DELETE FROM " + USER_TASKS_SPECIFIC_TABLE_NAME + " WHERE "
 			+ USER_TASKS_SPECIFIC_KEY_TASK_ID + " IN (SELECT " + GAMES_TASKS_KEY_TASK_ID + " FROM "
@@ -625,7 +444,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	// USER METHODS
 	@Override
 	public synchronized boolean insertUser(Player player) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		
 		boolean isDataOk = true;
 		
@@ -648,11 +467,11 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized Player getPlayer(String email) {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		String[] playerColumns = { USER_KEY_EMAIL, USER_KEY_DISPLAY_NAME, USER_KEY_AVATAR, USER_KEY_PASSWORD };
 		
 		Cursor cursor = db.query(USER_TABLE_NAME, playerColumns, USER_KEY_EMAIL + "=?", new String[] { email }, null,
-			null, null, null);
+			null, null);
 		
 		Player player = null;
 		if (cursor != null) {
@@ -670,7 +489,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean updatePlayer(Player player) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		
 		boolean isDataOk = player.getEmail() != null;
 		boolean updateOK = false;
@@ -697,7 +516,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean deletePlayer(String email) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		boolean isSucessful = db.delete(USER_TABLE_NAME, USER_KEY_EMAIL + "=?", new String[] { email }) != 0;
 		db.close();
 		return isSucessful;
@@ -705,7 +524,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean insertUserGameSpecific(PlayerGameSpecific playerGameSpecific) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		
 		boolean isDataOk = true;
 		
@@ -730,14 +549,14 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized PlayerGameSpecific getUserGameSpecific(String email, Long gameID) {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		String[] playerGamesSpecificColumns = { USER_GAMES_SPECIFIC_KEY_EMAIL, USER_GAMES_SPECIFIC_KEY_GAME_ID,
 			USER_GAMES_SPECIFIC_KEY_RANK, USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED,
 			USER_GAMES_SPECIFIC_KEY_CHANGES, USER_GAMES_SPECIFIC_KEY_HAS_CHANGES };
 		
 		Cursor cursor = db.query(USER_GAMES_SPECIFIC_TABLE_NAME, playerGamesSpecificColumns,
 			USER_GAMES_SPECIFIC_KEY_EMAIL + "=? AND " + USER_GAMES_SPECIFIC_KEY_GAME_ID + "=?", new String[] { email,
-				gameID.longValue() + "" }, null, null, null, null);
+				gameID.longValue() + "" }, null, null, null);
 		
 		PlayerGameSpecific playerGameSpecific = null;
 		if (cursor != null) {
@@ -769,7 +588,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean updateUserGameSpecific(PlayerGameSpecific playerGameSpecific) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		
 		boolean isDataOk = playerGameSpecific.getPlayerEmail() != null && playerGameSpecific.getGameID() != null;
 		boolean updateOK = false;
@@ -804,7 +623,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean deleteUserGameSpecific(String email, Long gameID) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		boolean isSucessful = db.delete(USER_GAMES_SPECIFIC_TABLE_NAME, USER_GAMES_SPECIFIC_KEY_EMAIL + "=? AND "
 			+ USER_GAMES_SPECIFIC_KEY_GAME_ID + "=?", new String[] { email, gameID.longValue() + "" }) != 0;
 		db.close();
@@ -813,7 +632,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean wipeOutUserData(String email) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		db.beginTransaction();
 		boolean isSucessful = db.delete(USER_GAMES_SPECIFIC_TABLE_NAME, USER_GAMES_SPECIFIC_KEY_EMAIL + "=?",
 			new String[] { email }) != 0;
@@ -828,7 +647,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean setLoggedPlayer(String email) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		db.beginTransaction();
 		boolean isSuccesful = email != null;
 		Cursor c = db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_KEY_EMAIL }, null, null, null,
@@ -848,7 +667,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized String getLoggedPlayerID() {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		Cursor cursor = db.query(USER_LOGGED_IN_TABLE_NAME, new String[] { USER_LOGGED_IN_KEY_EMAIL }, null, null,
 			null, null, null);
 		String playerEmail = null;
@@ -862,7 +681,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean setNoOneLogged() {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		int count = db.delete(USER_LOGGED_IN_TABLE_NAME, null, null);
 		boolean successful = count == 1 || count == 0;
 		return successful;
@@ -870,7 +689,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean insertPlayerTaskSpecific(PlayerTaskSpecific taskSpecific) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		
 		boolean isDataOk;
 		isDataOk = isTaskSpecificOk(taskSpecific);
@@ -900,14 +719,14 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized PlayerTaskSpecific getPlayerTaskSpecific(Long taskID, String playerEmail) {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		String[] taskColumns = { USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, USER_TASKS_SPECIFIC_KEY_TASK_ID,
 			USER_TASKS_SPECIFIC_KEY_POINTS, USER_TASKS_SPECIFIC_KEY_IS_FINISHED, USER_TASKS_SPECIFIC_KEY_ARE_CHANGES,
 			USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, USER_TASKS_SPECIFIC_KEY_CHANGES, USER_TASKS_SPECIFIC_KEY_STATUS };
 		
 		Cursor cursor = db.query(USER_TASKS_SPECIFIC_TABLE_NAME, taskColumns, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL
 			+ "=? AND " + USER_TASKS_SPECIFIC_KEY_TASK_ID + "=?",
-			new String[] { playerEmail, taskID.longValue() + "" }, null, null, null, null);
+			new String[] { playerEmail, taskID.longValue() + "" }, null, null, null);
 		
 		PlayerTaskSpecific taskSpecific;
 		if (cursor != null && cursor.moveToFirst()) {
@@ -943,7 +762,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean updatePlayerTaskSpecific(PlayerTaskSpecific taskSpecific) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		
 		boolean isDataOk = isTaskSpecificOk(taskSpecific);
 		boolean updateOK = false;
@@ -988,7 +807,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean deletePlayerTaskSpecific(Long taskID, String playerEmail) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		boolean isSucessful = db
 			.delete(USER_TASKS_SPECIFIC_TABLE_NAME, USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL + "=? AND "
 				+ USER_TASKS_SPECIFIC_KEY_TASK_ID + "=?", new String[] { playerEmail, taskID.longValue() + "" }) != 0;
@@ -1001,7 +820,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	// TASKS METHODS
 	@Override
 	public synchronized boolean insertTaskForGame(Long gameID, Task task) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		
 		boolean isDataOk;
 		isDataOk = isTaskOk(task);
@@ -1047,7 +866,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		else return false;
 	}
 	
-	private boolean insertTaskABCD(SQLiteDatabase db, ABCDTask abcdTask) {
+	private boolean insertTaskABCD(DBWrapper db, ABCDTask abcdTask) {
 		ContentValues values = new ContentValues();
 		values.put(TASKS_ABCD_KEY_TASK_ID, abcdTask.getId());
 		values.put(TASKS_ABCD_KEY_QUESTION, abcdTask.getQuestion());
@@ -1077,7 +896,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized List<Task> getTasksForGame(Long gameID) {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		
 		String query = "SELECT " + TASKS_KEY_ID + ", " + TASKS_KEY_TYPE + ", " + TASKS_KEY_TITLE + ", "
 			+ TASKS_KEY_MAX_POINTS + ", " + TASKS_KEY_REPETABLE + ", " + TASKS_KEY_IS_HIDDEN + ", "
@@ -1106,13 +925,13 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized Task getTask(Long taskID) {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		String[] taskColumns = { TASKS_KEY_ID, TASKS_KEY_TYPE, TASKS_KEY_TITLE, TASKS_KEY_MAX_POINTS,
 			TASKS_KEY_REPETABLE, TASKS_KEY_IS_HIDDEN, TASKS_KEY_NUMBER_OF_HIDDEN, TASKS_KEY_END_TIME,
 			TASKS_KEY_PICTURE, TASKS_KEY_DESCRIPTION };
 		
 		Cursor cursor = db.query(TASKS_TABLE_NAME, taskColumns, TASKS_KEY_ID + "=?", new String[] { taskID.longValue()
-			+ "" }, null, null, null, null);
+			+ "" }, null, null, null);
 		
 		Task task;
 		if (cursor != null && cursor.moveToFirst()) {
@@ -1138,7 +957,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		}
 	}
 	
-	private Task extractTaskInfroamtionFromCursorAndGetAdditionalIfNeeded(Cursor cursor, SQLiteDatabase db) {
+	private Task extractTaskInfroamtionFromCursorAndGetAdditionalIfNeeded(Cursor cursor, DBWrapper db) {
 		Long id = cursor.getLong(TasksFields.ID.value);
 		Integer type = cursor.getInt(TasksFields.TYPE.value);
 		String title = cursor.getString(TasksFields.TITLE.value);
@@ -1199,7 +1018,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean updateTask(Task task) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		
 		boolean isDataOk = task.getId() != null;
 		boolean updateOK = false;
@@ -1223,7 +1042,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 		return updateOK;
 	}
 	
-	private boolean updateABCDTaskSpecialData(SQLiteDatabase db, ABCDTask task) {
+	private boolean updateABCDTaskSpecialData(DBWrapper db, ABCDTask task) {
 		boolean isOk = true;
 		ContentValues values;
 		if (task.getQuestion() != null) {
@@ -1291,7 +1110,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean deleteTask(Long gameID, Long taskID) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		db.beginTransaction();
 		String userTaskSpecificDeletionSQL = "DELETE FROM " + USER_TASKS_SPECIFIC_TABLE_NAME + " WHERE "
 			+ USER_TASKS_SPECIFIC_KEY_TASK_ID + "=" + taskID.longValue();
@@ -1320,12 +1139,12 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized void closeDatabase() {
-		close();
+		databasebHelper.close();
 	}
 	
 	@Override
 	public synchronized List<UrbanGame> getAllUserGames(String email) {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		String query = "SELECT " + GAMES_TABLE_NAME + "." + GAMES_KEY_ID + ", " + GAMES_TABLE_NAME + "."
 			+ GAMES_KEY_VERSION + ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_TITLE + ", " + GAMES_TABLE_NAME + "."
 			+ GAMES_KEY_DESCRIPTION + ", " + GAMES_TABLE_NAME + "." + GAMES_KEY_GAME_ICON + ", " + GAMES_TABLE_NAME
@@ -1390,7 +1209,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized List<UrbanGameShortInfo> getAllUserGamesShortInfoByItsState(String email, Integer state) {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		
 		String query = "SELECT " + GAMES_KEY_ID + ", " + GAMES_KEY_TITLE + ", " + GAMES_KEY_GAME_ICON + ", "
 			+ GAMES_KEY_OPERATOR_ICON + ", " + GAMES_KEY_OPERATOR_NAME + ", " + GAMES_KEY_NUMBER_OF_PLAYERS + ", "
@@ -1419,7 +1238,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized boolean insertLocationTaskAnswerForTask(Long taskID, LocationTaskAnswer locationTaskAnswer) {
-		SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		
 		boolean isDataOk = taskID != null && isTaskAnswerOk(locationTaskAnswer);
 		if (isDataOk) {
@@ -1457,7 +1276,7 @@ public class Database extends SQLiteOpenHelper implements DatabaseInterface {
 	
 	@Override
 	public synchronized List<LocationTaskAnswer> getLocationTaskAnswers(Long taskID, String userEmail) {
-		SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASS);
+		DBWrapper db = databasebHelper.getWrappedReadableDatabase();
 		String query = "SELECT " + LOCATION_TASK_ANSWER_KEY_TASK_ID + ", " + LOCATION_TASK_ANSWER_KEY_LOCATION_LATITUDE
 			+ ", " + LOCATION_TASK_ANSWER_KEY_LOCATION_LONGITUDE + ", " + LOCATION_TASK_ANSWER_KEY_DATE + ", "
 			+ LOCATION_TASK_ANSWER_KEY_USER_EMAIL + " FROM " + LOCATION_TASK_ANSWERS_TABLE_NAME + " WHERE "
