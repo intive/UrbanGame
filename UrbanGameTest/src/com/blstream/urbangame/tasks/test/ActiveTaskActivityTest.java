@@ -105,7 +105,7 @@ public class ActiveTaskActivityTest extends ActivityUnitTestCase<ActiveTaskActiv
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		context.deleteDatabase(Database.DATABASE_NAME);
+		context.deleteDatabase(database.getDatabaseName());
 		database = null;
 	}
 }

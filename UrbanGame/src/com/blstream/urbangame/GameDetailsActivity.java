@@ -305,7 +305,7 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 	}
 	
 	private void startActivityAfterCompletedJoinAction() {
-		Intent intent = new Intent(GameDetailsActivity.this, MyGamesActivity.class);
+		Intent intent = new Intent(GameDetailsActivity.this, ActiveGameActivity.class);
 		startActivity(intent);
 	}
 	

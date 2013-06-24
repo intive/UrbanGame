@@ -4,6 +4,7 @@
     <style name="ActionBar.Solid.UrbanGame" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="backgroundStacked">@drawable/ab_stacked_solid</item>
         <item name="android:titleTextStyle">@style/ActionBar.Title</item>
+        <item name="background">?attr/action_bar_color</item>
         <item name="android:background">?attr/action_bar_color</item>
     </style>
 
