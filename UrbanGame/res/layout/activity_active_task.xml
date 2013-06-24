@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/margin_16"
-    android:layout_marginRight="@dimen/margin_16"
+    android:layout_marginLeft="@dimen/margin_from_edge"
+    android:layout_marginRight="@dimen/margin_from_edge"
     android:orientation="vertical"
     tools:ignore="HardcodedText" >
 
@@ -13,7 +13,6 @@
         layout="@layout/list_item_task" />
 
     <ImageView
-        android:id="@+id/imageView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="?attr/header_separator_drawable" />
@@ -22,9 +21,9 @@
         android:id="@+id/textViewActiveTaskActivityStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/margin_8"
-        android:paddingRight="@dimen/margin_8"
-        android:paddingTop="@dimen/margin_8"
+        android:paddingLeft="@dimen/text_padding"
+        android:paddingRight="@dimen/text_padding"
+        android:paddingTop="@dimen/text_padding"
         android:text="canceled"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -32,9 +31,9 @@
         android:id="@+id/textViewActiveTaskActivityPointsInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/margin_8"
-        android:paddingLeft="@dimen/margin_8"
-        android:paddingRight="@dimen/margin_8"
+        android:paddingBottom="@dimen/text_padding"
+        android:paddingLeft="@dimen/text_padding"
+        android:paddingRight="@dimen/text_padding"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -43,12 +42,11 @@
         style="@style/styleExpandableListHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/margin_8"
-        android:paddingRight="@dimen/margin_8"
+        android:paddingLeft="@dimen/text_padding"
+        android:paddingRight="@dimen/text_padding"
         android:text="Header" />
 
     <ImageView
-        android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="?attr/header_separator_drawable" />
@@ -57,7 +55,7 @@
         android:id="@+id/textViewActiveTaskDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_8"
+        android:padding="@dimen/text_padding"
         android:text="description" />
 
 </LinearLayout>

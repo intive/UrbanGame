@@ -193,7 +193,7 @@ public class ActiveTaskActivity extends AbstractMenuActivity {
 				statusString = getResources().getString(R.string.info_task_inactive);
 				headerDescription = getResources().getString(R.string.header_prerequisites);
 				
-				descriptionString = prerequesites();
+				descriptionString = getTaskPrerequisitesAsString();
 				break;
 		}
 		
@@ -207,7 +207,7 @@ public class ActiveTaskActivity extends AbstractMenuActivity {
 		textViewDescription.setText(descriptionString);
 	}
 	
-	private String prerequesites() {
+	private String getTaskPrerequisitesAsString() {
 		
 		String checkMark = "\u2714 ";
 		String crossedMark = "\u2718 ";

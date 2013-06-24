@@ -7,7 +7,7 @@
     <dimen name="dialogTitlePadding">15dp</dimen>
     <dimen name="dialogContentTopBottomPadding">10dp</dimen>
     <dimen name="dialogButtonBarHeight">40dp</dimen>
-    <dimen name="margin_16">16dp</dimen>
-    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_from_edge">16dp</dimen>
+    <dimen name="text_padding">8dp</dimen>
 
 </resources>
