@@ -5,14 +5,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import junit.framework.TestCase;
+import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.LocationTask;
 import com.blstream.urbangame.notifications.NotificationDiff;
 
-public class NotificationDiffTest extends TestCase {
+public class NotificationDiffTest extends AndroidTestCase {
 	
 	private final String TAG = NotificationDiffTest.class.getSimpleName();
 	
