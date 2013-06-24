@@ -2,11 +2,11 @@ package com.blstream.urbangame.datastructures.test;
 
 import java.util.ArrayList;
 
-import junit.framework.TestCase;
+import android.test.AndroidTestCase;
 
 import com.blstream.urbangame.datastructures.ExpandableListHeader;
 
-public class ExpandableListHeaderTest extends TestCase {
+public class ExpandableListHeaderTest extends AndroidTestCase {
 	
 	private final String TITLE = "Header number one";
 	private final ArrayList<String> CHILDREN;
