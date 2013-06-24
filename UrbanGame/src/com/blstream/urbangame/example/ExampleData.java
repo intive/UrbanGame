@@ -36,6 +36,7 @@ public class ExampleData {
 	}
 	
 	public static PlayerTaskSpecific getPlayerTaskSpecific() {
-		return new PlayerTaskSpecific("john@doe.com", 1L, 20, false, false, false, null, PlayerTaskSpecific.ACTIVE);
+		return new PlayerTaskSpecific("john@doe.com", 1L, 20, false, false, false, null, PlayerTaskSpecific.ACTIVE,
+			null);
 	}
 }

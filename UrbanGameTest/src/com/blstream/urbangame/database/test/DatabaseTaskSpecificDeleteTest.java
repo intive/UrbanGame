@@ -29,7 +29,7 @@ public class DatabaseTaskSpecificDeleteTest extends AndroidTestCase {
 	private void prepareData(String playerEmail, Long taskID, Integer points, Boolean isFinishedByUser,
 		Boolean areChanges, Boolean wasHidden, String changes, Integer status) {
 		PlayerTaskSpecific pts = new PlayerTaskSpecific(playerEmail, taskID, points, isFinishedByUser, areChanges,
-			wasHidden, changes, status);
+			wasHidden, changes, status, null);
 		database.insertPlayerTaskSpecific(pts);
 	}
 	
