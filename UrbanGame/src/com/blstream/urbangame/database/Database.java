@@ -721,11 +721,11 @@ public class Database implements DatabaseInterface {
 	private static char SELECTED_ANSWER = 'v';
 	private static char UNSELECTED_ANSWER = 'x';
 	
-	private String booleanArrayToString(Boolean[] selectedAnswers) {
+	private String booleanArrayToString(boolean[] selectedAnswers) {
 		if (selectedAnswers == null) return null;
 		
 		StringBuilder builder = new StringBuilder();
-		for (Boolean selectedAnswer : selectedAnswers) {
+		for (boolean selectedAnswer : selectedAnswers) {
 			if (selectedAnswer) {
 				builder.append(SELECTED_ANSWER);
 			}
@@ -736,10 +736,10 @@ public class Database implements DatabaseInterface {
 		return builder.toString();
 	}
 	
-	private Boolean[] stringToBooleanArray(String selections) {
+	private boolean[] stringToBooleanArray(String selections) {
 		if (selections == null) return null;
 		
-		Boolean[] selectedArray = new Boolean[selections.length()];
+		boolean[] selectedArray = new boolean[selections.length()];
 		
 		for (int i = 0; i < selections.length(); i++) {
 			selectedArray[i] = selections.charAt(i) == SELECTED_ANSWER;

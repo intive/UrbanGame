@@ -32,7 +32,7 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 	private ABCDTask task;
 	private PlayerTaskSpecific playerTaskSpecific;
 	private String[] answers;
-	private Boolean[] selections;
+	private boolean[] selections;
 	AnswerDialog dialog;
 	
 	public class ServerResponseToSendedAnswers {
@@ -83,7 +83,7 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 		return view;
 	}
 	
-	private List<Pair<String, Boolean>> makeListFromArrays(String[] answers, Boolean[] selections) {
+	private List<Pair<String, Boolean>> makeListFromArrays(String[] answers, boolean[] selections) {
 		List<Pair<String, Boolean>> list = new ArrayList<Pair<String, Boolean>>();
 		if (selections == null || answers.length != selections.length) { //this is when some task update could provide more or less answers in task update
 			for (String answer : answers) {
@@ -102,7 +102,7 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 	public void onDestroyView() {
 		
 		List<Pair<String, Boolean>> list = adapter.getItems();
-		Boolean[] selections = new Boolean[list.size()];
+		boolean[] selections = new boolean[list.size()];
 		for (int i = 0; i < list.size(); i++) {
 			selections[i] = list.get(i).second;
 		}
