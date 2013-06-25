@@ -36,7 +36,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         endDate: null,
         winning: "max_points",
         winningNum: 1,
-        diff: null,
+        diff: 'easy',
         playersNum: null,
         awards: "",
         tasksNo: 0,

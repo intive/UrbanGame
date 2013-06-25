@@ -16,7 +16,7 @@
 /* heights, widths */
 @contwidth: 940px;
 @wizminheight: 200px;
-@tareaheight: 131px;
+@tareaheight: 110px;
 @hfooter: 130px;
 @mapheight: 300px;
 @mapwidth: 350px;
@@ -86,6 +86,10 @@ a:hover>[class^="icon-"] {
     text-transform: lowercase;
 }
 
+.centered {
+    text-align: center;
+}
+
 .h1 {
     font-size: 20px;
 }
@@ -145,6 +149,10 @@ a:hover>[class^="icon-"] {
 
 .slight-padding-bottom {
     padding-left: @slightpadding;
+}
+
+.double-margin-left {
+    margin-left: @slightpadding * 2;
 }
 
 .pull-higher {
@@ -235,6 +243,19 @@ a:hover>[class^="icon-"] {
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     border-radius: 0px;
+}
+
+.input-xs {
+    width: 50px;
+}
+
+.input-append .add-on:last-child {
+    border-radius: 0 15px 15px 0;
+    -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    border-left-style: none;
 }
 
 #wrap {
@@ -533,8 +554,8 @@ a:hover>[class^="icon-"] {
 
 .wizard {
 
-    .step {
-        text-transform: uppercase;
+    .tooltip {
+        max-width: 190px;
     }
 
     textarea {
@@ -589,21 +610,34 @@ a:hover>[class^="icon-"] {
         background-color: @darkgreeny;
         color: @whitey;
     }
+
+    .gmt {
+        color: @gray;
+        margin: 0 10px;
+    }
+
+    .input-append .add-on, .input-prepend .add-on {
+        text-shadow: 0 1px 0 #ffffff;
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+    }
+
+    .input-append input, .input-append select, .input-append .uneditable-input {
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+
+    .time.tooltip.right { 
+        margin-left: 30px;
+    }
 }
 
 input.search-query {
     border-radius: 15px 0 0 15px;
     padding: 4px 14px;
     border-right-style: none;
-}
-
-.input-append .add-on:last-child {
-    border-radius: 0 15px 15px 0;
-    -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
-    background-color: #FFFFFF;
-    border: 1px solid #CCCCCC;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-    border-left-style: none;
 }
 
 @borderradius: 15px;
@@ -620,11 +654,13 @@ table#gamelist, #gamelist thead tr th:last-child {
 }
 
 #gamelist {
+    thead tr th:first-child {
+        border-left: 1px solid @lightgray;
+    }
+    
     thead tr th {
         background-color: #ececec;
         border: 0;
-        border-bottom: 1px solid @lightgray;
-        border-left: 1px solid @lightgray;
         font-weight: bold;
         font-size: 12px;
         text-align: center;
