@@ -25,7 +25,7 @@
         {{mapOpts.markers}}
     .span12.slight-padding-top
         .span7.pull-left
-            %a#createNewTask()
+            %a#createNewTask(data-toggle="lightbox" href="#taskLightbox")
                 %i.icon-plus
                 =Messages("tasks.newtaskbtn")(lan)
             %table#tasklist.table.table-hover.table-bordered.slight-margin-top()
@@ -64,4 +64,5 @@
                                     %icon.icon-trash
         .span5.pull-right.no-margin(style="padding-right:25px;")
             %div(id="gpsMap" task-list-map )
+
     

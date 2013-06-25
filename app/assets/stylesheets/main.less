@@ -25,6 +25,7 @@
 @mhmarginbottom: 20px;
 @slightpadding: 15px;
 @slightmargin: 15px;
+@mediummargin: 40px;
 @pullhigher: -10px;
 @roffset10: 10px;
 
@@ -137,6 +138,9 @@ a:hover>[class^="icon-"] {
 }
 .slight-margin-top {
     margin-top: @slightpadding;
+}
+.medium-margin-top {
+    margin-top: @mediummargin;
 }
 
 .slight-padding-right {
@@ -591,7 +595,12 @@ a:hover>[class^="icon-"] {
         color: @whitey;
     }
 }
-
+.lightbox{
+    textarea {
+        height: @tareaheight;
+        resize: none;
+    }
+}
 input.search-query {
     border-radius: 15px 0 0 15px;
     padding: 4px 14px;
@@ -706,6 +715,8 @@ table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist the
             .row {
                 margin: 20px 0;
             }
+            width:114px;
+            padding:3px;
 
             button {
                 width: 55px;
@@ -869,9 +880,23 @@ input::-webkit-inner-spin-button {
         color: #FFFFFF;
         margin-right: 8px;
     }
+    &:hover{
+        border-color: #DDDDDD;
+        border-style: solid;
+        border-width: 1px;
+    }
+}
+/* Lightbox (tasks) */
+#taskLightbox{
+    left: 20% !important;
+    top: 30px !important;
+    width: 60% !important;
+    min-width: 600px;
+    text-align:left;
     
-    
-    
+    .lightbox-content{
+        display:block;
+   }
 }
 textarea:focus,
 input[type="text"]:focus,

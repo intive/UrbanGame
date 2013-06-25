@@ -1,0 +1,50 @@
+-#
+    *Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+    *        http://blstream.github.com/UrbanGame/
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *        http://www.apache.org/licenses/LICENSE-2.0
+    * 
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+
+-@ val lan: Lang
+
+#taskLightbox.lightbox.hide.fade(tabindex="-1" role="dialog" aria-hidden="true")
+    .lightbox-header
+        %button.close(type="button" data-dismiss="lightbox" aria-hidden="true") &times;
+    .lightbox-content
+        %form.form-vertical(name="taskForm" class="css-form" novalidate )
+            .container-fluid
+                .span6.pull-left
+                    %h3= Messages("tasks.addtask")(lan)
+                    %p = Messages("tasks.subaddtask")(lan)
+                    .controls
+                        .control-group.medium-margin-top
+                            %label(for="tType")
+                                = Messages("tasks.type")(lan)
+                            %select(name="tType" id="tType" tooltip={Messages("tasks.tttasktype")(lan)})
+                                %option(value="ABC") =Messages("tasks.type1")(lan)
+                                %option(value="GPS") =Messages("tasks.type2")(lan)
+                        .control-group 
+                            %label(for="tName")
+                                = Messages("tasks.name")(lan)
+                            .control
+                                %input.input-xlarge(type="text" maxlength="100" id="tName" required name="tName" ng-model="task.name" tooltip={Messages("tasks.tttaskname")(lan)} tooltip-animation="true" tooltip-placement="left")
+                        .control-group
+                            %label(for="tDesc")
+                                = Messages("tasks.desc")(lan)
+                            .control
+                                %textarea.input-xlarge(name="tDesc" id="tDesc" required maxlength="1000" ng-model="task.description" tooltip={Messages("tasks.tttaskdesc")(lan)} tooltip-animation="true" tooltip-placement="left")
+                        .control-group
+                            .control
+                                %input.pull-left(type="checkbox" ng-model="task.image" name="tImage" id="tImage" tooltip={Messages("tasks.tttaskimage")(lan)} tooltip-animation="true" tooltip-placement="left")
+                            %label.slight-padding-left(for="tImage")
+                                = Messages("tasks.image")(lan)       
+                .span6.pull-right
+        

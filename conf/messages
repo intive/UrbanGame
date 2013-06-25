@@ -144,6 +144,8 @@ status.finished = Finished
 
 
 archive.title = Games archive
+
+
 tasks.newtaskbtn = CREATE NEW TASK
 tasks.headername = Task details
 tasks.headertype = Type
@@ -154,6 +156,7 @@ tasks.edit = Edit
 tasks.delete = Delete
 tasks.visibilitytooltip = Task is visible always
 tasks.rewardtooltip = Maximum reward points:
+tasks.addtask = Add task
 
 
 language.pick = Pick a language
