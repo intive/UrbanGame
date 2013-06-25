@@ -25,12 +25,10 @@
         {{mapOpts.markers}}
     .span12.slight-padding-top
         .span7.pull-left
-            %a.btn()
+            %a#createNewTask(data-toggle="lightbox" href="#taskLightbox")
                 %i.icon-plus
                 =Messages("tasks.newtaskbtn")(lan)
-            %table.table.table-hover.slight-padding-top(id="taskslist")
-                %caption 
-                    =Messages("tasks.tablecaption")(lan)
+            %table#tasklist.table.table-hover.table-bordered.slight-margin-top()
                 %thead
                     %tr
                         %th 
@@ -60,13 +58,11 @@
                                 {{task.visible}}
                         %td
                             .row
-                                %button.btn.btn-mini(ng-click="editTask($index); $event.stopPropagation();" type="button")
-                                    =Messages("tasks.edit")
+                                %button.btn.btn-small.btn-flat-dark.upper(ng-click="editTask($index); $event.stopPropagation();" type="button")
                                     %icon.icon-pencil
-                                |
-                                %button.btn.btn-mini(ng-click="deleteTask($index); $event.stopPropagation();" type="button")
-                                    =Messages("tasks.delete")
+                                %button.btn.btn-small.btn-flat-light.upper(ng-click="deleteTask($index); $event.stopPropagation();" type="button")
                                     %icon.icon-trash
         .span5.pull-right.no-margin(style="padding-right:25px;")
             %div(id="gpsMap" task-list-map )
+
     

@@ -24,6 +24,8 @@
 /* margins, paddings */
 @mhmarginbottom: 20px;
 @slightpadding: 15px;
+@slightmargin: 15px;
+@mediummargin: 40px;
 @pullhigher: -10px;
 @roffset10: 10px;
 
@@ -137,6 +139,12 @@ a:hover>[class^="icon-"] {
 
 .slight-padding-top {
     padding-top: @slightpadding;
+}
+.slight-margin-top {
+    margin-top: @slightpadding;
+}
+.medium-margin-top {
+    margin-top: @mediummargin;
 }
 
 .slight-padding-right {
@@ -342,10 +350,7 @@ a:hover>[class^="icon-"] {
         }
     
         .big-image {
-            text-align: center;
-            width: 1300px;
-            height: 465px;
-            background: #fff url(../images/topgraphic.png) no-repeat;
+            width: 100%
         }
 
         .navbar {
@@ -633,7 +638,12 @@ a:hover>[class^="icon-"] {
         margin-left: 30px;
     }
 }
-
+.lightbox{
+    textarea {
+        height: @tareaheight;
+        resize: none;
+    }
+}
 input.search-query {
     border-radius: 15px 0 0 15px;
     padding: 4px 14px;
@@ -641,13 +651,13 @@ input.search-query {
 }
 
 @borderradius: 15px;
-table#gamelist, #gamelist thead tr th:first-child {
+table#gamelist, table#tasklist, #tasklist thead tr th:first-child, #gamelist thead tr th:first-child {
     -webkit-border-top-left-radius: @borderradius;
     -moz-border-top-left-radius: @borderradius;
     border-top-left-radius: @borderradius;
 }
 
-table#gamelist, #gamelist thead tr th:last-child {
+table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist thead tr th:last-child {
     -webkit-border-top-right-radius: @borderradius;
     -moz-border-top-right-radius: @borderradius;
     border-top-right-radius: @borderradius;
@@ -708,7 +718,55 @@ table#gamelist, #gamelist thead tr th:last-child {
         }
     }
 }
+#tasklist {
+    thead tr th {
+        background-color: #ececec;
+        border: 0;
+        border-bottom: 1px solid @lightgray;
+        border-left: 1px solid @lightgray;
+        font-weight: bold;
+        font-size: 12px;
+        text-align: center;
+        height: 30px;
+        vertical-align: middle;
 
+        a {
+            color: @blacky;
+        }
+    }
+
+    tbody tr {
+        td {
+            border-top: none;
+            border-bottom: 1px solid @lightgray;
+            font-size: 13px;
+            padding: 0px;
+            vertical-align: middle;
+            text-align: center;
+            font-weight: bold;
+            
+
+        }
+        td:last-child {
+            .row {
+                margin: 20px 0;
+            }
+            width:114px;
+            padding:3px;
+
+            button {
+                width: 55px;
+                height: 45px;
+            }
+        }
+    }
+    tbody tr:last-child td{
+        border-bottom: none;
+    }
+    .row{
+        margin: 0 !important;
+    }
+}
 .finished {
     tr& {
         background-color: @finishedback;
@@ -813,10 +871,7 @@ form#auth.form-register {
     background-image: url("../images/ajax-error.png")
 }
 
-caption {
-    font-size: 130%;
-    font-weight: bold;
-}
+
 
 .small-font {
     font-size: 70%;
@@ -825,19 +880,6 @@ caption {
 google-map {
     display: block;
     height: @mapheight;
-}
-
-#taskslist {
-    thead tr th {
-        border-top: 1px double @lightgray;
-        border-bottom: 3px double @lightgray;
-        font-weight: bold;
-        text-align: center;
-    }
-    
-    tbody tr td {
-        text-align:center;
-    }
 }
 
 #gpsMap {
@@ -858,6 +900,40 @@ input::-webkit-inner-spin-button {
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
+/* Button */
+#createNewTask{
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    width: 200px;
+    background-color: #99CC00;
+    color: #FFFFFF;
+    display: block;
+    font-weight: bold;
+    text-align: center;
+    [class^="icon-"] {
+        color: #FFFFFF;
+        margin-right: 8px;
+    }
+    &:hover{
+        border-color: #DDDDDD;
+        border-style: solid;
+        border-width: 1px;
+    }
+}
+/* Lightbox (tasks) */
+#taskLightbox{
+    left: 20% !important;
+    top: 30px !important;
+    width: 60% !important;
+    min-width: 600px;
+    text-align:left;
+    
+    .lightbox-content{
+        display:block;
+   }
+}
 textarea:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
