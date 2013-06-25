@@ -34,7 +34,7 @@ public interface WebHighLevelInterface {
 	 * 
 	 * @param selectedGameID - game's ID to be leaved by current user
 	 */
-	void leaveCurrentPlayerToTheGame(Long selectedGameID);
+	void leaveCurrentPlayerFromTheGame(Long selectedGameID);
 	
 	/**
 	 * it check if user can "log in" (REST is stateless so no session - check if

@@ -10,7 +10,7 @@ import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 import com.blstream.urbangame.example.DemoData;
 
 /**
- * For now it's mock-y but as time will pass, every method will be implemented
+ * For now it's mock-y but as time will go by, every method will be implemented
  * as it should work in real conditions.
  */
 public class WebHighLevel implements WebHighLevelInterface {
@@ -23,22 +23,22 @@ public class WebHighLevel implements WebHighLevelInterface {
 	}
 	
 	@Override
-	public void downloadGameList() {
+	public synchronized void downloadGameList() {
 		new DemoData(context).insertDataIntoDatabase();
 	}
 	
 	@Override
-	public void downloadUsersGames() {
+	public synchronized void downloadUsersGames() {
 		// TODO Auto-generated method stub
 	}
 	
 	@Override
-	public void downloadGameDetails(Long selectedGameID) {
+	public synchronized void downloadGameDetails(Long selectedGameID) {
 		// TODO Auto-generated method stub
 	}
 	
 	@Override
-	public void joinCurrentPlayerToTheGame(Long selectedGameID) {
+	public synchronized void joinCurrentPlayerToTheGame(Long selectedGameID) {
 		// FIXME invocation to server should occur here
 		//******************//
 		//					//
@@ -70,7 +70,7 @@ public class WebHighLevel implements WebHighLevelInterface {
 	}
 	
 	@Override
-	public void leaveCurrentPlayerToTheGame(Long selectedGameID) {
+	public synchronized void leaveCurrentPlayerFromTheGame(Long selectedGameID) {
 		// FIXME invocation to server should occur here
 		//******************//
 		//					//
@@ -93,19 +93,19 @@ public class WebHighLevel implements WebHighLevelInterface {
 	}
 	
 	@Override
-	public Player checkUsersCredinetials(String email, String password) {
+	public synchronized Player checkUsersCredinetials(String email, String password) {
 		// TODO Auto-generated method stub
 		return new Player(email, password, null, (String) null);
 	}
 	
 	@Override
-	public Player registerPlayer(String email, String displayName, String password) {
+	public synchronized Player registerPlayer(String email, String displayName, String password) {
 		// TODO Auto-generated method stub
 		return new Player(email, password, displayName, (String) null);
 	}
 	
 	@Override
-	public void downloadTasksForGame(long gameID) {
+	public synchronized void downloadTasksForGame(long gameID) {
 		// TODO Auto-generated method stub
 	}
 	

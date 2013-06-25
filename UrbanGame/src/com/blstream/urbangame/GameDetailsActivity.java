@@ -297,7 +297,7 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 	private void leavePlayerFromGame() {
 		
 		WebHighLevelInterface web = new WebHighLevel(this);
-		web.leaveCurrentPlayerToTheGame(getSelectedGameID());
+		web.leaveCurrentPlayerFromTheGame(getSelectedGameID());
 		
 		isPlayerAParticipantOfCurrentGame = false;
 		setJoinLeaveButtonText((Button) findViewById(R.id.buttonJoinLeaveGame));
