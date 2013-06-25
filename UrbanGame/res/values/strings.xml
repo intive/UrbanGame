@@ -71,6 +71,11 @@
     <string name="tab_game_gameInfo">Game info</string>
     <string name="tab_game_tasks">Tasks</string>
     <string name="tab_game_ranking">Ranking</string>
+    <string name="header_prerequisites">PREREQUISITES</string>
+    <string name="info_task_inactive">This task is inactive.</string>
+    <string name="info_task_canceled">This task have been canceled.</string>
+    <string name="info_task_finished">You have already finished this task.</string>
+    <string name="info_task_canceled_points">All the points given for this task have been canceled.</string>
 
     <!-- ActiveTaskActivity -->
     <string name="tab_task_description">Description</string>
