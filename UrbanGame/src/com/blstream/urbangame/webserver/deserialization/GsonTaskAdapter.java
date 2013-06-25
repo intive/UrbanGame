@@ -1,4 +1,4 @@
-package com.blstream.urbangame.webserver.helper;
+package com.blstream.urbangame.webserver.deserialization;
 
 import java.lang.reflect.Type;
 
@@ -18,7 +18,7 @@ import com.google.gson.JsonSyntaxException;
 /* GsonTaskAdapter is custom GSON adapter which allows to deserialize JSON
  * string that describes object of the abstract class "Task". */
 
-class GsonTaskAdapter implements JsonDeserializer<Task> {
+public class GsonTaskAdapter implements JsonDeserializer<Task> {
 	private final String TAG = "GsonTaskAdapter";
 	private final String TASK_TYPE_FIELD_NAME = "type";
 	
@@ -30,8 +30,12 @@ class GsonTaskAdapter implements JsonDeserializer<Task> {
 		Task task = null;
 		
 		try {
-			if (type == Task.TASK_TYPE_ABCD) task = gson.fromJson(json, ABCDTask.class);
-			else task = gson.fromJson(json, LocationTask.class);
+			if (type == Task.TASK_TYPE_ABCD) {
+				task = gson.fromJson(json, ABCDTask.class);
+			}
+			else {
+				task = gson.fromJson(json, LocationTask.class);
+			}
 		}
 		
 		catch (JsonSyntaxException e) {

@@ -34,10 +34,16 @@ public class WebServerHelper {
 	//
 	// Public methods
 	//
+	
+	/**
+	 * @param  webServerResponseInterface - listener to be called after
+	 *         a query completed
+	 * @param  gid - id of a game
+	 * @return on failure listener which you provided as the first argument
+	 *         will receive null WebResponse object. Otherwise WebResponse will
+	 *         not be null.
+	 */
 	public static void getUrbanGameDetails(WebServerResponseInterface webServerResponseInterface, long gid) {
-		// This method issues HTTP request to server to collect game
-		// data for particular GID number.
-		
 		if (webServerResponseInterface != null) {
 			new AsyncSendWebQuery(webServerResponseInterface, QueryType.GetUrbanGameDetails, gid).execute();
 			
@@ -48,10 +54,14 @@ public class WebServerHelper {
 		}
 	}
 	
+	/**
+	 * @param  webServerResponseInterface - listener to be called after
+	 *         a query completed
+	 * @return on failure listener which you provided as the first argument
+	 *         will receive null WebResponse object. Otherwise WebResponse will
+	 *         not be null.
+	 */
 	public static void getUrbanGameBaseList(WebServerResponseInterface webServerResponseInterface) {
-		// This method issues HTTP request to server to collect list
-		// of all available games;
-		
 		if (webServerResponseInterface != null) {
 			new AsyncSendWebQuery(webServerResponseInterface, QueryType.GetUrbanGameBaseList).execute();
 			
@@ -62,9 +72,15 @@ public class WebServerHelper {
 		}
 	}
 	
+	/**
+	 * @param  webServerResponseInterface - listener to be called after
+	 *         a query completed
+	 * @param  gid - id of a game
+	 * @return on failure listener which you provided as the first argument
+	 *         will receive null WebResponse object. Otherwise WebResponse will
+	 *         not be null.
+	 */
 	public static void getTaskList(WebServerResponseInterface webServerResponseInterface, long gid) {
-		// This method issues HTTP request to server to collect Task list
-		// for particular game.
 		
 		if (webServerResponseInterface != null) {
 			new AsyncSendWebQuery(webServerResponseInterface, QueryType.GetTaskList, gid).execute();
@@ -76,10 +92,16 @@ public class WebServerHelper {
 		}
 	}
 	
+	/**
+	 * @param webServerResponseInterface - listener to be called after
+	 *         a query completed
+	 * @param  gid - id of a game
+	 * @param  tid - id of a task
+	 * @return on failure listener which you provided as the first argument
+	 *         will receive null WebResponse object. Otherwise WebResponse will
+	 *         not be null.
+	 */
 	public static void getTask(WebServerResponseInterface webServerResponseInterface, long gid, long tid) {
-		// This method issues HTTP request to server to collect information
-		// about particular Task that belongs to a specified game.
-		
 		if (webServerResponseInterface != null) {
 			new AsyncSendWebQuery(webServerResponseInterface, QueryType.GetTask, gid, tid).execute();
 			
