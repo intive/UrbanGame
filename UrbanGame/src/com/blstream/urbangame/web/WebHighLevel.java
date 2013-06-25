@@ -1,13 +1,20 @@
 package com.blstream.urbangame.web;
 
+import java.util.ArrayList;
+
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
+import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.Player;
 import com.blstream.urbangame.database.entity.PlayerGameSpecific;
+import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.example.DemoData;
+import com.blstream.urbangame.fragments.ABCDTaskAnswerFragment.ServerResponseToSendedAnswers;
+import com.blstream.urbangame.webserver.mock.MockWebServer;
 
 /**
  * For now it's mock-y but as time will go by, every method will be implemented
@@ -109,4 +116,52 @@ public class WebHighLevel implements WebHighLevelInterface {
 		// TODO Auto-generated method stub
 	}
 	
+	@Override
+	public ServerResponseToSendedAnswers sendAnswersForABCDTask(ABCDTask task, ArrayList<String> answers) {
+		
+		ServerResponseToSendedAnswers serverResponse = new ServerResponseToSendedAnswers();
+		
+		ArrayList<String> correctAnswers = null;
+		
+		correctAnswers = DemoData.getCorrectAnswers();
+		
+		if (correctAnswers != null) {
+			
+			int maxPoints = task.getMaxPoints();
+			int points = 0;
+			int numberOfCorrectAnswers = 0;
+			
+			for (String element : correctAnswers) {
+				if (answers.contains(element)) {
+					numberOfCorrectAnswers++;
+				}
+			}
+			
+			if (numberOfCorrectAnswers == correctAnswers.size()) {
+				points = maxPoints;
+			}
+			else {
+				points = maxPoints / correctAnswers.size() * numberOfCorrectAnswers;
+			}
+			
+			serverResponse.correctAnswers = correctAnswers;
+			serverResponse.points = points;
+		}
+		else {
+			serverResponse.noInternetConnection = true;
+		}
+		
+		return serverResponse;
+	}
+	
+	@Override
+	public int sendAnswerForLocationTask(Task task, Location location) {
+		MockWebServer mockWebServer = new MockWebServer();
+		return mockWebServer.sendGPSLocation(context, task, location);
+	}
+	
+	@Override
+	public Location getCorrectAnswerForGpsTask(Task task) {
+		return new MockWebServer().getCorrectGpsLocation(task);
+	}
 }

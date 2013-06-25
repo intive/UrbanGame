@@ -23,8 +23,9 @@ import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.dialogs.AnswerDialog;
 import com.blstream.urbangame.dialogs.AnswerDialog.DialogType;
-import com.blstream.urbangame.example.DemoData;
 import com.blstream.urbangame.helpers.Pair;
+import com.blstream.urbangame.web.WebHighLevel;
+import com.blstream.urbangame.web.WebHighLevelInterface;
 
 public class ABCDTaskAnswerFragment extends SherlockFragment {
 	
@@ -35,7 +36,7 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 	private boolean[] selections;
 	AnswerDialog dialog;
 	
-	public class ServerResponseToSendedAnswers {
+	public static class ServerResponseToSendedAnswers {
 		public boolean noInternetConnection = false;
 		public ArrayList<String> correctAnswers = null;
 		public Integer points = 0;
@@ -135,7 +136,8 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 			ProgressDialog progressDialog = new ProgressDialog(getActivity());
 			progressDialog.show();
 			
-			ServerResponseToSendedAnswers serverResponse = sendAnswers(task, answers);
+			WebHighLevelInterface web = new WebHighLevel(getActivity());
+			ServerResponseToSendedAnswers serverResponse = web.sendAnswersForABCDTask(task, answers);
 			
 			progressDialog.dismiss();
 			
@@ -171,43 +173,5 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 				}
 			}
 		}
-	}
-	
-	// FIXME MOCK replace with sending answers to server
-	public ServerResponseToSendedAnswers sendAnswers(ABCDTask task, ArrayList<String> answers) {
-		
-		ServerResponseToSendedAnswers serverResponse = new ServerResponseToSendedAnswers();
-		
-		ArrayList<String> correctAnswers = null;
-		
-		correctAnswers = DemoData.getCorrectAnswers();
-		
-		if (correctAnswers != null) {
-			
-			int maxPoints = task.getMaxPoints();
-			int points = 0;
-			int numberOfCorrectAnswers = 0;
-			
-			for (String element : correctAnswers) {
-				if (answers.contains(element)) {
-					numberOfCorrectAnswers++;
-				}
-			}
-			
-			if (numberOfCorrectAnswers == correctAnswers.size()) {
-				points = maxPoints;
-			}
-			else {
-				points = maxPoints / correctAnswers.size() * numberOfCorrectAnswers;
-			}
-			
-			serverResponse.correctAnswers = correctAnswers;
-			serverResponse.points = points;
-		}
-		else {
-			serverResponse.noInternetConnection = true;
-		}
-		
-		return serverResponse;
 	}
 }
