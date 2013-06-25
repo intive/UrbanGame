@@ -4,8 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.blstream.urbangame.example.DemoData;
 import com.blstream.urbangame.session.LoginManager;
+import com.blstream.urbangame.web.WebHighLevel;
+import com.blstream.urbangame.web.WebHighLevelInterface;
 
 /**
  * SplashScreen for application, which is not kept in history stack.
@@ -16,8 +17,8 @@ public class SplashScreenActivity extends SherlockFragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//FIXME delete mock when not needed
-		new DemoData(this).insertDataIntoDatabase();
+		WebHighLevelInterface web = new WebHighLevel(this);
+		web.downloadGameList();
 		
 		startGamesActivity();
 	}

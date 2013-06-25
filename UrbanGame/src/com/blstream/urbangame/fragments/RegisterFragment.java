@@ -36,18 +36,14 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 	// formatter:off
 	private void createRegisterCompleteAlertDialog() {
 		registerCompleteAlertDialog = new UrbanGameDialog.DialogBuilder(activity)
-			.setTitle(R.string.dialog_register_title)
-			.setMessage(R.string.dialog_register_message)
-			.setPositiveButton(android.R.string.ok, registerSuccessfulListener)
-			.create();
+			.setTitle(R.string.dialog_register_title).setMessage(R.string.dialog_register_message)
+			.setPositiveButton(android.R.string.ok, registerSuccessfulListener).create();
 	}
 	
 	private void createInvalidDataAlertDialog() {
 		invalidDataAlertDialog = new UrbanGameDialog.DialogBuilder(activity)
-			.setTitle(R.string.dialog_data_invalid_tittle)
-			.setMessage(R.string.dialog_data_invalid_message)
-			.setPositiveButton(R.string.button_correct, null)
-			.create();
+			.setTitle(R.string.dialog_data_invalid_tittle).setMessage(R.string.dialog_data_invalid_message)
+			.setPositiveButton(R.string.button_correct, null).create();
 	}
 	
 	// formatter:on
@@ -84,17 +80,17 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 	}
 	
 	private boolean isRegisterDataValid(String email, String displayName, String password) {
-		return loginRegisterView.isDataCorrect() && !isPlayerAlreadyRegistered(email);
+		return loginRegisterView.isDataCorrect() && register(email, displayName, password);
 	}
 	
-	private boolean isPlayerAlreadyRegistered(String email) {
-		return RegistrationManager.getInstance(activity).doesPlayerExist(email);
+	private boolean register(String email, String displayName, String password) {
+		return RegistrationManager.getInstance(activity).register(email, displayName, password);
 	}
 	
 	private final UrbanGameDialogOnClickListener registerSuccessfulListener = new UrbanGameDialogOnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			activity.registerAndLoginUser(email, displayName, password);
+			activity.loginUser(email, displayName, password);
 		}
 	};
 }

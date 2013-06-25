@@ -28,6 +28,8 @@ import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
+import com.blstream.urbangame.web.WebHighLevel;
+import com.blstream.urbangame.web.WebHighLevelInterface;
 
 public class MyGamesActivity extends AbstractGamesListActivity implements OnChildClickListener {
 	private ExpandableListView mExpandableList;
@@ -42,6 +44,10 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_games);
 		setSupportProgressBarVisibility(true);
+		
+		//it fills DB with users games if they are not in DB.
+		WebHighLevelInterface web = new WebHighLevel(this);
+		web.downloadUsersGames();
 		
 		mExpandableList = (ExpandableListView) findViewById(R.id.expandableListViewMyGamesList);
 		mExpandableList.setOnChildClickListener(this);

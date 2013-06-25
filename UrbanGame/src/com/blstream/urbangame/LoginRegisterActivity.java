@@ -61,8 +61,7 @@ public class LoginRegisterActivity extends AbstractMenuActivity {
 		this.finish();
 	}
 	
-	public void registerAndLoginUser(String email, String displayName, String password) {
-		registrationManager.registerUser(email, password, displayName, null);
+	public void loginUser(String email, String displayName, String password) {
 		loginUser(email);
 	}
 	

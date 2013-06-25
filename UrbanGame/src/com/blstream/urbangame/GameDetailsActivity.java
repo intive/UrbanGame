@@ -23,6 +23,8 @@ import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.dialogs.UrbanGameDialog;
 import com.blstream.urbangame.dialogs.UrbanGameDialog.UrbanGameDialogOnClickListener;
 import com.blstream.urbangame.example.ExampleData;
+import com.blstream.urbangame.web.WebHighLevel;
+import com.blstream.urbangame.web.WebHighLevelInterface;
 
 public class GameDetailsActivity extends AbstractMenuActivity implements OnClickListener {
 	public static final String TAG = "GameDetailsActivity";
@@ -31,12 +33,19 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 	public static boolean isDialogCompleted = true;
 	private static boolean isSomeoneLogged = false;
 	private static boolean isPlayerAParticipantOfCurrentGame = false;
+	private long gameID;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_details);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
+		gameID = getSelectedGameID();
+		
+		WebHighLevelInterface web = new WebHighLevel(this);
+		web.downloadGameDetails(gameID);
+		
 		Button joinLeaveButton = (Button) (findViewById(R.id.buttonJoinLeaveGame));
 		joinLeaveButton.setOnClickListener(this);
 		
@@ -272,34 +281,10 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 	
 	private void joinPlayerToTheGame() {
 		Log.i(TAG, "Joning the game");
-		// FIXME invocation to server should occur here
-		//******************//
-		//					//
-		//	   M O C K		//
-		//					//
-		//******************//
-		DatabaseInterface db = new Database(getApplicationContext());
-		String playerEmail = db.getLoggedPlayerID();
-		Long gameID = getSelectedGameID();
-		Log.i(TAG, "Sending information to server that player " + playerEmail + " want to join the game " + gameID);
 		
-		// FIXME code below should be invoked after positive response from server [move that code when appropriate class is ready]
-		int rankFromServer = 10;
-		PlayerGameSpecific playerGameInfo = new PlayerGameSpecific(rankFromServer, playerEmail, gameID, null, false);
-		playerGameInfo.setState(PlayerGameSpecific.GAME_ACTIVE);
-		PlayerGameSpecific actual = db.getUserGameSpecific(playerEmail, gameID);
-		if (actual == null) {
-			db.insertUserGameSpecific(playerGameInfo);
-		}
-		else {
-			db.updateUserGameSpecific(playerGameInfo);
-		}
-		db.closeDatabase();
-		//******************//
-		//					//
-		//	M O C K  E N D	//
-		//					//
-		//******************//
+		WebHighLevelInterface web = new WebHighLevel(this);
+		web.joinCurrentPlayerToTheGame(getSelectedGameID());
+		
 		isPlayerAParticipantOfCurrentGame = true;
 		startActivityAfterCompletedJoinAction();
 	}
@@ -310,26 +295,11 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 	}
 	
 	private void leavePlayerFromGame() {
-		// FIXME invocation to server should occur here
-		//******************//
-		//					//
-		//	   M O C K		//
-		//					//
-		//******************//
-		DatabaseInterface db = new Database(getApplicationContext());
-		String playerEmail = db.getLoggedPlayerID();
-		Long gameID = getSelectedGameID();
-		Log.i(TAG, "Sending information to server that player " + playerEmail + " leaved the game " + gameID);
 		
-		// FIXME code below should be invoked after positive response from server [move that code when appropriate class is ready]
-		db.deleteUserGameSpecific(playerEmail, gameID);
-		db.closeDatabase();
-		((Button) findViewById(R.id.buttonJoinLeaveGame)).setText(R.string.button_join);
-		//******************//
-		//					//
-		//	M O C K  E N D	//
-		//					//
-		//******************//
+		WebHighLevelInterface web = new WebHighLevel(this);
+		web.leaveCurrentPlayerToTheGame(getSelectedGameID());
+		
 		isPlayerAParticipantOfCurrentGame = false;
+		setJoinLeaveButtonText((Button) findViewById(R.id.buttonJoinLeaveGame));
 	}
 }
