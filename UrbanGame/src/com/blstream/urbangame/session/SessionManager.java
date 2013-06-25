@@ -13,7 +13,8 @@ import com.blstream.urbangame.database.entity.Player;
 /**
  * This class manages user session.
  * 
- * It provides the following functionalities: - adding users to DB
+ * It provides the following functionalities: 
+ * 		- adding users to DB
  * 
  * Due to this class we can easily connect with server to check and compare
  * local and online data.

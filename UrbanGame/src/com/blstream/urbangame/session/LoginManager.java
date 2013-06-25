@@ -11,8 +11,10 @@ import com.blstream.urbangame.web.WebHighLevelInterface;
 /**
  * This class manages user login session.
  * 
- * It provides the following functionalities: - keeping information about logged
- * user - login and logout user - validating user data (login and password)
+ * It provides the following functionalities: 
+ * 		- keeping information about logged user 
+ * 		- login and logout user 
+ * 		- validating user data (login and password)
  * 
  * Due to this class we can easily manages logged users, write and read their
  * data from DB, and connect with server to update information about session.
