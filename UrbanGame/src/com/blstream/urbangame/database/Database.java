@@ -910,7 +910,7 @@ public class Database implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean insertListOfTasksForGame(Long gameID, List<Task> tasks) {
+	public synchronized boolean insertListOfTasksForGame(Long gameID, List<Task> tasks) {
 		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		boolean isOK = true;
 		
