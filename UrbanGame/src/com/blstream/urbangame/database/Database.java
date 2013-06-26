@@ -89,7 +89,7 @@ public class Database implements DatabaseInterface {
 	}
 	
 	@Override
-	public boolean insertListOfGamesShortInfo(List<UrbanGameShortInfo> list) {
+	public synchronized boolean insertListOfGamesShortInfo(List<UrbanGameShortInfo> list) {
 		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		db.beginTransaction();
 		boolean isInsertOK = true;
