@@ -70,7 +70,7 @@ namespace Common
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <param name="solution">Solution of task</param>
         /// <returns>a bool</returns>
-        bool SubmitTaskSolution(int gid, int tid, IBaseSolution solution);
+        SubmitResult SubmitTaskSolution(int gid, int tid, IBaseSolution solution);
 
         /// <summary>
         /// Method responses for user authorization
