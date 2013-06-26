@@ -30,22 +30,22 @@ public class WebHighLevel implements WebHighLevelInterface {
 	}
 	
 	@Override
-	public synchronized void downloadGameList() {
+	public void downloadGameList() {
 		new DemoData(context).insertDataIntoDatabase();
 	}
 	
 	@Override
-	public synchronized void downloadUsersGames() {
+	public void downloadUsersGames() {
 		// TODO Auto-generated method stub
 	}
 	
 	@Override
-	public synchronized void downloadGameDetails(Long selectedGameID) {
+	public void downloadGameDetails(Long selectedGameID) {
 		// TODO Auto-generated method stub
 	}
 	
 	@Override
-	public synchronized void joinCurrentPlayerToTheGame(Long selectedGameID) {
+	public void joinCurrentPlayerToTheGame(Long selectedGameID) {
 		// FIXME invocation to server should occur here
 		//******************//
 		//					//
@@ -77,7 +77,7 @@ public class WebHighLevel implements WebHighLevelInterface {
 	}
 	
 	@Override
-	public synchronized void leaveCurrentPlayerFromTheGame(Long selectedGameID) {
+	public void leaveCurrentPlayerFromTheGame(Long selectedGameID) {
 		// FIXME invocation to server should occur here
 		//******************//
 		//					//
@@ -100,19 +100,19 @@ public class WebHighLevel implements WebHighLevelInterface {
 	}
 	
 	@Override
-	public synchronized Player loginUser(String email, String password) {
+	public Player loginUser(String email, String password) {
 		// TODO Auto-generated method stub
 		return new Player(email, password, null, (String) null);
 	}
 	
 	@Override
-	public synchronized Player registerPlayer(String email, String displayName, String password) {
+	public Player registerPlayer(String email, String displayName, String password) {
 		// TODO Auto-generated method stub
 		return new Player(email, password, displayName, (String) null);
 	}
 	
 	@Override
-	public synchronized void downloadTasksForGame(long gameID) {
+	public void downloadTasksForGame(long gameID) {
 		// TODO Auto-generated method stub
 	}
 	
