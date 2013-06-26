@@ -255,7 +255,7 @@
             </controls:PivotItem>
         </controls:Pivot>
 
-        <Grid x:Name="Toast" Visibility="Visible" cal:Message.Attach="[Event Tap]=[Action ChangeToNormal()]">
+        <Grid x:Name="Toast" Visibility="Collapsed" cal:Message.Attach="[Event Tap]=[Action ChangeToNormal()]">
             <Rectangle Width="480" Height="770" Opacity="0.5">
                 <Rectangle.Fill>
                     <SolidColorBrush Color="{StaticResource SolidColorBrushBlack}"/>

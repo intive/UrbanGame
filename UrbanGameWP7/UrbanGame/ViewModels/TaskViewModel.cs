@@ -273,7 +273,7 @@ namespace UrbanGame.ViewModels
             }
 
             //sending solution
-            var result = _gameWebService.SubmitTaskSolution(Game.Id, CurrentTask.Id, solution);
+            var result = _gameWebService.SubmitTaskSolution(Game.Id, CurrentTask.Id, Solution);
 
             if (result == SubmitResult.AnswerCorrect)
             {

@@ -160,8 +160,6 @@ namespace UrbanGame.ViewModels
                 _gameWebService.IsAuthorized = false;
                 SetAppBarContent();
             }
-
-
         }
 
         public async Task RefreshGame()
@@ -187,7 +185,7 @@ namespace UrbanGame.ViewModels
             if (MessageBox.Show("join in", "join in", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
-
+                {
                     IGame game = uow.GetRepository<IGame>().All().FirstOrDefault(x => x.Id == Game.Id);
                      
                     if (game == null)
