@@ -119,6 +119,7 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 		urbanGameApplication.onResume();
 		loginManager = LoginManager.getInstance(AbstractMenuActivity.this);
 		notificationServer.updateContext(this);
+		
 	}
 	
 	@Override
@@ -160,7 +161,7 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		int itemId = item.getItemId();
 		switch (itemId) {
-			case R.id.menu_refresh:		//TODO delete only demonstration feature
+			case R.id.menu_refresh: //TODO delete only demonstration feature
 				themeRES = themeRES == R.style.UrbanGameTheme_Default ? R.style.UrbanGameTheme_Blue
 					: R.style.UrbanGameTheme_Default;
 				break;
@@ -168,6 +169,9 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 			case R.id.menu_logout:
 				loginManager.logoutUser();
 				finishAndStartGamesListActivity();
+				break;
+			case R.id.menu_settings:
+				startActivity(new Intent(this, UserSettingsActivity.class));
 				break;
 			case android.R.id.home:
 				finish();
