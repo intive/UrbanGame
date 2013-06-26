@@ -11,11 +11,19 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_database" >
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="@string/key_database_encryption_on"
             android:summary="@string/settings_database_encryption_on_summary"
             android:title="@string/settings_database_encryption_on_title" >
         </CheckBoxPreference>
     </PreferenceCategory>
-
+    <PreferenceCategory android:title="@string/settings_style" >
+		<ListPreference
+		     android:defaultValue="UrbanGameTheme.Default"
+		     android:entries="@array/listThemes"
+		     android:entryValues="@array/listThemesValues"
+		     android:key="@string/key_theme"
+		     android:summary="@string/settings_theme_summary"
+		     android:title="@string/settings_theme_title" />
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -5,7 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -80,7 +82,11 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		setTheme(themeRES); //TODO delete only demonstration feature
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String themeName = sharedPrefs
+			.getString(getResources().getString(R.string.key_theme), "UrbanGameTheme.Default");
+		int themeID = this.getResources().getIdentifier(themeName, "style", this.getPackageName());
+		setTheme(themeID);
 		super.onCreate(savedInstanceState);
 		this.urbanGameApplication = (UrbanGameApplication) getApplication();
 		this.localBroadcastManager = LocalBroadcastManager.getInstance(AbstractMenuActivity.this);
@@ -119,7 +125,6 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 		urbanGameApplication.onResume();
 		loginManager = LoginManager.getInstance(AbstractMenuActivity.this);
 		notificationServer.updateContext(this);
-		
 	}
 	
 	@Override
@@ -155,15 +160,11 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 		return loginManager.isUserLoggedIn();
 	}
 	
-	private static int themeRES = R.style.UrbanGameTheme_Default; //TODO delete only demonstration feature
-	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		int itemId = item.getItemId();
 		switch (itemId) {
-			case R.id.menu_refresh: //TODO delete only demonstration feature
-				themeRES = themeRES == R.style.UrbanGameTheme_Default ? R.style.UrbanGameTheme_Blue
-					: R.style.UrbanGameTheme_Default;
+			case R.id.menu_refresh:
 				break;
 			//TODO end delete section
 			case R.id.menu_logout:

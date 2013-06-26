@@ -1,36 +1,27 @@
 package com.blstream.urbangame;
 
-import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.blstream.urbangame.database.Database;
-import com.blstream.urbangame.fragments.UserSettingsFragment;
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.blstream.urbangame.notifications.NotificationServer;
 
-public class UserSettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class UserSettingsActivity extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 	
 	private final String TAG = UserSettingsActivity.class.getSimpleName();
 	
-	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String themeName = sharedPrefs
+			.getString(getResources().getString(R.string.key_theme), "UrbanGameTheme.Default");
+		int themeID = this.getResources().getIdentifier(themeName, "style", this.getPackageName());
+		setTheme(themeID);
 		super.onCreate(savedInstanceState);
-		
-		//  for honeycomb and newer versions
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-			getFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingsFragment()).commit();
-			Log.i(TAG, "honeycomb user settings");
-		}
-		else {
-			addPreferencesFromResource(R.xml.user_settings);
-			Log.i(TAG, "older user settings");
-		}
-		
+		addPreferencesFromResource(R.xml.user_settings);
 	}
 	
 	@Override
@@ -47,6 +38,7 @@ public class UserSettingsActivity extends PreferenceActivity implements OnShared
 	
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		Log.i(TAG, "key " + key);
 		if (key.equals(getString(R.string.key_notifications_on))) {
 			if (sharedPreferences.getBoolean(getString(R.string.key_notifications_on), true)) {
 				NotificationServer.getInstance(this).turnOnNotifications();
@@ -57,11 +49,5 @@ public class UserSettingsActivity extends PreferenceActivity implements OnShared
 				Log.i(TAG, "Setting: Notifications Off");
 			}
 		}
-		else if (key.equals(getString(R.string.key_database_encryption_on))) {
-			Database.use_encryption_flag = sharedPreferences.getBoolean(getString(R.string.key_database_encryption_on),
-				false);
-			Log.i(TAG, "Setting: Database encryption " + Database.use_encryption_flag);
-		}
 	}
-	
 }
