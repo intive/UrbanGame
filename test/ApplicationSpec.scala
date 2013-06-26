@@ -74,7 +74,7 @@ class ApplicationSpec extends Specification {
         Thread.sleep(10 * 1000)
         status(ngame) must equalTo(OK)
         contentType(ngame) must beSome.which(_ == "text/html")
-        contentAsString(ngame) must contain ("Step 1")
+        contentAsString(ngame) must contain ("Complete the basic data")
       }
     }
     

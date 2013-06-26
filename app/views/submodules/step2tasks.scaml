@@ -28,28 +28,28 @@
             %a#createNewTask(data-toggle="lightbox" href="#taskLightbox")
                 %i.icon-plus
                 =Messages("tasks.newtaskbtn")(lan)
-            %table#tasklist.table.table-hover.table-bordered.slight-margin-top()
+            %table#tasklist.table.table-hover.table-bordered.slight-margin-top
                 %thead
                     %tr
                         %th 
-                            =Messages("tasks.headername")
                             %a(href="" ng-click="sortBy('name')")
                                 %i.icon-sort
+                            = Messages("tasks.headername")
                         %th 
-                            =Messages("tasks.headertype")
                             %a(href="" ng-click="sortBy('type')")
                                 %i.icon-sort
+                            = Messages("tasks.headertype")
                         %th 
-                            =Messages("tasks.headervisible")
                             %a(href="" ng-click="sortBy('visibility')")
                                 %i.icon-sort
-                        %th =Messages("tasks.headeroptions")
+                            = Messages("tasks.headervisible")
+                        %th = Messages("tasks.headeroptions")
                 %tbody
                     %tr.cursor-pointer(ng-repeat="task in tasks" ng-click="showMarkers($index);")
                         %td
                             {{task.name}}
                         %td
-                            -@ val ttd: String = tt+" {{task.maxPoints}}"
+                            -@ val ttd: String = tt + " {{task.maxPoints}}"
                             %span(tooltip={ttd} tooltip-placement="top" tooltip-animation="true")
                                 {{task.type}}
                                 

@@ -663,7 +663,7 @@ table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist the
     border-top-right-radius: @borderradius;
 }
 
-#gamelist {
+#gamelist, #tasklist {
     thead tr th:first-child {
         border-left: 1px solid @lightgray;
     }
@@ -684,7 +684,6 @@ table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist the
 
     tbody tr {
         td {
-        border-top: none;
             font-size: 13px;
             vertical-align: middle;
             padding-right: 10px;
@@ -700,16 +699,7 @@ table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist the
             }
         }
 
-        td:nth-child(2) {
-            text-align: left;
-            vertical-align: top;
-            padding-top: 15px;
-        }
-
         td:last-child {
-            .row {
-                margin: 20px 0;
-            }
 
             button {
                 width: 55px;
@@ -718,55 +708,21 @@ table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist the
         }
     }
 }
-#tasklist {
-    thead tr th {
-        background-color: #ececec;
-        border: 0;
-        border-bottom: 1px solid @lightgray;
-        border-left: 1px solid @lightgray;
-        font-weight: bold;
-        font-size: 12px;
-        text-align: center;
-        height: 30px;
-        vertical-align: middle;
 
-        a {
-            color: @blacky;
-        }
-    }
-
-    tbody tr {
-        td {
-            border-top: none;
-            border-bottom: 1px solid @lightgray;
-            font-size: 13px;
-            padding: 0px;
-            vertical-align: middle;
-            text-align: center;
-            font-weight: bold;
-            
-
-        }
-        td:last-child {
-            .row {
-                margin: 20px 0;
-            }
-            width:114px;
-            padding:3px;
-
-            button {
-                width: 55px;
-                height: 45px;
-            }
-        }
-    }
-    tbody tr:last-child td{
-        border-bottom: none;
-    }
-    .row{
-        margin: 0 !important;
-    }
+#gamelist td:nth-child(2) {
+    text-align: left;
+    vertical-align: top;
+    padding-top: 15px;
 }
+
+#gamelist td:last-child.row {
+    margin: 20px 0;
+}
+
+#tasklist tbody tr td:nth-child(2), #tasklist tbody tr td:nth-child(3) {
+    color: @greeny;
+}
+
 .finished {
     tr& {
         background-color: @finishedback;
@@ -871,8 +827,6 @@ form#auth.form-register {
     background-image: url("../images/ajax-error.png")
 }
 
-
-
 .small-font {
     font-size: 70%;
 }
@@ -922,18 +876,20 @@ input::-webkit-inner-spin-button {
         border-width: 1px;
     }
 }
+
 /* Lightbox (tasks) */
-#taskLightbox{
+#taskLightbox {
     left: 20% !important;
     top: 30px !important;
     width: 60% !important;
     min-width: 600px;
-    text-align:left;
+    text-align: left;
     
-    .lightbox-content{
-        display:block;
+    .lightbox-content {
+        display: block;
    }
 }
+
 textarea:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
