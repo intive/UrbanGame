@@ -38,7 +38,7 @@ namespace UrbanGame.ViewModels
         private List<AppbarItem> AuthorizedAppbar = new List<AppbarItem>()
         {
             new AppbarItem() {  Text = Localization.AppResources.LogIn,Message="LogoutOrLogin" } ,
-            new AppbarItem() { IconUri = new Uri("/Images/appbar.check.png", UriKind.Relative), Text = Localization.AppResources.JoinIn, Message = "JoinIn" }
+            new AppbarItem() { IconUri = new Uri("/Images/appbar.group.add.png", UriKind.Relative), Text = Localization.AppResources.JoinIn, Message = "JoinIn" }
         };
 
         #endregion

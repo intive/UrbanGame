@@ -255,8 +255,8 @@
             </controls:PivotItem>
         </controls:Pivot>
 
-        <Grid x:Name="Toast" Visibility="Visible">
-            <Rectangle Width="480" Height="700" Opacity="0.5">
+        <Grid x:Name="Toast" Visibility="Visible" cal:Message.Attach="[Event Tap]=[Action ChangeToNormal()]">
+            <Rectangle Width="480" Height="770" Opacity="0.5">
                 <Rectangle.Fill>
                     <SolidColorBrush Color="{StaticResource SolidColorBrushBlack}"/>
                 </Rectangle.Fill>
@@ -267,13 +267,12 @@
                 </Rectangle.Fill>
             </Rectangle>
             <TextBlock x:Name="SendingText" Text="{Binding Path=AppResources.Sending, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <toolkit:PerformanceProgressBar IsIndeterminate="True" Foreground="{StaticResource FontColorGreen}" Margin="0,0,0,50" Width="450" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <toolkit:PerformanceProgressBar x:Name="PerformanceProgressBar" IsIndeterminate="True" Foreground="{StaticResource FontColorGreen}" Margin="0,0,0,50" Width="450" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock x:Name="CorrectText" Text="{Binding Path=AppResources.Correct, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>
             <TextBlock x:Name="NotSoGreatText" Text="{Binding Path=AppResources.NotSoGreat, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>
             <TextBlock x:Name="WrongText" Text="{Binding Path=AppResources.Wrong, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>
             <TextBlock x:Name="Points" Text="{Binding UserPoints}" Style="{StaticResource UserPoints}"/>
         </Grid>
-        
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar BackgroundColor="{StaticResource SolidColorBrushGreen}">

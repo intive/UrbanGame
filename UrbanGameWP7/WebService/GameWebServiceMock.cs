@@ -141,8 +141,8 @@ namespace WebService
         public SubmitResult SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
             GameChangesManager.AddSolution(new SubmittedSolution() { TaskId = tid });
-            SubmitResult sbResult = new SubmitResult();
-
+            SubmitResult sbResult = SubmitResult.AnswerCorrect;
+            
             return sbResult;
         }
         #endregion

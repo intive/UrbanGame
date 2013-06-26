@@ -346,7 +346,6 @@ namespace UrbanGameTests.Tests
             Func<ABCDUserAnswer> sampleAnswer = () => new ABCDUserAnswer()
             {
                 Id = 1,
-                ABCDPossibleAnswerId  = 1,
                 Answer = false
             };
 

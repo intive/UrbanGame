@@ -262,6 +262,7 @@ namespace UrbanGame.ViewModels
         private void SubmitSolution(IBaseSolution solution)
         {
             //saving solution in database
+
             using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
             {
                 GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
@@ -272,9 +273,20 @@ namespace UrbanGame.ViewModels
             }
 
             //sending solution
-            _gameWebService.SubmitTaskSolution(Game.Id, CurrentTask.Id, solution);
+            var result = _gameWebService.SubmitTaskSolution(Game.Id, CurrentTask.Id, solution);
 
-            Solution = solution;
+            if (result == SubmitResult.AnswerCorrect)
+            {
+                VisualStateName = "Correct";
+            }
+            else if (result == SubmitResult.AnswerIncorrect)
+            {
+                VisualStateName = "Wrong";
+            }
+            else if (result == SubmitResult.Timeout)
+            {
+
+            }
         }
 
         public async void SubmitGPS()
@@ -284,15 +296,12 @@ namespace UrbanGame.ViewModels
             await Task.Factory.StartNew(() =>
             {
                 GPSLocation gps = new GPSLocation();
-
-                gps.GetCurrentCoordinates(coords =>
-                {
-                    IGPSSolution solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
-                    SubmitSolution(solution);
-                });
+                    gps.GetCurrentCoordinates(coords =>
+                    {
+                        Solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
+                        SubmitSolution(Solution);
+                    });
             });
-
-            VisualStateName = "Normal";
         }
 
         public async void SubmitABCD()
@@ -307,9 +316,13 @@ namespace UrbanGame.ViewModels
                     IABCDUserAnswer answer = new ABCDUserAnswer() { Answer = check.isChecked, Solution = new TaskSolution() { TextAnswer = check.possibleAnswear.Answer, TaskId = check.possibleAnswear.Task.Id, TaskType = TaskType.ABCD } };
                     solution.ABCDUserAnswers.Add(answer);
                 }
-                SubmitSolution(solution);
+                Solution = solution;
+                SubmitSolution(Solution);
             });
+        }
 
+        public void ChangeToNormal()
+        {
             VisualStateName = "Normal";
         }
 
