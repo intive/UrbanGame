@@ -16,10 +16,10 @@ import com.blstream.urbangame.database.entity.LocationTask;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
-import com.blstream.urbangame.webserver.helper.WebResponse.QueryType;
+import com.blstream.urbangame.webserver.WebServer.QueryType;
 import com.google.gson.Gson;
 
-/* MockWebServer class is simulating web server behaviour. Try to not use this
+/* MockWebServer class is simulating web server behavior. Try to not use this
  * class directly in code anywhere else then in tests, so there will be less
  * code to correct once a real web server is used. To access data kept in
  * MockWebServer use WebServerHelper class instead. */
@@ -132,7 +132,7 @@ public class MockWebServer {
 		int i;
 		
 		switch (queryType) {
-			case GetUrbanGameDetails:
+			case GetGameDetails:
 				UrbanGame urbanGame = getMockUrbanGameDetails(gid);
 				if (urbanGame != null) {
 					stringBuilder.append(gson.toJson(urbanGame));
@@ -140,7 +140,7 @@ public class MockWebServer {
 				
 				break;
 			
-			case GetUrbanGameBaseList:
+			case GetGamesList:
 				stringBuilder.append("[");
 				
 				for (i = 0; i < mockAllUrbanGames.size() - 1; ++i) {
@@ -150,7 +150,7 @@ public class MockWebServer {
 				stringBuilder.append(gson.toJson(mockAllUrbanGames.get(i))).append("]");
 				break;
 			
-			case GetTaskList:
+			case GetTasksList:
 				
 				ArrayList<Task> taskList = mockTaskLists.get(gid);
 				if (taskList != null) {
@@ -164,7 +164,7 @@ public class MockWebServer {
 				}
 				break;
 			
-			case GetTask:
+			case GetTaskDetails:
 				Task task = getMockSingleTask(gid, tid);
 				if (task != null) {
 					stringBuilder.append(gson.toJson(task));
