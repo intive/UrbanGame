@@ -55,7 +55,7 @@
                                                 <Setter Property="Margin" Value="0,0,5,5" />
                                             </Style>
                                         </Grid.Resources>
-                                        <Image Source="{Binding GameLogo}" Grid.Column="0" Width="100" Height="100" Margin="5,0,5,0" VerticalAlignment="Top"/>
+                                        <Image Source="{Binding GameLogoFullUrl}" Grid.Column="0" Width="100" Height="100" Margin="5,0,5,0" VerticalAlignment="Top"/>
                                         <StackPanel Grid.Column="1" Orientation="Vertical">
                                             <Grid>
                                                 <Grid.RowDefinitions>
@@ -71,7 +71,7 @@
                                                             <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
                                                         </Style>
                                                     </StackPanel.Resources>
-                                                    <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
+                                                    <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,0,10,0"/>
                                                     <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="2">
@@ -121,7 +121,7 @@
                                                 <Setter Property="Margin" Value="0,0,5,5" />
                                             </Style>
                                         </Grid.Resources>
-                                        <Image Source="{Binding GameLogo}" Width="100" Height="100" Grid.Column="0" Margin="0,0,5,0" VerticalAlignment="Top"/>
+                                        <Image Source="{Binding GameLogoFullUrl}" Width="100" Height="100" Grid.Column="0" Margin="0,0,5,0" VerticalAlignment="Top"/>
                                         <Grid Grid.Column="1" Background="Transparent">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
@@ -136,7 +136,7 @@
                                                         <Setter Property="Foreground" Value="{StaticResource FontColorWhite}"/>
                                                     </Style>
                                                 </StackPanel.Resources>
-                                                <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
+                                                <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,0,10,0"/>
                                                 <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" Grid.Row="2">
@@ -181,7 +181,7 @@
                                             <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
                                         </Style>
                                     </Grid.Resources>
-                                    <Image Source="{Binding GameLogo}" Grid.Column="0" Width="100" Height="100" Margin="0,0,5,0" VerticalAlignment="Top"/>
+                                    <Image Source="{Binding GameLogoFullUrl}" Grid.Column="0" Width="100" Height="100" Margin="0,0,5,0" VerticalAlignment="Top"/>
                                     <StackPanel Grid.Column="1" Orientation="Vertical">
                                         <Grid Background="Transparent">
                                             <Grid.RowDefinitions>
@@ -198,7 +198,7 @@
                                                         <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
                                                     </Style>
                                                 </StackPanel.Resources>
-                                                <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
+                                                <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,0,10,0"/>
                                                 <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                             </StackPanel>
                                             <StackPanel Grid.Row="2" Orientation="Horizontal">

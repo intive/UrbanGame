@@ -148,10 +148,12 @@ namespace UrbanGame.ViewModels
 
             if (!_gameWebService.IsAuthorized)
             {
+
                 _navigationService.UriFor<LoginAndRegistrerViewModel>().Navigate();
             }
             else
             {
+
                 GameAuthorizationService authorizationService = new GameAuthorizationService();
                 authorizationService.ClearIsolatedStorage();
 
@@ -164,16 +166,16 @@ namespace UrbanGame.ViewModels
 
         public async Task RefreshGame()
         {
-            await Task.Factory.StartNew(() =>
+            await Task.Factory.StartNew(async () =>
             {
                 if (_gameWebService.IsAuthorized)
                 {
                     IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
-                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
+                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
                 }
                 else
                 {
-                    Game = _gameWebService.GetGameInfo(GameId);
+                    Game = await _gameWebService.GetGameInfo(GameId);
                 }
 
                 SetAppBarContent();
@@ -185,17 +187,17 @@ namespace UrbanGame.ViewModels
             if (MessageBox.Show("join in", "join in", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
-                {
-                    var gameToDelete = uow.GetRepository<IGame>().All().FirstOrDefault(x => x.Id == Game.Id);
 
-                    //remove a game if stored in the db(it can be inactive)
-                    if (gameToDelete != null)                        
-                        uow.GetRepository<IGame>().MarkForDeletion(gameToDelete);
+                    IGame game = uow.GetRepository<IGame>().All().FirstOrDefault(x => x.Id == Game.Id);
+                     
+                    if (game == null)
+                        uow.GetRepository<IGame>().MarkForAdd(CreateInstance(GameState.Joined, uow));                        
+                    else
+                        game.GameState = GameState.Joined;
+
+
                     uow.Commit();
-                    //store game into the db
-                    var games = uow.GetRepository<IGame>();                   
-                    games.MarkForAdd(CreateInstance(GameState.Joined, uow));
-                    uow.Commit();
+
                 }
                 _navigationService.UriFor<GameDetailsViewModel>().WithParam(x => x.GameId, Game.Id).Navigate();
             }

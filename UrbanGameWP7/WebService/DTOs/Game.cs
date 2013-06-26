@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
 using Common;
 using System.Data.Linq;
+using Newtonsoft.Json;
+using WebService.BOMock;
 
-namespace UrbanGame.Storage
+namespace WebService.DTOs
 {
-    [Table]
-    public class Game : EntityBase, IGame
+    public class Game : BOBase, IGame
     {
-        public Game() : base()
-        {
-            _taskRefs = new EntitySet<GameTask>(OnTaskAdded, OnTaskRemoved);
-            _alertRefs = new EntitySet<GameAlert>(OnAlertAdded, OnAlertRemoved);
-            _highScoreRefs = new EntitySet<GameHighScore>(OnHighScoreAdded, OnHighScoreRemoved);
-        }
-
         const string imagesUrl = "http://urbangame.patronage.blstream.com/assets/images/";
 
+        public Game()
+        {
+            _tasks = new EntityEnumerable<ITask, TaskMock>(new EntitySet<TaskMock>(OnTaskAdded, OnTaskRemoved));
+            _alerts = new EntityEnumerable<IAlert, AlertMock>(new EntitySet<AlertMock>(OnAlertAdded, OnAlertRemoved));
+            _highScores = new EntityEnumerable<IHighScore, HighScoreMock>(new EntitySet<HighScoreMock>(OnHighScoreAdded, OnHighScoreRemoved));
+        }
+        //points, maxpoints, numberOfCompletedTasks, numberOfPlayers, (gameLat, gameLon - ale tego ponoc ma nie byc), rank, 
         #region Id
 
         private int _id;
 
-        [Column(IsPrimaryKey = true)]
+        [JsonProperty(PropertyName = "gid")]
         public int Id
         {
             get
@@ -47,7 +47,6 @@ namespace UrbanGame.Storage
 
         private string _name;
 
-        [Column]
         public string Name
         {
             get
@@ -70,7 +69,6 @@ namespace UrbanGame.Storage
 
         private string _operatorName;
 
-        [Column]
         public string OperatorName
         {
             get
@@ -89,11 +87,34 @@ namespace UrbanGame.Storage
         }
         #endregion
 
+        #region Localization
+
+        private string _localization;
+
+        [JsonProperty(PropertyName="location")]
+        public string Localization
+        {
+            get
+            {
+                return _localization;
+            }
+            set
+            {
+                if (_localization != value)
+                {
+                    NotifyPropertyChanging("Localization");
+                    _localization = value;
+                    NotifyPropertyChanged("Localization");
+                }
+            }
+        }
+        #endregion
+
         #region GameLogo
 
         private string _gameLogo;
 
-        [Column]
+        [JsonProperty(PropertyName = "image")]
         public string GameLogo
         {
             get
@@ -123,34 +144,11 @@ namespace UrbanGame.Storage
         }
         #endregion
 
-        #region Localization
-
-        private string _localization;
-
-        [Column]
-        public string Localization
-        {
-            get
-            {
-                return _localization;
-            }
-            set
-            {
-                if (_localization != value)
-                {
-                    NotifyPropertyChanging("Localization");
-                    _localization = value;
-                    NotifyPropertyChanged("Localization");
-                }
-            }
-        }
-        #endregion
-
         #region GameStart
 
         private DateTime _gameStart;
 
-        [Column]
+        [JsonProperty(PropertyName="startTime")]
         public DateTime GameStart
         {
             get
@@ -173,7 +171,7 @@ namespace UrbanGame.Storage
 
         private DateTime _gameEnd;
 
-        [Column]
+        [JsonProperty(PropertyName = "endTime")]
         public DateTime GameEnd
         {
             get
@@ -196,7 +194,7 @@ namespace UrbanGame.Storage
 
         private GameType _gameType;
 
-        [Column]
+        [JsonProperty(PropertyName = "winning")]
         public GameType GameType
         {
             get
@@ -219,7 +217,6 @@ namespace UrbanGame.Storage
 
         private int _points;
 
-        [Column]
         public int Points
         {
             get
@@ -242,7 +239,6 @@ namespace UrbanGame.Storage
 
         private int _maxPoints;
 
-        [Column]
         public int MaxPoints
         {
             get
@@ -265,7 +261,6 @@ namespace UrbanGame.Storage
 
         private int _numberOfTasks;
 
-        [Column]
         public int NumberOfTasks
         {
             get
@@ -288,7 +283,6 @@ namespace UrbanGame.Storage
 
         private int _numberOfCompletedTasks;
 
-        [Column]
         public int NumberOfCompletedTasks
         {
             get
@@ -311,7 +305,6 @@ namespace UrbanGame.Storage
 
         private int _numberOfPlayers;
 
-        [Column]
         public int NumberOfPlayers
         {
             get
@@ -334,7 +327,7 @@ namespace UrbanGame.Storage
 
         private int _numberOfSlots;
 
-        [Column]
+        [JsonProperty(PropertyName="maxPlayers")]
         public int NumberOfSlots
         {
             get
@@ -357,7 +350,6 @@ namespace UrbanGame.Storage
 
         private double _gameLatitude;
 
-        [Column]
         public double GameLatitude
         {
             get
@@ -380,7 +372,6 @@ namespace UrbanGame.Storage
 
         private double _gameLongitude;
 
-        [Column]
         public double GameLongitude
         {
             get
@@ -403,7 +394,6 @@ namespace UrbanGame.Storage
 
         private GameState _gameState;
 
-        [Column]
         public GameState GameState
         {
             get
@@ -426,7 +416,6 @@ namespace UrbanGame.Storage
 
         private int? _rank;
 
-        [Column]
         public int? Rank
         {
             get
@@ -449,7 +438,6 @@ namespace UrbanGame.Storage
 
         private GameDifficulty _difficulty;
 
-        [Column]
         public GameDifficulty Difficulty
         {
             get
@@ -472,7 +460,6 @@ namespace UrbanGame.Storage
 
         private string _description;
 
-        [Column]
         public string Description
         {
             get
@@ -495,7 +482,7 @@ namespace UrbanGame.Storage
 
         private string _prizes;
 
-        [Column]
+        [JsonProperty(PropertyName = "awards")]
         public string Prizes
         {
             get
@@ -514,99 +501,72 @@ namespace UrbanGame.Storage
         }
         #endregion
 
-        #region Tasks
+        #region IGame.Tasks
 
-        private EntitySet<GameTask> _taskRefs;
+        private IEntityEnumerable<ITask> _tasks;
 
-        [Association(Name = "FK_Game_Tasks", Storage = "_taskRefs", ThisKey = "Id", OtherKey = "GameId", DeleteRule = "CASCADE")]
-        public EntitySet<GameTask> Tasks
+        public IEntityEnumerable<ITask> Tasks
         {
-            get { return _taskRefs; }
+            get
+            {
+                return _tasks;
+            }
         }
 
-        private void OnTaskAdded(GameTask task)
+        private void OnTaskAdded(TaskMock task)
         {
             task.Game = this;
         }
 
-        private void OnTaskRemoved(GameTask task)
+        private void OnTaskRemoved(TaskMock task)
         {
             task.Game = null;
         }
-
         #endregion
 
-        #region IGame.Tasks
-        IEntityEnumerable<ITask> IGame.Tasks
+        #region IGame.Alerts
+
+        private IEntityEnumerable<IAlert> _alerts;
+
+        public IEntityEnumerable<IAlert> Alerts
         {
             get
             {
-                return new EntityEnumerable<ITask, GameTask>(_taskRefs);
+                return _alerts;
             }
         }
-        #endregion
-        
-        #region Alerts
 
-        private EntitySet<GameAlert> _alertRefs;
-
-        [Association(Name = "FK_Game_Alerts", Storage = "_alertRefs", ThisKey = "Id", OtherKey = "GameId", DeleteRule = "CASCADE")]
-        public EntitySet<GameAlert> Alerts
-        {
-            get { return _alertRefs; }
-        }
-
-        private void OnAlertAdded(GameAlert alert)
+        private void OnAlertAdded(AlertMock alert)
         {
             alert.Game = this;
         }
 
-        private void OnAlertRemoved(GameAlert alert)
+        private void OnAlertRemoved(AlertMock alert)
         {
             alert.Game = null;
         }
-
         #endregion
 
-        #region IGame.Alerts
-        IEntityEnumerable<IAlert> IGame.Alerts
+        #region IGame.HighScores
+
+        private IEntityEnumerable<IHighScore> _highScores;
+
+        public IEntityEnumerable<IHighScore> HighScores
         {
             get
             {
-                return new EntityEnumerable<IAlert, GameAlert>(_alertRefs);
+                return _highScores;
             }
         }
-        #endregion
 
-        #region High Scores
-
-        private EntitySet<GameHighScore> _highScoreRefs;
-
-        [Association(Name = "FK_Game_HighScores", Storage = "_highScoreRefs", ThisKey = "Id", OtherKey = "GameId", DeleteRule = "CASCADE")]
-        public EntitySet<GameHighScore> HighScores
-        {
-            get { return _highScoreRefs; }
-        }
-
-        private void OnHighScoreAdded(GameHighScore highScore)
+        private void OnHighScoreAdded(HighScoreMock highScore)
         {
             highScore.Game = this;
         }
 
-        private void OnHighScoreRemoved(GameHighScore highScore)
+        private void OnHighScoreRemoved(HighScoreMock highScore)
         {
             highScore.Game = null;
-        }
-
-        #endregion
-
-        #region IGame.HighScores
-        IEntityEnumerable<IHighScore> IGame.HighScores
-        {
-            get
-            {
-                return new EntityEnumerable<IHighScore, GameHighScore>(_highScoreRefs);
-            }
         }
         #endregion
     }

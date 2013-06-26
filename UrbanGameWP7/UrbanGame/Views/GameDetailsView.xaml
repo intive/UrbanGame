@@ -70,7 +70,7 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Image Width="130" Height="130" Margin="0,10,24,0" Source="{Binding Path=Game.GameLogo}" VerticalAlignment="Top" />
+                            <Image Width="130" Height="130" Margin="0,10,24,0" Source="{Binding Path=Game.GameLogoFullUrl}" VerticalAlignment="Top" />
 
                             <StackPanel Grid.Column="1" Orientation="Vertical">
                                 <TextBlock Text="{Binding Path=Game.Name}" FontSize="{StaticResource PhoneFontSizeLarge}" FontWeight="Bold" Foreground="{StaticResource FontColorWhite}"/>
@@ -84,7 +84,7 @@
                                            Margin="0,0,10,0" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center"/>
                                     <TextBlock Text="{Binding Path=Game.OperatorName}" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <TextBlock Text="{Binding Localization}" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource FontColorWhite}"/>
+                                <TextBlock Text="{Binding Game.Localization}" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource FontColorWhite}"/>
                             </StackPanel>
                         </Grid>
                         <StackPanel Grid.Row="1" Orientation="Horizontal">

@@ -254,6 +254,7 @@ namespace UrbanGame.ViewModels
         protected async override void OnActivate()
         {
             base.OnActivate();
+
             await RefreshActiveTasks();
             await RefreshInactiveTasks();
             await RefreshAccomplishedTasks();
@@ -302,10 +303,10 @@ namespace UrbanGame.ViewModels
 
         public async Task RefreshGame()
         {
-            await Task.Factory.StartNew(() =>
+            await Task.Factory.StartNew(async () =>
             {
                 IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
-                Game = games.FirstOrDefault(g => g.Id == GameId) ?? _gameWebService.GetGameInfo(GameId);
+                Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
             });
         }
 

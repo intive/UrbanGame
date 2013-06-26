@@ -339,6 +339,9 @@
   <data name="Repeatable" xml:space="preserve">
     <value>powtarzalne</value>
   </data>
+  <data name="ByOperatorUpCase" xml:space="preserve">
+    <value>OD</value>
+  </data>
   <data name="Sending" xml:space="preserve">
     <value>wysyłanie</value>
   </data>
@@ -398,5 +401,4 @@
   </data>
   <data name="IncorrectLogin" xml:space="preserve">
     <value>Podany login lub hasło są nieprawidłowe</value>
-  </data>
-</root>
+  </data></root>

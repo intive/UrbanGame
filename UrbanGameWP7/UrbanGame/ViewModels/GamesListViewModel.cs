@@ -56,9 +56,9 @@ namespace UrbanGame.ViewModels
         #region IHandle<GameChangedEvent>
         public void Handle(GameChangedEvent e)
         {
-            Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(async () =>
             {
-                IGame game = _gameWebService.GetGameInfo(e.Id);
+                IGame game = await _gameWebService.GetGameInfo(e.Id);
 
                 UpdateGame(UserActiveGames, game);
                 UpdateGame(UserInactiveGames, game);
@@ -276,7 +276,7 @@ namespace UrbanGame.ViewModels
             });
         }
 
-        public void RefreshNearestGames()
+        public async void RefreshNearestGames()
         {
             if (IsRefreshing)
             {
@@ -287,24 +287,21 @@ namespace UrbanGame.ViewModels
                 IsRefreshing = true;
             }
 
-            Task.Factory.StartNew(() =>
+            try
             {
-                try
+                NearestGames.Clear();
+                var allNearestGames = (await _gameWebService.UserNearbyGames(new GeoCoordinate(1, 1))).OrderBy(g => g.GameEnd);
+                using (var uow = _unitOfWorkLocator())
                 {
-                    NearestGames.Clear();
-                    var allNearestGames = _gameWebService.UserNearbyGames(new GeoCoordinate()).OrderBy(g => g.GameEnd);
-                    using (var uow = _unitOfWorkLocator())
-                    {
-                        var loadedGames=uow.GetRepository<IGame>().All().Select(x=>x.Id);
-                        NearestGames = new BindableCollection<IGame>(allNearestGames.Where(x => !loadedGames.Contains(x.Id)));
-                    }
+                    var loadedGames=uow.GetRepository<IGame>().All().Select(x=>x.Id);
+                    NearestGames = new BindableCollection<IGame>(allNearestGames.Where(x => !loadedGames.Contains(x.Id)));
+                }
                     
-                }
-                finally
-                {
-                    IsRefreshing = false;
-                }
-            });
+            }
+            finally
+            {
+                IsRefreshing = false;
+            }
         }
 
         public void ShowDetails(IGame game)

@@ -4,18 +4,26 @@ using System.Collections.Generic;
 using System.Device.Location;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using WebService.BOMock;
+using System.IO;
+using System.Windows;
+using System.Net;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using WebService.JsonConverters;
+using WebService.DTOs;
+using System.Diagnostics;
 
 namespace WebService
 {
-    public class GameWebServiceMock : IGameWebService
+    public class GameWebService : IGameWebService
     {
         #region GameWebServiceMock
+
         /// <summary>
         /// Simple constructor
         /// </summary>
-        public GameWebServiceMock()
+        public GameWebService()
         {
             ListOfGames = new List<IGame>();
             ListOfTasks = new List<ITask>();
@@ -27,6 +35,51 @@ namespace WebService
             ListOfTasks.Add(new TaskMock() { Id = 4, Type = TaskType.QRCode, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Accepted, IsRepeatable = false, IsCancelled = false, UserPoints = 10, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
             ListOfTasks.Add(new TaskMock() { Id = 5, Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, IsCancelled = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });*/
         }
+
+        #endregion
+
+        #region WebAPI
+
+        const string APIurl = "http://urbangame.patronage.blstream.com/api/";
+        JsonConverter[] _jsonConverters = new JsonConverter[] { new JsonGameTypeConverter(), new JsonEnumConverter(), new JsonDateTimeConverter() };
+
+        public static async Task<string> GetJson(string relativeUrl)
+        {
+            WebRequest request = HttpWebRequest.Create(APIurl + relativeUrl);
+            request.Credentials = new NetworkCredential() { UserName = "maxikq", Password = "pass" };
+
+            Task<WebResponse> task = request.GetResponseAsync();
+            string text = string.Empty;
+
+            await task.ContinueWith((taskParam) =>
+            {
+                Stream response = task.Result.GetResponseStream();
+                using (StreamReader sr = new StreamReader(response))
+                    text = sr.ReadToEnd();
+            });
+            return text;
+        }
+
+        public async Task<TObject> GetViaApi<TObject>(string relativeUrl) 
+        {
+            return await GetViaApi<TObject>(relativeUrl, null);
+        }
+
+        public async Task<TObject> GetViaApi<TObject>(string relativeUrl, params object[] args)
+        {
+            string url = args != null ? String.Format(relativeUrl, args) : relativeUrl;
+            string json = await GetJson(url);
+            return JsonConvert.DeserializeObject<TObject>(json, _jsonConverters);
+        }
+
+        public async void TestApi()
+        {
+            string json = await GetJson("games?lat=10&lon=10");
+
+            var results = JsonConvert.DeserializeObject<ListOfGames>(json, _jsonConverters);
+            MessageBox.Show(results.Games[1].Id.ToString() + "\n" + Enum.GetName(typeof(GameType), results.Games[1].GameType) + "\n" + results.Games[1].Name + "\n" + results.Games[1].Prizes + "\n" + results.Games[1].Description + "\n" + results.Games[1].OperatorName + "\n" + Enum.GetName(typeof(GameDifficulty), results.Games[1].Difficulty) + "\n" + results.Games[1].GameStart.ToShortDateString());
+        }
+
         #endregion
 
         #region Containers
@@ -80,7 +133,7 @@ namespace WebService
         #region GetGameInfo
         public async Task<IGame> GetGameInfo(int gid)
         {
-            return (await UserNearbyGames(new GeoCoordinate(1,1))).Union(UsersActiveGames()).Union(UsersInactiveGames()).FirstOrDefault(x => x.Id == gid);
+            return await GetViaApi<Game>("games/{0}/static", gid);
         }
         #endregion
 
@@ -132,12 +185,10 @@ namespace WebService
         #endregion        
 
         #region SubmitTaskSolution
-        public SubmitResult SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
+        public bool SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
             GameChangesManager.AddSolution(new SubmittedSolution() { TaskId = tid });
-            SubmitResult sbResult = SubmitResult.AnswerCorrect;
-            
-            return sbResult;
+            return true;
         }
         #endregion
 
@@ -179,23 +230,13 @@ namespace WebService
         #region UserNearbyGames
         public async Task<IGame[]> UserNearbyGames(GeoCoordinate coordinate)
         {
-            var games = new IGame[] {
-                new GameMock(){Name = "Hydromystery", GameType = GameType.ScoreAttack, OperatorName = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 1, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None, Difficulty = GameDifficulty.Easy, Description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010."},
-                new GameMock(){Name = "North & South", GameType = GameType.Race, OperatorName = "Infogrames", NumberOfPlayers = 23, Id = 2, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 5, 8, 12, 12,0), GameEnd = DateTime.Now.AddDays(3).AddHours(12), GameState = GameState.None},
-                new GameMock(){Name = "Ultimate Quest", GameType = GameType.ScoreAttack, OperatorName = "JCVD", NumberOfPlayers = 23,Id = 3, GameLogo = "/ApplicationIcon.png", GameStart = DateTime.Now.AddDays(1).AddHours(12), GameEnd = DateTime.Now.AddDays(10), GameState = GameState.None},
-                new GameMock(){Name = "Galaxy Quest", GameType = GameType.Race, OperatorName = "NSEA", NumberOfPlayers = 23,Id = 4, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameEnd = new DateTime(2013,6,5,4,12,30), GameState = GameState.None},
-                new GameMock(){Name = "The Quest for NEETs", GameType = GameType.Race, OperatorName = "Ron Jeremy", NumberOfPlayers = 23,Id = 5, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8),GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None}};
+            if (coordinate == null)
+                throw new ArgumentNullException("coordinate");
 
-            string lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam mauris vel elit tincidunt ac bibendum tortor scelerisque. Mauris nisi augue, malesuada ac lobortis sed, rhoncus et mauris. Vivamus dictum turpis congue arcu euismod in pulvinar mi volutpat. Aliquam euismod pharetra velit eu sagittis. Proin et nisi nibh, ut egestas enim.";
-            int id = 1;
-            foreach(var g in games)
-            {
-                g.Tasks.Add(new TaskMock() { Id = id++, Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
-                g.Tasks.Add(new TaskMock() { Id = id++, Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
-            }
-
-            return games;
+            var result = await GetViaApi<ListOfGames>("games?lat={0}&lon={1}", coordinate.Latitude, coordinate.Longitude);
+            return result.Games.Cast<IGame>().ToArray();
         }
+
         #endregion
 
         #region UsersInactiveGames

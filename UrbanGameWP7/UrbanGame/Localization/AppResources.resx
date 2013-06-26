@@ -358,6 +358,9 @@
   <data name="Sending" xml:space="preserve">
     <value>sending</value>
   </data>
+  <data name="ByOperatorUpCase" xml:space="preserve">
+    <value>BY</value>
+  </data>
   <data name="Correct" xml:space="preserve">
     <value>CORRECT!</value>
   </data>
@@ -415,4 +418,4 @@
   <data name="IncorrectLogin" xml:space="preserve">
     <value>Provided login or password are incorrect</value>
   </data>
-</root>
+  </data></root>
