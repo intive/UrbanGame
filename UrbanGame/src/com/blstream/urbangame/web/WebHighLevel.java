@@ -100,7 +100,7 @@ public class WebHighLevel implements WebHighLevelInterface {
 	}
 	
 	@Override
-	public synchronized Player checkUsersCredinetials(String email, String password) {
+	public synchronized Player loginUser(String email, String password) {
 		// TODO Auto-generated method stub
 		return new Player(email, password, null, (String) null);
 	}

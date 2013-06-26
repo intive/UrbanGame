@@ -56,7 +56,7 @@ public class LoginManager extends SessionManager {
 	public boolean isLoginDataValid(String email, String password) {
 		
 		WebHighLevelInterface web = new WebHighLevel(super.context);
-		Player fromWeb = web.checkUsersCredinetials(email, password);
+		Player fromWeb = web.loginUser(email, password);
 		boolean isOK = fromWeb != null;
 		
 		if (isOK) {

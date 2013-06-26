@@ -53,7 +53,7 @@ public interface WebHighLevelInterface {
 	 * @param password - provided password
 	 * @return - player data if successful, else null
 	 */
-	Player checkUsersCredinetials(String email, String password);
+	Player loginUser(String email, String password);
 	
 	/**
 	 * if registers user in web server
@@ -78,7 +78,8 @@ public interface WebHighLevelInterface {
 	 * 
 	 * @param task
 	 * @param answers
-	 * @return - object that is needed by {@link ABCDTaskAnswerFragment}
+	 * @return - object that is needed by {@link ABCDTaskAnswerFragment}, along
+	 *         with correct answers if it's last attempt
 	 */
 	ServerResponseToSendedAnswers sendAnswersForABCDTask(ABCDTask task, ArrayList<String> answers);
 	
