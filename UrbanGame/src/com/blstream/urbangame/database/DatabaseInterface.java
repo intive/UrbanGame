@@ -26,6 +26,13 @@ public interface DatabaseInterface {
 	public boolean insertGameShortInfo(UrbanGameShortInfo gameShotInfo);
 	
 	/**
+	 * @param list - list of short info about games
+	 * @return true if all inserts went successful. [notice: can return false
+	 *         and insert part of list]
+	 */
+	public boolean insertListOfGamesShortInfo(List<UrbanGameShortInfo> list);
+	
+	/**
 	 * @param gameInfo - all you need for game details view, full info obtained
 	 *        from server query. Should have the same id that details have.
 	 *        Server should do that.
