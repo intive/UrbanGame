@@ -9,10 +9,12 @@ import java.util.Locale;
 import java.util.Random;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.blstream.urbangame.R;
@@ -103,15 +105,18 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 		this.database = new Database(context);
 		this.playerEmail = database.getLoggedPlayerID();
 		this.mHandler = new Handler();
+		this.notificationManager = new NotificationsManager(context);
 		
 		// If you want to run a query to web server use
 		// "setWebServerQuery()" instead of "setNoWebServerQuery()";
 		//setWebServerQuery();
 		setNoWebServerQuery();
 		
-		initQueryCountDownTimer(timeToNextQuery);
-		notificationManager = new NotificationsManager(context);
-		registerNotificationListener(notificationManager);
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+		if (sharedPrefs.getBoolean(context.getString(R.string.key_notifications_on), true)) {
+			turnOnNotifications();
+			Log.i(TAG, "notifications started");
+		}
 	}
 	
 	// FIXME this method is only used to prevent exception:
@@ -120,16 +125,19 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 		unregisterNotificationListener(notificationManager);
 		this.context = context;
 		notificationManager = new NotificationsManager(context);
-		registerNotificationListener(notificationManager);
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+		if (sharedPrefs.getBoolean(context.getString(R.string.key_notifications_on), true)) {
+			turnOnNotifications();
+		}
 	}
 	
 	public void turnOnNotifications() {
-		registerNotificationListener(new NotificationsManager(context));
+		registerNotificationListener(notificationManager);
 	}
 	
 	public void turnOffNotifications() {
 		for (NotificationListener notificationListener : observators) {
-			observators.remove(notificationListener);
+			unregisterNotificationListener(notificationListener);
 		}
 	}
 	
@@ -137,7 +145,10 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 		if (observators.isEmpty()) {
 			startCallback();
 		}
-		observators.add(notificationListener);
+		
+		if (!observators.contains(notificationListener)) {
+			observators.add(notificationListener);
+		}
 	}
 	
 	public synchronized void unregisterNotificationListener(NotificationListener notificationListener) {

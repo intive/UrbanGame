@@ -2,7 +2,6 @@ package com.blstream.urbangame.database;
 
 //formatter: off
 import static com.blstream.urbangame.database.DatabaseDefinitions.*;
-//formatter: on
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,9 +11,12 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Location;
+import android.preference.PreferenceManager;
 
+import com.blstream.urbangame.R;
 import com.blstream.urbangame.database.dbobjects.DBWrapper;
 import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.LocationTask;
@@ -29,17 +31,15 @@ import com.blstream.urbangame.database.helper.SQLCipherHelper;
 import com.blstream.urbangame.database.helper.SQLInterface;
 import com.blstream.urbangame.database.helper.SQLiteHelper;
 
-
+//formatter: on
 
 public class Database implements DatabaseInterface {
-	
-	//This is a flag that tells which database should be used (encrypted or without encryption)
-	public static boolean use_encryption_flag = true;
 	
 	SQLInterface databasebHelper;
 	
 	public Database(Context context) {
-		if (use_encryption_flag) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		if (sharedPreferences.getBoolean(context.getString(R.string.key_database_encryption_on), true)) {
 			databasebHelper = new SQLCipherHelper(context);
 		}
 		else {
