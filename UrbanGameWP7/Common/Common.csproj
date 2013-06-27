@@ -91,6 +91,7 @@
     <Compile Include="Utilities\IAppbarManager.cs" />
     <Compile Include="Games\IGame.cs" />
     <Compile Include="Games\IGameChangesManager.cs" />
+    <Compile Include="WebService\CreateAccountResponse.cs" />
     <Compile Include="WebService\IGameWebService.cs" />
     <Compile Include="Solutions\IGPSSolution.cs" />
     <Compile Include="Solutions\IOpenQuestionSolution.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Solutions\SolutionStatus.cs" />
     <Compile Include="Tasks\TaskType.cs" />
     <Compile Include="WebService\SubmitResult.cs" />
+    <Compile Include="WebService\WebApiResponse.cs" />
     <Compile Include="WebService\WebEnum.cs" />
     <Compile Include="WebService\WebException.cs" />
   </ItemGroup>

@@ -9,5 +9,6 @@ namespace Common
     {
         void ShowGameChanged(int gameId, string title, string text, IList<string> diff);
         void ShowSolutionStatusChanged(int taskId, string title, string text);
+        string GetDifferencesText(IList<string> diff);
     }
 }

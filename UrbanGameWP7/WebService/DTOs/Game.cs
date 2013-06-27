@@ -591,5 +591,27 @@ namespace WebService.DTOs
             }
         }
         #endregion
+
+        #region ListOfChanges
+
+        private string _listOfChanges;
+
+        public string ListOfChanges
+        {
+            get
+            {
+                return _listOfChanges;
+            }
+            set
+            {
+                if (_listOfChanges != value)
+                {
+                    NotifyPropertyChanging("ListOfChanges");
+                    _listOfChanges = value;
+                    NotifyPropertyChanged("ListOfChanges");
+                }
+            }
+        }
+        #endregion
     }
 }

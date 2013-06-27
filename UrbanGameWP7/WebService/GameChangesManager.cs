@@ -97,7 +97,7 @@ namespace WebService
                 PropertyInfo newProperty = newProperties.First(p => p.Name == oldProperty.Name);
 
                 //todo: do not override fields which are stored only localy
-                if (oldProperty.Name != "GameState" && oldProperty.CanWrite)
+                if (oldProperty.Name != "GameState" && oldProperty.Name != "ListOfChanges" && oldProperty.CanWrite)
                 {
                     //skip collections - only basic data
                     if (!oldProperty.PropertyType.IsGenericType ||
@@ -144,11 +144,15 @@ namespace WebService
                                 if (newGame.Version != oldGame.Version)
                                 {
                                     IList<string> diff = UpdateGame(oldGame, newGame);
-                                    uow.Commit();
 
                                     if (diff.Count == 0)
                                         return;
 
+                                    if (_toastPromptService != null)
+                                        oldGame.ListOfChanges = _toastPromptService.GetDifferencesText(diff);
+
+                                    uow.Commit();                                    
+                                                                            
                                     if (_toastPromptService != null)
                                         _toastPromptService.ShowGameChanged(oldGame.Id, oldGame.Name, _localizationService.GetText("GameChangedToast"), diff);
 

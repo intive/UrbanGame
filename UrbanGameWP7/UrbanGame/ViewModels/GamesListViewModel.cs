@@ -59,6 +59,7 @@ namespace UrbanGame.ViewModels
             Task.Factory.StartNew(async () =>
             {
                 IGame game = await _gameWebService.GetGameInfo(e.Id);
+                game.ListOfChanges = "changed";
                 UpdateGame(UserActiveGames, game);
             });
         }

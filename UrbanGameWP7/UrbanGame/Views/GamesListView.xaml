@@ -65,7 +65,12 @@
                                                     <RowDefinition />
                                                     <RowDefinition />
                                                 </Grid.RowDefinitions>
-                                                <TextBlock Text="{Binding Name}" Grid.Row="0" Margin="0,0,0,5" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
+
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
+                                                    <Ellipse Fill="White" Width="10" Height="10" Visibility="{Binding ListOfChanges, Converter={StaticResource GameChangedToVisibilityConverter}}" />
+                                                </StackPanel>
+                                                
                                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                                                     <StackPanel.Resources>
                                                         <Style TargetType="TextBlock">

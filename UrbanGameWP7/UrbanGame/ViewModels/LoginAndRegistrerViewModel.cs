@@ -141,9 +141,9 @@ namespace UrbanGame.ViewModels
                    @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,6}))$");
         }
 
-        public void LogIn(string Password)
+        public async void LogIn(string Password)
         {
-            if (!string.IsNullOrWhiteSpace(Email) && IsValidEmail(Email) && !string.IsNullOrWhiteSpace(Password) && _gameWebService.Authorize(Login, Password) == AuthorizeState.Success)
+            if (!string.IsNullOrWhiteSpace(Email) && IsValidEmail(Email) && !string.IsNullOrWhiteSpace(Password) && await _gameWebService.Authorize(Email, Password) == AuthorizeState.Success)
             {
                 GameAuthorizationService authorization = new GameAuthorizationService();
                 authorization.ClearIsolatedStorage();

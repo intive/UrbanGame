@@ -632,5 +632,28 @@ namespace UrbanGame.Storage
             }
         }
         #endregion
+
+        #region ListOfChanges
+
+        private string _listOfChanges;
+
+        [Column]
+        public string ListOfChanges
+        {
+            get
+            {
+                return _listOfChanges;
+            }
+            set
+            {
+                if (_listOfChanges != value)
+                {
+                    NotifyPropertyChanging("ListOfChanges");
+                    _listOfChanges = value;
+                    NotifyPropertyChanged("ListOfChanges");
+                }
+            }
+        }
+        #endregion
     }
 }

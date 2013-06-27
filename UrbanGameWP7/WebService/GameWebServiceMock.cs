@@ -158,7 +158,7 @@ namespace WebService
         #endregion
 
         #region Authorize
-        public AuthorizeState Authorize(string username, string password)
+        public async Task<AuthorizeState> Authorize(string username, string password)
         {
             IsAuthorized = true;
             return AuthorizeState.Success;
@@ -180,6 +180,15 @@ namespace WebService
                 _isAuthorized = value;
             }
         }
+        #endregion
+
+        #region CreateAccount
+
+        public async Task<CreateAccountResponse> CreateAccount(string username, string password)
+        {
+            return CreateAccountResponse.Success;
+        }
+
         #endregion
 
         #region UserNearbyGames

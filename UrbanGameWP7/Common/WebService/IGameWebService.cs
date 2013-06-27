@@ -77,12 +77,17 @@ namespace Common
         /// </summary>
         /// <param name="username">Username</param>
         /// <returns>a bool</returns>
-        AuthorizeState Authorize(string username, string password);
+        Task<AuthorizeState> Authorize(string username, string password);
 
         /// <summary>
         /// Shows that user is authorize
         /// </summary>
         bool IsAuthorized { get; set; }
+
+        /// <summary>
+        /// Creates account
+        /// </summary>
+        Task<CreateAccountResponse> CreateAccount(string username, string password);
 
         /// <summary>
         /// Method returns array of the nearest games(only needed fields filled in)

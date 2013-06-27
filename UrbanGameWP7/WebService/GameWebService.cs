@@ -43,21 +43,70 @@ namespace WebService
         const string APIurl = "http://urbangame.patronage.blstream.com/api/";
         JsonConverter[] _jsonConverters = new JsonConverter[] { new JsonGameTypeConverter(), new JsonEnumConverter(), new JsonDateTimeConverter() };
 
-        public static async Task<string> GetJson(string relativeUrl)
+        private static string _username = "maxikq";
+        private static string _password = "pass";
+
+        private static async Task<WebApiResponse> GetResponse(WebRequest request)
         {
-            WebRequest request = HttpWebRequest.Create(APIurl + relativeUrl);
-            request.Credentials = new NetworkCredential() { UserName = "maxikq", Password = "pass" };
+            WebApiResponse result = new WebApiResponse() { Success = true, Status = HttpStatusCode.OK };
 
-            Task<WebResponse> task = request.GetResponseAsync();
-            string text = string.Empty;
-
-            await task.ContinueWith((taskParam) =>
+            try
             {
-                Stream response = task.Result.GetResponseStream();
+                Stream response = (await request.GetResponseAsync()).GetResponseStream();
                 using (StreamReader sr = new StreamReader(response))
-                    text = sr.ReadToEnd();
-            });
-            return text;
+                    result.Json = sr.ReadToEnd();
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+
+                if (ex.InnerException != null && ex.InnerException is System.Net.WebException)
+                {
+                    System.Net.WebException webEx = (System.Net.WebException)ex.InnerException;
+
+                    if (webEx.Response != null)
+                    {
+                        var resp = (HttpWebResponse)webEx.Response;
+                        result.Status = resp.StatusCode;
+                    }
+                }
+                else
+                {
+                    result.Status = HttpStatusCode.BadRequest;
+                    System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        var message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                        MessageBox.Show("Error while sending request to API.\r\n" + message, "Error", MessageBoxButton.OK);
+                    });
+                }
+            }
+
+            return result;
+        }
+
+        public static async Task<WebApiResponse> GetJson(string relativeUrl)
+        {           
+            WebRequest request = HttpWebRequest.Create(APIurl + relativeUrl);
+            request.Credentials = new NetworkCredential() { UserName = _username, Password = _password };
+            return await GetResponse(request);
+        }
+
+        public static async Task<WebApiResponse> PostJson(string relativeUrl, string postData)
+        {            
+            WebRequest request = HttpWebRequest.Create(APIurl + relativeUrl);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            request.Credentials = new NetworkCredential() { UserName = _username, Password = _password };            
+
+            Task<Stream> requestTask = request.GetRequestStreamAsync();
+            await requestTask.ContinueWith((taskParam) =>
+                {
+                    byte[] byteData = System.Text.Encoding.UTF8.GetBytes(postData);
+                    requestTask.Result.Write(byteData, 0, byteData.Length);
+                    requestTask.Result.Close();
+                });
+
+            return await GetResponse(request);
         }
 
         public async Task<TObject> GetViaApi<TObject>(string relativeUrl) 
@@ -68,8 +117,8 @@ namespace WebService
         public async Task<TObject> GetViaApi<TObject>(string relativeUrl, params object[] args)
         {
             string url = args != null ? String.Format(relativeUrl, args) : relativeUrl;
-            string json = await GetJson(url);
-            return JsonConvert.DeserializeObject<TObject>(json, _jsonConverters);
+            WebApiResponse response = await GetJson(url);
+            return JsonConvert.DeserializeObject<TObject>(response.Json, _jsonConverters);
         }
 
         #endregion
@@ -202,11 +251,55 @@ namespace WebService
 
         #endregion
 
-        #region Authorize
-        public AuthorizeState Authorize(string username, string password)
+        #region CreateAccount
+
+        public async Task<CreateAccountResponse> CreateAccount(string username, string password)
         {
-            IsAuthorized = true;
-            return AuthorizeState.Success;
+            WebApiResponse result = await PostJson("register", String.Format("{{ \"login\": \"{0}\", \"password\": \"{1}\" }}", username, password));
+
+            if (!result.Success)
+            {
+                switch (result.Status)
+                {
+                    case HttpStatusCode.Conflict:
+                        return CreateAccountResponse.LoginUnavailable;
+                    case HttpStatusCode.RequestTimeout:
+                        return CreateAccountResponse.Timeout;
+                    default:
+                        return CreateAccountResponse.UnknownError;
+                }                
+            }
+            else
+                return CreateAccountResponse.Success;
+        }
+
+        #endregion
+
+        #region Authorize
+        public async Task<AuthorizeState> Authorize(string username, string password)
+        {
+            _username = username;
+            _password = password;
+
+            WebApiResponse result = await GetJson("login");
+
+            if (!result.Success)
+            {
+                IsAuthorized = false;
+
+                switch (result.Status)
+                {
+                    case HttpStatusCode.Unauthorized:
+                        return AuthorizeState.WrongPassword;
+                    default:
+                        return AuthorizeState.Unknown;
+                }
+            }
+            else
+            {
+                IsAuthorized = true;
+                return AuthorizeState.Success;
+            }
         }
         #endregion
 

@@ -67,5 +67,7 @@ namespace Common
         IEntityEnumerable<IHighScore> HighScores { get; }
 
         int Version { get; set; }
+
+        string ListOfChanges { get; set; }
     }
 }

@@ -105,6 +105,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateToVisibilityConverter.cs" />
     <Compile Include="Converters\DurationTimeConverter.cs" />
+    <Compile Include="Converters\GameChangedToVisibilityConverter.cs" />
     <Compile Include="Converters\GameEndConverter.cs" />
     <Compile Include="Converters\GameStartConverter.cs" />
     <Compile Include="Converters\GameStateConverter.cs" />
@@ -223,10 +224,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SplashScreenImage.jpg" />
-    <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Delete.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Select.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

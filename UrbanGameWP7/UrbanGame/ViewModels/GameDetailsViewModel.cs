@@ -79,8 +79,6 @@ namespace UrbanGame.ViewModels
 
         public int GameId { get; set; }
 
-        public string DiffComparision { get; set; }
-
         #endregion
 
         #region bindable properties
@@ -285,12 +283,19 @@ namespace UrbanGame.ViewModels
             Task.Factory.StartNew(() =>
                 {
                     System.Threading.Thread.Sleep(700);
-                    if (DiffComparision != null)
+
+                    if (!String.IsNullOrEmpty(Game.ListOfChanges))
                     {
                         System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
                             {
-                                MessageBox.Show(DiffComparision);
-                                DiffComparision = null;
+                                MessageBox.Show(Game.ListOfChanges);
+
+                                Game.ListOfChanges = null;
+                                using (var uow = _unitOfWorkLocator())
+                                {
+                                    uow.GetRepository<IGame>().All().First(g => g.Id == GameId).ListOfChanges = null;
+                                    uow.Commit();
+                                }
                             });
                         
                     }
