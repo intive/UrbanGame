@@ -1,3 +1,2 @@
 info /Tests run/
-error //[exec/] FAILURES!!!/
-warning /Failures
+warning /Error 
