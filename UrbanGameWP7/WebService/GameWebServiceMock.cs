@@ -80,7 +80,7 @@ namespace WebService
         #region GetGameInfo
         public async Task<IGame> GetGameInfo(int gid)
         {
-            return (await UserNearbyGames(new GeoCoordinate(1,1))).Union(UsersActiveGames()).Union(UsersInactiveGames()).FirstOrDefault(x => x.Id == gid);
+            return (await UserNearbyGames(new GeoCoordinate(1,1))).FirstOrDefault(x => x.Id == gid);
         }
         #endregion
 
@@ -175,16 +175,6 @@ namespace WebService
         }
         #endregion
 
-        #region UsersActiveGames
-        public IGame[] UsersActiveGames()
-        {
-            return new IGame[] {
-                new GameMock(){Name = "M For The Mission", GameType = GameType.Race, GameState = GameState.Joined, Id = 6, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(2).AddHours(13), Rank = 4},
-                new GameMock(){Name = "Thanks For All That Fish", GameType = GameType.ScoreAttack, GameState = GameState.Joined, Id = 7, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(5), Rank = null},
-                new GameMock(){Name = "Pontifex", GameType = GameType.Race, GameState = GameState.Joined, Id = 8, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(8), Rank = 8}};
-        }
-        #endregion
-
         #region UserNearbyGames
         public async Task<IGame[]> UserNearbyGames(GeoCoordinate coordinate)
         {
@@ -204,15 +194,6 @@ namespace WebService
             }
 
             return games;
-        }
-        #endregion
-
-        #region UsersInactiveGames
-        public IGame[] UsersInactiveGames()
-        {
-            return new IGame[] {
-                new GameMock(){Name = "Wilqu!", GameType = GameType.ScoreAttack, Id = 9, GameLogo = "/ApplicationIcon.png", GameState = GameState.Ended, Rank = 4},
-                new GameMock(){Name = "Torghal", GameType = GameType.Race, Id = 10, GameLogo = "/ApplicationIcon.png", GameState = GameState.Withdraw, Rank = null}};
         }
         #endregion
 

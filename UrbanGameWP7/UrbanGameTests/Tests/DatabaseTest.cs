@@ -229,8 +229,7 @@ namespace UrbanGameTests.Tests
             Game game;
             GameTask task;
             GameAlert alert;
-            GameHighScore highScore;
-            ABCDPossibleAnswer answer;            
+            GameHighScore highScore;          
             CreateSampleEntities(out game, out task, out alert, out highScore);            
 
             using (UrbanGameDataContext dataContext = RecreateDatabase())

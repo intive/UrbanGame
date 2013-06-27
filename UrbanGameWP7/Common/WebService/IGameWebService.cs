@@ -85,22 +85,10 @@ namespace Common
         bool IsAuthorized { get; set; }
 
         /// <summary>
-        /// Method returns array of games in which user plays(only needed fields filled in)
-        /// </summary>
-        /// <returns></returns>
-        IGame[] UsersActiveGames();
-
-        /// <summary>
         /// Method returns array of the nearest games(only needed fields filled in)
         /// </summary>
         /// <returns></returns>
         Task<IGame[]> UserNearbyGames(GeoCoordinate coordinate);
-
-        /// <summary>
-        /// Method returns array of games in which user played(only needed fields filled in)
-        /// </summary>
-        /// <returns></returns>
-        IGame[] UsersInactiveGames();
 
         /// <summary>
         /// Method returns array of tasks in which are still active

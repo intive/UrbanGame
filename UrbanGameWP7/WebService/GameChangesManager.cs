@@ -124,7 +124,7 @@ namespace WebService
             if (!_gameWebService.IsAuthorized)
                 return;
 
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
                 {
                     _gameUpdaterTimer.Dispose();
 
@@ -136,12 +136,15 @@ namespace WebService
 
                             foreach (var oldGame in activeGames)
                             {
-                                IGame newGame = await _gameWebService.GetGameInfo(oldGame.Id);
+                                //there cannot be await, because it causes InvalidOperationExceptions by uow.Commit()
+                                var task = _gameWebService.GetGameInfo(oldGame.Id);
+                                task.Wait();
+                                IGame newGame = task.Result;
 
                                 if (newGame.Version != oldGame.Version)
                                 {
                                     IList<string> diff = UpdateGame(oldGame, newGame);
-                                    uow.Commit(); //todo: to check: sometimes throws InvalidOperationExceptions (only if use GameWebService - not mock), it doesn't happen if you put that line after foreach
+                                    uow.Commit();
 
                                     if (diff.Count == 0)
                                         return;
@@ -171,7 +174,7 @@ namespace WebService
             if (!_gameWebService.IsAuthorized)
                 return;
 
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
                 _solutionUpdaterTimer.Dispose();
 
@@ -183,7 +186,9 @@ namespace WebService
 
                         foreach (var solution in pendingSolutions)
                         {
-                            SolutionStatusResponse response = await _gameWebService.GetSolutionStatus(solution.Id);
+                            var task = _gameWebService.GetSolutionStatus(solution.Id);
+                            task.Wait();
+                            SolutionStatusResponse response = task.Result;
 
                             if (response.Status == SolutionStatus.Accepted || response.Status == SolutionStatus.Rejected)
                             {
