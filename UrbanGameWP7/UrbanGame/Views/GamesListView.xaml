@@ -18,7 +18,7 @@
     <Grid x:Name="LayoutRoot">
         <controls:Panorama cal:Message.Attach="[Event SelectionChanged]=[Action ChangeAppbarButtons($eventArgs)]">
             <controls:Panorama.Background>
-                <ImageBrush ImageSource="/Images/MainPanorama.png"/>
+                <ImageBrush ImageSource="/Images/MainPanorama.png" Stretch="UniformToFill"/>
             </controls:Panorama.Background>
             <controls:Panorama.Title>
                 <Grid Background="Transparent" Margin="0,100,0,0">
@@ -238,9 +238,11 @@
                 <Grid Background="Transparent">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding Path=AppResources.JoinOrLogIn, Source={StaticResource LocalizedStrings}}" Grid.Row="0" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}" Foreground="{StaticResource FontColorWhite}"/>
+                    <Button Content="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="1" BorderBrush="Transparent" Background="{StaticResource FontColorGreen}" Width="200" HorizontalAlignment="Right" cal:Message.Attach="[Event Tap]=[Action LogoutOrLogin()]" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
                     <Grid Margin="5,5,5,0" Background="Transparent">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -251,8 +253,8 @@
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="{Binding UserName}" Grid.Row="0" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeLarge}" FontWeight="Bold" Margin="0,0,0,5" Foreground="{StaticResource FontColorWhite}"/>
-                                <TextBlock Text="{Binding UserMail}" Grid.Row="1" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeMedium}" Foreground="{StaticResource FontColorWhite}"/>
+                                <TextBlock Text="{Binding User.Login}" Grid.Row="0" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeLarge}" FontWeight="Bold" Margin="0,0,0,5" Foreground="{StaticResource FontColorWhite}"/>
+                                <TextBlock Text="{Binding User.Email}" Grid.Row="1" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeMedium}" Foreground="{StaticResource FontColorWhite}"/>
                             </Grid>
                         </StackPanel>
                     </Grid>
@@ -261,7 +263,7 @@
         </controls:Panorama>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar>
+        <shell:ApplicationBar BackgroundColor="{StaticResource SolidColorBrushGreen}">
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>

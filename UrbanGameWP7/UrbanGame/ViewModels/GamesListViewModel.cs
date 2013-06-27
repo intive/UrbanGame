@@ -10,6 +10,8 @@ using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using System.Threading.Tasks;
 using System.Windows;
+using UrbanGame.Authorization;
+using UrbanGame.Models;
 
 namespace UrbanGame.ViewModels
 {
@@ -178,64 +180,22 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
-        #region UserAvatar
+        #region User
 
-        private string _userAvatar;
+        private User _user;
 
-        public string UserAvatar
+        public User User
         {
             get
             {
-                return _userAvatar;
+                return _user;
             }
             set
             {
-                if (_userAvatar != value)
+                if (_user != value)
                 {
-                    _userAvatar = value;
-                    NotifyOfPropertyChange(() => UserAvatar);
-                }
-            }
-        }
-        #endregion
-
-        #region UserName
-
-        private string _userName;
-
-        public string UserName
-        {
-            get
-            {
-                return _userName;
-            }
-            set
-            {
-                if (_userName != value)
-                {
-                    _userName = value;
-                    NotifyOfPropertyChange(() => UserName);
-                }
-            }
-        }
-        #endregion
-
-        #region UserMail
-
-        private string _userMail;
-
-        public string UserMail
-        {
-            get
-            {
-                return _userMail;
-            }
-            set
-            {
-                if (_userMail != value)
-                {
-                    _userMail = value;
-                    NotifyOfPropertyChange(() => UserMail);
+                    _user = value;
+                    NotifyOfPropertyChange(() => User);
                 }
             }
         }
@@ -248,8 +208,10 @@ namespace UrbanGame.ViewModels
         protected override async void OnActivate()
         {
             base.OnActivate();
+            LoadUserData();
             await RefreshUserGames();
             RefreshNearestGames();
+
         }
 
         #endregion
@@ -359,17 +321,30 @@ namespace UrbanGame.ViewModels
 
         public async void LogoutOrLogin()
         {
-
             if (IsAuthorized)
             {
                 _gameWebService.IsAuthorized = false;
+                GameAuthorizationService authorization = new GameAuthorizationService();
+                authorization.ClearIsolatedStorage();
             }
             else
             {
-                _gameWebService.Authorize("", "");
+               _navigationService.UriFor<LoginAndRegistrerViewModel>().Navigate();
             }
             RefreshMenuItemText();
             await RefreshUserGames();
+        }
+
+        public void LoadUserData()
+        {
+            GameAuthorizationService gameService = new GameAuthorizationService();
+            string userData = gameService.LoadDataFromIsolatedStorage();
+            if (!string.IsNullOrEmpty(userData))
+            {
+                string[] userData2 = userData.Split(' ');
+                _gameWebService.IsAuthorized = true;
+                User = new User() { Login = userData2[0], Email = userData2[1] };
+            }
         }
 
         #endregion

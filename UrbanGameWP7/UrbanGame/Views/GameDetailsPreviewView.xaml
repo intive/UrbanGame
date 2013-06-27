@@ -37,8 +37,8 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="-30,15,15,0" FontWeight="Bold" Foreground="{StaticResource FontColorGreen}"/>
-                    <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Column="0" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,15,15,0" FontWeight="Bold" Foreground="{StaticResource FontColorWhite}"/>
+                    <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="-30,15,15,0" Foreground="{StaticResource FontColorWhite}"/>
+                    <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Column="0" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="0,15,15,0" Foreground="{StaticResource FontColorGreen}"/>
                 </Grid>
             </controls:Pivot.Title>
 
@@ -139,7 +139,7 @@
         </controls:Pivot>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar>
+        <shell:ApplicationBar BackgroundColor="{StaticResource SolidColorBrushGreen}">
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
     <!-- LOCALIZED APPLICATIONBAR IS IN GameDetailsView.xaml.cs -->

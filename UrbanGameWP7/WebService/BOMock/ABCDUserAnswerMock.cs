@@ -53,11 +53,33 @@ namespace WebService.BOMock
         }
         #endregion
 
+        #region ABCDPossibleAnswer
+
+        private IABCDPossibleAnswer _abcdPossibleAnswer;
+
+        public IABCDPossibleAnswer ABCDPossibleAnswer
+        {
+            get
+            {
+                return _abcdPossibleAnswer;
+            }
+            set
+            {
+                if (_abcdPossibleAnswer != value)
+                {
+                    NotifyPropertyChanging("ABCDPossibleAnswer");
+                    _abcdPossibleAnswer = value;
+                    NotifyPropertyChanged("ABCDPossibleAnswer");
+                }
+            }
+        }
+        #endregion
+
         #region Answer
 
-        private byte _answer;
+        private bool _answer;
 
-        public byte Answer
+        public bool Answer
         {
             get
             {

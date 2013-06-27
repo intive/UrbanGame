@@ -8,13 +8,16 @@ using System.Windows;
 using System.Windows.Controls;
 using UrbanGame.Storage;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Windows.Threading;
+using UrbanGame.Models;
 
 namespace UrbanGame.ViewModels
 {
     public class TaskViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<TaskChangedEvent>, IHandle<SolutionStatusChanged>
     {
-
         IAppbarManager _appbarManager;
+
         public TaskViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
                                     IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
@@ -152,6 +155,49 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
+        #region Answers
+
+        private BindableCollection<ABCDAnswear> _answers;
+
+        public BindableCollection<ABCDAnswear> Answers
+        {
+            get
+            {
+                return _answers;
+            }
+            set
+            {
+                if (_answers != value)
+                {
+                    _answers = value;
+                    NotifyOfPropertyChange(() => Answers);
+                }
+            }
+        }
+        #endregion
+
+        #region VisualStateName
+
+        private string _visualStateName;
+
+        public string VisualStateName
+        {
+            get
+            {
+                return _visualStateName;
+            }
+            set
+            {
+                if (_visualStateName != value)
+                {
+                    _visualStateName = value;
+                    NotifyOfPropertyChange(() => VisualStateName);
+                }
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region lifecycle
@@ -166,7 +212,7 @@ namespace UrbanGame.ViewModels
             base.OnActivate();
             await RefreshGame();
             await RefreshTask();
-
+            VisualStateName = "Normal";
         }
 
         #endregion
@@ -191,9 +237,32 @@ namespace UrbanGame.ViewModels
             });
         }
 
+        public async Task RefreshAnswear()
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                Answers = new BindableCollection<ABCDAnswear>();
+
+                IQueryable<IABCDPossibleAnswer> possibleAnswers = _unitOfWorkLocator().GetRepository<IABCDPossibleAnswer>().All().Where(a => a.Task.Id == CurrentTask.Id);
+
+                foreach(IABCDPossibleAnswer possible in possibleAnswers.ToList())
+                {
+                    IABCDUserAnswer userAnswer = _unitOfWorkLocator().GetRepository<IABCDUserAnswer>().All().Where(a => a.ABCDPossibleAnswer.Id == possible.Id).Last();
+                    bool isChecked = false;
+                    if(userAnswer != null && userAnswer.Answer == true)
+                    {
+                        isChecked = true;
+                    }
+
+                    Answers.Add(new ABCDAnswear() { possibleAnswear = possible, isChecked = isChecked });
+                }
+            });
+        }
+
         private void SubmitSolution(IBaseSolution solution)
         {
             //saving solution in database
+
             using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
             {
                 GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
@@ -204,41 +273,57 @@ namespace UrbanGame.ViewModels
             }
 
             //sending solution
-            _gameWebService.SubmitTaskSolution(Game.Id, CurrentTask.Id, solution);
+            var result = _gameWebService.SubmitTaskSolution(Game.Id, CurrentTask.Id, Solution);
 
-            Solution = solution;
+            if (result == SubmitResult.AnswerCorrect)
+            {
+                VisualStateName = "Correct";
+            }
+            else if (result == SubmitResult.AnswerIncorrect)
+            {
+                VisualStateName = "Wrong";
+            }
+            else if (result == SubmitResult.Timeout)
+            {
+
+            }
         }
 
-        public async Task SubmitGPS()
+        public async void SubmitGPS()
         {
+            VisualStateName = "Sending";
+
             await Task.Factory.StartNew(() =>
             {
                 GPSLocation gps = new GPSLocation();
-                gps.GetCurrentCoordinates(coords =>
-                {
-                    IGPSSolution solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
-                    SubmitSolution(solution);
-                });
+                    gps.GetCurrentCoordinates(coords =>
+                    {
+                        Solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
+                        SubmitSolution(Solution);
+                    });
             });
         }
 
-        public async Task SubmitABCD()
+        public async void SubmitABCD()
         {
+            VisualStateName = "Sending";
             await Task.Factory.StartNew(() =>
             {
                 IABCDSolution solution = new TaskSolution() { TaskType = TaskType.ABCD };
 
-                /* when the view will be finished, then it should be there something like this:
-                 
-                foreach (var check in ABCDAnswers)
+                foreach (var check in Answers)
                 {
-                    IABCDUserAnswer answer = new ABCDUserAnswer() { Answer = check.LP, Solution = solution };
+                    IABCDUserAnswer answer = new ABCDUserAnswer() { Answer = check.isChecked, Solution = new TaskSolution() { TextAnswer = check.possibleAnswear.Answer, TaskId = check.possibleAnswear.Task.Id, TaskType = TaskType.ABCD } };
                     solution.ABCDUserAnswers.Add(answer);
                 }
-                */
-
-                SubmitSolution(solution);
+                Solution = solution;
+                SubmitSolution(Solution);
             });
+        }
+
+        public void ChangeToNormal()
+        {
+            VisualStateName = "Normal";
         }
 
         #endregion        

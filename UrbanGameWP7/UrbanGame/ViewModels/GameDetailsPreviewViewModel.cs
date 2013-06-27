@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using UrbanGame.Storage;
 using System.Threading.Tasks;
+using UrbanGame.Authorization;
 
 namespace UrbanGame.ViewModels
 {
@@ -37,7 +38,7 @@ namespace UrbanGame.ViewModels
         private List<AppbarItem> AuthorizedAppbar = new List<AppbarItem>()
         {
             new AppbarItem() {  Text = Localization.AppResources.LogIn,Message="LogoutOrLogin" } ,
-            new AppbarItem() { IconUri = new Uri("/Images/appbar.check.png", UriKind.Relative), Text = Localization.AppResources.JoinIn, Message = "JoinIn" }
+            new AppbarItem() { IconUri = new Uri("/Images/appbar.group.add.png", UriKind.Relative), Text = Localization.AppResources.JoinIn, Message = "JoinIn" }
         };
 
         #endregion
@@ -147,18 +148,18 @@ namespace UrbanGame.ViewModels
 
             if (!_gameWebService.IsAuthorized)
             {
-                _gameWebService.Authorize("username", "password");
-                await RefreshGame();
-                SetAppBarContent();
+
+                _navigationService.UriFor<LoginAndRegistrerViewModel>().Navigate();
             }
             else
             {
-                //to do implement login logout
+
+                GameAuthorizationService authorizationService = new GameAuthorizationService();
+                authorizationService.ClearIsolatedStorage();
+
                 _gameWebService.IsAuthorized = false;
                 SetAppBarContent();
             }
-
-
         }
 
         public async Task RefreshGame()
@@ -184,7 +185,7 @@ namespace UrbanGame.ViewModels
             if (MessageBox.Show("join in", "join in", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
-                {      
+                {
                     IGame game = uow.GetRepository<IGame>().All().FirstOrDefault(x => x.Id == Game.Id);
                      
                     if (game == null)
@@ -192,7 +193,9 @@ namespace UrbanGame.ViewModels
                     else
                         game.GameState = GameState.Joined;
 
+
                     uow.Commit();
+
                 }
                 _navigationService.UriFor<GameDetailsViewModel>().WithParam(x => x.GameId, Game.Id).Navigate();
             }

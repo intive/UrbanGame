@@ -346,7 +346,7 @@
         </controls:Panorama>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar>
+        <shell:ApplicationBar BackgroundColor="{StaticResource SolidColorBrushGreen}">
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>

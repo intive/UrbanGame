@@ -3,11 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data.Linq;
 
 namespace WebService.BOMock
 {
     public class ABCDPossibleAnswerMock : BOBase, IABCDPossibleAnswer
     {
+        public ABCDPossibleAnswerMock()
+        {
+            _abcdUserAnswers = new EntityEnumerable<IABCDUserAnswer, ABCDUserAnswerMock>(new EntitySet<ABCDUserAnswerMock>(OnABCDUserAnswerAdded, OnABCDUserAnswerRemoved));
+        }
+
         #region Id
 
         private int _id;
@@ -50,6 +56,30 @@ namespace WebService.BOMock
                 }
             }
         }
+        #endregion
+
+        #region IABCDPossibleAnswer.ABCDUserAnswers
+
+        private IEntityEnumerable<IABCDUserAnswer> _abcdUserAnswers;
+
+        public IEntityEnumerable<IABCDUserAnswer> ABCDUserAnswers
+        {
+            get
+            {
+                return _abcdUserAnswers;
+            }
+        }
+
+        private void OnABCDUserAnswerAdded(ABCDUserAnswerMock abcdUserAnswer)
+        {
+            abcdUserAnswer.ABCDPossibleAnswer = this;
+        }
+
+        private void OnABCDUserAnswerRemoved(ABCDUserAnswerMock abcdUserAnswer)
+        {
+            abcdUserAnswer.ABCDPossibleAnswer = null;
+        }
+
         #endregion
 
         #region Answer
