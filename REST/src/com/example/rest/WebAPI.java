@@ -1,4 +1,4 @@
-package com.blstream.urbangame.webserver;
+package com.example.rest;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,7 +9,6 @@ import java.util.concurrent.Future;
 
 import android.net.Uri;
 
-import com.blstream.urbangame.webserver.json.API;
 import com.google.gson.Gson;
 
 /**

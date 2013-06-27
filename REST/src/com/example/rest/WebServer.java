@@ -1,4 +1,4 @@
-package com.blstream.urbangame.webserver;
+package com.example.rest;
 
 import android.os.Bundle;
 import android.os.Message;

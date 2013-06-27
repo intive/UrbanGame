@@ -1,4 +1,4 @@
-package com.blstream.urbangame.webserver;
+package com.example.rest;
 
 import java.io.BufferedReader;
 import java.io.IOException;

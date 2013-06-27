@@ -1,6 +1,6 @@
-package com.blstream.urbangame.webserver;
+package com.example.rest;
 
-import com.blstream.urbangame.webserver.WebServer.QueryType;
+import com.example.rest.WebServer.QueryType;
 
 /**
  * WebResponse is an auxiliary class which contains information about response

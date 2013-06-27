@@ -1,9 +1,9 @@
-package com.blstream.urbangame.webserver;
+package com.example.rest;
 
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import com.blstream.urbangame.webserver.WebServer.QueryType;
+import com.example.rest.WebServer.QueryType;
 
 /**
  * This class represents simple asynchronous background HTTP request for
