@@ -16,7 +16,7 @@
 /* heights, widths */
 @contwidth: 940px;
 @wizminheight: 200px;
-@tareaheight: 131px;
+@tareaheight: 110px;
 @hfooter: 130px;
 @mapheight: 300px;
 @mapwidth: 350px;
@@ -24,6 +24,8 @@
 /* margins, paddings */
 @mhmarginbottom: 20px;
 @slightpadding: 15px;
+@slightmargin: 15px;
+@mediummargin: 40px;
 @pullhigher: -10px;
 @roffset10: 10px;
 
@@ -86,6 +88,10 @@ a:hover>[class^="icon-"] {
     text-transform: lowercase;
 }
 
+.centered {
+    text-align: center;
+}
+
 .h1 {
     font-size: 20px;
 }
@@ -134,6 +140,12 @@ a:hover>[class^="icon-"] {
 .slight-padding-top {
     padding-top: @slightpadding;
 }
+.slight-margin-top {
+    margin-top: @slightpadding;
+}
+.medium-margin-top {
+    margin-top: @mediummargin;
+}
 
 .slight-padding-right {
     padding-right: @slightpadding;
@@ -145,6 +157,10 @@ a:hover>[class^="icon-"] {
 
 .slight-padding-bottom {
     padding-left: @slightpadding;
+}
+
+.double-margin-left {
+    margin-left: @slightpadding * 2;
 }
 
 .pull-higher {
@@ -237,6 +253,19 @@ a:hover>[class^="icon-"] {
     border-radius: 0px;
 }
 
+.input-xs {
+    width: 50px;
+}
+
+.input-append .add-on:last-child {
+    border-radius: 0 15px 15px 0;
+    -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    border-left-style: none;
+}
+
 #wrap {
     min-height: 100%;
     height: auto !important;
@@ -321,10 +350,7 @@ a:hover>[class^="icon-"] {
         }
     
         .big-image {
-            text-align: center;
-            width: 1300px;
-            height: 465px;
-            background: #fff url(../images/topgraphic.png) no-repeat;
+            width: 100%
         }
 
         .navbar {
@@ -533,8 +559,8 @@ a:hover>[class^="icon-"] {
 
 .wizard {
 
-    .step {
-        text-transform: uppercase;
+    .tooltip {
+        max-width: 190px;
     }
 
     textarea {
@@ -589,42 +615,62 @@ a:hover>[class^="icon-"] {
         background-color: @darkgreeny;
         color: @whitey;
     }
-}
 
+    .gmt {
+        color: @gray;
+        margin: 0 10px;
+    }
+
+    .input-append .add-on, .input-prepend .add-on {
+        text-shadow: 0 1px 0 #ffffff;
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+    }
+
+    .input-append input, .input-append select, .input-append .uneditable-input {
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+
+    .time.tooltip.right { 
+        margin-left: 30px;
+    }
+}
+.lightbox{
+    textarea {
+        height: @tareaheight;
+        resize: none;
+    }
+}
 input.search-query {
     border-radius: 15px 0 0 15px;
     padding: 4px 14px;
     border-right-style: none;
 }
 
-.input-append .add-on:last-child {
-    border-radius: 0 15px 15px 0;
-    -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
-    background-color: #FFFFFF;
-    border: 1px solid #CCCCCC;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-    border-left-style: none;
-}
-
 @borderradius: 15px;
-table#gamelist, #gamelist thead tr th:first-child {
+table#gamelist, table#tasklist, #tasklist thead tr th:first-child, #gamelist thead tr th:first-child {
     -webkit-border-top-left-radius: @borderradius;
     -moz-border-top-left-radius: @borderradius;
     border-top-left-radius: @borderradius;
 }
 
-table#gamelist, #gamelist thead tr th:last-child {
+table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist thead tr th:last-child {
     -webkit-border-top-right-radius: @borderradius;
     -moz-border-top-right-radius: @borderradius;
     border-top-right-radius: @borderradius;
 }
 
-#gamelist {
+#gamelist, #tasklist {
+    thead tr th:first-child {
+        border-left: 1px solid @lightgray;
+    }
+    
     thead tr th {
         background-color: #ececec;
         border: 0;
-        border-bottom: 1px solid @lightgray;
-        border-left: 1px solid @lightgray;
         font-weight: bold;
         font-size: 12px;
         text-align: center;
@@ -638,7 +684,6 @@ table#gamelist, #gamelist thead tr th:last-child {
 
     tbody tr {
         td {
-        border-top: none;
             font-size: 13px;
             vertical-align: middle;
             padding-right: 10px;
@@ -654,16 +699,7 @@ table#gamelist, #gamelist thead tr th:last-child {
             }
         }
 
-        td:nth-child(2) {
-            text-align: left;
-            vertical-align: top;
-            padding-top: 15px;
-        }
-
         td:last-child {
-            .row {
-                margin: 20px 0;
-            }
 
             button {
                 width: 55px;
@@ -671,6 +707,20 @@ table#gamelist, #gamelist thead tr th:last-child {
             }
         }
     }
+}
+
+#gamelist td:nth-child(2) {
+    text-align: left;
+    vertical-align: top;
+    padding-top: 15px;
+}
+
+#gamelist td:last-child.row {
+    margin: 20px 0;
+}
+
+#tasklist tbody tr td:nth-child(2), #tasklist tbody tr td:nth-child(3) {
+    color: @greeny;
 }
 
 .finished {
@@ -777,11 +827,6 @@ form#auth.form-register {
     background-image: url("../images/ajax-error.png")
 }
 
-caption {
-    font-size: 130%;
-    font-weight: bold;
-}
-
 .small-font {
     font-size: 70%;
 }
@@ -789,19 +834,6 @@ caption {
 google-map {
     display: block;
     height: @mapheight;
-}
-
-#taskslist {
-    thead tr th {
-        border-top: 1px double @lightgray;
-        border-bottom: 3px double @lightgray;
-        font-weight: bold;
-        text-align: center;
-    }
-    
-    tbody tr td {
-        text-align:center;
-    }
 }
 
 #gpsMap {
@@ -820,6 +852,42 @@ input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+/* Button */
+#createNewTask{
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    width: 200px;
+    background-color: #99CC00;
+    color: #FFFFFF;
+    display: block;
+    font-weight: bold;
+    text-align: center;
+    [class^="icon-"] {
+        color: #FFFFFF;
+        margin-right: 8px;
+    }
+    &:hover{
+        border-color: #DDDDDD;
+        border-style: solid;
+        border-width: 1px;
+    }
+}
+
+/* Lightbox (tasks) */
+#taskLightbox {
+    left: 20% !important;
+    top: 30px !important;
+    width: 60% !important;
+    min-width: 600px;
+    text-align: left;
+    
+    .lightbox-content {
+        display: block;
+   }
 }
 
 textarea:focus,
