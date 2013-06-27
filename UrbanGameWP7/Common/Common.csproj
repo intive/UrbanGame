@@ -68,6 +68,7 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorizationService\IGameAuthorizationService.cs" />
     <Compile Include="Location\GPSLocation.cs" />
     <Compile Include="Solutions\IABCDUserAnswer.cs" />
     <Compile Include="Solutions\SolutionStatusChanged.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solutions\SolutionStatus.cs" />
     <Compile Include="Tasks\TaskType.cs" />
+    <Compile Include="WebService\SubmitResult.cs" />
     <Compile Include="WebService\WebEnum.cs" />
     <Compile Include="WebService\WebException.cs" />
   </ItemGroup>

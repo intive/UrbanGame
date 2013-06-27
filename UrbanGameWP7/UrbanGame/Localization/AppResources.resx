@@ -352,11 +352,71 @@
   <data name="Repeatable" xml:space="preserve">
     <value>repeatable</value>
   </data>
+  <data name="Sending" xml:space="preserve">
+    <value>sending</value>
+  </data>
   <data name="ByOperatorUpCase" xml:space="preserve">
     <value>BY</value>
   </data>
+  <data name="Correct" xml:space="preserve">
+    <value>CORRECT!</value>
+  </data>
   <data name="Rank" xml:space="preserve">
     <value>rank</value>
+  </data>
+  <data name="NotSoGreat" xml:space="preserve">
+    <value>NOT SO GREAT!</value>
+  </data>
+  <data name="Wrong" xml:space="preserve">
+    <value>WRONG!</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>email</value>
+  </data>
+  <data name="Join" xml:space="preserve">
+    <value>join</value>
+  </data>
+  <data name="LoginLabel" xml:space="preserve">
+    <value>login</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>password</value>
+  </data>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>repeat password</value>
+  </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>ACCOUNT CREATED!</value>
+  </data>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>confirmation email has been sent</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>creating account</value>
+  </data>
+  <data name="EmptyLogin" xml:space="preserve">
+    <value>You must enter login!</value>
+  </data>
+  <data name="EmptyPassword" xml:space="preserve">
+    <value>You must enter password!</value>
+  </data>
+  <data name="IncorrectEmail" xml:space="preserve">
+    <value>Incorrect email!</value>
+  </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>You are logged in!</value>
+  </data>
+  <data name="LogginIn" xml:space="preserve">
+    <value>logging in</value>
+  </data>
+  <data name="RepeatYourPassword" xml:space="preserve">
+    <value>You must enter twice the same password</value>
+  </data>
+  <data name="Incorrect" xml:space="preserve">
+    <value>Incorrect</value>
+  </data>
+  <data name="IncorrectLogin" xml:space="preserve">
+    <value>Provided login or password are incorrect</value>
   </data>
   <data name="GameChangedToast" xml:space="preserve">
     <value>Game details have changed. Tap to see differences.</value>

@@ -25,6 +25,11 @@ namespace UrbanGame.ViewModels
 
         protected override void OnViewReady(object view)
         {
+            if (Game == null)
+            {
+                RefreshGame();
+            }
+
             ChangeAppbarButtons();
             RemovePreviewFromStack();
         }
@@ -263,13 +268,14 @@ namespace UrbanGame.ViewModels
         protected async override void OnActivate()
         {
             base.OnActivate();
-            RefreshGame();
-            RefreshActiveTasks();
-            RefreshInactiveTasks();
-            RefreshAccomplishedTasks();
-            RefreshCancelledTasks();
-            RefreshHighScores();
+            await RefreshGame();
+            await RefreshActiveTasks();
+            await RefreshInactiveTasks();
+            await RefreshAccomplishedTasks();
+            await RefreshCancelledTasks();
+            await RefreshHighScores();
             await RefreshAlerts();
+
         }
 
         protected override void OnViewLoaded(object view)
@@ -297,7 +303,7 @@ namespace UrbanGame.ViewModels
 
         public void ShowTask(ITask task)
         {
-            _navigationService.UriFor<TaskViewModel>().WithParam(t => t.TaskId, task.Id).Navigate();
+            _navigationService.UriFor<TaskViewModel>().WithParam(t => t.TaskId, task.Id).WithParam(x=>x.GameId, GameId).Navigate();
         }
 
         public void ChangeAppbarButtons(SelectionChangedEventArgs args)

@@ -8,13 +8,16 @@ using System.Windows;
 using System.Windows.Controls;
 using UrbanGame.Storage;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Windows.Threading;
+using UrbanGame.Models;
 
 namespace UrbanGame.ViewModels
 {
     public class TaskViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<TaskChangedEvent>, IHandle<SolutionStatusChanged>
     {
-
         IAppbarManager _appbarManager;
+
         public TaskViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
                                     IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
@@ -155,6 +158,49 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
+        #region Answers
+
+        private BindableCollection<ABCDAnswear> _answers;
+
+        public BindableCollection<ABCDAnswear> Answers
+        {
+            get
+            {
+                return _answers;
+            }
+            set
+            {
+                if (_answers != value)
+                {
+                    _answers = value;
+                    NotifyOfPropertyChange(() => Answers);
+                }
+            }
+        }
+        #endregion
+
+        #region VisualStateName
+
+        private string _visualStateName;
+
+        public string VisualStateName
+        {
+            get
+            {
+                return _visualStateName;
+            }
+            set
+            {
+                if (_visualStateName != value)
+                {
+                    _visualStateName = value;
+                    NotifyOfPropertyChange(() => VisualStateName);
+                }
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region lifecycle
@@ -169,6 +215,7 @@ namespace UrbanGame.ViewModels
             base.OnActivate();
             await RefreshGame();
             await RefreshTask();
+            VisualStateName = "Normal";
         }
 
         protected override void OnViewLoaded(object view)
@@ -221,6 +268,31 @@ namespace UrbanGame.ViewModels
             });
         }
 
+        public async Task RefreshAnswear()
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                Answers = new BindableCollection<ABCDAnswear>();
+
+                using (var uow = _unitOfWorkLocator())
+                {
+                    IQueryable<IABCDPossibleAnswer> possibleAnswers = uow.GetRepository<IABCDPossibleAnswer>().All().Where(a => a.Task.Id == CurrentTask.Id);
+
+                    foreach (IABCDPossibleAnswer possible in possibleAnswers.ToList())
+                    {
+                        IABCDUserAnswer userAnswer = uow.GetRepository<IABCDUserAnswer>().All().Where(a => a.ABCDPossibleAnswer.Id == possible.Id).Last();
+                        bool isChecked = false;
+                        if (userAnswer != null && userAnswer.Answer == true)
+                        {
+                            isChecked = true;
+                        }
+
+                        Answers.Add(new ABCDAnswear() { possibleAnswear = possible, isChecked = isChecked });
+                    }
+                }
+            });
+        }
+
         private void SubmitSolution(IBaseSolution solution)
         {
             //saving solution in database
@@ -228,47 +300,76 @@ namespace UrbanGame.ViewModels
             {
                 GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
                 solution.Task = task;
+                solution.Task.SolutionStatus = SolutionStatus.Pending;
 
                 unitOfWork.GetRepository<IBaseSolution>().MarkForAdd(solution);
                 unitOfWork.Commit();
             }
 
             //sending solution
-            _gameWebService.SubmitTaskSolution(GameId, CurrentTask.Id, solution);
+            var result = _gameWebService.SubmitTaskSolution(GameId, CurrentTask.Id, Solution);
+            //todo: update points in Views (gameDetailsView & TaskView)
+            //todo: change WebService.SubmitTaskSolution to return gained points
 
-            Solution = solution;
+            using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
+            {
+                var sol = unitOfWork.GetRepository<IBaseSolution>().All().First(s => s.Id == solution.Id);                          
+
+                if (result == SubmitResult.AnswerCorrect)
+                {
+                    VisualStateName = "Correct";
+                    sol.Task.SolutionStatus = SolutionStatus.Accepted;
+                }
+                else if (result == SubmitResult.AnswerIncorrect)
+                {
+                    VisualStateName = "Wrong";
+                    sol.Task.SolutionStatus = SolutionStatus.Rejected;
+                }
+                else
+                {
+                    VisualStateName = "Normal";
+                    sol.Task.SolutionStatus = SolutionStatus.Pending; 
+                }
+
+                unitOfWork.Commit();
+            }
         }
 
-        public async Task SubmitGPS()
+        public async void SubmitGPS()
         {
+            VisualStateName = "Sending";
+
             await Task.Factory.StartNew(() =>
             {
                 GPSLocation gps = new GPSLocation();
-                gps.GetCurrentCoordinates(coords =>
-                {
-                    IGPSSolution solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
-                    SubmitSolution(solution);
-                });
+                    gps.GetCurrentCoordinates(coords =>
+                    {
+                        Solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
+                        SubmitSolution(Solution);
+                    });
             });
         }
 
-        public async Task SubmitABCD()
+        public async void SubmitABCD()
         {
+            VisualStateName = "Sending";
             await Task.Factory.StartNew(() =>
             {
                 IABCDSolution solution = new TaskSolution() { TaskType = TaskType.ABCD };
 
-                /* when the view will be finished, then it should be there something like this:
-                 
-                foreach (var check in ABCDAnswers)
+                foreach (var check in Answers)
                 {
-                    IABCDUserAnswer answer = new ABCDUserAnswer() { Answer = check.LP, Solution = solution };
+                    IABCDUserAnswer answer = new ABCDUserAnswer() { Answer = check.isChecked, Solution = new TaskSolution() { TextAnswer = check.possibleAnswear.Answer, TaskId = check.possibleAnswear.Task.Id, TaskType = TaskType.ABCD } };
                     solution.ABCDUserAnswers.Add(answer);
                 }
-                */
-
-                SubmitSolution(solution);
+                Solution = solution;
+                SubmitSolution(Solution);
             });
+        }
+
+        public void ChangeToNormal()
+        {
+            VisualStateName = "Normal";
         }
 
         #endregion        

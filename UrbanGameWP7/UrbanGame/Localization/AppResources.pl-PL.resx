@@ -344,5 +344,63 @@
   </data>
   <data name="GameChangedToast" xml:space="preserve">
     <value>Szczegóły gry zmieniły się. Naciśnij, aby zobaczyć różnice.</value>
+  </data>  <data name="Sending" xml:space="preserve">
+    <value>wysyłanie</value>
   </data>
-</root>
+  <data name="Correct" xml:space="preserve">
+    <value>POPRAWNIE!</value>
+  </data>
+  <data name="NotSoGreat" xml:space="preserve">
+    <value>NIE TAK DOBRZE!</value>
+  </data>
+  <data name="Wrong" xml:space="preserve">
+    <value>NIEPOPRAWNIE!</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>email</value>
+  </data>
+  <data name="Join" xml:space="preserve">
+    <value>dołącz</value>
+  </data>
+  <data name="LoginLabel" xml:space="preserve">
+    <value>login</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>hasło</value>
+  </data>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>powtórz hasło</value>
+  </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>KONTO UTWORZONE!</value>
+  </data>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>email z potwierdzeniem został wysłany</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>tworzenie konta</value>
+  </data>
+  <data name="EmptyLogin" xml:space="preserve">
+    <value>Musisz podać login!</value>
+  </data>
+  <data name="IncorrectEmail" xml:space="preserve">
+    <value>Niepoprawny email!</value>
+  </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Jesteś zalogowany!</value>
+  </data>
+  <data name="LogginIn" xml:space="preserve">
+    <value>logowanie</value>
+  </data>
+  <data name="EmptyPassword" xml:space="preserve">
+    <value>Muszisz podać hasło!</value>
+  </data>
+  <data name="RepeatYourPassword" xml:space="preserve">
+    <value>Musisz podać dwukrotnie to samo hasło</value>
+  </data>
+  <data name="Incorrect" xml:space="preserve">
+    <value>Niepoprawnie</value>
+  </data>
+  <data name="IncorrectLogin" xml:space="preserve">
+    <value>Podany login lub hasło są nieprawidłowe</value>
+  </data></root>

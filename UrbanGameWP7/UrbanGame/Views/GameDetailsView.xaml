@@ -106,7 +106,7 @@
                             </StackPanel.Resources>
                             <TextBlock Text="{Binding Game.GameEnd, Converter={StaticResource GameEndConverter}}" FontWeight="Bold"/>
                         </StackPanel>
-                        <TextBlock Grid.Row="3" Text="{Binding Game.Description}" Margin="5,10,0,5" Foreground="{StaticResource FontColorWhite}"/>
+                        <TextBlock Grid.Row="3" Text="{Binding Game.Description}" Margin="5,10,0,5" Foreground="{StaticResource FontColorWhite}" TextWrapping="Wrap"/>
                         <StackPanel Grid.Row="4" Orientation="Horizontal" Visibility="{Binding ShowsMore, Converter={StaticResource BoolToVisibilityConverter}}">
                             <StackPanel.Resources>
                                 <Style TargetType="TextBlock">
@@ -345,7 +345,7 @@
         </controls:Panorama>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar>
+        <shell:ApplicationBar BackgroundColor="{StaticResource SolidColorBrushGreen}">
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>

@@ -12,5 +12,7 @@ namespace Common
         string Answer { get; set; }
 
         ITask Task { get; set; }
+
+        IEntityEnumerable<IABCDUserAnswer> ABCDUserAnswers { get; }
     }
 }

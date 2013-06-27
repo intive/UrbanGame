@@ -177,9 +177,16 @@ namespace WebService
         #endregion        
 
         #region SubmitTaskSolution
-        public bool SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
+        public SubmitResult SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
-            return true;
+            int r = new Random().Next(100);
+
+            if (r < 20)
+                return SubmitResult.AnswerIncorrect;
+            else if (r < 60)
+                return SubmitResult.AnswerCorrect;
+            else
+                return SubmitResult.ScoreDelayed;
         }
         #endregion
 

@@ -29,7 +29,7 @@ namespace UrbanGameTests.Tests
             IAlert alert = new GameAlert() { Id = 3, Topic = "Operator" };
             IHighScore highScore = new GameHighScore() { Id = 4, UserLogin = "Test" };
             IBaseSolution solution = new TaskSolution() { Id = 1, TaskType = Common.TaskType.OpenQuestion, TextAnswer = "test" };
-            IABCDUserAnswer abcdUserAnswer = new ABCDUserAnswer() { Id = 1, Answer = 1 };
+            IABCDUserAnswer abcdUserAnswer = new ABCDUserAnswer() { Id = 1 };
 
             //inserting
             gameTable.InsertOnSubmit(game);

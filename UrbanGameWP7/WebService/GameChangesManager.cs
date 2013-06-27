@@ -108,7 +108,7 @@ namespace WebService
                         object newValue = newProperty.GetValue(newGame, null);
 
                         if (((oldValue == null || newValue == null) && oldValue != newValue) ||
-                                (oldValue != null && newValue != null && !oldValue.Equals(newValue)))
+                              (oldValue != null && newValue != null && !oldValue.Equals(newValue)))
                         {
                             oldProperty.SetValue(oldGame, newProperty.GetValue(newGame, null), null);
                             differences.Add(oldProperty.Name);
