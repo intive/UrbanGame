@@ -26,7 +26,7 @@ public class UserSettingsActivity extends SherlockPreferenceActivity implements 
 	
 	@Override
 	protected void onResume() {
-		super.onDestroy();
+		super.onResume();
 		PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 	}
 	
