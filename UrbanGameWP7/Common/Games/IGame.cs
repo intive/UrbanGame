@@ -65,5 +65,7 @@ namespace Common
         IEntityEnumerable<IAlert> Alerts { get; }
 
         IEntityEnumerable<IHighScore> HighScores { get; }
+
+        int Version { get; set; }
     }
 }

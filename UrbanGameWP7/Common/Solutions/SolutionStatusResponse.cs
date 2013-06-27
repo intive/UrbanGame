@@ -5,11 +5,10 @@ using System.Text;
 
 namespace Common
 {
-    public class SolutionStatusChanged
+    public class SolutionStatusResponse
     {
-        public int Id { get; set; }
-        public int TaskId { get; set; }
         public SolutionStatus Status { get; set; }
+
         public int Points { get; set; }
     }
 }

@@ -85,7 +85,7 @@
                                 </StackPanel>
                             </Grid>
                         </Grid>
-                        <Image Source="{Binding Path=CurrentTask.Picture}" Margin="0 14 0 0"/>
+                        <Image Height="270" HorizontalAlignment="Left" Source="{Binding Path=CurrentTask.Picture}" Margin="0 14 0 0"/>
                         <TextBlock Margin="5 14 5 0" Text="{Binding Path=CurrentTask.Description}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                     </StackPanel>
                 </ScrollViewer>
@@ -110,7 +110,7 @@
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Description}" Grid.Row="0" Foreground="{StaticResource FontColorWhite}"/>
+                            <TextBlock Text="{Binding CurrentTask.AdditionalText}" Grid.Row="0" Foreground="{StaticResource FontColorWhite}"/>
                             <ListBox Grid.Row="1" ItemsSource="{Binding CurrentTask.ABCDPossibleAnswers}" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>

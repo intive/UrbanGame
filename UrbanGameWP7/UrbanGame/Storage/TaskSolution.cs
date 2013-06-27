@@ -10,7 +10,7 @@ namespace UrbanGame.Storage
 {
     [Table]
     public class TaskSolution : EntityBase, 
-        IGPSSolution, IPhotoSolution, IOpenQuestionSolution, IABCDSolution, IQRCodeSolution
+        IBaseSolution, IGPSSolution, IPhotoSolution, IOpenQuestionSolution, IABCDSolution, IQRCodeSolution
     {
         public TaskSolution() : base()
         {

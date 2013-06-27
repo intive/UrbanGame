@@ -234,7 +234,7 @@
   <data name="CurrentRank" xml:space="preserve">
     <value>aktualna pozycja</value>
   </data>
-  <data name="Descrition" xml:space="preserve">
+  <data name="Description" xml:space="preserve">
     <value>opis</value>
   </data>
   <data name="Duration" xml:space="preserve">
@@ -341,5 +341,8 @@
   </data>
   <data name="ByOperatorUpCase" xml:space="preserve">
     <value>OD</value>
+  </data>
+  <data name="GameChangedToast" xml:space="preserve">
+    <value>Szczegóły gry zmieniły się. Naciśnij, aby zobaczyć różnice.</value>
   </data>
 </root>

@@ -134,9 +134,20 @@ namespace WebService
         #region SubmitTaskSolution
         public bool SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
-            GameChangesManager.AddSolution(new SubmittedSolution() { TaskId = tid });
             return true;
         }
+        #endregion
+
+        #region GetSolutionStatus
+
+        public async Task<SolutionStatusResponse> GetSolutionStatus(int taskId)
+        {
+            SolutionStatusResponse result = new SolutionStatusResponse();
+            result.Status = new Random().Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
+            result.Points = 5;
+            return result;
+        }
+
         #endregion
 
         #region Authorize
@@ -188,8 +199,8 @@ namespace WebService
             int id = 1;
             foreach(var g in games)
             {
-                g.Tasks.Add(new TaskMock() { Id = id++, Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
-                g.Tasks.Add(new TaskMock() { Id = id++, Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+                g.Tasks.Add(new TaskMock() { Id = id++, Name = "Find Wally", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+                g.Tasks.Add(new TaskMock() { Id = id++, Name = "IQ Test!", AdditionalText = "What is red with dots?", Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
             }
 
             return games;

@@ -70,7 +70,7 @@
                             <StackPanel Grid.Column="1" Orientation="Vertical">
                                 <TextBlock Text="{Binding Path=Game.Name}" FontSize="{StaticResource PhoneFontSizeLarge}" FontWeight="Bold" />
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Path=AppResources.ByOperatorUpCase, Source={StaticResource LocalizedStrings}}" 
+                                    <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" 
                                            Margin="0,0,10,0" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center" Foreground="{StaticResource FontColorWhite}"/>
                                     <TextBlock Text="{Binding Path=Game.OperatorName}" FontSize="{StaticResource PhoneFontSizeNormal}" VerticalAlignment="Center" Foreground="{StaticResource FontColorWhite}"/>
                                 </StackPanel>

@@ -609,5 +609,28 @@ namespace UrbanGame.Storage
             }
         }
         #endregion
+
+        #region Version
+
+        private int _version;
+
+        [Column]
+        public int Version
+        {
+            get
+            {
+                return _version;
+            }
+            set
+            {
+                if (_version != value)
+                {
+                    NotifyPropertyChanging("Version");
+                    _version = value;
+                    NotifyPropertyChanged("Version");
+                }
+            }
+        }
+        #endregion
     }
 }

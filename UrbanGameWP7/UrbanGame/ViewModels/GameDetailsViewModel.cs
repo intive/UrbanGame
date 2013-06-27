@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace UrbanGame.ViewModels
 {
-    public class GameDetailsViewModel : BaseViewModel, IHandle<GameChangedEvent>
+    public class GameDetailsViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<SolutionStatusChanged>
     {
         IAppbarManager _appbarManager;
         private string _activeSection;
@@ -58,9 +58,23 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
+        #region IHandle<SolutionStatusChanged>
+        public void Handle(SolutionStatusChanged status)
+        {
+            ITask task = ActiveTasks.FirstOrDefault(t => t.Id == status.TaskId);
+            if (task != null)
+            {
+                task.SolutionStatus = status.Status;
+                task.UserPoints = status.Points;
+            }
+        }
+        #endregion
+
         #region navigation properties
 
         public int GameId { get; set; }
+
+        public string DiffComparision { get; set; }
 
         #endregion
 
@@ -249,12 +263,32 @@ namespace UrbanGame.ViewModels
         protected async override void OnActivate()
         {
             base.OnActivate();
+            RefreshGame();
             RefreshActiveTasks();
             RefreshInactiveTasks();
             RefreshAccomplishedTasks();
             RefreshCancelledTasks();
             RefreshHighScores();
             await RefreshAlerts();
+        }
+
+        protected override void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+
+            Task.Factory.StartNew(() =>
+                {
+                    System.Threading.Thread.Sleep(700);
+                    if (DiffComparision != null)
+                    {
+                        System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
+                            {
+                                MessageBox.Show(DiffComparision);
+                                DiffComparision = null;
+                            });
+                        
+                    }
+                });
         }
 
         #endregion
@@ -296,11 +330,11 @@ namespace UrbanGame.ViewModels
 
         public async Task RefreshGame()
         {
-            await Task.Factory.StartNew(async () =>
+            using (var uow = _unitOfWorkLocator())
             {
-                IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
+                IQueryable<IGame> games = uow.GetRepository<IGame>().All();
                 Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
-            });
+            }
         }
 
 
@@ -308,9 +342,12 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-                IQueryable<IAlert> alerts = _unitOfWorkLocator().GetRepository<IAlert>().All();
+                using (var uow = _unitOfWorkLocator())
+                {
+                    IQueryable<IAlert> alerts = uow.GetRepository<IAlert>().All();
 
-                GameAlerts = new BindableCollection<IAlert>(alerts.Where(a => a.Game.Id == GameId).AsEnumerable());
+                    GameAlerts = new BindableCollection<IAlert>(alerts.Where(a => a.Game.Id == GameId).AsEnumerable());
+                }
             });
         }
 
@@ -318,18 +355,21 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-                IQueryable<IHighScore> highScores = _unitOfWorkLocator().GetRepository<IHighScore>().All();
-                BindableCollection<IHighScore> GameHighScoresTemp;
-
-                GameHighScoresTemp = new BindableCollection<IHighScore>(highScores.Where(h => h.Game.Id == GameId)
-                                                                                .OrderByDescending(h => h.Points)
-                                                                                .AsEnumerable());
-
-
-                GameHighScores = new BindableCollection<PositionedHighScore>();
-                for (int i = 0; i < GameHighScoresTemp.Count; i++)
+                using (var uow = _unitOfWorkLocator())
                 {
-                    GameHighScores.Add(new PositionedHighScore() { Position = i + 1, Entity = GameHighScoresTemp.ElementAt(i) });
+                    IQueryable<IHighScore> highScores = uow.GetRepository<IHighScore>().All();
+                    BindableCollection<IHighScore> GameHighScoresTemp;
+
+                    GameHighScoresTemp = new BindableCollection<IHighScore>(highScores.Where(h => h.Game.Id == GameId)
+                                                                                    .OrderByDescending(h => h.Points)
+                                                                                    .AsEnumerable());
+
+
+                    GameHighScores = new BindableCollection<PositionedHighScore>();
+                    for (int i = 0; i < GameHighScoresTemp.Count; i++)
+                    {
+                        GameHighScores.Add(new PositionedHighScore() { Position = i + 1, Entity = GameHighScoresTemp.ElementAt(i) });
+                    }
                 }
             });
         }
@@ -338,12 +378,15 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-                IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
+                using (var uow = _unitOfWorkLocator())
+                {
+                    IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
-                ActiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Active)
-                                                                     .Where(t => t.Game.Id == GameId)
-                                                                                .OrderBy(t => t.EndDate)
-                                                                                .AsEnumerable());
+                    ActiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Active)
+                                                                         .Where(t => t.Game.Id == GameId)
+                                                                                    .OrderBy(t => t.EndDate)
+                                                                                    .AsEnumerable());
+                }
             });
         }
 
@@ -351,13 +394,15 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-                IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
+                using (var uow = _unitOfWorkLocator())
+                {
+                    IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
-                InactiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Inactive)
-                                                                                            .Where(t => t.Game.Id == GameId)
-                                                                                                    .OrderBy(t => t.EndDate)
-                                                                                                    .AsEnumerable());
-
+                    InactiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Inactive)
+                                                                                                .Where(t => t.Game.Id == GameId)
+                                                                                                        .OrderBy(t => t.EndDate)
+                                                                                                        .AsEnumerable());
+                }
             });
         }
 
@@ -365,12 +410,15 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-                IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
+                using (var uow = _unitOfWorkLocator())
+                {
+                    IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
-                AccomplishedTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Accomplished)
-                                                                        .Where(t => t.Game.Id == GameId)
-                                                                                .OrderBy(t => t.EndDate)
-                                                                                .AsEnumerable());
+                    AccomplishedTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Accomplished)
+                                                                            .Where(t => t.Game.Id == GameId)
+                                                                                    .OrderBy(t => t.EndDate)
+                                                                                    .AsEnumerable());
+                }
             });
         }
 
@@ -378,12 +426,15 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-                IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
+                using (var uow = _unitOfWorkLocator())
+                {
+                    IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
-                CancelledTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Cancelled)
-                                                                        .Where(t => t.Game.Id == GameId)
-                                                                                .OrderBy(t => t.EndDate)
-                                                                                .AsEnumerable());
+                    CancelledTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Cancelled)
+                                                                            .Where(t => t.Game.Id == GameId)
+                                                                                    .OrderBy(t => t.EndDate)
+                                                                                    .AsEnumerable());
+                }
             });
 
         }

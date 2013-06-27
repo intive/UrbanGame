@@ -137,5 +137,11 @@ namespace Common
         /// </summary>
         /// <returns></returns>
         IHighScore[] HighScores();
+
+        /// <summary>
+        /// Method returns status and points of submitted solution
+        /// </summary>
+        /// <returns></returns>
+        Task<SolutionStatusResponse> GetSolutionStatus(int taskId);
     }
 }

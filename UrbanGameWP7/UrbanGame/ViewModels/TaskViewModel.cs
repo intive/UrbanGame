@@ -75,6 +75,7 @@ namespace UrbanGame.ViewModels
             if (message.TaskId == CurrentTask.Id)
             {
                 CurrentTask.SolutionStatus = message.Status;
+                CurrentTask.UserPoints = message.Points;
             }
         }
         #endregion
@@ -84,6 +85,8 @@ namespace UrbanGame.ViewModels
         public int GameId { get; set; }
 
         public int TaskId { get; set; }
+
+        public string DiffComparision { get; set; }
 
         #endregion
 
@@ -166,7 +169,25 @@ namespace UrbanGame.ViewModels
             base.OnActivate();
             await RefreshGame();
             await RefreshTask();
+        }
 
+        protected override void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+
+            Task.Factory.StartNew(() =>
+            {
+                System.Threading.Thread.Sleep(700);
+                if (DiffComparision != null)
+                {
+                    System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        MessageBox.Show(DiffComparision);
+                        DiffComparision = null;
+                    });
+
+                }
+            });
         }
 
         #endregion
@@ -176,9 +197,12 @@ namespace UrbanGame.ViewModels
         public async Task RefreshGame()
         {
             await Task.Factory.StartNew(async () =>
-            {               
-                IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
-                Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
+            {
+                using (var uow = _unitOfWorkLocator())
+                {
+                    IQueryable<IGame> games = uow.GetRepository<IGame>().All();
+                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
+                }
             });
         }
 
@@ -186,8 +210,14 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-                IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
-                CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId) ?? _gameWebService.GetTaskDetails(GameId, TaskId);
+                using (var uow = _unitOfWorkLocator())
+                {
+                    IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
+                    CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId) ?? _gameWebService.GetTaskDetails(GameId, TaskId);
+                    
+                    //to load it (lazy loading)
+                    var abcd = CurrentTask.ABCDPossibleAnswers.Any(a => false);
+                }
             });
         }
 
@@ -204,7 +234,7 @@ namespace UrbanGame.ViewModels
             }
 
             //sending solution
-            _gameWebService.SubmitTaskSolution(Game.Id, CurrentTask.Id, solution);
+            _gameWebService.SubmitTaskSolution(GameId, CurrentTask.Id, solution);
 
             Solution = solution;
         }

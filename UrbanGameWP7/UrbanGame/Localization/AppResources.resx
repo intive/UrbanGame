@@ -160,9 +160,6 @@
   <data name="DayShortcut" xml:space="preserve">
     <value>d</value>
   </data>
-  <data name="Descrition" xml:space="preserve">
-    <value>description</value>
-  </data>
   <data name="Difficulty" xml:space="preserve">
     <value>DIFFICULTY</value>
   </data>
@@ -357,5 +354,11 @@
   </data>
   <data name="ByOperatorUpCase" xml:space="preserve">
     <value>BY</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>rank</value>
+  </data>
+  <data name="GameChangedToast" xml:space="preserve">
+    <value>Game details have changed. Tap to see differences.</value>
   </data>
 </root>

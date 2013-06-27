@@ -7,6 +7,6 @@ namespace Common
 {
     public interface IGameChangesManager
     {
-        void GameChanged(int gid);
+
     }
 }

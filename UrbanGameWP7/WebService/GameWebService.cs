@@ -72,14 +72,6 @@ namespace WebService
             return JsonConvert.DeserializeObject<TObject>(json, _jsonConverters);
         }
 
-        public async void TestApi()
-        {
-            string json = await GetJson("games?lat=10&lon=10");
-
-            var results = JsonConvert.DeserializeObject<ListOfGames>(json, _jsonConverters);
-            MessageBox.Show(results.Games[1].Id.ToString() + "\n" + Enum.GetName(typeof(GameType), results.Games[1].GameType) + "\n" + results.Games[1].Name + "\n" + results.Games[1].Prizes + "\n" + results.Games[1].Description + "\n" + results.Games[1].OperatorName + "\n" + Enum.GetName(typeof(GameDifficulty), results.Games[1].Difficulty) + "\n" + results.Games[1].GameStart.ToShortDateString());
-        }
-
         #endregion
 
         #region Containers
@@ -187,9 +179,20 @@ namespace WebService
         #region SubmitTaskSolution
         public bool SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
-            GameChangesManager.AddSolution(new SubmittedSolution() { TaskId = tid });
             return true;
         }
+        #endregion
+
+        #region GetSolutionStatus
+
+        public async Task<SolutionStatusResponse> GetSolutionStatus(int taskId)
+        {
+            SolutionStatusResponse result = new SolutionStatusResponse();
+            result.Status = new Random().Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
+            result.Points = 5;
+            return result;
+        }
+
         #endregion
 
         #region Authorize

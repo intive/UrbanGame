@@ -74,7 +74,7 @@
 
                             <StackPanel Grid.Column="1" Orientation="Vertical">
                                 <TextBlock Text="{Binding Path=Game.Name}" FontSize="{StaticResource PhoneFontSizeLarge}" FontWeight="Bold" Foreground="{StaticResource FontColorWhite}"/>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,5,5">
                                     <StackPanel.Resources>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
@@ -105,7 +105,6 @@
                                 </Style>
                             </StackPanel.Resources>
                             <TextBlock Text="{Binding Game.GameEnd, Converter={StaticResource GameEndConverter}}" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding Path=AppResources.ToEnd, Source={StaticResource LocalizedStrings}}" FontWeight="Bold"/>
                         </StackPanel>
                         <TextBlock Grid.Row="3" Text="{Binding Game.Description}" Margin="5,10,0,5" Foreground="{StaticResource FontColorWhite}"/>
                         <StackPanel Grid.Row="4" Orientation="Horizontal" Visibility="{Binding ShowsMore, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -204,7 +203,7 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding IsRepeatable, Converter={StaticResource IsRepeatableConverter}}" />
                                                     <TextBlock Text="|" />
-                                                    <TextBlock Text="{Binding UserPoints}" />
+                                                    <TextBlock Text="{Binding UserPoints, TargetNullValue=?}" />
                                                     <TextBlock Text="{Binding MaxPoints, Converter={StaticResource IntToSlashIntConverter}}" />
                                                 </StackPanel>
                                                 <TextBlock Text="{Binding EndDate, Converter={StaticResource GameEndConverter}}" Foreground="{StaticResource FontColorWhite}"/>

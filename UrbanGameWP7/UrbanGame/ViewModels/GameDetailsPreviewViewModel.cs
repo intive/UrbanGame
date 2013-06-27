@@ -167,8 +167,11 @@ namespace UrbanGame.ViewModels
             {
                 if (_gameWebService.IsAuthorized)
                 {
-                    IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
-                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
+                    using (var uow = _unitOfWorkLocator())
+                    {
+                        IQueryable<IGame> games = uow.GetRepository<IGame>().All();
+                        Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
+                    }
                 }
                 else
                 {
@@ -215,6 +218,7 @@ namespace UrbanGame.ViewModels
             newGame.Description = Game.Description;
             newGame.Difficulty = Game.Difficulty;
             newGame.Prizes = Game.Prizes;
+            newGame.Version = Game.Version;
 
             foreach (var t in Game.Tasks)
             {

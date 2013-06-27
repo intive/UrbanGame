@@ -73,9 +73,11 @@
     <Compile Include="Solutions\SolutionStatusChanged.cs" />
     <Compile Include="Alerts\IAlert.cs" />
     <Compile Include="HighScores\IHighScore.cs" />
+    <Compile Include="Solutions\SolutionStatusResponse.cs" />
     <Compile Include="Tasks\TaskChangedEvent.cs" />
     <Compile Include="Tasks\TaskState.cs" />
     <Compile Include="Utilities\ILocalizationService.cs" />
+    <Compile Include="Utilities\IToastPromptService.cs" />
     <Compile Include="WebService\AuthorizeState.cs" />
     <Compile Include="Collections\IEntityEnumerable.cs" />
     <Compile Include="Collections\EntityEnumerable.cs" />
