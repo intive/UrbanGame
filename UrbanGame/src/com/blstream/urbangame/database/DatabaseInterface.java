@@ -232,6 +232,14 @@ public interface DatabaseInterface {
 	public boolean insertTaskForGame(Long gameID, Task task);
 	
 	/**
+	 * @param gameID - id of game for which the task should be inserted
+	 * @param tasks - list of tasks to be inserted for specified game
+	 * @return - true if all elements inserted successful [notice: can return
+	 *         false and insert part of list]
+	 */
+	public boolean insertListOfTasksForGame(Long gameID, List<Task> tasks);
+	
+	/**
 	 * @param gameID - points to the tasks specific for a game
 	 * @return list of tasks of game with ID given in parameter, null if no
 	 *         match

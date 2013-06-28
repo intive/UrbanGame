@@ -31,6 +31,7 @@ import com.blstream.urbangame.database.helper.SQLCipherHelper;
 import com.blstream.urbangame.database.helper.SQLInterface;
 import com.blstream.urbangame.database.helper.SQLiteHelper;
 
+
 //formatter: on
 
 public class Database implements DatabaseInterface {
@@ -887,43 +888,61 @@ public class Database implements DatabaseInterface {
 		
 		if (isDataOk) {
 			db.beginTransaction();
-			ContentValues values = new ContentValues();
-			values.put(GAMES_TASKS_KEY_GAME_ID, gameID);
-			values.put(GAMES_TASKS_KEY_TASK_ID, task.getId());
-			
-			boolean isInsert1OK = db.insert(GAMES_TASKS_TABLE_NAME, null, values) != -1;
-			
-			values = new ContentValues();
-			values.put(TASKS_KEY_ID, task.getId());
-			values.put(TASKS_KEY_TITLE, task.getTitle());
-			values.put(TASKS_KEY_TYPE, task.getType());
-			values.put(TASKS_KEY_PICTURE, task.getPictureBase64());
-			values.put(TASKS_KEY_DESCRIPTION, task.getDescription());
-			values.put(TASKS_KEY_REPETABLE, booleanToString(task.isRepetable()));
-			values.put(TASKS_KEY_IS_HIDDEN, booleanToString(task.isHidden()));
-			values.put(TASKS_KEY_NUMBER_OF_HIDDEN, task.getNumberOfHidden());
-			values.put(TASKS_KEY_END_TIME, dateToLong(task.getEndTime()));
-			values.put(TASKS_KEY_MAX_POINTS, task.getMaxPoints());
-			
-			boolean isInsert2OK = db.insert(TASKS_TABLE_NAME, null, values) != -1;
-			boolean isInsert3OK = true;
-			if (isInsert1OK && isInsert2OK) {
-				if (task instanceof ABCDTask) {
-					isInsert3OK = insertTaskABCD(db, (ABCDTask) task);
-					if (isInsert3OK) {
-						db.setTransactionSuccessful();
-					}
-				}
-				else {
-					db.setTransactionSuccessful();
-				}
+			boolean isOK = insertOneTask(db, task, gameID);
+			if (isOK) {
+				db.setTransactionSuccessful();
 			}
 			db.endTransaction();
 			db.close();
 			
-			return isInsert1OK && isInsert2OK && isInsert3OK;
+			return isOK;
 		}
 		else return false;
+	}
+	
+	private boolean insertOneTask(DBWrapper db, Task task, Long gameID) {
+		ContentValues values = new ContentValues();
+		values.put(GAMES_TASKS_KEY_GAME_ID, gameID);
+		values.put(GAMES_TASKS_KEY_TASK_ID, task.getId());
+		
+		boolean isInsert1OK = db.insert(GAMES_TASKS_TABLE_NAME, null, values) != -1;
+		
+		values = new ContentValues();
+		values.put(TASKS_KEY_ID, task.getId());
+		values.put(TASKS_KEY_TITLE, task.getTitle());
+		values.put(TASKS_KEY_TYPE, task.getType());
+		values.put(TASKS_KEY_PICTURE, task.getPictureBase64());
+		values.put(TASKS_KEY_DESCRIPTION, task.getDescription());
+		values.put(TASKS_KEY_REPETABLE, booleanToString(task.isRepetable()));
+		values.put(TASKS_KEY_IS_HIDDEN, booleanToString(task.isHidden()));
+		values.put(TASKS_KEY_NUMBER_OF_HIDDEN, task.getNumberOfHidden());
+		values.put(TASKS_KEY_END_TIME, dateToLong(task.getEndTime()));
+		values.put(TASKS_KEY_MAX_POINTS, task.getMaxPoints());
+		
+		boolean isInsert2OK = db.insert(TASKS_TABLE_NAME, null, values) != -1;
+		boolean isInsert3OK = true;
+		if (isInsert1OK && isInsert2OK) {
+			if (task instanceof ABCDTask) {
+				isInsert3OK = insertTaskABCD(db, (ABCDTask) task);
+				if (!isInsert3OK) return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public synchronized boolean insertListOfTasksForGame(Long gameID, List<Task> tasks) {
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
+		boolean isOK = true;
+		
+		db.beginTransaction();
+		for (Task task : tasks) {
+			isOK = isOK && insertOneTask(db, task, gameID);
+		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
+		return isOK;
 	}
 	
 	private boolean insertTaskABCD(DBWrapper db, ABCDTask abcdTask) {
