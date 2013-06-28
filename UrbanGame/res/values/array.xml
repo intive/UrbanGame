@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <resources>
+   <string-array name="listThemes">
+     <item>Default</item>
+     <item>Blue</item>
+     </string-array>
+ 
+   <string-array name="listThemesValues">
+     <item>UrbanGameTheme.Default</item>
+     <item>UrbanGameTheme.Blue</item>
+   </string-array>
+ </resources>
