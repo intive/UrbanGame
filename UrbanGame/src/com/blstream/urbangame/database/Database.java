@@ -553,13 +553,7 @@ public class Database implements DatabaseInterface {
 		isDataOk = playerGameSpecific.getPlayerEmail() != null && playerGameSpecific.getGameID() != null;
 		
 		if (isDataOk) {
-			ContentValues values = new ContentValues();
-			values.put(USER_GAMES_SPECIFIC_KEY_EMAIL, playerGameSpecific.getPlayerEmail());
-			values.put(USER_GAMES_SPECIFIC_KEY_GAME_ID, playerGameSpecific.getGameID());
-			values.put(USER_GAMES_SPECIFIC_KEY_RANK, playerGameSpecific.getRank());
-			values.put(USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED, playerGameSpecific.getState());
-			values.put(USER_GAMES_SPECIFIC_KEY_CHANGES, playerGameSpecific.getChanges());
-			values.put(USER_GAMES_SPECIFIC_KEY_HAS_CHANGES, booleanToString(playerGameSpecific.hasChanges()));
+			ContentValues values = putUserGamesSpecificIntoContentValues(playerGameSpecific);
 			
 			boolean isInsertOK = db.insert(USER_GAMES_SPECIFIC_TABLE_NAME, null, values) != -1;
 			db.close();
@@ -567,6 +561,32 @@ public class Database implements DatabaseInterface {
 			return isInsertOK;
 		}
 		else return false;
+	}
+	
+	private ContentValues putUserGamesSpecificIntoContentValues(PlayerGameSpecific playerGameSpecific) {
+		ContentValues values = new ContentValues();
+		values.put(USER_GAMES_SPECIFIC_KEY_EMAIL, playerGameSpecific.getPlayerEmail());
+		values.put(USER_GAMES_SPECIFIC_KEY_GAME_ID, playerGameSpecific.getGameID());
+		values.put(USER_GAMES_SPECIFIC_KEY_RANK, playerGameSpecific.getRank());
+		values.put(USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED, playerGameSpecific.getState());
+		values.put(USER_GAMES_SPECIFIC_KEY_CHANGES, playerGameSpecific.getChanges());
+		values.put(USER_GAMES_SPECIFIC_KEY_HAS_CHANGES, booleanToString(playerGameSpecific.hasChanges()));
+		return values;
+	}
+
+	@Override
+	public synchronized boolean insertListOfUserGameSpecific(List<PlayerGameSpecific> list) {
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
+		boolean isOK = true;
+		
+		db.beginTransaction();
+		for (PlayerGameSpecific pgs : list) {
+			ContentValues values = putUserGamesSpecificIntoContentValues(pgs);
+			isOK = isOK && db.insert(USER_GAMES_SPECIFIC_TABLE_NAME, null, values) != -1;
+		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
+		return isOK;
 	}
 	
 	@Override
