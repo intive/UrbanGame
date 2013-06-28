@@ -94,7 +94,7 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 	private final UrbanGameDialogOnClickListener registerSuccessfulListener = new UrbanGameDialogOnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			activity.loginUser(email, displayName, password);
+			activity.loginUser(email);
 		}
 	};
 }
