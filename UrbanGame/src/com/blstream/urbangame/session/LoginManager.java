@@ -4,19 +4,20 @@ import android.content.Context;
 import android.util.Log;
 
 import com.blstream.urbangame.database.entity.Player;
+import com.blstream.urbangame.web.WebHighLevel;
+import com.blstream.urbangame.web.WebHighLevelInterface;
 
 // formatter:off
 /**
  * This class manages user login session.
  * 
- * It provides the following functionalities:
- * 	- keeping information about logged user
- * 	- login and logout user 
- * 	- validating user data (login and password)
+ * It provides the following functionalities: 
+ * 		- keeping information about logged user 
+ * 		- login and logout user 
+ * 		- validating user data (login and password)
  * 
- * Due to this class we can easily manages logged users,
- * write and read their data from DB, and connect with
- * server to update information about session.
+ * Due to this class we can easily manages logged users, write and read their
+ * data from DB, and connect with server to update information about session.
  */
 //formatter:on
 public class LoginManager extends SessionManager {
@@ -49,24 +50,30 @@ public class LoginManager extends SessionManager {
 	public boolean loginUser(String email) {
 		Log.i(TAG, email + " logging in");
 		
-		// FIXME connect with server and login user
 		return database.setLoggedPlayer(email);
 	}
 	
 	public boolean isLoginDataValid(String email, String password) {
-		Player player = getPlayerFromDB(email);
-		if (!doesPlayerExist(player)) return false;
-		else return isPlayerPasswordCorrect(password, player);
-	}
-	
-	private boolean isPlayerPasswordCorrect(String password, Player player) {
-		return player.getPassword().equals(password);
+		
+		WebHighLevelInterface web = new WebHighLevel(super.context);
+		Player fromWeb = web.loginUser(email, password);
+		boolean isOK = fromWeb != null;
+		
+		if (isOK) {
+			if (!doesPlayerExist(email)) {
+				addUserToDB(fromWeb);
+			}
+			else {
+				updatePlayerInDB(fromWeb);
+			}
+		}
+		
+		return isOK;
 	}
 	
 	public void logoutUser() {
 		Log.i(TAG, database.getLoggedPlayerID() + " logging out");
 		
-		// FIXME connect with server and logout user
 		if (database.setNoOneLogged()) {
 			startMainActivity();
 		}

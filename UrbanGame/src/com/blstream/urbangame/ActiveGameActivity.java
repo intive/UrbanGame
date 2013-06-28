@@ -1,5 +1,6 @@
 package com.blstream.urbangame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -10,6 +11,8 @@ import com.blstream.urbangame.fragments.GameInfoFragment;
 import com.blstream.urbangame.fragments.GameRankingFragment;
 import com.blstream.urbangame.fragments.GameTasksFragment;
 import com.blstream.urbangame.fragments.TabManager;
+import com.blstream.urbangame.web.WebHighLevel;
+import com.blstream.urbangame.web.WebHighLevelInterface;
 
 public class ActiveGameActivity extends AbstractMenuActivity {
 	
@@ -29,7 +32,25 @@ public class ActiveGameActivity extends AbstractMenuActivity {
 		setContentView(R.layout.tabhost_layout);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
+		long gameID = getGameID();
+		
+		// it downloads tasks for game (current user related) if not in database
+		WebHighLevelInterface web = new WebHighLevel(this);
+		web.downloadTasksForGame(gameID);
+		
 		setUpTabHost(savedInstanceState);
+	}
+	
+	private long getGameID() {
+		long gameID;
+		Intent intent = getIntent();
+		if (intent.getExtras() != null) {
+			gameID = intent.getExtras().getLong(GameDetailsActivity.GAME_KEY, GameDetailsActivity.GAME_NOT_FOUND);
+		}
+		else {
+			gameID = GameDetailsActivity.GAME_NOT_FOUND;
+		}
+		return gameID;
 	}
 	
 	private void setUpTabHost(Bundle savedInstanceState) {

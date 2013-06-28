@@ -17,8 +17,8 @@ import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.date.TimeLeftBuilder;
 
-public class GamesListAdapter extends BaseExpandableListAdapter {//ArrayAdapter<UrbanGameShortInfo> {
-
+public class GamesListAdapter extends BaseExpandableListAdapter {
+	
 	private ArrayList<UrbanGameShortInfo> data;
 	private int viewResourceId;
 	private Context context;
@@ -115,7 +115,6 @@ public class GamesListAdapter extends BaseExpandableListAdapter {//ArrayAdapter<
 		UrbanGameShortInfo gameInfo = data.get(childPosition);
 		
 		if (convertView == null) {
-			//LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			LayoutInflater inflater = LayoutInflater.from(context);
 			row = inflater.inflate(viewResourceId, parent, false);
 			

@@ -61,11 +61,6 @@ public class LoginRegisterActivity extends AbstractMenuActivity {
 		this.finish();
 	}
 	
-	public void registerAndLoginUser(String email, String displayName, String password) {
-		registrationManager.registerUser(email, password, displayName, null);
-		loginUser(email);
-	}
-	
 	@Override
 	public void onBackPressed() {
 		Intent intent = new Intent(LoginRegisterActivity.this, GamesListActivity.class);
