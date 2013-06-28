@@ -5,6 +5,9 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +40,6 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 	AnswerDialog dialog;
 	
 	public static class ServerResponseToSendedAnswers {
-		public boolean noInternetConnection = false;
 		public ArrayList<String> correctAnswers = null;
 		public Integer points = 0;
 	}
@@ -141,7 +143,7 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 			
 			progressDialog.dismiss();
 			
-			if (serverResponse.noInternetConnection) {
+			if (!isOnline()) {
 				// If there is no connection to the Internet.
 				dialog.showDialog(DialogType.NO_INTERNET_CONNECTION, null, null);
 			}
@@ -173,5 +175,13 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 				}
 			}
 		}
+	}
+	
+	public boolean isOnline() {
+		ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(
+			Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+		if (networkInfo == null) return false;
+		return networkInfo.isAvailable() && networkInfo.isConnected();
 	}
 }

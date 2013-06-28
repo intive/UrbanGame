@@ -147,9 +147,6 @@ public class WebHighLevel implements WebHighLevelInterface {
 			serverResponse.correctAnswers = correctAnswers;
 			serverResponse.points = points;
 		}
-		else {
-			serverResponse.noInternetConnection = true;
-		}
 		
 		return serverResponse;
 	}
