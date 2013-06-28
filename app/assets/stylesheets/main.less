@@ -350,6 +350,7 @@ a:hover>[class^="icon-"] {
         }
     
         .big-image {
+            background-color: #fff;
             width: 100%
         }
 
@@ -709,14 +710,16 @@ table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist the
     }
 }
 
-#gamelist td:nth-child(2) {
-    text-align: left;
-    vertical-align: top;
-    padding-top: 15px;
-}
+#gamelist tbody tr { 
+    td:nth-child(2) {
+        text-align: left;
+        vertical-align: top;
+        padding-top: 15px;
+    }
 
-#gamelist td:last-child.row {
-    margin: 20px 0;
+    td:last-child .row {
+        margin: 20px 0;
+    }
 }
 
 #tasklist tbody tr td:nth-child(2), #tasklist tbody tr td:nth-child(3) {
@@ -914,4 +917,35 @@ input[type="color"]:focus,
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
   -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+}
+
+input[class*="ng-dirty"][class*="ng-invalid-"] {
+    background-color: #f2dede;
+}
+
+input[class*="ng-invalid-"]:focus {
+    background-color: transparent;
+    border-color: #e9322d;
+    -webkit-box-shadow: 0 0 6px #f8b9b7;
+    -moz-box-shadow: 0 0 6px #f8b9b7;
+    box-shadow: 0 0 6px #f8b9b7;
+}
+
+.help-block {
+    color: #b94a48;
+    width: 220px;
+}
+
+.checkbox-terms .help-block {
+    width: 310px;
+}
+
+.form-horizontal input+.help-block, .form-horizontal select+.help-block, 
+.form-horizontal textarea+.help-block, .form-horizontal .uneditable-input+.help-block, 
+.form-horizontal .input-prepend+.help-block, .form-horizontal .input-append+.help-block {
+    margin-top: 0;
+}
+
+span#processing {
+    position: absolute;
 }

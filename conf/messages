@@ -13,6 +13,11 @@ remember = Remember me
 forgotpass = Forgot password?
 login.register = Don''t you have an account? Sign up!
 
+main.register.title = Register for free
+main.register.msg = The application is a web interface that allows to create a game. When the game is created, the organizer can add different tasks for players. We are assuming that many tasks will be related to position on the map and finding something in
+main.last.title = Last created games
+main.last.msg = Play the game for free
+
 refresh = Refresh
 help = Help
 captcha.getaudio = Get an audio CAPTCHA
@@ -27,7 +32,7 @@ error.name.required = Name is required
 error.passwords.match = Passwords are not the same
 error.captcha.required = Captcha code is required
 error.minLength = Minimum length is {0}
-error.accept.therms = You must accept Terms of Service and Privacy Policy
+error.accept.therms = You must accept the Terms of Service and Privacy Policy
 error.captcha.match = Wrong code
 
 notify.register.sent = Your account has been created. The confirmation e-mail has been sent to: {0}.
@@ -138,9 +143,7 @@ status.online = Online
 status.project = Project
 status.finished = Finished
 
-
 archive.title = Games archive
-
 
 tasks.newtaskbtn = CREATE NEW TASK
 tasks.headername = Task details
