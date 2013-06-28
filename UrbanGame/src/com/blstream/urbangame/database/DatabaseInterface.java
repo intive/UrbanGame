@@ -147,6 +147,13 @@ public interface DatabaseInterface {
 	public boolean insertUserGameSpecific(PlayerGameSpecific playerGameSpecific);
 	
 	/**
+	 * @param list - list of player's info about game to be inserted
+	 * @return true if all inserts went successful. [notice: can return false
+	 *         and insert part of list]
+	 */
+	public boolean insertListOfUserGameSpecific(List<PlayerGameSpecific> list);
+	
+	/**
 	 * @param email - email of user that games are required
 	 * @return list of games, null if user don't have any game
 	 */
@@ -179,6 +186,13 @@ public interface DatabaseInterface {
 	 * @return true if successful
 	 */
 	public boolean insertPlayerTaskSpecific(PlayerTaskSpecific taskSpecific);
+	
+	/**
+	 * @param list - list of task info specific to user to be inserted
+	 * @return true if all inserts successful [notice: can return false and
+	 *         insert part of list]
+	 */
+	public boolean insertListOfPlayerTaskSpecific(List<PlayerTaskSpecific> list);
 	
 	/**
 	 * @param taskID - task id to get info for
@@ -230,6 +244,14 @@ public interface DatabaseInterface {
 	 * @return true if successful
 	 */
 	public boolean insertTaskForGame(Long gameID, Task task);
+	
+	/**
+	 * @param gameID - id of game for which the task should be inserted
+	 * @param tasks - list of tasks to be inserted for specified game
+	 * @return - true if all elements inserted successful [notice: can return
+	 *         false and insert part of list]
+	 */
+	public boolean insertListOfTasksForGame(Long gameID, List<Task> tasks);
 	
 	/**
 	 * @param gameID - points to the tasks specific for a game

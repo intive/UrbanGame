@@ -31,6 +31,7 @@ import com.blstream.urbangame.database.helper.SQLCipherHelper;
 import com.blstream.urbangame.database.helper.SQLInterface;
 import com.blstream.urbangame.database.helper.SQLiteHelper;
 
+
 //formatter: on
 
 public class Database implements DatabaseInterface {
@@ -552,13 +553,7 @@ public class Database implements DatabaseInterface {
 		isDataOk = playerGameSpecific.getPlayerEmail() != null && playerGameSpecific.getGameID() != null;
 		
 		if (isDataOk) {
-			ContentValues values = new ContentValues();
-			values.put(USER_GAMES_SPECIFIC_KEY_EMAIL, playerGameSpecific.getPlayerEmail());
-			values.put(USER_GAMES_SPECIFIC_KEY_GAME_ID, playerGameSpecific.getGameID());
-			values.put(USER_GAMES_SPECIFIC_KEY_RANK, playerGameSpecific.getRank());
-			values.put(USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED, playerGameSpecific.getState());
-			values.put(USER_GAMES_SPECIFIC_KEY_CHANGES, playerGameSpecific.getChanges());
-			values.put(USER_GAMES_SPECIFIC_KEY_HAS_CHANGES, booleanToString(playerGameSpecific.hasChanges()));
+			ContentValues values = putUserGamesSpecificIntoContentValues(playerGameSpecific);
 			
 			boolean isInsertOK = db.insert(USER_GAMES_SPECIFIC_TABLE_NAME, null, values) != -1;
 			db.close();
@@ -566,6 +561,32 @@ public class Database implements DatabaseInterface {
 			return isInsertOK;
 		}
 		else return false;
+	}
+	
+	private ContentValues putUserGamesSpecificIntoContentValues(PlayerGameSpecific playerGameSpecific) {
+		ContentValues values = new ContentValues();
+		values.put(USER_GAMES_SPECIFIC_KEY_EMAIL, playerGameSpecific.getPlayerEmail());
+		values.put(USER_GAMES_SPECIFIC_KEY_GAME_ID, playerGameSpecific.getGameID());
+		values.put(USER_GAMES_SPECIFIC_KEY_RANK, playerGameSpecific.getRank());
+		values.put(USER_GAMES_SPECIFIC_KEY_GAME_ACTIVE_OBSERVED, playerGameSpecific.getState());
+		values.put(USER_GAMES_SPECIFIC_KEY_CHANGES, playerGameSpecific.getChanges());
+		values.put(USER_GAMES_SPECIFIC_KEY_HAS_CHANGES, booleanToString(playerGameSpecific.hasChanges()));
+		return values;
+	}
+
+	@Override
+	public synchronized boolean insertListOfUserGameSpecific(List<PlayerGameSpecific> list) {
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
+		boolean isOK = true;
+		
+		db.beginTransaction();
+		for (PlayerGameSpecific pgs : list) {
+			ContentValues values = putUserGamesSpecificIntoContentValues(pgs);
+			isOK = isOK && db.insert(USER_GAMES_SPECIFIC_TABLE_NAME, null, values) != -1;
+		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
+		return isOK;
 	}
 	
 	@Override
@@ -716,17 +737,7 @@ public class Database implements DatabaseInterface {
 		isDataOk = isTaskSpecificOk(taskSpecific);
 		
 		if (isDataOk) {
-			ContentValues values = new ContentValues();
-			values.put(USER_TASKS_SPECIFIC_KEY_TASK_ID, taskSpecific.getTaskID());
-			values.put(USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, taskSpecific.getPlayerEmail());
-			values.put(USER_TASKS_SPECIFIC_KEY_ARE_CHANGES, booleanToString(taskSpecific.getAreChanges()));
-			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.isFinishedByUser()));
-			values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
-			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
-			values.put(USER_TASKS_SPECIFIC_KEY_CHANGES, taskSpecific.getChanges());
-			values.put(USER_TASKS_SPECIFIC_KEY_STATUS, taskSpecific.getStatus());
-			values.put(USER_TASKS_SPECIFIC_KEY_SELECTED_ANSWERS,
-				booleanArrayToString(taskSpecific.getSelectedAnswers()));
+			ContentValues values = putPlayerTaskSpecificIntoValues(taskSpecific);
 			
 			boolean isInsertOK = db.insert(USER_TASKS_SPECIFIC_TABLE_NAME, null, values) != -1;
 			
@@ -734,6 +745,35 @@ public class Database implements DatabaseInterface {
 			return isInsertOK;
 		}
 		else return false;
+	}
+	
+	private ContentValues putPlayerTaskSpecificIntoValues(PlayerTaskSpecific taskSpecific) {
+		ContentValues values = new ContentValues();
+		values.put(USER_TASKS_SPECIFIC_KEY_TASK_ID, taskSpecific.getTaskID());
+		values.put(USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, taskSpecific.getPlayerEmail());
+		values.put(USER_TASKS_SPECIFIC_KEY_ARE_CHANGES, booleanToString(taskSpecific.getAreChanges()));
+		values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.isFinishedByUser()));
+		values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
+		values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
+		values.put(USER_TASKS_SPECIFIC_KEY_CHANGES, taskSpecific.getChanges());
+		values.put(USER_TASKS_SPECIFIC_KEY_STATUS, taskSpecific.getStatus());
+		values.put(USER_TASKS_SPECIFIC_KEY_SELECTED_ANSWERS,
+			booleanArrayToString(taskSpecific.getSelectedAnswers()));
+		return values;
+	}
+
+	public synchronized boolean insertListOfPlayerTaskSpecific(List<PlayerTaskSpecific> list){
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
+		boolean isOK = true;
+		
+		db.beginTransaction();
+		for (PlayerTaskSpecific pts : list) {
+			ContentValues values = putPlayerTaskSpecificIntoValues(pts);
+			isOK = isOK && db.insert(USER_TASKS_SPECIFIC_TABLE_NAME, null, values) != -1;
+		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
+		return isOK;
 	}
 	
 	//needed for transformation from boolean array to string and backwards
@@ -887,43 +927,61 @@ public class Database implements DatabaseInterface {
 		
 		if (isDataOk) {
 			db.beginTransaction();
-			ContentValues values = new ContentValues();
-			values.put(GAMES_TASKS_KEY_GAME_ID, gameID);
-			values.put(GAMES_TASKS_KEY_TASK_ID, task.getId());
-			
-			boolean isInsert1OK = db.insert(GAMES_TASKS_TABLE_NAME, null, values) != -1;
-			
-			values = new ContentValues();
-			values.put(TASKS_KEY_ID, task.getId());
-			values.put(TASKS_KEY_TITLE, task.getTitle());
-			values.put(TASKS_KEY_TYPE, task.getType());
-			values.put(TASKS_KEY_PICTURE, task.getPictureBase64());
-			values.put(TASKS_KEY_DESCRIPTION, task.getDescription());
-			values.put(TASKS_KEY_REPETABLE, booleanToString(task.isRepetable()));
-			values.put(TASKS_KEY_IS_HIDDEN, booleanToString(task.isHidden()));
-			values.put(TASKS_KEY_NUMBER_OF_HIDDEN, task.getNumberOfHidden());
-			values.put(TASKS_KEY_END_TIME, dateToLong(task.getEndTime()));
-			values.put(TASKS_KEY_MAX_POINTS, task.getMaxPoints());
-			
-			boolean isInsert2OK = db.insert(TASKS_TABLE_NAME, null, values) != -1;
-			boolean isInsert3OK = true;
-			if (isInsert1OK && isInsert2OK) {
-				if (task instanceof ABCDTask) {
-					isInsert3OK = insertTaskABCD(db, (ABCDTask) task);
-					if (isInsert3OK) {
-						db.setTransactionSuccessful();
-					}
-				}
-				else {
-					db.setTransactionSuccessful();
-				}
+			boolean isOK = insertOneTask(db, task, gameID);
+			if (isOK) {
+				db.setTransactionSuccessful();
 			}
 			db.endTransaction();
 			db.close();
 			
-			return isInsert1OK && isInsert2OK && isInsert3OK;
+			return isOK;
 		}
 		else return false;
+	}
+	
+	private boolean insertOneTask(DBWrapper db, Task task, Long gameID) {
+		ContentValues values = new ContentValues();
+		values.put(GAMES_TASKS_KEY_GAME_ID, gameID);
+		values.put(GAMES_TASKS_KEY_TASK_ID, task.getId());
+		
+		boolean isInsert1OK = db.insert(GAMES_TASKS_TABLE_NAME, null, values) != -1;
+		
+		values = new ContentValues();
+		values.put(TASKS_KEY_ID, task.getId());
+		values.put(TASKS_KEY_TITLE, task.getTitle());
+		values.put(TASKS_KEY_TYPE, task.getType());
+		values.put(TASKS_KEY_PICTURE, task.getPictureBase64());
+		values.put(TASKS_KEY_DESCRIPTION, task.getDescription());
+		values.put(TASKS_KEY_REPETABLE, booleanToString(task.isRepetable()));
+		values.put(TASKS_KEY_IS_HIDDEN, booleanToString(task.isHidden()));
+		values.put(TASKS_KEY_NUMBER_OF_HIDDEN, task.getNumberOfHidden());
+		values.put(TASKS_KEY_END_TIME, dateToLong(task.getEndTime()));
+		values.put(TASKS_KEY_MAX_POINTS, task.getMaxPoints());
+		
+		boolean isInsert2OK = db.insert(TASKS_TABLE_NAME, null, values) != -1;
+		boolean isInsert3OK = true;
+		if (isInsert1OK && isInsert2OK) {
+			if (task instanceof ABCDTask) {
+				isInsert3OK = insertTaskABCD(db, (ABCDTask) task);
+				if (!isInsert3OK) return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public synchronized boolean insertListOfTasksForGame(Long gameID, List<Task> tasks) {
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
+		boolean isOK = true;
+		
+		db.beginTransaction();
+		for (Task task : tasks) {
+			isOK = isOK && insertOneTask(db, task, gameID);
+		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
+		return isOK;
 	}
 	
 	private boolean insertTaskABCD(DBWrapper db, ABCDTask abcdTask) {
