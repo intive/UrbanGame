@@ -717,17 +717,7 @@ public class Database implements DatabaseInterface {
 		isDataOk = isTaskSpecificOk(taskSpecific);
 		
 		if (isDataOk) {
-			ContentValues values = new ContentValues();
-			values.put(USER_TASKS_SPECIFIC_KEY_TASK_ID, taskSpecific.getTaskID());
-			values.put(USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, taskSpecific.getPlayerEmail());
-			values.put(USER_TASKS_SPECIFIC_KEY_ARE_CHANGES, booleanToString(taskSpecific.getAreChanges()));
-			values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.isFinishedByUser()));
-			values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
-			values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
-			values.put(USER_TASKS_SPECIFIC_KEY_CHANGES, taskSpecific.getChanges());
-			values.put(USER_TASKS_SPECIFIC_KEY_STATUS, taskSpecific.getStatus());
-			values.put(USER_TASKS_SPECIFIC_KEY_SELECTED_ANSWERS,
-				booleanArrayToString(taskSpecific.getSelectedAnswers()));
+			ContentValues values = putPlayerTaskSpecificIntoValues(taskSpecific);
 			
 			boolean isInsertOK = db.insert(USER_TASKS_SPECIFIC_TABLE_NAME, null, values) != -1;
 			
@@ -735,6 +725,35 @@ public class Database implements DatabaseInterface {
 			return isInsertOK;
 		}
 		else return false;
+	}
+	
+	private ContentValues putPlayerTaskSpecificIntoValues(PlayerTaskSpecific taskSpecific) {
+		ContentValues values = new ContentValues();
+		values.put(USER_TASKS_SPECIFIC_KEY_TASK_ID, taskSpecific.getTaskID());
+		values.put(USER_TASKS_SPECIFIC_KEY_PLAYER_EMAIL, taskSpecific.getPlayerEmail());
+		values.put(USER_TASKS_SPECIFIC_KEY_ARE_CHANGES, booleanToString(taskSpecific.getAreChanges()));
+		values.put(USER_TASKS_SPECIFIC_KEY_IS_FINISHED, booleanToString(taskSpecific.isFinishedByUser()));
+		values.put(USER_TASKS_SPECIFIC_KEY_POINTS, taskSpecific.getPoints());
+		values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
+		values.put(USER_TASKS_SPECIFIC_KEY_CHANGES, taskSpecific.getChanges());
+		values.put(USER_TASKS_SPECIFIC_KEY_STATUS, taskSpecific.getStatus());
+		values.put(USER_TASKS_SPECIFIC_KEY_SELECTED_ANSWERS,
+			booleanArrayToString(taskSpecific.getSelectedAnswers()));
+		return values;
+	}
+
+	public synchronized boolean insertListOfPlayerTaskSpecific(List<PlayerTaskSpecific> list){
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
+		boolean isOK = true;
+		
+		db.beginTransaction();
+		for (PlayerTaskSpecific pts : list) {
+			ContentValues values = putPlayerTaskSpecificIntoValues(pts);
+			isOK = isOK && db.insert(USER_TASKS_SPECIFIC_TABLE_NAME, null, values) != -1;
+		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
+		return isOK;
 	}
 	
 	//needed for transformation from boolean array to string and backwards
