@@ -182,7 +182,7 @@ public interface DatabaseInterface {
 	
 	/**
 	 * @param list - list of task info specific to user to be inserted
-	 * @return true if all inserts successful [notice: can return null and
+	 * @return true if all inserts successful [notice: can return false and
 	 *         insert part of list]
 	 */
 	public boolean insertListOfPlayerTaskSpecific(List<PlayerTaskSpecific> list);
