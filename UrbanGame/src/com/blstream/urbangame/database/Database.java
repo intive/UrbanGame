@@ -741,7 +741,7 @@ public class Database implements DatabaseInterface {
 		return values;
 	}
 
-	public boolean insertListOfPlayerTaskSpecific(List<PlayerTaskSpecific> list){
+	public synchronized boolean insertListOfPlayerTaskSpecific(List<PlayerTaskSpecific> list){
 		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		boolean isOK = true;
 		
