@@ -2,7 +2,6 @@ package com.blstream.urbangame.database;
 
 //formatter: off
 import static com.blstream.urbangame.database.DatabaseDefinitions.*;
-//formatter: on
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,9 +11,12 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Location;
+import android.preference.PreferenceManager;
 
+import com.blstream.urbangame.R;
 import com.blstream.urbangame.database.dbobjects.DBWrapper;
 import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.LocationTask;
@@ -29,17 +31,15 @@ import com.blstream.urbangame.database.helper.SQLCipherHelper;
 import com.blstream.urbangame.database.helper.SQLInterface;
 import com.blstream.urbangame.database.helper.SQLiteHelper;
 
-
+//formatter: on
 
 public class Database implements DatabaseInterface {
-	
-	//This is a flag that tells which database should be used (encrypted or without encryption)
-	public static boolean use_encryption_flag = true;
 	
 	SQLInterface databasebHelper;
 	
 	public Database(Context context) {
-		if (use_encryption_flag) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		if (sharedPreferences.getBoolean(context.getString(R.string.key_database_encryption_on), true)) {
 			databasebHelper = new SQLCipherHelper(context);
 		}
 		else {
@@ -61,19 +61,7 @@ public class Database implements DatabaseInterface {
 		isDataOk = areShortGameInfoFieldsOK(game);
 		
 		if (isDataOk) {
-			ContentValues values = new ContentValues();
-			values.put(GAMES_KEY_ID, game.getID());
-			values.put(GAMES_KEY_TITLE, game.getTitle());
-			values.put(GAMES_KEY_GAME_ICON, game.getGameLogoBase64());
-			values.put(GAMES_KEY_OPERATOR_ICON, game.getOperatorLogoBase64());
-			values.put(GAMES_KEY_OPERATOR_NAME, game.getOperatorName());
-			values.put(GAMES_KEY_NUMBER_OF_PLAYERS, game.getPlayers());
-			values.put(GAMES_KEY_NUMBER_OF_MAX_PLAYERS, game.getMaxPlayers());
-			values.put(GAMES_KEY_CITY_NAME, game.getLocation());
-			values.put(GAMES_KEY_START_DATE, dateToLong(game.getStartDate()));
-			values.put(GAMES_KEY_END_DATE, dateToLong(game.getEndDate()));
-			values.put(GAMES_KEY_REWARD, booleanToString(game.getReward()));
-			values.put(GAMES_KEY_DETAILS_LINK, game.getDetailsLink());
+			ContentValues values = putGameShortInfoInContentValues(game);
 			
 			boolean isInsertOK = db.insert(GAMES_TABLE_NAME, null, values) != -1;
 			db.close();
@@ -81,6 +69,37 @@ public class Database implements DatabaseInterface {
 			return isInsertOK;
 		}
 		else return false;
+	}
+	
+	private ContentValues putGameShortInfoInContentValues(UrbanGameShortInfo game) {
+		ContentValues values = new ContentValues();
+		values.put(GAMES_KEY_ID, game.getID());
+		values.put(GAMES_KEY_TITLE, game.getTitle());
+		values.put(GAMES_KEY_GAME_ICON, game.getGameLogoBase64());
+		values.put(GAMES_KEY_OPERATOR_ICON, game.getOperatorLogoBase64());
+		values.put(GAMES_KEY_OPERATOR_NAME, game.getOperatorName());
+		values.put(GAMES_KEY_NUMBER_OF_PLAYERS, game.getPlayers());
+		values.put(GAMES_KEY_NUMBER_OF_MAX_PLAYERS, game.getMaxPlayers());
+		values.put(GAMES_KEY_CITY_NAME, game.getLocation());
+		values.put(GAMES_KEY_START_DATE, dateToLong(game.getStartDate()));
+		values.put(GAMES_KEY_END_DATE, dateToLong(game.getEndDate()));
+		values.put(GAMES_KEY_REWARD, booleanToString(game.getReward()));
+		values.put(GAMES_KEY_DETAILS_LINK, game.getDetailsLink());
+		return values;
+	}
+	
+	@Override
+	public synchronized boolean insertListOfGamesShortInfo(List<UrbanGameShortInfo> list) {
+		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
+		db.beginTransaction();
+		boolean isInsertOK = true;
+		for (UrbanGameShortInfo game : list) {
+			ContentValues values = putGameShortInfoInContentValues(game);
+			isInsertOK = isInsertOK && db.insert(GAMES_TABLE_NAME, null, values) != -1;
+		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
+		return isInsertOK;
 	}
 	
 	@Override

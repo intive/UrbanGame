@@ -48,7 +48,8 @@
         <activity android:name=".ActiveTaskActivity" />
         <activity android:name=".LoginRegisterActivity" />
         <activity android:name=".MyGamesActivity" />
-
+        <activity android:name=".UserSettingsActivity" />
+        
         <service android:name=".notifications.NotificationService" />
 
         <meta-data
