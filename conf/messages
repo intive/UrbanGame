@@ -153,6 +153,26 @@ tasks.delete = Delete
 tasks.visibilitytooltip = Task is visible always
 tasks.rewardtooltip = Maximum reward points:
 tasks.addtask = Add task
+tasks.addtaskbtn = ADD TASK
+tasks.cancel = CANCEL
+tasks.subaddtaskgreen = Fill all data
+tasks.subaddtaskplain = to add task to your task list.
+tasks.name = Task name
+tasks.type = Task type
+tasks.type1 = ABC Question
+tasks.type2 = GPS Location
+tasks.desc = Description
+tasks.image = image connected to description
+tasks.browseimage = Browse image
+tasks.removeAnswer = remove
+tasks.repeat = Is possible to repeat task after wrong answer
+tasks.correct = Correct
+tasks.answers = Answers
+tasks.points = Points
+tasks.addmoreanswers = ADD MORE ANSWERS
+tasks.showadditional = Show additional conditions for unlock task
+tasks.hideadditional = Hide additional conditions for unlock task
+
 
 
 language.pick = Pick a language
