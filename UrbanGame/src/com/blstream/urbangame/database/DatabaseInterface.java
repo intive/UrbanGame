@@ -147,6 +147,13 @@ public interface DatabaseInterface {
 	public boolean insertUserGameSpecific(PlayerGameSpecific playerGameSpecific);
 	
 	/**
+	 * @param list - list of player's info about game to be inserted
+	 * @return true if all inserts went successful. [notice: can return false
+	 *         and insert part of list]
+	 */
+	public boolean insertListOfUserGameSpecific(List<PlayerGameSpecific> list);
+	
+	/**
 	 * @param email - email of user that games are required
 	 * @return list of games, null if user don't have any game
 	 */
