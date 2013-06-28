@@ -14,11 +14,8 @@ import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
-<<<<<<< HEAD
 import android.os.Message;
-=======
 import android.preference.PreferenceManager;
->>>>>>> upstream/android
 import android.util.Log;
 
 import com.blstream.urbangame.R;

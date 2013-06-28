@@ -29,4 +29,8 @@ public class WebResponse {
 	public String getResponse() {
 		return responseString;
 	}
+	
+	public boolean isValid() {
+		return !WebDownloader.EMPTY_JSON.equals(responseString);
+	}
 }

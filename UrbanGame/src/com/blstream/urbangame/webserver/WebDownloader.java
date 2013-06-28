@@ -25,7 +25,7 @@ import android.util.Log;
  * After that input stream is read to String result, which is being returned.
  */
 public abstract class WebDownloader {
-	private final static String EMPYT_JSON = "{}";
+	public final static String EMPTY_JSON = "{}";
 	private final static String TAG = WebDownloader.class.getSimpleName();
 	private HttpClient httpClient;
 	
@@ -39,8 +39,8 @@ public abstract class WebDownloader {
 		}
 		catch (IOException e) {
 			Log.e(TAG, e.getMessage());
-			Log.d(TAG, "Possible issues: host doesn't exist or no intenet connection.");
-			return EMPYT_JSON;
+			Log.d(TAG, "Possible issues: host doesn't exist or no internet connection.");
+			return EMPTY_JSON;
 		}
 	}
 	
