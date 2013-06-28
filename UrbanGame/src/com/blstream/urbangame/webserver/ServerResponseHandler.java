@@ -36,6 +36,8 @@ public class ServerResponseHandler extends Handler {
 	public void handleMessage(Message message) {
 		WebServerNotificationListener webServerNotificationListener = weakReferenceToWebServerNotificationListener
 			.get();
-		webServerNotificationListener.onWebServerResponse(message);
+		if (webServerNotificationListener != null) {
+			webServerNotificationListener.onWebServerResponse(message);
+		}
 	}
 }
