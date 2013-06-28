@@ -222,19 +222,15 @@ namespace UrbanGame.ViewModels
         {
             base.OnViewLoaded(view);
 
-            Task.Factory.StartNew(() =>
-            {
-                System.Threading.Thread.Sleep(700);
-                if (DiffComparision != null)
+            if (DiffComparision != null)
+                new Timer(new TimerCallback((obj) =>
                 {
                     System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
                     {
                         MessageBox.Show(DiffComparision);
                         DiffComparision = null;
                     });
-
-                }
-            });
+                }), null, 700, System.Threading.Timeout.Infinite);
         }
 
         #endregion

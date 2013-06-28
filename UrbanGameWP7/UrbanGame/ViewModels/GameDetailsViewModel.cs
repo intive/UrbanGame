@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using UrbanGame.Storage;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace UrbanGame.ViewModels
 {
@@ -59,7 +60,21 @@ namespace UrbanGame.ViewModels
         #region IHandle<GameChangedEvent>
         public void Handle(GameChangedEvent game)
         {
-            RefreshGame();
+            if (game.Id == GameId)
+            {
+                using (var uow = _unitOfWorkLocator())
+                {
+                    var Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
+
+                    if (!String.IsNullOrEmpty(Game.ListOfChanges) && 
+                        _navigationService.CurrentSource.OriginalString == _navigationService.UriFor<GameDetailsViewModel>().WithParam(vm => vm.GameId, GameId).BuildUri().OriginalString)
+                    {
+                        MessageBox.Show(Game.ListOfChanges);
+                        Game.ListOfChanges = null;
+                        uow.Commit();
+                    }
+                }
+            }
         }
         #endregion
 
@@ -280,26 +295,21 @@ namespace UrbanGame.ViewModels
         {
             base.OnViewLoaded(view);
 
-            Task.Factory.StartNew(() =>
-                {
-                    System.Threading.Thread.Sleep(700);
-
-                    if (!String.IsNullOrEmpty(Game.ListOfChanges))
+            if (!String.IsNullOrEmpty(Game.ListOfChanges))
+                new Timer(new TimerCallback((obj) =>
                     {
                         System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
-                            {
-                                MessageBox.Show(Game.ListOfChanges);
+                        {
+                            MessageBox.Show(Game.ListOfChanges);
 
-                                Game.ListOfChanges = null;
-                                using (var uow = _unitOfWorkLocator())
-                                {
-                                    uow.GetRepository<IGame>().All().First(g => g.Id == GameId).ListOfChanges = null;
-                                    uow.Commit();
-                                }
-                            });
-                        
-                    }
-                });
+                            Game.ListOfChanges = null;
+                            using (var uow = _unitOfWorkLocator())
+                            {
+                                uow.GetRepository<IGame>().All().First(g => g.Id == GameId).ListOfChanges = null;
+                                uow.Commit();
+                            }
+                        });
+                    }), null, 700, System.Threading.Timeout.Infinite);
         }
 
         #endregion

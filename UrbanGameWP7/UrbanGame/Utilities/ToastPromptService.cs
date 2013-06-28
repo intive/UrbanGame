@@ -15,12 +15,10 @@ namespace UrbanGame.Utilities
     public class ToastPromptService : IToastPromptService
     {
         INavigationService _navigationService;
-        Func<IUnitOfWork> _unitOfWorkLocator;
 
-        public ToastPromptService(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator)
+        public ToastPromptService(INavigationService navigationService)
         {
             _navigationService = navigationService;
-            _unitOfWorkLocator = unitOfWorkLocator;
         }
 
         protected void ShowToast(string title, string text, int timeout, EventHandler<System.Windows.Input.GestureEventArgs> tapAction)
@@ -50,30 +48,14 @@ namespace UrbanGame.Utilities
 
         public void ShowGameChanged(int gameId, string title, string text, IList<string> diff)
         {
-            bool currentPage = false;
-
-            System.Windows.Deployment.Current.Dispatcher.InvokeAsync(() =>
+            System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
-                currentPage = _navigationService.CurrentSource.OriginalString == _navigationService.UriFor<GameDetailsViewModel>().WithParam(vm => vm.GameId, gameId).BuildUri().OriginalString;
-            }).Wait();
+                string navURI = _navigationService.UriFor<GameDetailsViewModel>().WithParam(vm => vm.GameId, gameId).BuildUri().OriginalString;
+                bool currentPage = _navigationService.CurrentSource.OriginalString == navURI;
 
-            //changes won't be shown when user will leave a page and then come back
-            if (currentPage)
-                using (var uow = _unitOfWorkLocator())
-                {
-                    uow.GetRepository<IGame>().All().First(g => g.Id == gameId).ListOfChanges = null;
-                    uow.Commit();
-                }
-
-            ShowToast(title, text, 7000, (s, e) =>
-                {
-                    if (currentPage)
-                        MessageBox.Show(GetDifferencesText(diff));
-                    else
-                        _navigationService.UriFor<GameDetailsViewModel>()
-                            .WithParam(vm => vm.GameId, gameId)
-                            .Navigate();
-                });
+                if (!currentPage)
+                    ShowToast(title, text, 7000, (s, e) => _navigationService.UriFor<GameDetailsViewModel>().WithParam(vm => vm.GameId, gameId).Navigate());   
+            });
         }
 
         public void ShowSolutionStatusChanged(int taskId, string title, string text)
