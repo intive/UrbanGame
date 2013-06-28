@@ -109,7 +109,7 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 		
 		// If you want to run a query to web server use
 		// "setWebServerQuery()" instead of "setNoWebServerQuery()";
-		//setWebServerQuery();
+		// setWebServerQuery();
 		setNoWebServerQuery();
 		
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
