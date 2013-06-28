@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -28,8 +29,9 @@ import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.database.helper.Base64ImageCoder;
-import com.blstream.urbangame.webserver.helper.WebResponse;
-import com.blstream.urbangame.webserver.helper.WebServerHelper;
+import com.blstream.urbangame.webserver.ServerResponseHandler;
+import com.blstream.urbangame.webserver.WebServer;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
 /**
  * This is a singleton notifier class. You can implement an observator interface
@@ -39,14 +41,13 @@ import com.blstream.urbangame.webserver.helper.WebServerHelper;
  * NotificationServer is used).
  * */
 
-public class NotificationServer implements WebServerHelper.WebServerResponseInterface {
+public class NotificationServer implements WebServerNotificationListener {
 	private final static String TAG = NotificationServer.class.getSimpleName();
 	
 	private static NotificationServer instance;
 	private final List<NotificationListener> observators;
 	private final DatabaseInterface database;
 	private final String playerEmail;
-	private final Handler mHandler;
 	
 	private Context context;
 	private long timeToNextQuery;
@@ -55,42 +56,8 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 	private AsyncNotificationQuery asyncNotificationQuery;
 	private NotificationsManager notificationManager;
 	private UrbanGameApplication urbanGameApplication;
-	
-	@Override
-	public void onWebServerResponse(WebResponse webResponse) {
-		
-		// If there was correct response from web server
-		if (webResponse != null) {
-			switch (webResponse.getQueryType()) {
-			
-			// If query returned detailed information about single UrbanGame
-				case GetUrbanGameDetails:
-					getUrbanGameDetails(webResponse);
-					break;
-				
-				// if query returned list of short info for all games
-				case GetUrbanGameBaseList: {
-					getUrbanGameBaseList(webResponse);
-					break;
-					
-				}
-				// if query returned list of Tasks for a particular game
-				case GetTaskList: {
-					getTaskList(webResponse);
-					break;
-				}
-				
-				// TODO: send a query to a web server and check
-				// if a game is over. If so display notification
-				// and get list of winners for the game.
-				
-				default:
-					Log.e(TAG, "Incorrect queryType " + webResponse.getQueryType().toString());
-					break;
-			}
-		}
-		
-	}
+	private WebServer webServer;
+	private Handler mHandler;
 	
 	public static NotificationServer getInstance(Context context) {
 		if (instance == null) {
@@ -102,9 +69,10 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 	private NotificationServer(Context context) {
 		this.observators = new ArrayList<NotificationListener>();
 		this.context = context;
+		this.mHandler = new Handler();
 		this.database = new Database(context);
 		this.playerEmail = database.getLoggedPlayerID();
-		this.mHandler = new Handler();
+		this.webServer = new WebServer(new ServerResponseHandler(this));
 		this.notificationManager = new NotificationsManager(context);
 		
 		// If you want to run a query to web server use
@@ -179,11 +147,11 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 				};
 			});
 		}
-		
 	}
 	
 	private synchronized void notifyGameLost(final UrbanGame game) {
 		setGameStatusHasChanged(game);
+		
 		if (urbanGameApplication != null && urbanGameApplication.isApplicationRunning()) {
 			mHandler.post(new Runnable() {
 				@Override
@@ -295,68 +263,6 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 		};
 	}
 	
-	private void getUrbanGameDetails(WebResponse webResponse) {
-		UrbanGame serverGame = webResponse.getUrbanGame();
-		if (serverGame != null) {
-			UrbanGame databaseGame = database.getGameInfo(serverGame.getID());
-			
-			// If serverGame is not in a database
-			if (databaseGame == null) {
-				notifyGameChanged(serverGame, serverGame);
-				Log.i(TAG, "web query new game " + serverGame.getID());
-			}
-			else {
-				if (!databaseGame.equals(serverGame)) {
-					notifyGameChanged(databaseGame, serverGame);
-					Log.i(TAG, "web query game changed " + serverGame.getID());
-				}
-				else {
-					Log.i(TAG, "server and database game equal " + serverGame.getID());
-				}
-			}
-			
-			// Database has got actual info for a game.
-			// Now issue query to get a task list for the game.
-			WebServerHelper.getTaskList(this, serverGame.getID().longValue());
-		}
-	}
-	
-	private void getUrbanGameBaseList(WebResponse webResponse) {
-		List<UrbanGameShortInfo> serverGames = webResponse.getUrbanGameShortInfoList();
-		
-		if (serverGames != null) {
-			// Get detailed information for every game from a server
-			for (UrbanGameShortInfo game : serverGames) {
-				WebServerHelper.getUrbanGameDetails(this, game.getID().longValue());
-			}
-		}
-	}
-	
-	private void getTaskList(WebResponse webResponse) {
-		List<Task> serverTasks = webResponse.getTaskList();
-		if (serverTasks != null) {
-			Task databaseTask;
-			for (Task serverTask : serverTasks) {
-				databaseTask = database.getTask(serverTask.getId());
-				
-				// If serverTask is not in database
-				if (databaseTask == null) {
-					notifyTaskNew(database.getGameInfo(webResponse.getGameId()), serverTask);
-					Log.i(TAG, "web query new task " + serverTask.getId());
-				}
-				else {
-					if (!databaseTask.equals(serverTask)) {
-						notifyTaskChanged(database.getGameInfo(webResponse.getGameId()), databaseTask, serverTask);
-						Log.i(TAG, "web query task changed " + serverTask.getId());
-					}
-					else {
-						Log.i(TAG, "server and database task equal " + serverTask.getId());
-					}
-				}
-			}
-		}
-	}
-	
 	private class AsyncNotificationQuery extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -365,7 +271,7 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 				Log.i(TAG, "no web server query started");
 			}
 			else {
-				WebServerHelper.getUrbanGameBaseList(getInstance(context));
+				webServer.getAllGames();
 				Log.i(TAG, "web server query started");
 			}
 			return null;
@@ -638,12 +544,17 @@ public class NotificationServer implements WebServerHelper.WebServerResponseInte
 				new Handler().post(new Runnable() {
 					@Override
 					public void run() {
-						WebServerHelper.getUrbanGameBaseList(getInstance(context));
+						webServer.getAllGames();
 					}
 				});
 				Looper.loop();
 			}
 		}).start();
+	}
+	
+	@Override
+	public void onWebServerResponse(Message message) {
+		mockSimulateNewGameAvailable();
 	}
 	
 	//**********************//
