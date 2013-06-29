@@ -66,16 +66,21 @@ a.thumbnail:hover, a.thumbnail:focus {
 a:hover {
     text-decoration: none;
     color: @blacky;
+    cursor: pointer;
 }
 
 a>[class^="icon-"] {
     color: @blacky;
+    
 }
 
 a:hover>[class^="icon-"] {
     color: @greeny;
+    
 }
-
+div.rating > i:hover {
+    cursor: pointer;
+}
 .bold {
     font-weight: bold;
 }
@@ -725,6 +730,10 @@ table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist the
 #tasklist tbody tr td:nth-child(2), #tasklist tbody tr td:nth-child(3) {
     color: @greeny;
 }
+#tasklist tbody tr td:last-child {
+    padding: 3px;
+    width: 114px;
+}
 
 .finished {
     tr& {
@@ -858,11 +867,11 @@ input::-webkit-inner-spin-button {
 }
 
 /* Button */
-#createNewTask{
+#createNewTask, .btn-green{
     border: 1px solid transparent;
     border-radius: 4px;
-    padding-bottom: 8px;
-    padding-top: 8px;
+    padding-bottom: 6px;
+    padding-top: 6px;
     width: 200px;
     background-color: #99CC00;
     color: #FFFFFF;
@@ -875,22 +884,134 @@ input::-webkit-inner-spin-button {
     }
     &:hover{
         border-color: #DDDDDD;
-        border-style: solid;
-        border-width: 1px;
     }
+    
+}
+#addMoreAnswers:disabled {
+    background-color: #989898;
+    color: #C4C4C4;
 }
 
 /* Lightbox (tasks) */
 #taskLightbox {
     left: 20% !important;
-    top: 30px !important;
+    top: 10px !important;
     width: 60% !important;
+    height:95%;
     min-width: 600px;
     text-align: left;
+    overflow-y: auto;
+    overflow-x: hidden;
+    
+    span.greeny {
+        color: @greeny;
+    }
     
     .lightbox-content {
         display: block;
-   }
+        padding: 0px;
+    }
+    
+    label {
+        font-weight: bold;
+    }
+    label.checkbox {
+        font-weight: normal;
+    }
+    .answer {
+        margin: 0px;
+    }
+    .green-strip{
+        height: 7px;
+        background-color: @greeny;
+    }
+    .answers label {
+        display: inline-block;
+        top: -5px;
+        position: relative;
+        width: 10px;
+        text-align: center;
+    }
+    input[type="checkbox"]{
+        margin: 5px;
+    }
+    .answer input[type="checkbox"]{
+        margin: 5px 18px 9px;
+    }
+    .answer-headers {
+        font-size: 85%;
+        font-weight: bold;
+        padding: 14px;
+        span:nth-child(2){
+            margin-left: 115px;
+        }
+        span:nth-child(3){
+            margin-left: 6px;
+        }
+    }
+    .input-mini{
+        width: 48px;
+    }
+    button.dark{
+        border: 1px solid transparent;
+        border-radius: 3px;
+        padding-bottom: 4px;
+        padding-top: 4px;
+        width: 62px;
+        font-size: 90%;
+        background-color: #555555;
+        color: #FFFFFF;
+        font-weight: bold;
+        text-align: center;
+        margin: -10px 0px 0px 0px;
+        &:hover{
+            border-color: #AAAAAA
+        }
+    
+    }
+    a>span {
+        line-height: 15px;
+        display: inline-block;
+        margin: 0px auto;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 4px;
+        color: black;
+        &:hover {
+            color: @greeny;
+        }
+        div{
+            width: 19px;
+            height: 10px;
+            display: inline-block;
+            margin-left: 8px;
+        }
+        .arrow-up{
+            background-image: url("../images/arrow-up.png")
+        }
+        .arrow-down{
+            background-image: url("../images/arrow-down.png")
+        }
+    }
+    button.close {
+        padding: 5px 9px 5px 5px;
+    }
+    .lightbox-footer {
+        position: relative;
+        bottom: -20px;
+        overflow: hidden;
+        margin-top: 10px;
+        button {
+            float: right;
+            width: 135px;
+            padding: 4px;
+            margin: 5px;
+        }
+    }
+    
+    div.pull-right {
+        margin-top: 102px;
+    }
 }
 
 textarea:focus,
