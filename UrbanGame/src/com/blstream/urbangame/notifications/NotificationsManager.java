@@ -75,7 +75,7 @@ public class NotificationsManager implements NotificationListener {
 			showNotification(NotificationConstans.GAME_CHANGED, gameName, null, operatorLogo, diff, gameID);
 		}
 		else {
-			showAlertDialog(NotificationConstans.GAME_CHANGED, gameName, null, null, gameID);
+			showAlertDialog(NotificationConstans.GAME_CHANGED, gameName, null, diff, gameID);
 		}
 	}
 	
