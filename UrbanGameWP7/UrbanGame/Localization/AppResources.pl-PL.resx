@@ -234,7 +234,7 @@
   <data name="CurrentRank" xml:space="preserve">
     <value>aktualna pozycja</value>
   </data>
-  <data name="Descrition" xml:space="preserve">
+  <data name="Description" xml:space="preserve">
     <value>opis</value>
   </data>
   <data name="Duration" xml:space="preserve">
@@ -342,6 +342,9 @@
   <data name="ByOperatorUpCase" xml:space="preserve">
     <value>OD</value>
   </data>
+  <data name="GameChangedToast" xml:space="preserve">
+    <value>Szczegóły gry zmieniły się. Naciśnij, aby zobaczyć różnice.</value>
+  </data>
   <data name="Sending" xml:space="preserve">
     <value>wysyłanie</value>
   </data>
@@ -401,4 +404,14 @@
   </data>
   <data name="IncorrectLogin" xml:space="preserve">
     <value>Podany login lub hasło są nieprawidłowe</value>
-  </data></root>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>Podany login jest już zajęty</value>
+  </data>
+  <data name="ServiceTimeout" xml:space="preserve">
+    <value>Czas oczekiwania na odpowiedź z serwisu został przekroczony</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Wystąpił nieznany błąd serwisu</value>
+  </data>
+</root>

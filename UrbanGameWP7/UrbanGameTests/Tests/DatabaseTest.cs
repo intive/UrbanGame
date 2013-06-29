@@ -84,7 +84,6 @@ namespace UrbanGameTests.Tests
             userAnswer = new ABCDUserAnswer()
             {
                 Id = 1,
-                Answer = false
             };
         }
 
@@ -346,7 +345,6 @@ namespace UrbanGameTests.Tests
             Func<ABCDUserAnswer> sampleAnswer = () => new ABCDUserAnswer()
             {
                 Id = 1,
-                Answer = false
             };
 
             TestEntitiesRelationship<TaskSolution, ABCDUserAnswer>(sampleTaskSolution, sampleAnswer,
@@ -482,7 +480,6 @@ namespace UrbanGameTests.Tests
             Func<IABCDUserAnswer> sampleUserAnswer = () => new ABCDUserAnswer
             {
                 Id = 1,
-                Answer = false
             };
 
             TestInterfaceRelationship<IABCDPossibleAnswer, IABCDUserAnswer, ABCDPossibleAnswer, ABCDUserAnswer>(sampleABCDPossibleAnswer, sampleUserAnswer,

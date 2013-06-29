@@ -5,8 +5,11 @@ using System.Text;
 
 namespace Common
 {
-    public interface IGameChangesManager
+    public enum CreateAccountResponse
     {
-
+        Success,
+        LoginUnavailable,
+        Timeout,
+        UnknownError
     }
 }

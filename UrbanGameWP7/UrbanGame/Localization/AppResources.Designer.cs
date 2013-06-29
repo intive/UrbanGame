@@ -278,15 +278,6 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to description.
-        /// </summary>
-        public static string Descrition {
-            get {
-                return ResourceManager.GetString("Descrition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to DIFFICULTY.
         /// </summary>
         public static string Difficulty {
@@ -337,6 +328,15 @@ namespace UrbanGame.Localization {
         public static string EmptyPassword {
             get {
                 return ResourceManager.GetString("EmptyPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game details have changed. Tap to see differences..
+        /// </summary>
+        public static string GameChangedToast {
+            get {
+                return ResourceManager.GetString("GameChangedToast", resourceCulture);
             }
         }
         
@@ -593,6 +593,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This login has been already used.
+        /// </summary>
+        public static string LoginUnavailable {
+            get {
+                return ResourceManager.GetString("LoginUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logout.
         /// </summary>
         public static string Logout {
@@ -791,6 +800,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to rank.
+        /// </summary>
+        public static string Rank {
+            get {
+                return ResourceManager.GetString("Rank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Refresh.
         /// </summary>
         public static string Refresh {
@@ -859,6 +877,15 @@ namespace UrbanGame.Localization {
         public static string Sending {
             get {
                 return ResourceManager.GetString("Sending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service timeout.
+        /// </summary>
+        public static string ServiceTimeout {
+            get {
+                return ResourceManager.GetString("ServiceTimeout", resourceCulture);
             }
         }
         
@@ -940,6 +967,15 @@ namespace UrbanGame.Localization {
         public static string Undefinied {
             get {
                 return ResourceManager.GetString("Undefinied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serviced returned unknown error.
+        /// </summary>
+        public static string UnknownError {
+            get {
+                return ResourceManager.GetString("UnknownError", resourceCulture);
             }
         }
         
