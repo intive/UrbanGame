@@ -294,10 +294,10 @@ namespace UrbanGame.ViewModels
         protected override void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-
-            if (!String.IsNullOrEmpty(Game.ListOfChanges))
-                new Timer(new TimerCallback((obj) =>
-                    {
+            
+            new Timer(new TimerCallback((obj) =>
+                {
+                    if (!String.IsNullOrEmpty(Game.ListOfChanges))
                         System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
                         {
                             MessageBox.Show(Game.ListOfChanges);
@@ -309,7 +309,7 @@ namespace UrbanGame.ViewModels
                                 uow.Commit();
                             }
                         });
-                    }), null, 700, System.Threading.Timeout.Infinite);
+                }), null, 700, System.Threading.Timeout.Infinite);
         }
 
         #endregion
@@ -466,7 +466,9 @@ namespace UrbanGame.ViewModels
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
                 {
-                    uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id).GameState = GameState.Inactive;
+                    IGame game = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
+                    game.GameState = GameState.Inactive;
+                    game.ListOfChanges = null;
                     uow.Commit();
                 }
                 await RefreshGame();

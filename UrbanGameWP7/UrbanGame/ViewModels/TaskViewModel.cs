@@ -221,16 +221,16 @@ namespace UrbanGame.ViewModels
         protected override void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-
-            if (DiffComparision != null)
-                new Timer(new TimerCallback((obj) =>
-                {
+            
+            new Timer(new TimerCallback((obj) =>
+            {
+                if (DiffComparision != null)
                     System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
                     {
                         MessageBox.Show(DiffComparision);
                         DiffComparision = null;
                     });
-                }), null, 700, System.Threading.Timeout.Infinite);
+            }), null, 700, System.Threading.Timeout.Infinite);
         }
 
         #endregion
