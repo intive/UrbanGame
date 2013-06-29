@@ -9,6 +9,12 @@ import android.graphics.drawable.Drawable;
 
 public class UrbanGame {
 	
+	public static final String FIELD_NAME_WINNING_STRATEGY = "Winning strategy";
+	public static final String FIELD_NAME_DIFFICULTY = "Difficulty";
+	public static final String FIELD_PRIZES_INFO = "Prizes";
+	public static final String FIELD_DESCRIPTION = "Description";
+	public static final String FIELD_COMMENTS = "Comments";
+	
 	// holds very basic info about game(list view info) - that gives less code,
 	// but little less clarity
 	private UrbanGameShortInfo primaryInfo;

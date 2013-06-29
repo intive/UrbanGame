@@ -2,7 +2,6 @@ package com.blstream.urbangame.database;
 
 //formatter: off
 import static com.blstream.urbangame.database.DatabaseDefinitions.*;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,7 +29,6 @@ import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.database.helper.SQLCipherHelper;
 import com.blstream.urbangame.database.helper.SQLInterface;
 import com.blstream.urbangame.database.helper.SQLiteHelper;
-
 
 //formatter: on
 
@@ -573,7 +571,7 @@ public class Database implements DatabaseInterface {
 		values.put(USER_GAMES_SPECIFIC_KEY_HAS_CHANGES, booleanToString(playerGameSpecific.hasChanges()));
 		return values;
 	}
-
+	
 	@Override
 	public synchronized boolean insertListOfUserGameSpecific(List<PlayerGameSpecific> list) {
 		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
@@ -757,12 +755,11 @@ public class Database implements DatabaseInterface {
 		values.put(USER_TASKS_SPECIFIC_KEY_WAS_HIDDEN, booleanToString(taskSpecific.getWasHidden()));
 		values.put(USER_TASKS_SPECIFIC_KEY_CHANGES, taskSpecific.getChanges());
 		values.put(USER_TASKS_SPECIFIC_KEY_STATUS, taskSpecific.getStatus());
-		values.put(USER_TASKS_SPECIFIC_KEY_SELECTED_ANSWERS,
-			booleanArrayToString(taskSpecific.getSelectedAnswers()));
+		values.put(USER_TASKS_SPECIFIC_KEY_SELECTED_ANSWERS, booleanArrayToString(taskSpecific.getSelectedAnswers()));
 		return values;
 	}
-
-	public synchronized boolean insertListOfPlayerTaskSpecific(List<PlayerTaskSpecific> list){
+	
+	public synchronized boolean insertListOfPlayerTaskSpecific(List<PlayerTaskSpecific> list) {
 		DBWrapper db = databasebHelper.getWrappedWritableDatabase();
 		boolean isOK = true;
 		

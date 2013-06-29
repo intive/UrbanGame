@@ -5,6 +5,7 @@ import android.util.Log;
 import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
+import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 
 /**
  * Auxiliary class to make comparison between two games or tasks and obtain
@@ -76,9 +77,37 @@ public class NotificationDiff {
 		StringBuilder diff = new StringBuilder();
 		
 		if (canGamesBeCompared(oldGame, newGame)) {
-			// FIXME to be implemented in diff sub-task
+			diff.append(calculateDiff(UrbanGameShortInfo.FIELD_NAME_TITLE, oldGame.getTitle(), newGame.getTitle()));
+			diff.append(calculateDiff(UrbanGameShortInfo.FIELD_NAME_OPERATOR_NAME, oldGame.getOperatorName(),
+				newGame.getOperatorName()));
+			diff.append(calculateDiff(UrbanGameShortInfo.FIELD_NAME_PLAYERS, oldGame.getPlayers(), newGame.getPlayers()));
+			diff.append(calculateDiff(UrbanGameShortInfo.FIELD_NAME_MAX_PLAYERS, oldGame.getMaxPlayers(),
+				newGame.getMaxPlayers()));
+			diff.append(calculateDiff(UrbanGameShortInfo.FIELD_NAME_START_DATE, oldGame.getStartDate(),
+				newGame.getStartDate()));
+			diff.append(calculateDiff(UrbanGameShortInfo.FIELD_NAME_END_DATE, oldGame.getEndDate(),
+				newGame.getEndDate()));
+			diff.append(calculateDiff(UrbanGameShortInfo.FIELD_NAME_REWARD, oldGame.getReward(), newGame.getReward()));
+			diff.append(calculateDiff(UrbanGameShortInfo.FIELD_NAME_LOCATION, oldGame.getLocation(),
+				newGame.getLocation()));
+			
+			diff.append(calculateDiff(UrbanGame.FIELD_NAME_WINNING_STRATEGY, oldGame.getWinningStrategy(),
+				newGame.getWinningStrategy()));
+			diff.append(calculateDiff(UrbanGame.FIELD_NAME_DIFFICULTY, oldGame.getDifficulty(), newGame.getDifficulty()));
+			diff.append(calculateDiff(UrbanGame.FIELD_PRIZES_INFO, oldGame.getPrizesInfo(), newGame.getPrizesInfo()));
+			diff.append(calculateDiff(UrbanGame.FIELD_DESCRIPTION, oldGame.getDescription(), newGame.getDescription()));
+			diff.append(calculateDiff(UrbanGame.FIELD_COMMENTS, oldGame.getComments(), newGame.getComments()));
 		}
-		return "\n\n" + diff.toString();
+		else {
+			Log.e(TAG, "getGameDiff comparision fail");
+		}
+		
+		// remove last newline
+		if (diff.length() > 0) {
+			diff.deleteCharAt(diff.length() - 1);
+		}
+		
+		return diff.toString();
 	}
 	
 	private boolean canGamesBeCompared(UrbanGame oldGame, UrbanGame newGame) {

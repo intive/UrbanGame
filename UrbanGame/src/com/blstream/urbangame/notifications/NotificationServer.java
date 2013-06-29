@@ -56,8 +56,8 @@ public class NotificationServer implements WebServerNotificationListener {
 	private AsyncNotificationQuery asyncNotificationQuery;
 	private NotificationsManager notificationManager;
 	private UrbanGameApplication urbanGameApplication;
-	private WebServer webServer;
-	private Handler mHandler;
+	private final WebServer webServer;
+	private final Handler mHandler;
 	
 	public static NotificationServer getInstance(Context context) {
 		if (instance == null) {
@@ -413,6 +413,8 @@ public class NotificationServer implements WebServerNotificationListener {
 			oldGame.getStartDate(), oldGame.getEndDate(), oldGame.getDifficulty(), oldGame.getReward(),
 			oldGame.getPrizesInfo(), oldGame.getDescription(), oldGame.getGameLogoBase64(),
 			oldGame.getOperatorLogoBase64(), oldGame.getComments(), oldGame.getLocation(), oldGame.getDetailsLink());
+		
+		game.setMaxPlayers(game.getPlayers() + r.nextInt(20));
 		
 		if (r.nextBoolean()) {
 			game.setGameVersion(r.nextDouble());
