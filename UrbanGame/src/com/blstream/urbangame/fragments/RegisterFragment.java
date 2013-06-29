@@ -84,17 +84,17 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 	}
 	
 	private boolean isRegisterDataValid(String email, String displayName, String password) {
-		return loginRegisterView.isDataCorrect() && !isPlayerAlreadyRegistered(email);
+		return loginRegisterView.isDataCorrect() && register(email, displayName, password);
 	}
 	
-	private boolean isPlayerAlreadyRegistered(String email) {
-		return RegistrationManager.getInstance(activity).doesPlayerExist(email);
+	private boolean register(String email, String displayName, String password) {
+		return RegistrationManager.getInstance(activity).register(email, displayName, password);
 	}
 	
 	private final UrbanGameDialogOnClickListener registerSuccessfulListener = new UrbanGameDialogOnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			activity.registerAndLoginUser(email, displayName, password);
+			activity.loginUser(email);
 		}
 	};
 }

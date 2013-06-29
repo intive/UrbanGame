@@ -11,14 +11,14 @@ import com.blstream.urbangame.database.entity.Player;
 
 //formatter:off
 /**
-* This class manages user session.
-* 
-* It provides the following functionalities:
-* 	- adding users to DB
-* 
-* Due to this class we can easily connect with server
-* to check and compare local and online data.
-*/
+ * This class manages user session.
+ * 
+ * It provides the following functionalities: 
+ * 		- adding users to DB
+ * 
+ * Due to this class we can easily connect with server to check and compare
+ * local and online data.
+ */
 //formatter:on
 public abstract class SessionManager {
 	protected DatabaseInterface database;
@@ -34,12 +34,7 @@ public abstract class SessionManager {
 	}
 	
 	protected Player getPlayerFromDB(String email) {
-		// FIXME connect with server and download user
 		return database.getPlayer(email);
-	}
-	
-	protected boolean doesPlayerExist(Player player) {
-		return player != null;
 	}
 	
 	protected void startMainActivity() {
@@ -51,6 +46,13 @@ public abstract class SessionManager {
 	protected void addUserToDB(String email, String password, String displayName, Drawable avatar) {
 		Player player = new Player(email, password, displayName, avatar);
 		database.insertUser(player);
-		// FIXME connect with server and add user
+	}
+	
+	protected void addUserToDB(Player player) {
+		database.insertUser(player);
+	}
+	
+	protected void updatePlayerInDB(Player player) {
+		database.updatePlayer(player);
 	}
 }

@@ -32,7 +32,8 @@ import com.blstream.urbangame.database.entity.PlayerTaskSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.dialogs.AnswerDialog;
 import com.blstream.urbangame.dialogs.AnswerDialog.DialogType;
-import com.blstream.urbangame.webserver.mock.MockWebServer;
+import com.blstream.urbangame.web.WebHighLevel;
+import com.blstream.urbangame.web.WebHighLevelInterface;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -316,9 +317,10 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	
 	private int sendLocationForVerification(Location location) {
 		
-		//FIXME get real server data
-		MockWebServer mockWebServer = new MockWebServer();
-		return mockWebServer.sendGPSLocation(context, task, location);
+		WebHighLevelInterface web = new WebHighLevel(getActivity());
+		int result = web.sendAnswerForLocationTask(task, location);
+		
+		return result;
 	}
 	
 	//check internet connection
@@ -385,7 +387,8 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	}
 	
 	private Location getCorrectLocationFromServer() {
-		//FIXME replace mock
-		return new MockWebServer().getCorrectGpsLocation(task);
+		
+		WebHighLevelInterface web = new WebHighLevel(getActivity());
+		return web.getCorrectAnswerForGpsTask(task);
 	}
 }

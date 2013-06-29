@@ -77,7 +77,7 @@ public class NotificationServer implements WebServerNotificationListener {
 		
 		// If you want to run a query to web server use
 		// "setWebServerQuery()" instead of "setNoWebServerQuery()";
-		//setWebServerQuery();
+		// setWebServerQuery();
 		setNoWebServerQuery();
 		
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);

@@ -1,8 +1,10 @@
 package com.blstream.urbangame.session;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
+
+import com.blstream.urbangame.database.entity.Player;
+import com.blstream.urbangame.web.WebHighLevel;
+import com.blstream.urbangame.web.WebHighLevelInterface;
 
 public class RegistrationManager extends SessionManager {
 	private final static String TAG = "RegistrationManager";
@@ -19,10 +21,16 @@ public class RegistrationManager extends SessionManager {
 		return instance;
 	}
 	
-	public void registerUser(String email, String password, String displayName, Drawable avatar) {
-		Log.d(TAG, "Registering user " + email);
+	public boolean register(String email, String displayName, String password) {
 		
-		addUserToDB(email, password, displayName, avatar);
-		// FIXME connect with server to add user data
+		WebHighLevelInterface web = new WebHighLevel(context);
+		Player player = web.registerPlayer(email, displayName, password);
+		boolean isOK = player != null;
+		
+		if (isOK) {
+			addUserToDB(player);
+		}
+		
+		return isOK;
 	}
 }
