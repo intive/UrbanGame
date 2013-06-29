@@ -60,14 +60,13 @@ namespace UrbanGame.ViewModels
         #region IHandle<GameChangedEvent>
         public void Handle(GameChangedEvent game)
         {
-            if (game.Id == GameId)
+            if (IsActive && game.Id == GameId)
             {
                 using (var uow = _unitOfWorkLocator())
                 {
                     var Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
 
-                    if (!String.IsNullOrEmpty(Game.ListOfChanges) && 
-                        _navigationService.CurrentSource.OriginalString == _navigationService.UriFor<GameDetailsViewModel>().WithParam(vm => vm.GameId, GameId).BuildUri().OriginalString)
+                    if (!String.IsNullOrEmpty(Game.ListOfChanges))
                     {
                         MessageBox.Show(Game.ListOfChanges);
                         Game.ListOfChanges = null;

@@ -593,6 +593,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This login has been already used.
+        /// </summary>
+        public static string LoginUnavailable {
+            get {
+                return ResourceManager.GetString("LoginUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logout.
         /// </summary>
         public static string Logout {
@@ -872,6 +881,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service timeout.
+        /// </summary>
+        public static string ServiceTimeout {
+            get {
+                return ResourceManager.GetString("ServiceTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Solution status has changed to.
         /// </summary>
         public static string SolutionStatusChanged {
@@ -949,6 +967,15 @@ namespace UrbanGame.Localization {
         public static string Undefinied {
             get {
                 return ResourceManager.GetString("Undefinied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serviced returned unknown error.
+        /// </summary>
+        public static string UnknownError {
+            get {
+                return ResourceManager.GetString("UnknownError", resourceCulture);
             }
         }
         

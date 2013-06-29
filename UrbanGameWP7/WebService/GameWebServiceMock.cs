@@ -184,7 +184,7 @@ namespace WebService
 
         #region CreateAccount
 
-        public async Task<CreateAccountResponse> CreateAccount(string username, string password)
+        public async Task<CreateAccountResponse> CreateAccount(string username, string email, string password)
         {
             return CreateAccountResponse.Success;
         }

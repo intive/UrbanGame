@@ -253,7 +253,7 @@ namespace WebService
 
         #region CreateAccount
 
-        public async Task<CreateAccountResponse> CreateAccount(string username, string password)
+        public async Task<CreateAccountResponse> CreateAccount(string username, string email, string password)
         {
             WebApiResponse result = await PostJson("register", String.Format("{{ \"login\": \"{0}\", \"password\": \"{1}\" }}", username, password));
 

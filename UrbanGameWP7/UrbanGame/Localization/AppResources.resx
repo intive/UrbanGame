@@ -421,4 +421,13 @@
   <data name="GameChangedToast" xml:space="preserve">
     <value>Game details have changed. Tap to see differences.</value>
   </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>This login has been already used</value>
+  </data>
+  <data name="ServiceTimeout" xml:space="preserve">
+    <value>Service timeout</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Serviced returned unknown error</value>
+  </data>
 </root>

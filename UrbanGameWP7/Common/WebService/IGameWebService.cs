@@ -87,7 +87,7 @@ namespace Common
         /// <summary>
         /// Creates account
         /// </summary>
-        Task<CreateAccountResponse> CreateAccount(string username, string password);
+        Task<CreateAccountResponse> CreateAccount(string username, string email, string password);
 
         /// <summary>
         /// Method returns array of the nearest games(only needed fields filled in)
