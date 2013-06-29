@@ -11,6 +11,15 @@ import com.blstream.urbangame.database.helper.Base64ImageCoder;
 
 public class UrbanGameShortInfo {
 	
+	public static final String FIELD_NAME_TITLE = "Title";
+	public static final String FIELD_NAME_OPERATOR_NAME = "Operator name";
+	public static final String FIELD_NAME_PLAYERS = "Number of players";
+	public static final String FIELD_NAME_MAX_PLAYERS = "Maximum number of players";
+	public static final String FIELD_NAME_START_DATE = "Start date";
+	public static final String FIELD_NAME_END_DATE = "End date";
+	public static final String FIELD_NAME_REWARD = "Reward";
+	public static final String FIELD_NAME_LOCATION = "Location";
+	
 	private Long ID;
 	private String title;
 	private String operatorName;
