@@ -138,7 +138,7 @@ namespace WebService.BOMock
         {
             get
             {
-                return imagesUrl + GameLogo;
+                return GameLogo;
             }
         }
         #endregion
@@ -566,6 +566,50 @@ namespace WebService.BOMock
         private void OnHighScoreRemoved(HighScoreMock highScore)
         {
             highScore.Game = null;
+        }
+        #endregion
+
+        #region Version
+
+        private int _version;
+
+        public int Version
+        {
+            get
+            {
+                return _version;
+            }
+            set
+            {
+                if (_version != value)
+                {
+                    NotifyPropertyChanging("Version");
+                    _version = value;
+                    NotifyPropertyChanged("Version");
+                }
+            }
+        }
+        #endregion
+
+        #region ListOfChanges
+
+        private string _listOfChanges;
+
+        public string ListOfChanges
+        {
+            get
+            {
+                return _listOfChanges;
+            }
+            set
+            {
+                if (_listOfChanges != value)
+                {
+                    NotifyPropertyChanging("ListOfChanges");
+                    _listOfChanges = value;
+                    NotifyPropertyChanged("ListOfChanges");
+                }
+            }
         }
         #endregion
     }

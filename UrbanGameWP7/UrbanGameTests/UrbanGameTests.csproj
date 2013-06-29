@@ -107,7 +107,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\DatabaseMockTest.cs" />
     <Compile Include="Tests\DatabaseTest.cs" />
-    <Compile Include="Tests\GameChangesManagerTest.cs" />
     <Compile Include="Tests\GameDetailsPreviewViewModelTest.cs" />
     <Compile Include="Tests\GameDetailsViewModelTest.cs" />
     <Compile Include="Tests\GamesListViewModelTest.cs" />

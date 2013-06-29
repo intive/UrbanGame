@@ -21,7 +21,7 @@ namespace UrbanGame.ViewModels
                                     IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
         {
-            _appbarManager = appbarManager;
+            _appbarManager = appbarManager;          
         }
 
         protected override void OnViewReady(object view)
@@ -134,6 +134,11 @@ namespace UrbanGame.ViewModels
 
         #region operations
 
+        public void ChangeToNormal()
+        {
+            VisualStateName = "Normal";
+        }
+
         public static bool IsValidEmail(string strIn)
         {
             return Regex.IsMatch(strIn,
@@ -141,9 +146,9 @@ namespace UrbanGame.ViewModels
                    @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,6}))$");
         }
 
-        public void LogIn(string Password)
+        public async void LogIn(string Password)
         {
-            if (!string.IsNullOrWhiteSpace(Email) && IsValidEmail(Email) && !string.IsNullOrWhiteSpace(Password) && _gameWebService.Authorize(Login, Password) == AuthorizeState.Success)
+            if (!string.IsNullOrWhiteSpace(Email) && IsValidEmail(Email) && !string.IsNullOrWhiteSpace(Password) && await _gameWebService.Authorize(Email, Password) == AuthorizeState.Success)
             {
                 GameAuthorizationService authorization = new GameAuthorizationService();
                 authorization.ClearIsolatedStorage();
@@ -158,7 +163,7 @@ namespace UrbanGame.ViewModels
             }
         }
 
-        public void CreateAccount(string Password, string PasswordConfirmation)
+        public async void CreateAccount(string Password, string PasswordConfirmation)
         {
             if (string.IsNullOrWhiteSpace(Login))
             {
@@ -179,20 +184,24 @@ namespace UrbanGame.ViewModels
             else
             {
                 VisualStateName = "CreatingAccount";
-                DispatcherTimer timer = new DispatcherTimer();
-                timer.Tick +=
-                delegate(object s, EventArgs args)
+
+                var result = await _gameWebService.CreateAccount(Login, Email, Password);
+
+                switch (result)
                 {
-                    VisualStateName = "AccountCreated";
-                };
-
-                timer.Interval = new TimeSpan(0, 0, 3);
-                timer.Start();
-
-
-                //create account
-
-                
+                    case CreateAccountResponse.Success:
+                        VisualStateName = "AccountCreated";
+                        break;
+                    case CreateAccountResponse.LoginUnavailable:
+                        VisualStateName = "LoginUnavailable";
+                        break;
+                    case CreateAccountResponse.Timeout:
+                        VisualStateName = "Timeout";
+                        break;
+                    default:
+                        VisualStateName = "UnknownError";
+                        break;
+                }  
             }
         }
 

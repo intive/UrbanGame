@@ -59,10 +59,8 @@ namespace UrbanGame.ViewModels
             Task.Factory.StartNew(async () =>
             {
                 IGame game = await _gameWebService.GetGameInfo(e.Id);
-
+                game.ListOfChanges = "changed";
                 UpdateGame(UserActiveGames, game);
-                UpdateGame(UserInactiveGames, game);
-                UpdateGame(NearestGames, game);
             });
         }
         #endregion
@@ -73,7 +71,7 @@ namespace UrbanGame.ViewModels
         {
             for (int i = 0; i < games.Count; i++)
                 if (games[i].Id == newGame.Id)
-                {
+                {                    
                     games[i] = newGame;
                     break;
                 }
@@ -260,18 +258,18 @@ namespace UrbanGame.ViewModels
 
                 if (IsAuthorized)
                 {
-                    IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
+                    using (var uow = _unitOfWorkLocator())
+                    {
+                        IQueryable<IGame> games = uow.GetRepository<IGame>().All();
 
-                    UserActiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Joined)
-                                                                         .OrderBy(g => g.GameEnd)
-                                                                         .AsEnumerable());
+                        UserActiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Joined)
+                                                                             .OrderBy(g => g.GameEnd)
+                                                                             .AsEnumerable());
 
-                    UserInactiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState == GameState.Ended ||
-                                                                                       g.GameState == GameState.Won ||
-                                                                                       g.GameState == GameState.Withdraw ||
-                                                                                       g.GameState == GameState.Inactive )
-                                                                           .OrderByDescending(g => g.GameStart)
-                                                                           .AsEnumerable());
+                        UserInactiveGames = new BindableCollection<IGame>(games.Where(g => g.GameState != GameState.Joined)
+                                                                               .OrderByDescending(g => g.GameStart)
+                                                                               .AsEnumerable());
+                    }
                 }
             });
         }
@@ -291,9 +289,10 @@ namespace UrbanGame.ViewModels
             {
                 NearestGames.Clear();
                 var allNearestGames = (await _gameWebService.UserNearbyGames(new GeoCoordinate(1, 1))).OrderBy(g => g.GameEnd);
+
                 using (var uow = _unitOfWorkLocator())
                 {
-                    var loadedGames=uow.GetRepository<IGame>().All().Select(x=>x.Id);
+                    var loadedGames = uow.GetRepository<IGame>().All().Select(x => x.Id);
                     NearestGames = new BindableCollection<IGame>(allNearestGames.Where(x => !loadedGames.Contains(x.Id)));
                 }
                     

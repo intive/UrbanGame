@@ -77,7 +77,7 @@ namespace Common
         /// </summary>
         /// <param name="username">Username</param>
         /// <returns>a bool</returns>
-        AuthorizeState Authorize(string username, string password);
+        Task<AuthorizeState> Authorize(string username, string password);
 
         /// <summary>
         /// Shows that user is authorize
@@ -85,22 +85,15 @@ namespace Common
         bool IsAuthorized { get; set; }
 
         /// <summary>
-        /// Method returns array of games in which user plays(only needed fields filled in)
+        /// Creates account
         /// </summary>
-        /// <returns></returns>
-        IGame[] UsersActiveGames();
+        Task<CreateAccountResponse> CreateAccount(string username, string email, string password);
 
         /// <summary>
         /// Method returns array of the nearest games(only needed fields filled in)
         /// </summary>
         /// <returns></returns>
         Task<IGame[]> UserNearbyGames(GeoCoordinate coordinate);
-
-        /// <summary>
-        /// Method returns array of games in which user played(only needed fields filled in)
-        /// </summary>
-        /// <returns></returns>
-        IGame[] UsersInactiveGames();
 
         /// <summary>
         /// Method returns array of tasks in which are still active
@@ -137,5 +130,11 @@ namespace Common
         /// </summary>
         /// <returns></returns>
         IHighScore[] HighScores();
+
+        /// <summary>
+        /// Method returns status and points of submitted solution
+        /// </summary>
+        /// <returns></returns>
+        Task<SolutionStatusResponse> GetSolutionStatus(int taskId);
     }
 }
