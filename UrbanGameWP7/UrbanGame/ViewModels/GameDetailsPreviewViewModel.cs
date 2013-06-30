@@ -60,7 +60,7 @@ namespace UrbanGame.ViewModels
         private void SetAppBarContent()
         {
             Deployment.Current.Dispatcher.BeginInvoke(() =>
-            {                
+            {
                 if (_authorizationService.IsUserAuthenticated())
                 {
                     _appbarManager.ShowAppbar();
@@ -164,8 +164,11 @@ namespace UrbanGame.ViewModels
             {
                 if (_authorizationService.IsUserAuthenticated())
                 {
-                    IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
-                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
+                    using (var uow = _unitOfWorkLocator())
+                    {
+                        IQueryable<IGame> games = uow.GetRepository<IGame>().All();
+                        Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
+                    }
                 }
                 else
                 {
@@ -183,11 +186,13 @@ namespace UrbanGame.ViewModels
                 using (IUnitOfWork uow = _unitOfWorkLocator())
                 {
                     IGame game = uow.GetRepository<IGame>().All().FirstOrDefault(x => x.Id == Game.Id);
-                     
+
                     if (game == null)
-                        uow.GetRepository<IGame>().MarkForAdd(CreateInstance(GameState.Joined, uow));                        
+                        uow.GetRepository<IGame>().MarkForAdd(CreateInstance(GameState.Joined, uow));
                     else
                         game.GameState = GameState.Joined;
+
+
 
 
                     uow.Commit();
@@ -213,6 +218,7 @@ namespace UrbanGame.ViewModels
             newGame.GameType = Game.GameType;
             newGame.Description = Game.Description;
             newGame.Difficulty = Game.Difficulty;
+            newGame.Version = Game.Version;
             newGame.Prizes = Game.Prizes;
 
             foreach (var t in Game.Tasks)

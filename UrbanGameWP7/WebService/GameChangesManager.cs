@@ -7,9 +7,9 @@ using Common;
 using Caliburn.Micro;
 using System.Threading.Tasks;
 using System.Threading;
-using Coding4Fun.Toolkit.Controls;
 using System.Windows;
 using System.Windows.Media;
+using System.Reflection;
 
 namespace WebService
 {
@@ -24,117 +24,201 @@ namespace WebService
         IEventAggregator _gameEventAggregator;
         Func<IUnitOfWork> _unitOfWorkLocator;
         ILocalizationService _localizationService;
-        Timer _mockTimer;        
+        IToastPromptService _toastPromptService;
+        Timer _solutionUpdaterTimer;
+        Timer _gameUpdaterTimer;
+        IGameAuthorizationService _authorizationService;
+
+        private const int _gameUpdaterPeriod = 60 * 1000;
+        private const int _solutionUpdaterPeriod = 30 * 1000;
 
         public GameChangesManager(IGameWebService gameWebService, IEventAggregator gameEventAggregator,
-                                  Func<IUnitOfWork> unitOfWorkLocator, ILocalizationService localizationService)
+                                  Func<IUnitOfWork> unitOfWorkLocator, ILocalizationService localizationService,
+                                  IToastPromptService toastPromptService, IGameAuthorizationService authorizationService)
         {
             _gameWebService = gameWebService;
             _gameEventAggregator = gameEventAggregator;
             _unitOfWorkLocator = unitOfWorkLocator;
             _localizationService = localizationService;
+            _toastPromptService = toastPromptService;
+            _authorizationService = authorizationService;
 
-            _mockTimer = new Timer(new TimerCallback(RandomChange), null, 5000, 5000);
+            _solutionUpdaterTimer = new Timer(new TimerCallback(CheckSolutionStatusChanged), null, _solutionUpdaterPeriod, _solutionUpdaterPeriod);
+            _gameUpdaterTimer = new Timer(new TimerCallback(CheckGameChanges), null, _gameUpdaterPeriod, _gameUpdaterPeriod);
         }
 
-        public void GameChanged(int gid)
+        #region GameChanges
+
+        public PropertyInfo[] GetPublicProperties(Type type)
         {
-            Task.Factory.StartNew(async () =>
+            if (type.IsInterface)
+            {
+                var propertyInfos = new List<PropertyInfo>();
+
+                var considered = new List<Type>();
+                var queue = new Queue<Type>();
+                considered.Add(type);
+                queue.Enqueue(type);
+                while (queue.Count > 0)
                 {
-                    IGame newGame = await _gameWebService.GetGameInfo(gid);
-                    IRepository<IGame> repo = _unitOfWorkLocator().GetRepository<IGame>();
-                    IGame toUpdate = repo.All().FirstOrDefault(g => g.Id == gid);
-
-                    if (toUpdate != null)
+                    var subType = queue.Dequeue();
+                    foreach (var subInterface in subType.GetInterfaces())
                     {
-                        //for tests, until it works as mock-up
-                        toUpdate.Description = DateTime.Now.ToLongTimeString() + " " + newGame.Description; 
+                        if (considered.Contains(subInterface)) continue;
 
-                        toUpdate.Difficulty = newGame.Difficulty;
-                        toUpdate.GameEnd = newGame.GameEnd;
-                        toUpdate.GameLongitude = newGame.GameLongitude;
-                        toUpdate.GameLatitude = newGame.GameLatitude;
-                        toUpdate.GameLogo = newGame.GameLogo;
-                        toUpdate.Localization = newGame.Localization;
-                        toUpdate.GameStart = newGame.GameStart;
-                        toUpdate.GameState = newGame.GameState;
-                        toUpdate.GameType = newGame.GameType;
-                        toUpdate.MaxPoints = newGame.MaxPoints;
-                        toUpdate.Name = newGame.Name;
-                        toUpdate.NumberOfCompletedTasks = newGame.NumberOfCompletedTasks;
-                        toUpdate.NumberOfPlayers = newGame.NumberOfPlayers;
-                        toUpdate.NumberOfSlots = newGame.NumberOfSlots;
-                        toUpdate.NumberOfTasks = newGame.NumberOfTasks;
-                        toUpdate.OperatorName = newGame.OperatorName;
-                        toUpdate.Points = newGame.Points;
-                        toUpdate.Prizes = newGame.Prizes;
-                        toUpdate.Rank = newGame.Rank;
-
-                        _unitOfWorkLocator().Commit();
+                        considered.Add(subInterface);
+                        queue.Enqueue(subInterface);
                     }
 
-                    _gameEventAggregator.Publish(new GameChangedEvent() { Id = gid });                    
+                    var typeProperties = subType.GetProperties(
+                        BindingFlags.FlattenHierarchy
+                        | BindingFlags.Public
+                        | BindingFlags.Instance);
+
+                    var newPropertyInfos = typeProperties
+                        .Where(x => !propertyInfos.Contains(x));
+
+                    propertyInfos.InsertRange(0, newPropertyInfos);
+                }
+
+                return propertyInfos.ToArray();
+            }
+
+            return type.GetProperties(BindingFlags.FlattenHierarchy
+                | BindingFlags.Public | BindingFlags.Instance);
+        }
+
+        protected IList<string> UpdateGame(IGame oldGame, IGame newGame)
+        {
+            List<string> differences = new List<string>();
+            PropertyInfo[] newProperties = GetPublicProperties(newGame.GetType());
+            PropertyInfo[] oldProperties = GetPublicProperties(oldGame.GetType());
+
+            foreach (PropertyInfo oldProperty in oldProperties)
+            {
+                PropertyInfo newProperty = newProperties.First(p => p.Name == oldProperty.Name);
+
+                //todo: do not override fields which are stored only localy
+                if (oldProperty.Name != "GameState" && oldProperty.Name != "ListOfChanges" && oldProperty.CanWrite)
+                {
+                    //skip collections - only basic data
+                    if (!oldProperty.PropertyType.IsGenericType ||
+                        (oldProperty.PropertyType.GetGenericTypeDefinition() != typeof(IEntityEnumerable<>) &&
+                         oldProperty.PropertyType.GetGenericTypeDefinition() != typeof(EntitySet<>)))
+                    {
+                        object oldValue = oldProperty.GetValue(oldGame, null);
+                        object newValue = newProperty.GetValue(newGame, null);
+
+                        if (((oldValue == null || newValue == null) && oldValue != newValue) ||
+                              (oldValue != null && newValue != null && !oldValue.Equals(newValue)))
+                        {
+                            oldProperty.SetValue(oldGame, newProperty.GetValue(newGame, null), null);
+                            differences.Add(oldProperty.Name);
+                        }
+                    }
+                }
+            }
+            return differences;
+        }
+
+        protected void CheckGameChanges(object obj)
+        {
+            if (!_authorizationService.IsUserAuthenticated())
+                return;
+
+            Task.Factory.StartNew(() =>
+                {
+                    _gameUpdaterTimer.Dispose();
+
+                    try
+                    {
+                        using (var uow = _unitOfWorkLocator())
+                        {
+                            var activeGames = uow.GetRepository<IGame>().All().Where(g => g.GameState == GameState.Joined);
+
+                            foreach (var oldGame in activeGames)
+                            {
+                                //there cannot be await, because it causes InvalidOperationExceptions by uow.Commit()
+                                var task = _gameWebService.GetGameInfo(oldGame.Id);
+                                task.Wait();
+                                IGame newGame = task.Result;
+
+                                if (newGame.Version != oldGame.Version)
+                                {
+                                    IList<string> diff = UpdateGame(oldGame, newGame);
+
+                                    if (diff.Count == 0)
+                                        return;
+
+                                    if (_toastPromptService != null)
+                                        oldGame.ListOfChanges = _toastPromptService.GetDifferencesText(diff);
+
+                                    uow.Commit();                                    
+                                                                            
+                                    if (_toastPromptService != null)
+                                        _toastPromptService.ShowGameChanged(oldGame.Id, oldGame.Name, _localizationService.GetText("GameChangedToast"), diff);
+
+                                    _gameEventAggregator.Publish(new GameChangedEvent() { Id = oldGame.Id });
+                                }
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        _gameUpdaterTimer = new Timer(new TimerCallback(CheckGameChanges), null, _gameUpdaterPeriod, _gameUpdaterPeriod);
+                    }                    
                 });
         }
 
-        static List<SubmittedSolution> SubmittedSolutions = new List<SubmittedSolution>();
-        static object _syncObj = new object();
+        #endregion
 
-        public static void AddSolution(SubmittedSolution solution)
+
+        #region SolutionChanges
+
+        protected void CheckSolutionStatusChanged(object obj)
         {
-            lock (_syncObj)
-            {
-                SubmittedSolution s = SubmittedSolutions.FirstOrDefault(sol => sol.TaskId == solution.TaskId);
-                if (s != null)
-                    SubmittedSolutions.Remove(s);
-
-                SubmittedSolutions.Add(solution);
-            }
-        }
-
-        public void UpdateSolutionStatus()
-        {
-            Random r = new Random();
+            if (!_authorizationService.IsUserAuthenticated())
+                return;
 
             Task.Factory.StartNew(() =>
             {
-                lock (_syncObj)
+                _solutionUpdaterTimer.Dispose();
+
+                try
                 {
-                    IRepository<ITask> repo = _unitOfWorkLocator().GetRepository<ITask>();
-
-                    foreach (SubmittedSolution solution in SubmittedSolutions.ToList())
+                    using (var uow = _unitOfWorkLocator())
                     {
-                        ITask toUpdate = repo.All().FirstOrDefault(t => t.Id == solution.TaskId);
+                        var pendingSolutions = uow.GetRepository<IBaseSolution>().All().Where(s => s.Task.SolutionStatus == SolutionStatus.Pending);
 
-                        if (toUpdate != null)
+                        foreach (var solution in pendingSolutions)
                         {
-                            toUpdate.SolutionStatus = r.Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
-                            SubmittedSolutions.Remove(solution);
+                            var task = _gameWebService.GetSolutionStatus(solution.Id);
+                            task.Wait();
+                            SolutionStatusResponse response = task.Result;
 
-                            _unitOfWorkLocator().Commit();
-                            _gameEventAggregator.Publish(new SolutionStatusChanged() { Id = 1, TaskId = solution.TaskId, Status = toUpdate.SolutionStatus });
+                            if (response.Status == SolutionStatus.Accepted || response.Status == SolutionStatus.Rejected)
+                            {
+                                solution.Task.SolutionStatus = response.Status;
+                                solution.Task.UserPoints = response.Points;
+                                uow.Commit();
 
-                            
-                            System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
-                                new ToastPrompt()
-                                {
-                                    Title = toUpdate.Name,
-                                    Background = new SolidColorBrush(Colors.Green),
-                                    TextWrapping = System.Windows.TextWrapping.Wrap,
-                                    MillisecondsUntilHidden = 5000,
-                                    Message = _localizationService.GetText("SolutionStatusChanged") + " " +
-                                              (toUpdate.SolutionStatus == SolutionStatus.Accepted ? _localizationService.GetText("Accepted") : _localizationService.GetText("Rejected"))
-                                }.Show());
-                        }
+                                string message = _localizationService.GetText("SolutionStatusChanged") + " " +
+                                                 (response.Status == SolutionStatus.Accepted ? _localizationService.GetText("Accepted") : _localizationService.GetText("Rejected"));
+                                if (_toastPromptService != null)
+                                    _toastPromptService.ShowSolutionStatusChanged(solution.Task.Id, solution.Task.Name, message);
+
+                                _gameEventAggregator.Publish(new SolutionStatusChanged() { Status = response.Status, Points = response.Points, TaskId = solution.Task.Id });
+                            }
+                        }                        
                     }
-                };
+                }
+                finally
+                {
+                    _solutionUpdaterTimer = new Timer(new TimerCallback(CheckSolutionStatusChanged), null, _solutionUpdaterPeriod, _solutionUpdaterPeriod);
+                }
             });
         }
 
-        private void RandomChange(object obj)
-        {
-            GameChanged(new Random().Next(1, 2));
-            UpdateSolutionStatus();
-        }
+        #endregion
     }
 }

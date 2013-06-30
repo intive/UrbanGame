@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using System.Windows;
 using WebService;
 using Caliburn.Micro;
@@ -53,35 +54,52 @@ namespace UrbanGame.Utilities
 
         public LoginResult LogIn(string email, string password)
         {
-            // check in web service if email and password are correct
+            AuthorizeState authState =  _gameWebService.Authorize(email, password).Result;
 
-            AuthenticatedUser = new User() { Login = "Login", Email = email, Password = password };
+            switch(authState)
+            {
+                case AuthorizeState.Success:
+                    AuthenticatedUser = new User() { Login = "Login", Email = email, Password = password };
 
-            byte[] data = ProtectedData.Protect(Encoding.UTF8.GetBytes("login" + " " + password + " " + email), null);
-            string encrypted = System.Convert.ToBase64String(data, 0, data.Length);
-            XDocument xmlFile = new XDocument(new XElement("Root",encrypted));
+                    byte[] data = ProtectedData.Protect(Encoding.UTF8.GetBytes("login" + " " + password + " " + email), null);
+                    string encrypted = System.Convert.ToBase64String(data, 0, data.Length);
+                    XDocument xmlFile = new XDocument(new XElement("Root",encrypted));
             
 
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(fileName, FileMode.Create, FileAccess.Write, store))
-                {
-                    xmlFile.Save(stream);
-                }
-            }
+                    using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+                    {
+                        using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(fileName, FileMode.Create, FileAccess.Write, store))
+                        {
+                            xmlFile.Save(stream);
+                        }
+                    }
 
-            return LoginResult.Success;
+                    return LoginResult.Success;
+                case AuthorizeState.WrongPassword:
+                    return LoginResult.Failure;
+                case AuthorizeState.NoUserFound:
+                    return LoginResult.Failure;
+                default:
+                    return LoginResult.Timeout;
+            }
         }
 
         /// <summary>
-        /// Clear credentials
+        /// Clear credentials and all data from database
         /// </summary>
         public void Logout()
         {
-            // delete all data from database
+            var repo = _unitOfWorkLocator.GetRepository<IGame>();
+            var allGamesList = repo.All();
+
+            foreach (IGame game in allGamesList)
+            {
+                repo.MarkForDeletion(game);
+            }
+
+            _unitOfWorkLocator.Commit();
 
             AuthenticatedUser = null;
-
             using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 if (isf.FileExists(fileName))
@@ -117,8 +135,20 @@ namespace UrbanGame.Utilities
         public RegisterResult Register(User userData)
         {
             AuthenticatedUser = userData;
+            CreateAccountResponse accuontResponse = _gameWebService.CreateAccount(userData.Login, userData.Email, userData.Password).Result;
 
-            return RegisterResult.Success;
+            switch (accuontResponse)
+            {
+                case CreateAccountResponse.Success:
+                    return RegisterResult.Success;
+                case CreateAccountResponse.LoginUnavailable:
+                    return RegisterResult.Failure;
+                case CreateAccountResponse.Timeout:
+                    return RegisterResult.Timeout;
+                default:
+                    return RegisterResult.UnknownError;
+                    
+            }
         }
     }
 }

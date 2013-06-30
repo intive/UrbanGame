@@ -21,7 +21,7 @@ namespace UrbanGame.ViewModels
                                     IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager, IGameAuthorizationService authorizationService)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator, authorizationService)
         {
-            _appbarManager = appbarManager;
+            _appbarManager = appbarManager;          
         }
 
         protected override void OnViewReady(object view)
@@ -141,9 +141,9 @@ namespace UrbanGame.ViewModels
                    @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,6}))$");
         }
 
-        public void LogIn(string Password)
+        public async void LogIn(string Password)
         {
-            if (!string.IsNullOrWhiteSpace(Email) && IsValidEmail(Email) && !string.IsNullOrWhiteSpace(Password) && _gameWebService.Authorize(Login, Password) == AuthorizeState.Success)
+            if (!string.IsNullOrWhiteSpace(Email) && IsValidEmail(Email) && !string.IsNullOrWhiteSpace(Password) && await _gameWebService.Authorize(Email, Password) == AuthorizeState.Success)
             {
                 VisualStateName = "LoggingIn";
 
@@ -155,23 +155,6 @@ namespace UrbanGame.ViewModels
                     case LoginResult.Failure: VisualStateName = "Incorrect"; break;
                     case LoginResult.Timeout: VisualStateName = "Timeout"; break;
                 }
-
-                /*if (result == LoginResult.Success)
-                {
-                    VisualStateName = "LoggedIn";
-
-                    //get all user data
-
-                    _navigationService.GoBack();
-                }
-                else if (result == LoginResult.Failure)
-                {
-                    VisualStateName = "Incorrect";
-                }
-                else if (result == LoginResult.Timeout)
-                {
-                    VisualStateName = "Timeout";
-                }*/
             }
             else
             {
@@ -179,7 +162,7 @@ namespace UrbanGame.ViewModels
             }
         }
 
-        public void CreateAccount(string Password, string PasswordConfirmation)
+        public async void CreateAccount(string Password, string PasswordConfirmation)
         {
             if (string.IsNullOrWhiteSpace(Login))
             {
@@ -206,31 +189,26 @@ namespace UrbanGame.ViewModels
                 VisualStateName = "CreatingAccount";
                 var result = _authorizationService.Register(new User { Login = Login, Password = Password, Email = Email });
 
-
                 switch (result)
                 {
-                    case RegisterResult.Success: VisualStateName = "AccountCreated"; break;
-                    case RegisterResult.Failure: MessageBox.Show("Account already Existing", "Something went wrong", MessageBoxButton.OK); break;
-                    case RegisterResult.Timeout: _previousState = "CreatingAccount";
-                        MessageBox.Show("Something went wrong, try again later", "Something went wrong", MessageBoxButton.OK); break;
+                    case RegisterResult.Success: 
+                        VisualStateName = "AccountCreated"; 
+                        break;
+                    case RegisterResult.Failure:
+                        VisualStateName = "LoginUnavailable";
+                        break;
+                    case RegisterResult.Timeout:
+                        _previousState = "CreatingAccount";
+                        VisualStateName = "Timeout";
+                        break;
+                    default:
+                        VisualStateName = "UnknownError";
+                        break;
                 }
-
-
-                /*if (result == RegisterResult.Success)
-                {
-                    VisualStateName = "AccountCreated";
-                }
-                else if (result == RegisterResult.Failure)
-                {
-                    MessageBox.Show("Account already Existing", "Something went wrong", MessageBoxButton.OK);
-                }
-                else if (result == RegisterResult.Timeout)
-                {
-                    _previousState = "CreatingAccount";
-                    MessageBox.Show("Something went wrong, try again later", "Something went wrong", MessageBoxButton.OK);
-                }*/
             }
         }
+
+                
 
         public void Retry()
         {
@@ -239,14 +217,6 @@ namespace UrbanGame.ViewModels
                 case "CreatingAccount": CreateAccount(_authorizationService.AuthenticatedUser.Password, _authorizationService.AuthenticatedUser.Password); break;
                 case "LoggingIn": LogIn(_authorizationService.AuthenticatedUser.Password); break;
             }
-            /*if (_previousState == "CreatingAccount")
-            {
-                CreateAccount(_authorizationService.AuthenticatedUser.Password, _authorizationService.AuthenticatedUser.Password);
-            }
-            else if (_previousState == "LoggingIn")
-            {
-                LogIn(_authorizationService.AuthenticatedUser.Password);
-            }*/
         }
 
         public void ChangeToNormal()

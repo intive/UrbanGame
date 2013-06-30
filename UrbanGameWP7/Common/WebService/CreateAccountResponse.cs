@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Common
 {
-    public enum RegisterResult
+    public enum CreateAccountResponse
     {
         Success,
-        Failure,
-        UnknownError,
-        Timeout
+        LoginUnavailable,
+        Timeout,
+        UnknownError
     }
 }

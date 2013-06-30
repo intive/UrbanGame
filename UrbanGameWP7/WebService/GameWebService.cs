@@ -43,21 +43,70 @@ namespace WebService
         const string APIurl = "http://urbangame.patronage.blstream.com/api/";
         JsonConverter[] _jsonConverters = new JsonConverter[] { new JsonGameTypeConverter(), new JsonEnumConverter(), new JsonDateTimeConverter() };
 
-        public static async Task<string> GetJson(string relativeUrl)
+        private static string _username = "maxikq";
+        private static string _password = "pass";
+
+        private static async Task<WebApiResponse> GetResponse(WebRequest request)
         {
-            WebRequest request = HttpWebRequest.Create(APIurl + relativeUrl);
-            request.Credentials = new NetworkCredential() { UserName = "maxikq", Password = "pass" };
+            WebApiResponse result = new WebApiResponse() { Success = true, Status = HttpStatusCode.OK };
 
-            Task<WebResponse> task = request.GetResponseAsync();
-            string text = string.Empty;
-
-            await task.ContinueWith((taskParam) =>
+            try
             {
-                Stream response = task.Result.GetResponseStream();
+                Stream response = (await request.GetResponseAsync()).GetResponseStream();
                 using (StreamReader sr = new StreamReader(response))
-                    text = sr.ReadToEnd();
-            });
-            return text;
+                    result.Json = sr.ReadToEnd();
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+
+                if (ex.InnerException != null && ex.InnerException is System.Net.WebException)
+                {
+                    System.Net.WebException webEx = (System.Net.WebException)ex.InnerException;
+
+                    if (webEx.Response != null)
+                    {
+                        var resp = (HttpWebResponse)webEx.Response;
+                        result.Status = resp.StatusCode;
+                    }
+                }
+                else
+                {
+                    result.Status = HttpStatusCode.BadRequest;
+                    System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        var message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                        MessageBox.Show("Error while sending request to API.\r\n" + message, "Error", MessageBoxButton.OK);
+                    });
+                }
+            }
+
+            return result;
+        }
+
+        public static async Task<WebApiResponse> GetJson(string relativeUrl)
+        {           
+            WebRequest request = HttpWebRequest.Create(APIurl + relativeUrl);
+            request.Credentials = new NetworkCredential() { UserName = _username, Password = _password };
+            return await GetResponse(request);
+        }
+
+        public static async Task<WebApiResponse> PostJson(string relativeUrl, string postData)
+        {            
+            WebRequest request = HttpWebRequest.Create(APIurl + relativeUrl);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            request.Credentials = new NetworkCredential() { UserName = _username, Password = _password };            
+
+            Task<Stream> requestTask = request.GetRequestStreamAsync();
+            await requestTask.ContinueWith((taskParam) =>
+                {
+                    byte[] byteData = System.Text.Encoding.UTF8.GetBytes(postData);
+                    requestTask.Result.Write(byteData, 0, byteData.Length);
+                    requestTask.Result.Close();
+                });
+
+            return await GetResponse(request);
         }
 
         public async Task<TObject> GetViaApi<TObject>(string relativeUrl) 
@@ -68,16 +117,8 @@ namespace WebService
         public async Task<TObject> GetViaApi<TObject>(string relativeUrl, params object[] args)
         {
             string url = args != null ? String.Format(relativeUrl, args) : relativeUrl;
-            string json = await GetJson(url);
-            return JsonConvert.DeserializeObject<TObject>(json, _jsonConverters);
-        }
-
-        public async void TestApi()
-        {
-            string json = await GetJson("games?lat=10&lon=10");
-
-            var results = JsonConvert.DeserializeObject<ListOfGames>(json, _jsonConverters);
-            MessageBox.Show(results.Games[1].Id.ToString() + "\n" + Enum.GetName(typeof(GameType), results.Games[1].GameType) + "\n" + results.Games[1].Name + "\n" + results.Games[1].Prizes + "\n" + results.Games[1].Description + "\n" + results.Games[1].OperatorName + "\n" + Enum.GetName(typeof(GameDifficulty), results.Games[1].Difficulty) + "\n" + results.Games[1].GameStart.ToShortDateString());
+            WebApiResponse response = await GetJson(url);
+            return JsonConvert.DeserializeObject<TObject>(response.Json, _jsonConverters);
         }
 
         #endregion
@@ -187,27 +228,75 @@ namespace WebService
         #region SubmitTaskSolution
         public SubmitResult SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
-            GameChangesManager.AddSolution(new SubmittedSolution() { TaskId = tid });
-            SubmitResult sbResult = SubmitResult.AnswerCorrect;
+            int r = new Random().Next(100);
 
-            return sbResult;
+            if (r < 20)
+                return SubmitResult.AnswerIncorrect;
+            else if (r < 60)
+                return SubmitResult.AnswerCorrect;
+            else
+                return SubmitResult.ScoreDelayed;
         }
+        #endregion
+
+        #region GetSolutionStatus
+
+        public async Task<SolutionStatusResponse> GetSolutionStatus(int taskId)
+        {
+            SolutionStatusResponse result = new SolutionStatusResponse();
+            result.Status = new Random().Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
+            result.Points = 5;
+            return result;
+        }
+
+        #endregion
+
+        #region CreateAccount
+
+        public async Task<CreateAccountResponse> CreateAccount(string username, string email, string password)
+        {
+            WebApiResponse result = await PostJson("register", String.Format("{{ \"login\": \"{0}\", \"password\": \"{1}\" }}", username, password));
+
+            if (!result.Success)
+            {
+                switch (result.Status)
+                {
+                    case HttpStatusCode.Conflict:
+                        return CreateAccountResponse.LoginUnavailable;
+                    case HttpStatusCode.RequestTimeout:
+                        return CreateAccountResponse.Timeout;
+                    default:
+                        return CreateAccountResponse.UnknownError;
+                }                
+            }
+            else
+                return CreateAccountResponse.Success;
+        }
+
         #endregion
 
         #region Authorize
-        public AuthorizeState Authorize(string username, string password)
+        public async Task<AuthorizeState> Authorize(string username, string password)
         {
-            return AuthorizeState.Success;
-        }
-        #endregion
+            _username = username;
+            _password = password;
 
-        #region UsersActiveGames
-        public IGame[] UsersActiveGames()
-        {
-            return new IGame[] {
-                new GameMock(){Name = "M For The Mission", GameType = GameType.Race, GameState = GameState.Joined, Id = 6, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(2).AddHours(13), Rank = 4},
-                new GameMock(){Name = "Thanks For All That Fish", GameType = GameType.ScoreAttack, GameState = GameState.Joined, Id = 7, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(5), Rank = null},
-                new GameMock(){Name = "Pontifex", GameType = GameType.Race, GameState = GameState.Joined, Id = 8, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(8), Rank = 8}};
+            WebApiResponse result = await GetJson("login");
+
+            if (!result.Success)
+            {
+                switch (result.Status)
+                {
+                    case HttpStatusCode.Unauthorized:
+                        return AuthorizeState.WrongPassword;
+                    default:
+                        return AuthorizeState.Unknown;
+                }
+            }
+            else
+            {
+                return AuthorizeState.Success;
+            }
         }
         #endregion
 
@@ -218,18 +307,11 @@ namespace WebService
                 throw new ArgumentNullException("coordinate");
 
             var result = await GetViaApi<ListOfGames>("games?lat={0}&lon={1}", coordinate.Latitude, coordinate.Longitude);
+            if (result.Games == null)
+                result.Games = new List<Game>();
             return result.Games.Cast<IGame>().ToArray();
         }
 
-        #endregion
-
-        #region UsersInactiveGames
-        public IGame[] UsersInactiveGames()
-        {
-            return new IGame[] {
-                new GameMock(){Name = "Wilqu!", GameType = GameType.ScoreAttack, Id = 9, GameLogo = "/ApplicationIcon.png", GameState = GameState.Ended, Rank = 4},
-                new GameMock(){Name = "Torghal", GameType = GameType.Race, Id = 10, GameLogo = "/ApplicationIcon.png", GameState = GameState.Withdraw, Rank = null}};
-        }
         #endregion
 
         #region ActiveTasks

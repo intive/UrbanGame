@@ -31,6 +31,7 @@ namespace UrbanGame
             container.Singleton<IGameWebService, GameWebServiceMock>();
             container.Singleton<IGameChangesManager, GameChangesManager>();
             container.PerRequest<IAppbarManager, AppbarManager>();
+            container.PerRequest<IToastPromptService, ToastPromptService>();
             container.Singleton<IGameAuthorizationService, GameAuthorizationService>();
 
             container.Handler<UrbanGameDataContext>((sc) =>

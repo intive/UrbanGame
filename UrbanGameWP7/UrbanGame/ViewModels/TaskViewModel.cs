@@ -78,6 +78,7 @@ namespace UrbanGame.ViewModels
             if (message.TaskId == CurrentTask.Id)
             {
                 CurrentTask.SolutionStatus = message.Status;
+                CurrentTask.UserPoints = message.Points;
             }
         }
         #endregion
@@ -87,6 +88,8 @@ namespace UrbanGame.ViewModels
         public int GameId { get; set; }
 
         public int TaskId { get; set; }
+
+        public string DiffComparision { get; set; }
 
         #endregion
 
@@ -215,6 +218,21 @@ namespace UrbanGame.ViewModels
             VisualStateName = "Normal";
         }
 
+        protected override void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+            
+            new Timer(new TimerCallback((obj) =>
+            {
+                if (DiffComparision != null)
+                    System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        MessageBox.Show(DiffComparision);
+                        DiffComparision = null;
+                    });
+            }), null, 700, System.Threading.Timeout.Infinite);
+        }
+
         #endregion
 
         #region operations
@@ -222,9 +240,12 @@ namespace UrbanGame.ViewModels
         public async Task RefreshGame()
         {
             await Task.Factory.StartNew(async () =>
-            {               
-                IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
-                Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
+            {
+                using (var uow = _unitOfWorkLocator())
+                {
+                    IQueryable<IGame> games = uow.GetRepository<IGame>().All();
+                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
+                }
             });
         }
 
@@ -232,8 +253,14 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
-                IQueryable<ITask> tasks = _unitOfWorkLocator().GetRepository<ITask>().All();
-                CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId) ?? _gameWebService.GetTaskDetails(GameId, TaskId);
+                using (var uow = _unitOfWorkLocator())
+                {
+                    IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
+                    CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId) ?? _gameWebService.GetTaskDetails(GameId, TaskId);
+                    
+                    //to load it (lazy loading)
+                    var abcd = CurrentTask.ABCDPossibleAnswers.Any(a => false);
+                }
             });
         }
 
@@ -243,18 +270,21 @@ namespace UrbanGame.ViewModels
             {
                 Answers = new BindableCollection<ABCDAnswear>();
 
-                IQueryable<IABCDPossibleAnswer> possibleAnswers = _unitOfWorkLocator().GetRepository<IABCDPossibleAnswer>().All().Where(a => a.Task.Id == CurrentTask.Id);
-
-                foreach(IABCDPossibleAnswer possible in possibleAnswers.ToList())
+                using (var uow = _unitOfWorkLocator())
                 {
-                    IABCDUserAnswer userAnswer = _unitOfWorkLocator().GetRepository<IABCDUserAnswer>().All().Where(a => a.ABCDPossibleAnswer.Id == possible.Id).Last();
-                    bool isChecked = false;
-                    if(userAnswer != null && userAnswer.Answer == true)
-                    {
-                        isChecked = true;
-                    }
+                    IQueryable<IABCDPossibleAnswer> possibleAnswers = uow.GetRepository<IABCDPossibleAnswer>().All().Where(a => a.Task.Id == CurrentTask.Id);
 
-                    Answers.Add(new ABCDAnswear() { possibleAnswear = possible, isChecked = isChecked });
+                    foreach (IABCDPossibleAnswer possible in possibleAnswers.ToList())
+                    {
+                        IABCDUserAnswer userAnswer = uow.GetRepository<IABCDUserAnswer>().All().Where(a => a.ABCDPossibleAnswer.Id == possible.Id).Last();
+                        bool isChecked = false;
+                        if (userAnswer != null && userAnswer.Answer == true)
+                        {
+                            isChecked = true;
+                        }
+
+                        Answers.Add(new ABCDAnswear() { possibleAnswear = possible, isChecked = isChecked });
+                    }
                 }
             });
         }
@@ -268,38 +298,49 @@ namespace UrbanGame.ViewModels
         private void SubmitSolution(IBaseSolution solution)
         {
             //saving solution in database
-
             using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
             {
                 GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
                 solution.Task = task;
+                solution.Task.SolutionStatus = SolutionStatus.Pending;
 
                 unitOfWork.GetRepository<IBaseSolution>().MarkForAdd(solution);
                 unitOfWork.Commit();
             }
 
             //sending solution
-            var result = _gameWebService.SubmitTaskSolution(Game.Id, CurrentTask.Id, Solution);
+            var result = _gameWebService.SubmitTaskSolution(GameId, CurrentTask.Id, Solution);
+            //todo: update points in Views (gameDetailsView & TaskView)
+            //todo: change WebService.SubmitTaskSolution to return gained points
+
 
             using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
             {
+                var sol = unitOfWork.GetRepository<IBaseSolution>().All().First(s => s.Id == solution.Id);                          
                 GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
-                
+
                 task.UserPoints = 20;
-                solution.Task = task;
+
+                switch(result)
+                {
+                    case SubmitResult.AnswerCorrect:
+                        VisualStateName = "Correct";
+                        sol.Task.SolutionStatus = SolutionStatus.Accepted;
+                        break;
+                    case SubmitResult.AnswerIncorrect:
+                        VisualStateName = "Wrong";
+                        sol.Task.SolutionStatus = SolutionStatus.Rejected;
+                        break;
+                    default: 
+                        VisualStateName = "Timeout";
+                        break;
+                }
 
                 unitOfWork.Commit();
             }
 
             RefreshTask();
 
-            switch(result)
-            {
-                case SubmitResult.AnswerCorrect: VisualStateName = "Correct"; break;
-                case SubmitResult.AnswerIncorrect: VisualStateName = "Wrong"; break;
-                case SubmitResult.Timeout: VisualStateName = "Timeout"; break;
-                default: break;
-            }
         }
 
         public async void SubmitGPS()

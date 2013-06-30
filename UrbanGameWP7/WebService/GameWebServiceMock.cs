@@ -80,7 +80,7 @@ namespace WebService
         #region GetGameInfo
         public async Task<IGame> GetGameInfo(int gid)
         {
-            return (await UserNearbyGames(new GeoCoordinate(1,1))).Union(UsersActiveGames()).Union(UsersInactiveGames()).FirstOrDefault(x => x.Id == gid);
+            return (await UserNearbyGames(new GeoCoordinate(1,1))).FirstOrDefault(x => x.Id == gid);
         }
         #endregion
 
@@ -134,28 +134,49 @@ namespace WebService
         #region SubmitTaskSolution
         public SubmitResult SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
-            GameChangesManager.AddSolution(new SubmittedSolution() { TaskId = tid });
-            SubmitResult sbResult = SubmitResult.AnswerCorrect;
-            
-            return sbResult;
+            int r = new Random().Next(100);
+
+            if (r < 20)
+            {
+                return SubmitResult.AnswerIncorrect;
+            }
+            else if (r < 60)
+            {
+                return SubmitResult.AnswerCorrect;
+            }
+            else
+            {
+                return SubmitResult.ScoreDelayed;
+            }
         }
         #endregion
 
+        #region GetSolutionStatus
+
+        public async Task<SolutionStatusResponse> GetSolutionStatus(int taskId)
+        {
+            SolutionStatusResponse result = new SolutionStatusResponse();
+            result.Status = new Random().Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
+            result.Points = 5;
+            return result;
+        }
+
+        #endregion
+
         #region Authorize
-        public AuthorizeState Authorize(string username, string password)
+        public async Task<AuthorizeState> Authorize(string username, string password)
         {
             return AuthorizeState.Success;
         }
         #endregion
 
-        #region UsersActiveGames
-        public IGame[] UsersActiveGames()
+        #region CreateAccount
+
+        public async Task<CreateAccountResponse> CreateAccount(string username, string email, string password)
         {
-            return new IGame[] {
-                new GameMock(){Name = "M For The Mission", GameType = GameType.Race, GameState = GameState.Joined, Id = 6, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(2).AddHours(13), Rank = 4},
-                new GameMock(){Name = "Thanks For All That Fish", GameType = GameType.ScoreAttack, GameState = GameState.Joined, Id = 7, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(3).AddHours(5), Rank = null},
-                new GameMock(){Name = "Pontifex", GameType = GameType.Race, GameState = GameState.Joined, Id = 8, GameLogo = "/ApplicationIcon.png", GameEnd = DateTime.Now.AddDays(8), Rank = 8}};
+            return CreateAccountResponse.Success;
         }
+
         #endregion
 
         #region UserNearbyGames
@@ -172,20 +193,11 @@ namespace WebService
             int id = 1;
             foreach(var g in games)
             {
-                g.Tasks.Add(new TaskMock() { Id = id++, Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
-                g.Tasks.Add(new TaskMock() { Id = id++, Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+                g.Tasks.Add(new TaskMock() { Id = id++, Name = "Find Wally", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+                g.Tasks.Add(new TaskMock() { Id = id++, Name = "IQ Test!", AdditionalText = "What is red with dots?", Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
             }
 
             return games;
-        }
-        #endregion
-
-        #region UsersInactiveGames
-        public IGame[] UsersInactiveGames()
-        {
-            return new IGame[] {
-                new GameMock(){Name = "Wilqu!", GameType = GameType.ScoreAttack, Id = 9, GameLogo = "/ApplicationIcon.png", GameState = GameState.Ended, Rank = 4},
-                new GameMock(){Name = "Torghal", GameType = GameType.Race, Id = 10, GameLogo = "/ApplicationIcon.png", GameState = GameState.Withdraw, Rank = null}};
         }
         #endregion
 

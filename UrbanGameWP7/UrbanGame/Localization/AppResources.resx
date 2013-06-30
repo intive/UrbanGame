@@ -160,9 +160,6 @@
   <data name="DayShortcut" xml:space="preserve">
     <value>d</value>
   </data>
-  <data name="Descrition" xml:space="preserve">
-    <value>description</value>
-  </data>
   <data name="Difficulty" xml:space="preserve">
     <value>DIFFICULTY</value>
   </data>
@@ -364,6 +361,9 @@
   <data name="Correct" xml:space="preserve">
     <value>CORRECT!</value>
   </data>
+  <data name="Rank" xml:space="preserve">
+    <value>rank</value>
+  </data>
   <data name="NotSoGreat" xml:space="preserve">
     <value>NOT SO GREAT!</value>
   </data>
@@ -417,5 +417,17 @@
   </data>
   <data name="IncorrectLogin" xml:space="preserve">
     <value>Incorrect password or email</value>
+  </data>
+  <data name="GameChangedToast" xml:space="preserve">
+    <value>Game details have changed. Tap to see differences.</value>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>This login has been already used</value>
+  </data>
+  <data name="ServiceTimeout" xml:space="preserve">
+    <value>Service timeout</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Serviced returned unknown error</value>
   </data>
 </root>

@@ -69,27 +69,30 @@ namespace UrbanGameTests.Tests
             authorizationService.AuthenticatedUser = new User { Login = "Login", Password = "Admin", Email = "Login@gmail.com" };
             await vm.RefreshUserGames();
             Assert.AreEqual(vm.UserActiveGames.Count, 1); //that with Joined game state
-            Assert.AreEqual(vm.UserInactiveGames.Count, 2); //that with Ended/Won/Withdraw game state
+            Assert.AreEqual(vm.UserInactiveGames.Count, 3); //that with game state != Joined
 
             //when user is unauthorized
             authorizationService.AuthenticatedUser = null;
             await vm.RefreshUserGames();
             Assert.AreEqual(vm.UserActiveGames.Count, 0); //that with Joined game state
-            Assert.AreEqual(vm.UserInactiveGames.Count, 0); //that with Ended/Won/Withdraw game state
+            Assert.AreEqual(vm.UserInactiveGames.Count, 0); //that with game state != Joined
 
 
             //handling updates test
             authorizationService.AuthenticatedUser = new User { Login = "Login", Password = "Admin", Email = "Login@gmail.com" };
             await vm.RefreshUserGames();
 
-            //description changes each time in mock-up WebService results
             string oldDescription = unitOfWork.GetRepository<IGame>().All().First(g => g.Id == 3).Description;
+            unitOfWork.GetRepository<IGame>().All().First(g => g.Id == 3).Description = "sadasdsada";
+            unitOfWork.Commit();
             Thread.Sleep(1000);
             eventAgg.Publish(new GameChangedEvent() { Id = 3 });
             Thread.Sleep(1000);
             Assert.AreNotEqual(vm.UserInactiveGames.First(g => g.Id == 3).Description, oldDescription);
 
             oldDescription = unitOfWork.GetRepository<IGame>().All().First(g => g.Id == 1).Description;
+            unitOfWork.GetRepository<IGame>().All().First(g => g.Id == 1).Description = "sadasdsada";
+            unitOfWork.Commit();
             Thread.Sleep(1000);
             eventAgg.Publish(new GameChangedEvent() { Id = 1 });
             Thread.Sleep(1000);

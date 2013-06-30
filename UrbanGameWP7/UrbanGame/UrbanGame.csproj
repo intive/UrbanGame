@@ -57,10 +57,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Externals\caliburn\Caliburn.Micro.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Coding4Fun.Toolkit.Controls, Version=2.0.6.0, Culture=neutral, PublicKeyToken=c5fd7b72b1a17ce4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Coding4Fun.Toolkit.Controls.2.0.6\lib\wp71\Coding4Fun.Toolkit.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Phone" />
     <Reference Include="Microsoft.Phone.Controls, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit">
-      <HintPath>..\..\..\..\..\..\Applications\PuzzleCreatorNormal\Externals\toolkit\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
+      <HintPath>..\packages\WPToolkit.4.2013.06.11\lib\sl4-windowsphone71\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Phone.Interop" />
     <Reference Include="Microsoft.Threading.Tasks">
@@ -101,6 +105,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateToVisibilityConverter.cs" />
     <Compile Include="Converters\DurationTimeConverter.cs" />
+    <Compile Include="Converters\GameChangedToVisibilityConverter.cs" />
     <Compile Include="Converters\GameEndConverter.cs" />
     <Compile Include="Converters\GameStartConverter.cs" />
     <Compile Include="Converters\GameStateConverter.cs" />
@@ -146,6 +151,7 @@
     <Compile Include="Utilities\AppbarManager.cs" />
     <Compile Include="Utilities\GameAuthorizationService.cs" />
     <Compile Include="Utilities\LocalizationService.cs" />
+    <Compile Include="Utilities\ToastPromptService.cs" />
     <Compile Include="Utilities\PhoneTextBox.cs" />
     <Compile Include="Utilities\StateManager.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
