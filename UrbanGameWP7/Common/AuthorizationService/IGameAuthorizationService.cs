@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Common
 {
@@ -11,7 +12,7 @@ namespace Common
         /// Checks if credentials are saved in memory
         /// </summary>
         /// <returns>Checking result</returns>
-        bool PersistCredentials();
+        Task LoadUserData();
 
         /// <summary>
         /// Checks if user is registered and logs in

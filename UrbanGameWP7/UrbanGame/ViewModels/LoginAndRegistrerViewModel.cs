@@ -225,6 +225,8 @@ namespace UrbanGame.ViewModels
 
             if (_previousState == "LoggedIn")
             {
+                MessageBox.Show(_authorizationService.AuthenticatedUser+"");
+
                 _navigationService.GoBack();
             }
             else

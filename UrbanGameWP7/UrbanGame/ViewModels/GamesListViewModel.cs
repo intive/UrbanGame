@@ -197,7 +197,7 @@ namespace UrbanGame.ViewModels
         protected override async void OnActivate()
         {
             base.OnActivate();
-            LoadUserData();
+            await _authorizationService.LoadUserData();
             await RefreshUserGames();
             RefreshNearestGames();
 
@@ -323,10 +323,10 @@ namespace UrbanGame.ViewModels
             await RefreshUserGames();
         }
 
-        public void LoadUserData()
+        /*public async Task LoadUserData()
         {
-            _authorizationService.PersistCredentials();
-        }
+            await _authorizationService.LoadUserData();
+        }*/
 
         #endregion
     }

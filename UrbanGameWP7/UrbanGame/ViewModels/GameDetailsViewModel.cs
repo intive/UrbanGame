@@ -317,7 +317,7 @@ namespace UrbanGame.ViewModels
 
         public void ShowTask(ITask task)
         {
-            _navigationService.UriFor<TaskViewModel>().WithParam(t => t.TaskId, task.Id).WithParam(x=>x.GameId,task.Game.Id).Navigate();
+            _navigationService.UriFor<TaskViewModel>().WithParam(t => t.TaskId, task.Id).WithParam(x => x.GameId, GameId).Navigate();
         }
 
         public void ChangeAppbarButtons(SelectionChangedEventArgs args)

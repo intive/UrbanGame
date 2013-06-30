@@ -53,9 +53,6 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Toast">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GreenRectangle">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
-                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CorrectText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
@@ -78,9 +75,6 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Toast">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GreenRectangle">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
-                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CorrectText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
@@ -101,9 +95,6 @@
                 <VisualState x:Name="Wrong">
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Toast">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GreenRectangle">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CorrectText">
@@ -268,15 +259,17 @@
                     <SolidColorBrush Color="{StaticResource SolidColorBrushBlack}"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <Rectangle x:Name="GreenRectangle" Width="480" Height="260">
-                <Rectangle.Fill>
+            <Border x:Name="GreenRectangle" VerticalAlignment="Center" Height="Auto" Padding="20">
+                <Border.Background>
                     <SolidColorBrush Color="{StaticResource SolidColorBrushGreen}"/>
-                </Rectangle.Fill>
-            </Rectangle>
-            <TextBlock x:Name="CorrectText" Text="{Binding Path=AppResources.Correct, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>
-            <TextBlock x:Name="NotSoGreatText" Text="{Binding Path=AppResources.NotSoGreat, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>
-            <TextBlock x:Name="WrongText" Text="{Binding Path=AppResources.Wrong, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}"/>
-            <TextBlock x:Name="Points" Text="{Binding CurrentTask.UserPoints}" Style="{StaticResource UserPoints}"/>
+                </Border.Background>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="Auto">
+                    <TextBlock x:Name="CorrectText" Text="{Binding Path=AppResources.Correct, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Visibility="Visible"/>
+                    <TextBlock x:Name="NotSoGreatText" Text="{Binding Path=AppResources.NotSoGreat, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Visibility="Collapsed"/>
+                    <TextBlock x:Name="WrongText" Text="{Binding Path=AppResources.Wrong, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Visibility="Collapsed"/>
+                    <TextBlock x:Name="Points" Text="{Binding CurrentTask.UserPoints}" Style="{StaticResource UserPoints}"/>
+                </StackPanel>
+            </Border>
         </Grid>
         <Grid x:Name="SendingState" Visibility="Collapsed">
             <Rectangle Width="480" Height="740" Opacity="0.5">
@@ -300,8 +293,8 @@
             </Rectangle>
             <TextBlock Text="Something went wrong" FontSize="35" Margin="25,30,0,0" FontWeight="Bold"/>
             <TextBlock Text="You can retry or try again later" FontSize="26" Margin="25,90,0,0"/>
-            <Button Content="retry" Height="78" Width="230" HorizontalAlignment="Left" Margin="10,-330,0,0" cal:Message.Attach="[Action Tap]=[Event Retry()]"/>
-            <Button Content="cancel" Height="78" Width="230" HorizontalAlignment="Right" Margin="0,-330,10,0" cal:Message.Attach="[Action Tap]=[Event ChangeToNormal()]"/>
+            <Button Content="retry" Height="78" Width="230" HorizontalAlignment="Left" Margin="10,-330,0,0" cal:Message.Attach="[Event Tap]=[Action Retry()]"/>
+            <Button Content="cancel" Height="78" Width="230" HorizontalAlignment="Right" Margin="0,-330,10,0" cal:Message.Attach="[Event Tap]=[Action ChangeToNormal()]"/>
         </Grid>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>

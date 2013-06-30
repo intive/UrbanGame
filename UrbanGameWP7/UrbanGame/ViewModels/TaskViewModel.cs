@@ -336,7 +336,7 @@ namespace UrbanGame.ViewModels
                         break;
                 }
 
-                unitOfWork.Commit();
+                //unitOfWork.Commit();
             }
 
             RefreshTask();

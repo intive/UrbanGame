@@ -29,27 +29,28 @@ namespace UrbanGame.Utilities
             _unitOfWorkLocator = unitOfWorkLocator;
         }
 
-        public bool PersistCredentials()
+        public async Task LoadUserData()
         {
-            AuthenticatedUser = null;
-            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+            await Task.Factory.StartNew(() =>
             {
-                if(store.FileExists(fileName))
+                AuthenticatedUser = null;
+                using (var store = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    using (var stream = new IsolatedStorageFileStream(fileName, FileMode.Open, store))
+                    if (store.FileExists(fileName))
                     {
-                        XDocument xmlFile = XDocument.Load(stream);
-                        XElement root = xmlFile.Root;
-                        byte[] encrypted = System.Convert.FromBase64String(root.Value);
-                        byte[] decrypted = ProtectedData.Unprotect(encrypted, null);
-                        string[] data = Encoding.UTF8.GetString(decrypted, 0, decrypted.Length).Split(' ');
+                        using (var stream = new IsolatedStorageFileStream(fileName, FileMode.Open, store))
+                        {
+                            XDocument xmlFile = XDocument.Load(stream);
+                            XElement root = xmlFile.Root;
+                            byte[] encrypted = System.Convert.FromBase64String(root.Value);
+                            byte[] decrypted = ProtectedData.Unprotect(encrypted, null);
+                            string[] data = Encoding.UTF8.GetString(decrypted, 0, decrypted.Length).Split(' ');
 
-                        AuthenticatedUser = new User{ Login = data[0], Password = data[1], Email = data[2] };
+                            AuthenticatedUser = new User { Login = data[0], Password = data[1], Email = data[2] };
+                        }
                     }
                 }
-            }
-
-            return IsUserAuthenticated();
+            });
         }
 
         public LoginResult LogIn(string email, string password)
@@ -89,16 +90,6 @@ namespace UrbanGame.Utilities
         /// </summary>
         public void Logout()
         {
-            var repo = _unitOfWorkLocator.GetRepository<IGame>();
-            var allGamesList = repo.All();
-
-            foreach (IGame game in allGamesList)
-            {
-                repo.MarkForDeletion(game);
-            }
-
-            _unitOfWorkLocator.Commit();
-
             AuthenticatedUser = null;
             using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
             {

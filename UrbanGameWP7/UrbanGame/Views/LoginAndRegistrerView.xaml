@@ -85,9 +85,6 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="LoggedInText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="IncorrectText">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="TimeoutState">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
@@ -368,20 +365,20 @@
                     <SolidColorBrush Color="{StaticResource SolidColorBrushBlack}"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <Border x:Name="GreenRectangle" VerticalAlignment="Center" Height="Auto" Padding="50">
+            <Border x:Name="GreenRectangle" VerticalAlignment="Center" Height="Auto" Padding="20">
                 <Border.Background>
                     <SolidColorBrush Color="{StaticResource SolidColorBrushGreen}"/>
                 </Border.Background>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="Auto">
+                    <TextBlock x:Name="AccountCretedText" Text="{Binding Path=AppResources.AccountCreated, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Margin="0" Visibility="Collapsed"/>
+                    <TextBlock x:Name="ConfirmationText" Text="{Binding Path=AppResources.ConfirmationEmail, Source={StaticResource LocalizedStrings}}" Style="{StaticResource UserPoints}" Margin="0,10,0,0" Visibility="Collapsed"/>
+                    <TextBlock x:Name="LoggedInText" Text="{Binding Path=AppResources.LoggedIn, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="30" TextWrapping="Wrap" Visibility="Collapsed"/>
+                    <TextBlock x:Name="LoginUnavailableText" Text="{Binding Path=AppResources.LoginUnavailable, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="30" TextWrapping="Wrap" Visibility="Collapsed"/>
+                    <TextBlock x:Name="TimeoutText" Text="{Binding Path=AppResources.ServiceTimeout, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="30" TextWrapping="Wrap" Visibility="Collapsed"/>
+                    <TextBlock x:Name="UnknownErrorText" Text="{Binding Path=AppResources.UnknownError, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="30" TextWrapping="Wrap" Visibility="Visible" />
+                    <TextBlock x:Name="IncorrectText" Text="{Binding Path=AppResources.IncorrectLogin, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35" TextWrapping="Wrap" Visibility="Collapsed"/>
+                </StackPanel>
             </Border>
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="Auto">
-                <TextBlock x:Name="AccountCretedText" Text="{Binding Path=AppResources.AccountCreated, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Margin="0" Visibility="Collapsed"/>
-                <TextBlock x:Name="ConfirmationText" Text="{Binding Path=AppResources.ConfirmationEmail, Source={StaticResource LocalizedStrings}}" Style="{StaticResource UserPoints}" Margin="0,10,0,0" Visibility="Collapsed"/>
-                <TextBlock x:Name="LoggedInText" Text="{Binding Path=AppResources.LoggedIn, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="30" TextWrapping="Wrap" Visibility="Collapsed"/>
-                <TextBlock x:Name="LoginUnavailableText" Text="{Binding Path=AppResources.LoginUnavailable, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="30" TextWrapping="Wrap" Visibility="Collapsed"/>
-                <TextBlock x:Name="TimeoutText" Text="{Binding Path=AppResources.ServiceTimeout, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="30" TextWrapping="Wrap" Visibility="Collapsed"/>
-                <TextBlock x:Name="UnknownErrorText" Text="{Binding Path=AppResources.UnknownError, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="30" TextWrapping="Wrap" Visibility="Visible" />
-                <TextBlock x:Name="IncorrectText" Text="{Binding Path=AppResources.IncorrectLogin, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35" TextWrapping="Wrap" Visibility="Collapsed"/>
-            </StackPanel>
         </Grid>
         <Grid x:Name="LoggingAndRegistringState" Visibility="Collapsed">
             <Rectangle Width="480" Height="740" Opacity="0.5">
