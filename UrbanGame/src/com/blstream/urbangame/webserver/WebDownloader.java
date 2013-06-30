@@ -154,9 +154,8 @@ class WebDownloaderWithAuthorization extends WebDownloader {
 	
 	private String userNameAndPasswordInBase64() {
 		Base64 coder = new Base64();
-		String encodedUserName = new String(coder.encode(userName.getBytes()));
-		String encodedPassword = new String(coder.encode(password.getBytes()));
+		String toEncode = userName + ":" + password;
 		
-		return encodedUserName + ":" + encodedPassword;
+		return new String(coder.encode(toEncode.getBytes()));
 	}
 }
