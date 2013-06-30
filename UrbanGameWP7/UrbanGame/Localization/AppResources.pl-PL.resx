@@ -400,5 +400,6 @@
     <value>Niepoprawnie</value>
   </data>
   <data name="IncorrectLogin" xml:space="preserve">
-    <value>Podany login lub hasło są nieprawidłowe</value>
-  </data></root>
+    <value>Nieprawidzłowe hasło lub email</value>
+  </data>
+</root>

@@ -144,25 +144,7 @@ namespace WebService
         #region Authorize
         public AuthorizeState Authorize(string username, string password)
         {
-            IsAuthorized = true;
             return AuthorizeState.Success;
-        }
-        #endregion
-
-        #region IsAuthorized
-
-        private bool _isAuthorized;
-
-        public bool IsAuthorized
-        {
-            get
-            {
-                return _isAuthorized;
-            }
-            set
-            {
-                _isAuthorized = value;
-            }
         }
         #endregion
 

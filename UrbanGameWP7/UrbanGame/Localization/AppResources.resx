@@ -416,5 +416,6 @@
     <value>Incorrect</value>
   </data>
   <data name="IncorrectLogin" xml:space="preserve">
-    <value>Provided login or password are incorrect</value>
-  </data></root>
+    <value>Incorrect password or email</value>
+  </data>
+</root>

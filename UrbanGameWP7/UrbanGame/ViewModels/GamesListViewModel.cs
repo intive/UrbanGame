@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using System.Threading.Tasks;
 using System.Windows;
-using UrbanGame.Authorization;
 using UrbanGame.Models;
 
 namespace UrbanGame.ViewModels
@@ -21,8 +20,8 @@ namespace UrbanGame.ViewModels
         private string _activeSection;
 
         public GamesListViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                  IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
-            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
+                                  IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager, IGameAuthorizationService authorizationService)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator, authorizationService)
         {
             UserActiveGames = new BindableCollection<IGame>();
             UserInactiveGames = new BindableCollection<IGame>();
@@ -89,7 +88,7 @@ namespace UrbanGame.ViewModels
         {
             get
             {
-                return _gameWebService.IsAuthorized;
+                return _authorizationService.IsUserAuthenticated();
             }
 
         }
@@ -188,15 +187,7 @@ namespace UrbanGame.ViewModels
         {
             get
             {
-                return _user;
-            }
-            set
-            {
-                if (_user != value)
-                {
-                    _user = value;
-                    NotifyOfPropertyChange(() => User);
-                }
+                return _authorizationService.AuthenticatedUser;
             }
         }
         #endregion
@@ -323,9 +314,7 @@ namespace UrbanGame.ViewModels
         {
             if (IsAuthorized)
             {
-                _gameWebService.IsAuthorized = false;
-                GameAuthorizationService authorization = new GameAuthorizationService();
-                authorization.ClearIsolatedStorage();
+                _authorizationService.Logout();
             }
             else
             {
@@ -337,14 +326,7 @@ namespace UrbanGame.ViewModels
 
         public void LoadUserData()
         {
-            GameAuthorizationService gameService = new GameAuthorizationService();
-            string userData = gameService.LoadDataFromIsolatedStorage();
-            if (!string.IsNullOrEmpty(userData))
-            {
-                string[] userData2 = userData.Split(' ');
-                _gameWebService.IsAuthorized = true;
-                User = new User() { Login = userData2[0], Email = userData2[1] };
-            }
+            _authorizationService.PersistCredentials();
         }
 
         #endregion

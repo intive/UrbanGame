@@ -79,10 +79,6 @@ namespace Common
         /// <returns>a bool</returns>
         AuthorizeState Authorize(string username, string password);
 
-        /// <summary>
-        /// Shows that user is authorize
-        /// </summary>
-        bool IsAuthorized { get; set; }
 
         /// <summary>
         /// Method returns array of games in which user plays(only needed fields filled in)

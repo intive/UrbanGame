@@ -19,8 +19,8 @@ namespace UrbanGame.ViewModels
         IAppbarManager _appbarManager;
 
         public TaskViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
-            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
+                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager, IGameAuthorizationService authorizationService)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator, authorizationService)
         {
             _appbarManager = appbarManager;
         }
@@ -259,6 +259,12 @@ namespace UrbanGame.ViewModels
             });
         }
 
+        public void Retry()
+        {
+            VisualStateName = "Sending";
+            SubmitSolution(Solution);
+        }
+
         private void SubmitSolution(IBaseSolution solution)
         {
             //saving solution in database
@@ -275,17 +281,24 @@ namespace UrbanGame.ViewModels
             //sending solution
             var result = _gameWebService.SubmitTaskSolution(Game.Id, CurrentTask.Id, Solution);
 
-            if (result == SubmitResult.AnswerCorrect)
+            using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
             {
-                VisualStateName = "Correct";
-            }
-            else if (result == SubmitResult.AnswerIncorrect)
-            {
-                VisualStateName = "Wrong";
-            }
-            else if (result == SubmitResult.Timeout)
-            {
+                GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
+                
+                task.UserPoints = 20;
+                solution.Task = task;
 
+                unitOfWork.Commit();
+            }
+
+            RefreshTask();
+
+            switch(result)
+            {
+                case SubmitResult.AnswerCorrect: VisualStateName = "Correct"; break;
+                case SubmitResult.AnswerIncorrect: VisualStateName = "Wrong"; break;
+                case SubmitResult.Timeout: VisualStateName = "Timeout"; break;
+                default: break;
             }
         }
 

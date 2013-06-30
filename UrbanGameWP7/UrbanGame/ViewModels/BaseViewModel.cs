@@ -16,10 +16,12 @@ namespace UrbanGame.ViewModels
         protected Func<IUnitOfWork> _unitOfWorkLocator;
         protected IGameWebService _gameWebService;
         protected IEventAggregator _eventAggregator;
+        protected IGameAuthorizationService _authorizationService;
         bool _creating = true;
 
         public BaseViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                             IGameWebService gameWebService, IEventAggregator eventAggregator)
+                             IGameWebService gameWebService, IEventAggregator eventAggregator,
+                             IGameAuthorizationService authorizationService)
         {
             eventAggregator.Subscribe(this);
 
@@ -27,8 +29,7 @@ namespace UrbanGame.ViewModels
             _unitOfWorkLocator = unitOfWorkLocator;
             _gameWebService = gameWebService;
             _eventAggregator = eventAggregator;
-            
-
+            _authorizationService = authorizationService;
         }
 
         protected override void OnActivate()

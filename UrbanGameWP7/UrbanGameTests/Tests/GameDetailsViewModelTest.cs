@@ -10,6 +10,7 @@ using UrbanGame.Storage;
 using WebService;
 using Caliburn.Micro;
 using UrbanGame.ViewModels;
+using UrbanGame.Utilities;
 
 namespace UrbanGameTests.Tests
 {
@@ -96,6 +97,7 @@ namespace UrbanGameTests.Tests
             IUnitOfWork unitOfWork = new UnitOfWorkMock(database);
             IGameWebService webService = new GameWebServiceMock();
             IEventAggregator eventAgg = new EventAggregator();
+            IGameAuthorizationService authorizationService = new GameAuthorizationService(unitOfWork, webService);
 
             //removing current records
             foreach (ITask g in unitOfWork.GetRepository<ITask>().All().ToList())
@@ -122,7 +124,7 @@ namespace UrbanGameTests.Tests
 
             unitOfWork.Commit();
             GameDetailsViewModel vm = new GameDetailsViewModel(null, () => unitOfWork,
-                                                           webService, eventAgg, new AppbarManagerMock());
+                                                           webService, eventAgg, new AppbarManagerMock(), authorizationService);
             #endregion
 
             vm.GameId = game.Id;

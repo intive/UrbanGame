@@ -17,8 +17,8 @@ namespace UrbanGame.ViewModels
         private string _activeSection;
 
         public GameDetailsViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
-            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
+                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager, IGameAuthorizationService authorizationService)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator, authorizationService)
         {
             _appbarManager = appbarManager;
         }

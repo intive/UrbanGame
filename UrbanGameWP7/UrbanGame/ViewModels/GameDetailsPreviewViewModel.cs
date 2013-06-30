@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using UrbanGame.Storage;
 using System.Threading.Tasks;
-using UrbanGame.Authorization;
+using UrbanGame.Utilities;
 
 namespace UrbanGame.ViewModels
 {
@@ -17,8 +17,8 @@ namespace UrbanGame.ViewModels
 
         IAppbarManager _appbarManager;
         public GameDetailsPreviewViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
-            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
+                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager, IGameAuthorizationService authorizationService)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator, authorizationService)
         {
             _appbarManager = appbarManager;
         }
@@ -47,7 +47,7 @@ namespace UrbanGame.ViewModels
 
         public void RefreshMenuItemText()
         {
-            if (_gameWebService.IsAuthorized)
+            if (_authorizationService.IsUserAuthenticated())
             {
                 _appbarManager.ChangeItemText("LogoutOrLogin", Localization.AppResources.Logout);
             }
@@ -61,7 +61,7 @@ namespace UrbanGame.ViewModels
         {
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {                
-                if (_gameWebService.IsAuthorized)
+                if (_authorizationService.IsUserAuthenticated())
                 {
                     _appbarManager.ShowAppbar();
                     _appbarManager.ConfigureAppbar(AuthorizedAppbar);
@@ -146,18 +146,14 @@ namespace UrbanGame.ViewModels
         public async void LogoutOrLogin()
         {
 
-            if (!_gameWebService.IsAuthorized)
+            if (!_authorizationService.IsUserAuthenticated())
             {
-
                 _navigationService.UriFor<LoginAndRegistrerViewModel>().Navigate();
             }
             else
             {
+                _authorizationService.Logout();
 
-                GameAuthorizationService authorizationService = new GameAuthorizationService();
-                authorizationService.ClearIsolatedStorage();
-
-                _gameWebService.IsAuthorized = false;
                 SetAppBarContent();
             }
         }
@@ -166,7 +162,7 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(async () =>
             {
-                if (_gameWebService.IsAuthorized)
+                if (_authorizationService.IsUserAuthenticated())
                 {
                     IQueryable<IGame> games = _unitOfWorkLocator().GetRepository<IGame>().All();
                     Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);

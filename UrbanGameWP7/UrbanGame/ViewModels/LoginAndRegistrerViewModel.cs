@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Common;
-using UrbanGame.Authorization;
 using UrbanGame.Utilities;
 using System.Text;
 using Caliburn.Micro;
@@ -16,10 +15,11 @@ namespace UrbanGame.ViewModels
     public class LoginAndRegistrerViewModel :BaseViewModel
     {
         IAppbarManager _appbarManager;
+        private string _previousState;
 
         public LoginAndRegistrerViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
-            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
+                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager, IGameAuthorizationService authorizationService)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator, authorizationService)
         {
             _appbarManager = appbarManager;
         }
@@ -145,12 +145,33 @@ namespace UrbanGame.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(Email) && IsValidEmail(Email) && !string.IsNullOrWhiteSpace(Password) && _gameWebService.Authorize(Login, Password) == AuthorizeState.Success)
             {
-                GameAuthorizationService authorization = new GameAuthorizationService();
-                authorization.ClearIsolatedStorage();
+                VisualStateName = "LoggingIn";
 
-                authorization.SaveToIsolatedStorage("Username" + " " + Password + " " + Email);
+                var result = _authorizationService.LogIn(Email, Password);
 
-                _navigationService.GoBack();
+                switch (result)
+                {
+                    case LoginResult.Success: VisualStateName = "LoggedIn"; _previousState = "LoggedIn"; break;
+                    case LoginResult.Failure: VisualStateName = "Incorrect"; break;
+                    case LoginResult.Timeout: VisualStateName = "Timeout"; break;
+                }
+
+                /*if (result == LoginResult.Success)
+                {
+                    VisualStateName = "LoggedIn";
+
+                    //get all user data
+
+                    _navigationService.GoBack();
+                }
+                else if (result == LoginResult.Failure)
+                {
+                    VisualStateName = "Incorrect";
+                }
+                else if (result == LoginResult.Timeout)
+                {
+                    VisualStateName = "Timeout";
+                }*/
             }
             else
             {
@@ -164,7 +185,11 @@ namespace UrbanGame.ViewModels
             {
                 MessageBox.Show(Localization.AppResources.EmptyLogin);
             }
-            else if (!IsValidEmail(Email) || string.IsNullOrWhiteSpace(Email))
+            else if (string.IsNullOrWhiteSpace(Email))
+            {
+                MessageBox.Show(Localization.AppResources.IncorrectEmail);
+            }
+            else if (!IsValidEmail(Email))
             {
                 MessageBox.Show(Localization.AppResources.IncorrectEmail);
             }
@@ -179,20 +204,62 @@ namespace UrbanGame.ViewModels
             else
             {
                 VisualStateName = "CreatingAccount";
-                DispatcherTimer timer = new DispatcherTimer();
-                timer.Tick +=
-                delegate(object s, EventArgs args)
+                var result = _authorizationService.Register(new User { Login = Login, Password = Password, Email = Email });
+
+
+                switch (result)
+                {
+                    case RegisterResult.Success: VisualStateName = "AccountCreated"; break;
+                    case RegisterResult.Failure: MessageBox.Show("Account already Existing", "Something went wrong", MessageBoxButton.OK); break;
+                    case RegisterResult.Timeout: _previousState = "CreatingAccount";
+                        MessageBox.Show("Something went wrong, try again later", "Something went wrong", MessageBoxButton.OK); break;
+                }
+
+
+                /*if (result == RegisterResult.Success)
                 {
                     VisualStateName = "AccountCreated";
-                };
+                }
+                else if (result == RegisterResult.Failure)
+                {
+                    MessageBox.Show("Account already Existing", "Something went wrong", MessageBoxButton.OK);
+                }
+                else if (result == RegisterResult.Timeout)
+                {
+                    _previousState = "CreatingAccount";
+                    MessageBox.Show("Something went wrong, try again later", "Something went wrong", MessageBoxButton.OK);
+                }*/
+            }
+        }
 
-                timer.Interval = new TimeSpan(0, 0, 3);
-                timer.Start();
+        public void Retry()
+        {
+            switch (_previousState)
+            {
+                case "CreatingAccount": CreateAccount(_authorizationService.AuthenticatedUser.Password, _authorizationService.AuthenticatedUser.Password); break;
+                case "LoggingIn": LogIn(_authorizationService.AuthenticatedUser.Password); break;
+            }
+            /*if (_previousState == "CreatingAccount")
+            {
+                CreateAccount(_authorizationService.AuthenticatedUser.Password, _authorizationService.AuthenticatedUser.Password);
+            }
+            else if (_previousState == "LoggingIn")
+            {
+                LogIn(_authorizationService.AuthenticatedUser.Password);
+            }*/
+        }
 
+        public void ChangeToNormal()
+        {
+            VisualStateName = "Normal";
 
-                //create account
-
-                
+            if (_previousState == "LoggedIn")
+            {
+                _navigationService.GoBack();
+            }
+            else
+            {
+                _authorizationService.AuthenticatedUser = null;
             }
         }
 

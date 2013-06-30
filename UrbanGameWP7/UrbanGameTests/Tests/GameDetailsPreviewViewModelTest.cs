@@ -10,6 +10,7 @@ using WebService;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UrbanGameTests.Mocks;
+using UrbanGame.Utilities;
 
 namespace UrbanGameTests.Tests
 {
@@ -26,6 +27,7 @@ namespace UrbanGameTests.Tests
             IUnitOfWork unitOfWork = new UnitOfWorkMock(database);
             IGameWebService webService = new GameWebServiceMock();
             IEventAggregator eventAgg = new EventAggregator();
+            IGameAuthorizationService authorizationService = new GameAuthorizationService(unitOfWork, webService);
 
             //removing current records
             foreach (IGame g in unitOfWork.GetRepository<IGame>().All())
@@ -53,17 +55,17 @@ namespace UrbanGameTests.Tests
 
             GameDetailsPreviewViewModel vm = 
                 new GameDetailsPreviewViewModel(null, () => new UnitOfWorkMock(database), 
-                                         webService, eventAgg, new AppbarManagerMock()) { GameId = 1 };
+                                         webService, eventAgg, new AppbarManagerMock(), authorizationService) { GameId = 1 };
             #endregion
             
             //if user is unauthorized, then game should be downloaded from WebService
-            webService.IsAuthorized = false;
+            authorizationService.AuthenticatedUser = null;
             await vm.RefreshGame();
             Assert.IsNotNull(vm.Game);
             Assert.AreNotEqual(vm.Game.Name, "FromDatabase");
             
             //if user is authorized, then game should be downloaded from database
-            webService.IsAuthorized = true;
+            authorizationService.AuthenticatedUser = new User { Login = "Login", Password = "Admin", Email = "Login@gmail.com" };
             await vm.RefreshGame();
             Assert.IsNotNull(vm.Game);
             Assert.AreEqual(vm.Game.Name, "FromDatabase");
