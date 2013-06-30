@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -34,6 +35,8 @@ import com.blstream.urbangame.dialogs.AnswerDialog;
 import com.blstream.urbangame.dialogs.AnswerDialog.DialogType;
 import com.blstream.urbangame.web.WebHighLevel;
 import com.blstream.urbangame.web.WebHighLevelInterface;
+import com.blstream.urbangame.webserver.ServerResponseHandler;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -49,8 +52,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickListener, ConnectionCallbacks,
-	OnConnectionFailedListener, LocationListener, android.location.GpsStatus.Listener {
-	
+	OnConnectionFailedListener, LocationListener, android.location.GpsStatus.Listener, WebServerNotificationListener {
+	private ServerResponseHandler handler;
 	private Task task;
 	private PlayerTaskSpecific playerTaskSpecific;
 	private Activity context;
@@ -61,6 +64,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	private LocationClient mLocationClient;
 	private LocationRequest mLocationRequest;
 	private Location mLastLocation;
+	private Location correctLocation;
 	private long mLastLocationMillis; //last location time
 	private LocationManager mLocationManager;
 	private boolean isGPSFix;
@@ -76,6 +80,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		super.onAttach(activity);
 		
 		context = activity;
+		handler = new ServerResponseHandler(this);
 		
 		task = getArguments().getParcelable(Task.TASK_KEY);
 		
@@ -111,7 +116,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		if (hasGoogleServices) {
 			mLocationClient = new LocationClient(context, this, this);
 			//I failed to find how to check if gps is off using LocationClient, please tell me if you know how to do it
-			mLocationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+			mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 			mLocationManager.addGpsStatusListener(this);
 		}
 		
@@ -168,8 +173,7 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	public void onClick(View v) {
 		if (hasGoogleServices) {
 			AnswerDialog dialog = new AnswerDialog(context);
-			
-			mLocationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+			mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 			
 			//gps is off
 			if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -179,54 +183,9 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 			else if (!isGPSFix) {
 				dialog.showDialog(DialogType.NO_GPS_SIGNAL);
 			}
-			//no network connection
-			else if (!isOnline()) {
-				dialog.showDialog(DialogType.NO_INTERNET_CONNECTION);
-			}
 			//everything went ok, we are sending data to server
 			else {
-				int result = sendLocationForVerification(mLastLocation);
-				
-				int maxPoints = task.getMaxPoints();
-				
-				if (result == maxPoints) {
-					dialog.showDialog(DialogType.RIGHT_ANSWER, result, maxPoints);
-				}
-				else if (result == 0) {
-					dialog.showDialog(DialogType.WRONG_ANSWER, result, maxPoints);
-				}
-				else {
-					dialog.showDialog(DialogType.PARTIALLY_RIGHT_ANSWER, result, maxPoints);
-				}
-				
-				//this shouldn't happen in future, this if is to test it before we have playerTaskSpecyfic in db
-				if (playerTaskSpecific == null) {
-					playerTaskSpecific = new PlayerTaskSpecific();
-					playerTaskSpecific.setTaskID(task.getId());
-				}
-				
-				playerTaskSpecific.setPoints(result);
-				playerTaskSpecific.setIsFinishedByUser(true);
-				
-				DatabaseInterface database = new Database(context);
-				database.updatePlayerTaskSpecific(playerTaskSpecific);
-				database.insertLocationTaskAnswerForTask(task.getId(), new LocationTaskAnswer(mLastLocation,
-					new Date(), database.getLoggedPlayerID()));
-				database.closeDatabase();
-				if (mMap != null) {
-					mMap.addMarker(new MarkerOptions().position(
-						new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())).icon(
-						BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-				}
-				mapFragment.getView().setVisibility(View.VISIBLE);
-				textViewYourAnswer.setVisibility(View.VISIBLE);
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-					new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 14f));
-				if (!task.isRepetable()) {
-					submitButton.setVisibility(View.GONE);
-					addCorrectAnswerMarker(getCorrectLocationFromServer());
-				}
-				
+				sendLocationForVerification(mLastLocation);
 			}
 		}
 	}
@@ -315,12 +274,9 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 		super.onDestroyView();
 	}
 	
-	private int sendLocationForVerification(Location location) {
-		
-		WebHighLevelInterface web = new WebHighLevel(getActivity());
-		int result = web.sendAnswerForLocationTask(task, location);
-		
-		return result;
+	private void sendLocationForVerification(Location location) {
+		WebHighLevelInterface web = new WebHighLevel(handler, getActivity());
+		web.sendAnswerForLocationTask(task, location);
 	}
 	
 	//check internet connection
@@ -387,8 +343,69 @@ public class GpsTaskAnswerFragment extends SherlockFragment implements OnClickLi
 	}
 	
 	private Location getCorrectLocationFromServer() {
+		WebHighLevelInterface web = new WebHighLevel(handler, getActivity());
+		web.getCorrectAnswerForGpsTask(task);
+		waitForServerResponse();
+		return correctLocation;
+	}
+	
+	protected void waitForServerResponse() {
+		try {
+			wait();
+		}
+		catch (InterruptedException e) {
+			Log.e(TAG, e.getMessage());
+		}
+	}
+	
+	@Override
+	public void onWebServerResponse(Message message) {
+		// TODO implement on response behavior
+		// FIXME set correctLocation
+		correctLocation = new Location(LocationManager.GPS_PROVIDER);
 		
-		WebHighLevelInterface web = new WebHighLevel(getActivity());
-		return web.getCorrectAnswerForGpsTask(task);
+		AnswerDialog dialog = new AnswerDialog(context);
+		int result = 0;
+		
+		int maxPoints = task.getMaxPoints();
+		
+		if (result == maxPoints) {
+			dialog.showDialog(DialogType.RIGHT_ANSWER, result, maxPoints);
+		}
+		else if (result == 0) {
+			dialog.showDialog(DialogType.WRONG_ANSWER, result, maxPoints);
+		}
+		else {
+			dialog.showDialog(DialogType.PARTIALLY_RIGHT_ANSWER, result, maxPoints);
+		}
+		
+		//this shouldn't happen in future, this if is to test it before we have playerTaskSpecyfic in db
+		if (playerTaskSpecific == null) {
+			playerTaskSpecific = new PlayerTaskSpecific();
+			playerTaskSpecific.setTaskID(task.getId());
+		}
+		
+		playerTaskSpecific.setPoints(result);
+		playerTaskSpecific.setIsFinishedByUser(true);
+		
+		DatabaseInterface database = new Database(context);
+		database.updatePlayerTaskSpecific(playerTaskSpecific);
+		database.insertLocationTaskAnswerForTask(task.getId(), new LocationTaskAnswer(mLastLocation, new Date(),
+			database.getLoggedPlayerID()));
+		database.closeDatabase();
+		if (mMap != null) {
+			mMap.addMarker(new MarkerOptions().position(
+				new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude())).icon(
+				BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+		}
+		mapFragment.getView().setVisibility(View.VISIBLE);
+		textViewYourAnswer.setVisibility(View.VISIBLE);
+		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+			new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 14f));
+		if (!task.isRepetable()) {
+			submitButton.setVisibility(View.GONE);
+			addCorrectAnswerMarker(correctLocation);
+		}
+		notify();
 	}
 }

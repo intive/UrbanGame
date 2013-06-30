@@ -109,9 +109,8 @@ public class NotificationPopupWindow implements UrbanGameDialogOnClickListener {
 			case DialogInterface.BUTTON_POSITIVE:
 				finishAndOpenGameDetailsActivity();
 				break;
-			case DialogInterface.BUTTON_NEGATIVE:
-				break;
 		}
+		dialog.dismiss();
 	}
 	
 	private void finishAndOpenGameDetailsActivity() {

@@ -6,47 +6,60 @@ import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
+import com.blstream.urbangame.UrbanGameApplication;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.ABCDTask;
-import com.blstream.urbangame.database.entity.Player;
 import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 import com.blstream.urbangame.database.entity.Task;
+import com.blstream.urbangame.dialogs.InternetAlertDialog;
 import com.blstream.urbangame.example.DemoData;
-import com.blstream.urbangame.fragments.ABCDTaskAnswerFragment.ServerResponseToSendedAnswers;
-import com.blstream.urbangame.webserver.mock.MockWebServer;
+import com.blstream.urbangame.webserver.ServerResponseHandler;
+import com.blstream.urbangame.webserver.WebServer;
 
 /**
  * For now it's mock-y but as time will go by, every method will be implemented
  * as it should work in real conditions.
  */
 public class WebHighLevel implements WebHighLevelInterface {
+	private final static String TAG = WebHighLevel.class.getSimpleName();
+	private WebServer webServer;
+	private Context context;
+	private InternetAlertDialog internetAlertDialog;
 	
-	Context context;
-	String TAG = WebHighLevel.class.getSimpleName();
-	
-	public WebHighLevel(Context context) {
+	public WebHighLevel(ServerResponseHandler handler, Context context) {
+		this.webServer = new WebServer(handler);
 		this.context = context;
+		this.internetAlertDialog = new InternetAlertDialog(context);
 	}
 	
 	@Override
-	public void downloadGameList() {
+	public void downloadGamesList() {
+		if (isOnline()) {
+			webServer.downloadGamesList();
+		}
 		new DemoData(context).insertDataIntoDatabase();
 	}
 	
 	@Override
 	public void downloadUsersGames() {
-		// TODO Auto-generated method stub
+		if (isOnline()) {
+			webServer.downloadUsersGames();
+		}
 	}
 	
 	@Override
 	public void downloadGameDetails(Long selectedGameID) {
-		// TODO Auto-generated method stub
+		if (isOnline()) {
+			webServer.downloadGameDetails(selectedGameID);
+		}
 	}
 	
 	@Override
 	public void joinCurrentPlayerToTheGame(Long selectedGameID) {
-		// FIXME invocation to server should occur here
+		if (isOnline()) {
+			webServer.joinCurrentPlayerToTheGame(selectedGameID);
+		}
 		//******************//
 		//					//
 		//	   M O C K		//
@@ -78,7 +91,9 @@ public class WebHighLevel implements WebHighLevelInterface {
 	
 	@Override
 	public void leaveCurrentPlayerFromTheGame(Long selectedGameID) {
-		// FIXME invocation to server should occur here
+		if (isOnline()) {
+			webServer.leaveCurrentPlayerFromTheGame(selectedGameID);
+		}
 		//******************//
 		//					//
 		//	   M O C K		//
@@ -100,65 +115,53 @@ public class WebHighLevel implements WebHighLevelInterface {
 	}
 	
 	@Override
-	public Player loginUser(String email, String password) {
-		// TODO Auto-generated method stub
-		return new Player(email, password, null, (String) null);
+	public void loginUser(String email, String password) {
+		if (isOnline()) {
+			webServer.loginUser(email, password);
+		}
 	}
 	
 	@Override
-	public Player registerPlayer(String email, String displayName, String password) {
-		// TODO Auto-generated method stub
-		return new Player(email, password, displayName, (String) null);
+	public void registerPlayer(String email, String displayName, String password) {
+		if (isOnline()) {
+			webServer.registerPlayer(email, displayName, password);
+		}
 	}
 	
 	@Override
 	public void downloadTasksForGame(long gameID) {
-		// TODO Auto-generated method stub
-	}
-	
-	@Override
-	public ServerResponseToSendedAnswers sendAnswersForABCDTask(ABCDTask task, ArrayList<String> answers) {
-		
-		ServerResponseToSendedAnswers serverResponse = new ServerResponseToSendedAnswers();
-		
-		ArrayList<String> correctAnswers = null;
-		
-		correctAnswers = DemoData.getCorrectAnswers();
-		
-		if (correctAnswers != null) {
-			
-			int maxPoints = task.getMaxPoints();
-			int points = 0;
-			int numberOfCorrectAnswers = 0;
-			
-			for (String element : correctAnswers) {
-				if (answers.contains(element)) {
-					numberOfCorrectAnswers++;
-				}
-			}
-			
-			if (numberOfCorrectAnswers == correctAnswers.size()) {
-				points = maxPoints;
-			}
-			else {
-				points = maxPoints / correctAnswers.size() * numberOfCorrectAnswers;
-			}
-			
-			serverResponse.correctAnswers = correctAnswers;
-			serverResponse.points = points;
+		if (isOnline()) {
+			webServer.downloadTasksForGame(gameID);
 		}
-		
-		return serverResponse;
 	}
 	
 	@Override
-	public int sendAnswerForLocationTask(Task task, Location location) {
-		MockWebServer mockWebServer = new MockWebServer();
-		return mockWebServer.sendGPSLocation(context, task, location);
+	public void sendAnswersForABCDTask(ABCDTask task, ArrayList<String> answers) {
+		if (isOnline()) {
+			webServer.sendAnswersForABCDTask(task, answers);
+		}
 	}
 	
 	@Override
-	public Location getCorrectAnswerForGpsTask(Task task) {
-		return new MockWebServer().getCorrectGpsLocation(task);
+	public void sendAnswerForLocationTask(Task task, Location location) {
+		if (isOnline()) {
+			webServer.sendAnswerForLocationTask(task, location);
+		}
+	}
+	
+	@Override
+	public void getCorrectAnswerForGpsTask(Task task) {
+		if (isOnline()) {
+			webServer.getCorrectAnswerForGpsTask(task);
+		}
+	}
+	
+	public boolean isOnline() {
+		UrbanGameApplication uga = (UrbanGameApplication) context.getApplicationContext();
+		if (uga.isConnectedToInternet()) return true;
+		else {
+			internetAlertDialog.showDialog();
+			return false;
+		}
 	}
 }

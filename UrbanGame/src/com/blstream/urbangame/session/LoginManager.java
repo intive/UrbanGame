@@ -1,11 +1,13 @@
 package com.blstream.urbangame.session;
 
 import android.content.Context;
+import android.os.Message;
 import android.util.Log;
 
 import com.blstream.urbangame.database.entity.Player;
 import com.blstream.urbangame.web.WebHighLevel;
-import com.blstream.urbangame.web.WebHighLevelInterface;
+import com.blstream.urbangame.webserver.ServerResponseHandler;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
 // formatter:off
 /**
@@ -20,12 +22,16 @@ import com.blstream.urbangame.web.WebHighLevelInterface;
  * data from DB, and connect with server to update information about session.
  */
 //formatter:on
-public class LoginManager extends SessionManager {
+public class LoginManager extends SessionManager implements WebServerNotificationListener {
 	private final static String TAG = "LoginManager";
 	private static LoginManager instance;
+	private boolean loginResult;
+	private String email;
 	
 	private LoginManager(Context context) {
 		super(context);
+		this.handler = new ServerResponseHandler(this);
+		this.web = new WebHighLevel(handler, context);
 	}
 	
 	public static LoginManager getInstance(Context context) {
@@ -48,27 +54,26 @@ public class LoginManager extends SessionManager {
 	}
 	
 	public boolean loginUser(String email) {
+		this.email = email;
 		Log.i(TAG, email + " logging in");
 		
 		return database.setLoggedPlayer(email);
 	}
 	
 	public boolean isLoginDataValid(String email, String password) {
+		web.loginUser(email, password);
+		waitForServerResponse();
 		
-		WebHighLevelInterface web = new WebHighLevel(super.context);
-		Player fromWeb = web.loginUser(email, password);
-		boolean isOK = fromWeb != null;
-		
-		if (isOK) {
-			if (!doesPlayerExist(email)) {
-				addUserToDB(fromWeb);
-			}
-			else {
-				updatePlayerInDB(fromWeb);
-			}
+		return loginResult;
+	}
+	
+	protected void waitForServerResponse() {
+		try {
+			wait();
 		}
-		
-		return isOK;
+		catch (InterruptedException e) {
+			Log.e(TAG, e.getMessage());
+		}
 	}
 	
 	public void logoutUser() {
@@ -77,5 +82,23 @@ public class LoginManager extends SessionManager {
 		if (database.setNoOneLogged()) {
 			startMainActivity();
 		}
+	}
+	
+	@Override
+	public synchronized void onWebServerResponse(Message message) {
+		// TODO obtain player from server response
+		Player fromWeb = null;
+		
+		loginResult = fromWeb != null;
+		
+		if (loginResult) {
+			if (!doesPlayerExist(email)) {
+				addUserToDB(fromWeb);
+			}
+			else {
+				updatePlayerInDB(fromWeb);
+			}
+		}
+		notify();
 	}
 }

@@ -2,11 +2,11 @@ package com.blstream.urbangame.dialogs;
 
 import java.io.Serializable;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -16,10 +16,11 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.blstream.urbangame.R;
 
-public class UrbanGameDialog extends DialogFragment {
+public class UrbanGameDialog extends SherlockDialogFragment {
 	
 	public static final int POSITIVE_BUTTON = DialogInterface.BUTTON_POSITIVE;
 	public static final int NEGATIVE_BUTTON = DialogInterface.BUTTON_NEGATIVE;
@@ -47,6 +48,14 @@ public class UrbanGameDialog extends DialogFragment {
 	private static final String IS_NEGATIVE_ENABLED_KEY = "is_negative_enabled";
 	private static final String IS_CANCELABLE = "is_cancelable";
 	
+	private Activity activity;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.activity = activity;
+	}
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		
@@ -64,13 +73,13 @@ public class UrbanGameDialog extends DialogFragment {
 		Button negative = null;
 		
 		if (isPositiveEnabled && isNegativeEnabled) {
-			v = View.inflate(getActivity(), R.layout.dialog_two_buttons, null);
+			v = activity.getLayoutInflater().inflate(R.layout.dialog_two_buttons, null);
 			
 			positive = (Button) v.findViewById(R.id.buttonDialogPositive);
 			negative = (Button) v.findViewById(R.id.buttonDialogNegative);
 		}
 		else {
-			v = View.inflate(getActivity(), R.layout.dialog_one_button, null);
+			v = activity.getLayoutInflater().inflate(R.layout.dialog_one_button, null);
 			
 			if (isPositiveEnabled) {
 				positive = (Button) v.findViewById(R.id.buttonDialogPositive);
@@ -128,6 +137,7 @@ public class UrbanGameDialog extends DialogFragment {
 		public final String TAG = DialogBuilder.class.getSimpleName();
 		
 		private final SherlockFragmentActivity context;
+		private final FragmentManager manager;
 		private String title;
 		private String message;
 		
@@ -143,6 +153,7 @@ public class UrbanGameDialog extends DialogFragment {
 		
 		public DialogBuilder(Context context) {
 			this.context = (SherlockFragmentActivity) context;
+			this.manager = this.context.getSupportFragmentManager();
 			isCancelable = true;
 		}
 		
@@ -198,14 +209,9 @@ public class UrbanGameDialog extends DialogFragment {
 		}
 		
 		public void show() {
-			FragmentManager manager = context.getSupportFragmentManager();
-			Fragment fragment = manager.findFragmentByTag(TAG);
-			if (fragment != null) {
-				manager.beginTransaction().remove(fragment).commit();
-				manager.executePendingTransactions();
-			}
+			hide();
+			
 			if ((isPositiveEnabled || isNegativeEnabled)) {
-				
 				Bundle arugments = new Bundle();
 				arugments.putString(TITLE_KEY, title);
 				arugments.putString(MESSAGE_KEY, message);
@@ -219,13 +225,20 @@ public class UrbanGameDialog extends DialogFragment {
 				
 				UrbanGameDialog dial = new UrbanGameDialog();
 				dial.setArguments(arugments);
-				
 				dial.show(manager, TAG);
 			}
 		}
 		
 		public DialogBuilder create() {
 			return this;
+		}
+		
+		public void hide() {
+			Fragment fragment = manager.findFragmentByTag(TAG);
+			if (fragment != null) {
+				manager.beginTransaction().remove(fragment).commit();
+				manager.executePendingTransactions();
+			}
 		}
 	}
 	
@@ -245,7 +258,6 @@ public class UrbanGameDialog extends DialogFragment {
 			if (dialogInterfaceListener != null) {
 				dialogInterfaceListener.onClick(getDialog(), which);
 			}
-			UrbanGameDialog.this.dismiss();
 		}
 	}
 	

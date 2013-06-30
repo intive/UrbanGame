@@ -92,6 +92,8 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 	}
 	
 	private final UrbanGameDialogOnClickListener registerSuccessfulListener = new UrbanGameDialogOnClickListener() {
+		private static final long serialVersionUID = 1L;
+		
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			activity.loginUser(email);

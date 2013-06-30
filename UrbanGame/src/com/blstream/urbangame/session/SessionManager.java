@@ -8,6 +8,8 @@ import com.blstream.urbangame.GamesListActivity;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.Player;
+import com.blstream.urbangame.web.WebHighLevelInterface;
+import com.blstream.urbangame.webserver.ServerResponseHandler;
 
 //formatter:off
 /**
@@ -23,6 +25,8 @@ import com.blstream.urbangame.database.entity.Player;
 public abstract class SessionManager {
 	protected DatabaseInterface database;
 	protected Context context;
+	protected ServerResponseHandler handler;
+	protected WebHighLevelInterface web;
 	
 	protected SessionManager(Context context) {
 		this.context = context;

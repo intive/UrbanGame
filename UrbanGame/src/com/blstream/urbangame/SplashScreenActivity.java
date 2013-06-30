@@ -5,21 +5,20 @@ import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.blstream.urbangame.session.LoginManager;
-import com.blstream.urbangame.web.WebHighLevel;
-import com.blstream.urbangame.web.WebHighLevelInterface;
 
 /**
  * SplashScreen for application, which is not kept in history stack.
  */
 public class SplashScreenActivity extends SherlockFragmentActivity {
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		WebHighLevelInterface web = new WebHighLevel(this);
-		web.downloadGameList();
-		
+		setContentView(R.layout.activity_splashscreen);
+	}
+	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
 		startGamesActivity();
 	}
 	
