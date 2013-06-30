@@ -200,7 +200,7 @@ namespace UrbanGame.ViewModels
             await _authorizationService.LoadUserData();
             await RefreshUserGames();
             RefreshNearestGames();
-
+            NotifyOfPropertyChange(() => User);
         }
 
         #endregion
@@ -322,11 +322,6 @@ namespace UrbanGame.ViewModels
             RefreshMenuItemText();
             await RefreshUserGames();
         }
-
-        /*public async Task LoadUserData()
-        {
-            await _authorizationService.LoadUserData();
-        }*/
 
         #endregion
     }

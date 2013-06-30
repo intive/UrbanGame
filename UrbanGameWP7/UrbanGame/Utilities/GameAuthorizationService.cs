@@ -46,27 +46,50 @@ namespace UrbanGame.Utilities
                             byte[] decrypted = ProtectedData.Unprotect(encrypted, null);
                             string[] data = Encoding.UTF8.GetString(decrypted, 0, decrypted.Length).Split(' ');
 
-                            AuthenticatedUser = new User { Login = data[0], Password = data[1], Email = data[2] };
+                            if (data.Length == 3)
+                            {
+                                AuthenticatedUser = new User { Login = data[0], Password = data[1], Email = data[2] };
+                            }
                         }
                     }
                 }
             });
         }
 
-        public LoginResult LogIn(string email, string password)
+        public LoginResult LogIn(string login, string password)
         {
-            AuthorizeState authState =  _gameWebService.Authorize(email, password).Result;
+            AuthorizeState authState = _gameWebService.Authorize(login, password).Result;
+
+            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (store.FileExists(fileName))
+                {
+                    using (var stream = new IsolatedStorageFileStream(fileName, FileMode.Open, store))
+                    {
+                        XDocument xmlFile = XDocument.Load(stream);
+                        XElement root = xmlFile.Root;
+                        byte[] encrypted = System.Convert.FromBase64String(root.Value);
+                        byte[] decrypted = ProtectedData.Unprotect(encrypted, null);
+                        string data = Encoding.UTF8.GetString(decrypted, 0, decrypted.Length);
+
+                        if (login != data)
+                        {
+                            _unitOfWorkLocator.DeleteDatabase();
+                            _unitOfWorkLocator.CreateDatabase();
+                        }
+                    }
+                }
+            }
 
             switch(authState)
             {
                 case AuthorizeState.Success:
-                    AuthenticatedUser = new User() { Login = "Login", Email = email, Password = password };
+                    AuthenticatedUser = new User() { Login = login, Email = "Email", Password = password };
 
-                    byte[] data = ProtectedData.Protect(Encoding.UTF8.GetBytes("login" + " " + password + " " + email), null);
+                    byte[] data = ProtectedData.Protect(Encoding.UTF8.GetBytes(login + " " + password + " " + "Email"), null);
                     string encrypted = System.Convert.ToBase64String(data, 0, data.Length);
                     XDocument xmlFile = new XDocument(new XElement("Root",encrypted));
             
-
                     using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
                     {
                         using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(fileName, FileMode.Create, FileAccess.Write, store))
@@ -91,11 +114,32 @@ namespace UrbanGame.Utilities
         public void Logout()
         {
             AuthenticatedUser = null;
-            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                if (isf.FileExists(fileName))
+                if (store.FileExists(fileName))
                 {
-                    isf.DeleteFile(fileName);
+                    string login;
+
+                    using (var stream = new IsolatedStorageFileStream(fileName, FileMode.Open, store))
+                    {
+                        XDocument xmlFile = XDocument.Load(stream);
+                        XElement root = xmlFile.Root;
+                        byte[] encrypted = System.Convert.FromBase64String(root.Value);
+                        byte[] decrypted = ProtectedData.Unprotect(encrypted, null);
+                        string[] data = Encoding.UTF8.GetString(decrypted, 0, decrypted.Length).Split(' ');
+                        login = data[0];
+                    }
+
+                    store.DeleteFile(fileName);
+
+                    byte[] encryptedData = ProtectedData.Protect(Encoding.UTF8.GetBytes(login), null);
+                    string converted = System.Convert.ToBase64String(encryptedData, 0, encryptedData.Length);
+                    XDocument newXmlFile = new XDocument(new XElement("Root", converted));
+
+                    using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(fileName, FileMode.Create, FileAccess.Write, store))
+                    {
+                        newXmlFile.Save(stream);
+                    }
                 }
             }
         }
@@ -131,14 +175,15 @@ namespace UrbanGame.Utilities
             switch (accuontResponse)
             {
                 case CreateAccountResponse.Success:
+                    _unitOfWorkLocator.DeleteDatabase();
+                    _unitOfWorkLocator.CreateDatabase();
                     return RegisterResult.Success;
                 case CreateAccountResponse.LoginUnavailable:
                     return RegisterResult.Failure;
                 case CreateAccountResponse.Timeout:
                     return RegisterResult.Timeout;
                 default:
-                    return RegisterResult.UnknownError;
-                    
+                    return RegisterResult.UnknownError;        
             }
         }
     }
