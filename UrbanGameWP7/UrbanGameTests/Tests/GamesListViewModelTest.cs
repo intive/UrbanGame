@@ -10,6 +10,7 @@ using UrbanGame.Storage;
 using WebService;
 using System.Threading;
 using UrbanGameTests.Mocks;
+using UrbanGame.Utilities;
 
 namespace UrbanGameTests.Tests
 {
@@ -47,7 +48,8 @@ namespace UrbanGameTests.Tests
             IUnitOfWork unitOfWork = new UnitOfWorkMock(database);
             IGameWebService webService = new GameWebServiceMock();
             IEventAggregator eventAgg = new EventAggregator();
-            
+            IGameAuthorizationService authorizationService = new GameAuthorizationService(unitOfWork, webService);
+
             //removing current records
             foreach (IGame g in unitOfWork.GetRepository<IGame>().All().ToList())
                 unitOfWork.GetRepository<IGame>().MarkForDeletion(g);
@@ -60,24 +62,24 @@ namespace UrbanGameTests.Tests
             unitOfWork.GetRepository<IGame>().MarkForAdd(CreateTestGame(GameState.None, 4, "Hydrozagadka2"));
             unitOfWork.Commit();
             GamesListViewModel vm = new GamesListViewModel(null, () => new UnitOfWorkMock(database), 
-                                                           webService, eventAgg, new AppbarManagerMock());
+                                                           webService, eventAgg, new AppbarManagerMock(), authorizationService);
             #endregion
 
             //when user is authorized
-            webService.IsAuthorized = true;
+            authorizationService.AuthenticatedUser = new User { Login = "Login", Password = "Admin", Email = "Login@gmail.com" };
             await vm.RefreshUserGames();
             Assert.AreEqual(vm.UserActiveGames.Count, 1); //that with Joined game state
             Assert.AreEqual(vm.UserInactiveGames.Count, 3); //that with game state != Joined
 
             //when user is unauthorized
-            webService.IsAuthorized = false;
+            authorizationService.AuthenticatedUser = null;
             await vm.RefreshUserGames();
             Assert.AreEqual(vm.UserActiveGames.Count, 0); //that with Joined game state
             Assert.AreEqual(vm.UserInactiveGames.Count, 0); //that with game state != Joined
 
 
             //handling updates test
-            webService.IsAuthorized = true;
+            authorizationService.AuthenticatedUser = new User { Login = "Login", Password = "Admin", Email = "Login@gmail.com" };
             await vm.RefreshUserGames();
 
             string oldDescription = unitOfWork.GetRepository<IGame>().All().First(g => g.Id == 3).Description;

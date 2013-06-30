@@ -18,8 +18,8 @@ namespace UrbanGame.ViewModels
         private string _activeSection;
 
         public GameDetailsViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
-            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
+                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager, IGameAuthorizationService authorizationService)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator, authorizationService)
         {
             _appbarManager = appbarManager;
         }
@@ -317,7 +317,7 @@ namespace UrbanGame.ViewModels
 
         public void ShowTask(ITask task)
         {
-            _navigationService.UriFor<TaskViewModel>().WithParam(t => t.TaskId, task.Id).WithParam(x=>x.GameId, GameId).Navigate();
+            _navigationService.UriFor<TaskViewModel>().WithParam(t => t.TaskId, task.Id).WithParam(x => x.GameId, GameId).Navigate();
         }
 
         public void ChangeAppbarButtons(SelectionChangedEventArgs args)
@@ -375,14 +375,17 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
+
                 using (var uow = _unitOfWorkLocator())
                 {
                     IQueryable<IHighScore> highScores = uow.GetRepository<IHighScore>().All();
                     BindableCollection<IHighScore> GameHighScoresTemp;
 
+
                     GameHighScoresTemp = new BindableCollection<IHighScore>(highScores.Where(h => h.Game.Id == GameId)
                                                                                     .OrderByDescending(h => h.Points)
                                                                                     .AsEnumerable());
+
 
 
                     GameHighScores = new BindableCollection<PositionedHighScore>();
@@ -398,9 +401,11 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
+
                 using (var uow = _unitOfWorkLocator())
                 {
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
+
 
                     ActiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Active)
                                                                          .Where(t => t.Game.Id == GameId)
@@ -414,9 +419,11 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
+
                 using (var uow = _unitOfWorkLocator())
                 {
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
+
 
                     InactiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Inactive)
                                                                                                 .Where(t => t.Game.Id == GameId)
@@ -430,9 +437,11 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
+
                 using (var uow = _unitOfWorkLocator())
                 {
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
+
 
                     AccomplishedTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Accomplished)
                                                                             .Where(t => t.Game.Id == GameId)
@@ -446,9 +455,11 @@ namespace UrbanGame.ViewModels
         {
             await Task.Factory.StartNew(() =>
             {
+
                 using (var uow = _unitOfWorkLocator())
                 {
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
+
 
                     CancelledTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Cancelled)
                                                                             .Where(t => t.Game.Id == GameId)
@@ -465,6 +476,7 @@ namespace UrbanGame.ViewModels
             {
                 using (IUnitOfWork uow = _unitOfWorkLocator())
                 {
+
                     IGame game = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
                     game.GameState = GameState.Inactive;
                     game.ListOfChanges = null;

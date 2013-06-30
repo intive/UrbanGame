@@ -19,8 +19,8 @@ namespace UrbanGame.ViewModels
         IAppbarManager _appbarManager;
 
         public TaskViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
-            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
+                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager, IGameAuthorizationService authorizationService)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator, authorizationService)
         {
             _appbarManager = appbarManager;
         }
@@ -289,6 +289,12 @@ namespace UrbanGame.ViewModels
             });
         }
 
+        public void Retry()
+        {
+            VisualStateName = "Sending";
+            SubmitSolution(Solution);
+        }
+
         private void SubmitSolution(IBaseSolution solution)
         {
             //saving solution in database
@@ -307,28 +313,34 @@ namespace UrbanGame.ViewModels
             //todo: update points in Views (gameDetailsView & TaskView)
             //todo: change WebService.SubmitTaskSolution to return gained points
 
+
             using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
             {
                 var sol = unitOfWork.GetRepository<IBaseSolution>().All().First(s => s.Id == solution.Id);                          
+                GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
 
-                if (result == SubmitResult.AnswerCorrect)
+                task.UserPoints = 20;
+
+                switch(result)
                 {
-                    VisualStateName = "Correct";
-                    sol.Task.SolutionStatus = SolutionStatus.Accepted;
-                }
-                else if (result == SubmitResult.AnswerIncorrect)
-                {
-                    VisualStateName = "Wrong";
-                    sol.Task.SolutionStatus = SolutionStatus.Rejected;
-                }
-                else
-                {
-                    VisualStateName = "Normal";
-                    sol.Task.SolutionStatus = SolutionStatus.Pending; 
+                    case SubmitResult.AnswerCorrect:
+                        VisualStateName = "Correct";
+                        sol.Task.SolutionStatus = SolutionStatus.Accepted;
+                        break;
+                    case SubmitResult.AnswerIncorrect:
+                        VisualStateName = "Wrong";
+                        sol.Task.SolutionStatus = SolutionStatus.Rejected;
+                        break;
+                    default: 
+                        VisualStateName = "Timeout";
+                        break;
                 }
 
-                unitOfWork.Commit();
+                //unitOfWork.Commit();
             }
+
+            RefreshTask();
+
         }
 
         public async void SubmitGPS()

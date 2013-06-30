@@ -137,11 +137,17 @@ namespace WebService
             int r = new Random().Next(100);
 
             if (r < 20)
+            {
                 return SubmitResult.AnswerIncorrect;
+            }
             else if (r < 60)
+            {
                 return SubmitResult.AnswerCorrect;
+            }
             else
+            {
                 return SubmitResult.ScoreDelayed;
+            }
         }
         #endregion
 
@@ -160,25 +166,7 @@ namespace WebService
         #region Authorize
         public async Task<AuthorizeState> Authorize(string username, string password)
         {
-            IsAuthorized = true;
             return AuthorizeState.Success;
-        }
-        #endregion
-
-        #region IsAuthorized
-
-        private bool _isAuthorized;
-
-        public bool IsAuthorized
-        {
-            get
-            {
-                return _isAuthorized;
-            }
-            set
-            {
-                _isAuthorized = value;
-            }
         }
         #endregion
 

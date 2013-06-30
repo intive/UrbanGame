@@ -416,7 +416,7 @@
     <value>Incorrect</value>
   </data>
   <data name="IncorrectLogin" xml:space="preserve">
-    <value>Provided login or password are incorrect</value>
+    <value>Incorrect password or email</value>
   </data>
   <data name="GameChangedToast" xml:space="preserve">
     <value>Game details have changed. Tap to see differences.</value>

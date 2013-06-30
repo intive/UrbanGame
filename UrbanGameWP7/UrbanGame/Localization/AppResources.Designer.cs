@@ -503,7 +503,7 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided login or password are incorrect.
+        ///   Looks up a localized string similar to Incorrect password or email.
         /// </summary>
         public static string IncorrectLogin {
             get {
