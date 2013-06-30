@@ -69,6 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizationService\IGameAuthorizationService.cs" />
+    <Compile Include="AuthorizationService\LoginResult.cs" />
+    <Compile Include="AuthorizationService\RegisterResult.cs" />
+    <Compile Include="AuthorizationService\User.cs" />
     <Compile Include="Location\GPSLocation.cs" />
     <Compile Include="Solutions\IABCDUserAnswer.cs" />
     <Compile Include="Solutions\SolutionStatusChanged.cs" />

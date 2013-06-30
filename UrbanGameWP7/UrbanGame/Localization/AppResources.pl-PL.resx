@@ -403,7 +403,7 @@
     <value>Niepoprawnie</value>
   </data>
   <data name="IncorrectLogin" xml:space="preserve">
-    <value>Podany login lub hasło są nieprawidłowe</value>
+    <value>Nieprawidzłowe hasło lub email</value>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
     <value>Podany login jest już zajęty</value>

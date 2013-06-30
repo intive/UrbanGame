@@ -79,10 +79,6 @@ namespace Common
         /// <returns>a bool</returns>
         Task<AuthorizeState> Authorize(string username, string password);
 
-        /// <summary>
-        /// Shows that user is authorize
-        /// </summary>
-        bool IsAuthorized { get; set; }
 
         /// <summary>
         /// Creates account
