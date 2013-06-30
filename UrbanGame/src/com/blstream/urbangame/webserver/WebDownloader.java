@@ -29,7 +29,7 @@ public abstract class WebDownloader {
 	public final static String EMPTY_JSON = "{}";
 	private final static String TAG = WebDownloader.class.getSimpleName();
 	private final static String CONTENT_TYPE_HEADER_KEY = "Content-Type";
-	private final static String JSON_CONTETN = "text/json";
+	private final static String JSON_CONTENT = "text/json";
 	private final HttpClient httpClient;
 	
 	public WebDownloader() {
@@ -50,7 +50,7 @@ public abstract class WebDownloader {
 	private String downloadDataFromUri(Uri requestUri) throws IOException {
 		String requestString = requestUri.toString();
 		HttpUriRequest httpRequestMethod = getHttpRequestMethod(requestString);
-		httpRequestMethod.addHeader(CONTENT_TYPE_HEADER_KEY, JSON_CONTETN);
+		httpRequestMethod.addHeader(CONTENT_TYPE_HEADER_KEY, JSON_CONTENT);
 		InputStreamReader inputStreamReader = getInputStreamReaderFromRequest(httpRequestMethod);
 		String result = readInputStreamToString(inputStreamReader);
 		return result;
