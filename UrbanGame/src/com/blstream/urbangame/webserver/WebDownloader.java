@@ -148,11 +148,11 @@ class WebDownloaderWithAuthorization extends WebDownloader {
 	@Override
 	public HttpUriRequest getHttpRequestMethod(String requestUri) {
 		HttpUriRequest request = webDownloader.getHttpRequestMethod(requestUri);
-		request.addHeader(AUTH_KEY, BASIC_PRE + " " + createValueForCurrentUser());
+		request.addHeader(AUTH_KEY, BASIC_PRE + " " + userNameAndPasswordInBase64());
 		return request;
 	}
 	
-	private String createValueForCurrentUser() {
+	private String userNameAndPasswordInBase64() {
 		Base64 coder = new Base64();
 		String encodedUserName = new String(coder.encode(userName.getBytes()));
 		String encodedPassword = new String(coder.encode(password.getBytes()));
