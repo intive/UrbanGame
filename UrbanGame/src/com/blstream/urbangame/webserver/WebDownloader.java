@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -27,7 +28,9 @@ import android.util.Log;
 public abstract class WebDownloader {
 	public final static String EMPTY_JSON = "{}";
 	private final static String TAG = WebDownloader.class.getSimpleName();
-	private HttpClient httpClient;
+	private final static String CONTENT_TYPE_HEADER_KEY = "Content-Type";
+	private final static String JSON_CONTETN = "text/json";
+	private final HttpClient httpClient;
 	
 	public WebDownloader() {
 		httpClient = HttpClientFactory.getHttpClient();
@@ -47,6 +50,7 @@ public abstract class WebDownloader {
 	private String downloadDataFromUri(Uri requestUri) throws IOException {
 		String requestString = requestUri.toString();
 		HttpUriRequest httpRequestMethod = getHttpRequestMethod(requestString);
+		httpRequestMethod.addHeader(CONTENT_TYPE_HEADER_KEY, JSON_CONTETN);
 		InputStreamReader inputStreamReader = getInputStreamReaderFromRequest(httpRequestMethod);
 		String result = readInputStreamToString(inputStreamReader);
 		return result;
@@ -113,5 +117,46 @@ class WebDownloaderDELETE extends WebDownloader {
 	@Override
 	public HttpUriRequest getHttpRequestMethod(String requestUri) {
 		return new HttpDelete(requestUri);
+	}
+}
+
+//formatter: off
+/**
+ * This is a decorator class that adds authorization header to request.
+ * 
+ * Use: WebDownloader X = new WebDownloaderWithAuthentication(new WebDownloaderGET(), userName, password); in place of WebDownloaderGET object
+ * 
+ * you can pass one of { WebDownloaderGET, WebDownloaderPOST, WebDownloaderPUT,
+ * WebDownloaderDELETE }
+ * 
+ * rest of use stays the same as it was.
+ */
+//formatter: on
+class WebDownloaderWithAuthorization extends WebDownloader {
+	
+	private static final String AUTH_KEY = "Authorization";
+	private static final String BASIC_PRE = "Basic";
+	
+	private final WebDownloader webDownloader;
+	private String userName;
+	private String password;
+	
+	public WebDownloaderWithAuthorization(WebDownloader webDownloader, String username, String password) {
+		this.webDownloader = webDownloader;
+	}
+	
+	@Override
+	public HttpUriRequest getHttpRequestMethod(String requestUri) {
+		HttpUriRequest request = webDownloader.getHttpRequestMethod(requestUri);
+		request.addHeader(AUTH_KEY, BASIC_PRE + " " + createValueForCurrentUser());
+		return request;
+	}
+	
+	private String createValueForCurrentUser() {
+		Base64 coder = new Base64();
+		String encodedUserName = new String(coder.encode(userName.getBytes()));
+		String encodedPassword = new String(coder.encode(password.getBytes()));
+		
+		return encodedUserName + ":" + encodedPassword;
 	}
 }

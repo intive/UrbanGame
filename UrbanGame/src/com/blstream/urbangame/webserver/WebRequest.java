@@ -12,12 +12,14 @@ import com.blstream.urbangame.webserver.WebServer.QueryType;
 //FIXME implementation needed
 public class WebRequest extends AsyncTask<Void, Integer, WebResponse> {
 	private Uri requestUri;
-	private WebResponse webResponse;
+	private final WebResponse webResponse;
 	private WebDownloader webDownloader;
-	private QueryType queryType;
-	private WebServer webServer;
-	private int gameID;
-	private int taskID;
+	private final QueryType queryType;
+	private final WebServer webServer;
+	private final int gameID;
+	private final int taskID;
+	private String userName;
+	private String password;
 	
 	public WebRequest(WebServer webServer, QueryType queryType) {
 		this(webServer, queryType, 0, 0);
@@ -33,6 +35,12 @@ public class WebRequest extends AsyncTask<Void, Integer, WebResponse> {
 		this.queryType = queryType;
 		this.webServer = webServer;
 		this.webResponse = new WebResponse(queryType);
+	}
+	
+	public WebRequest(WebServer webServer, QueryType queryType, int gameID, String userName, String password) {
+		this(webServer, queryType, gameID, 0);
+		this.userName = userName;
+		this.password = password;
 	}
 	
 	/**
