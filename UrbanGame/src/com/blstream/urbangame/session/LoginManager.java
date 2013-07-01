@@ -1,12 +1,10 @@
 package com.blstream.urbangame.session;
 
 import android.content.Context;
-import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.blstream.urbangame.database.entity.Player;
-import com.blstream.urbangame.web.WebHighLevel;
-import com.blstream.urbangame.webserver.ServerResponseHandler;
 import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
 // formatter:off
@@ -22,19 +20,21 @@ import com.blstream.urbangame.webserver.WebServerNotificationListener;
  * data from DB, and connect with server to update information about session.
  */
 //formatter:on
-public class LoginManager extends SessionManager implements WebServerNotificationListener {
-	private final static String TAG = "LoginManager";
-	private boolean loginResult;
+public class LoginManager extends SessionManager {
+	private static final String NAME = LoginManager.class.getSimpleName();
+	
 	private String email;
+	
+	public LoginManager(Context context, WebServerNotificationListener listener) {
+		super(context, listener);
+	}
 	
 	public LoginManager(Context context) {
 		super(context);
-		this.handler = new ServerResponseHandler(this);
-		this.web = new WebHighLevel(handler, context);
 	}
 	
 	public boolean isUserLoggedIn() {
-		return isUserIdStoredInDB() && !isUserIdEmpty();
+		return !isUserIdEmpty() && isUserIdStoredInDB();
 	}
 	
 	private boolean isUserIdStoredInDB() {
@@ -42,44 +42,40 @@ public class LoginManager extends SessionManager implements WebServerNotificatio
 	}
 	
 	private boolean isUserIdEmpty() {
-		return database.getLoggedPlayerID().length() == 0;
+		String loggedPlayerID = database.getLoggedPlayerID();
+		return database.getLoggedPlayerID() != null && TextUtils.isEmpty(loggedPlayerID);
 	}
 	
-	public boolean loginUser(String email) {
-		this.email = email;
-		Log.i(TAG, email + " logging in");
+	public boolean setLoggedUserInDB(String email) {
+		Log.d(TAG, NAME + " setLoggedUserInDB() " + email);
 		
 		return database.setLoggedPlayer(email);
 	}
 	
-	public void isLoginDataValid(String email, String password) {
+	public void loginUser(String email, String password) {
+		Log.d(TAG, NAME + " loginUser() " + email + " with password " + password);
+		
 		web.loginUser(email, password);
-		waitForServerResponse();
 	}
 	
 	public void logoutUser() {
-		Log.i(TAG, database.getLoggedPlayerID() + " logging out");
+		Log.d(TAG, NAME + " " + database.getLoggedPlayerID() + " logging out");
 		
 		if (database.setNoOneLogged()) {
 			startMainActivity();
 		}
 	}
 	
-	@Override
-	public synchronized void onWebServerResponse(Message message) {
-		hasResult = true;
+	public void storeUserInDB(Player player) {
+		Log.d(TAG, NAME + " storeUserInDB()");
 		
-		// TODO obtain player from server response
-		Player fromWeb = null;
-		
-		loginResult = fromWeb != null;
-		
+		boolean loginResult = player != null;
 		if (loginResult) {
 			if (!doesPlayerExist(email)) {
-				addUserToDB(fromWeb);
+				addUserToDB(player);
 			}
 			else {
-				updatePlayerInDB(fromWeb);
+				updatePlayerInDB(player);
 			}
 		}
 	}

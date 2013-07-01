@@ -238,6 +238,8 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 		dialogBuilder.setCancelable(false);
 		dialogBuilder.setPositiveButton(R.string.dialog_join_leave_positive_button,
 			new UrbanGameDialogOnClickListener() {
+				private static final long serialVersionUID = 1L;
+				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Log.i("UrbanGame", "Dialog: clicked positive button");
@@ -264,6 +266,8 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 			});
 		dialogBuilder.setNegativeButton(R.string.dialog_join_leave_negative_button,
 			new UrbanGameDialogOnClickListener() {
+				private static final long serialVersionUID = 1L;
+				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Log.i("UrbanGame", "Dialog: clicked negative button");
