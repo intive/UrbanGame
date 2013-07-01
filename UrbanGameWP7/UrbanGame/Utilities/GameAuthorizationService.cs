@@ -21,9 +21,9 @@ namespace UrbanGame.Utilities
     {
         protected string fileName = "data-file.xml";
         IGameWebService _gameWebService;
-        IUnitOfWork _unitOfWorkLocator;
+        Func<IUnitOfWork> _unitOfWorkLocator;
 
-        public GameAuthorizationService(IUnitOfWork unitOfWorkLocator, IGameWebService gameWebService)
+        public GameAuthorizationService(Func<IUnitOfWork> unitOfWorkLocator, IGameWebService gameWebService)
         {
             _gameWebService = gameWebService;
             _unitOfWorkLocator = unitOfWorkLocator;
@@ -74,8 +74,11 @@ namespace UrbanGame.Utilities
 
                         if (login != data)
                         {
-                            _unitOfWorkLocator.DeleteDatabase();
-                            _unitOfWorkLocator.CreateDatabase();
+                            using (IUnitOfWork uow = _unitOfWorkLocator())
+                            {
+                                uow.DeleteDatabase();
+                                uow.CreateDatabase();
+                            }
                         }
                     }
                 }
@@ -175,8 +178,11 @@ namespace UrbanGame.Utilities
             switch (accuontResponse)
             {
                 case CreateAccountResponse.Success:
-                    _unitOfWorkLocator.DeleteDatabase();
-                    _unitOfWorkLocator.CreateDatabase();
+                    using (IUnitOfWork uow = _unitOfWorkLocator())
+                    {
+                        uow.DeleteDatabase();
+                        uow.CreateDatabase();
+                    }
                     return RegisterResult.Success;
                 case CreateAccountResponse.LoginUnavailable:
                     return RegisterResult.Failure;
