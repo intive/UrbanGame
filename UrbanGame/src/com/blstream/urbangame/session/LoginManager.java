@@ -24,21 +24,13 @@ import com.blstream.urbangame.webserver.WebServerNotificationListener;
 //formatter:on
 public class LoginManager extends SessionManager implements WebServerNotificationListener {
 	private final static String TAG = "LoginManager";
-	private static LoginManager instance;
 	private boolean loginResult;
 	private String email;
 	
-	private LoginManager(Context context) {
+	public LoginManager(Context context) {
 		super(context);
 		this.handler = new ServerResponseHandler(this);
 		this.web = new WebHighLevel(handler, context);
-	}
-	
-	public static LoginManager getInstance(Context context) {
-		if (instance == null) {
-			instance = new LoginManager(context);
-		}
-		return instance;
 	}
 	
 	public boolean isUserLoggedIn() {
@@ -60,20 +52,9 @@ public class LoginManager extends SessionManager implements WebServerNotificatio
 		return database.setLoggedPlayer(email);
 	}
 	
-	public boolean isLoginDataValid(String email, String password) {
+	public void isLoginDataValid(String email, String password) {
 		web.loginUser(email, password);
 		waitForServerResponse();
-		
-		return loginResult;
-	}
-	
-	protected void waitForServerResponse() {
-		try {
-			wait();
-		}
-		catch (InterruptedException e) {
-			Log.e(TAG, e.getMessage());
-		}
 	}
 	
 	public void logoutUser() {
@@ -86,6 +67,8 @@ public class LoginManager extends SessionManager implements WebServerNotificatio
 	
 	@Override
 	public synchronized void onWebServerResponse(Message message) {
+		hasResult = true;
+		
 		// TODO obtain player from server response
 		Player fromWeb = null;
 		
@@ -99,6 +82,5 @@ public class LoginManager extends SessionManager implements WebServerNotificatio
 				updatePlayerInDB(fromWeb);
 			}
 		}
-		notify();
 	}
 }

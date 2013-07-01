@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -225,7 +226,10 @@ public class UrbanGameDialog extends SherlockDialogFragment {
 				
 				UrbanGameDialog dial = new UrbanGameDialog();
 				dial.setArguments(arugments);
-				dial.show(manager, TAG);
+				
+				FragmentTransaction transaction = manager.beginTransaction();
+				transaction.add(dial, TAG);
+				transaction.commitAllowingStateLoss();
 			}
 		}
 		
@@ -236,7 +240,7 @@ public class UrbanGameDialog extends SherlockDialogFragment {
 		public void hide() {
 			Fragment fragment = manager.findFragmentByTag(TAG);
 			if (fragment != null) {
-				manager.beginTransaction().remove(fragment).commit();
+				manager.beginTransaction().remove(fragment).commitAllowingStateLoss();
 				manager.executePendingTransactions();
 			}
 		}

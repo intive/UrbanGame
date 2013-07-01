@@ -40,7 +40,7 @@ public class SplashScreenActivity extends SherlockFragmentActivity {
 	}
 	
 	private boolean isUserLoggedIn() {
-		LoginManager loginManager = LoginManager.getInstance(SplashScreenActivity.this);
+		LoginManager loginManager = new LoginManager(SplashScreenActivity.this);
 		return loginManager.isUserLoggedIn();
 	}
 	

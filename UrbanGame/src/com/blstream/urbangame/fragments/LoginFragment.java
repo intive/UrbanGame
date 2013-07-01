@@ -38,7 +38,7 @@ public class LoginFragment extends SherlockFragment implements OnClickListener {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		loginRegisterView = new LoginRegisterView(getActivity(), null);
+		loginRegisterView = new LoginRegisterView(activity, null);
 		loginRegisterView.setOnButtonClickListener(this);
 		return loginRegisterView;
 	}
@@ -48,7 +48,7 @@ public class LoginFragment extends SherlockFragment implements OnClickListener {
 		String email = loginRegisterView.getEmail();
 		String password = loginRegisterView.getPassword();
 		boolean isLoginDataValid = loginRegisterView.isDataCorrect()
-			&& LoginManager.getInstance(activity).isLoginDataValid(email, password);
+			&& new LoginManager(activity).isLoginDataValid(email, password);
 		
 		if (isLoginDataValid) {
 			setLoggedUserAndStartBrowsing(email);

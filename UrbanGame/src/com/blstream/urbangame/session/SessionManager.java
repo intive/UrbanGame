@@ -27,6 +27,7 @@ public abstract class SessionManager {
 	protected Context context;
 	protected ServerResponseHandler handler;
 	protected WebHighLevelInterface web;
+	protected boolean hasResult;
 	
 	protected SessionManager(Context context) {
 		this.context = context;

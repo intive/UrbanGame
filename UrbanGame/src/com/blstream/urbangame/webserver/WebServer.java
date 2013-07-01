@@ -124,7 +124,7 @@ public class WebServer implements WebHighLevelInterface {
 	
 	@Override
 	public void registerPlayer(String email, String displayName, String password) {
-		new WebRequest(this, QueryType.LoginUser, email, password, displayName).execute();
+		new WebRequest(this, QueryType.RegisterPlayer, email, password, displayName).execute();
 	}
 	
 	@Override

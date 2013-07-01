@@ -43,6 +43,7 @@ public class WebRequest extends AsyncTask<Void, Integer, WebResponse> {
 	public WebRequest(WebServer webServer, QueryType queryType, long gameID, long taskID) {
 		this.gameID = gameID;
 		this.taskID = taskID;
+		
 		this.queryType = queryType;
 		this.webServer = webServer;
 		this.webResponse = new WebResponse(queryType);
@@ -56,6 +57,8 @@ public class WebRequest extends AsyncTask<Void, Integer, WebResponse> {
 		this.email = email;
 		this.password = password;
 		this.displayName = displayName;
+		
+		this.queryType = queryType;
 		this.webServer = webServer;
 		this.webResponse = new WebResponse(queryType);
 	}
@@ -67,6 +70,8 @@ public class WebRequest extends AsyncTask<Void, Integer, WebResponse> {
 	public WebRequest(WebServer webServer, QueryType queryType, Task task, Location location) {
 		this.task = task;
 		this.location = location;
+		
+		this.queryType = queryType;
 		this.webServer = webServer;
 		this.webResponse = new WebResponse(queryType);
 	}
@@ -74,6 +79,8 @@ public class WebRequest extends AsyncTask<Void, Integer, WebResponse> {
 	public WebRequest(WebServer webServer, QueryType queryType, ABCDTask abcdTask, ArrayList<String> answers) {
 		this.abcdTask = abcdTask;
 		this.answers = answers;
+		
+		this.queryType = queryType;
 		this.webServer = webServer;
 		this.webResponse = new WebResponse(queryType);
 	}

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
 import com.blstream.urbangame.fragments.LoginRegisterPageAdapter;
-import com.blstream.urbangame.session.RegistrationManager;
 
 public class LoginRegisterActivity extends AbstractMenuActivity {
 	public final static String ACTION_RETURN_LOGIN_RESULT = "intent_open_games";
@@ -16,8 +15,6 @@ public class LoginRegisterActivity extends AbstractMenuActivity {
 	private LoginRegisterPageAdapter sectionsPagerAdapter;
 	private ViewPager viewPager;
 	
-	private RegistrationManager registrationManager;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,7 +22,6 @@ public class LoginRegisterActivity extends AbstractMenuActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.activity_login_register);
 		
-		registrationManager = RegistrationManager.getInstance(LoginRegisterActivity.this);
 		sectionsPagerAdapter = new LoginRegisterPageAdapter(getSupportFragmentManager(), LoginRegisterActivity.this);
 		viewPager = (ViewPager) findViewById(R.id.view_pager);
 		viewPager.setAdapter(sectionsPagerAdapter);
