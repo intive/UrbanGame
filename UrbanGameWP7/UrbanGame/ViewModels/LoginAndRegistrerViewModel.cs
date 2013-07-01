@@ -143,7 +143,7 @@ namespace UrbanGame.ViewModels
 
         public async void LogIn(string Password)
         {
-            if (!string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password) && await _gameWebService.Authorize(Login, Password) == AuthorizeState.Success)
+            if (!string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password))
             {
                 VisualStateName = "LoggingIn";
 
