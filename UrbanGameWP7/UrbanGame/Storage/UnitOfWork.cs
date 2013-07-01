@@ -36,5 +36,15 @@ namespace UrbanGame.Storage
         {
             _dataContext.Dispose();
         }
+
+        public void DeleteDatabase()
+        {
+            _dataContext.DeleteDatabase();
+        }
+
+        public void CreateDatabase()
+        {
+            _dataContext.CreateDatabase();
+        }
     }
 }

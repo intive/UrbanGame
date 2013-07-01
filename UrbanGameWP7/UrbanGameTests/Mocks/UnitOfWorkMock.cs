@@ -33,5 +33,13 @@ namespace UrbanGameTests.Mocks
         public void Dispose()
         {
         }
+
+        public void DeleteDatabase()
+        {
+        }
+
+        public void CreateDatabase()
+        {
+        }
     }
 }

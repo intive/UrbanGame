@@ -299,8 +299,8 @@
                             <Setter Property="Margin" Value="10,10,10,0"/>
                         </Style>
                     </Grid.Resources>
-                    <TextBlock Text="{Binding Path=AppResources.Email, Source={StaticResource LocalizedStrings}}" Grid.Row="0"/>
-                    <utils:PhoneTextBox Text="{Binding Email, Mode=TwoWay}" Grid.Row="1" InputScope="EmailUserName"/>
+                    <TextBlock Text="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="0"/>
+                    <utils:PhoneTextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1" InputScope="EmailUserName"/>
                     <TextBlock Text="{Binding Path=AppResources.Password, Source={StaticResource LocalizedStrings}}" Grid.Row="2"/>
                     <PasswordBox x:Name="Password" Grid.Row="3" />
                     <Button Content="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="4" Width="250" Height="75" HorizontalAlignment="Right" Background="{StaticResource FontColorGreen}" BorderBrush="Transparent">
