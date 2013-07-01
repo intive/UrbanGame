@@ -219,13 +219,13 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         overlays = []
         task = $scope.tasks[taskIndex]
         if task.type == "GPS"
-            $scope.createMarker loc, task.name for loc in task.locations
+            $scope.createMarker loc for loc in task.locations
             map.fitBounds(latlngBounds)
         else
             map.setCenter(new google.maps.LatLng(51.107885, 17.038538))
             map.setZoom(7)
                 
-    $scope.createMarker = (loc,taskName) ->
+    $scope.createMarker = (loc) ->
         marker = new google.maps.Marker {
             position: new google.maps.LatLng(loc.lat,loc.lng)
             }
@@ -243,7 +243,34 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         overlays.push(circle)
         circle.setMap(map)
         marker.setMap(map)
+        
+    # ------------------ MAP (add gps task)
+    tmap = null
+    toverlays = []
+    tlatlngBounds = null
+    selectedMarker = null
+    $scope.setTMap = ->
+        mapOptions = {
+            zoom: 11,
+            center: new google.maps.LatLng(51.107885, 17.038538),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        tmap = new google.maps.Map(document.getElementById("addTaskMap"), mapOptions)
+        google.maps.event.addListener tmap, 'click', (event) ->
+            $scope.selectLocation(event.latLng)
+            
+    $scope.selectLocation = (latlng) ->
+        selectedMarker.setMap(null) if selectedMarker!=null
+        selectedMarker = new google.maps.Marker {
+            position: latlng,
+            map: tmap
+        }
+        $("#latitude").val(latlng.lat)
+        $("#longitude").val(latlng.lng)
 
+        
+
+    
     # ------------------ STEPS SWITCHING
     $scope.selection = $scope.steps[0]
 

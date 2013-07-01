@@ -19,6 +19,7 @@
 @tareaheight: 110px;
 @hfooter: 130px;
 @mapheight: 300px;
+@tmapheight: 250px;
 @mapwidth: 350px;
 
 /* margins, paddings */
@@ -845,7 +846,7 @@ google-map {
     height: @mapheight;
 }
 
-#gpsMap {
+#gpsMap,  {
     height: @mapheight;
     /* width: @mapwidth; */
     top:0;
@@ -854,6 +855,10 @@ google-map {
     right:0;
     margin: 0;
     padding: 0;
+}
+#addTaskMap {
+    height: @tmapheight;
+    margin-right: 40px;
 }
 
 input::-webkit-outer-spin-button,
@@ -891,11 +896,12 @@ input::-webkit-inner-spin-button {
 
 /* Lightbox (tasks) */
 #taskLightbox {
+    line-height: 20px;
     left: 20% !important;
     top: 10px !important;
     width: 60% !important;
     height:95%;
-    min-width: 600px;
+    min-width: 800px;
     text-align: left;
     overflow-y: auto;
     overflow-x: hidden;
@@ -1007,7 +1013,39 @@ input::-webkit-inner-spin-button {
     }
     
     div.pull-right {
-        margin-top: 102px;
+        margin-top: 94px;
+    }
+    .latlng button, .latlnglist  button{
+            height: 30px;
+            line-height: 0;
+            margin: 24px 0 0;
+            width: 62px;
+        }
+    .latlng{
+        .control {
+            display: inline-block;
+            float: left;
+            margin: 7px;
+            input {
+                width: 65px;
+            }
+            
+        }
+    }
+    .latlnglist {
+        .control {
+            display: inline-block;
+            float: left;
+            margin: 7px;
+            button{
+                margin: 0px;
+            }
+        }
+        select{
+           width: 264px;
+           
+        }
+    
     }
 }
 

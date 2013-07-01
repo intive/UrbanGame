@@ -17,6 +17,12 @@ app.directive 'taskListMap', ->
         scope.setMap()
         undefined
         
+app.directive 'taskGpsMap', ->
+    restrict: 'A',
+    link: (scope, elm, attr) ->
+        scope.setTMap()
+        undefined
+        
 app.directive 'gameName', ->
     restrict: 'A',
     link: (scope, elm, attr) ->

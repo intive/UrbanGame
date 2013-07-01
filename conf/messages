@@ -172,6 +172,12 @@ tasks.points = Points
 tasks.addmoreanswers = ADD MORE ANSWERS
 tasks.showadditional = Show additional conditions for unlock task
 tasks.hideadditional = Hide additional conditions for unlock task
+tasks.gpspointslist = GPS points list
+tasks.addlocation = ADD
+tasks.removelocation = remove
+tasks.latitude = Latitude
+tasks.longitude = Longitude
+tasks.radius = Radius(m)
 
 
 
