@@ -442,4 +442,10 @@
   <data name="ProvideEmail" xml:space="preserve">
     <value>Provide e-mail address connected with your account to recover your password.</value>
   </data>
+  <data name="NotLogged" xml:space="preserve">
+    <value>You are not logged in.</value>
+  </data>
+  <data name="PleaseLog" xml:space="preserve">
+    <value>Please log in to see list of your games.</value>
+  </data>
 </root>

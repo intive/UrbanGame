@@ -701,6 +701,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are not logged in..
+        /// </summary>
+        public static string NotLogged {
+            get {
+                return ResourceManager.GetString("NotLogged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to not repeatable.
         /// </summary>
         public static string NotRepeatable {
@@ -769,6 +778,15 @@ namespace UrbanGame.Localization {
         public static string PlayersUPCase {
             get {
                 return ResourceManager.GetString("PlayersUPCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please log in to see list of your games..
+        /// </summary>
+        public static string PleaseLog {
+            get {
+                return ResourceManager.GetString("PleaseLog", resourceCulture);
             }
         }
         

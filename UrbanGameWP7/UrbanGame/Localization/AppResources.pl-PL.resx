@@ -426,4 +426,10 @@
   <data name="ProvideEmail" xml:space="preserve">
     <value>Wprowadź adres e-mail powiązany z kontem w celu odzyskania hasła</value>
   </data>
+  <data name="NotLogged" xml:space="preserve">
+    <value>Nie jesteś zalogowany.</value>
+  </data>
+  <data name="PleaseLog" xml:space="preserve">
+    <value>Proszę zaloguj się, żeby zobaczyć listę swoich gier.</value>
+  </data>
 </root>

@@ -92,7 +92,7 @@
                                                     <TextBlock Text="{Binding MaxPoints, Converter={StaticResource IntToSlashIntConverter}}" Margin="-5,0,0,0"/>
                                                     <TextBlock Text="p." />
                                                     <TextBlock Text="|" />
-                                                    <TextBlock Text="{Binding Path=AppResources.CurrentRank, Source={StaticResource LocalizedStrings}}" />
+                                                    <TextBlock Text="{Binding Path=AppResources.Rank, Source={StaticResource LocalizedStrings}}" />
                                                     <TextBlock Text="{Binding Rank, Converter={StaticResource RankConverter}}" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="3">
@@ -113,7 +113,9 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        
+
+                        <TextBlock Text="{Binding Path=AppResources.NotLogged, Source={StaticResource LocalizedStrings}}" Grid.Row="0" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
+                        <TextBlock Text="{Binding Path=AppResources.PleaseLog, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
                         <TextBlock Text="{Binding Path=AppResources.MyLatestGames, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,0,5" FontSize="{StaticResource PhoneFontSizeMedium}" Foreground="{StaticResource FontColorWhite}"/>
                         
                         <ListBox Grid.Row="2" Margin="0,5,0,0" ItemsSource="{Binding UserInactiveGames}" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -189,7 +191,7 @@
                                             <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
                                         </Style>
                                     </Grid.Resources>
-                                    <Image Source="{Binding GameLogoFullUrl}" Grid.Column="0" Width="100" Height="100" Margin="0,0,10,0" VerticalAlignment="Top"/>
+                                    <Image Source="{Binding GameLogoFullUrl}" Grid.Column="0" Width="120" Height="120" Margin="0,0,10,0" VerticalAlignment="Top"/>
                                     <StackPanel Grid.Column="1" Orientation="Vertical">
                                         <Grid Background="Transparent">
                                             <Grid.RowDefinitions>

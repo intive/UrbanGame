@@ -132,21 +132,21 @@ namespace WebService
         #endregion        
 
         #region SubmitTaskSolution
-        public SubmitResult SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
+        public SolutionResultScore SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
             int r = new Random().Next(100);
 
             if (r < 20)
             {
-                return SubmitResult.AnswerIncorrect;
+                return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = r };
             }
             else if (r < 60)
             {
-                return SubmitResult.AnswerCorrect;
+                return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerCorrect, ScoredPoints = r };
             }
             else
             {
-                return SubmitResult.ScoreDelayed;
+                return new SolutionResultScore() { SubmitResult = SubmitResult.ScoreDelayed, ScoredPoints = r };
             }
         }
         #endregion
