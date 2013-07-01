@@ -319,7 +319,7 @@ namespace UrbanGame.ViewModels
                 var sol = unitOfWork.GetRepository<IBaseSolution>().All().First(s => s.Id == solution.Id);                          
                 GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
 
-                task.UserPoints = 20;
+                System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() => CurrentTask.UserPoints = 20);
 
                 switch(result)
                 {
