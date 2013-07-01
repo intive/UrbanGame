@@ -8,18 +8,20 @@ import java.util.Date;
  * 
  */
 public class DateUtil {
-	private static final int MINUTE = 60 * 1000;
+	private static final int SECOND = 1000;
+	private static final int MINUTE = 60 * SECOND;
 	private static final int HOUR = 60 * MINUTE;
 	private static final int DAY = 24 * HOUR;
 	private static final int WEEK = 7;
 	
-	private Date dateNow;
-	private Date endDate;
+	private final Date dateNow;
+	private final Date endDate;
 	
 	private int weeks;
 	private int days;
 	private int hours;
 	private int minutes;
+	private int seconds;
 	
 	public DateUtil(Date endDate) {
 		this.dateNow = new Date();
@@ -30,9 +32,10 @@ public class DateUtil {
 	private void calculateDifferences() {
 		long diff = endDate.getTime() - dateNow.getTime();
 		
+		seconds = (int) (diff / SECOND % 60);   // seconds left, which are not included in full minutes
 		minutes = (int) (diff / MINUTE % 60);	// minutes left, which are not included in full hours
 		hours = (int) (diff / HOUR % 24);		// hours left, which are not included in full days
-		days = (int) (diff / DAY);
+		days = (int) (diff / DAY % 7);          // days left, which are not included in full weeks
 		weeks = days / WEEK;
 	}
 	
@@ -50,6 +53,10 @@ public class DateUtil {
 	
 	public int getDifferenceInMinutes() {
 		return minutes;
+	}
+	
+	public int getDifferenceInSeconds() {
+		return seconds;
 	}
 	
 	public Date getDateNow() {

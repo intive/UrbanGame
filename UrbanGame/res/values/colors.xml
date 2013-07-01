@@ -17,4 +17,8 @@
 	<color name="action_bar_background_blue">#006699</color>
 	<color name="pressed_blue">#cc0099cc</color>
 	
+	<!-- Text Colors -->
+	<color name="text_grey">#777777</color>
+	<color name="text_dark_grey">#222222</color>
+	
 </resources>

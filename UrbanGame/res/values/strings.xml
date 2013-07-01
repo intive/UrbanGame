@@ -20,6 +20,15 @@
     <string name="label_hoursLeft">Hours left:</string>
     <string name="label_minutesLeft">Minutes left:</string>
     <string name="header_nearby_games">NEARBY GAMES</string>
+    <string name="string_players">players</string>
+    <string-array name="difficulty_levels">
+        <item>very easy</item>
+        <item>easy</item>
+        <item>medium</item>
+        <item>hard</item>
+        <item>very hard</item>
+        <item>extremly hard</item>
+    </string-array>
 
     <!-- TasksListActivity -->
     <string name="label_points2">" pts"</string>
@@ -81,9 +90,10 @@
     <string name="tab_task_description">Description</string>
     <string name="tab_task_answer">Answer</string>
 
-    <!-- TaskDescriptionFragment -->
-    <string name="string_left">left</string>
-    <string name="string_noMoreTime">No more time</string>
+    <!-- Time related strings -->
+    <string name="string_to_end">to end</string>
+    <string name="string_to_start">to start</string>
+    <string name="string_ended">Ended:</string>
 
     <plurals name="numberOfYears">
         <item quantity="one">one year</item>
@@ -92,6 +102,10 @@
     <plurals name="numberOfMonths">
         <item quantity="one">one month</item>
         <item quantity="other">%d months</item>
+    </plurals>
+    <plurals name="numberOfWeeks">
+        <item quantity="one">one week</item>
+        <item quantity="other">%d weeks</item>
     </plurals>
     <plurals name="numberOfDays">
         <item quantity="one">one day</item>
@@ -104,6 +118,10 @@
     <plurals name="numberOfMinutes">
         <item quantity="one">one minute</item>
         <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="numberOfSeconds">
+        <item quantity="one">one second</item>
+        <item quantity="other">%d seconds</item>
     </plurals>
 
     <!-- Task -->

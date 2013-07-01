@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -19,6 +18,7 @@ import com.blstream.urbangame.R;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.UrbanGame;
+import com.blstream.urbangame.date.TimeLeftBuilder;
 
 public class GameInfoFragment extends SherlockFragment {
 	private static final String DATE_FORMAT = "E, MMM d 'at' h:mm a";
@@ -40,18 +40,16 @@ public class GameInfoFragment extends SherlockFragment {
 		super.onViewCreated(view, savedInstanceState);
 		
 		// formatter:off
-		Button 		joinLeaveGameButton 		= (Button) 		view.findViewById(R.id.buttonJoinLeaveGame);
-		ImageView 	ivGameLogo 					= (ImageView) 	view.findViewById(R.id.imageViewGameLogo);
-		TextView 	tvGameName 					= (TextView) 	view.findViewById(R.id.textViewGameName);
-		TextView 	tvOperatorName 				= (TextView) 	view.findViewById(R.id.textViewOperatorName);
-		TextView 	tvNumberOfTotalPlayers 		= (TextView) 	view.findViewById(R.id.textViewNumberOfTotalPlayers);
-		TextView 	tvNumberOfCurrentPlayers 	= (TextView) 	view.findViewById(R.id.textViewNumberOfCurrentPlayers);
-		TextView 	tvStartTime 				= (TextView) 	view.findViewById(R.id.textViewStartTime);
-		TextView 	tvEndTime 					= (TextView) 	view.findViewById(R.id.textViewEndTime);
-		RatingBar 	rbDifficulty 				= (RatingBar)	view.findViewById(R.id.ratingBarDifficulty);
-		TextView 	tvPrizes 					= (TextView) 	view.findViewById(R.id.TextViewPrizes);
-		TextView 	tvGameDesc 					= (TextView) 	view.findViewById(R.id.textViewGameDescription);
-		TextView 	tvWinningStrategy 			= (TextView) 	view.findViewById(R.id.textViewWinningStrategy);
+		Button 	   joinLeaveGameButton 	   = (Button) 	 view.findViewById(R.id.buttonJoinLeaveGame);
+		ImageView  ivGameLogo              = (ImageView) view.findViewById(R.id.imageViewGameLogo);
+		TextView   tvGameName              = (TextView)  view.findViewById(R.id.textViewGameName);
+		TextView   tvOperatorName          = (TextView)  view.findViewById(R.id.textViewOperatorName);
+		TextView   textViewNumberOfPlayers = (TextView)  view.findViewById(R.id.textViewPlayers);
+		TextView   textViewTime            = (TextView)  view.findViewById(R.id.textViewTime);
+		TextView   textViewDifficulty      = (TextView)  view.findViewById(R.id.textViewDifficulty);
+		TextView   tvWinningStrategy       = (TextView)  view.findViewById(R.id.textViewWinningStrategy);
+		TextView   tvPrizes                = (TextView)  view.findViewById(R.id.textViewPrizes);
+		TextView   tvGameDesc              = (TextView)  view.findViewById(R.id.textViewGameDescription);
 		// formatter:on
 		
 		configureCommonView(view, joinLeaveGameButton);
@@ -59,15 +57,23 @@ public class GameInfoFragment extends SherlockFragment {
 		UrbanGame selectedGame = getCurrentGame();
 		if (selectedGame != null) {
 			ivGameLogo.setImageDrawable(selectedGame.getGameLogoDrawable(getResources()));
+			
 			tvGameName.setText(selectedGame.getTitle());
 			tvOperatorName.setText(selectedGame.getOperatorName());
-			tvNumberOfTotalPlayers.setText(String.valueOf(selectedGame.getMaxPlayers()));
-			tvNumberOfCurrentPlayers.setText(String.valueOf(selectedGame.getPlayers()));
-			CharSequence parsedStartDate = formatDate(selectedGame.getStartDate());
-			tvStartTime.setText(parsedStartDate);
-			CharSequence parsedEndDate = formatDate(selectedGame.getEndDate());
-			tvEndTime.setText(parsedEndDate);
-			rbDifficulty.setRating(selectedGame.getDifficulty());
+			String players;
+			if (selectedGame.getMaxPlayers() == null || selectedGame.getMaxPlayers() == 0) {
+				players = Integer.toString(selectedGame.getPlayers()) + " " + getString(R.string.string_players);
+			}
+			else {
+				players = Integer.toString(selectedGame.getPlayers()) + "/"
+					+ Integer.toString(selectedGame.getMaxPlayers()) + " " + getString(R.string.string_players);
+			}
+			textViewNumberOfPlayers.setText(players);
+			TimeLeftBuilder timeLeftBuilder = new TimeLeftBuilder(getResources(), selectedGame.getStartDate(),
+				selectedGame.getEndDate());
+			textViewTime.setText(timeLeftBuilder.getLeftTime());
+			textViewDifficulty.setText(getResources().getStringArray(R.array.difficulty_levels)[selectedGame
+				.getDifficulty()]);
 			tvPrizes.setText(selectedGame.getPrizesInfo());
 			tvGameDesc.setText(selectedGame.getDescription());
 			tvWinningStrategy.setText(selectedGame.getWinningStrategy());
@@ -80,8 +86,7 @@ public class GameInfoFragment extends SherlockFragment {
 	}
 	
 	protected void configureHeaders(View view) {
-		setHeaderText(view, R.id.detailsHeader, R.string.header_details);
-		setHeaderText(view, R.id.PrizesHeader, R.string.header_prizes);
+		setHeaderText(view, R.id.prizesHeader, R.string.header_prizes);
 		setHeaderText(view, R.id.descriptionHeader, R.string.header_description);
 	}
 	
