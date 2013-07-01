@@ -31,18 +31,19 @@ namespace UrbanGame.ViewModels
 
         #region appbar
 
-        public void RefreshMenuItemText()
+        private List<AppbarItem> BasicAppbar = new List<AppbarItem>()
         {
+            new AppbarItem() {  Text = Localization.AppResources.ForgotPassword,Message="ForgotPassword" } 
+        };
 
-        }
+
 
         private void SetAppBarContent()
         {
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
-                RefreshMenuItemText();
+                _appbarManager.ConfigureAppbar(BasicAppbar);
             });
-            _appbarManager.HideAppbar();
         }
 
         #endregion
@@ -231,6 +232,11 @@ namespace UrbanGame.ViewModels
             {
                 _authorizationService.AuthenticatedUser = null;
             }
+        }
+
+        public void ForgotPassword()
+        {
+            _navigationService.UriFor<PasswordRecoveryViewModel>().Navigate();
         }
 
         #endregion
