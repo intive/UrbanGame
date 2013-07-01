@@ -16,7 +16,8 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="False" 
+    cal:Message.Attach="[Event BackKeyPress] = [Action CanGoBack($executionContext)]">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -142,7 +143,7 @@
                 </DataTemplate>
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.Title>
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical" Margin="-14,7,0,0">
                     <Grid Background="Transparent">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -154,8 +155,13 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontFamily" Value="Segoe WP Light" />
+                            </Style>
+                        </Grid.Resources>
 
-                        <TextBlock Text="{Binding Path=Game.Name}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontFamily="100"/>
+                        <TextBlock Text="{Binding Path=Game.Name}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontSize="60"/>
 
                         <TextBlock Text="{Binding Path=AppResources.PoweredBy, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.Column="0"  FontSize="{StaticResource PhoneFontSizeMedium}" Margin="120,0,10,0"/>
                         <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="-20,0,0,0"/>

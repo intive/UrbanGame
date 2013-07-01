@@ -304,6 +304,10 @@ namespace UrbanGame.ViewModels
                 solution.Task = task;
                 solution.Task.SolutionStatus = SolutionStatus.Pending;
 
+                //delete old solutions
+                foreach (var sol in unitOfWork.GetRepository<IBaseSolution>().All().Where(s => s.Task.Id == TaskId))
+                    unitOfWork.GetRepository<IBaseSolution>().MarkForDeletion(sol);
+
                 unitOfWork.GetRepository<IBaseSolution>().MarkForAdd(solution);
                 unitOfWork.Commit();
             }
@@ -317,9 +321,6 @@ namespace UrbanGame.ViewModels
             using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
             {
                 var sol = unitOfWork.GetRepository<IBaseSolution>().All().First(s => s.Id == solution.Id);                          
-                GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
-
-                task.UserPoints = 20;
 
                 switch(result)
                 {
@@ -335,12 +336,9 @@ namespace UrbanGame.ViewModels
                         VisualStateName = "Timeout";
                         break;
                 }
-
-                //unitOfWork.Commit();
             }
 
             RefreshTask();
-
         }
 
         public async void SubmitGPS()
@@ -378,6 +376,11 @@ namespace UrbanGame.ViewModels
         public void ChangeToNormal()
         {
             VisualStateName = "Normal";
+        }
+
+        public void CanGoBack(ActionExecutionContext executionContext)
+        {
+            (executionContext.EventArgs as System.ComponentModel.CancelEventArgs).Cancel = VisualStateName == "Sending";
         }
 
         #endregion        
