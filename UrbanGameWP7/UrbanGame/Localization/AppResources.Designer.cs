@@ -278,7 +278,7 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DIFFICULTY.
+        ///   Looks up a localized string similar to difficulty:.
         /// </summary>
         public static string Difficulty {
             get {
@@ -287,7 +287,7 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DURATION.
+        ///   Looks up a localized string similar to duration:.
         /// </summary>
         public static string Duration {
             get {
@@ -328,6 +328,15 @@ namespace UrbanGame.Localization {
         public static string EmptyPassword {
             get {
                 return ResourceManager.GetString("EmptyPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to end:.
+        /// </summary>
+        public static string End {
+            get {
+                return ResourceManager.GetString("End", resourceCulture);
             }
         }
         
@@ -431,7 +440,7 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GAME TYPE.
+        ///   Looks up a localized string similar to game type:.
         /// </summary>
         public static string GameType {
             get {
@@ -566,6 +575,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to left.
+        /// </summary>
+        public static string Left {
+            get {
+                return ResourceManager.GetString("Left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are logged in!.
         /// </summary>
         public static string LoggedIn {
@@ -661,15 +679,6 @@ namespace UrbanGame.Localization {
         public static string MyGames {
             get {
                 return ResourceManager.GetString("MyGames", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to my latest games.
-        /// </summary>
-        public static string MyLatestGames {
-            get {
-                return ResourceManager.GetString("MyLatestGames", resourceCulture);
             }
         }
         
@@ -773,15 +782,6 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PLAYERS.
-        /// </summary>
-        public static string PlayersUPCase {
-            get {
-                return ResourceManager.GetString("PlayersUPCase", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please log in to see list of your games..
         /// </summary>
         public static string PleaseLog {
@@ -818,11 +818,11 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to powered by.
+        ///   Looks up a localized string similar to previous games.
         /// </summary>
-        public static string PoweredBy {
+        public static string PreviousGames {
             get {
-                return ResourceManager.GetString("PoweredBy", resourceCulture);
+                return ResourceManager.GetString("PreviousGames", resourceCulture);
             }
         }
         

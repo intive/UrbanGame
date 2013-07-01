@@ -32,6 +32,7 @@
         <conv:DurationTimeConverter x:Key="DurationTimeConverter" />
         <conv:IsRepeatableConverter x:Key="IsRepeatableConverter" />
         <conv:GameChangedToVisibilityConverter x:Key="GameChangedToVisibilityConverter" />
+        <conv:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter" />
         
         <Style x:Key="ItemStyle" TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

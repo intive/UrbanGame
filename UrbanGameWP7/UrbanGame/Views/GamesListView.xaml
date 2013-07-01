@@ -29,8 +29,8 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Column="1" FontSize="50" FontWeight="Bold" Margin="-30,0,0,0"/>
-                    <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Column="0" FontSize="50" Foreground="{StaticResource FontColorGreen}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Column="1" FontSize="70" FontWeight="Bold" Margin="-30,0,0,0"/>
+                    <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Column="0" FontSize="70" Foreground="{StaticResource FontColorGreen}" FontWeight="Bold"/>
                 </Grid>
             </controls:Panorama.Title>
 
@@ -56,29 +56,29 @@
                                                 <Setter Property="Margin" Value="0,0,5,5" />
                                             </Style>
                                         </Grid.Resources>
-                                        <Image Source="{Binding GameLogoFullUrl}" Grid.Column="0" Width="100" Height="100" Margin="5,0,10,0" VerticalAlignment="Top"/>
+                                        <Image Source="{Binding GameLogoFullUrl}" Grid.Column="0" Width="110" Height="110" Margin="5,0,10,0" VerticalAlignment="Top"/>
                                         <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0,-10,0,0">
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto"/>
-                                                    <RowDefinition />
-                                                    <RowDefinition />
-                                                    <RowDefinition />
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
                                                 </Grid.RowDefinitions>
 
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                                     <Ellipse Fill="White" Width="10" Height="10" Visibility="{Binding ListOfChanges, Converter={StaticResource GameChangedToVisibilityConverter}}" />
                                                 </StackPanel>
-                                                
-                                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+
+                                                <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,-10,0,0">
                                                     <StackPanel.Resources>
                                                         <Style TargetType="TextBlock">
                                                             <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
                                                         </Style>
                                                     </StackPanel.Resources>
                                                     <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,0,10,0"/>
-                                                    <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
+                                                    <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}" />
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="2">
                                                     <StackPanel.Resources>
@@ -88,12 +88,12 @@
                                                             <Setter Property="Foreground" Value="{StaticResource FontColorGreen}" />
                                                         </Style>
                                                     </StackPanel.Resources>
-                                                    <TextBlock Text="{Binding Points}"/>
-                                                    <TextBlock Text="{Binding MaxPoints, Converter={StaticResource IntToSlashIntConverter}}" Margin="-5,0,0,0"/>
-                                                    <TextBlock Text="p." />
-                                                    <TextBlock Text="|" />
-                                                    <TextBlock Text="{Binding Path=AppResources.Rank, Source={StaticResource LocalizedStrings}}" />
-                                                    <TextBlock Text="{Binding Rank, Converter={StaticResource RankConverter}}" />
+                                                    <TextBlock Text="{Binding Points}" Visibility="{Binding Points, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                                                    <TextBlock Text="p." Visibility="{Binding Points, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                                                    <TextBlock Text="|" Visibility="{Binding Points, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                                                    <TextBlock Text="{Binding Path=AppResources.Rank, Source={StaticResource LocalizedStrings}}" Visibility="{Binding Rank, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                                                    <TextBlock Text="{Binding Rank, Converter={StaticResource RankConverter}}" Visibility="{Binding Rank, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                                                    <TextBlock Text=" "/>
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="3">
                                                     <StackPanel.Resources>
@@ -116,7 +116,7 @@
 
                         <TextBlock Text="{Binding Path=AppResources.NotLogged, Source={StaticResource LocalizedStrings}}" Grid.Row="0" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
                         <TextBlock Text="{Binding Path=AppResources.PleaseLog, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
-                        <TextBlock Text="{Binding Path=AppResources.MyLatestGames, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,0,5" FontSize="{StaticResource PhoneFontSizeMedium}" Foreground="{StaticResource FontColorWhite}"/>
+                        <TextBlock Text="{Binding Path=AppResources.PreviousGames, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,0,5" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}"/>
                         
                         <ListBox Grid.Row="2" Margin="0,5,0,0" ItemsSource="{Binding UserInactiveGames}" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
@@ -157,7 +157,7 @@
                                                         <Setter Property="Foreground" Value="{StaticResource FontColorGreen}" />
                                                     </Style>
                                                 </StackPanel.Resources>
-                                                <TextBlock Text="{Binding Points}"/>
+                                                <TextBlock Text="{Binding Points, Converter={StaticResource IntToSlashIntConverter}}"/>
                                                 <TextBlock Text="{Binding MaxPoints, Converter={StaticResource IntToSlashIntConverter}}" Margin="-5,0,5,0"/>
                                                 <TextBlock Text="p." />
                                                 <TextBlock Text="|" />
@@ -191,18 +191,17 @@
                                             <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
                                         </Style>
                                     </Grid.Resources>
-                                    <Image Source="{Binding GameLogoFullUrl}" Grid.Column="0" Width="120" Height="120" Margin="0,0,10,0" VerticalAlignment="Top"/>
+                                    <Image Source="{Binding GameLogoFullUrl}" Grid.Column="0" Width="110" Height="110" Margin="0,0,10,0" VerticalAlignment="Top"/>
                                     <StackPanel Grid.Column="1" Orientation="Vertical">
                                         <Grid Background="Transparent">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto"/>
-
+                                                <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding Name}" Grid.Row="0" Margin="0,-3,0,0" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
-                                            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                            <TextBlock Text="{Binding Name}" Grid.Row="0" Margin="0,-10,0,0" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,-7,0,0">
                                                 <StackPanel.Resources>
                                                     <Style TargetType="TextBlock">
                                                         <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
@@ -211,7 +210,7 @@
                                                 <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,0,10,0"/>
                                                 <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                             </StackPanel>
-                                            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,7,0,0">
                                                 <StackPanel.Resources>
                                                     <Style TargetType="TextBlock">
                                                         <Setter Property="Margin" Value="0,0,5,5" />
@@ -221,9 +220,9 @@
                                                 </StackPanel.Resources>
                                                 <TextBlock Text="{Binding Path=AppResources.Players, Source={StaticResource LocalizedStrings}}" />
                                                 <TextBlock Text="{Binding NumberOfPlayers}" Grid.Column="1" />
-                                                <TextBlock Text="{Binding NumberOfSlots, Converter={StaticResource IntToSlashIntConverter}}" Margin="-5,0,5,0"/>
+                                                <TextBlock Text="{Binding NumberOfSlots, Converter={StaticResource IntToSlashIntConverter}}" Margin="-5,0,5,0" Visibility="{Binding NumberOfSlots, Converter={StaticResource ValueToVisibilityConverter}}"/>
                                             </StackPanel>
-                                            <StackPanel Orientation="Horizontal" Grid.Row="3">
+                                            <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="0,-7,0,0">
                                                 <StackPanel.Resources>
                                                     <Style TargetType="TextBlock">
                                                         <Setter Property="Margin" Value="0,0,5,5" />
