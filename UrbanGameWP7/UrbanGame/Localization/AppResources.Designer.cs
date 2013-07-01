@@ -332,6 +332,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to forgot password.
+        /// </summary>
+        public static string ForgotPassword {
+            get {
+                return ResourceManager.GetString("ForgotPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Game details have changed. Tap to see differences..
         /// </summary>
         public static string GameChangedToast {
@@ -674,6 +683,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next instructions has been sent to provided e-mail address.
+        /// </summary>
+        public static string NextInstructions {
+            get {
+                return ResourceManager.GetString("NextInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apparently you don&apos;t play in any game..
         /// </summary>
         public static string NoGamesPlaying {
@@ -724,6 +742,15 @@ namespace UrbanGame.Localization {
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to password recovery.
+        /// </summary>
+        public static string PasswordRecovery {
+            get {
+                return ResourceManager.GetString("PasswordRecovery", resourceCulture);
             }
         }
         
@@ -787,6 +814,15 @@ namespace UrbanGame.Localization {
         public static string Prizes {
             get {
                 return ResourceManager.GetString("Prizes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide e-mail address connected with your account to recover your password..
+        /// </summary>
+        public static string ProvideEmail {
+            get {
+                return ResourceManager.GetString("ProvideEmail", resourceCulture);
             }
         }
         

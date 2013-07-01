@@ -414,4 +414,16 @@
   <data name="UnknownError" xml:space="preserve">
     <value>Wystąpił nieznany błąd serwisu</value>
   </data>
+  <data name="PasswordRecovery" xml:space="preserve">
+    <value>odzyskiwanie hasła</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>zapomniałem hasła</value>
+  </data>
+  <data name="NextInstructions" xml:space="preserve">
+    <value>Kolejne instrukcje zostały wysłane na podany adres e-mail</value>
+  </data>
+  <data name="ProvideEmail" xml:space="preserve">
+    <value>Wprowadź adres e-mail powiązany z kontem w celu odzyskania hasła</value>
+  </data>
 </root>

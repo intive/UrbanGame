@@ -430,4 +430,16 @@
   <data name="UnknownError" xml:space="preserve">
     <value>Serviced returned unknown error</value>
   </data>
+  <data name="PasswordRecovery" xml:space="preserve">
+    <value>password recovery</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>forgot password</value>
+  </data>
+  <data name="NextInstructions" xml:space="preserve">
+    <value>Next instructions has been sent to provided e-mail address</value>
+  </data>
+  <data name="ProvideEmail" xml:space="preserve">
+    <value>Provide e-mail address connected with your account to recover your password.</value>
+  </data>
 </root>
