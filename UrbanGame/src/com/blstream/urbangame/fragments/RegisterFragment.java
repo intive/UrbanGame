@@ -3,6 +3,8 @@ package com.blstream.urbangame.fragments;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,8 +16,12 @@ import com.blstream.urbangame.R;
 import com.blstream.urbangame.dialogs.UrbanGameDialog;
 import com.blstream.urbangame.dialogs.UrbanGameDialog.UrbanGameDialogOnClickListener;
 import com.blstream.urbangame.session.RegistrationManager;
+import com.blstream.urbangame.session.SessionManager;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
-public class RegisterFragment extends SherlockFragment implements OnClickListener {
+public class RegisterFragment extends SherlockFragment implements OnClickListener, WebServerNotificationListener {
+	private static final String NAME = RegisterFragment.class.getSimpleName();
+	
 	private LoginRegisterView loginRegisterView;
 	private UrbanGameDialog.DialogBuilder invalidDataAlertDialog;
 	private UrbanGameDialog.DialogBuilder registerCompleteAlertDialog;
@@ -65,36 +71,41 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 		email = loginRegisterView.getEmail();
 		displayName = loginRegisterView.getDisplayName();
 		password = loginRegisterView.getPassword();
-		boolean isRegisterDataValid = isRegisterDataValid(email, displayName, password);
+		boolean isRegisterDataValid = loginRegisterView.isDataSyntaxCorrect();
 		
 		if (isRegisterDataValid) {
-			showRegistrationCompleteAlertDialog();
+			register(email, displayName, password);
 		}
 		else {
 			showInvalidDataAlertDialog();
 		}
 	}
 	
-	private void showRegistrationCompleteAlertDialog() {
-		registerCompleteAlertDialog.show();
-	}
-	
 	private void showInvalidDataAlertDialog() {
 		invalidDataAlertDialog.show();
 	}
 	
-	private boolean isRegisterDataValid(String email, String displayName, String password) {
-		return loginRegisterView.isDataCorrect() && register(email, displayName, password);
-	}
-	
-	private boolean register(String email, String displayName, String password) {
-		return RegistrationManager.getInstance(activity).register(email, displayName, password);
+	private void register(String email, String displayName, String password) {
+		new RegistrationManager(activity, this).register(email, displayName, password);
 	}
 	
 	private final UrbanGameDialogOnClickListener registerSuccessfulListener = new UrbanGameDialogOnClickListener() {
+		private static final long serialVersionUID = 1L;
+		
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			activity.loginUser(email);
+			activity.setLoggedUserInDB(email);
 		}
 	};
+	
+	@Override
+	public void onWebServerResponse(Message message) {
+		Log.d(SessionManager.TAG, NAME + " onWebServerResponse()");
+		// TODO check registration status
+		showRegistrationCompleteAlertDialog();
+	}
+	
+	private void showRegistrationCompleteAlertDialog() {
+		registerCompleteAlertDialog.show();
+	}
 }

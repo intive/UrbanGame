@@ -180,7 +180,7 @@ public class LoginRegisterView extends LinearLayout implements OnClickListener {
 		}
 	}
 	
-	public boolean isDataCorrect() {
+	public boolean isDataSyntaxCorrect() {
 		switch (type) {
 			case TYPE_LOGIN:
 				return isLoginDataValid(getEmail(), getPassword());

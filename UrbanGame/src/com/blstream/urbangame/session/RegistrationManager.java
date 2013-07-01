@@ -1,36 +1,30 @@
 package com.blstream.urbangame.session;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.blstream.urbangame.database.entity.Player;
-import com.blstream.urbangame.web.WebHighLevel;
-import com.blstream.urbangame.web.WebHighLevelInterface;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
 public class RegistrationManager extends SessionManager {
-	private final static String TAG = "RegistrationManager";
-	private static RegistrationManager instance;
+	private static final String NAME = RegistrationManager.class.getSimpleName();
 	
-	private RegistrationManager(Context context) {
-		super(context);
+	public RegistrationManager(Context context, WebServerNotificationListener listener) {
+		super(context, listener);
 	}
 	
-	public static RegistrationManager getInstance(Context context) {
-		if (instance == null) {
-			instance = new RegistrationManager(context);
-		}
-		return instance;
+	public synchronized void register(String email, String displayName, String password) {
+		Log.d(TAG, NAME + " register()");
+		
+		web.registerPlayer(email, displayName, password);
 	}
 	
-	public boolean register(String email, String displayName, String password) {
+	public void storeUserInDB(Player player) {
+		Log.d(TAG, NAME + " storeUserInDB()");
 		
-		WebHighLevelInterface web = new WebHighLevel(context);
-		Player player = web.registerPlayer(email, displayName, password);
-		boolean isOK = player != null;
-		
-		if (isOK) {
+		boolean registrationStatus = player != null;
+		if (registrationStatus) {
 			addUserToDB(player);
 		}
-		
-		return isOK;
 	}
 }

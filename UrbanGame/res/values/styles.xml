@@ -89,9 +89,9 @@
         <item name="android:paddingBottom">@dimen/dialogContentTopBottomPadding</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
-    
+
     <style name="DialogButtonStyle">
-        <item name="android:background">?attr/selectable_background</item> 
+        <item name="android:background">?attr/selectable_background</item>
     </style>
 
 </resources>
