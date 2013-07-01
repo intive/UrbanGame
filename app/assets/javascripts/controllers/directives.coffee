@@ -27,7 +27,7 @@ app.directive 'gameName', ->
     restrict: 'A',
     link: (scope, elm, attr) ->
         elm.on 'keyup', ->
-            if scope.game.name!=undefined
+            if scope.game.name != undefined
                 scope.isValidName()
             else
                 $("#processing").attr "class", ""
@@ -53,3 +53,41 @@ app.directive 'timeCheck', ->
                     scope.form.$setValidity "dates", true
             else
                 scope.form.$setValidity "dates", true
+
+app.directive 'passwordConfirm', ->
+    require: "ngModel",
+    link: (scope, elem, attrs, ctrl) ->
+        otherInput = elem.inheritedData("$formController")[attrs.passwordConfirm]
+
+        ctrl.$parsers.push((value) ->
+            if(value == otherInput.$viewValue)
+                ctrl.$setValidity "repeat", true
+                return value
+            ctrl.$setValidity "repeat", false
+        )
+
+        otherInput.$parsers.push((value) ->
+            ctrl.$setValidity "repeat", value == ctrl.$viewValue
+            return value
+        )
+
+app.directive 'userEmail', ->
+    require: "ngModel",
+    link: (scope, elem, attrs, ctrl) ->
+        ctrl.$parsers.push((value) ->
+            if value != undefined
+                scope.isValidEmail(value).
+                    success((data, status) ->
+                        if data.val
+                            ctrl.$setValidity "emailunique", true
+                        else
+                            ctrl.$setValidity "emailunique", false
+                        scope.error = null
+                    ).
+                    error((data, status) ->
+                        ctrl.$setValidity "emailunique", true
+                        scope.error = Messages("js.errors.email") + data
+                    )
+            $("#processing").removeClass("img-processing")
+            value
+        )

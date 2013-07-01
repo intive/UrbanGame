@@ -83,10 +83,10 @@ object dal {
     }
 
     def searchName(name: String): Try[Boolean] = {
-      val cntName: Int = db.withSession { implicit session =>
+      val cntName: Option[Int] = db.withSession { implicit session =>
         Games.checkName(name)
       }
-      Try(cntName == 0)
+      Try(cntName == Some(0))
     }
 
     def gameChangeStatus(id: Int, flag: String): Try[Int] = db.withSession { implicit session =>

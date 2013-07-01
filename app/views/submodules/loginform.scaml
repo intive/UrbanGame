@@ -29,13 +29,13 @@
         %form.navbar-form(action={routes.Application.authenticate} method="post" name="loginForm")
             .span
                 .row
-                    %input.input-medium(type="text" placeholder={Messages("email")(lan)} name="user.email")
+                    %input.input-medium(type="text" placeholder={Messages("email")(lan)} name="user.email" required)
                 .row
                     %label.checkbox.inline.lower
                         %input(type="checkbox" name="remember" value="true" disabled) = Messages("remember")(lan)
             .span
                 .row
-                    %input.input-medium(type="password" placeholder={Messages("password")(lan)} name="user.password")
+                    %input.input-medium(type="password" placeholder={Messages("password")(lan)} name="user.password" required)
                 .row
                     %a.help-inline.lower(href="/") = Messages("forgotpass")(lan)
             .span

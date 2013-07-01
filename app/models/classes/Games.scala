@@ -142,7 +142,7 @@ trait Games { this: ImplicitSession =>
     Try(q.delete)
   }
 
-  def checkName(name: String): Int = (for {g <- Games if g.name.toLowerCase === name.toLowerCase} yield g.length).first
+  def checkName(name: String): Option[Int] = (for {g <- Games if g.name.toLowerCase === name.toLowerCase} yield g.length).firstOption
 
   def changeStatus(gid: Int, flag: String): Try[Int] = {
     val (statS, statE): (String, String) = flag match {

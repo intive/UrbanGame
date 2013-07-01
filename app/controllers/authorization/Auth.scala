@@ -86,8 +86,8 @@ trait EmailConfirmation {
     val url = "http://" + request.host + "/confirm/" + email + "/" + token
     val msg = """
       <html>
-        <h4>""" + Messages("email.signUpConfirm.title")(Lang(lan)) + """</h4>
-        <p>""" + Messages("email.signUpConfirm.body")(Lang(lan)) + """</p>
+        <h4>""" + Messages("notify.email.signUpConfirm.title")(Lang(lan)) + """</h4>
+        <p>""" + Messages("notify.email.signUpConfirm.body")(Lang(lan)) + """</p>
         <p><a href='""" + url + """'>""" + url + """</a></p>
       </html>
     """

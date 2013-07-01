@@ -159,6 +159,15 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
     Ok(Scalate("confirmations").render('title -> "Urban Game - E-mail confirmation", 'user -> user, 'message -> msg))
   }
 
+  def checkEmail(email: String) = StackAction { implicit request =>
+    val res = findByEmail(email) match {
+      case Some(x) => false
+      case None => true
+    }
+
+    Ok(Json.toJson(Map("val" -> res)))
+  }
+
   def fillDatabase = Action { implicit request =>
     import scala.io._
     import com.github.nscala_time.time.Imports._
