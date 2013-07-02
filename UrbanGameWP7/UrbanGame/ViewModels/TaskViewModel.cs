@@ -333,6 +333,10 @@ namespace UrbanGame.ViewModels
                         VisualStateName = "Wrong";
                         sol.Task.SolutionStatus = SolutionStatus.Rejected;
                         break;
+                    case SubmitResult.ScoreDelayed:
+                        VisualStateName = "Delayed";
+                        sol.Task.SolutionStatus = SolutionStatus.Pending;
+                        break;
                     default: 
                         VisualStateName = "Timeout";
                         break;
