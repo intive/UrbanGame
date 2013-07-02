@@ -11,9 +11,12 @@ POST    /                   		controllers.Application.register
 POST    /locale                     controllers.Application.changeLang
 GET 	/notify						controllers.Application.notification
 GET     /messages.js                controllers.Application.jsMessages
-
 GET 	/confirm/:email/:token		controllers.Application.confirm(email: String, token: String)
 GET 	/confirm/new/:typ/:email	controllers.Application.newToken(typ: String, email: String)
+GET 	/passwordRecovery			controllers.Application.passwordRecovery
+POST 	/recover					controllers.Application.recover
+
+GET 	/json/checkEmail/:email 	controllers.Application.checkEmail(email: String)
 
 # Json
 GET     /my/games/json/list         controllers.GamesCtrl.getGamesList

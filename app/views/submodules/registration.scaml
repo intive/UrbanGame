@@ -15,6 +15,7 @@
 
 - attributes("scripts") = capture
     %script(src={uri("/assets/javascripts/controllers/registrationCtrl.min.js")} type="text/javascript")
+    %script(src={uri("/assets/javascripts/controllers/directives.min.js")} type="text/javascript")
 
 -@ val lan: Lang
 -@ var registrationForm: play.api.data.Form[(String, String, (String, String), (String, String), Boolean)]
@@ -33,31 +34,38 @@
     -}
 
 .row
-    %p.upper.h1.bold Register for free
-    %p The application is a web interface that allows to create a game. When the game is created, the organizer can add different tasks for players. We are assuming that many tasks will be related to position on the map and finding something in
+    %p.upper.h1.bold = Messages("main.register.title")(lan)
+    %p = Messages("main.register.msg")(lan)
 .row(ng-controller="registrationCtrl")
     %form.form-register.form-horizontal(action={routes.Application.register} method="post" name="registration" class="css-form" id="auth")
         .control-group
             %label.control-label = Messages("register.name")(lan)
             .controls
                 %input(type="text" name="name" id="name" placeholder={Messages("name")(lan)} 
-                    value={if(registrationForm.data.contains("name")) registrationForm.data("name")})
+                    value={if(registrationForm.data.contains("name")) registrationForm.data("name")} ng-model="user.name" required)
+                .help-block(ng-show="registration.name.$dirty && registration.name.$error.required" ng-cloak) = Messages("error.name.required")
                 != showMsg("name")
         .control-group
             %label.control-label = Messages("email")(lan)
             .controls
                 %input(type="text" name="email" id="email" placeholder={Messages("email")(lan)}
-                    value={if(registrationForm.data.contains("email")) registrationForm.data("email")})
+                    value={if(registrationForm.data.contains("email")) registrationForm.data("email")} ng-model="user.email" user-email required)
+                %span#processing
+                .help-block(ng-show="registration.email.$dirty && registration.email.$error.emailunique" ng-cloak) = Messages("error.email.exists")
+                .help-block(ng-show="registration.email.$dirty && registration.email.$error.required" ng-cloak) = Messages("error.email.required")
                 != showMsg("email")
         .control-group
             %label.control-label = Messages("password")(lan)
             .controls
-                %input(type="password" name="password.main" id="password.main" placeholder={Messages("password")(lan)})
+                %input(type="password" name="password.main" id="password.main" placeholder={Messages("password")(lan)} ng-model="user.password" pattern=".{6,}" required)
+                .help-block(ng-show="registration['password.main'].$dirty && registration['password.main'].$error.required" ng-cloak) = Messages("error.password.required")
                 != showMsg("password.main")
         .control-group
             %label.control-label = Messages("password.confirm")(lan)
             .controls
-                %input(type="password" name="password.confirm" id="password.confirm" placeholder={Messages("password.confirm")(lan)})
+                %input(type="password" name="password.confirm" id="password.confirm" placeholder={Messages("password.confirm")(lan)} ng-model="user.passwordConfirm" pattern=".{6,}" required password-confirm="password.main")
+                .help-block(ng-show="registration['password.confirm'].$dirty && registration['password.confirm'].$error.required" ng-cloak) = Messages("error.password.required")
+                .help-block(ng-show="registration['password.confirm'].$dirty && registration['password.confirm'].$error.repeat" ng-cloak) = Messages("error.passwords.match")
                 != showMsg("password.confirm")
         %script(type="text/javascript")
             var RecaptchaOptions = {theme : 'custom', custom_theme_widget: 'recaptcha_widget'};
@@ -78,7 +86,8 @@
             .control-group
                 %label.control-label = Messages("captcha")(lan)
                 .controls
-                    %input#recaptcha_response_field(type="text" name="captcha.recaptcha_response_field" placeholder={Messages("captcha")(lan)})
+                    %input#recaptcha_response_field(type="text" name="captcha.recaptcha_response_field" placeholder={Messages("captcha")(lan)} ng-model="user.captcha" required)
+                    .help-block(ng-show="registration['captcha.recaptcha_response_field'].$dirty && registration['captcha.recaptcha_response_field'].$error.required" ng-cloak) = Messages("error.captcha.required")
                     != showMsg("captcha.recaptcha_response_field")
                     != showMsg("captcha")
 
@@ -93,10 +102,11 @@
         .control-group
             .controls
                 %label.checkbox.checkbox-terms
-                    %input(type="checkbox" name="accept" id="accept" value="true" checked={if(registrationForm.data.contains("accept")) true else false}) 
+                    %input(type="checkbox" name="accept" id="accept" value="true" ng-model="user.accept" checked={if(registrationForm.data.contains("accept")) true else false} required) 
                         I agree to 
                         %a(href="") Terms of Service 
                         and 
                         %a(href="") Privacy Policy
+                    .help-block(ng-show="registration.accept.$dirty && registration.accept.$error.required" ng-cloak) = Messages("error.accept.therms")
                     != showMsg("accept")
                 %input.btn.btn-success.pull-right(type="submit" name="regbtn" id="regbtn" value={Messages("register.submit")(lan)} ng-click="send()")

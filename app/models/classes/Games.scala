@@ -129,7 +129,7 @@ trait Games { this: ImplicitSession =>
 
   def update(gid: Int, gd: GamesDetails): Try[Int] = {
     val q = for {
-      g <- Games if g.id === gid
+      g <- Games if g.id === gid.bind
     } yield g
 
     Try(q.update(gd))
@@ -137,13 +137,13 @@ trait Games { this: ImplicitSession =>
 
   def delete(gid: Int): Try[Int] = {
     val q = for {
-      g <- Games if g.id === gid
+      g <- Games if g.id === gid.bind
     } yield g
 
     Try(q.delete)
   }
 
-  def checkName(name: String): Int = (for {g <- Games if g.name.toLowerCase === name.toLowerCase} yield g.length).first
+  def checkName(name: String): Option[Int] = (for {g <- Games if g.name.toLowerCase === name.bind.toLowerCase} yield g.length).firstOption
 
   def changeStatus(gid: Int, flag: String): Try[Int] = {
     val (statS, statE): (String, String) = flag match {
