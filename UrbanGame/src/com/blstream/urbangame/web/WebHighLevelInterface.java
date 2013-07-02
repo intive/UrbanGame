@@ -5,18 +5,21 @@ import java.util.ArrayList;
 import android.location.Location;
 
 import com.blstream.urbangame.database.entity.ABCDTask;
-import com.blstream.urbangame.database.entity.Player;
 import com.blstream.urbangame.database.entity.Task;
-import com.blstream.urbangame.fragments.ABCDTaskAnswerFragment;
-import com.blstream.urbangame.fragments.ABCDTaskAnswerFragment.ServerResponseToSendedAnswers;
-import com.blstream.urbangame.fragments.GpsTaskAnswerFragment;
+import com.blstream.urbangame.webserver.WebServer;
 
+/**
+ * WebHighLevelInterface is interface provided for user to perform specific
+ * actions on {@link WebServer}. All of methods don't return anything because
+ * user get server response only in onWebServerResponse() method required by
+ * handler which is used to create {@link WebServer} object.
+ */
 public interface WebHighLevelInterface {
 	
 	/**
 	 * it downloads games basic info and inserts it into database
 	 */
-	void downloadGameList();
+	void downloadGamesList();
 	
 	/**
 	 * it downloads all games that user is participating and inserts them into
@@ -51,9 +54,8 @@ public interface WebHighLevelInterface {
 	 * 
 	 * @param email - user's email
 	 * @param password - provided password
-	 * @return - player data if successful, else null
 	 */
-	Player loginUser(String email, String password);
+	void loginUser(String email, String password);
 	
 	/**
 	 * if registers user in web server
@@ -61,9 +63,8 @@ public interface WebHighLevelInterface {
 	 * @param email
 	 * @param displayName
 	 * @param password
-	 * @return player if successful, null if not succeeded
 	 */
-	Player registerPlayer(String email, String displayName, String password);
+	void registerPlayer(String email, String displayName, String password);
 	
 	/**
 	 * it downloads all tasks for game with data for current user if they are
@@ -78,19 +79,16 @@ public interface WebHighLevelInterface {
 	 * 
 	 * @param task
 	 * @param answers
-	 * @return - object that is needed by {@link ABCDTaskAnswerFragment}, along
-	 *         with correct answers if it's last attempt
 	 */
-	ServerResponseToSendedAnswers sendAnswersForABCDTask(ABCDTask task, ArrayList<String> answers);
+	void sendAnswersForABCDTask(ABCDTask task, ArrayList<String> answers);
 	
 	/**
 	 * it sends answer for location task to server in order to verify
 	 * 
 	 * @param task
 	 * @param location
-	 * @return int code that is recognized by {@link GpsTaskAnswerFragment}
 	 */
-	int sendAnswerForLocationTask(Task task, Location location);
+	void sendAnswerForLocationTask(Task task, Location location);
 	
 	/**
 	 * it asks server for correct answer location
@@ -98,6 +96,5 @@ public interface WebHighLevelInterface {
 	 * @param task
 	 * @return
 	 */
-	Location getCorrectAnswerForGpsTask(Task task);
-	
+	void getCorrectAnswerForGpsTask(Task task);
 }

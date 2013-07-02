@@ -1,11 +1,11 @@
 package com.blstream.urbangame.session;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.blstream.urbangame.database.entity.Player;
-import com.blstream.urbangame.web.WebHighLevel;
-import com.blstream.urbangame.web.WebHighLevelInterface;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
 // formatter:off
 /**
@@ -21,22 +21,20 @@ import com.blstream.urbangame.web.WebHighLevelInterface;
  */
 //formatter:on
 public class LoginManager extends SessionManager {
-	private final static String TAG = "LoginManager";
-	private static LoginManager instance;
+	private static final String NAME = LoginManager.class.getSimpleName();
 	
-	private LoginManager(Context context) {
+	private String email;
+	
+	public LoginManager(Context context, WebServerNotificationListener listener) {
+		super(context, listener);
+	}
+	
+	public LoginManager(Context context) {
 		super(context);
 	}
 	
-	public static LoginManager getInstance(Context context) {
-		if (instance == null) {
-			instance = new LoginManager(context);
-		}
-		return instance;
-	}
-	
 	public boolean isUserLoggedIn() {
-		return isUserIdStoredInDB() && !isUserIdEmpty();
+		return !isUserIdEmpty() && isUserIdStoredInDB();
 	}
 	
 	private boolean isUserIdStoredInDB() {
@@ -44,38 +42,41 @@ public class LoginManager extends SessionManager {
 	}
 	
 	private boolean isUserIdEmpty() {
-		return database.getLoggedPlayerID().length() == 0;
+		String loggedPlayerID = database.getLoggedPlayerID();
+		return database.getLoggedPlayerID() != null && TextUtils.isEmpty(loggedPlayerID);
 	}
 	
-	public boolean loginUser(String email) {
-		Log.i(TAG, email + " logging in");
+	public boolean setLoggedUserInDB(String email) {
+		Log.d(TAG, NAME + " setLoggedUserInDB() " + email);
 		
 		return database.setLoggedPlayer(email);
 	}
 	
-	public boolean isLoginDataValid(String email, String password) {
+	public void loginUser(String email, String password) {
+		Log.d(TAG, NAME + " loginUser() " + email + " with password " + password);
 		
-		WebHighLevelInterface web = new WebHighLevel(super.context);
-		Player fromWeb = web.loginUser(email, password);
-		boolean isOK = fromWeb != null;
-		
-		if (isOK) {
-			if (!doesPlayerExist(email)) {
-				addUserToDB(fromWeb);
-			}
-			else {
-				updatePlayerInDB(fromWeb);
-			}
-		}
-		
-		return isOK;
+		web.loginUser(email, password);
 	}
 	
 	public void logoutUser() {
-		Log.i(TAG, database.getLoggedPlayerID() + " logging out");
+		Log.d(TAG, NAME + " " + database.getLoggedPlayerID() + " logging out");
 		
 		if (database.setNoOneLogged()) {
 			startMainActivity();
+		}
+	}
+	
+	public void storeUserInDB(Player player) {
+		Log.d(TAG, NAME + " storeUserInDB()");
+		
+		boolean loginResult = player != null;
+		if (loginResult) {
+			if (!doesPlayerExist(email)) {
+				addUserToDB(player);
+			}
+			else {
+				updatePlayerInDB(player);
+			}
 		}
 	}
 }

@@ -110,8 +110,8 @@
     <string name="label_taksRepeatable">repeatable</string>
     <string name="label_taskNon_repeatable">non-repeatable</string>
     <string name="button_submit">Submit</string>
- 	<string name="label_your_answer">Your Answer:</string>
- 	
+    <string name="label_your_answer">Your Answer:</string>
+
     <!-- ProfileActivity -->
     <string name="button_save">Save</string>
     <string name="button_skip">Skip</string>
@@ -130,8 +130,8 @@
     <string name="settings_database_encryption_on_title">Encryption</string>
     <string name="settings_style">Style</string>
     <string name="settings_theme_summary">Sets application theme. Application should be restarted.</string>
-    <string name="settings_theme_title">Theme</string>  
-    
+    <string name="settings_theme_title">Theme</string>
+
     <!-- Content descriptions -->
     <string name="contentDescription_gameLogo">Game logo</string>
     <string name="contentDescription_operatorLogo">Operator logo</string>
@@ -165,7 +165,21 @@
         <item>Gallery</item>
         <item>Camera</item>
     </string-array>
-    
+
+    <!-- Answer Dialog -->
+    <string name="title_right">Correct</string>
+    <string name="title_wrong">Wrong</string>
+    <string name="title_partially_right">Not so great</string>
+    <string name="title_no_internet">No Internet connection</string>
+    <string name="title_no_gps_signal">No GPS signal</string>
+    <string name="title_gps_off">GPS is off</string>
+    <string name="message_answer_score">%1$d/%2$d points</string>
+    <string name="message_no_internet">Make sure you are connected to the Internet to submit the answer.</string>
+    <string name="message_device_offline">Device is offline! Go to settings to enable internet connection.</string>
+    <string name="message_no_gps_signal">Please wait for a valid GPS signal.</string>
+    <string name="message_gps_off">Turn on GPS in the settings to submit the answer.</string>
+    <string name="answer_dialog_button_settings">Settings</string>
+
     <!-- Answer Dialog -->
     <string name="title_right">Correct</string>
     <string name="title_wrong">Wrong</string>
@@ -179,19 +193,6 @@
     <string name="message_gps_off">Turn on GPS in the settings to submit the answer.</string>
     <string name="answer_dialog_button_settings">Settings</string>
 
-     <!-- Answer Dialog -->
-    <string name="title_right">Correct</string>
-    <string name="title_wrong">Wrong</string>
-    <string name="title_partially_right">Not so great</string>
-    <string name="title_no_internet">No Internet connection</string>
-    <string name="title_no_gps_signal">No GPS signal</string>
-    <string name="title_gps_off">GPS is off</string>
-    <string name="message_answer_score">%1$d/%2$d points</string>
-    <string name="message_no_internet">Make sure you are connected to the Internet to submit the answer.</string>
-    <string name="message_no_gps_signal">Please wait for a valid GPS signal.</string>
-    <string name="message_gps_off">Turn on GPS in the settings to submit the answer.</string>
-    <string name="answer_dialog_button_settings">Settings</string>
-    
     <!-- Notifications -->
     <string name="notification_title_game_changed">Game changed</string>
     <string name="notification_title_game_over">Game over</string>
@@ -208,7 +209,7 @@
 
     <!-- Shared preferences -->
     <string name="key_notifications_on">keyNotificationsOn</string>
-    <string name="key_database_encryption_on">keyDatabaseEncryptionOn</string>   
-    <string name="key_theme">keyTheme</string>   
-   
+    <string name="key_database_encryption_on">keyDatabaseEncryptionOn</string>
+    <string name="key_theme">keyTheme</string>
+
 </resources>

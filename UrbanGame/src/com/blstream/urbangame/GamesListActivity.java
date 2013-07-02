@@ -2,6 +2,7 @@ package com.blstream.urbangame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -15,16 +16,26 @@ import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.blstream.urbangame.adapters.GamesListAdapter;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
+import com.blstream.urbangame.web.WebHighLevel;
+import com.blstream.urbangame.web.WebHighLevelInterface;
+import com.blstream.urbangame.webserver.ServerResponseHandler;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
-public class GamesListActivity extends AbstractGamesListActivity implements OnChildClickListener {
+public class GamesListActivity extends AbstractGamesListActivity implements OnChildClickListener,
+	WebServerNotificationListener {
 	private GamesListAdapter adapter;
 	private ExpandableListView list;
+	private ServerResponseHandler handler;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_games_list);
 		setSupportProgressBarVisibility(true);
+		
+		this.handler = new ServerResponseHandler(this);
+		WebHighLevelInterface web = new WebHighLevel(handler, this);
+		web.downloadGamesList();
 		
 		list = (ExpandableListView) findViewById(R.id.listViewAllGamesList);
 		
@@ -90,5 +101,11 @@ public class GamesListActivity extends AbstractGamesListActivity implements OnCh
 				return true;
 			}
 		});
+	}
+	
+	@Override
+	public void onWebServerResponse(Message message) {
+		// TODO implement on response behavior
+		// FIXME refreshing adapters should be moved here
 	}
 }

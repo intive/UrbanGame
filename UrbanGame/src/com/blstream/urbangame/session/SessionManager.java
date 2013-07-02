@@ -8,6 +8,10 @@ import com.blstream.urbangame.GamesListActivity;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.Player;
+import com.blstream.urbangame.web.WebHighLevel;
+import com.blstream.urbangame.web.WebHighLevelInterface;
+import com.blstream.urbangame.webserver.ServerResponseHandler;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
 //formatter:off
 /**
@@ -21,12 +25,22 @@ import com.blstream.urbangame.database.entity.Player;
  */
 //formatter:on
 public abstract class SessionManager {
+	public static final String TAG = "LoginRegisterAction";
+	
 	protected DatabaseInterface database;
 	protected Context context;
+	protected ServerResponseHandler handler;
+	protected WebHighLevelInterface web;
 	
-	protected SessionManager(Context context) {
+	public SessionManager(Context context) {
+		this(context, null);
+	}
+	
+	protected SessionManager(Context context, WebServerNotificationListener listener) {
 		this.context = context;
 		this.database = new Database(context);
+		this.handler = new ServerResponseHandler(listener);
+		this.web = new WebHighLevel(handler, context);
 	}
 	
 	public boolean doesPlayerExist(String email) {
