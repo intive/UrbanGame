@@ -63,6 +63,14 @@ trait Operators { this: ImplicitSession =>
 
   def create(op: Operator): Try[Int] = Try(Operators.forInsert returning Operators.id insert op)
 
+  def update(op: Operator): Try[Int] = {
+    val q = for {
+      o <- Operators if o.id === op.id
+    } yield o
+
+    Try(q.update(op))
+  }
+
   def updateToken(email: String, token: Option[String]): Try[Int] = {
     val q = for {
       o <- Operators if o.email === email.bind
@@ -81,9 +89,5 @@ trait Operators { this: ImplicitSession =>
   def findById(id: Int): Option[Operator] = Query(Operators).filter(_.id === id).firstOption
 
   def findAll: Seq[Operator] = Query(Operators).list
-
-  def findByCookie(cookie: String) = {
-    val q = Query(Operators).filter{ s => play.api.libs.Crypto.sign(s.email.toString) == cookie }
-  }
   
 }

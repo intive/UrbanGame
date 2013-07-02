@@ -19,7 +19,7 @@
 
 - if(user != None)
     %form.navbar-form.pull-right(action={routes.Application.logout} method="get")
-        = Messages("loggedInAs")(lan)
+        = Messages("notify.loggedInAs")(lan)
         %a.bold(href="/my/options")
             = user.get.name
             %i.icon-user
@@ -27,16 +27,17 @@
 - else
     -if(req.uri != "/login")
         %form.navbar-form(action={routes.Application.authenticate} method="post" name="loginForm")
-            .span
-                .row
+            .row
+                .span
                     %input.input-medium(type="text" placeholder={Messages("email")(lan)} name="user.email" required)
-                .row
+                .span
+                    %input.input-medium(type="password" placeholder={Messages("password")(lan)} name="user.password" required)
+                .span
+                    %input.btn.btn-success(type="submit" value={Messages("login")(lan)})
+            .row
+                .span
                     %label.checkbox.inline.lower
                         %input(type="checkbox" name="remember" value="true" disabled) = Messages("remember")(lan)
-            .span
-                .row
-                    %input.input-medium(type="password" placeholder={Messages("password")(lan)} name="user.password" required)
-                .row
-                    %a.help-inline.lower(href="/") = Messages("forgotpass")(lan)
-            .span
-                %input.btn.btn-success(type="submit" value={Messages("login")(lan)})
+                .span
+                    %a.help-inline.lower(href="/passwordRecovery") = Messages("forgotpass")(lan)
+                .span

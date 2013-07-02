@@ -28,7 +28,7 @@
                     %label(for="gName")
                         = Messages("newgame.gamenamelabel")(lan)
                     .controls-row
-                        %input.pull-left.input-xlarge(type="text" pattern=".{,100}" id='gName' game-name required name="gName" ng-model="game.name" tooltip={Messages("newgame.ttgamename")(lan)} tooltip-animation="true" tooltip-placement="right")
+                        %input.pull-left.input-xlarge(type="text" maxlength="100" id='gName' game-name required name="gName" ng-model="game.name" tooltip={Messages("newgame.ttgamename")(lan)} tooltip-animation="true" tooltip-placement="right")
                         .slight-padding-left.pull-left
                             %div(id="processing")
                     .alert.alert-error.span11(ng-show="form.$error.nameunique" ng-cloak) = Messages("newgame.gnameinvaliderror")

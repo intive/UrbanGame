@@ -19,11 +19,14 @@ import play.api.mvc._
 import play.api.mvc.Results._
 import play.api.Play.current
 import jp.t2v.lab.play2.auth.AuthConfig
-import scala.reflect.classTag
+import com.github.nscala_time.time.Imports._
+import play.api.i18n._
 import models.utils._
 import models.dal.Bridges._
 
 trait AuthConfigImpl extends AuthConfig {
+  
+  import scala.reflect.classTag
 
   type Id = Int
 
@@ -35,16 +38,21 @@ trait AuthConfigImpl extends AuthConfig {
 
   val sessionTimeoutInSeconds: Int = 3600
 
-  def resolveUser(id: Id): Option[User] = findById(id)
+  def resolveUser(id: Id): Option[User] = findOperatorById(id)
 
-  def loginSucceeded(request: RequestHeader) = Redirect(routes.GamesCtrl.myGames)
+  def loginSucceeded(request: RequestHeader) = {
+    val uri = request.session.get("access_uri").getOrElse(routes.GamesCtrl.myGames.url.toString)
+    Redirect(uri).withSession(request.session - "access_uri")
+  }
 
-  def logoutSucceeded(request: RequestHeader) = Redirect(routes.Application.index)
+  def logoutSucceeded(request: RequestHeader) = Redirect(routes.Application.notification).flashing(
+    "notification" -> request.flash.get("success").getOrElse("")
+  )
 
   def authenticationFailed(request: RequestHeader) = {
     request.headers.get("X-Requested-With") match {
       case Some("XMLHttpRequest") => Unauthorized("Authentication failed")
-      case _ => Redirect(routes.Application.login)
+      case _ => Redirect(routes.Application.login).withSession("access_uri" -> request.uri)
     }
   }
 
@@ -60,23 +68,10 @@ trait AuthConfigImpl extends AuthConfig {
       case _ => false
     }
 
-  //override lazy val cookieSecureOption: Boolean = play.api.Play.current.configuration.getBoolean("auth.cookie.secure").getOrElse(true)
-
-}
-
-import jp.t2v.lab.play2.stackc.{RequestAttributeKey, RequestWithAttributes, StackableController}
-
-trait RememberMeElement extends StackableController with AuthConfigImpl {
-  self: Controller =>
-
-  val persistentCookieName = "UG_RememberMe"
-
-  val persistentSessionTimeout = 31536000
 }
 
 trait EmailConfirmation {
   import com.typesafe.plugin._
-  import play.api.i18n._
 
   private val mail = use[MailerPlugin].email
 
@@ -96,8 +91,29 @@ trait EmailConfirmation {
     mail.setSubject(subject)
     mail.addRecipient(email)
     mail.addFrom(from)
-    mail.sendHtml(msg)
-    //Console.printf(msg)
+    //mail.sendHtml(msg)
+    Console.printf(msg)
+  }
+
+  def sendNewPassword(email: String, pass: String, request: RequestHeader) = {
+    val lan = request.cookies.get("PLAY_LANG").getOrElse(Cookie("PLAY_LANG", Lang.defaultLang.code)).value.toString
+    val from = Play.current.configuration.getString("mail.from").getOrElse("")
+    val url = "http://" + request.host
+    val msg = """
+      <html>
+        <h4>""" + Messages("notify.email.recover.title")(Lang(lan)) + """</h4>
+        <p>""" + Messages("notify.email.recover.body")(Lang(lan)) + """</p>
+        <p>""" + Messages("notify.email.recover.password")(Lang(lan)) + """: """ + pass + """</p>
+        <p><a href='""" + url + """'>""" + url + """</a></p>
+      </html>
+    """
+    val subject = Messages("notify.email.recover.subject")(Lang(lan))
+
+    mail.setSubject(subject)
+    mail.addRecipient(email)
+    mail.addFrom(from)
+    //mail.sendHtml(msg)
+    Console.printf(msg)
   }
 
 }

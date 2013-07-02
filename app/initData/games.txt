@@ -1,4 +1,4 @@
-Game1::2::Game1 Description::Wroclaw, Poland::1::2013-04-30T13:14::2013-05-02T10:00::2013-06-30T12:30::2013-05-02T10:00::2013-06-30T12:30::max_points::2::easy::30::Some awsome awards::online::games/gameicon.png
+Game1::2::Game1 Description::Wroclaw, Poland::1::2013-04-30T13:14::2013-05-02T10:00::2013-09-30T12:30::2013-05-02T10:00::2013-09-30T12:30::max_points::2::easy::30::Some awsome awards::online::games/gameicon.png
 Game2::1::Game2 Description::Warszawa, Poland::1::2013-03-30T10:10::2013-04-02T10:00::2013-04-30T12:30::2013-04-02T10:00::2013-04-30T12:30::max_points::1::medium::100::Some awsome awards 2::finished::games/gameicon.png
 Game3::3::Game3 Description::Aberdeen, United Kingdom::2::2013-05-03T20:10::2013-05-30T10:00::2013-07-10T12:30::2013-05-30T10:00::2013-07-10T12:30::shortest_time::1::hard::120::Some awsome awards 3::project::games/gameicon.png
 Game4::2::Game4 Description::Wroclaw, Poland::2::2013-04-30T13:14::2013-05-15T10:00::2013-06-30T12:30::2013-05-15T10:00::2013-06-30T12:30::max_points::1::hard::70::Some awsome awards 4::published::games/gameicon.png
