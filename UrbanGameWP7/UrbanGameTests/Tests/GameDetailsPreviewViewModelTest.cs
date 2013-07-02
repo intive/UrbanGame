@@ -25,9 +25,10 @@ namespace UrbanGameTests.Tests
             #region preparing view model
             IDatabaseMock database = new DatabaseMock();
             IUnitOfWork unitOfWork = new UnitOfWorkMock(database);
+            Func<IUnitOfWork> uow = new Func<IUnitOfWork>(() => unitOfWork);
             IGameWebService webService = new GameWebServiceMock();
             IEventAggregator eventAgg = new EventAggregator();
-            IGameAuthorizationService authorizationService = new GameAuthorizationService(unitOfWork, webService);
+            IGameAuthorizationService authorizationService = new GameAuthorizationService(uow, webService);
 
             //removing current records
             foreach (IGame g in unitOfWork.GetRepository<IGame>().All())

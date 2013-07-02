@@ -319,9 +319,9 @@ namespace UrbanGame.ViewModels
                 var sol = unitOfWork.GetRepository<IBaseSolution>().All().First(s => s.Id == solution.Id);                          
                 GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
 
-                System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() => CurrentTask.UserPoints = 20);
+                System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() => CurrentTask.UserPoints = result.ScoredPoints);
 
-                switch(result)
+                switch(result.SubmitResult)
                 {
                     case SubmitResult.AnswerCorrect:
                         VisualStateName = "Correct";
