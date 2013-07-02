@@ -130,7 +130,7 @@
     <value>dni</value>
   </data>
   <data name="Difficulty" xml:space="preserve">
-    <value>POZIOM TRUDNOŚCI</value>
+    <value>poziom trudności:</value>
   </data>
   <data name="Easy" xml:space="preserve">
     <value>łatwe</value>
@@ -201,9 +201,6 @@
   <data name="Logout" xml:space="preserve">
     <value>Wyloguj</value>
   </data>
-  <data name="MyLatestGames" xml:space="preserve">
-    <value>moje poprzednie gry</value>
-  </data>
   <data name="NoGamesPlaying" xml:space="preserve">
     <value>Najwyraźniej nie grasz w żadną grę.</value>
   </data>
@@ -238,7 +235,7 @@
     <value>opis</value>
   </data>
   <data name="Duration" xml:space="preserve">
-    <value>CZAS TRWANIA</value>
+    <value>czas trwania:</value>
   </data>
   <data name="GameStateEnded" xml:space="preserve">
     <value>zakończył</value>
@@ -259,16 +256,13 @@
     <value>wygrał</value>
   </data>
   <data name="GameType" xml:space="preserve">
-    <value>TYP GRY</value>
+    <value>typ gry:</value>
   </data>
   <data name="HighScores" xml:space="preserve">
     <value>najlepsze wyniki</value>
   </data>
   <data name="Inactive" xml:space="preserve">
     <value>nieaktywne</value>
-  </data>
-  <data name="PlayersUPCase" xml:space="preserve">
-    <value>GRACZE</value>
   </data>
   <data name="Points" xml:space="preserve">
     <value>punkty</value>
@@ -308,9 +302,6 @@
   </data>
   <data name="Messages" xml:space="preserve">
     <value>wiadomości</value>
-  </data>
-  <data name="PoweredBy" xml:space="preserve">
-    <value>zasilany przez</value>
   </data>
   <data name="Urban" xml:space="preserve">
     <value>URBAN</value>
@@ -403,7 +394,7 @@
     <value>Niepoprawnie</value>
   </data>
   <data name="IncorrectLogin" xml:space="preserve">
-    <value>Nieprawidzłowe hasło lub email</value>
+    <value>Nieprawidzłowe hasło lub login</value>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
     <value>Podany login jest już zajęty</value>
@@ -413,5 +404,35 @@
   </data>
   <data name="UnknownError" xml:space="preserve">
     <value>Wystąpił nieznany błąd serwisu</value>
+  </data>
+  <data name="PasswordRecovery" xml:space="preserve">
+    <value>odzyskiwanie hasła</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>zapomniałem hasła</value>
+  </data>
+  <data name="NextInstructions" xml:space="preserve">
+    <value>Kolejne instrukcje zostały wysłane na podany adres e-mail</value>
+  </data>
+  <data name="ProvideEmail" xml:space="preserve">
+    <value>Wprowadź adres e-mail powiązany z kontem w celu odzyskania hasła</value>
+  </data>
+  <data name="NotLogged" xml:space="preserve">
+    <value>Nie jesteś zalogowany.</value>
+  </data>
+  <data name="PleaseLog" xml:space="preserve">
+    <value>Proszę zaloguj się, żeby zobaczyć listę swoich gier.</value>
+  </data>
+  <data name="PreviousGames" xml:space="preserve">
+    <value>poprzednie gry</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>koniec:</value>
+  </data>
+  <data name="Left" xml:space="preserve">
+    <value>do końca</value>
+  </data>
+  <data name="DelayedSolution" xml:space="preserve">
+    <value>Odpowiedź wysłana. Wyniki będą dostępne później.</value>
   </data>
 </root>

@@ -132,21 +132,21 @@ namespace WebService
         #endregion        
 
         #region SubmitTaskSolution
-        public SubmitResult SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
+        public SolutionResultScore SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
             int r = new Random().Next(100);
 
             if (r < 20)
             {
-                return SubmitResult.AnswerIncorrect;
+                return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = r };
             }
             else if (r < 60)
             {
-                return SubmitResult.AnswerCorrect;
+                return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerCorrect, ScoredPoints = r };
             }
             else
             {
-                return SubmitResult.ScoreDelayed;
+                return new SolutionResultScore() { SubmitResult = SubmitResult.ScoreDelayed, ScoredPoints = r };
             }
         }
         #endregion
@@ -183,18 +183,24 @@ namespace WebService
         public async Task<IGame[]> UserNearbyGames(GeoCoordinate coordinate)
         {
             var games = new IGame[] {
-                new GameMock(){Name = "Hydromystery", GameType = GameType.ScoreAttack, OperatorName = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 1, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None, Difficulty = GameDifficulty.Easy, Description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010."},
+                new GameMock(){Name = "Hydromystery", GameType = GameType.ScoreAttack, OperatorName = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 1, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None, Difficulty = GameDifficulty.Easy, Description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010.", Localization = "Wroclaw"},
                 new GameMock(){Name = "North & South", GameType = GameType.Race, OperatorName = "Infogrames", NumberOfPlayers = 23, Id = 2, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 5, 8, 12, 12,0), GameEnd = DateTime.Now.AddDays(3).AddHours(12), GameState = GameState.None},
-                new GameMock(){Name = "Ultimate Quest", GameType = GameType.ScoreAttack, OperatorName = "JCVD", NumberOfPlayers = 23,Id = 3, GameLogo = "/ApplicationIcon.png", GameStart = DateTime.Now.AddDays(1).AddHours(12), GameEnd = DateTime.Now.AddDays(10), GameState = GameState.None},
+                new GameMock(){Name = "Ultimate Quest", GameType = GameType.ScoreAttack, OperatorName = "JCVD", NumberOfPlayers = 23,Id = 3, GameLogo = "/ApplicationIcon.png", GameStart = DateTime.Now.AddDays(1).AddHours(12), GameEnd = DateTime.Now.AddDays(10).AddHours(2), GameState = GameState.None},
                 new GameMock(){Name = "Galaxy Quest", GameType = GameType.Race, OperatorName = "NSEA", NumberOfPlayers = 23,Id = 4, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameEnd = new DateTime(2013,6,5,4,12,30), GameState = GameState.None},
                 new GameMock(){Name = "The Quest for NEETs", GameType = GameType.Race, OperatorName = "Ron Jeremy", NumberOfPlayers = 23,Id = 5, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8),GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None}};
 
             string lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam mauris vel elit tincidunt ac bibendum tortor scelerisque. Mauris nisi augue, malesuada ac lobortis sed, rhoncus et mauris. Vivamus dictum turpis congue arcu euismod in pulvinar mi volutpat. Aliquam euismod pharetra velit eu sagittis. Proin et nisi nibh, ut egestas enim.";
-            int id = 1;
+            int taskId = 1;
+            int possibleAnswerId = 1;
             foreach(var g in games)
             {
-                g.Tasks.Add(new TaskMock() { Id = id++, Name = "Find Wally", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
-                g.Tasks.Add(new TaskMock() { Id = id++, Name = "IQ Test!", AdditionalText = "What is red with dots?", Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+                g.Tasks.Add(new TaskMock() { Id = taskId++, Name = "Find Wally", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 });
+
+                var task = new TaskMock() { Id = taskId++, Name = "IQ Test!", AdditionalText = "What is red with dots?", Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
+                task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++,Task=task, Answer = "Option A" });
+                task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Task = task, Answer = "Option B" });
+                task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Task = task, Answer = "Option C" });
+                g.Tasks.Add(task);
             }
 
             return games;

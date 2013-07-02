@@ -108,6 +108,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solutions\SolutionStatus.cs" />
     <Compile Include="Tasks\TaskType.cs" />
+    <Compile Include="WebService\SolutionResultScore.cs" />
     <Compile Include="WebService\SubmitResult.cs" />
     <Compile Include="WebService\WebApiResponse.cs" />
     <Compile Include="WebService\WebEnum.cs" />

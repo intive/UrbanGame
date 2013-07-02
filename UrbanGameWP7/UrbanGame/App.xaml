@@ -32,6 +32,7 @@
         <conv:DurationTimeConverter x:Key="DurationTimeConverter" />
         <conv:IsRepeatableConverter x:Key="IsRepeatableConverter" />
         <conv:GameChangedToVisibilityConverter x:Key="GameChangedToVisibilityConverter" />
+        <conv:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter" />
         
         <Style x:Key="ItemStyle" TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -57,12 +58,16 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Color x:Key="SolidColorBrushGreen">#A1E438</Color>
+        <Color x:Key="SolidColorBrushGreen">#B3F549</Color>
         <Color x:Key="SolidColorBrushBlack">#000000</Color>
         <Color x:Key="SolidColorBrushGrey">#222222</Color>
-        <SolidColorBrush x:Key="FontColorGreen">#A1E438</SolidColorBrush>
+        <SolidColorBrush x:Key="FontColorGreen">#B3F549</SolidColorBrush>
         <SolidColorBrush x:Key="FontColorWhite">#FFFFFF</SolidColorBrush>
-        
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource FontColorWhite}"/>
+        </Style>
+
         <Style x:Key="TaskAnswer" TargetType="TextBlock">
             <Setter Property="FontSize" Value="25"/>
             <Setter Property="Margin" Value="0,0,0,10"/>

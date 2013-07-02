@@ -12,7 +12,8 @@ namespace UrbanGame.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return ((DateTime)value).ToString("dd MMM, hh:ss tt");
+            return ((DateTime)value).ToString("ddd, MMM d, h:mm tt");
+            //return ((DateTime)value).ToString("dd MMM, hh:ss tt");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

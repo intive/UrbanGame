@@ -161,10 +161,10 @@
     <value>d</value>
   </data>
   <data name="Difficulty" xml:space="preserve">
-    <value>DIFFICULTY</value>
+    <value>difficulty:</value>
   </data>
   <data name="Duration" xml:space="preserve">
-    <value>DURATION</value>
+    <value>duration:</value>
   </data>
   <data name="Easy" xml:space="preserve">
     <value>easy</value>
@@ -194,7 +194,7 @@
     <value>won</value>
   </data>
   <data name="GameType" xml:space="preserve">
-    <value>GAME TYPE</value>
+    <value>game type:</value>
   </data>
   <data name="GameTypeRace" xml:space="preserve">
     <value>complete all tasks first</value>
@@ -247,9 +247,6 @@
   <data name="MyGames" xml:space="preserve">
     <value>my games</value>
   </data>
-  <data name="MyLatestGames" xml:space="preserve">
-    <value>my latest games</value>
-  </data>
   <data name="Nearby" xml:space="preserve">
     <value>nearby</value>
   </data>
@@ -261,9 +258,6 @@
   </data>
   <data name="Players" xml:space="preserve">
     <value>players:</value>
-  </data>
-  <data name="PlayersUPCase" xml:space="preserve">
-    <value>PLAYERS</value>
   </data>
   <data name="Points" xml:space="preserve">
     <value>points</value>
@@ -321,9 +315,6 @@
   </data>
   <data name="Games" xml:space="preserve">
     <value>GAMES</value>
-  </data>
-  <data name="PoweredBy" xml:space="preserve">
-    <value>powered by</value>
   </data>
   <data name="Urban" xml:space="preserve">
     <value>URBAN</value>
@@ -416,7 +407,7 @@
     <value>Incorrect</value>
   </data>
   <data name="IncorrectLogin" xml:space="preserve">
-    <value>Incorrect password or email</value>
+    <value>Incorrect password or login</value>
   </data>
   <data name="GameChangedToast" xml:space="preserve">
     <value>Game details have changed. Tap to see differences.</value>
@@ -429,5 +420,35 @@
   </data>
   <data name="UnknownError" xml:space="preserve">
     <value>Serviced returned unknown error</value>
+  </data>
+  <data name="PasswordRecovery" xml:space="preserve">
+    <value>password recovery</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>forgot password</value>
+  </data>
+  <data name="NextInstructions" xml:space="preserve">
+    <value>Next instructions has been sent to provided e-mail address</value>
+  </data>
+  <data name="ProvideEmail" xml:space="preserve">
+    <value>Provide e-mail address connected with your account to recover your password.</value>
+  </data>
+  <data name="NotLogged" xml:space="preserve">
+    <value>You are not logged in.</value>
+  </data>
+  <data name="PleaseLog" xml:space="preserve">
+    <value>Please log in to see list of your games.</value>
+  </data>
+  <data name="PreviousGames" xml:space="preserve">
+    <value>previous games</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>end:</value>
+  </data>
+  <data name="Left" xml:space="preserve">
+    <value>left</value>
+  </data>
+  <data name="DelayedSolution" xml:space="preserve">
+    <value>Solution sent, but results will be available later.</value>
   </data>
 </root>
