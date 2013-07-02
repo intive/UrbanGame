@@ -61,7 +61,11 @@
         <Color x:Key="SolidColorBrushBlack">#000000</Color>
         <SolidColorBrush x:Key="FontColorGreen">#A1E438</SolidColorBrush>
         <SolidColorBrush x:Key="FontColorWhite">#FFFFFF</SolidColorBrush>
-        
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource FontColorWhite}"/>
+        </Style>
+
         <Style x:Key="TaskAnswer" TargetType="TextBlock">
             <Setter Property="FontSize" Value="25"/>
             <Setter Property="Margin" Value="0,0,0,50"/>

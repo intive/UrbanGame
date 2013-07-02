@@ -160,9 +160,9 @@ namespace UrbanGame.ViewModels
 
         #region Answers
 
-        private BindableCollection<ABCDAnswear> _answers;
+        private BindableCollection<ABCDAnswer> _answers;
 
-        public BindableCollection<ABCDAnswear> Answers
+        public BindableCollection<ABCDAnswer> Answers
         {
             get
             {
@@ -257,18 +257,29 @@ namespace UrbanGame.ViewModels
                 {
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
                     CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId) ?? _gameWebService.GetTaskDetails(GameId, TaskId);
+                    if (CurrentTask.SolutionStatus == SolutionStatus.NotSend)
+                    {
+                        VisualStateName = "FirstSending";
+                    }
+                    else if (CurrentTask.IsRepeatable)
+                    {
+                        VisualStateName = "ReSending";
+                    }
+                    else
+                    {
+                        VisualStateName = "Sent";
+                    }
                     
-                    //to load it (lazy loading)
-                    var abcd = CurrentTask.ABCDPossibleAnswers.Any(a => false);
                 }
             });
+            await RefreshAnswear();
         }
 
         public async Task RefreshAnswear()
         {
             await Task.Factory.StartNew(() =>
             {
-                Answers = new BindableCollection<ABCDAnswear>();
+                Answers = new BindableCollection<ABCDAnswer>();
 
                 using (var uow = _unitOfWorkLocator())
                 {
@@ -276,14 +287,14 @@ namespace UrbanGame.ViewModels
 
                     foreach (IABCDPossibleAnswer possible in possibleAnswers.ToList())
                     {
-                        IABCDUserAnswer userAnswer = uow.GetRepository<IABCDUserAnswer>().All().Where(a => a.ABCDPossibleAnswer.Id == possible.Id).Last();
+                        IABCDUserAnswer userAnswer = uow.GetRepository<IABCDUserAnswer>().All().Where(a => a.ABCDPossibleAnswer.Id == possible.Id).FirstOrDefault();
                         bool isChecked = false;
                         if (userAnswer != null && userAnswer.Answer == true)
                         {
                             isChecked = true;
                         }
 
-                        Answers.Add(new ABCDAnswear() { possibleAnswear = possible, isChecked = isChecked });
+                        Answers.Add(new ABCDAnswer() { PossibleAnswer = possible, IsChecked = isChecked });
                     }
                 }
             });
@@ -291,16 +302,7 @@ namespace UrbanGame.ViewModels
 
         private void SubmitSolution(IBaseSolution solution)
         {
-            //saving solution in database
-            using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
-            {
-                GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
-                solution.Task = task;
-                solution.Task.SolutionStatus = SolutionStatus.Pending;
 
-                unitOfWork.GetRepository<IBaseSolution>().MarkForAdd(solution);
-                unitOfWork.Commit();
-            }
 
             //sending solution
             var result = _gameWebService.SubmitTaskSolution(GameId, CurrentTask.Id, Solution);
@@ -329,6 +331,14 @@ namespace UrbanGame.ViewModels
 
                 unitOfWork.Commit();
             }
+            if (CurrentTask.IsRepeatable)
+            {
+                VisualStateName = "ReSending";
+            }
+            else
+            {
+                VisualStateName = "Sent";
+            }
         }
 
         public async void SubmitGPS()
@@ -341,6 +351,16 @@ namespace UrbanGame.ViewModels
                     gps.GetCurrentCoordinates(coords =>
                     {
                         Solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
+                        //saving solution in database
+                        using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
+                        {
+                            GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
+                            Solution.Task = task;
+                            Solution.Task.SolutionStatus = SolutionStatus.Pending;
+
+                            unitOfWork.GetRepository<IBaseSolution>().MarkForAdd(Solution);
+                            unitOfWork.Commit();
+                        }
                         SubmitSolution(Solution);
                     });
             });
@@ -351,14 +371,32 @@ namespace UrbanGame.ViewModels
             VisualStateName = "Sending";
             await Task.Factory.StartNew(() =>
             {
-                IABCDSolution solution = new TaskSolution() { TaskType = TaskType.ABCD };
-
-                foreach (var check in Answers)
+                
+                //saving solution in database
+                using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
                 {
-                    IABCDUserAnswer answer = new ABCDUserAnswer() { Answer = check.isChecked, Solution = new TaskSolution() { TextAnswer = check.possibleAnswear.Answer, TaskId = check.possibleAnswear.Task.Id, TaskType = TaskType.ABCD } };
-                    solution.ABCDUserAnswers.Add(answer);
+                    var solutionRepo=unitOfWork.GetRepository<IABCDSolution>();
+                    IABCDSolution solution = solutionRepo.CreateInstance();
+                    solutionRepo.MarkForAdd(solution);
+                    ITask task = unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
+                    solution.Task = task;
+                    solution.Task.SolutionStatus = SolutionStatus.Pending;
+
+                    var answerRepo = unitOfWork.GetRepository<IABCDUserAnswer>();
+                    foreach (var check in Answers)
+                    {
+                        IABCDUserAnswer answer =answerRepo.CreateInstance();
+                        answer.Answer = check.IsChecked;
+                        answer.ABCDPossibleAnswer =unitOfWork.GetRepository<IABCDPossibleAnswer>().All().First(x=>x.Id== check.PossibleAnswer.Id);
+                        answerRepo.MarkForAdd(answer);
+                        solution.ABCDUserAnswers.Add(answer);
+                    }
+
+                    unitOfWork.GetRepository<IBaseSolution>().MarkForAdd(solution);
+                    unitOfWork.Commit();
+                    Solution = solution;
                 }
-                Solution = solution;
+                
                 SubmitSolution(Solution);
             });
         }
