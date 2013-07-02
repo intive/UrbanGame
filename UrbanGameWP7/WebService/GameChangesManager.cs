@@ -27,19 +27,21 @@ namespace WebService
         IToastPromptService _toastPromptService;
         Timer _solutionUpdaterTimer;
         Timer _gameUpdaterTimer;
+        IGameAuthorizationService _authorizationService;
 
         private const int _gameUpdaterPeriod = 60 * 1000;
         private const int _solutionUpdaterPeriod = 30 * 1000;
 
         public GameChangesManager(IGameWebService gameWebService, IEventAggregator gameEventAggregator,
                                   Func<IUnitOfWork> unitOfWorkLocator, ILocalizationService localizationService,
-                                  IToastPromptService toastPromptService)
+                                  IToastPromptService toastPromptService, IGameAuthorizationService authorizationService)
         {
             _gameWebService = gameWebService;
             _gameEventAggregator = gameEventAggregator;
             _unitOfWorkLocator = unitOfWorkLocator;
             _localizationService = localizationService;
             _toastPromptService = toastPromptService;
+            _authorizationService = authorizationService;
 
             _solutionUpdaterTimer = new Timer(new TimerCallback(CheckSolutionStatusChanged), null, _solutionUpdaterPeriod, _solutionUpdaterPeriod);
             _gameUpdaterTimer = new Timer(new TimerCallback(CheckGameChanges), null, _gameUpdaterPeriod, _gameUpdaterPeriod);
@@ -121,7 +123,7 @@ namespace WebService
 
         protected void CheckGameChanges(object obj)
         {
-            if (!_gameWebService.IsAuthorized)
+            if (!_authorizationService.IsUserAuthenticated())
                 return;
 
             Task.Factory.StartNew(() =>
@@ -175,7 +177,7 @@ namespace WebService
 
         protected void CheckSolutionStatusChanged(object obj)
         {
-            if (!_gameWebService.IsAuthorized)
+            if (!_authorizationService.IsUserAuthenticated())
                 return;
 
             Task.Factory.StartNew(() =>

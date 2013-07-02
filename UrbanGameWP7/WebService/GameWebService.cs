@@ -285,8 +285,6 @@ namespace WebService
 
             if (!result.Success)
             {
-                IsAuthorized = false;
-
                 switch (result.Status)
                 {
                     case HttpStatusCode.Unauthorized:
@@ -297,25 +295,7 @@ namespace WebService
             }
             else
             {
-                IsAuthorized = true;
                 return AuthorizeState.Success;
-            }
-        }
-        #endregion
-
-        #region IsAuthorized
-
-        private bool _isAuthorized;
-
-        public bool IsAuthorized
-        {
-            get
-            {
-                return _isAuthorized;
-            }
-            set
-            {
-                _isAuthorized = value;
             }
         }
         #endregion

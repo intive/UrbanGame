@@ -23,5 +23,15 @@ namespace Common
         /// Saves changes from all repositories registered within this UnitOfWork
         /// </summary>
         void Commit();
+
+        /// <summary>
+        /// Deletes existing database
+        /// </summary>
+        void DeleteDatabase();
+
+        /// <summary>
+        /// Creates a new database
+        /// </summary>
+        void CreateDatabase();
     }
 }

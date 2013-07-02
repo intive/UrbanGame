@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Common;
-using UrbanGame.Authorization;
 using UrbanGame.Utilities;
 using System.Text;
 using Caliburn.Micro;
@@ -16,10 +15,11 @@ namespace UrbanGame.ViewModels
     public class LoginAndRegistrerViewModel :BaseViewModel
     {
         IAppbarManager _appbarManager;
+        private string _previousState;
 
         public LoginAndRegistrerViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager)
-            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator)
+                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager, IGameAuthorizationService authorizationService)
+            : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator, authorizationService)
         {
             _appbarManager = appbarManager;          
         }
@@ -134,11 +134,6 @@ namespace UrbanGame.ViewModels
 
         #region operations
 
-        public void ChangeToNormal()
-        {
-            VisualStateName = "Normal";
-        }
-
         public static bool IsValidEmail(string strIn)
         {
             return Regex.IsMatch(strIn,
@@ -148,14 +143,18 @@ namespace UrbanGame.ViewModels
 
         public async void LogIn(string Password)
         {
-            if (!string.IsNullOrWhiteSpace(Email) && IsValidEmail(Email) && !string.IsNullOrWhiteSpace(Password) && await _gameWebService.Authorize(Email, Password) == AuthorizeState.Success)
+            if (!string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password))
             {
-                GameAuthorizationService authorization = new GameAuthorizationService();
-                authorization.ClearIsolatedStorage();
+                VisualStateName = "LoggingIn";
 
-                authorization.SaveToIsolatedStorage("Username" + " " + Password + " " + Email);
+                var result = _authorizationService.LogIn(Login, Password);
 
-                _navigationService.GoBack();
+                switch (result)
+                {
+                    case LoginResult.Success: VisualStateName = "LoggedIn"; _previousState = "LoggedIn"; break;
+                    case LoginResult.Failure: VisualStateName = "Incorrect"; break;
+                    case LoginResult.Timeout: VisualStateName = "Timeout"; break;
+                }
             }
             else
             {
@@ -169,7 +168,11 @@ namespace UrbanGame.ViewModels
             {
                 MessageBox.Show(Localization.AppResources.EmptyLogin);
             }
-            else if (!IsValidEmail(Email) || string.IsNullOrWhiteSpace(Email))
+            else if (string.IsNullOrWhiteSpace(Email))
+            {
+                MessageBox.Show(Localization.AppResources.IncorrectEmail);
+            }
+            else if (!IsValidEmail(Email))
             {
                 MessageBox.Show(Localization.AppResources.IncorrectEmail);
             }
@@ -184,24 +187,49 @@ namespace UrbanGame.ViewModels
             else
             {
                 VisualStateName = "CreatingAccount";
-
-                var result = await _gameWebService.CreateAccount(Login, Email, Password);
+                var result = _authorizationService.Register(new User { Login = Login, Password = Password, Email = Email });
 
                 switch (result)
                 {
-                    case CreateAccountResponse.Success:
-                        VisualStateName = "AccountCreated";
+                    case RegisterResult.Success: 
+                        VisualStateName = "AccountCreated"; 
                         break;
-                    case CreateAccountResponse.LoginUnavailable:
+                    case RegisterResult.Failure:
                         VisualStateName = "LoginUnavailable";
                         break;
-                    case CreateAccountResponse.Timeout:
+                    case RegisterResult.Timeout:
+                        _previousState = "CreatingAccount";
                         VisualStateName = "Timeout";
                         break;
                     default:
                         VisualStateName = "UnknownError";
                         break;
-                }  
+                }
+            }
+        }
+
+                
+
+        public void Retry()
+        {
+            switch (_previousState)
+            {
+                case "CreatingAccount": CreateAccount(_authorizationService.AuthenticatedUser.Password, _authorizationService.AuthenticatedUser.Password); break;
+                case "LoggingIn": LogIn(_authorizationService.AuthenticatedUser.Password); break;
+            }
+        }
+
+        public void ChangeToNormal()
+        {
+            VisualStateName = "Normal";
+
+            if (_previousState == "LoggedIn")
+            {
+                _navigationService.GoBack();
+            }
+            else
+            {
+                _authorizationService.AuthenticatedUser = null;
             }
         }
 
