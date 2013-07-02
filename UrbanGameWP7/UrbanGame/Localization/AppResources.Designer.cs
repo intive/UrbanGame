@@ -269,6 +269,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Solution sent, but results will be available later..
+        /// </summary>
+        public static string DelayedSolution {
+            get {
+                return ResourceManager.GetString("DelayedSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to description.
         /// </summary>
         public static string Description {

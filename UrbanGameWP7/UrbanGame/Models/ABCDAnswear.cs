@@ -6,9 +6,9 @@ using Common;
 
 namespace UrbanGame.Models
 {
-    public class ABCDAnswear
+    public class ABCDAnswer
     {
-        public IABCDPossibleAnswer possibleAnswear { get; set; }
-        public bool isChecked { get; set; }
+        public IABCDPossibleAnswer PossibleAnswer { get; set; }
+        public bool IsChecked { get; set; }
     }
 }

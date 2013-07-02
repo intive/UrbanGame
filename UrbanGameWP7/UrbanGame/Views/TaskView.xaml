@@ -16,7 +16,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -48,6 +48,16 @@
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
+                <VisualState x:Name="Delayed">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Toast">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="DelayedText">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
                 <VisualState x:Name="Correct">
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Toast">
@@ -56,18 +66,6 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CorrectText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="NotSoGreatText">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="WrongText">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SendingState">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="TimeoutState">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
                 <VisualState x:Name="NotSoGreat">
@@ -75,20 +73,8 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Toast">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CorrectText">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="NotSoGreatText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="WrongText">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SendingState">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="TimeoutState">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
@@ -97,20 +83,9 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Toast">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CorrectText">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="NotSoGreatText">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
+
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="WrongText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SendingState">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="TimeoutState">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
@@ -124,6 +99,20 @@
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SendingState">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup x:Name="AnswersStates">
+                <VisualState x:Name="FirstSending"/>
+                <VisualState x:Name="ReSending"/>
+                <VisualState x:Name="Sent">
+                    <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="IsEnabled" Storyboard.TargetName="SubmitABCD">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="False"/>
+                    </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="IsEnabled" Storyboard.TargetName="ABCDListView">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="False"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
@@ -210,7 +199,7 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Grid x:Name="ABCD" Grid.Row="0" Visibility="{Binding Path=CurrentTask.Type, Converter={StaticResource ABCDToVisibilityConverter}}">
+                        <Grid x:Name="ABCD" Visibility="{Binding Path=CurrentTask.Type, Converter={StaticResource ABCDToVisibilityConverter}}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -220,19 +209,19 @@
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding CurrentTask.AdditionalText}" Grid.Row="0" Foreground="{StaticResource FontColorWhite}"/>
-                            <ListBox Grid.Row="1" ItemsSource="{Binding Answers}" ItemContainerStyle="{StaticResource ItemStyle}">
+                            <TextBlock Text="{Binding CurrentTask.AdditionalText}" Grid.Row="0" Grid.ColumnSpan="2" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMedium}" />
+                            <ListBox Name="ABCDListView" Grid.Row="1" ItemsSource="{Binding Answers}" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid>
-                                            <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding ABCDPossibleAnswer.Answer}" />
-                                        </Grid>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked,Mode=TwoWay}"/>
+                                            <TextBlock VerticalAlignment="Center" Grid.Column="1" Margin="5,0,0,0" Text="{Binding PossibleAnswer.Answer}" Foreground="{StaticResource FontColorWhite}"  FontSize="{StaticResource PhoneFontSizeMedium}"/>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
 
-                            <Button cal:Message.Attach="[Event Tap] = [Action SubmitABCD()]" Content="{Binding Path=AppResources.Submit, Source={StaticResource LocalizedStrings}}" Background="OliveDrab" BorderBrush="OliveDrab" Grid.Column="1" Grid.Row="1" x:Name="SubmitABCD"/>
+                            <Button cal:Message.Attach="[Event Tap] = [Action SubmitABCD()]" Content="{Binding Path=AppResources.Submit, Source={StaticResource LocalizedStrings}}" Background="OliveDrab" BorderBrush="OliveDrab" Grid.Column="1" Grid.Row="2" x:Name="SubmitABCD"/>
                         </Grid>
                         <Grid x:Name="GPS" Grid.Row="1" Visibility="{Binding Path=CurrentTask.Type, Converter={StaticResource GPSToVisibilityConverter}}">
                             <Grid.RowDefinitions>
@@ -263,7 +252,8 @@
                     <SolidColorBrush Color="{StaticResource SolidColorBrushGreen}"/>
                 </Border.Background>
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="Auto">
-                    <TextBlock x:Name="CorrectText" Text="{Binding Path=AppResources.Correct, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Visibility="Visible"/>
+                    <TextBlock x:Name="CorrectText" Text="{Binding Path=AppResources.Correct, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Visibility="Collapsed"/>
+                    <TextBlock x:Name="DelayedText" Text="{Binding Path=AppResources.DelayedSolution, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Visibility="Collapsed"/>
                     <TextBlock x:Name="NotSoGreatText" Text="{Binding Path=AppResources.NotSoGreat, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Visibility="Collapsed"/>
                     <TextBlock x:Name="WrongText" Text="{Binding Path=AppResources.Wrong, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Visibility="Collapsed"/>
                     <TextBlock x:Name="Points" Text="{Binding CurrentTask.UserPoints}" Style="{StaticResource UserPoints}"/>
