@@ -212,24 +212,6 @@ class ApplicationSpec extends Specification {
       }
     }
 
-    "send true when the given game name is unique" in {
-      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-
-        val fill = controllers.Application.fillDatabase(FakeRequest())
-
-        val json: JsValue = Json.parse("""
-        { 
-          "data": "Game100"
-        }
-        """)
-        val uname = route(FakeRequest(POST, "/my/games/json/checkName").withJsonBody(json).withLoggedIn(config)(1)).get
-       
-        Thread.sleep(10 * 100)
-        status(uname) must equalTo(OK)
-        contentAsString(uname) must contain ("true")
-      }
-    }
-
     "send false when the given game name is NOT unique" in {
       running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
 
@@ -242,7 +224,6 @@ class ApplicationSpec extends Specification {
         """)
         val uname = route(FakeRequest(POST, "/my/games/json/checkName").withJsonBody(json).withLoggedIn(config)(1)).get
         
-        Thread.sleep(10 * 100)
         status(uname) must equalTo(OK)
         contentAsString(uname) must contain ("false")
       }
