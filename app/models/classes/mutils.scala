@@ -21,7 +21,10 @@ case class TasksList(id: Int, name: String, version: Int)
 
 case class Operator(id: Option[Int], email: String, password: String, name: String, 
   logo: String = "users/logo.png", description: Option[String] = None, permission: Permission = NormalUser, 
-  created: DateTime = DateTime.now, modified: DateTime = DateTime.now, validated: Boolean = false, token: Option[String] = None)
+  created: DateTime = DateTime.now, modified: DateTime = DateTime.now, validated: Boolean = false, 
+  token: Option[String] = None)
+case class Token(id: Option[Int], opId: Int, token: String, series: String, created: DateTime = DateTime.now, 
+  expires: DateTime, rememberme: Boolean = false)
 
 object mutils extends mutils {
 

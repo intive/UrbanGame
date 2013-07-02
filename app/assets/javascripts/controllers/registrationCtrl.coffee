@@ -14,16 +14,20 @@
 ###
 
 # '------------------------------------- REGISTRATION CTRL
-registrationCtrl = app.controller 'registrationCtrl', ['$scope', ($scope) ->
-    $scope.signupForm = {
+app.controller 'registrationCtrl', ['$scope', '$http', ($scope, $http) ->
+    $scope.user = {
         name: "",
         email: "",
         password: "",
-        confirm_password: "",
-        captcha: ""
+        passwordConfirm: "",
+        captcha: "",
+        accept: false
     }
 
     $scope.send = ->
         $("input[name='recaptcha_challenge_field']").attr("name", "captcha.recaptcha_challenge_field")
     
+    $scope.isValidEmail = (email) ->
+        $("#processing").removeClass("img-ok img-error").addClass("img-processing")
+        $http({method: 'GET', url: '/json/checkEmail/' + email})
 ]
