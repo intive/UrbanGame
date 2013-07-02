@@ -169,11 +169,10 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding Path=Game.Name}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontFamily="100"/>
+                        <TextBlock Text="{Binding Path=Game.Name}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontSize="60"/>
 
-                        <TextBlock Text="{Binding Path=AppResources.PoweredBy, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.Column="0"  FontSize="{StaticResource PhoneFontSizeMedium}" Margin="120,0,10,0"/>
-                        <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="-20,0,0,0"/>
-                        <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}"/>
+                        <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="-15,0,0,0" HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="250,0,0,0" Foreground="{StaticResource FontColorGreen}" HorizontalAlignment="Right"/>
                     </Grid>
                 </StackPanel>
             </controls:Pivot.Title>
