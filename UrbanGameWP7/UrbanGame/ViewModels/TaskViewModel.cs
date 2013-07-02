@@ -319,7 +319,6 @@ namespace UrbanGame.ViewModels
             using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
             {
                 var sol = unitOfWork.GetRepository<IBaseSolution>().All().First(s => s.Id == solution.Id);                          
-                GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
 
                 System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() => CurrentTask.UserPoints = result.ScoredPoints);
 
@@ -341,12 +340,9 @@ namespace UrbanGame.ViewModels
                         VisualStateName = "Timeout";
                         break;
                 }
-
-                //unitOfWork.Commit();
             }
 
             RefreshTask();
-
         }
 
         public async void SubmitGPS()
@@ -412,6 +408,11 @@ namespace UrbanGame.ViewModels
         public void ChangeToNormal()
         {
             VisualStateName = "Normal";
+        }
+
+        public void CanGoBack(ActionExecutionContext executionContext)
+        {
+            (executionContext.EventArgs as System.ComponentModel.CancelEventArgs).Cancel = VisualStateName == "Sending";
         }
 
         #endregion        

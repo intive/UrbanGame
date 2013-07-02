@@ -156,7 +156,7 @@ namespace WebService
                                     uow.Commit();                                    
                                                                             
                                     if (_toastPromptService != null)
-                                        _toastPromptService.ShowGameChanged(oldGame.Id, oldGame.Name, _localizationService.GetText("GameChangedToast"), diff);
+                                        _toastPromptService.ShowGameChanged(oldGame.Id, oldGame.Name, _localizationService.GetText("GameChangedToast"));
 
                                     _gameEventAggregator.Publish(new GameChangedEvent() { Id = oldGame.Id });
                                 }
@@ -205,7 +205,7 @@ namespace WebService
                                 string message = _localizationService.GetText("SolutionStatusChanged") + " " +
                                                  (response.Status == SolutionStatus.Accepted ? _localizationService.GetText("Accepted") : _localizationService.GetText("Rejected"));
                                 if (_toastPromptService != null)
-                                    _toastPromptService.ShowSolutionStatusChanged(solution.Task.Id, solution.Task.Name, message);
+                                    _toastPromptService.ShowSolutionStatusChanged(solution.Task.Id, solution.Task.Game.Id, solution.Task.Name, message);
 
                                 _gameEventAggregator.Publish(new SolutionStatusChanged() { Status = response.Status, Points = response.Points, TaskId = solution.Task.Id });
                             }
