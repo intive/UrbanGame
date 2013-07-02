@@ -223,7 +223,7 @@ class ApplicationSpec extends Specification {
         }
         """)
         val uname = route(FakeRequest(POST, "/my/games/json/checkName").withJsonBody(json).withLoggedIn(config)(1)).get
-
+        
         status(uname) must equalTo(OK)
         contentAsString(uname) must contain ("false")
       }
