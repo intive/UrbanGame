@@ -123,7 +123,7 @@ public abstract class AbstractMenuActivity extends SherlockFragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		urbanGameApplication.onResume();
-		loginManager = LoginManager.getInstance(AbstractMenuActivity.this);
+		loginManager = new LoginManager(AbstractMenuActivity.this);
 		notificationServer.updateContext(this);
 	}
 	

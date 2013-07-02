@@ -13,6 +13,7 @@ public class UserSettingsActivity extends SherlockPreferenceActivity implements 
 	
 	private final String TAG = UserSettingsActivity.class.getSimpleName();
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);

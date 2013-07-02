@@ -1,8 +1,13 @@
 package com.blstream.urbangame.webserver;
 
+import java.util.ArrayList;
+
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import com.blstream.urbangame.database.entity.ABCDTask;
+import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.webserver.WebServer.QueryType;
 
 /**
@@ -11,65 +16,145 @@ import com.blstream.urbangame.webserver.WebServer.QueryType;
  */
 //FIXME implementation needed
 public class WebRequest extends AsyncTask<Void, Integer, WebResponse> {
-	private Uri requestUri;
-	private final WebResponse webResponse;
+	private WebResponse webResponse;
 	private WebDownloader webDownloader;
-	private final QueryType queryType;
-	private final WebServer webServer;
-	private final int gameID;
-	private final int taskID;
-	private String userName;
+	private QueryType queryType;
+	private WebServer webServer;
+	
+	/* Data to send */
+	private long gameID;
+	private long taskID;
+	private String email;
 	private String password;
+	private String displayName;
+	private Location location;
+	private ArrayList<String> answers;
+	private Task task;
+	private ABCDTask abcdTask;
 	
 	public WebRequest(WebServer webServer, QueryType queryType) {
 		this(webServer, queryType, 0, 0);
 	}
 	
-	public WebRequest(WebServer webServer, QueryType queryType, int gameID) {
+	public WebRequest(WebServer webServer, QueryType queryType, long gameID) {
 		this(webServer, queryType, gameID, 0);
 	}
 	
-	public WebRequest(WebServer webServer, QueryType queryType, int gameID, int taskID) {
+	public WebRequest(WebServer webServer, QueryType queryType, long gameID, long taskID) {
 		this.gameID = gameID;
 		this.taskID = taskID;
+		
 		this.queryType = queryType;
 		this.webServer = webServer;
 		this.webResponse = new WebResponse(queryType);
 	}
 	
-	public WebRequest(WebServer webServer, QueryType queryType, int gameID, String userName, String password) {
-		this(webServer, queryType, gameID, 0);
-		this.userName = userName;
+	public WebRequest(WebServer webServer, QueryType queryType, String email, String password) {
+		this(webServer, queryType, email, password, "");
+	}
+	
+	public WebRequest(WebServer webServer, QueryType queryType, String email, String password, String displayName) {
+		this.email = email;
 		this.password = password;
+		this.displayName = displayName;
+		
+		this.queryType = queryType;
+		this.webServer = webServer;
+		this.webResponse = new WebResponse(queryType);
+	}
+	
+	public WebRequest(WebServer webServer, QueryType queryType, Task task) {
+		this(webServer, queryType, task, null);
+	}
+	
+	public WebRequest(WebServer webServer, QueryType queryType, Task task, Location location) {
+		this.task = task;
+		this.location = location;
+		
+		this.queryType = queryType;
+		this.webServer = webServer;
+		this.webResponse = new WebResponse(queryType);
+	}
+	
+	public WebRequest(WebServer webServer, QueryType queryType, ABCDTask abcdTask, ArrayList<String> answers) {
+		this.abcdTask = abcdTask;
+		this.answers = answers;
+		
+		this.queryType = queryType;
+		this.webServer = webServer;
+		this.webResponse = new WebResponse(queryType);
+	}
+	
+	@Override
+	protected WebResponse doInBackground(Void... args) {
+		Uri requestUri = downloadRequestUri();
+		if (requestUri != null) {
+			String responseString = webDownloader.executeRequest(requestUri);
+			webResponse.setResponse(responseString);
+		}
+		return webResponse;
 	}
 	
 	/**
 	 * Specific {@link WebDownloader} and request URI is configured here
 	 * regarding to query type.
 	 */
-	@Override
-	protected void onPreExecute() {
+	private Uri downloadRequestUri() {
+		WebAPI webAPI;
+		
 		switch (queryType) {
-			case GetGamesList:
+			case DownloadGamesList:
 				this.webDownloader = new WebDownloaderGET();
-				WebAPI webAPI = new WebAPI(webDownloader);
-				this.requestUri = webAPI.getAllGamesUri();
+				webAPI = new WebAPI(webDownloader);
+				return webAPI.getAllGamesUri();
+			case DownloadUsersGames:
+				this.webDownloader = new WebDownloaderGET();
+				webAPI = new WebAPI(webDownloader);
+				return null;
+			case DownloadGameDetails:
+				this.webDownloader = new WebDownloaderGET();
+				webAPI = new WebAPI(webDownloader);
+				return null;
+			case DownloadTasksForGame:
+				this.webDownloader = new WebDownloaderGET();
+				webAPI = new WebAPI(webDownloader);
+				return null;
+			case DownloadTaskDetails:
+				this.webDownloader = new WebDownloaderGET();
+				webAPI = new WebAPI(webDownloader);
 				break;
-			/*
-			 *  and so on ...
-			 *  Combination of requestUri and webDownloader will be used
-			 */
-			
+			case LoginUser:
+				this.webDownloader = new WebDownloaderPOST();
+				webAPI = new WebAPI(webDownloader);
+				return null;
+			case RegisterPlayer:
+				this.webDownloader = new WebDownloaderPOST();
+				webAPI = new WebAPI(webDownloader);
+				return null;
+			case JoinCurrentPlayerToTheGame:
+				this.webDownloader = new WebDownloaderPOST();
+				webAPI = new WebAPI(webDownloader);
+				return null;
+			case LeaveCurrentPlayerFromTheGame:
+				this.webDownloader = new WebDownloaderDELETE();
+				webAPI = new WebAPI(webDownloader);
+				return null;
+			case SendAnswersForABCDTask:
+				this.webDownloader = new WebDownloaderPUT();
+				webAPI = new WebAPI(webDownloader);
+				return null;
+			case SendAnswerForLocationTask:
+				this.webDownloader = new WebDownloaderPUT();
+				webAPI = new WebAPI(webDownloader);
+				return null;
+			case GetCorrectAnswerForGpsTask:
+				this.webDownloader = new WebDownloaderGET();
+				webAPI = new WebAPI(webDownloader);
+				return null;
 			default:
-				break;
+				return null;
 		}
-	}
-	
-	@Override
-	protected WebResponse doInBackground(Void... args) {
-		String responseString = webDownloader.executeRequest(requestUri);
-		webResponse.setResponse(responseString);
-		return webResponse;
+		return null;
 	}
 	
 	@Override

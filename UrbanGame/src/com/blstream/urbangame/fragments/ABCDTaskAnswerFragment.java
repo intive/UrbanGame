@@ -5,10 +5,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +16,7 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.blstream.urbangame.R;
+import com.blstream.urbangame.UrbanGameApplication;
 import com.blstream.urbangame.adapters.AnswersAdapter;
 import com.blstream.urbangame.database.Database;
 import com.blstream.urbangame.database.DatabaseInterface;
@@ -29,26 +28,28 @@ import com.blstream.urbangame.dialogs.AnswerDialog.DialogType;
 import com.blstream.urbangame.helpers.Pair;
 import com.blstream.urbangame.web.WebHighLevel;
 import com.blstream.urbangame.web.WebHighLevelInterface;
+import com.blstream.urbangame.webserver.ServerResponseHandler;
+import com.blstream.urbangame.webserver.WebResponse;
+import com.blstream.urbangame.webserver.WebServer.QueryType;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
-public class ABCDTaskAnswerFragment extends SherlockFragment {
-	
+public class ABCDTaskAnswerFragment extends SherlockFragment implements WebServerNotificationListener {
+	private ServerResponseHandler handler;
 	private AnswersAdapter adapter;
 	private ABCDTask task;
 	private PlayerTaskSpecific playerTaskSpecific;
 	private String[] answers;
 	private boolean[] selections;
 	AnswerDialog dialog;
-	
-	public static class ServerResponseToSendedAnswers {
-		public ArrayList<String> correctAnswers = null;
-		public Integer points = 0;
-	}
+	ProgressDialog progressDialog;
 	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		
 		dialog = new AnswerDialog(activity);
+		progressDialog = new ProgressDialog(activity);
+		handler = new ServerResponseHandler(this);
 		
 		task = getArguments().getParcelable(Task.TASK_KEY);
 		DatabaseInterface database = new Database(activity);
@@ -135,53 +136,49 @@ public class ABCDTaskAnswerFragment extends SherlockFragment {
 					answers.add(this.answers[i]);
 				}
 			}
-			ProgressDialog progressDialog = new ProgressDialog(getActivity());
+			
 			progressDialog.show();
 			
-			WebHighLevelInterface web = new WebHighLevel(getActivity());
-			ServerResponseToSendedAnswers serverResponse = web.sendAnswersForABCDTask(task, answers);
-			
-			progressDialog.dismiss();
-			
-			if (!isOnline()) {
-				// If there is no connection to the Internet.
-				dialog.showDialog(DialogType.NO_INTERNET_CONNECTION, null, null);
-			}
-			else {
-				playerTaskSpecific.setPoints(serverResponse.points);
-				playerTaskSpecific.setIsFinishedByUser(true);
-				
-				Database database = new Database(getActivity());
-				database.updatePlayerTaskSpecific(playerTaskSpecific);
-				database.closeDatabase();
-				
-				Integer maxPoints = task.getMaxPoints();
-				DialogType dialogType;
-				
-				if (serverResponse.points == 0) {
-					dialogType = DialogType.WRONG_ANSWER;
-				}
-				else if (serverResponse.points == maxPoints) {
-					dialogType = DialogType.RIGHT_ANSWER;
-				}
-				else {
-					dialogType = DialogType.PARTIALLY_RIGHT_ANSWER;
-				}
-				dialog.showDialog(dialogType, serverResponse.points, maxPoints);
-				
-				if (!task.isRepetable()) {
-					//show answers
-					adapter.setCorrectAnswers(serverResponse.correctAnswers);
-				}
-			}
+			WebHighLevelInterface web = new WebHighLevel(handler, getActivity());
+			web.sendAnswersForABCDTask(task, answers);
 		}
 	}
 	
 	public boolean isOnline() {
-		ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(
-			Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-		if (networkInfo == null) return false;
-		return networkInfo.isAvailable() && networkInfo.isConnected();
+		UrbanGameApplication uga = (UrbanGameApplication) getActivity().getApplication();
+		return uga.isConnectedToInternet();
+	}
+	
+	@Override
+	public void onWebServerResponse(Message message) {
+		progressDialog.dismiss();
+		
+		WebResponse serverResponse = new WebResponse(QueryType.SendAnswersForABCDTask);
+		
+		playerTaskSpecific.setPoints(serverResponse.points);
+		playerTaskSpecific.setIsFinishedByUser(true);
+		
+		Database database = new Database(getActivity());
+		database.updatePlayerTaskSpecific(playerTaskSpecific);
+		database.closeDatabase();
+		
+		Integer maxPoints = task.getMaxPoints();
+		DialogType dialogType;
+		
+		if (serverResponse.points == 0) {
+			dialogType = DialogType.WRONG_ANSWER;
+		}
+		else if (serverResponse.points == maxPoints) {
+			dialogType = DialogType.RIGHT_ANSWER;
+		}
+		else {
+			dialogType = DialogType.PARTIALLY_RIGHT_ANSWER;
+		}
+		dialog.showDialog(dialogType, serverResponse.points, maxPoints);
+		
+		if (!task.isRepetable()) {
+			//show answers
+			adapter.setCorrectAnswers(serverResponse.correctAnswers);
+		}
 	}
 }

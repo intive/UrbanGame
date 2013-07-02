@@ -132,7 +132,7 @@ public class MockWebServer {
 		int i;
 		
 		switch (queryType) {
-			case GetGameDetails:
+			case DownloadGameDetails:
 				UrbanGame urbanGame = getMockUrbanGameDetails(gid);
 				if (urbanGame != null) {
 					stringBuilder.append(gson.toJson(urbanGame));
@@ -140,7 +140,7 @@ public class MockWebServer {
 				
 				break;
 			
-			case GetGamesList:
+			case DownloadGamesList:
 				stringBuilder.append("[");
 				
 				for (i = 0; i < mockAllUrbanGames.size() - 1; ++i) {
@@ -150,7 +150,7 @@ public class MockWebServer {
 				stringBuilder.append(gson.toJson(mockAllUrbanGames.get(i))).append("]");
 				break;
 			
-			case GetTasksList:
+			case DownloadTasksForGame:
 				
 				ArrayList<Task> taskList = mockTaskLists.get(gid);
 				if (taskList != null) {
@@ -164,7 +164,7 @@ public class MockWebServer {
 				}
 				break;
 			
-			case GetTaskDetails:
+			case DownloadTaskDetails:
 				Task task = getMockSingleTask(gid, tid);
 				if (task != null) {
 					stringBuilder.append(gson.toJson(task));

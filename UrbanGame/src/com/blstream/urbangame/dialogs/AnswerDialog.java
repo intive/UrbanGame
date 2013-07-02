@@ -26,6 +26,10 @@ public class AnswerDialog implements UrbanGameDialogOnClickListener {
 		this.context = context;
 	}
 	
+	public void showDialog(DialogType dialogType) {
+		showDialog(dialogType, null, null);
+	}
+	
 	public void showDialog(DialogType dialogType, Integer points, Integer maxPoints) {
 		this.dialogType = dialogType;
 		
@@ -87,9 +91,5 @@ public class AnswerDialog implements UrbanGameDialogOnClickListener {
 					break;
 			}
 		}
-	}
-	
-	public void showDialog(DialogType dialogType) {
-		showDialog(dialogType, null, null);
 	}
 }

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +31,14 @@ import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
 import com.blstream.urbangame.helpers.ExpandableListViewPropertiesSetter;
 import com.blstream.urbangame.web.WebHighLevel;
 import com.blstream.urbangame.web.WebHighLevelInterface;
+import com.blstream.urbangame.webserver.ServerResponseHandler;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
-public class MyGamesActivity extends AbstractGamesListActivity implements OnChildClickListener {
+public class MyGamesActivity extends AbstractGamesListActivity implements OnChildClickListener,
+	WebServerNotificationListener {
 	private ExpandableListView mExpandableList;
 	private ArrayList<ExpandableListHeader> mArrayHeaders;
+	private ServerResponseHandler handler;
 	
 	private static final Integer ACTIVE_GAMES_KEY = 0x1;
 	private static final Integer OBSERVED_GAMES_KEY = 0x2;
@@ -46,7 +51,8 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 		setSupportProgressBarVisibility(true);
 		
 		//it fills DB with users games if they are not in DB.
-		WebHighLevelInterface web = new WebHighLevel(this);
+		this.handler = new ServerResponseHandler(this);
+		WebHighLevelInterface web = new WebHighLevel(handler, this);
 		web.downloadUsersGames();
 		
 		mExpandableList = (ExpandableListView) findViewById(R.id.expandableListViewMyGamesList);
@@ -85,7 +91,7 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 	}
 	
 	private HashMap<Integer, List<UrbanGameShortInfo>> readGamesInfo() {
-		DatabaseInterface database = new Database(getApplicationContext());
+		DatabaseInterface database = new Database(MyGamesActivity.this);
 		String email = database.getLoggedPlayerID();
 		HashMap<Integer, List<UrbanGameShortInfo>> gamesList = new HashMap<Integer, List<UrbanGameShortInfo>>();
 		
@@ -289,5 +295,11 @@ public class MyGamesActivity extends AbstractGamesListActivity implements OnChil
 		public void setArrayChildren(ArrayList<UrbanGameShortInfo> mArrayGameInfo) {
 			this.mArrayGameInfo = mArrayGameInfo;
 		}
+	}
+	
+	@Override
+	public void onWebServerResponse(Message message) {
+		// TODO implement on response behavior
+		// FIXME refreshing adapters should be moved here
 	}
 }

@@ -1,5 +1,7 @@
 package com.blstream.urbangame.webserver;
 
+import java.util.ArrayList;
+
 import com.blstream.urbangame.webserver.WebServer.QueryType;
 
 /**
@@ -11,14 +13,17 @@ import com.blstream.urbangame.webserver.WebServer.QueryType;
 // TODO extend by information which will be needed
 public class WebResponse {
 	public final QueryType queryType;
-	public final long gameID;
-	public final long taskID;
-	
 	private String responseString;
 	
+	/*
+	 * Optional data to be placed in response 
+	 */
+	public long gameID;
+	public long taskID;
+	public int points;
+	public ArrayList<String> correctAnswers;
+	
 	public WebResponse(QueryType queryType) {
-		this.gameID = 0L;
-		this.taskID = 0L;
 		this.queryType = queryType;
 	}
 	

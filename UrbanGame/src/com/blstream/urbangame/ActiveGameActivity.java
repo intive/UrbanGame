@@ -2,6 +2,7 @@ package com.blstream.urbangame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -13,8 +14,10 @@ import com.blstream.urbangame.fragments.GameTasksFragment;
 import com.blstream.urbangame.fragments.TabManager;
 import com.blstream.urbangame.web.WebHighLevel;
 import com.blstream.urbangame.web.WebHighLevelInterface;
+import com.blstream.urbangame.webserver.ServerResponseHandler;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
-public class ActiveGameActivity extends AbstractMenuActivity {
+public class ActiveGameActivity extends AbstractMenuActivity implements WebServerNotificationListener {
 	
 	private final String TAG = ActiveGameActivity.class.getSimpleName();
 	
@@ -25,6 +28,7 @@ public class ActiveGameActivity extends AbstractMenuActivity {
 	private final String TAB_LAST_SELECTED = "tab";
 	
 	private TabManager tabManager;
+	private ServerResponseHandler handler;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,8 @@ public class ActiveGameActivity extends AbstractMenuActivity {
 		long gameID = getGameID();
 		
 		// it downloads tasks for game (current user related) if not in database
-		WebHighLevelInterface web = new WebHighLevel(this);
+		this.handler = new ServerResponseHandler(this);
+		WebHighLevelInterface web = new WebHighLevel(handler, this);
 		web.downloadTasksForGame(gameID);
 		
 		setUpTabHost(savedInstanceState);
@@ -98,5 +103,11 @@ public class ActiveGameActivity extends AbstractMenuActivity {
 		menuInflater.inflate(R.menu.top_bar_message, menu);
 		
 		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public void onWebServerResponse(Message message) {
+		// TODO implement on response behavior
+		// FIXME setting views should be moved here
 	}
 }

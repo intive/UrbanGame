@@ -32,7 +32,13 @@ public class WebAPI {
 	}
 	
 	public Uri getAllGamesUri() {
-		Uri uri = Uri.parse(base + getBaseAPI().links.games.href);
+		Uri uri = null;
+		try {
+			uri = Uri.parse(base + getBaseAPI().links.games.href);
+		}
+		catch (Exception e) {
+			uri = Uri.parse(base);
+		}
 		return uri;
 	}
 	

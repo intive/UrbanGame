@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,8 +21,10 @@ import com.blstream.urbangame.dialogs.UrbanGameDialog;
 import com.blstream.urbangame.dialogs.UrbanGameDialog.UrbanGameDialogOnClickListener;
 import com.blstream.urbangame.web.WebHighLevel;
 import com.blstream.urbangame.web.WebHighLevelInterface;
+import com.blstream.urbangame.webserver.ServerResponseHandler;
+import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
-public class GameDetailsActivity extends AbstractMenuActivity implements OnClickListener {
+public class GameDetailsActivity extends AbstractMenuActivity implements OnClickListener, WebServerNotificationListener {
 	public static final String TAG = "GameDetailsActivity";
 	public static final String GAME_KEY = "gameID";
 	public static final Long GAME_NOT_FOUND = -1L;
@@ -29,6 +32,9 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 	private static boolean isSomeoneLogged = false;
 	private static boolean isPlayerAParticipantOfCurrentGame = false;
 	private long gameID;
+	
+	private ServerResponseHandler handler;
+	private WebHighLevelInterface web;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +44,8 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 		
 		gameID = getSelectedGameID();
 		
-		WebHighLevelInterface web = new WebHighLevel(this);
+		this.handler = new ServerResponseHandler(this);
+		web = new WebHighLevel(handler, this);
 		web.downloadGameDetails(gameID);
 		
 		Button joinLeaveButton = (Button) (findViewById(R.id.buttonJoinLeaveGame));
@@ -62,7 +69,7 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 	
 	//checks is player a participant of current game
 	private void checkIsPlayerIsLogedAndIsParticipantOfCurrentGame(Long idOfSelectedGame) {
-		DatabaseInterface database = new Database(getApplicationContext());
+		DatabaseInterface database = new Database(GameDetailsActivity.this);
 		String loggedPlayerEmail = database.getLoggedPlayerID();
 		if (loggedPlayerEmail != null) {
 			isSomeoneLogged = true;
@@ -177,6 +184,8 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 		dialogBuilder.setCancelable(false);
 		dialogBuilder.setPositiveButton(R.string.dialog_join_leave_positive_button,
 			new UrbanGameDialogOnClickListener() {
+				private static final long serialVersionUID = 1L;
+				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Log.i("UrbanGame", "Dialog: clicked positive button");
@@ -203,6 +212,8 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 			});
 		dialogBuilder.setNegativeButton(R.string.dialog_join_leave_negative_button,
 			new UrbanGameDialogOnClickListener() {
+				private static final long serialVersionUID = 1L;
+				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Log.i("UrbanGame", "Dialog: clicked negative button");
@@ -228,7 +239,6 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 	private void joinPlayerToTheGame() {
 		Log.i(TAG, "Joning the game");
 		
-		WebHighLevelInterface web = new WebHighLevel(this);
 		web.joinCurrentPlayerToTheGame(getSelectedGameID());
 		
 		isPlayerAParticipantOfCurrentGame = true;
@@ -241,11 +251,15 @@ public class GameDetailsActivity extends AbstractMenuActivity implements OnClick
 	}
 	
 	private void leavePlayerFromGame() {
-		
-		WebHighLevelInterface web = new WebHighLevel(this);
 		web.leaveCurrentPlayerFromTheGame(getSelectedGameID());
 		
 		isPlayerAParticipantOfCurrentGame = false;
 		setJoinLeaveButtonText((Button) findViewById(R.id.buttonJoinLeaveGame));
+	}
+	
+	@Override
+	public void onWebServerResponse(Message message) {
+		// TODO implement on response behavior
+		// FIXME setting views should be moved here
 	}
 }
