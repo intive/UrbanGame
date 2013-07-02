@@ -44,15 +44,16 @@ object Games extends Table[GamesDetails]("GAMES") {
   def status = column[String]("status", O.NotNull, O.Default("project"))
   def image = column[String]("image", O.NotNull, O.Default("games/gameicon.png"))
   def tasksNo = column[Int]("tasksNo", O.NotNull, O.Default(0))
+  def numberOfPlayers = column[Int]("numberOfPlayers", O.NotNull, O.Default(0))
   def * = id.? ~ name ~ version ~ description ~ location ~ operatorId ~ created ~ 
     updated ~ startTime ~ endTime ~ started ~ ended ~ winning ~ nWins ~ difficulty ~ 
-    maxPlayers ~ awards ~ status ~ image ~ tasksNo <> (GamesDetails, GamesDetails.unapply _)
+    maxPlayers ~ awards ~ status ~ image ~ tasksNo ~ numberOfPlayers <> (GamesDetails, GamesDetails.unapply _)
 
   def forInsert = name ~ version ~ description ~ location ~ operatorId ~ 
     created ~ updated ~ startTime ~ endTime ~ started ~ ended ~ winning ~ nWins ~ 
     difficulty ~ maxPlayers ~ awards ~ status ~ image ~ tasksNo <> ({ t => 
       GamesDetails(None, t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, 
-        t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17, t._18, t._19)}, 
+        t._10, t._11, t._12, t._13, t._14, t._15, t._16, t._17, t._18, t._19, 0)}, 
       { (gd: GamesDetails) => Some((gd.name, gd.version, gd.description, gd.location, gd.operatorId, 
         gd.updated, gd.created, gd.startTime, gd.endTime, gd.started, gd.ended, gd.winning, gd.nWins, 
         gd.difficulty, gd.maxPlayers, gd.awards, gd.status, gd.image, gd.tasksNo))

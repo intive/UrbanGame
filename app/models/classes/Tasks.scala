@@ -28,16 +28,21 @@ object Tasks extends Table[TasksDetails]("TASKS") {
   def gameId = column[Int]("gameId", O.NotNull)
   def version = column[Int]("version", O.NotNull, O.Default(1))
   def name = column[String]("name", O.NotNull)
-  def description = column[String]("description", O.NotNull)
-  def deadline = column[DateTime]("deadline", O.NotNull)
+  def category = column[String]("category", O.NotNull)
+  def detailsJson = column[String]("detailsJson", O.NotNull)
+  def answerJson = column[String]("answerJson", O.NotNull)
   def maxpoints = column[Int]("maxpoints", O.NotNull)
   def maxattempts = column[Int]("maxattempts", O.NotNull)
-  def * = id.? ~ gameId ~ version ~ name ~ description ~ deadline ~ maxpoints ~ maxattempts <> (TasksDetails, TasksDetails.unapply _)
-  def forInsert = gameId ~ version ~ name ~ description ~ deadline ~ maxpoints ~ maxattempts <> ({ t => 
-      TasksDetails(None, t._1, t._2, t._3, t._4, t._5, t._6, t._7)}, 
-      { (td: TasksDetails) => Some((td.gameId, td.version, td.name, td.description, td.deadline, td.maxpoints, td.maxattempts))
+  def timeLimit = column[Option[DateTime]]("timeLimit")
+  def lat   = column[Option[Double]]("lat")
+  def lon   = column[Option[Double]]("lon")
+  def rangeLimit = column[Option[Double]]("rangeLimit")
+  def cancelled = column[Boolean]("cancelled", O.NotNull, O.Default(false))
+  def * = id.? ~ gameId ~ version ~ category ~ name ~ detailsJson ~ answerJson ~ maxpoints ~ maxattempts ~ timeLimit ~ lat ~ lon ~ rangeLimit ~ cancelled <> (TasksDetails, TasksDetails.unapply _)
+  def forInsert = gameId ~ version ~ category ~ name ~ detailsJson ~ answerJson ~ maxpoints ~ maxattempts ~ timeLimit ~ lat ~ lon ~ rangeLimit ~ cancelled <> ({ t => 
+    TasksDetails(None, t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13)}, 
+      { (td: TasksDetails) => Some((td.gameId, td.version, td.category, td.name, td.taskJson, td.answerJson, td.maxpoints, td.maxattempts, td.timeLimit, td.lat, td.lon, td.rangeLimit, td.cancelled))
       })
-
   def game = foreignKey("GMT_FK", gameId, Games)(_.id)
 }
 

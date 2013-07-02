@@ -175,3 +175,14 @@ js.aftereffects.delete = When you do this, your game will disappear.
 js.no = No
 js.yes = Yes, {0} this game
 js.gpstask.marker = Reach it to complete task.
+
+webapi.error.gameNotFound = Game not found
+webapi.error.taskNotFound = Task not found
+webapi.error.userExists = User with this login already exists
+webapi.error.notPartOfGame = You are not part of this game
+webapi.error.notStarted = Game is not started
+webapi.error.isEnded = Game is ended
+webapi.error.alreadyJoined = You are already joined
+webapi.error.isFull = Game is full
+webapi.error.alreadyLeft = You are already left this game
+webapi.error.mustWait = User must wait {0} minutes

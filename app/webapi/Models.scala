@@ -1,3 +1,4 @@
+
 /**Copyright 2013 BLStream, BLStream's Patronage Program Contributors
  * 		 http://blstream.github.com/UrbanGame/
  * 
@@ -22,15 +23,19 @@ case class User(id: Int, login: String)
 case class GameSummary(
     gid: Int, version: Int, name: String, 
     startTime: DateTime, endTime: DateTime,
-    difficulty: String, operatorName: String
+    difficulty: String, 
+    operatorName: String, operatorLogo: String,
+    maxPlayers: Int, numberOfPlayers: Int,
+    awards: String,
+    distance: Option[Double]
 )
 case class GameStatic(
     gid: Int, version: Int, name: String, description: String,
     location: String,
     operatorName: String,
+    operatorLogo: String,
     created: DateTime, updated: DateTime,
     startTime: DateTime, endTime: DateTime,
-    started: Option[DateTime], ended: Option[DateTime],
     winning: String, nWins: Int,
     difficulty: String,
     maxPlayers: Int,
@@ -38,38 +43,49 @@ case class GameStatic(
     status: String,
     image: String
 )
-case class GameDynamic(gid: Int, version: Int, status: String, free: Int)
-case class TaskSummary(gid: Int, tid: Int, version: Int,  name: String)
+case class GameDynamic(
+    gid: Int, version: Int, status: String, numberOfPlayers: Int
+)
+case class TaskSummary(
+    gid: Int, tid: Int, version: Int,  name: String
+)
+abstract class TaskSpecDetails
+case class GPSTaskDetails(description: String) extends TaskSpecDetails
+case class ABCTaskDetails(description: String, choices: List[String]) extends TaskSpecDetails
 case class TaskStatic(
     gid: Int, tid: Int, version: Int,
-    name: String, description: String,
-    deadline: DateTime,
+    category: String, name: String, details: TaskSpecDetails,
     maxpoints: Int,
     maxattempts: Int
-);
-case class TaskDynamic(gid: Int, tid: Int, version: Int)
+)
+case class TaskDynamic(
+    gid: Int, tid: Int, version: Int
+)
 case class UserGameSummary(
   gid: Int, version: Int, started: DateTime, finished: Option[DateTime], points: Int
 )
-case class UserGameStatus(gid: Int, points: Int)
-case class UserTaskStatus(gid: Int, tid: Int, points: Int)
+case class UserGameStatus(points: Int, rank: Int)
+case class UserTaskSummary(
+  tid: Int, gid: Int, version: Int, t: String, deadline: DateTime
+)
+case class UserTaskStatus(status: String, attempts: Int, points: Int, canRepeat: Boolean)
 
 abstract class UserAnswer
 case class GPSAnswer(lat: Double, lon: Double) extends UserAnswer
 case class ABCAnswer(checked: Int) extends UserAnswer
 
 trait GamesService {
-  def listGames(lat: Double, lon: Double, r: Double): List[GameSummary]
+  def listGames(lat: Double, lon: Double): List[GameSummary]
   def getGameStatic(gid: Int): GameStatic
   def getGameDynamic(gid: Int): GameDynamic
-  def listTasks(gid: Int): List[TaskSummary]
   def getTaskStatic(gid: Int, tid: Int): TaskStatic
   def getTaskDynamic(gid: Int, tid: Int): TaskDynamic
   def getUserOpt(login: String, password: String): Option[User]
-  def findUserOpt(login: String): Option[User]
+  def findUserByLoginOpt(login: String): Option[User]
   def createUser(login: String, password: String)
   def joinGame(user: User, gid: Int)
   def leaveGame(user: User, gid: Int)
+  def listTasks(user:User, gid: Int, lat: Double, lon: Double): List[TaskSummary]
   def listUserGames(user: User): List[UserGameSummary]
   def getUserGameStatus(user: User, gid: Int): UserGameStatus
   def getUserTaskStatus(user: User, gid: Int, tid: Int): UserTaskStatus

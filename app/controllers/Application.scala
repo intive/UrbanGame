@@ -197,7 +197,7 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
       }
 
       if (Tasks.findAll.isEmpty) {
-        val td = TasksDetails(None, 1, 1, "Task1", "Task1 desc", DateTime.now + 2.days, 100, 20)
+        val td = TasksDetails(None, 1, 1, "GPSTask", "Task1", """{"description":"desc of task 1"}""", """{"lat":0, "lon":0, "range":3}""", 100, 20, Some(DateTime.now + 2.days), None, None, None, false)
 
         Tasks.createTask(td)
         cnt3 = cnt3 + 1
