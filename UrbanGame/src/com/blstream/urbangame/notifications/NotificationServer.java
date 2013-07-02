@@ -72,7 +72,7 @@ public class NotificationServer implements WebServerNotificationListener {
 		this.mHandler = new Handler();
 		this.database = new Database(context);
 		this.playerEmail = database.getLoggedPlayerID();
-		this.webServer = new WebServer(new ServerResponseHandler(this));
+		this.webServer = new WebServer(context, new ServerResponseHandler(this));
 		this.notificationManager = new NotificationsManager(context);
 		
 		// If you want to run a query to web server use

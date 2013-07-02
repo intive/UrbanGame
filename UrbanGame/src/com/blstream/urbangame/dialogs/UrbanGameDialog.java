@@ -262,6 +262,7 @@ public class UrbanGameDialog extends SherlockDialogFragment {
 			if (dialogInterfaceListener != null) {
 				dialogInterfaceListener.onClick(getDialog(), which);
 			}
+			UrbanGameDialog.this.dismiss();
 		}
 	}
 	
