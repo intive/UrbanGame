@@ -49,12 +49,11 @@ case class GameDynamic(
 case class TaskSummary(
     gid: Int, tid: Int, version: Int,  name: String
 )
-abstract class TaskSpecDetails
-case class GPSTaskDetails(description: String) extends TaskSpecDetails
-case class ABCTaskDetails(description: String, choices: List[String]) extends TaskSpecDetails
+case class ABCOption(option: String, answer: String)
 case class TaskStatic(
     gid: Int, tid: Int, version: Int,
-    category: String, name: String, details: TaskSpecDetails,
+    category: String, name: String, description: String,
+    choices: Option[List[ABCOption]],
     maxpoints: Int,
     maxattempts: Int
 )
@@ -72,7 +71,7 @@ case class UserTaskStatus(status: String, attempts: Int, points: Int, canRepeat:
 
 abstract class UserAnswer
 case class GPSAnswer(lat: Double, lon: Double) extends UserAnswer
-case class ABCAnswer(checked: Int) extends UserAnswer
+case class ABCAnswer(option: String) extends UserAnswer
 
 trait GamesService {
   def listGames(lat: Double, lon: Double): List[GameSummary]

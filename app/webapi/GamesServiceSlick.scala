@@ -22,7 +22,7 @@ import webapi.models._
 class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
   import com.github.tototoshi.slick.JodaSupport._
   import com.github.nscala_time.time.Imports._
-  import models.{Games, Tasks, Users, Operators, UserGames, UserTasks}
+  import models.{Games, Tasks, Users, Operators, UserGames, GPSTasks, ABCTasks, UserTasks}
   import play.api.Play.current
   import play.api.db.slick.Config.driver.simple._
   import scala.language.postfixOps
@@ -41,7 +41,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
         d
       )
 
-      q.elements map { GameSummary.tupled(_) } toList
+      q.sortBy(_._12).elements map { GameSummary.tupled(_) } toList
     }
   }
 
@@ -71,28 +71,25 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     }
   }
 
-  import play.api.libs.json._
-  import play.api.libs.functional.syntax._
-  implicit val gpsTaskDetailsReads = Json.reads[GPSTaskDetails]
-  implicit val abcTaskDetailsReads = Json.reads[ABCTaskDetails]
+  def isABCTask(category: String) = category contains "ABC"
 
   override def getTaskStatic(gid: Int, tid: Int): TaskStatic = {
     db withSession { implicit session =>
       val q = for (
         t <- Tasks if t.gameId === gid && t.id === tid
       ) yield (
-        t.gameId, t.id, t.version, t.category, t.name, t.detailsJson,
+        t.gameId, t.id, t.version, t.category, t.name, t.description,
         t.maxpoints, t.maxattempts
       )
 
-      q.firstOption map { case (gid, tid, version, category, name, detailsJson, maxpoints, maxattempts) =>
-        val obj = Json.parse(detailsJson)
-        val details: TaskSpecDetails = 
-          if (category contains "GPS")
-            obj.as[GPSTaskDetails]
-          else
-            obj.as[ABCTaskDetails]
-        TaskStatic(gid, tid, version, category, name, details, maxpoints, maxattempts)
+      q.firstOption map { case (gid, tid, version, category, name, description, maxpoints, maxattempts) =>
+        val choices = 
+          if (category contains "ABC") 
+            Some((for (t <- ABCTasks if t.gameId === gid && t.taskId === tid) yield(t.char, t.option)).elements map { ABCOption.tupled(_) } toList)
+          else 
+            None
+
+        TaskStatic(gid, tid, version, category, name, description, choices, maxpoints, maxattempts)
       } getOrElse { throw taskNotFound }
     }
   }
@@ -260,7 +257,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     PublicGamesView innerJoin Operators on (_.operatorId === _.id)
   def GamesViewWithDistances(lat: Double, lon: Double) = 
     GamesView map { case (g, o) =>
-      (g, o, (for (t <- Tasks if t.gameId === g.id) yield geodistance(t.lat, t.lon, lat, lon)).min)
+      (g, o, (for (t <- GPSTasks if t.gameId === g.id) yield geodistance(t.lat, t.lon, lat, lon)).min)
     }
   def UserGamesView(uid: Int) =
     UserGames filter (_.userId === uid) innerJoin Games on (_.gameId === _.id)

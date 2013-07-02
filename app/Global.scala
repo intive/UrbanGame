@@ -21,5 +21,7 @@ object TestApiModule extends TestApiModule
 
 object Global extends PlayControllerWiring {
   import play.api.Play.current
-  override lazy val module = TestApiModule
+  override lazy val module = 
+    if (Play.isTest) TestApiModule
+    else MainApiModule
 }

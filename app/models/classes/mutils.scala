@@ -11,8 +11,7 @@ case class GamesDetails(id: Option[Int], name: String, version: Int = 1, descrip
   nWins: Int = 1, difficulty: String = "easy", maxPlayers: Int = 1000000, awards: String, status: String, 
   image: String = "games/gameicon.png", tasksNo: Int = 0, numberOfPlayers: Int = 0)
 case class TasksDetails(id: Option[Int], gameId: Int, version: Int, 
-  category: String, name: String,
-  taskJson: String, answerJson: String,
+  category: String, name: String, description: String,
   maxpoints: Int, maxattempts: Int,
   timeLimit: Option[DateTime],
   lat: Option[Double], lon: Option[Double], rangeLimit: Option[Double],

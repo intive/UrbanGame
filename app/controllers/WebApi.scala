@@ -64,7 +64,7 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
     val list = gamesService.listTasks(user, gid, lat, lon)
     val embedded = list map { task => 
       val selfLink = HalLink("self", taskLink(task.gid, task.tid).href)
-      val links = Seq(selfLink, userTaskStatusLink(task.gid, task.tid))
+      val links = Seq(selfLink)
       HalJsonRes(links, body=Json.toJson(task))
     }
     val links = Seq(selfLink, gameLink(gid))
@@ -186,14 +186,7 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
   implicit val gamesArgsReads    = Json.reads[GamesArgs]
   implicit val registerArgsReads = Json.reads[RegisterArgs]
 
-  implicit val gpsTaskDetailsWrites  = Json.writes[GPSTaskDetails]
-  implicit val abcTaskDetailsWrites  = Json.writes[ABCTaskDetails]
-  implicit val taskSpecDetailsWrites = new Writes[TaskSpecDetails] {
-    def writes(t: TaskSpecDetails): JsValue = t match {
-      case gps: GPSTaskDetails => Json.toJson(gps)
-      case abc: ABCTaskDetails => Json.toJson(abc)
-    }
-  }
+  implicit val ABCOptionWrites  = Json.writes[ABCOption]
 
   implicit val gameSummaryWrites = Json.writes[GameSummary]
   implicit val gameStaticWrites  = Json.writes[GameStatic]
