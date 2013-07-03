@@ -97,12 +97,14 @@ namespace WebService
             PropertyInfo[] newProperties = GetPublicProperties(newGame.GetType());
             PropertyInfo[] oldProperties = GetPublicProperties(oldGame.GetType());
 
+            //todo: do not override fields which are stored only localy
+            List<string> skipFields = new List<string>() { "GameState", "ListOfChanges", "GameOverDisplayed" };
+
             foreach (PropertyInfo oldProperty in oldProperties)
             {
                 PropertyInfo newProperty = newProperties.First(p => p.Name == oldProperty.Name);
-
-                //todo: do not override fields which are stored only localy
-                if (oldProperty.Name != "GameState" && oldProperty.Name != "ListOfChanges" && oldProperty.CanWrite)
+                
+                if (!skipFields.Contains(oldProperty.Name) && oldProperty.CanWrite)
                 {
                     //skip collections - only basic data
                     if (!oldProperty.PropertyType.IsGenericType ||

@@ -304,13 +304,10 @@ namespace UrbanGame.ViewModels
 
         private void SubmitSolution(IBaseSolution solution)
         {
-
-
             //sending solution
             var result = _gameWebService.SubmitTaskSolution(GameId, CurrentTask.Id, Solution);
             //todo: update points in Views (gameDetailsView & TaskView)
             //todo: change WebService.SubmitTaskSolution to return gained points
-
 
             using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
             {
