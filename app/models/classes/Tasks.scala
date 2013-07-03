@@ -36,7 +36,7 @@ object Tasks extends Table[TasksDetails]("TASKS") {
   def timeLimit = column[Option[DateTime]]("timeLimit")
   def lat   = column[Option[Double]]("lat")
   def lon   = column[Option[Double]]("lon")
-  def rangeLimit = column[Option[Double]]("rangeLimit")
+  def rangeLimit = column[Option[Int]]("rangeLimit")
   def active = column[Boolean]("active", O.NotNull, O.Default(true))
   def penalty = column[Int]("penalty", O.NotNull, O.Default(0))
   def * = id.? ~ gameId ~ version ~ ttype ~ name ~ description ~ maxpoints ~ minToAccept ~ maxattempts ~ timeLimit ~ lat ~ lon ~ rangeLimit ~ active ~ penalty <> (TasksDetails, TasksDetails.unapply _)

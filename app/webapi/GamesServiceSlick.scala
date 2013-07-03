@@ -81,7 +81,8 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
 
       q.firstOption map { case (gid, tid, version, ttype, name, description, maxpoints, maxattempts) =>
         val choices = if (isABCTask(ttype)) Some(getListOfAnswers(gid, tid)) else None
-        TaskStatic(gid, tid, version, ttype, name, description, choices, maxpoints, maxattempts)
+        val range   = if (isGPSTask(ttype)) Some(getListOfPoints(gid,tid)) else None
+        TaskStatic(gid, tid, version, ttype, name, description, choices, range, maxpoints, maxattempts)
       } getOrElse { throw taskNotFound }
     }
   }
@@ -196,7 +197,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
       val q = for (
         t <- models.Tasks if t.gameId === gid
         if canShowTask(t, user, lat, lon)
-      ) yield (t.gameId, t.id, t.version, t.name)
+      ) yield (t.gameId, t.id, t.version, t.name, t.ttype)
 
       q.elements map { TaskSummary.tupled(_) } toList
     }
@@ -276,7 +277,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
 
   private def getStatusAndPoints(user: User, gid: Int, tid: Int, ans: UserAnswer, ttype: String, maxpoints: Int, minToAccept: Int, penalty: Int)(implicit session: Session): (String, Int) = 
     if (isABCTask(ttype)) {
-      val selected = ans.option getOrElse (throw expectedField("option"))
+      val selected = ans.options getOrElse (throw expectedField("option"))
       val abcq = for (
         abc <- models.ABCTasks if abc.gameId === gid && abc.taskId === tid
       ) yield (abc.char, abc.points)
@@ -323,8 +324,13 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     val q = for (t <- models.ABCTasks if t.gameId === gid && t.taskId === tid) yield(t.char, t.option)
     q.elements map { ABCOption.tupled(_) } toList
   }
+ 
+  private def getListOfPoints(gid: Int, tid: Int)(implicit session: Session) = {
+    val q = for (t <- models.GPSTasks if t.gameId === gid && t.taskId === tid) yield(t.lat, t.lon, t.range)
+    q.elements map { GPSPoint.tupled(_) } toList
+  }
 
-  private val geodistanceFun = SimpleFunction[Double]("geodistance")
+  private val geodistanceFun = SimpleFunction[Int]("geodistance")
   private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double) =
     geodistanceFun(Seq(lat1, lon1, lat2, lon2))
   private val PublicGamesView = models.Games filter (g => g.status === "published" || g.status === "online")

@@ -14,7 +14,7 @@ case class TasksDetails(id: Option[Int], gameId: Int, version: Int,
   ttype: String, name: String, description: String,
   maxpoints: Int, minToAccept: Int, maxattempts: Int,
   timeLimit: Option[DateTime],
-  lat: Option[Double], lon: Option[Double], rangeLimit: Option[Double],
+  lat: Option[Double], lon: Option[Double], rangeLimit: Option[Int],
   active: Boolean, penalty: Int)
 case class SkinsDetails(id: Option[Int], gameId: Int, icon: String)
 case class Notification(id: Option[Int], gameId: Int, version: Int, notification: String, date: DateTime)
@@ -34,7 +34,7 @@ case class UserDB(id: Option[Int], login: String, hash: String)
 case class UserGame(userId: Int, gameId: Int, joined: DateTime, left: Option[DateTime], points: Int)
 case class UserTask(userId: Int, gameId: Int, taskId: Int, status: String, points: Int, attempts: Int, time: Option[DateTime])
 case class ABCTaskOption(gid: Int, tid: Int, char: String, option: String, points: Int)
-case class GPSTask(gid: Int, tid: Int, pointId: Int, lat: Double, lon: Double, range: Double)
+case class GPSTask(gid: Int, tid: Int, pointId: Int, lat: Double, lon: Double, range: Int)
 
 object mutils extends mutils {
 

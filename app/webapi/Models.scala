@@ -27,7 +27,7 @@ case class GameSummary(
     operatorName: String, operatorLogo: String,
     maxPlayers: Int, numberOfPlayers: Int,
     awards: String,
-    distance: Option[Double]
+    distance: Option[Int]
 )
 case class GameStatic(
     gid: Int, version: Int, name: String, description: String,
@@ -47,13 +47,15 @@ case class GameDynamic(
     gid: Int, version: Int, status: String, numberOfPlayers: Int
 )
 case class TaskSummary(
-    gid: Int, tid: Int, version: Int,  name: String
+    gid: Int, tid: Int, version: Int,  name: String, ttype: String
 )
 case class ABCOption(option: String, answer: String)
+case class GPSPoint(lat: Double, lon: Double, range: Int)
 case class TaskStatic(
     gid: Int, tid: Int, version: Int,
-    category: String, name: String, description: String,
+    ttype: String, name: String, description: String,
     choices: Option[List[ABCOption]],
+    areas: Option[List[GPSPoint]],
     maxpoints: Int,
     maxattempts: Int
 )
@@ -65,10 +67,10 @@ case class UserGameSummary(
 )
 case class UserGameStatus(points: Int, rank: Int)
 case class UserTaskSummary(
-  tid: Int, gid: Int, version: Int, t: String, deadline: DateTime
+  tid: Int, gid: Int, version: Int, ttype: String, deadline: DateTime
 )
 case class UserTaskStatus(status: String, attempts: Int, points: Int, canRepeat: Boolean)
-case class UserAnswer(lat: Option[Double], lon: Option[Double], option: Option[List[String]])
+case class UserAnswer(lat: Option[Double], lon: Option[Double], options: Option[List[String]])
 
 trait GamesService {
   def listGames(lat: Double, lon: Double): List[GameSummary]

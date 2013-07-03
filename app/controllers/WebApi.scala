@@ -196,6 +196,7 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
   implicit val userAnswerReads   = Json.reads[UserAnswer]
 
   implicit val ABCOptionWrites   = Json.writes[ABCOption]
+  implicit val GPSPointWrites    = Json.writes[GPSPoint]
   implicit val gameSummaryWrites = Json.writes[GameSummary]
   implicit val gameStaticWrites  = Json.writes[GameStatic]
   implicit val gameDynamicWrites = Json.writes[GameDynamic]
