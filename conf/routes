@@ -43,21 +43,21 @@ GET     /my/games/:gid/messages     controllers.GamesCtrl.gameMessages(gid: Int)
 
 # WebApi resources
 GET     /api                        @controllers.WebApi.root
-GET     /api/games                  @controllers.WebApi.games(lat: Double, lon: Double, r: Double ?= 40000)
+GET     /api/games                  @controllers.WebApi.games(lat: Double, lon: Double)
 GET     /api/login                  @controllers.WebApi.login
-GET     /api/my/games               @controllers.WebApi.userGames
 GET     /api/games/:gid             @controllers.WebApi.game(gid: Int)
 GET     /api/games/:gid/static      @controllers.WebApi.gameStatic(gid: Int)
 GET     /api/games/:gid/dynamic     @controllers.WebApi.gameDynamic(gid: Int)
-GET     /api/games/:gid/tasks       @controllers.WebApi.tasks(gid: Int)
+GET     /api/games/:gid/tasks       @controllers.WebApi.tasks(gid: Int, lat: Double, lon: Double)
 GET     /api/games/:gid/tasks/:tid  @controllers.WebApi.task(gid: Int, tid: Int)
 GET     /api/games/:gid/tasks/:tid/static   @controllers.WebApi.taskStatic(gid: Int, tid: Int)
 GET     /api/games/:gid/tasks/:tid/dynamic  @controllers.WebApi.taskDynamic(gid: Int, tid: Int)
 GET     /api/my/games/:gid          @controllers.WebApi.userGameStatus(gid: Int)
 GET     /api/my/games/:gid/tasks/:tid @controllers.WebApi.userTaskStatus(gid: Int, tid: Int)
+GET     /api/my/games               @controllers.WebApi.userGames
 POST    /api/register               @controllers.WebApi.register
 POST    /api/games/:gid             @controllers.WebApi.joinGame(gid: Int)
-POST    /api/my/games/:gid/tasks/:tid @controllers.WebApi.sendUserAnswer(gid: Int, tid: Int)
+POST    /api/games/:gid/tasks/:tid  @controllers.WebApi.sendUserAnswer(gid: Int, tid: Int)
 DELETE  /api/my/games/:gid          @controllers.WebApi.leaveGame(gid: Int)
 
 # Map static resources from the /public folder to the /assets URL path

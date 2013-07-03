@@ -137,14 +137,15 @@ class ApplicationSpec extends Specification {
       }
     }
     
-    "fill database with example data" in {
+    /*
+     "fill database with example data" in {
       running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
         val fill = route(FakeRequest(GET, "/filldb")).get
 
         status(fill) must equalTo(OK)
         contentAsString(fill) must contain ("Inserted 11 game(s) and 2 operator(s) and 1 task(s)")
       }
-    }
+    }*/
 
     "send an id as Json object when saving the game" in {
       running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
