@@ -50,6 +50,12 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         {name:"taskThree", type:"GPS", visible:"None", locations: [{lat:51.10235,lng:17.042328,radius:43},{lat:51.137885,lng:17.038538,radius:222}], version:1.0, maxPoints:7}
     ]
 
+    $scope.task = {
+        type:"ABC",
+        name:"",
+        description:"",
+        answers:[{symbol:"A", text:"", points: null, correct: true},{symbol:"B", text:"", points: null, correct: true},{symbol:"C", text:"", points: null, correct: true},{symbol:"D", text:"", points: null, correct: true}]
+    }
     $scope.skin = {
         image: "games/gameicon.png"
     }
@@ -186,7 +192,10 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 .then (result) ->
                     if(result == "ok")
                         resource[action]()
-
+                        
+    $scope.removeAnswer = (index) ->
+        $scope.task.answers.splice(index,1)
+        
     # ------------------ GAME NAME VALIDATION
     $scope.isValidName = ->
         if ($scope.gameid == null || _.isUndefined($scope.gameid) || $scope.game.name != $scope.previousname)
@@ -324,6 +333,23 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             Messages("newgame.gametype1")
         else
             Messages("newgame.gametype2")
+            
+    # ------------------- TASKS - LIGHTBOX       
+    $scope.resetDefaultTaskTemplate = ->
+        $scope.task = {
+            type:"ABC",
+            name:"",
+            description:"",
+            answers:[{symbol:"A", text:"", points: null, correct: true},{symbol:"B", text:"", points: null, correct: true},{symbol:"C", text:"", points: null, correct: true},{symbol:"D", text:"", points: null, correct: true}]
+        }
+        additionalCond = false
+        
+    $scope.addAnswer = ->
+        symbol = String.fromCharCode(65+$scope.task.answers.length)
+        $scope.task.answers.push({symbol:symbol, text:"", points: null, correct: true})
+        
+    $scope.additionalCond = false
+        
         
     # ------------------ INIT
     $ ->

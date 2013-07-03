@@ -27,38 +27,7 @@ import scala.util.{ Try, Success, Failure }
 import models.utils._
 import models.dal.Bridges._
 
-object Application extends Controller with CookieLang with OptionalAuthElement with LoginLogout with RememberMeElement with EmailConfirmation {
-
-  def registrationForm(implicit request: RequestHeader) = Form {
-    mapping(
-      "name" -> text.verifying("error.name.required", res => res.nonEmpty),
-      "email" -> email.verifying("error.email.exists", res => findByEmail(res) == None),
-      "password" -> tuple(
-        "main" -> text(minLength = 6),
-        "confirm" -> text.verifying("error.name.required", res => res.nonEmpty)
-      ).verifying("error.passwords.match", passwords => passwords._1 == passwords._2),
-      "captcha" -> tuple(
-        "recaptcha_challenge_field" -> text.verifying("error.captcha.required", res => res.nonEmpty),
-        "recaptcha_response_field" -> text.verifying("error.captcha.required", res => res.nonEmpty)
-      ).verifying("error.captcha.match", captcha => Recaptcha.validate(captcha._1, captcha._2)),
-      "accept" -> checked("error.accept.therms")
-    ) {
-      case (name, email, passwords, captcha, accept) => Operator(id = None, email = email, password = passwords._1, name = name)
-    } {
-      operator => Some(operator.name, operator.email, (operator.password, ""), ("", ""), false)
-    }
-  }
-
-  val loginForm = Form {
-    tuple(
-      "remember" -> boolean,
-      "user" -> mapping(
-        "email" -> email, 
-        "password" -> text.verifying("error.password.required", res => res.nonEmpty)
-      )(auth)(_.map(u => (u.email, "")))
-        .verifying("error.login.invalid.data", result => result.isDefined)
-    )
-  }
+object Application extends Controller with CookieLang with OptionalAuthElement with LoginLogout with AuthConfigImpl with EmailConfirmation {
     
   def lan(implicit request: RequestHeader) = request.cookies.get("PLAY_LANG").getOrElse(Cookie("PLAY_LANG", lang.code)).value.toString
 
@@ -78,26 +47,21 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
   def authenticate = Action { implicit request =>
     loginForm.bindFromRequest.fold(
       errors => BadRequest(Scalate("login").render('title -> "Urban Game", 'user -> None, 'loginForm -> errors)),
-      { case (remember, user) => {
+      { case (remember, user) =>
           if(user.get.validated)
-            if(remember) 
-              gotoLoginSucceeded(user.get.id.get).withCookies(Cookie(persistentCookieName, 
-                play.api.libs.Crypto.sign(user.get.email), Some(persistentSessionTimeout)))
-            else
-              gotoLoginSucceeded(user.get.id.get) 
+            gotoLoginSucceeded(user.get.id.get) 
           else {
             val msg = Messages("notify.login.novalidated", routes.Application.newToken("signup", user.get.email))(Lang(lan))
             Ok(Scalate("confirmations").render('title -> "Urban Game - E-mail confirmation", 'user -> None, 
               'message -> msg))
           }
-        }
       }
     )
   }
 
   def logout = Action { implicit request =>
     gotoLogoutSucceeded.flashing(
-      "success" -> Messages("logout.msg")(Lang(lan))
+      "success" -> Messages("notify.logout.msg")(Lang(lan))
     )
   }
 
@@ -144,7 +108,7 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
 
   def confirm(email: String, token: String) = StackAction { implicit request =>
     val user: Option[User] = loggedIn
-    val op = findByEmail(email)
+    val op = findOperatorByEmail(email)
 
     val msg: String = true match {
       case _ if(op == None) => Messages("notify.confirm.noUser")(Lang(lan))
@@ -157,6 +121,48 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
     }
 
     Ok(Scalate("confirmations").render('title -> "Urban Game - E-mail confirmation", 'user -> user, 'message -> msg))
+  }
+
+  def checkEmail(email: String) = StackAction { implicit request =>
+    val res = findOperatorByEmail(email) match {
+      case Some(x) => false
+      case None => true
+    }
+
+    Ok(Json.toJson(Map("val" -> res)))
+  }
+
+  def passwordRecovery = StackAction { implicit request =>
+    val user: Option[User] = loggedIn
+
+    Ok(Scalate("passrecovery").render('title -> "Urban Game - Password recovery", 'user -> user, 'passRecForm -> recovery))
+  }
+
+  def recover = StackAction { implicit request =>
+    val user: Option[User] = loggedIn
+    recovery.bindFromRequest.fold(
+      errors => BadRequest(Scalate("passrecovery").render('title -> "Urban Game", 'user -> user, 'passRecForm -> errors)),
+      email => {
+        val msg = findOperatorByEmail(email) match {
+          case Some(op) => {
+            val password = UUID.randomUUID.toString.substring(0,8)
+            val opc = op.copy(password = org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt()))
+            operatorUpdate(opc) match {
+              case Success(a) => {
+                sendNewPassword(opc.email, password, request)
+                Messages("notify.password.recover.send")(Lang(lan))
+              }
+              case Failure(e) => Messages("notify.password.recover.notsend")(Lang(lan)) + "<br><br>Reason: " + e.toString
+            }
+          }
+          case None => Messages("notify.password.recover.notsend")(Lang(lan)) + "<br><br><span class='bold'>Reason:</span> " + Messages("notify.password.recover.notsend.nouser", email)(Lang(lan))
+        }
+        
+        Redirect(routes.Application.notification).flashing(
+          "notification" -> msg
+        )
+      }
+    )
   }
 
   def fillDatabase = Action { implicit request =>
@@ -210,6 +216,43 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
   def jsMessages = Action { implicit request =>
     import jsmessages.api.JsMessages
     Ok(JsMessages.apply(Some("Messages"))).as(JAVASCRIPT)
+  }
+
+  def registrationForm(implicit request: RequestHeader) = Form {
+    mapping(
+      "name" -> text.verifying("error.name.required", res => res.nonEmpty),
+      "email" -> email.verifying("error.email.exists", res => findOperatorByEmail(res) == None),
+      "password" -> tuple(
+        "main" -> text(minLength = 6),
+        "confirm" -> text.verifying("error.name.required", res => res.nonEmpty)
+      ).verifying("error.passwords.match", passwords => passwords._1 == passwords._2),
+      "captcha" -> tuple(
+        "recaptcha_challenge_field" -> text.verifying("error.captcha.required", res => res.nonEmpty),
+        "recaptcha_response_field" -> text.verifying("error.captcha.required", res => res.nonEmpty)
+      ).verifying("error.captcha.match", captcha => Recaptcha.validate(captcha._1, captcha._2)),
+      "accept" -> checked("error.accept.therms")
+    ) {
+      case (name, email, passwords, captcha, accept) => Operator(id = None, email = email, password = passwords._1, name = name)
+    } {
+      operator => Some(operator.name, operator.email, (operator.password, ""), ("", ""), false)
+    }
+  }
+
+  val loginForm = Form {
+    tuple(
+      "remember" -> boolean,
+      "user" -> mapping(
+        "email" -> email, 
+        "password" -> text.verifying("error.password.required", res => res.nonEmpty)
+      )(auth)(_.map(u => (u.email, "")))
+        .verifying("error.login.invalid.data", result => result.isDefined)
+    )
+  }
+
+  val recovery = Form {
+    single(
+      "email" -> email
+    )
   }
 
   private def sendEmailToken(email: String)(implicit request: RequestHeader) = {

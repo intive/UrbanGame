@@ -57,7 +57,9 @@ class ApplicationSpec extends Specification {
     }
     
     "render the 'my games' page for logged user" in {
-      running(FakeApplication()) {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
         val mgames = route(FakeRequest(GET, "/my/games").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
@@ -68,7 +70,9 @@ class ApplicationSpec extends Specification {
     }
     
     "render the 'create new game' page for logged user" in {
-      running(FakeApplication()) {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
         val ngame = route(FakeRequest(GET, "/my/games/new").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
@@ -79,7 +83,9 @@ class ApplicationSpec extends Specification {
     }
     
     "render the 'archive' page for logged user" in {
-      running(FakeApplication()) {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
         val archive = route(FakeRequest(GET, "/my/games/archive").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
@@ -89,7 +95,9 @@ class ApplicationSpec extends Specification {
     }
     
     "render the 'options' page for logged user" in {
-      running(FakeApplication()) {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
         val ngame = route(FakeRequest(GET, "/my/options").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
@@ -138,14 +146,10 @@ class ApplicationSpec extends Specification {
       }
     }
 
-     "send an id in Json object when saving the game" in {
+    "send an id as Json object when saving the game" in {
       running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
 
-        import scala.util.{ Try, Success, Failure }
-        val gid: Try[Int] = play.api.db.slick.DB.withSession { implicit session =>
-          Operators.create(Operator(id = None, email = "test@test.pl", password = "test", 
-      name = "Test1", permission = NormalUser, token = None))
-        }
+        val fill = controllers.Application.fillDatabase(FakeRequest())
 
         val json: JsValue = Json.parse("""
         { 
@@ -174,6 +178,111 @@ class ApplicationSpec extends Specification {
         contentAsString(gameid) must contain ("val")
       }
     }
-	
+
+    "send the number of updated rows when updating the game" in {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
+
+        val json: JsValue = Json.parse("""
+        { 
+          "data": {
+            "name" : "Game9Test",
+            "version" : 1,
+            "description" : "gametest desc",
+            "location" : "somewhere",
+            "startTime" : "20:20",
+            "startDate" : "2013-05-10",
+            "endTime" : "10:10",
+            "endDate" : "2013-05-30",
+            "winning" : "shortest_time",
+            "winningNum" : 2,
+            "diff" : "medium",
+            "playersNum" : 300,
+            "awards" : "some awards",
+            "status" : "project",
+            "tasksNo" : 0
+          } 
+        }
+        """)
+        val gameid = route(FakeRequest(PUT, "/my/games/json/9").withJsonBody(json).withLoggedIn(config)(1)).get
+        
+        status(gameid) must equalTo(OK)
+        contentAsString(gameid) must contain ("1")
+      }
+    }
+
+    "send false when the given game name is NOT unique" in {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
+
+        val json: JsValue = Json.parse("""
+        { 
+          "data": "Game1"
+        }
+        """)
+        val uname = route(FakeRequest(POST, "/my/games/json/checkName").withJsonBody(json).withLoggedIn(config)(1)).get
+        
+        status(uname) must equalTo(OK)
+        contentAsString(uname) must contain ("false")
+      }
+    }
+
+    "send the number of deleted rows for specified game id" in {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
+
+        val del = route(FakeRequest(DELETE, "/my/games/json/2").withLoggedIn(config)(1)).get
+        
+        status(del) must equalTo(OK)
+        contentAsString(del) must contain ("1")
+      }
+    }
+
+    "send the number of updated rows after publishing the game" in {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
+        val json: JsValue = Json.parse("""
+        { 
+          "data": 11
+        }
+        """)
+        val pub = route(FakeRequest(POST, "/my/games/json/publish").withJsonBody(json).withLoggedIn(config)(1)).get
+        
+        status(pub) must equalTo(OK)
+        contentAsString(pub) must contain ("1")
+      }
+    }
+
+    "send the number of updated rows after canceling the game" in {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
+        val json: JsValue = Json.parse("""
+        { 
+          "data": 7
+        }
+        """)
+        val pub = route(FakeRequest(POST, "/my/games/json/cancel").withJsonBody(json).withLoggedIn(config)(1)).get
+        
+        status(pub) must equalTo(OK)
+        contentAsString(pub) must contain ("1")
+      }
+    }
+
+    "return an array of elements for user id = 1 when asking for games list " in {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
+
+        val cnt = route(FakeRequest(GET, "/my/games/json/list").withLoggedIn(config)(1)).get
+        
+        status(cnt) must equalTo(OK)
+        contentAsString(cnt) must contain ("name")
+      }
+    }
   }
 }

@@ -1,22 +1,33 @@
+refresh = Refresh
+help = Help
+search = Search
+
 name = Name
 email = E-mail
 password = Password
-captcha = Enter the code
-register.submit = Register
-password = Password
 password.confirm = Confirm password
+
+captcha = Enter the code
+captcha.getaudio = Get an audio CAPTCHA
+captcha.getimage = Get an image CAPTCHA
+register.submit = Register
+
+remember = Remember me
+
 login = Login
 logout = Logout
-logout.msg = You have been logged out
-loggedInAs = You are logged in as:
-remember = Remember me
+send = Send
+
 forgotpass = Forgot password?
 login.register = Don''t you have an account? Sign up!
 
-refresh = Refresh
-help = Help
-captcha.getaudio = Get an audio CAPTCHA
-captcha.getimage = Get an image CAPTCHA
+main.register.title = Register for free
+main.register.msg = The application is a web interface that allows to create a game. When the game is created, the organizer can add different tasks for players. We are assuming that many tasks will be related to position on the map and finding something in
+main.last.title = Last created games
+main.last.msg = Play the game for free
+
+password.recovery.title = Recover password
+password.recovery.desc =  Write your e-mail address in the input below to recover your password
 
 error.name.required = Name is required
 error.login.invalid.data = Invalid e-mail or password
@@ -27,16 +38,27 @@ error.name.required = Name is required
 error.passwords.match = Passwords are not the same
 error.captcha.required = Captcha code is required
 error.minLength = Minimum length is {0}
-error.accept.therms = You must accept Terms of Service and Privacy Policy
+error.accept.therms = You must accept the Terms of Service and Privacy Policy
 error.captcha.match = Wrong code
+
+notify.logout.msg = You have been logged out
+notify.loggedInAs = You are logged in as:
 
 notify.register.sent = Your account has been created. The confirmation e-mail has been sent to: {0}.
 notify.register.notSent = We could not sent the confirmation e-mail to: {0}. Please, try the link below to send it again or contact us.
 notify.register.dbIssue = Technical problem occured. Your account has not been created. Please, try again later or contact us.
 
+notify.password.recover.send = E-mail with new password has been send. Check your inbox.
+notify.password.recover.notsend = Your new password could not be send.
+notify.password.recover.notsend.nouser = Wrong e-mail address. There is no user with e-mail: {0} in our database.
+
 notify.email.signUpConfirm.subject = UrbanGame Sign Up Confirmation
 notify.email.signUpConfirm.title = UrbanGame Sign Up Confirmation E-mail
 notify.email.signUpConfirm.body = Please, confirm your registration by clicking in the link below
+notify.email.recover.title = UrbanGame - Password recovery
+notify.email.recover.body = Hello, below you will find your new password. You can change it later in your account settings.
+notify.email.recover.password = Your new password is: 
+notify.email.recover.subject = UrbanGame - Password recovery
 
 notify.login.novalidated = Your account has not been validated yet. Please check your e-mail and click the confirmation link.<br><a href="{0}">Send me another e-mail with a new token</a>.
 
@@ -138,9 +160,7 @@ status.online = Online
 status.project = Project
 status.finished = Finished
 
-
 archive.title = Games archive
-
 
 tasks.newtaskbtn = CREATE NEW TASK
 tasks.headername = Task details
@@ -153,7 +173,25 @@ tasks.delete = Delete
 tasks.visibilitytooltip = Task is visible always
 tasks.rewardtooltip = Maximum reward points:
 tasks.addtask = Add task
-
+tasks.addtaskbtn = ADD TASK
+tasks.cancel = CANCEL
+tasks.subaddtaskgreen = Fill all data
+tasks.subaddtaskplain = to add task to your task list.
+tasks.name = Task name
+tasks.type = Task type
+tasks.type1 = ABC Question
+tasks.type2 = GPS Location
+tasks.desc = Description
+tasks.image = image connected to description
+tasks.browseimage = Browse image
+tasks.removeAnswer = remove
+tasks.repeat = Is possible to repeat task after wrong answer
+tasks.correct = Correct
+tasks.answers = Answers
+tasks.points = Points
+tasks.addmoreanswers = ADD MORE ANSWERS
+tasks.showadditional = Show additional conditions for unlock task
+tasks.hideadditional = Hide additional conditions for unlock task
 
 language.pick = Pick a language
 language.en = English

@@ -17,15 +17,14 @@
 -@ val tt: String = Messages("tasks.rewardtooltip")(lan)
 .row-fluid
     %div(id="tasksDiv")
-        %h4
-            %span.step = Messages("newgame.step2")(lan) 
-            = Messages("newgame.step2title")(lan)
+        %h3
+            %span.step = Messages("newgame.step2title")(lan)
         %em = Messages("newgame.step2subtitle")(lan)
         .alert.alert-error(ng-show="error != null") {{error}}
         {{mapOpts.markers}}
     .span12.slight-padding-top
         .span7.pull-left
-            %a#createNewTask(data-toggle="lightbox" href="#taskLightbox")
+            %a#createNewTask.btn-green(data-toggle="lightbox" href="#taskLightbox")
                 %i.icon-plus
                 =Messages("tasks.newtaskbtn")(lan)
             %table#tasklist.table.table-hover.table-bordered.slight-margin-top
