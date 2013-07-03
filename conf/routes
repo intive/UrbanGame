@@ -57,7 +57,7 @@ GET     /api/my/games/:gid/tasks/:tid @controllers.WebApi.userTaskStatus(gid: In
 GET     /api/my/games               @controllers.WebApi.userGames
 POST    /api/register               @controllers.WebApi.register
 POST    /api/games/:gid             @controllers.WebApi.joinGame(gid: Int)
-POST    /api/my/games/:gid/tasks/:tid @controllers.WebApi.sendUserAnswer(gid: Int, tid: Int)
+POST    /api/games/:gid/tasks/:tid  @controllers.WebApi.sendUserAnswer(gid: Int, tid: Int)
 DELETE  /api/my/games/:gid          @controllers.WebApi.leaveGame(gid: Int)
 
 # Map static resources from the /public folder to the /assets URL path

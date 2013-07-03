@@ -19,8 +19,6 @@ import play.api.db.slick.Config.driver.simple._
 import scala.language.postfixOps
 import models.utils._
 
-case class ABCTaskOption(gid: Int, tid: Int, char: String, option: String, points: Int)
-
 object ABCTasks extends Table[ABCTaskOption]("ABCTASKS") {
   def taskId = column[Int]("taskId", O.NotNull)
   def gameId = column[Int]("gameId", O.NotNull)

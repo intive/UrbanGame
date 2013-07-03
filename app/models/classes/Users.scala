@@ -17,13 +17,12 @@ package models
 import play.api.db.slick.Config.driver.simple._
 import com.github.tototoshi.slick.JodaSupport._
 import com.github.nscala_time.time.Imports._
+import models.utils._
 
-case class User(id: Option[Int], login: String, hash: String)
-
-object Users extends Table[User]("USERS") {
+object Users extends Table[UserDB]("USERS") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def login  = column[String]("login", O.NotNull)
   def hash   = column[String]("hash", O.NotNull)
-  def * = id.? ~ login ~ hash <> (User, User.unapply _)
+  def * = id.? ~ login ~ hash <> (UserDB, UserDB.unapply _)
 }
 

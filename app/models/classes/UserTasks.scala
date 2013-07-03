@@ -1,4 +1,3 @@
-
 /**Copyright 2013 BLStream, BLStream's Patronage Program Contributors
  *     http://blstream.github.com/UrbanGame/
  * 
@@ -18,8 +17,7 @@ package models
 import play.api.db.slick.Config.driver.simple._
 import com.github.tototoshi.slick.JodaSupport._
 import com.github.nscala_time.time.Imports._
-
-case class UserTask(userId: Int, gameId: Int, taskId: Int, status: String, points: Int, attempts: Int, time: Option[DateTime])
+import models.utils._
 
 object UserTasks extends Table[UserTask]("USERTASKS") {
   def userId = column[Int]("userId", O.NotNull)

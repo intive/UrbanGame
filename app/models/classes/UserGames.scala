@@ -17,8 +17,7 @@ package models
 import play.api.db.slick.Config.driver.simple._
 import com.github.tototoshi.slick.JodaSupport._
 import com.github.nscala_time.time.Imports._
-
-case class UserGame(userId: Int, gameId: Int, joined: DateTime, left: Option[DateTime], points: Int)
+import models.utils._
 
 object UserGames extends Table[UserGame]("USERGAMES") {
   def userId = column[Int]("userId", O.NotNull)

@@ -68,10 +68,7 @@ case class UserTaskSummary(
   tid: Int, gid: Int, version: Int, t: String, deadline: DateTime
 )
 case class UserTaskStatus(status: String, attempts: Int, points: Int, canRepeat: Boolean)
-
-abstract class UserAnswer
-case class GPSAnswer(lat: Double, lon: Double) extends UserAnswer
-case class ABCAnswer(option: String) extends UserAnswer
+case class UserAnswer(lat: Option[Double], lon: Option[Double], option: Option[String])
 
 trait GamesService {
   def listGames(lat: Double, lon: Double): List[GameSummary]
@@ -88,7 +85,7 @@ trait GamesService {
   def listUserGames(user: User): List[UserGameSummary]
   def getUserGameStatus(user: User, gid: Int): UserGameStatus
   def getUserTaskStatus(user: User, gid: Int, tid: Int): UserTaskStatus
-  def checkUserAnswer(user: User, gid: Int, tid: Int, ans: UserAnswer)
+  def checkUserAnswer(user: User, gid: Int, tid: Int, ans: UserAnswer): UserTaskStatus
 }
 
 trait UserAuth {
