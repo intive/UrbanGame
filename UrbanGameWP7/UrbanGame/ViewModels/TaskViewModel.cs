@@ -30,10 +30,6 @@ namespace UrbanGame.ViewModels
             SetAppBarContent();
         }
 
-        #region appbar configurations
-
-        #endregion
-
         #region appbar
 
         public void RefreshMenuItemText()

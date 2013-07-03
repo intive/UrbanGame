@@ -175,8 +175,8 @@
   <data name="GameStart" xml:space="preserve">
     <value>start:</value>
   </data>
-  <data name="GameStateEnded" xml:space="preserve">
-    <value>ended</value>
+  <data name="GameStateLost" xml:space="preserve">
+    <value>lost</value>
   </data>
   <data name="GameStateInactive" xml:space="preserve">
     <value>inactive</value>
@@ -186,9 +186,6 @@
   </data>
   <data name="GameStateNone" xml:space="preserve">
     <value />
-  </data>
-  <data name="GameStateWithdraw" xml:space="preserve">
-    <value>withdraw</value>
   </data>
   <data name="GameStateWon" xml:space="preserve">
     <value>won</value>
@@ -450,5 +447,17 @@
   </data>
   <data name="DelayedSolution" xml:space="preserve">
     <value>Solution sent, but results will be available later.</value>
+  </data>
+  <data name="GameStateChangedToast" xml:space="preserve">
+    <value>Game is over. Tap to see your result.</value>
+  </data>
+  <data name="YouLost" xml:space="preserve">
+    <value>You lost!</value>
+  </data>
+  <data name="YouWon" xml:space="preserve">
+    <value>You won!</value>
+  </data>
+  <data name="WeWillContact" xml:space="preserve">
+    <value>We will contact with you</value>
   </data>
 </root>

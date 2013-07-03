@@ -84,6 +84,20 @@ namespace WebService
         }
         #endregion
 
+        #region GetGameState
+        public async Task<GameState> GetGameState(int gid)
+        {
+            int r = new Random().Next(100);
+
+            if (r < 20)
+                return GameState.Won;
+            if (r < 35)
+                return GameState.Lost;
+            else
+                return GameState.Joined;
+        }
+        #endregion
+
         #region GetGameProgress
         public int GetGameProgress(int gid)
         {

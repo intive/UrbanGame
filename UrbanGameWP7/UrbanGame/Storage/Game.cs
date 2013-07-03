@@ -422,6 +422,28 @@ namespace UrbanGame.Storage
         }
         #endregion
 
+        #region GameOverDisplayed
+        private bool _gameOverDisplayed;
+
+        [Column]
+        public bool GameOverDisplayed
+        {
+            get
+            {
+                return _gameOverDisplayed;
+            }
+            set
+            {
+                if (_gameOverDisplayed != value)
+                {
+                    NotifyPropertyChanging("GameOverDisplayed");
+                    _gameOverDisplayed = value;
+                    NotifyPropertyChanged("GameOverDisplayed");
+                }
+            }
+        }
+        #endregion
+
         #region Rank
 
         private int? _rank;

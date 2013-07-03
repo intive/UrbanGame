@@ -178,6 +178,13 @@ namespace WebService
         }
         #endregion
 
+        #region GetGameState
+        public async Task<GameState> GetGameState(int gid)
+        {
+            return (await GetGameInfo(gid)).GameState;
+        }
+        #endregion
+
         #region GetGameProgress
         public int GetGameProgress(int gid)
         {

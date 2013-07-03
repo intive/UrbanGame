@@ -27,8 +27,10 @@ namespace WebService
         IToastPromptService _toastPromptService;
         Timer _solutionUpdaterTimer;
         Timer _gameUpdaterTimer;
+        Timer _gameStateUpdaterTimer;
         IGameAuthorizationService _authorizationService;
 
+        private const int _gameStateUpdaterPeriod = 20 * 1000;
         private const int _gameUpdaterPeriod = 60 * 1000;
         private const int _solutionUpdaterPeriod = 30 * 1000;
 
@@ -45,11 +47,12 @@ namespace WebService
 
             _solutionUpdaterTimer = new Timer(new TimerCallback(CheckSolutionStatusChanged), null, _solutionUpdaterPeriod, _solutionUpdaterPeriod);
             _gameUpdaterTimer = new Timer(new TimerCallback(CheckGameChanges), null, _gameUpdaterPeriod, _gameUpdaterPeriod);
+            _gameStateUpdaterTimer = new Timer(new TimerCallback(CheckGameStateChanges), null, _gameStateUpdaterPeriod, _gameStateUpdaterPeriod);
         }
 
         #region GameChanges
 
-        public PropertyInfo[] GetPublicProperties(Type type)
+        private PropertyInfo[] GetPublicProperties(Type type)
         {
             if (type.IsInterface)
             {
@@ -172,6 +175,50 @@ namespace WebService
 
         #endregion
 
+        #region GameStateChanges
+
+        protected void CheckGameStateChanges(object obj)
+        {
+            if (!_authorizationService.IsUserAuthenticated())
+                return;
+
+            Task.Factory.StartNew(() =>
+            {
+                _gameUpdaterTimer.Dispose();
+
+                try
+                {
+                    using (var uow = _unitOfWorkLocator())
+                    {
+                        var activeGames = uow.GetRepository<IGame>().All().Where(g => g.GameState == GameState.Joined);
+
+                        foreach (var oldGame in activeGames)
+                        {
+                            Task<GameState> task = _gameWebService.GetGameState(oldGame.Id);
+                            task.Wait();
+                            GameState newState = task.Result; 
+
+                            if (oldGame.GameState != newState)
+                            {
+                                oldGame.GameState = newState;
+                                uow.Commit();
+
+                                if (_toastPromptService != null)
+                                    _toastPromptService.ShowGameChanged(oldGame.Id, oldGame.Name, _localizationService.GetText("GameStateChangedToast"));
+
+                                _gameEventAggregator.Publish(new GameStateChangedEvent() { Id = oldGame.Id, NewState = newState });
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    _gameStateUpdaterTimer = new Timer(new TimerCallback(CheckGameStateChanges), null, _gameStateUpdaterPeriod, _gameStateUpdaterPeriod);
+                }
+            });
+        }
+
+        #endregion
 
         #region SolutionChanges
 

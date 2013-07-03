@@ -10,8 +10,7 @@ namespace Common
         None,
         Joined,
         Won,
-        Ended,
-        Withdraw,
+        Lost,
         Inactive
     }
 }

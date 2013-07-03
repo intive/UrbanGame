@@ -59,7 +59,7 @@ namespace UrbanGameTests.Tests
             //test data            
             unitOfWork.GetRepository<IGame>().MarkForAdd(CreateTestGame(GameState.Joined, 1));
             unitOfWork.GetRepository<IGame>().MarkForAdd(CreateTestGame(GameState.Won, 2, "Hydrozagadka2"));
-            unitOfWork.GetRepository<IGame>().MarkForAdd(CreateTestGame(GameState.Ended, 3, "Hydrozagadka2"));
+            unitOfWork.GetRepository<IGame>().MarkForAdd(CreateTestGame(GameState.Lost, 3, "Hydrozagadka2"));
             unitOfWork.GetRepository<IGame>().MarkForAdd(CreateTestGame(GameState.None, 4, "Hydrozagadka2"));
             unitOfWork.Commit();
             GamesListViewModel vm = new GamesListViewModel(null, () => new UnitOfWorkMock(database), 

@@ -20,6 +20,13 @@ namespace Common
         bool SingUpToTheGame(int gid);
 
         /// <summary>
+        /// Returns state of game
+        /// </summary>
+        /// <param name="gid">Integer parameter - game's identifier</param>
+        /// <returns></returns>
+        Task<GameState> GetGameState(int gid);
+
+        /// <summary>
         /// Returns completely filled in IGame
         /// </summary>
         /// <param name="gid">Integer parameter - game's identifier</param>

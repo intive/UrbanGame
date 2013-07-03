@@ -12,7 +12,8 @@ using System.Threading;
 
 namespace UrbanGame.ViewModels
 {
-    public class GameDetailsViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<SolutionStatusChanged>
+    public class GameDetailsViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<SolutionStatusChanged>,
+        IHandle<GameStateChangedEvent>
     {
         IAppbarManager _appbarManager;
         private string _activeSection;
@@ -29,6 +30,12 @@ namespace UrbanGame.ViewModels
             if (Game == null)
             {
                 RefreshGame();
+            }
+
+            if (Game.GameState == GameState.Won || Game.GameState == GameState.Lost)
+            {
+                BasicAppbar.Clear();
+                DescriptionAppbar.Clear();
             }
 
             ChangeAppbarButtons();
@@ -72,6 +79,39 @@ namespace UrbanGame.ViewModels
                         Game.ListOfChanges = null;
                         uow.Commit();
                     }
+                }
+            }
+        }
+        #endregion
+
+        #region IHandle<GameStateChangedEvent>
+        public void Handle(GameStateChangedEvent game)
+        {
+            if (IsActive && game.Id == GameId)
+            {
+                using (var uow = _unitOfWorkLocator())
+                {
+                    var Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
+
+                    if (!Game.GameOverDisplayed && (Game.GameState == GameState.Won || Game.GameState == GameState.Lost))
+                    {
+                        BasicAppbar.Clear();
+                        DescriptionAppbar.Clear();
+                        ChangeAppbarButtons();
+                        
+                        switch (Game.GameState)
+                        {
+                            case GameState.Won:
+                                VisualStateName = "YouWon";
+                                break;
+                            case GameState.Lost:
+                                VisualStateName = "YouLost";
+                                break;
+                        }
+
+                        Game.GameOverDisplayed = true;
+                        uow.Commit();
+                    }                   
                 }
             }
         }
@@ -268,6 +308,49 @@ namespace UrbanGame.ViewModels
 
         #endregion
 
+        #region BonusTasks
+
+        private BindableCollection<ITask> _bonusTasks;
+
+        public BindableCollection<ITask> BonusTasks
+        {
+            get
+            {
+                return _bonusTasks;
+            }
+            set
+            {
+                if (_bonusTasks != value)
+                {
+                    _bonusTasks = value;
+                    NotifyOfPropertyChange(() => BonusTasks);
+                }
+            }
+        }
+        #endregion
+
+        #region VisualStateName
+
+        private string _visualStateName;
+
+        public string VisualStateName
+        {
+            get
+            {
+                return _visualStateName;
+            }
+            set
+            {
+                if (_visualStateName != value)
+                {
+                    _visualStateName = value;
+                    NotifyOfPropertyChange(() => VisualStateName);
+                }
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region lifecycle
@@ -279,27 +362,29 @@ namespace UrbanGame.ViewModels
 
         protected async override void OnActivate()
         {
-            base.OnActivate();
+            base.OnActivate();            
             await RefreshGame();
             await RefreshActiveTasks();
             await RefreshInactiveTasks();
             await RefreshAccomplishedTasks();
             await RefreshCancelledTasks();
             await RefreshHighScores();
-            await RefreshAlerts();
-
+            await RefreshAlerts();            
         }
 
         protected override void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
+            VisualStateName = "Normal";
             
             new Timer(new TimerCallback((obj) =>
                 {
+                    //Game changes
                     if (!String.IsNullOrEmpty(Game.ListOfChanges))
                         System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
                         {
-                            MessageBox.Show(Game.ListOfChanges);
+                            if (Game.GameState != GameState.Won && Game.GameState != GameState.Lost)
+                                MessageBox.Show(Game.ListOfChanges);
 
                             Game.ListOfChanges = null;
                             using (var uow = _unitOfWorkLocator())
@@ -308,12 +393,38 @@ namespace UrbanGame.ViewModels
                                 uow.Commit();
                             }
                         });
+
+                    //You won/You lost banner
+                    if (!Game.GameOverDisplayed && (Game.GameState == GameState.Won || Game.GameState == GameState.Lost))
+                    {
+                        switch (Game.GameState)
+                        {
+                            case GameState.Won:
+                                VisualStateName = "YouWon";
+                                break;
+                            case GameState.Lost:
+                                VisualStateName = "YouLost";
+                                break;
+                        }
+
+                        Game.GameOverDisplayed = true;
+                        using (var uow = _unitOfWorkLocator())
+                        {
+                            uow.GetRepository<IGame>().All().First(g => g.Id == GameId).GameOverDisplayed = true;
+                            uow.Commit();
+                        }
+                    }  
                 }), null, 700, System.Threading.Timeout.Infinite);
         }
 
         #endregion
 
         #region operations
+
+        public void ChangeToNormal()
+        {
+            VisualStateName = "Normal";
+        }
 
         public void ShowTask(ITask task)
         {

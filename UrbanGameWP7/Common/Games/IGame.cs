@@ -45,6 +45,8 @@ namespace Common
         /// </summary>
         GameState GameState { get; set; }
 
+        bool GameOverDisplayed { get; set; }
+
         /// <summary>
         /// User's rank in that game
         /// </summary>
