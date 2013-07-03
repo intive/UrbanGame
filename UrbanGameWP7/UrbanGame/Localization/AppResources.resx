@@ -157,9 +157,6 @@
   <data name="Days" xml:space="preserve">
     <value>days</value>
   </data>
-  <data name="DayShortcut" xml:space="preserve">
-    <value>d</value>
-  </data>
   <data name="Difficulty" xml:space="preserve">
     <value>difficulty:</value>
   </data>
@@ -205,9 +202,6 @@
   <data name="HighScores" xml:space="preserve">
     <value>high scores</value>
   </data>
-  <data name="HoursShortcut" xml:space="preserve">
-    <value>h</value>
-  </data>
   <data name="Inactive" xml:space="preserve">
     <value>inactive</value>
   </data>
@@ -234,9 +228,6 @@
   </data>
   <data name="Messages" xml:space="preserve">
     <value>messages</value>
-  </data>
-  <data name="MinutesShortcut" xml:space="preserve">
-    <value>m</value>
   </data>
   <data name="MyAccount" xml:space="preserve">
     <value>my account</value>
@@ -447,6 +438,36 @@
   </data>
   <data name="DelayedSolution" xml:space="preserve">
     <value>Solution sent, but results will be available later.</value>
+  </data>
+  <data name="ReportTask" xml:space="preserve">
+    <value>report task</value>
+  </data>
+  <data name="ToStart" xml:space="preserve">
+    <value>to start</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>cancel</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>retry</value>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Something went wrong</value>
+  </data>
+  <data name="TryLater" xml:space="preserve">
+    <value>You can retry or try again later</value>
+  </data>
+  <data name="Refreshing" xml:space="preserve">
+    <value>refreshing</value>
+  </data>
+  <data name="AnyGame" xml:space="preserve">
+    <value>You don't have any active game.</value>
+  </data>
+  <data name="BelowMinute" xml:space="preserve">
+    <value>below 1 m</value>
+  </data>
+  <data name="ChooseAndJoin" xml:space="preserve">
+    <value>Please, choose one and join in.</value>
   </data>
   <data name="GameStateChangedToast" xml:space="preserve">
     <value>Game is over. Tap to see your result.</value>

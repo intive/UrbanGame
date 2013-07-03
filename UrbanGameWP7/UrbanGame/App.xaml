@@ -33,7 +33,10 @@
         <conv:IsRepeatableConverter x:Key="IsRepeatableConverter" />
         <conv:GameChangedToVisibilityConverter x:Key="GameChangedToVisibilityConverter" />
         <conv:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter" />
-        
+        <conv:TimeToEndConverter x:Key="TimeToEndConverter" />
+        <conv:TypeToImageSourceConverter x:Key="TypeToImageSourceConverter" />
+        <conv:NearbyGameStartConverter x:Key="NearbyGameStartConverter" />
+
         <Style x:Key="ItemStyle" TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="Template">

@@ -36,8 +36,6 @@ namespace UrbanGame.ViewModels
             new AppbarItem() {  Text = Localization.AppResources.ForgotPassword,Message="ForgotPassword" } 
         };
 
-
-
         private void SetAppBarContent()
         {
             Deployment.Current.Dispatcher.BeginInvoke(() =>

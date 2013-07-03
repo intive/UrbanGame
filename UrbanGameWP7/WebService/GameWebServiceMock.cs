@@ -199,27 +199,45 @@ namespace WebService
         {
             var games = new IGame[] {
                 new GameMock(){Name = "Hydromystery", GameType = GameType.ScoreAttack, OperatorName = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 1, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), Difficulty = GameDifficulty.Easy, Description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010.", Localization = "Wroclaw"},
-                new GameMock(){Name = "North & South", GameType = GameType.Race, OperatorName = "Infogrames", NumberOfPlayers = 23, Id = 2, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 5, 8, 12, 12,0), GameEnd = DateTime.Now.AddDays(3).AddHours(12) },
-                new GameMock(){Name = "Ultimate Quest", GameType = GameType.ScoreAttack, OperatorName = "JCVD", NumberOfPlayers = 23,Id = 3, GameLogo = "/ApplicationIcon.png", GameStart = DateTime.Now.AddDays(1).AddHours(12), GameEnd = DateTime.Now.AddDays(10).AddHours(2) },
-                new GameMock(){Name = "Galaxy Quest", GameType = GameType.Race, OperatorName = "NSEA", NumberOfPlayers = 23,Id = 4, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameEnd = new DateTime(2013,6,5,4,12,30) },
-                new GameMock(){Name = "The Quest for NEETs", GameType = GameType.Race, OperatorName = "Ron Jeremy", NumberOfPlayers = 23,Id = 5, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8),GameEnd = DateTime.Now.AddDays(2).AddHours(10) }};
+                new GameMock(){Name = "North & South", GameType = GameType.Race, OperatorName = "Infogrames", NumberOfPlayers = 23, Id = 2, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013, 5, 8, 12, 12,0), GameEnd = DateTime.Now.AddDays(3).AddHours(12)},
+                new GameMock(){Name = "Ultimate Quest", GameType = GameType.ScoreAttack, OperatorName = "JCVD", NumberOfPlayers = 23,Id = 3, GameLogo = "/ApplicationIcon.png", GameStart = DateTime.Now.AddDays(1).AddHours(12), GameEnd = DateTime.Now.AddDays(10).AddHours(2)},
+                new GameMock(){Name = "Galaxy Quest", GameType = GameType.Race, OperatorName = "NSEA", NumberOfPlayers = 23,Id = 4, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameEnd = DateTime.Now.AddDays(3).AddHours(7).AddMinutes(18).AddSeconds(43)},
+                new GameMock(){Name = "The Quest for NEETs", GameType = GameType.Race, OperatorName = "Ron Jeremy", NumberOfPlayers = 23,Id = 5, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8),GameEnd = DateTime.Now.AddDays(2).AddHours(10)}};
 
             string lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam mauris vel elit tincidunt ac bibendum tortor scelerisque. Mauris nisi augue, malesuada ac lobortis sed, rhoncus et mauris. Vivamus dictum turpis congue arcu euismod in pulvinar mi volutpat. Aliquam euismod pharetra velit eu sagittis. Proin et nisi nibh, ut egestas enim.";
             int taskId = 1;
             int possibleAnswerId = 1;
+            int alertId = 1;
+            int highScoreId = 1;
+
             ListOfTasks.Clear();
             foreach(var g in games)
             {
-                var task1 = new TaskMock() { Id = taskId++, Name = "Find Wally", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
+                var task = new TaskMock() { Id = taskId++, Name = "IQ Test!", AdditionalText = "What is red with dots?", Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
+                task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Zebra" });
+                task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Dragon" });
+                task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Leaf" });
+                task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Ladybug" });
+                g.Tasks.Add(task);
+                ListOfTasks.Add(task);
+
+                var task1 = new TaskMock() { Id = taskId++, Name = "Find Wally", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = true, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
                 g.Tasks.Add(task1);
                 ListOfTasks.Add(task1);
 
-                var task2 = new TaskMock() { Id = taskId++, Name = "IQ Test!", AdditionalText = "What is red with dots?", Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
-                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++,Task=task2, Answer = "Option A" });
-                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Task = task2, Answer = "Option B" });
-                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Task = task2, Answer = "Option C" });
+                var task2 = new TaskMock() { Id = taskId++, Name = "Brain Storm!", AdditionalText = "What color is a red car?", Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = true, UserPoints = null, MaxPoints = 30, EndDate = DateTime.Now.AddDays(1).AddHours(15), Version = 1 };
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Green" });
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Red" });
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Blue" });
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "DarkBlack" });
                 g.Tasks.Add(task2);
                 ListOfTasks.Add(task2);
+
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "XTerminator", Points = 329 });
+                g.Alerts.Add(new AlertMock() { Id = alertId++, Topic = "Information", Description = "There might be a problem getting to center, bacause of bus crash" });
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "RunnungRabit", Points = 310 });
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "$ebastian", Points = 150 });
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "xX_Warior_Xx", Points = 90 });
             }
 
             return games;

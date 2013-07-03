@@ -7,28 +7,25 @@ using UrbanGame.Localization;
 
 namespace UrbanGame.Converters
 {
-    public class GameEndConverter : IValueConverter
+    public class TimeToEndConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value is DateTime)
             {
-                TimeSpan time = (DateTime)value - DateTime.Now;
-                if (time.Days > 0)
+                TimeSpan leftTime = (DateTime)value - DateTime.Now;
+
+                if (leftTime.Days > 0)
                 {
-                    return string.Format("{0} d {1} h {2} m " + AppResources.ToEndLowCase, time.Days, time.Hours, time.Minutes);
+                    return string.Format("{0} d {1} h", leftTime.Days, leftTime.Hours);
                 }
-                else if (time.Hours > 0)
+                else if (leftTime.Hours > 0)
                 {
-                    return string.Format("{0} h {1} m " + AppResources.ToEndLowCase, time.Hours, time.Minutes);
-                }
-                else if (time.Minutes > 0)
-                {
-                    return string.Format("{0} m " + AppResources.ToEndLowCase, time.Minutes);
+                    return string.Format("{0} h {1} m", leftTime.Hours, leftTime.Minutes);
                 }
                 else
                 {
-                    return AppResources.BelowMinute + " ";
+                    return string.Format("{0} m {1} s", leftTime.Minutes, leftTime.Seconds);
                 }
             }
             else

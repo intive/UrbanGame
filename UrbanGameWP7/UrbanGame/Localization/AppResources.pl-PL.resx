@@ -273,15 +273,6 @@
   <data name="ToEnd" xml:space="preserve">
     <value>DO KOŃCA</value>
   </data>
-  <data name="DayShortcut" xml:space="preserve">
-    <value>d</value>
-  </data>
-  <data name="HoursShortcut" xml:space="preserve">
-    <value>h</value>
-  </data>
-  <data name="MinutesShortcut" xml:space="preserve">
-    <value>m</value>
-  </data>
   <data name="Start" xml:space="preserve">
     <value>początek:</value>
   </data>
@@ -431,6 +422,36 @@
   </data>
   <data name="DelayedSolution" xml:space="preserve">
     <value>Odpowiedź wysłana. Wyniki będą dostępne później.</value>
+  </data>
+  <data name="ReportTask" xml:space="preserve">
+    <value>zgłoś błąd</value>
+  </data>
+  <data name="ToStart" xml:space="preserve">
+    <value>do rozpoczęcia</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>przerwij</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>powtórz</value>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Coś poszło nie tak</value>
+  </data>
+  <data name="TryLater" xml:space="preserve">
+    <value>Możesz powtórzyć lub spróbować później</value>
+  </data>
+  <data name="Refreshing" xml:space="preserve">
+    <value>odświeżanie</value>
+  </data>
+  <data name="AnyGame" xml:space="preserve">
+    <value>Nie masz żadnej aktywnej gry.</value>
+  </data>
+  <data name="BelowMinute" xml:space="preserve">
+    <value>below 1 m</value>
+  </data>
+  <data name="ChooseAndJoin" xml:space="preserve">
+    <value>Proszę wybierz jedną i dołacz.</value>
   </data>
   <data name="GameStateChangedToast" xml:space="preserve">
     <value>Gra zakończona. Naciśnij, aby zobaczyć wynik.</value>
