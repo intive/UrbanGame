@@ -33,6 +33,7 @@ namespace UrbanGame.ViewModels
         protected override void OnViewReady(object view)
         {
             ChangeAppbarButtons();
+            VisualStateName = "Normal";
         }
 
         #region appbar configurations
@@ -46,8 +47,7 @@ namespace UrbanGame.ViewModels
         {
             new AppbarItem() { Text = Localization.AppResources.LogIn,Message="LogoutOrLogin" } ,
             new AppbarItem() { IconUri = new Uri("/Images/appbarSearch.png", UriKind.Relative), Text = Localization.AppResources.Search, Message = "Search" },
-            new AppbarItem() { IconUri = new Uri("/Images/appbarRefresh.png", UriKind.Relative), Text = Localization.AppResources.Refresh, Message = "RefreshNearestGames" }
-       
+            new AppbarItem() { IconUri = new Uri("/Images/appbarRefresh.png", UriKind.Relative), Text = Localization.AppResources.Refresh, Message = "RefreshNearest" }
         };
 
         #endregion
@@ -79,6 +79,30 @@ namespace UrbanGame.ViewModels
         #endregion
 
         #region bindable properties
+
+        #region NoUserActiveGames
+
+        public bool NoUserActiveGames
+        {
+            get
+            {
+                return (IsAuthorized && UserActiveGames.Count == 0);
+            }
+        }
+
+        #endregion
+
+        #region UserInactiveGamesVisibility
+
+        public bool UserInactiveGamesVisibility
+        {
+            get
+            {
+                return (IsAuthorized && UserInactiveGames.Count > 0);
+            }
+        }
+
+        #endregion
 
         #region IsAuthorized
 
@@ -177,6 +201,28 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
+        #region VisualStateName
+
+        private string _visualStateName;
+
+        public string VisualStateName
+        {
+            get
+            {
+                return _visualStateName;
+            }
+            set
+            {
+                if (_visualStateName != value)
+                {
+                    _visualStateName = value;
+                    NotifyOfPropertyChange(() => VisualStateName);
+                }
+            }
+        }
+
+        #endregion
+
         #region User
 
         private User _user;
@@ -263,6 +309,14 @@ namespace UrbanGame.ViewModels
                     }
                 }
             });
+            NotifyOfPropertyChange(() => NoUserActiveGames);
+            NotifyOfPropertyChange(() => UserInactiveGamesVisibility);
+        }
+
+        public void RefreshNearest()
+        {
+            VisualStateName = "Refreshing";
+            RefreshNearestGames();
         }
 
         public async void RefreshNearestGames()
@@ -290,6 +344,7 @@ namespace UrbanGame.ViewModels
             }
             finally
             {
+                VisualStateName = "Normal";
                 IsRefreshing = false;
             }
         }
