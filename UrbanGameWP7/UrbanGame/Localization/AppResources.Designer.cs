@@ -188,6 +188,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to cancelled.
         /// </summary>
         public static string Cancelled {
@@ -277,7 +286,6 @@ namespace UrbanGame.Localization {
             }
         }
         
-        /// <summary>
         /// <summary>
         ///   Looks up a localized string similar to description.
         /// </summary>
@@ -882,6 +890,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to refreshing.
+        /// </summary>
+        public static string Refreshing {
+            get {
+                return ResourceManager.GetString("Refreshing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to rejected.
         /// </summary>
         public static string Rejected {
@@ -927,6 +944,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to retry.
+        /// </summary>
+        public static string Retry {
+            get {
+                return ResourceManager.GetString("Retry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to high scores.
         /// </summary>
         public static string Scores {
@@ -941,6 +967,15 @@ namespace UrbanGame.Localization {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to s.
+        /// </summary>
+        public static string SecondShortcut {
+            get {
+                return ResourceManager.GetString("SecondShortcut", resourceCulture);
             }
         }
         
@@ -968,6 +1003,15 @@ namespace UrbanGame.Localization {
         public static string SolutionStatusChanged {
             get {
                 return ResourceManager.GetString("SolutionStatusChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong.
+        /// </summary>
+        public static string SomethingWentWrong {
+            get {
+                return ResourceManager.GetString("SomethingWentWrong", resourceCulture);
             }
         }
         
@@ -1040,6 +1084,15 @@ namespace UrbanGame.Localization {
         public static string ToStart {
             get {
                 return ResourceManager.GetString("ToStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can retry or try again later.
+        /// </summary>
+        public static string TryLater {
+            get {
+                return ResourceManager.GetString("TryLater", resourceCulture);
             }
         }
         

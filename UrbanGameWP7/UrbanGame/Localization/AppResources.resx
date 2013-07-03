@@ -457,4 +457,22 @@
   <data name="ToStart" xml:space="preserve">
     <value>to start</value>
   </data>
+  <data name="SecondShortcut" xml:space="preserve">
+    <value>s</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>cancel</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>retry</value>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Something went wrong</value>
+  </data>
+  <data name="TryLater" xml:space="preserve">
+    <value>You can retry or try again later</value>
+  </data>
+  <data name="Refreshing" xml:space="preserve">
+    <value>refreshing</value>
+  </data>
 </root>

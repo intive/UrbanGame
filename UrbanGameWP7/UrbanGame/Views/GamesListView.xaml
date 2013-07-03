@@ -2,12 +2,15 @@
     x:Class="UrbanGame.Views.GamesListView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:utils="clr-namespace:UrbanGame.Utilities"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+    utils:StateManager.VisualStateProperty="{Binding VisualStateName}"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -16,6 +19,25 @@
     shell:SystemTray.IsVisible="False">
 
     <Grid x:Name="LayoutRoot">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="BackupStates">
+                <VisualState x:Name="Normal">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="RefreshingState">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Refreshing">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="RefreshingState">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <controls:Panorama cal:Message.Attach="[Event SelectionChanged]=[Action ChangeAppbarButtons($eventArgs)]">
             <controls:Panorama.Background>
                 <ImageBrush ImageSource="/Images/MainPanorama.png" Stretch="UniformToFill"/>
@@ -40,10 +62,16 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        
-                        <ListBox ItemsSource="{Binding UserActiveGames}" VerticalAlignment="Top" Grid.Row="0" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+
+                        <StackPanel Grid.Row="0"  Orientation="Vertical" Visibility="{Binding UserActiveGames, Converter={StaticResource BindableCollectionCountToVisibilityConverter}}">
+                            <TextBlock Text="You don't have any active game."/>
+                            <TextBlock Text="Please, choose one and join in"/>
+                        </StackPanel>
+
+                        <ListBox ItemsSource="{Binding UserActiveGames}" VerticalAlignment="Top" Grid.Row="1" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Margin="0,5,0,0" Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowFullDetails($dataContext)]">
@@ -108,9 +136,9 @@
 
                         <TextBlock Text="{Binding Path=AppResources.NotLogged, Source={StaticResource LocalizedStrings}}" Grid.Row="0" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
                         <TextBlock Text="{Binding Path=AppResources.PleaseLog, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
-                        <TextBlock Text="{Binding Path=AppResources.PreviousGames, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,0,5" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}"/>
+                        <TextBlock Text="{Binding Path=AppResources.PreviousGames, Source={StaticResource LocalizedStrings}}" Grid.Row="2" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,0,5" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}"/>
                         
-                        <ListBox Grid.Row="2" Margin="0,5,0,0" ItemsSource="{Binding UserInactiveGames}" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                        <ListBox Grid.Row="3" Margin="0,5,0,0" ItemsSource="{Binding UserInactiveGames}" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Margin="5,0,5,0" Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]">
@@ -255,6 +283,15 @@
                 </Grid>
             </controls:PanoramaItem>
         </controls:Panorama>
+        <Grid x:Name="RefreshingState" Visibility="Collapsed">
+            <Rectangle Width="480" Height="740" Opacity="0.5">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="{StaticResource SolidColorBrushBlack}"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <toolkit:PerformanceProgressBar IsIndeterminate="True" Foreground="{StaticResource FontColorGreen}" Margin="0,0,0,50" Width="450" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="refreshing" Margin="25,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar BackgroundColor="{StaticResource SolidColorBrushGreen}">

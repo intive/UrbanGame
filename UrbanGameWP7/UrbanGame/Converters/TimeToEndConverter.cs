@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
+using UrbanGame.Localization;
 
 namespace UrbanGame.Converters
 {
@@ -16,15 +17,15 @@ namespace UrbanGame.Converters
 
                 if (leftTime.Days > 0)
                 {
-                    return leftTime.Days + " d " + leftTime.Hours + " h";
+                    return leftTime.Days + " " + AppResources.DayShortcut + " " + leftTime.Hours + " " + AppResources.HoursShortcut;
                 }
                 else if (leftTime.Hours > 0)
                 {
-                    return leftTime.Hours + " h " + leftTime.Minutes + " m";
+                    return leftTime.Hours + " " + AppResources.HoursShortcut + " " + leftTime.Minutes + " " + AppResources.MinutesShortcut;
                 }
                 else
                 {
-                    return leftTime.Minutes + " m " + leftTime.Seconds + " s";
+                    return leftTime.Minutes + " " + AppResources.MinutesShortcut + " " + leftTime.Seconds + " " + AppResources.SecondShortcut;
                 }
             }
             else
