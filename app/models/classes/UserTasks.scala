@@ -19,10 +19,18 @@ import com.github.tototoshi.slick.JodaSupport._
 import com.github.nscala_time.time.Imports._
 import models.utils._
 
-object Users extends Table[UserDB]("USERS") {
-  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-  def login  = column[String]("login", O.NotNull)
-  def hash   = column[String]("hash", O.NotNull)
-  def * = id.? ~ login ~ hash <> (UserDB, UserDB.unapply _)
+object UserTasks extends Table[UserTask]("USERTASKS") {
+  def userId = column[Int]("userId", O.NotNull)
+  def gameId = column[Int]("gameId", O.NotNull)
+  def taskId = column[Int]("taskId", O.NotNull)
+  def status = column[String]("status", O.NotNull, O.Default("not sent"))
+  def points = column[Int]("points", O.NotNull, O.Default(0))
+  def attempts = column[Int]("attempts", O.NotNull, O.Default(0))
+  def time = column[Option[DateTime]]("time")
+  def * = userId ~ gameId ~ taskId ~ status ~ points ~ attempts ~ time <> (UserTask, UserTask.unapply _)
+  def pk = primaryKey("USERTASKS_PK", (userId, gameId, taskId))
+  def user = foreignKey("USERTASKS_USERS_FK", userId, Users)(_.id)
+  def game = foreignKey("USERTASKS_GAMES_FK", gameId, Games)(_.id)
+  def task = foreignKey("USERTASKS_TASKS_FK", (gameId, taskId), Tasks)(t => (t.gameId, t.id))
 }
 
