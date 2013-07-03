@@ -314,8 +314,16 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     q.elements map { ABCOption.tupled(_) } toList
   }
 
-  private def distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double =
-    0.1
+  import math._
+  private val R = 6372.797560856         
+  private def distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double = {
+    val dLat=(lat2 - lat1).toRadians
+    val dLon=(lon2 - lon1).toRadians
+    val a = pow(sin(dLat/2),2) + pow(sin(dLon/2),2) * cos(lat1.toRadians) * cos(lat2.toRadians)
+    val c = 2 * asin(sqrt(a))
+    R * c
+  }
+    
 
   private val geodistanceFun = SimpleFunction[Double]("geodistance")
   private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double) =
