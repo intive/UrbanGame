@@ -1,8 +1,5 @@
 package com.blstream.urbangame.fragments;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Message;
@@ -95,33 +92,13 @@ public class LoginFragment extends SherlockFragment implements OnClickListener, 
 	@Override
 	public void onWebServerResponse(Message message) {
 		Log.d(SessionManager.TAG, NAME + " onWebServerResponse()");
-		boolean invalidData = processServerResponse(message);
-		if (invalidData) {
-			invalidLoginAlertDialog.show();
-		}
-		else {
+		WebResponse webResponse = (WebResponse) message.obj;
+		if (webResponse.isValid()) {
 			setLoggedUserAndStartBrowsing(loginRegisterView.getEmail());
 		}
-	}
-	
-	private boolean processServerResponse(Message message) {
-		JSONObject jsonObject = null;
-		boolean invalidData = false;
-		try {
-			jsonObject = new JSONObject(((WebResponse) message.obj).getResponse());
+		else {
+			invalidLoginAlertDialog.show();
 		}
-		catch (JSONException e) {
-			invalidData = true;
-		}
-		try {
-			if (jsonObject != null) {
-				if (jsonObject.getString("code").equals("401")) {
-					invalidData = true;
-				}
-			}
-		}
-		catch (JSONException e) {}
-		return invalidData;
 	}
 	
 	private void setLoggedUserAndStartBrowsing(String email) {

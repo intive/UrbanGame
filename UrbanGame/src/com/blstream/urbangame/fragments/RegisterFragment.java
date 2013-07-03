@@ -1,8 +1,5 @@
 package com.blstream.urbangame.fragments;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -116,35 +113,15 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 	@Override
 	public void onWebServerResponse(Message message) {
 		Log.d(SessionManager.TAG, NAME + " onWebServerResponse()");
-		boolean invalidData = processServerResponse(message);
-		if (invalidData) {
-			userAlreadyExistsAlertDialog.show();
-		}
-		else {
+		WebResponse webResponse = (WebResponse) message.obj;
+		if (webResponse.isValid()) {
 			Player player = new Player(email, password, displayName, (String) null);
 			(new RegistrationManager(activity, this)).storeUserInDB(player);
 			showRegistrationCompleteAlertDialog();
 		}
-	}
-	
-	private boolean processServerResponse(Message message) {
-		JSONObject jsonObject = null;
-		boolean invalidData = false;
-		try {
-			jsonObject = new JSONObject(((WebResponse) message.obj).getResponse());
+		else {
+			userAlreadyExistsAlertDialog.show();
 		}
-		catch (JSONException e) {
-			invalidData = true;
-		}
-		try {
-			if (jsonObject != null) {
-				if (jsonObject.getString("code").equals("409")) {
-					invalidData = true;
-				}
-			}
-		}
-		catch (JSONException e) {}
-		return invalidData;
 	}
 	
 	private void showRegistrationCompleteAlertDialog() {

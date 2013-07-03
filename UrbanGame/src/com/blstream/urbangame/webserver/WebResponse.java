@@ -2,6 +2,9 @@ package com.blstream.urbangame.webserver;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.blstream.urbangame.webserver.WebServer.QueryType;
 
 /**
@@ -14,6 +17,9 @@ import com.blstream.urbangame.webserver.WebServer.QueryType;
 public class WebResponse {
 	public final QueryType queryType;
 	private String responseString;
+	
+	private final static int USER_ALREADY_EXISTS = 409;
+	private final static int WRONG_LOGIN_DATA = 401;
 	
 	/*
 	 * Optional data to be placed in response 
@@ -36,6 +42,27 @@ public class WebResponse {
 	}
 	
 	public boolean isValid() {
-		return !WebDownloader.EMPTY_JSON.equals(responseString);
+		JSONObject jsonObject = null;
+		boolean valid = true;
+		try {
+			jsonObject = new JSONObject(responseString);
+		}
+		catch (JSONException e) {
+			valid = false;
+		}
+		try {
+			if (jsonObject != null) {
+				switch (Integer.valueOf(jsonObject.getString("code"))) {
+					case USER_ALREADY_EXISTS:
+					case WRONG_LOGIN_DATA:
+						valid = false;
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		catch (JSONException e) {}
+		return valid;
 	}
 }

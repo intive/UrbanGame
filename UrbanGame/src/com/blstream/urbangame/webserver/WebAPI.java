@@ -36,7 +36,8 @@ public class WebAPI {
 		this.webDownloader = webDownloader;
 		
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		base = sharedPrefs.getString(context.getString(R.string.key_server_name), base);
+		base = sharedPrefs.getString(context.getString(R.string.key_server_name),
+			context.getString(R.string.settings_server_default_server_name));
 	}
 	
 	public Uri getAllGamesUri() {
