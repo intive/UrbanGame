@@ -22,7 +22,7 @@ namespace UrbanGame.Converters
                 {
                     return string.Format("{0} h {1} m" + AppResources.ToEndLowCase, time.Hours, time.Minutes);
                 }
-                else if (time.Minutes > )
+                else if (time.Minutes > 0)
                 {
                     return string.Format("{0} m" + AppResources.ToEndLowCase, time.Minutes);
                 }
