@@ -131,7 +131,7 @@
     <value>accomplished</value>
   </data>
   <data name="Active" xml:space="preserve">
-    <value>acitve</value>
+    <value>active</value>
   </data>
   <data name="Alerts" xml:space="preserve">
     <value>alerts</value>
@@ -459,5 +459,8 @@
   </data>
   <data name="WeWillContact" xml:space="preserve">
     <value>We will contact with you</value>
+  </data>
+  <data name="TaskChangedToast" xml:space="preserve">
+    <value>Task details have changed. Tap to see differences.</value>
   </data>
 </root>

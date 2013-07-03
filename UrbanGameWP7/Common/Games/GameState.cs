@@ -7,7 +7,6 @@ namespace Common
 {
     public enum GameState
     {
-        None,
         Joined,
         Won,
         Lost,

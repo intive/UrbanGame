@@ -82,6 +82,25 @@ namespace UrbanGame.Utilities
             });
         }
 
+        public void ShowTaskChanged(int gameId, int taskId, string title, string text)
+        {
+            System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                string navURI = _navigationService.UriFor<TaskViewModel>()
+                                    .WithParam(vm => vm.TaskId, taskId)
+                                    .WithParam(vm => vm.GameId, gameId)
+                                    .BuildUri().OriginalString;
+                bool currentPage = _navigationService.CurrentSource.OriginalString == navURI;
+
+                if (!currentPage)
+                    AddToQueue(taskId, ToastType.Task, title, text, 5000,
+                                (s, e) => _navigationService.UriFor<TaskViewModel>()
+                                            .WithParam(vm => vm.TaskId, taskId)
+                                            .WithParam(vm => vm.GameId, gameId)
+                                            .Navigate());
+            });
+        }
+
         public void ShowSolutionStatusChanged(int taskId, int gameId, string title, string text)
         {
             AddToQueue(taskId, ToastType.Task, title, text, 5000, (s, e) => 

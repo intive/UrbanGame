@@ -125,7 +125,7 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to acitve.
+        ///   Looks up a localized string similar to active.
         /// </summary>
         public static string Active {
             get {
@@ -985,6 +985,15 @@ namespace UrbanGame.Localization {
         public static string Submit {
             get {
                 return ResourceManager.GetString("Submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task details have changed. Tap to see differences..
+        /// </summary>
+        public static string TaskChangedToast {
+            get {
+                return ResourceManager.GetString("TaskChangedToast", resourceCulture);
             }
         }
         

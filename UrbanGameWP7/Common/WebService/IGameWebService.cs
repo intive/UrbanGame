@@ -37,7 +37,7 @@ namespace Common
         /// Method returns an array of game's tasks
         /// </summary>
         /// <returns>Array of ITask</returns>
-        ITask[] GetTasks(int gid);
+        Task<ITask[]> GetTasks(int gid);
 
         /// <summary>
         /// Returns task's details

@@ -14,7 +14,8 @@ using UrbanGame.Models;
 
 namespace UrbanGame.ViewModels
 {
-    public class TaskViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<TaskChangedEvent>, IHandle<SolutionStatusChanged>
+    public class TaskViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<TaskChangedEvent>, 
+        IHandle<SolutionStatusChanged>
     {
         IAppbarManager _appbarManager;
 
@@ -61,9 +62,19 @@ namespace UrbanGame.ViewModels
         #region IHandle<TaskChangedEvent>
         public void Handle(TaskChangedEvent task)
         {
-            if (task.Id == TaskId)
+            if (IsActive && task.Id == TaskId)
             {
-                RefreshTask();
+                using (var uow = _unitOfWorkLocator())
+                {
+                    CurrentTask = uow.GetRepository<ITask>().All().First(t => t.Id == task.Id);
+
+                    if (!String.IsNullOrEmpty(CurrentTask.ListOfChanges))
+                    {
+                        MessageBox.Show(CurrentTask.ListOfChanges);
+                        CurrentTask.ListOfChanges = null;
+                        uow.Commit();
+                    }
+                }
             }
         }
         #endregion
@@ -84,8 +95,6 @@ namespace UrbanGame.ViewModels
         public int GameId { get; set; }
 
         public int TaskId { get; set; }
-
-        public string DiffComparision { get; set; }
 
         #endregion
 
@@ -220,11 +229,23 @@ namespace UrbanGame.ViewModels
             
             new Timer(new TimerCallback((obj) =>
             {
-                if (DiffComparision != null)
+                if (CurrentTask == null)
+                {
+                    var task = RefreshTask();
+                    task.Wait();
+                }
+
+                if (!String.IsNullOrEmpty(CurrentTask.ListOfChanges))
                     System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
                     {
-                        MessageBox.Show(DiffComparision);
-                        DiffComparision = null;
+                        MessageBox.Show(CurrentTask.ListOfChanges);
+
+                        CurrentTask.ListOfChanges = null;
+                        using (var uow = _unitOfWorkLocator())
+                        {
+                            uow.GetRepository<ITask>().All().First(t => t.Id == TaskId).ListOfChanges = null;
+                            uow.Commit();
+                        }
                     });
             }), null, 700, System.Threading.Timeout.Infinite);
         }

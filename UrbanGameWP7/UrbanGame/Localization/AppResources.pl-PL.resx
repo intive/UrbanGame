@@ -444,4 +444,7 @@
   <data name="WeWillContact" xml:space="preserve">
     <value>Skontaktujemy się z Tobą</value>
   </data>
+  <data name="TaskChangedToast" xml:space="preserve">
+    <value>Szczegóły zadania zmieniły się. Naciśnij, aby zobaczyć różnice.</value>
+  </data>
 </root>

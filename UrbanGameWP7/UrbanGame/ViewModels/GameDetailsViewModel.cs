@@ -13,7 +13,7 @@ using System.Threading;
 namespace UrbanGame.ViewModels
 {
     public class GameDetailsViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<SolutionStatusChanged>,
-        IHandle<GameStateChangedEvent>
+        IHandle<GameStateChangedEvent>, IHandle<TaskChangedEvent>
     {
         IAppbarManager _appbarManager;
         private string _activeSection;
@@ -32,7 +32,7 @@ namespace UrbanGame.ViewModels
                 RefreshGame();
             }
 
-            if (Game.GameState == GameState.Won || Game.GameState == GameState.Lost)
+            if (Game.GameState != GameState.Joined)
             {
                 BasicAppbar.Clear();
                 DescriptionAppbar.Clear();
@@ -71,7 +71,7 @@ namespace UrbanGame.ViewModels
             {
                 using (var uow = _unitOfWorkLocator())
                 {
-                    var Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
+                    Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
 
                     if (!String.IsNullOrEmpty(Game.ListOfChanges))
                     {
@@ -91,7 +91,7 @@ namespace UrbanGame.ViewModels
             {
                 using (var uow = _unitOfWorkLocator())
                 {
-                    var Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
+                    Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
 
                     if (!Game.GameOverDisplayed && (Game.GameState == GameState.Won || Game.GameState == GameState.Lost))
                     {
@@ -113,6 +113,19 @@ namespace UrbanGame.ViewModels
                         uow.Commit();
                     }                   
                 }
+            }
+        }
+        #endregion
+
+        #region IHandle<TaskChangedEvent>
+        public void Handle(TaskChangedEvent task)
+        {
+            if (task.GameId == GameId)
+            {
+                RefreshActiveTasks();
+                RefreshAccomplishedTasks();
+                RefreshCancelledTasks();
+                RefreshInactiveTasks();
             }
         }
         #endregion

@@ -195,7 +195,7 @@ namespace WebService
         #endregion
 
         #region GetTasks
-        public ITask[] GetTasks(int gid)
+        public async Task<ITask[]> GetTasks(int gid)
         {
             return ListOfTasks.Where(task => task.Game == null ? false : task.Game.Id == gid).ToArray();
         }

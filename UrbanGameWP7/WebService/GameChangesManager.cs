@@ -26,11 +26,13 @@ namespace WebService
         ILocalizationService _localizationService;
         IToastPromptService _toastPromptService;
         Timer _solutionUpdaterTimer;
+        Timer _taskUpdaterTimer;
         Timer _gameUpdaterTimer;
         Timer _gameStateUpdaterTimer;
         IGameAuthorizationService _authorizationService;
 
         private const int _gameStateUpdaterPeriod = 20 * 1000;
+        private const int _taskUpdaterPeriod = 50 * 1000;
         private const int _gameUpdaterPeriod = 60 * 1000;
         private const int _solutionUpdaterPeriod = 30 * 1000;
 
@@ -46,11 +48,12 @@ namespace WebService
             _authorizationService = authorizationService;
 
             _solutionUpdaterTimer = new Timer(new TimerCallback(CheckSolutionStatusChanged), null, _solutionUpdaterPeriod, _solutionUpdaterPeriod);
+            _taskUpdaterTimer = new Timer(new TimerCallback(CheckTaskChanges), null, _taskUpdaterPeriod, _taskUpdaterPeriod);
             _gameUpdaterTimer = new Timer(new TimerCallback(CheckGameChanges), null, _gameUpdaterPeriod, _gameUpdaterPeriod);
             _gameStateUpdaterTimer = new Timer(new TimerCallback(CheckGameStateChanges), null, _gameStateUpdaterPeriod, _gameStateUpdaterPeriod);
         }
 
-        #region GameChanges
+        #region GetPublicProperties
 
         private PropertyInfo[] GetPublicProperties(Type type)
         {
@@ -91,33 +94,35 @@ namespace WebService
                 | BindingFlags.Public | BindingFlags.Instance);
         }
 
-        protected IList<string> UpdateGame(IGame oldGame, IGame newGame)
+        #endregion
+
+        #region UpdateObject
+
+        protected IList<string> UpdateObject<T>(T oldObject, T newObject, List<string> skipFields = null)
         {
             List<string> differences = new List<string>();
-            PropertyInfo[] newProperties = GetPublicProperties(newGame.GetType());
-            PropertyInfo[] oldProperties = GetPublicProperties(oldGame.GetType());
-
-            //todo: do not override fields which are stored only localy
-            List<string> skipFields = new List<string>() { "GameState", "ListOfChanges", "GameOverDisplayed" };
+            PropertyInfo[] newProperties = GetPublicProperties(newObject.GetType());
+            PropertyInfo[] oldProperties = GetPublicProperties(oldObject.GetType());
 
             foreach (PropertyInfo oldProperty in oldProperties)
             {
-                PropertyInfo newProperty = newProperties.First(p => p.Name == oldProperty.Name);
-                
-                if (!skipFields.Contains(oldProperty.Name) && oldProperty.CanWrite)
+                PropertyInfo newProperty = newProperties.FirstOrDefault(p => p.Name == oldProperty.Name);
+
+                if (newProperty != null && oldProperty.CanWrite && 
+                    (skipFields == null || !skipFields.Contains(oldProperty.Name)))
                 {
                     //skip collections - only basic data
                     if (!oldProperty.PropertyType.IsGenericType ||
                         (oldProperty.PropertyType.GetGenericTypeDefinition() != typeof(IEntityEnumerable<>) &&
                          oldProperty.PropertyType.GetGenericTypeDefinition() != typeof(EntitySet<>)))
                     {
-                        object oldValue = oldProperty.GetValue(oldGame, null);
-                        object newValue = newProperty.GetValue(newGame, null);
+                        object oldValue = oldProperty.GetValue(oldObject, null);
+                        object newValue = newProperty.GetValue(newObject, null);
 
                         if (((oldValue == null || newValue == null) && oldValue != newValue) ||
                               (oldValue != null && newValue != null && !oldValue.Equals(newValue)))
                         {
-                            oldProperty.SetValue(oldGame, newProperty.GetValue(newGame, null), null);
+                            oldProperty.SetValue(oldObject, newProperty.GetValue(newObject, null), null);
                             differences.Add(oldProperty.Name);
                         }
                     }
@@ -125,6 +130,12 @@ namespace WebService
             }
             return differences;
         }
+
+        #endregion
+
+
+
+        #region GameChanges
 
         protected void CheckGameChanges(object obj)
         {
@@ -150,7 +161,7 @@ namespace WebService
 
                                 if (newGame.Version != oldGame.Version)
                                 {
-                                    IList<string> diff = UpdateGame(oldGame, newGame);
+                                    IList<string> diff = UpdateObject(oldGame, newGame, new List<string>() { "GameState", "ListOfChanges", "GameOverDisplayed" });
 
                                     if (diff.Count == 0)
                                         return;
@@ -217,6 +228,64 @@ namespace WebService
                 finally
                 {
                     _gameStateUpdaterTimer = new Timer(new TimerCallback(CheckGameStateChanges), null, _gameStateUpdaterPeriod, _gameStateUpdaterPeriod);
+                }
+            });
+        }
+
+        #endregion
+
+        #region TaskChanges
+
+        protected void CheckTaskChanges(object obj)
+        {
+            if (!_authorizationService.IsUserAuthenticated())
+                return;
+
+            Task.Factory.StartNew(() =>
+            {
+                _taskUpdaterTimer.Dispose();
+
+                try
+                {
+                    using (var uow = _unitOfWorkLocator())
+                    {
+                        var activeGames = uow.GetRepository<IGame>().All().Where(g => g.GameState == GameState.Joined);
+
+                        foreach (var game in activeGames)
+                        {
+                            //there cannot be await, because it causes InvalidOperationExceptions by uow.Commit()
+                            var t = _gameWebService.GetTasks(game.Id);
+                            t.Wait();
+                            ITask[] listOfTasks = t.Result;
+
+                            foreach (var newTask in listOfTasks)
+                            {
+                                var oldTask = uow.GetRepository<ITask>().All().First(gt => gt.Id == newTask.Id);
+
+                                if (newTask.Version != oldTask.Version)
+                                {
+                                    IList<string> diff = UpdateObject(oldTask, newTask, new List<string>() { "Game", "ListOfChanges" });
+
+                                    if (diff.Count == 0)
+                                        return;
+
+                                    if (_toastPromptService != null)
+                                        oldTask.ListOfChanges = _toastPromptService.GetDifferencesText(diff);
+
+                                    uow.Commit();
+
+                                    if (_toastPromptService != null)
+                                        _toastPromptService.ShowTaskChanged(game.Id, oldTask.Id, oldTask.Name, _localizationService.GetText("TaskChangedToast"));
+
+                                    _gameEventAggregator.Publish(new TaskChangedEvent() { Id = oldTask.Id, GameId = game.Id });
+                                }
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    _taskUpdaterTimer = new Timer(new TimerCallback(CheckTaskChanges), null, _taskUpdaterPeriod, _taskUpdaterPeriod);
                 }
             });
         }

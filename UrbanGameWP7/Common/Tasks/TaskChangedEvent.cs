@@ -8,5 +8,7 @@ namespace Common
     public class TaskChangedEvent
     {
         public int Id { get; set; }
+
+        public int GameId { get; set; }
     }
 }
