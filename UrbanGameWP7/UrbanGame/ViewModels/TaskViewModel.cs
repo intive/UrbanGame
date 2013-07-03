@@ -36,16 +36,16 @@ namespace UrbanGame.ViewModels
 
         #region appbar
 
-        public void RefreshMenuItemText()
+        private List<AppbarItem> BasicAppbar = new List<AppbarItem>()
         {
-
-        }
+            new AppbarItem() {  Text = Localization.AppResources.ForgotPassword,Message="ReportTask" } 
+        };
 
         private void SetAppBarContent()
         {
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
-                RefreshMenuItemText();
+                _appbarManager.ConfigureAppbar(BasicAppbar);
             });
         }
 
@@ -413,6 +413,11 @@ namespace UrbanGame.ViewModels
         public void CanGoBack(ActionExecutionContext executionContext)
         {
             (executionContext.EventArgs as System.ComponentModel.CancelEventArgs).Cancel = VisualStateName == "Sending";
+        }
+
+        public void ReportTask()
+        {
+            _navigationService.UriFor<ReportTaskViewModel>().WithParam(rt => rt.GameId, GameId).WithParam(rt => rt.TaskId, TaskId).Navigate();
         }
 
         #endregion        

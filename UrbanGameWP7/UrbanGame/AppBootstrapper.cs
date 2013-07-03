@@ -26,6 +26,7 @@ namespace UrbanGame
             container.PerRequest<GamesListViewModel>();
             container.PerRequest<LoginAndRegistrerViewModel>();
             container.PerRequest<PasswordRecoveryViewModel>();
+            container.PerRequest<ReportTaskViewModel>();
             container.PerRequest<TaskViewModel>();
             container.Singleton<ILocalizationService, LocalizationService>();
             container.PerRequest<IUnitOfWork, UnitOfWork>();       

@@ -401,10 +401,10 @@
                     <SolidColorBrush Color="{StaticResource SolidColorBrushGrey}"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <TextBlock Text="Something went wrong" FontSize="35" Margin="25,30,0,0" FontWeight="Bold"/>
-            <TextBlock Text="You can retry or try again later" FontSize="26" Margin="25,90,0,0"/>
-            <Button Content="retry" Height="78" Width="230" HorizontalAlignment="Left" Margin="10,-330,0,0" cal:Message.Attach="[Event Tap]=[Action Retry()]"/>
-            <Button Content="cancel" Height="78" Width="230" HorizontalAlignment="Right" Margin="0,-330,10,0" cal:Message.Attach="[Event Tap]=[Action ChangeToNormal()]"/>
+            <TextBlock Text="{Binding Path=AppResources.SomethingWentWrong, Source={StaticResource LocalizedStrings}}" FontSize="35" Margin="25,30,0,0" FontWeight="Bold"/>
+            <TextBlock Text="{Binding Path=AppResources.TryLater, Source={StaticResource LocalizedStrings}}" FontSize="26" Margin="25,90,0,0"/>
+            <Button Content="{Binding Path=AppResources.Retry, Source={StaticResource LocalizedStrings}}" Height="78" Width="230" HorizontalAlignment="Left" Margin="10,-202,0,646" cal:Message.Attach="[Event Tap]=[Action Retry()]"/>
+            <Button Content="{Binding Path=AppResources.Cancel, Source={StaticResource LocalizedStrings}}" Height="78" Width="230" HorizontalAlignment="Right" Margin="0,-330,10,0" cal:Message.Attach="[Event Tap]=[Action ChangeToNormal()]"/>
         </Grid>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
