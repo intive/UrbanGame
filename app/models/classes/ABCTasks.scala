@@ -14,15 +14,20 @@
  */
 package models
 
+import play.api.db.slick.DB
 import play.api.db.slick.Config.driver.simple._
-import com.github.tototoshi.slick.JodaSupport._
-import com.github.nscala_time.time.Imports._
+import scala.language.postfixOps
 import models.utils._
 
-object Users extends Table[UserDB]("USERS") {
-  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-  def login  = column[String]("login", O.NotNull)
-  def hash   = column[String]("hash", O.NotNull)
-  def * = id.? ~ login ~ hash <> (UserDB, UserDB.unapply _)
+object ABCTasks extends Table[ABCTaskOption]("ABCTASKS") {
+  def taskId = column[Int]("taskId", O.NotNull)
+  def gameId = column[Int]("gameId", O.NotNull)
+  def char   = column[String]("character", O.NotNull)
+  def option = column[String]("option", O.NotNull)
+  def points = column[Int]("points", O.NotNull)
+  def * = gameId ~ taskId ~ char ~ option ~ points <> (ABCTaskOption, ABCTaskOption.unapply _)
+  def pk = primaryKey("ABCTASKS_PK", (gameId, taskId, char))
+  def game = foreignKey("ABCTASKS_GAMES_FK", gameId, Games)(_.id)
+  def task = foreignKey("ABCTASKS_TASKS_FK", (gameId, taskId), Tasks)(t => (t.gameId, t.id))
 }
 
