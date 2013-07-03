@@ -114,7 +114,6 @@
     <Compile Include="Converters\GPSToVisibilityConverter.cs" />
     <Compile Include="Converters\IntToSlashIntConverter.cs" />
     <Compile Include="Converters\IsRepeatableConverter.cs" />
-    <Compile Include="Converters\BindableCollectionCountToVisibilityConverter.cs" />
     <Compile Include="Converters\NearbyGameStartConverter.cs" />
     <Compile Include="Converters\TimeToEndConverter.cs" />
     <Compile Include="Converters\TypeToImageSourceConverter.cs" />

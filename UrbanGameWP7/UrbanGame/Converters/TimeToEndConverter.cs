@@ -13,19 +13,19 @@ namespace UrbanGame.Converters
         {
             if (value is DateTime)
             {
-                TimeSpan leftTime = ((DateTime)value).Subtract(DateTime.Now);
+                TimeSpan leftTime = (DateTime)value - DateTime.Now;
 
                 if (leftTime.Days > 0)
                 {
-                    return leftTime.Days + " " + AppResources.DayShortcut + " " + leftTime.Hours + " " + AppResources.HoursShortcut;
+                    return string.Format("{0} d {1} h", leftTime.Days, leftTime.Hours);
                 }
                 else if (leftTime.Hours > 0)
                 {
-                    return leftTime.Hours + " " + AppResources.HoursShortcut + " " + leftTime.Minutes + " " + AppResources.MinutesShortcut;
+                    return string.Format("{0} h {1} m", leftTime.Hours, leftTime.Minutes);
                 }
                 else
                 {
-                    return leftTime.Minutes + " " + AppResources.MinutesShortcut + " " + leftTime.Seconds + " " + AppResources.SecondShortcut;
+                    return string.Format("{0} m {1} s", leftTime.Minutes, leftTime.Seconds);
                 }
             }
             else

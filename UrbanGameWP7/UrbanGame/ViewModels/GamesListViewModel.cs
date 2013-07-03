@@ -80,6 +80,30 @@ namespace UrbanGame.ViewModels
 
         #region bindable properties
 
+        #region NoUserActiveGames
+
+        public bool NoUserActiveGames
+        {
+            get
+            {
+                return (IsAuthorized && UserActiveGames.Count == 0);
+            }
+        }
+
+        #endregion
+
+        #region UserInactiveGamesVisibility
+
+        public bool UserInactiveGamesVisibility
+        {
+            get
+            {
+                return (IsAuthorized && UserInactiveGames.Count > 0);
+            }
+        }
+
+        #endregion
+
         #region IsAuthorized
 
         public bool IsAuthorized
@@ -285,6 +309,8 @@ namespace UrbanGame.ViewModels
                     }
                 }
             });
+            NotifyOfPropertyChange(() => NoUserActiveGames);
+            NotifyOfPropertyChange(() => UserInactiveGamesVisibility);
         }
 
         public void RefreshNearest()

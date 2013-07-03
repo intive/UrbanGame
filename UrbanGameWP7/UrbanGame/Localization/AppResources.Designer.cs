@@ -161,6 +161,24 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have any active game..
+        /// </summary>
+        public static string AnyGame {
+            get {
+                return ResourceManager.GetString("AnyGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to below 1 m.
+        /// </summary>
+        public static string BelowMinute {
+            get {
+                return ResourceManager.GetString("BelowMinute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to bonus task found.
         /// </summary>
         public static string BonusTask {
@@ -202,6 +220,15 @@ namespace UrbanGame.Localization {
         public static string Cancelled {
             get {
                 return ResourceManager.GetString("Cancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please, choose one and join in..
+        /// </summary>
+        public static string ChooseAndJoin {
+            get {
+                return ResourceManager.GetString("ChooseAndJoin", resourceCulture);
             }
         }
         
@@ -265,15 +292,6 @@ namespace UrbanGame.Localization {
         public static string Days {
             get {
                 return ResourceManager.GetString("Days", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to d.
-        /// </summary>
-        public static string DayShortcut {
-            get {
-                return ResourceManager.GetString("DayShortcut", resourceCulture);
             }
         }
         
@@ -503,15 +521,6 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to h.
-        /// </summary>
-        public static string HoursShortcut {
-            get {
-                return ResourceManager.GetString("HoursShortcut", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to inactive.
         /// </summary>
         public static string Inactive {
@@ -670,15 +679,6 @@ namespace UrbanGame.Localization {
         public static string Messages {
             get {
                 return ResourceManager.GetString("Messages", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to m.
-        /// </summary>
-        public static string MinutesShortcut {
-            get {
-                return ResourceManager.GetString("MinutesShortcut", resourceCulture);
             }
         }
         
@@ -967,15 +967,6 @@ namespace UrbanGame.Localization {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to s.
-        /// </summary>
-        public static string SecondShortcut {
-            get {
-                return ResourceManager.GetString("SecondShortcut", resourceCulture);
             }
         }
         

@@ -66,9 +66,9 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Row="0"  Orientation="Vertical" Visibility="{Binding UserActiveGames, Converter={StaticResource BindableCollectionCountToVisibilityConverter}}">
-                            <TextBlock Text="You don't have any active game."/>
-                            <TextBlock Text="Please, choose one and join in"/>
+                        <StackPanel Grid.Row="0" Orientation="Vertical" Visibility="{Binding NoUserActiveGames, Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,0,0">
+                            <TextBlock Text="{Binding Path=AppResources.AnyGame, Source={StaticResource LocalizedStrings}}"/>
+                            <TextBlock Text="{Binding Path=AppResources.ChooseAndJoin, Source={StaticResource LocalizedStrings}}"/>
                         </StackPanel>
 
                         <ListBox ItemsSource="{Binding UserActiveGames}" VerticalAlignment="Top" Grid.Row="1" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -134,9 +134,9 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
 
-                        <TextBlock Text="{Binding Path=AppResources.NotLogged, Source={StaticResource LocalizedStrings}}" Grid.Row="0" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
-                        <TextBlock Text="{Binding Path=AppResources.PleaseLog, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}"/>
-                        <TextBlock Text="{Binding Path=AppResources.PreviousGames, Source={StaticResource LocalizedStrings}}" Grid.Row="2" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,0,5" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}"/>
+                        <TextBlock Text="{Binding Path=AppResources.NotLogged, Source={StaticResource LocalizedStrings}}" Grid.Row="0" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}" Margin="5,0,0,0"/>
+                        <TextBlock Text="{Binding Path=AppResources.PleaseLog, Source={StaticResource LocalizedStrings}}" Grid.Row="1" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding IsAuthorized,Converter={StaticResource OpositeBoolToVisibilityConverter}}" Margin="5,0,0,0"/>
+                        <TextBlock Text="{Binding Path=AppResources.PreviousGames, Source={StaticResource LocalizedStrings}}" Grid.Row="2" Visibility="{Binding UserInactiveGamesVisibility,Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,0,10" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}" />
                         
                         <ListBox Grid.Row="3" Margin="0,5,0,0" ItemsSource="{Binding UserInactiveGames}" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
