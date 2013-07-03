@@ -164,7 +164,7 @@ public class DemoData {
 					TASK_DESCRIPTION, isRepetable, isHidden, numberOfHidden, endDate, maxPoints);
 			}
 			playerTaskSpecific = new PlayerTaskSpecific(USER, Long.valueOf(FIRST_TASK_ID + j), points,
-				isFinishedByUser, areChanges, isHidden, changes, status, null);
+				isFinishedByUser, areChanges, isHidden, changes, PlayerTaskSpecific.ACTIVE, null);
 			
 			database.insertTaskForGame(Long.valueOf(FIRST_GAME_ID), task);
 			database.insertPlayerTaskSpecific(playerTaskSpecific);
