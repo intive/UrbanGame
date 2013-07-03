@@ -30,7 +30,7 @@ class WebApiSpec extends Specification {
     import Q.interpolation
     import play.api.Play.current
 
-    DB withSession { implicit session =>
+    DB("urbangameApi") withSession { implicit session =>
       val uq = sql"""SELECT "id" FROM USERS WHERE "login" = 'new_user'""".as[Int] 
       uq.firstOption map { uid =>
         sqlu"""DELETE FROM USERGAMES WHERE "userId" = $uid""".execute

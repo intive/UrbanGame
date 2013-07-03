@@ -17,15 +17,15 @@ package models
 import play.api.db.slick.Config.driver.simple._
 import com.github.tototoshi.slick.JodaSupport._
 import com.github.nscala_time.time.Imports._
-
-case class UserGame(userId: Int, gameId: Int, joined: DateTime, left: Option[DateTime])
+import models.utils._
 
 object UserGames extends Table[UserGame]("USERGAMES") {
   def userId = column[Int]("userId", O.NotNull)
   def gameId = column[Int]("gameId", O.NotNull)
   def joined = column[DateTime]("joined", O.NotNull, O.Default(DateTime.now))
   def left   = column[Option[DateTime]]("left")
-  def * = userId ~ gameId ~ joined ~ left <> (UserGame, UserGame.unapply _)
+  def points = column[Int]("points", O.NotNull, O.Default(0))
+  def * = userId ~ gameId ~ joined ~ left ~ points <> (UserGame, UserGame.unapply _)
   def pk = primaryKey("USERSGAMES_PK", (userId, gameId))
 
   def user = foreignKey("USERGAMES_USERS_FK", userId, Users)(_.id)

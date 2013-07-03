@@ -19,12 +19,11 @@ import play.api.mvc._
 import webapi.models._
 
 class UserBasicAuth(gamesService: GamesService) extends UserAuth {
-  
   override def authorize[A](request: Request[A]): User = {
     val header = getAuthHeader(request)
     val (login, hash) = parseHeader(header)
     gamesService.getUserOpt(login, hash) getOrElse { 
-      throw new AuthException("Invalid user or password")
+      throw new AuthException(preMsg+"invalidUserOrPassword")
     }
   }
  
@@ -33,7 +32,7 @@ class UserBasicAuth(gamesService: GamesService) extends UserAuth {
 
   private def getAuthHeader[A](request: Request[A]): String =
     request.headers.get("Authorization") getOrElse { 
-      throw new AuthException("No Auth header!")
+      throw new AuthException(preMsg+"noAuthHeader")
     }
 
   private def decode(encoded: String):Option[String] = {
@@ -50,6 +49,8 @@ class UserBasicAuth(gamesService: GamesService) extends UserAuth {
       (login, hash) <- Some(decoded span {_ != ':'})
     } yield (login, hash drop 1)
 
-    res getOrElse { throw new AuthException("Invalid Auth header!") }
+    res getOrElse { throw new AuthException(preMsg+"invalidAuthHeader") }
   }
+
+  val preMsg = "webapi.error."
 }
