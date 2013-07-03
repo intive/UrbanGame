@@ -29,19 +29,20 @@ object Tasks extends Table[TasksDetails]("TASKS") {
   def version = column[Int]("version", O.NotNull, O.Default(1))
   def name = column[String]("name", O.NotNull)
   def description = column[String]("description", O.NotNull)
-  def category = column[String]("category", O.NotNull)
+  def ttype = column[String]("type", O.NotNull)
   def maxpoints = column[Int]("maxpoints", O.NotNull)
+  def minToAccept = column[Int]("minToAccept", O.NotNull, O.Default(1))
   def maxattempts = column[Int]("maxattempts", O.NotNull)
   def timeLimit = column[Option[DateTime]]("timeLimit")
   def lat   = column[Option[Double]]("lat")
   def lon   = column[Option[Double]]("lon")
   def rangeLimit = column[Option[Double]]("rangeLimit")
-  def cancelled = column[Boolean]("cancelled", O.NotNull, O.Default(false))
-  def penalty = column[Int]("penalty", O.NotNull)
-  def * = id.? ~ gameId ~ version ~ category ~ name ~ description ~ maxpoints ~ maxattempts ~ timeLimit ~ lat ~ lon ~ rangeLimit ~ cancelled ~ penalty <> (TasksDetails, TasksDetails.unapply _)
-  def forInsert = gameId ~ version ~ category ~ name ~ description ~ maxpoints ~ maxattempts ~ timeLimit ~ lat ~ lon ~ rangeLimit ~ cancelled ~ penalty <> ({ t => 
-    TasksDetails(None, t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13)},
-      { (td: TasksDetails) => Some((td.gameId, td.version, td.category, td.name, td.description, td.maxpoints, td.maxattempts, td.timeLimit, td.lat, td.lon, td.rangeLimit, td.cancelled, td.penalty))
+  def active = column[Boolean]("active", O.NotNull, O.Default(true))
+  def penalty = column[Int]("penalty", O.NotNull, O.Default(0))
+  def * = id.? ~ gameId ~ version ~ ttype ~ name ~ description ~ maxpoints ~ minToAccept ~ maxattempts ~ timeLimit ~ lat ~ lon ~ rangeLimit ~ active ~ penalty <> (TasksDetails, TasksDetails.unapply _)
+  def forInsert = gameId ~ version ~ ttype ~ name ~ description ~ maxpoints ~ minToAccept ~  maxattempts ~ timeLimit ~ lat ~ lon ~ rangeLimit ~ active ~ penalty <> ({ t => 
+    TasksDetails(None, t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10, t._11, t._12, t._13, t._14)},
+      { (td: TasksDetails) => Some((td.gameId, td.version, td.ttype, td.name, td.description, td.maxpoints, td.minToAccept, td.maxattempts, td.timeLimit, td.lat, td.lon, td.rangeLimit, td.active, td.penalty))
       })
   def game = foreignKey("GMT_FK", gameId, Games)(_.id)
 }
