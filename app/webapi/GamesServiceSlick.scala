@@ -136,35 +136,38 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
   }
 
   override def joinGame(user: User, gid: Int) {
-    db withSession { implicit session =>
-      val gameInfo = for (
-        g <- models.Games if g.id === gid
-      ) yield (g.status, g.maxPlayers, g.numberOfPlayers)
-
-      gameInfo.firstOption map { case (status, maxPlayers, numOfPlayers) =>
+    def testGame(status: String, maxPlayers: Int, numOfPlayers: Int) {
         if (status == "ended")
           throw gameIsEnded
         if (status != "online")
           throw gameNotStarted
         if (maxPlayers == numOfPlayers)
           throw gameIsFull
+    }
 
+    def testUserTask(left: Option[DateTime]) {
+      if (left.isEmpty) 
+         throw alreadyInGame
+      val wait = 30 - (left.get to DateTime.now).millis / (60*1000)
+      if (wait > 0) 
+        throw userMustWait(wait)
+    }
+
+    db withSession { implicit session =>
+      val gameInfo = for (
+        g <- models.Games if g.id === gid
+      ) yield (g.status, g.maxPlayers, g.numberOfPlayers)
+
+      gameInfo.firstOption map { case (status, maxPlayers, numOfPlayers) =>
+        testGame(status, maxPlayers, numOfPlayers)
         val userJoinedInfo = for (
           ug <- models.UserGames if ug.userId === user.id && ug.gameId === gid
         ) yield (ug.joined ~ ug.left)
 
         userJoinedInfo.firstOption match { 
           case Some((joined, left)) =>
-            if (left.isEmpty) 
-              throw alreadyInGame
-
-            val now = DateTime.now
-            val wait = 30 - (left.get to now).millis / (60*1000)
-            if (wait > 0) 
-              throw userMustWait(wait)
-
-            userJoinedInfo update (now, None)
-
+            testUserTask(left)
+            userJoinedInfo update (DateTime.now, None)
           case None =>
             models.UserGames insert UserGame(user.id, gid, DateTime.now, None, 0)
         }
@@ -277,7 +280,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
 
   private def getStatusAndPoints(user: User, gid: Int, tid: Int, ans: UserAnswer, ttype: String, maxpoints: Int, minToAccept: Int, penalty: Int)(implicit session: Session): (String, Int) = 
     if (isABCTask(ttype)) {
-      val selected = ans.options getOrElse (throw expectedField("option"))
+      val selected = ans.options getOrElse (throw expectedField("options"))
       val abcq = for (
         abc <- models.ABCTasks if abc.gameId === gid && abc.taskId === tid
       ) yield (abc.char, abc.points)

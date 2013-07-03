@@ -128,13 +128,13 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
 
   def userGameStatus(gid: Int) = ApiUserAction { implicit request => user =>
       val status = gamesService.getUserGameStatus(user, gid)
-      val links = Seq(selfLink, gameLink(gid))
+      val links = Seq(selfLink)
       ApiOk(HalJsonRes(links, body=Json.toJson(status)))
   }
   
   def userTaskStatus(gid: Int, tid: Int) = ApiUserAction { implicit request => user =>
       val status = gamesService.getUserTaskStatus(user, gid, tid)
-      val links = Seq(selfLink, gameLink(gid))
+      val links = Seq(selfLink)
       ApiOk(HalJsonRes(links, body=Json.toJson(status)))
   }
 
