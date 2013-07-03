@@ -93,9 +93,10 @@ trait UserAuth {
   def apply[A](request: Request[A]): User = authorize(request)
 }
 
-class ApiException(code: Int, message: String) extends RuntimeException(message) {
+class ApiException(code: Int, message: String, params: Seq[Any] = Seq()) extends RuntimeException(message) {
   def getCode = code
+  def getParams = params
 }
 
-class AuthException(msg: String) extends ApiException(401, msg)
+class AuthException(msg: String, params: Seq[Any] = Seq()) extends ApiException(401, msg, params)
 

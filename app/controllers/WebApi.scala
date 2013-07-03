@@ -150,7 +150,7 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
   }
 
   private def ApiUserAction(f: Request[AnyContent] => User => Result): Action[AnyContent] =
-    ApiAction { request => 
+    ApiAction { implicit request => 
       try { f (request) (auth(request)) } catch {
         case authEx: AuthException => 
           ApiErr(authEx).withHeaders("WWW-Authenticate" -> "Basic realm=\"myrealm\"")
@@ -158,7 +158,7 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
     }
 
   private def ApiAction(f: Request[AnyContent] => Result): Action[AnyContent] = 
-    Action { request =>
+    Action { implicit request =>
       //if (request.accepts("application/hal+json")) // it doesn't work
       if (true)
         try { f (request) } catch {
@@ -183,8 +183,10 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
     Ok(Json.prettyPrint(Json.toJson(response))).as("application/json")
   }
 
-  def ApiErr(apiEx: ApiException) = {
-    val jsonMsg = Json.obj("code" -> apiEx.getCode, "message" -> apiEx.getMessage)
+  import play.api.i18n.Messages
+  def ApiErr(apiEx: ApiException)(implicit request: Request[Any]) = {
+    val msg = Messages(apiEx.getMessage, apiEx.getParams: _*)
+    val jsonMsg = Json.obj("code" -> apiEx.getCode, "message" -> msg)
     Status(apiEx.getCode)(Json.prettyPrint(jsonMsg)).as("application/json")
   }
 

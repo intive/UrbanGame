@@ -323,7 +323,6 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     val c = 2 * asin(sqrt(a))
     R * c
   }
-    
 
   private val geodistanceFun = SimpleFunction[Double]("geodistance")
   private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double) =
@@ -344,22 +343,20 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     sha256.digest((login+":"+password).getBytes("UTF-8")) map { "%02X" format _ } mkString
   }
 
-
-  import play.api.i18n._
   private val msgPre = "webapi.error."
-  private val gameNotFound   = new ApiException(404, Messages(msgPre+"gameNotFound"))
-  private val taskNotFound   = new ApiException(404, Messages(msgPre+"taskNotFound"))
-  private val userExists     = new ApiException(409, Messages(msgPre+"userExists"))
-  private val notPartOfGame  = new ApiException(404, Messages(msgPre+"notPartOfGame"))
-  private val gameNotStarted = new ApiException(400, Messages(msgPre+"notStarted"))
-  private val gameIsEnded    = new ApiException(400, Messages(msgPre+"isEnded"))
-  private val alreadyInGame  = new ApiException(400, Messages(msgPre+"alreadyJoined"))
-  private val gameIsFull     = new ApiException(400, Messages(msgPre+"isFull"))
-  private val alreadyLeft    = new ApiException(400, Messages(msgPre+"alreadyLeft"))
-  private val taskCancelled  = new ApiException(400, Messages(msgPre+"taskCancelled"))
-  private val noMoreAttempts = new ApiException(400, Messages(msgPre+"noMoreAttempts"))
-  private def userMustWait(m: Long) = new ApiException(400, Messages(msgPre+"mustWait", m))
-  private def expectedField(f: String) = new ApiException(400, Messages(msgPre+"expectedField", f))
-  private def unexpectedTaskType(c: String) = new ApiException(500, Messages(msgPre+"unexpectedTaskType", c))
+  private val gameNotFound   = new ApiException(404, msgPre+"gameNotFound")
+  private val taskNotFound   = new ApiException(404, msgPre+"taskNotFound")
+  private val userExists     = new ApiException(409, msgPre+"userExists")
+  private val notPartOfGame  = new ApiException(404, msgPre+"notPartOfGame")
+  private val gameNotStarted = new ApiException(400, msgPre+"notStarted")
+  private val gameIsEnded    = new ApiException(400, msgPre+"isEnded")
+  private val alreadyInGame  = new ApiException(400, msgPre+"alreadyJoined")
+  private val gameIsFull     = new ApiException(400, msgPre+"isFull")
+  private val alreadyLeft    = new ApiException(400, msgPre+"alreadyLeft")
+  private val taskCancelled  = new ApiException(400, msgPre+"taskCancelled")
+  private val noMoreAttempts = new ApiException(400, msgPre+"noMoreAttempts")
+  private def userMustWait(m: Long) = new ApiException(400, msgPre+"mustWait", Seq(m))
+  private def expectedField(f: String) = new ApiException(400, msgPre+"expectedField", Seq(f))
+  private def unexpectedTaskType(c: String) = new ApiException(500, msgPre+"unexpectedTaskType", Seq(c))
 }
 

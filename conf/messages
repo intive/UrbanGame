@@ -228,3 +228,6 @@ webapi.error.taskCancelled = This task is cancelled
 webapi.error.noMoreAttempts = Attempts limit reached
 webapi.error.expectedField = Expected field "{0}"
 webapi.error.unexpectedTaskType = Unxpected task type "{0}"
+webapi.error.invalidUserOrPassword = Invalid user or password
+webapi.error.noAuthHeader = No authentication header
+webapi.error.invalidAuthHeader = Invalid basic authentication header
