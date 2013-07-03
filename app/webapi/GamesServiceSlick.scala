@@ -81,8 +81,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
 
       q.firstOption map { case (gid, tid, version, ttype, name, description, maxpoints, maxattempts) =>
         val choices = if (isABCTask(ttype)) Some(getListOfAnswers(gid, tid)) else None
-        val range   = if (isGPSTask(ttype)) Some(getListOfPoints(gid,tid)) else None
-        TaskStatic(gid, tid, version, ttype, name, description, choices, range, maxpoints, maxattempts)
+        TaskStatic(gid, tid, version, ttype, name, description, choices, maxpoints, maxattempts)
       } getOrElse { throw taskNotFound }
     }
   }
@@ -124,13 +123,13 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
       }
     }
   }
-  
+
   override def listUserGames(user: User): List[UserGameSummary] = {
     db withSession { implicit session =>
       val q = for (
         (ug, g) <- UserGamesView(user.id)
-      ) yield (g.id, g.version, ug.joined, ug.left, ug.points)
-
+      ) yield (g.id, g.version, ug.joined, ug.left, sumPoints(user.id, g.id))
+        
       q.elements map { UserGameSummary.tupled(_) } toList
     }
   }
@@ -169,7 +168,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
             testUserTask(left)
             userJoinedInfo update (DateTime.now, None)
           case None =>
-            models.UserGames insert UserGame(user.id, gid, DateTime.now, None, 0)
+            models.UserGames insert UserGame(user.id, gid, DateTime.now, None)
         }
 
       } getOrElse (throw gameNotFound)
@@ -216,7 +215,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     db withSession { implicit session =>
       val q = for (
         ug <- models.UserGames if ug.userId === user.id && ug.gameId === gid
-      ) yield (ug.points, 0)
+      ) yield (sumPoints(user.id, ug.gameId), 0)
       
       q.firstOption map { UserGameStatus.tupled(_) } getOrElse (throw notPartOfGame)
     }
@@ -268,11 +267,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
           else
             utq update (userTaskStatus, userTaskPoints, attempts+1, now)
 
-          val ugq = for (ug <- models.UserGames if ug.userId === user.id && ug.gameId === gid) yield (ug.points) 
-          val gamePoints = ugq.first
-          ugq update (gamePoints + userTaskPoints - lastPoints)
-
-          return UserTaskStatus(userTaskStatus, attempts+1, userTaskPoints, attempts < maxattempts)
+          return UserTaskStatus(userTaskStatus, attempts+1, userTaskPoints, attempts+1 < maxattempts)
 
         } getOrElse (throw taskNotFound)
       } getOrElse (throw notPartOfGame)
@@ -327,12 +322,14 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     val q = for (t <- models.ABCTasks if t.gameId === gid && t.taskId === tid) yield(t.char, t.option)
     q.elements map { ABCOption.tupled(_) } toList
   }
- 
-  private def getListOfPoints(gid: Int, tid: Int)(implicit session: Session) = {
-    val q = for (t <- models.GPSTasks if t.gameId === gid && t.taskId === tid) yield(t.lat, t.lon, t.range)
-    q.elements map { GPSPoint.tupled(_) } toList
-  }
 
+  private def sumPoints(uid: Int, gid: Column[Int]) = (
+    for(
+      (ut, t) <- models.UserTasks innerJoin models.Tasks on (_.gameId === _.gameId) 
+      if ut.userId === uid && ut.gameId === gid && t.active === true
+    ) yield (ut.points)
+  ).sum.getOrElse(0)
+  
   private val geodistanceFun = SimpleFunction[Int]("geodistance")
   private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double) =
     geodistanceFun(Seq(lat1, lon1, lat2, lon2))
@@ -345,7 +342,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
   private def UserGamesView(uid: Int) =
     models.UserGames filter (_.userId === uid) innerJoin models.Games on (_.gameId === _.id)
   private def UserTasksView(uid: Int, gid: Int) =
-    models.UserTasks filter (ut => ut.userId === uid && ut.gameId === gid) innerJoin models.Tasks on ((ut, t) => ut.gameId === t.gameId)
+    models.UserTasks filter (ut => ut.userId === uid && ut.gameId === gid) innerJoin models.Tasks on (_.gameId === _.gameId)
 
   private val sha256 = java.security.MessageDigest.getInstance("SHA-256")
   private def hash(login: String, password: String) = {

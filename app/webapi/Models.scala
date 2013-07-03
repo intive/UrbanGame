@@ -50,12 +50,10 @@ case class TaskSummary(
     gid: Int, tid: Int, version: Int,  name: String, ttype: String
 )
 case class ABCOption(option: String, answer: String)
-case class GPSPoint(lat: Double, lon: Double, range: Int)
 case class TaskStatic(
     gid: Int, tid: Int, version: Int,
     ttype: String, name: String, description: String,
     choices: Option[List[ABCOption]],
-    areas: Option[List[GPSPoint]],
     maxpoints: Int,
     maxattempts: Int
 )

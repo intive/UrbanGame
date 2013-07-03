@@ -196,16 +196,39 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
   implicit val userAnswerReads   = Json.reads[UserAnswer]
 
   implicit val ABCOptionWrites   = Json.writes[ABCOption]
-  implicit val GPSPointWrites    = Json.writes[GPSPoint]
   implicit val gameSummaryWrites = Json.writes[GameSummary]
   implicit val gameStaticWrites  = Json.writes[GameStatic]
   implicit val gameDynamicWrites = Json.writes[GameDynamic]
   implicit val gameStatusWrites  = Json.writes[UserGameStatus]
-  implicit val taskSummaryWrites = Json.writes[TaskSummary]
-  implicit val taskStaticWrites  = Json.writes[TaskStatic]
   implicit val taskDynamicWrites = Json.writes[TaskDynamic]
-  implicit val taskStatusWrites  = Json.writes[UserTaskStatus]
-  implicit val userGameSummary   = Json.writes[UserGameSummary]
+  implicit val userGameSummaryWrites = Json.writes[UserGameSummary]
+  implicit val userTaskStatusWrites  = Json.writes[UserTaskStatus]
+  implicit val taskSummaryWrites = (
+    (__ \ "gid").write[Int] ~
+    (__ \ "tid").write[Int] ~
+    (__ \ "version").write[Int] ~
+    (__ \ "name").write[String] ~
+    (__ \ "type").write[String]
+  )(unlift(TaskSummary.unapply))
+  implicit val taskStaticWrites = (
+    (__ \ "gid").write[Int] ~
+    (__ \ "tid").write[Int] ~
+    (__ \ "version").write[Int] ~
+    (__ \ "type").write[String] ~
+    (__ \ "name").write[String] ~
+    (__ \ "description").write[String] ~
+    (__ \ "choices").write[Option[List[ABCOption]]] ~
+    (__ \ "maxpoints").write[Int] ~
+    (__ \ "maxattempts").write[Int]
+  )(unlift(TaskStatic.unapply))
+  import com.github.nscala_time.time.Imports._
+  implicit val userTaskSummaryWrites = (
+    (__ \ "gid").write[Int] ~
+    (__ \ "tid").write[Int] ~
+    (__ \ "version").write[Int] ~
+    (__ \ "type").write[String] ~
+    (__ \ "deadline").write[DateTime]
+  )(unlift(UserTaskSummary.unapply))
 
   implicit val halJsonResWrites = new Writes[HalJsonRes] {
     def writes(r: HalJsonRes): JsValue = {
