@@ -892,9 +892,13 @@ input::-webkit-inner-spin-button {
     }
     
 }
-#addMoreAnswers:disabled {
+#addMoreAnswers:disabled, #addTaskButton:disabled {
     background-color: #989898;
     color: #C4C4C4;
+    &:hover {
+        cursor: default;
+        border-color: #989898;
+    }
 }
 
 /* Lightbox (tasks) */
@@ -924,6 +928,9 @@ input::-webkit-inner-spin-button {
     label.checkbox {
         font-weight: normal;
     }
+    .answers{
+        margin-bottom: 10px;
+    }
     .answer {
         margin: 0px;
     }
@@ -941,22 +948,19 @@ input::-webkit-inner-spin-button {
     input[type="checkbox"]{
         margin: 5px;
     }
-    .answer input[type="checkbox"]{
-        margin: 5px 18px 9px;
-    }
     .answer-headers {
         font-size: 85%;
         font-weight: bold;
         padding: 14px;
         span:nth-child(2){
-            margin-left: 115px;
-        }
-        span:nth-child(3){
-            margin-left: 6px;
+            margin-left: 155px;
         }
     }
     .input-mini{
         width: 48px;
+    }
+    .input-large{
+        width:190px;
     }
     button.dark{
         border: 1px solid transparent;
@@ -973,7 +977,9 @@ input::-webkit-inner-spin-button {
         &:hover{
             border-color: #AAAAAA
         }
-    
+    }
+    select option{
+        font-size: 0.85em;
     }
     a>span {
         line-height: 15px;
@@ -1034,6 +1040,12 @@ input::-webkit-inner-spin-button {
             }
             
         }
+    }
+    .control-group{
+        overflow: hidden;
+    }
+    .penalty input{
+        width: 65px;
     }
     .latlnglist {
         .control {

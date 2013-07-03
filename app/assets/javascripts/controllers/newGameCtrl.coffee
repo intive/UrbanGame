@@ -49,13 +49,11 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         {name:"taskTwo", type:"ABC", visible:"None", version:1.0, maxPoints:10},
         {name:"taskThree", type:"GPS", visible:"None", locations: [{lat:51.10235,lng:17.042328,radius:43},{lat:51.137885,lng:17.038538,radius:222}], version:1.0, maxPoints:7}
     ]
+    
+    
 
-    $scope.task = {
-        type:"ABC",
-        name:"",
-        description:"",
-        answers:[{symbol:"A", text:"", points: null, correct: true},{symbol:"B", text:"", points: null, correct: true},{symbol:"C", text:"", points: null, correct: true},{symbol:"D", text:"", points: null, correct: true}]
-    }
+    $scope.task = null
+    
     $scope.skin = {
         image: "games/gameicon.png"
     }
@@ -193,8 +191,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                     if(result == "ok")
                         resource[action]()
                         
-    $scope.removeAnswer = (index) ->
-        $scope.task.answers.splice(index,1)
+   
         
     # ------------------ GAME NAME VALIDATION
     $scope.isValidName = ->
@@ -219,13 +216,13 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         overlays = []
         task = $scope.tasks[taskIndex]
         if task.type == "GPS"
-            $scope.createMarker loc for loc in task.locations
+            $scope.createMarker loc, latlngBounds, overlays, map for loc in task.locations
             map.fitBounds(latlngBounds)
         else
             map.setCenter(new google.maps.LatLng(51.107885, 17.038538))
             map.setZoom(7)
                 
-    $scope.createMarker = (loc) ->
+    $scope.createMarker = (loc, latlngBounds, overlays, map) ->
         marker = new google.maps.Marker {
             position: new google.maps.LatLng(loc.lat,loc.lng)
             }
@@ -236,9 +233,11 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             strokeWeight: 1.5,
             fillColor: "#00FF00",
             fillOpacity: 0.45,
-            center: marker.position
+            center: marker.position,
+            clickable: false
         }
-        latlngBounds.extend(marker.position)
+        if latlngBounds!=null
+            latlngBounds.extend(marker.position)
         overlays.push(marker)
         overlays.push(circle)
         circle.setMap(map)
@@ -249,6 +248,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
     toverlays = []
     tlatlngBounds = null
     selectedMarker = null
+    selectedCircle = null
     $scope.setTMap = ->
         mapOptions = {
             zoom: 11,
@@ -259,16 +259,51 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         google.maps.event.addListener tmap, 'click', (event) ->
             $scope.selectLocation(event.latLng)
             
+    $scope.changeRadius = (radius) ->
+        if selectedCircle!=null
+            selectedCircle.radius = radius
+            selectedCircle.setMap(null)
+            selectedCircle.setMap(tmap)
+            
     $scope.selectLocation = (latlng) ->
         selectedMarker.setMap(null) if selectedMarker!=null
+        selectedCircle.setMap(null) if selectedCircle!=null
         selectedMarker = new google.maps.Marker {
             position: latlng,
             map: tmap
         }
-        $("#latitude").val(latlng.lat)
-        $("#longitude").val(latlng.lng)
+        element = $("#radius")
+        scope = angular.element(element).scope()
+        radius = Number element.val()
+        if (!scope.radiusIsNumber || radius == 0)
+            element.val("100")
+            radius = 100 
+            scope.radiusIsNumber = true
+            scope.$apply()
+            
+        selectedCircle =  new google.maps.Circle {
+            radius: radius,
+            strokeColor: "#4444FF",
+            strokeOpacity: 1,
+            strokeWeight: 1.5,
+            fillColor: "#0000FF",
+            fillOpacity: 0.45,
+            center: latlng,
+            map: tmap,
+            clickable: false
+        }
+        $("#latitude").val(latlng.lat())
+        $("#longitude").val(latlng.lng())
 
-        
+    $scope.repaintLocations = ->
+        selectedMarker.setMap(null) if selectedMarker!=null
+        selectedCircle.setMap(null) if selectedCircle!=null
+        tlatlngBounds = new google.maps.LatLngBounds()
+        overlay.setMap(null) for overlay in toverlays
+        toverlays = []
+        $scope.createMarker loc, null, toverlays, tmap for loc in $scope.task.locations
+
+                
 
     
     # ------------------ STEPS SWITCHING
@@ -361,13 +396,18 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         else
             Messages("newgame.gametype2")
             
-    # ------------------- TASKS - LIGHTBOX       
+    # ------------------- TASKS - LIGHTBOX      
     $scope.resetDefaultTaskTemplate = ->
         $scope.task = {
             type:"ABC",
             name:"",
             description:"",
-            answers:[{symbol:"A", text:"", points: null, correct: true},{symbol:"B", text:"", points: null, correct: true},{symbol:"C", text:"", points: null, correct: true},{symbol:"D", text:"", points: null, correct: true}]
+            locations: [],
+            maxattempts: null,
+            maxpoints: null,
+            penalty: null,
+            repeat: false,
+            answers:[{symbol:"A", text:"", points: null},{symbol:"B", text:"", points: null},{symbol:"C", text:"", points: null},{symbol:"D", text:"", points: null}]
         }
         additionalCond = false
         
@@ -375,12 +415,37 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         symbol = String.fromCharCode(65+$scope.task.answers.length)
         $scope.task.answers.push({symbol:symbol, text:"", points: null, correct: true})
         
+    $scope.removeAnswer = (index) ->
+        $scope.task.answers.splice(index,1)
+        
+    $scope.addLocation = ->
+        lat = Number($("#latitude").val())
+        lng = Number($("#longitude").val())
+        radius = Number($("#radius").val())
+        console.log lat+" "+lng+" "+radius
+        if (!isNaN(lat) && !isNaN(lng) && !isNaN(radius))
+            console.log "wtf"
+            $scope.task.locations.push({lat: lat, lng: lng, radius: radius})
+            $scope.repaintLocations()
+            
+    $scope.removeLocations = ->
+        options = document.getElementById("locationsList").options
+        i = options.length - 1
+        while i != -1
+            if options[i].selected
+                $scope.task.locations.splice(i,1)
+            i--
+        $scope.repaintLocations()
+        
+        
+   
     $scope.additionalCond = false
         
         
     # ------------------ INIT
     $ ->
         fillGameModel()
+        $scope.resetDefaultTaskTemplate()
 
     # ------------------ WATCH
     $scope.$watch '[game.winningNum, game.playersNum]', ->
@@ -395,7 +460,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             else
                 $scope.form.$setValidity "morewinnersthanplayers", true
     , true
-    
+    console.log $scope
 ]
 
 

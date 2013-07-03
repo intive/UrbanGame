@@ -181,6 +181,12 @@ tasks.removelocation = remove
 tasks.latitude = Latitude
 tasks.longitude = Longitude
 tasks.radius = Radius(m)
+tasks.radiusnotnumber = Radius is not a correct number. Please use only digits.
+tasks.pointsnotnumber = Wrong format of points or some points fields are empty.
+tasks.maxpoints = Correct points
+tasks.penaltypoints =  Penalty points
+tasks.mintoaccept = Minimum points to accept answer
+tasks.maxattempts = Maximum attempts
 
 
 

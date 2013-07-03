@@ -1,4 +1,6 @@
 time_regexp = /^(20|21|22|23|[01]\d|\d)(:[0-5]\d)$/
+number_regexp = /^\d+$/
+number_pn_regexp = /^[\+\-]?(\d+)?$/
 
 app.directive 'time', ->
     require: "ngModel",
@@ -11,6 +13,58 @@ app.directive 'time', ->
                 ctrl.$setValidity "time", false
                 undefined
 
+app.directive 'radius', ->
+    restrict: 'A',
+    link: (scope, elm, attr, ctrl) ->
+        scope.radiusIsNumber = true
+        elm.on 'keyup', ->
+            if number_regexp.test(elm.val())
+                radius = Number(elm.val())
+                scope.changeRadius(radius)
+                scope.radiusIsNumber = true
+            else
+                scope.radiusIsNumber = false
+            scope.$apply()
+            
+            
+app.directive 'minpoints', ->
+    restrict: 'A',
+    require: "ngModel",
+    link: (scope, elm, attr, ctrl) ->
+        elm.on 'keyup', ->
+            if !number_regexp.test(ctrl.$viewValue)
+                console.log "numreg"
+                scope.$parent.taskForm.tMinToAccept.$setValidity 'minpointswrong', false
+            else
+                minpoints = Number(ctrl.$viewValue)
+                sum = 0
+                pointsCorrect = true
+                scope.task.answers.forEach (answer) ->
+                    if (pointsCorrect)
+                        if number_pn_regexp.test(answer.points)
+                            num = Number(answer.points)
+                            sum += num if num>0
+                        else
+                            console.log "points not crrect"
+                            pointsCorrect = false
+                if !pointsCorrect
+                    scope.$parent.taskForm.tMinToAccept.$setValidity 'minpointswrong', false
+                else
+                    scope.$parent.taskForm.tMinToAccept.$setValidity 'minpointswrong', (sum>=minpoints)
+            scope.$apply
+            console.log ctrl.$error
+            console.log scope.$parent
+                    
+app.directive 'points', ->
+    restrict: 'A',
+    link: (scope, elm, attr, ctrl) ->
+        elm.on 'keyup', ->
+            if (this.value != this.value.replace(/[^0-9\-\+]/g, ''))
+                this.value = this.value.replace(/[^0-9\-\+]/g, '')
+                scope.$apply(attr.ngModel + '=' + elm.val())
+            if !number_pn_regexp.test(elm.val())
+                scope.$apply(attr.ngModel + '=' + 0)
+            
 app.directive 'taskListMap', ->
     restrict: 'A',
     link: (scope, elm, attr) ->
@@ -31,7 +85,7 @@ app.directive 'gameName', ->
                 scope.isValidName()
             else
                 $("#processing").attr "class", ""
-                $scope.form.$setValidity "nameunique", true
+                scope.form.$setValidity "nameunique", true
         
 app.directive 'geoComplete', ->
     restrict: 'A',
