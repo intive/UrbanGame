@@ -432,6 +432,9 @@
   <data name="Left" xml:space="preserve">
     <value>do końca</value>
   </data>
+  <data name="DelayedSolution" xml:space="preserve">
+    <value>Odpowiedź wysłana. Wyniki będą dostępne później.</value>
+  </data>
   <data name="ReportTask" xml:space="preserve">
     <value>zgłoś błąd</value>
   </data>

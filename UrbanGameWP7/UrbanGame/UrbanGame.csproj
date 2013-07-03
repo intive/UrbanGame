@@ -155,9 +155,11 @@
     <Compile Include="Utilities\AppbarManager.cs" />
     <Compile Include="Utilities\GameAuthorizationService.cs" />
     <Compile Include="Utilities\LocalizationService.cs" />
+    <Compile Include="Utilities\ToastData.cs" />
     <Compile Include="Utilities\ToastPromptService.cs" />
     <Compile Include="Utilities\PhoneTextBox.cs" />
     <Compile Include="Utilities\StateManager.cs" />
+    <Compile Include="Utilities\ToastType.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsPreviewViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsViewModel.cs" />

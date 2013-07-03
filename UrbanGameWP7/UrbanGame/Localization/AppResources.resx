@@ -448,6 +448,9 @@
   <data name="Left" xml:space="preserve">
     <value>left</value>
   </data>
+  <data name="DelayedSolution" xml:space="preserve">
+    <value>Solution sent, but results will be available later.</value>
+  </data>
   <data name="ReportTask" xml:space="preserve">
     <value>report task</value>
   </data>
