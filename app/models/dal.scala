@@ -41,6 +41,7 @@ object dal {
     def Tasks(implicit session: Session) = new ImplicitSession with Tasks { override val implicitSession = session }
     def Skins(implicit session: Session) = new ImplicitSession with Skins { override val implicitSession = session }
     def Notifications(implicit session: Session) = new ImplicitSession with Notifications { override val implicitSession = session }
+    def Tokens(implicit session: Session) = new ImplicitSession with Tokens { override val implicitSession = session }
 
     val db = play.api.db.slick.DB
 
@@ -97,11 +98,19 @@ object dal {
       Games.findOperatorId(gid)
     }
 
-    def findById(oid: Int): Option[Operator] =db.withSession { implicit session =>
+    def operatorSave(op: Operator): Try[Int] = db.withSession { implicit session =>
+      Operators.create(op)
+    }
+
+    def operatorUpdate(op: Operator): Try[Int] = db.withSession { implicit session =>
+      Operators.update(op)
+    }
+
+    def findOperatorById(oid: Int): Option[Operator] =db.withSession { implicit session =>
       Operators.findById(oid)
     }
 
-    def findByEmail(email: String): Option[Operator] = db.withSession { implicit session =>
+    def findOperatorByEmail(email: String): Option[Operator] = db.withSession { implicit session =>
       Operators.findByEmail(email)
     }
 
@@ -113,12 +122,20 @@ object dal {
       Operators.updateToken(email, token)
     }
 
-    def operatorSave(op: Operator): Try[Int] = db.withSession { implicit session =>
-      Operators.create(op)
+    def findTokenByKeys(opId: Int, token: String, series: String): Option[Token] = db.withSession { implicit session =>
+      Tokens.findByKeys(opId, token, series)
     }
 
-    def findOperatorByCookie(cookie: String) = db.withSession { implicit session =>
-      Operators.findByCookie(cookie)
+    def saveToken(token: Token): Try[Int] = db.withSession { implicit session =>
+      Tokens.create(token)
+    }
+
+    def deleteToken(id: Int, rm: Boolean): Try[Int] = db.withSession { implicit session =>
+      Tokens.delete(id, rm)
+    }
+
+    def deleteToken(opId: Int, token: String, series: String, rm: Boolean): Try[Int] = db.withSession { implicit session =>
+      Tokens.delete(Tokens.findByKeys(opId, token, series).get.id.get, rm)
     }
   }
 }
@@ -130,16 +147,23 @@ trait Bridges {
 
   def game(gid: Int): Try[GamesDetails]
   def gameList(opId: Int): List[GamesList]
+  def gameArchives(opId: Int): List[GamesList]
   def gameSave(res: GamePartData, oid: Int): Try[Int]
   def gameUpdate(res: GamePartData, gid: Int, oid: Int): Try[Int]
   def gameDelete(gid: Int): Try[Int]
   def searchName(name: String): Try[Boolean]
   def gameChangeStatus(id: Int, flag: String): Try[Int]
   def findOperatorId(gid: Int): Int
-  def findById(oid: Int): Option[Operator]
-  def findByEmail(email: String): Option[Operator]
+  def operatorSave(op: Operator): Try[Int]
+  def operatorUpdate(op: Operator): Try[Int]
+  def findOperatorById(oid: Int): Option[Operator]
+  def findOperatorByEmail(email: String): Option[Operator]
+  def auth(email: String, password: String): Option[Operator]
   def updateSignUpToken(email: String, token: Option[String]): Try[Int]
-  def findOperatorByCookie(cookie: String)
+  def findTokenByKeys(opId: Int, token: String, series: String): Option[Token]
+  def saveToken(token: Token): Try[Int]
+  def deleteToken(id: Int, rm: Boolean): Try[Int]
+  def deleteToken(opId: Int, token: String, series: String, rm: Boolean): Try[Int]
 }
 
 

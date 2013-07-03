@@ -57,7 +57,9 @@ class ApplicationSpec extends Specification {
     }
     
     "render the 'my games' page for logged user" in {
-      running(FakeApplication()) {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
         val mgames = route(FakeRequest(GET, "/my/games").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
@@ -68,7 +70,9 @@ class ApplicationSpec extends Specification {
     }
     
     "render the 'create new game' page for logged user" in {
-      running(FakeApplication()) {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
         val ngame = route(FakeRequest(GET, "/my/games/new").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
@@ -79,7 +83,9 @@ class ApplicationSpec extends Specification {
     }
     
     "render the 'archive' page for logged user" in {
-      running(FakeApplication()) {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
         val archive = route(FakeRequest(GET, "/my/games/archive").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
@@ -89,7 +95,9 @@ class ApplicationSpec extends Specification {
     }
     
     "render the 'options' page for logged user" in {
-      running(FakeApplication()) {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+        val fill = controllers.Application.fillDatabase(FakeRequest())
         val ngame = route(FakeRequest(GET, "/my/options").withLoggedIn(config)(1)).get
         
         Thread.sleep(10 * 1000)
@@ -201,23 +209,6 @@ class ApplicationSpec extends Specification {
         
         status(gameid) must equalTo(OK)
         contentAsString(gameid) must contain ("1")
-      }
-    }
-
-    "send true when the given game name is unique" in {
-      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-
-        val fill = controllers.Application.fillDatabase(FakeRequest())
-
-        val json: JsValue = Json.parse("""
-        { 
-          "data": "Game100"
-        }
-        """)
-        val uname = route(FakeRequest(POST, "/my/games/json/checkName").withJsonBody(json).withLoggedIn(config)(1)).get
-        
-        status(uname) must equalTo(OK)
-        contentAsString(uname) must contain ("true")
       }
     }
 
