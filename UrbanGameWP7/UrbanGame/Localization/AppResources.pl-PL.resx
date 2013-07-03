@@ -432,4 +432,10 @@
   <data name="Left" xml:space="preserve">
     <value>do końca</value>
   </data>
+  <data name="ReportTask" xml:space="preserve">
+    <value>zgłoś błąd</value>
+  </data>
+  <data name="ToStart" xml:space="preserve">
+    <value>do rozpoczęcia</value>
+  </data>
 </root>

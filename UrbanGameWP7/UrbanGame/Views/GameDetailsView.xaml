@@ -186,7 +186,7 @@
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <Image Source="{Binding Picture}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                                            <Image Source="{Binding Path=., Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
                                             <StackPanel Grid.Column="1" Orientation="Vertical">
                                                 <StackPanel.Resources>
                                                     <Style TargetType="TextBlock">
@@ -198,7 +198,7 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding IsRepeatable, Converter={StaticResource IsRepeatableConverter}}" />
                                                     <TextBlock Text="|" />
-                                                    <TextBlock Text="{Binding UserPoints, TargetNullValue=?}" />
+                                                    <TextBlock Text="{Binding UserPoints, TargetNullValue=0}" />
                                                     <TextBlock Text="{Binding MaxPoints, Converter={StaticResource IntToSlashIntConverter}}" />
                                                 </StackPanel>
                                                 <TextBlock Text="{Binding EndDate, Converter={StaticResource TaskEndConverter}}" Foreground="{StaticResource FontColorWhite}"/>
@@ -222,7 +222,7 @@
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <Image Source="{Binding Picture}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                                            <Image Source="{Binding Path=., Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
                                             <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                         </Grid>
                                     </DataTemplate>
@@ -250,7 +250,7 @@
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <Image Source="{Binding Picture}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                                            <Image Source="{Binding Path=., Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
                                             <StackPanel Grid.Column="1" Orientation="Vertical">
                                                 <TextBlock Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                                 <StackPanel Orientation="Horizontal">
@@ -274,7 +274,7 @@
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <Image Source="{Binding Picture}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                                            <Image Source="{Binding Path=., Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
                                             <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                         </Grid>
                                     </DataTemplate>

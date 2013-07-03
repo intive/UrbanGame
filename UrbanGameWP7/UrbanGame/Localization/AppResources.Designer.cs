@@ -908,6 +908,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to report task.
+        /// </summary>
+        public static string ReportTask {
+            get {
+                return ResourceManager.GetString("ReportTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to high scores.
         /// </summary>
         public static string Scores {
@@ -1012,6 +1021,15 @@ namespace UrbanGame.Localization {
         public static string ToEndLowCase {
             get {
                 return ResourceManager.GetString("ToEndLowCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to start.
+        /// </summary>
+        public static string ToStart {
+            get {
+                return ResourceManager.GetString("ToStart", resourceCulture);
             }
         }
         

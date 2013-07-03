@@ -114,6 +114,9 @@
     <Compile Include="Converters\GPSToVisibilityConverter.cs" />
     <Compile Include="Converters\IntToSlashIntConverter.cs" />
     <Compile Include="Converters\IsRepeatableConverter.cs" />
+    <Compile Include="Converters\NearbyGameStartConverter.cs" />
+    <Compile Include="Converters\TimeToEndConverter.cs" />
+    <Compile Include="Converters\TypeToImageSourceConverter.cs" />
     <Compile Include="Converters\ValueToVisibilityConverter.cs" />
     <Compile Include="Converters\NullableToNumberConverter.cs" />
     <Compile Include="Converters\OpositeBoolToVisibilityConverter.cs" />
@@ -161,6 +164,7 @@
     <Compile Include="ViewModels\GamesListViewModel.cs" />
     <Compile Include="ViewModels\LoginAndRegistrerViewModel.cs" />
     <Compile Include="ViewModels\PasswordRecoveryViewModel.cs" />
+    <Compile Include="ViewModels\ReportTaskViewModel.cs" />
     <Compile Include="ViewModels\TaskViewModel.cs" />
     <Compile Include="Views\GameDetailsPreviewView.xaml.cs">
       <DependentUpon>GameDetailsPreviewView.xaml</DependentUpon>
@@ -176,6 +180,9 @@
     </Compile>
     <Compile Include="Views\PasswordRecoveryView.xaml.cs">
       <DependentUpon>PasswordRecoveryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportTaskView.xaml.cs">
+      <DependentUpon>ReportTaskView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TaskView.xaml.cs">
       <DependentUpon>TaskView.xaml</DependentUpon>
@@ -206,6 +213,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ReportTaskView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TaskView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -225,6 +236,7 @@
     </Content>
     <Content Include="Images\appbar.check.png" />
     <Content Include="Images\appbar.group.add.png" />
+    <Content Include="Images\appbar.repeat.png" />
     <Content Include="Images\appbarRefresh.png" />
     <Content Include="Images\appbarSearch.png" />
     <Content Include="Images\GameviewPanorama.png" />

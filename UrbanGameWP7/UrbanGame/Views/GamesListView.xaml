@@ -93,19 +93,11 @@
                                                     <TextBlock Text="|" Visibility="{Binding Points, Converter={StaticResource ValueToVisibilityConverter}}"/>
                                                     <TextBlock Text="{Binding Path=AppResources.Rank, Source={StaticResource LocalizedStrings}}" Visibility="{Binding Rank, Converter={StaticResource ValueToVisibilityConverter}}"/>
                                                     <TextBlock Text="{Binding Rank, Converter={StaticResource RankConverter}}" Visibility="{Binding Rank, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                                                    <TextBlock Text="{Binding GameStart, Converter={StaticResource TimeToEndConverter}}" Visibility="{Binding GameStart, Converter={StaticResource DateToVisibilityConverter}}" />
+                                                    <TextBlock Text="{Binding Path=AppResources.ToStart, Source={StaticResource LocalizedStrings}}" Visibility="{Binding GameStart, Converter={StaticResource DateToVisibilityConverter}}" />
+                                                    <TextBlock Text="{Binding GameEnd, Converter={StaticResource TimeToEndConverter}}" Visibility="{Binding GameStart, Converter={StaticResource OpositeDateToVisibilityConverter}}" />
+                                                    <TextBlock Text="{Binding Path=AppResources.ToEndLowCase, Source={StaticResource LocalizedStrings}}" Visibility="{Binding GameStart, Converter={StaticResource OpositeDateToVisibilityConverter}}" />
                                                     <TextBlock Text=" "/>
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Grid.Row="3">
-                                                    <StackPanel.Resources>
-                                                        <Style TargetType="TextBlock">
-                                                            <Setter Property="Margin" Value="0,0,5,5" />
-                                                            <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeSmall}" />
-                                                            <Setter Property="Foreground" Value="{StaticResource FontColorGreen}" />
-                                                        </Style>
-                                                    </StackPanel.Resources>
-                                                    <TextBlock Text="{Binding Path=AppResources.Start, Source={StaticResource LocalizedStrings}}" Visibility="{Binding GameStart, Converter={StaticResource DateToVisibilityConverter}}" />
-                                                    <TextBlock Text="{Binding GameStart, Converter={StaticResource GameStartConverter}}" Visibility="{Binding GameStart, Converter={StaticResource DateToVisibilityConverter}}" />
-                                                    <TextBlock Text="{Binding GameEnd, Converter={StaticResource GameEndConverter}}" Visibility="{Binding GameStart, Converter={StaticResource OpositeDateToVisibilityConverter}}" />
                                                 </StackPanel>
                                             </Grid>
                                         </StackPanel>
@@ -180,7 +172,7 @@
                     <ListBox ItemsSource="{Binding NearestGames}" VerticalAlignment="Top" Grid.Row="0" ItemContainerStyle="{StaticResource ItemStyle}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="5,0,5,0" Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]">
+                                <Grid Margin="5,0,5,5" Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition />
@@ -197,8 +189,8 @@
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="{Binding Name}" Grid.Row="0" Margin="0,-10,0,0" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,-7,0,0">
@@ -210,28 +202,21 @@
                                                 <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,0,10,0"/>
                                                 <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                             </StackPanel>
-                                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,7,0,0">
+                                            <TextBlock Text=" " Grid.Row="2"/>
+                                            <StackPanel Grid.Row="3" Orientation="Horizontal">
                                                 <StackPanel.Resources>
                                                     <Style TargetType="TextBlock">
                                                         <Setter Property="Margin" Value="0,0,5,5" />
-                                                        <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeSmall}" />
+                                                        <Setter Property="FontSize" Value="17" />
                                                         <Setter Property="Foreground" Value="{StaticResource FontColorGreen}" />
                                                     </Style>
                                                 </StackPanel.Resources>
                                                 <TextBlock Text="{Binding Path=AppResources.Players, Source={StaticResource LocalizedStrings}}" />
                                                 <TextBlock Text="{Binding NumberOfPlayers}" Grid.Column="1" />
                                                 <TextBlock Text="{Binding NumberOfSlots, Converter={StaticResource IntToSlashIntConverter}}" Margin="-5,0,5,0" Visibility="{Binding NumberOfSlots, Converter={StaticResource ValueToVisibilityConverter}}"/>
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="0,-7,0,0">
-                                                <StackPanel.Resources>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Margin" Value="0,0,5,5" />
-                                                        <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeSmall}" />
-                                                        <Setter Property="Foreground" Value="{StaticResource FontColorGreen}" />
-                                                    </Style>
-                                                </StackPanel.Resources>
+                                                <TextBlock Text="|" />
                                                 <TextBlock Text="{Binding Path=AppResources.Start, Source={StaticResource LocalizedStrings}}" Visibility="{Binding GameStart, Converter={StaticResource DateToVisibilityConverter}}"/>
-                                                <TextBlock Text="{Binding GameStart, Converter={StaticResource GameStartConverter}}" Visibility="{Binding GameStart, Converter={StaticResource DateToVisibilityConverter}}" />
+                                                <TextBlock Text="{Binding GameStart, Converter={StaticResource NearbyGameStartConverter}}" Visibility="{Binding GameStart, Converter={StaticResource DateToVisibilityConverter}}" />
                                                 <TextBlock Text="{Binding GameEnd, Converter={StaticResource GameEndConverter}}" Visibility="{Binding GameStart, Converter={StaticResource OpositeDateToVisibilityConverter}}" />
                                             </StackPanel>
                                         </Grid>
