@@ -42,6 +42,7 @@ public class WebResponse {
 	}
 	
 	public boolean isValid() {
+		if (WebDownloader.EMPTY_JSON.equals(responseString)) return false;
 		JSONObject jsonObject = null;
 		boolean valid = true;
 		try {
