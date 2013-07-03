@@ -22,7 +22,7 @@ public class AnswersAdapter extends ArrayAdapter<Pair<String, Boolean>> {
 	private final int viewResourceId;
 	private ArrayList<String> correctAnswers = null;
 	private final List<Pair<String, Boolean>> items;
-	private boolean isEnabled;
+	private boolean isAnswerEnabled;
 	
 	private class ViewHolder {
 		public TextView textViewAnswer;
@@ -34,7 +34,7 @@ public class AnswersAdapter extends ArrayAdapter<Pair<String, Boolean>> {
 		this.context = context;
 		this.viewResourceId = viewResourceId;
 		this.items = objects;
-		this.isEnabled = true;
+		this.isAnswerEnabled = true;
 	}
 	
 	public List<Pair<String, Boolean>> getItems() {
@@ -75,7 +75,7 @@ public class AnswersAdapter extends ArrayAdapter<Pair<String, Boolean>> {
 		viewHolder.textViewAnswer.setText(answer.first);
 		viewHolder.checkBoxAnswer.setTag(Integer.valueOf(position));
 		viewHolder.checkBoxAnswer.setChecked(answer.second);
-		viewHolder.checkBoxAnswer.setEnabled(isEnabled);
+		viewHolder.checkBoxAnswer.setEnabled(isAnswerEnabled);
 		
 		if (correctAnswers != null) {
 			if (correctAnswers.contains(answer.first)) {
@@ -94,7 +94,7 @@ public class AnswersAdapter extends ArrayAdapter<Pair<String, Boolean>> {
 		notifyDataSetInvalidated();
 	}
 	
-	public void setEnabled(boolean areAllItemsEnabled) {
-		this.isEnabled = areAllItemsEnabled;
+	public void setEnabled(boolean isAnswerEnabled) {
+		this.isAnswerEnabled = isAnswerEnabled;
 	}
 }
