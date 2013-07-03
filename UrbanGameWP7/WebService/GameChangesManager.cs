@@ -196,19 +196,20 @@ namespace WebService
 
                         foreach (var oldGame in activeGames)
                         {
-                            Task<GameState> task = _gameWebService.GetGameState(oldGame.Id);
+                            Task<GameOverResponse> task = _gameWebService.CheckGameOver(oldGame.Id);
                             task.Wait();
-                            GameState newState = task.Result; 
+                            GameOverResponse gameOverResp = task.Result; 
 
-                            if (oldGame.GameState != newState)
+                            if (gameOverResp.IsGameOver)
                             {
-                                oldGame.GameState = newState;
+                                oldGame.GameState = gameOverResp.State;
+                                oldGame.Rank = gameOverResp.Rank;
                                 uow.Commit();
 
                                 if (_toastPromptService != null)
                                     _toastPromptService.ShowGameChanged(oldGame.Id, oldGame.Name, _localizationService.GetText("GameStateChangedToast"));
 
-                                _gameEventAggregator.Publish(new GameStateChangedEvent() { Id = oldGame.Id, NewState = newState });
+                                _gameEventAggregator.Publish(new GameStateChangedEvent() { Id = oldGame.Id, NewState = gameOverResp.State, Rank = gameOverResp.Rank });
                             }
                         }
                     }
@@ -248,7 +249,7 @@ namespace WebService
                             if (response.Status == SolutionStatus.Accepted || response.Status == SolutionStatus.Rejected)
                             {
                                 solution.Task.SolutionStatus = response.Status;
-                                solution.Task.UserPoints = response.Points;
+                                solution.Task.UserPoints = response.Points;                 
                                 uow.Commit();
 
                                 string message = _localizationService.GetText("SolutionStatusChanged") + " " +

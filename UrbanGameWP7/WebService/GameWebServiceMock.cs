@@ -84,17 +84,18 @@ namespace WebService
         }
         #endregion
 
-        #region GetGameState
-        public async Task<GameState> GetGameState(int gid)
+        #region CheckGameOver
+        public async Task<GameOverResponse> CheckGameOver(int gid)
         {
             int r = new Random().Next(100);
+            int rank = new Random().Next(1, 100);
 
             if (r < 20)
-                return GameState.Won;
+                return new GameOverResponse() { State = GameState.Won, Rank = rank, IsGameOver = true };
             if (r < 35)
-                return GameState.Lost;
+                return new GameOverResponse() { State = GameState.Lost, Rank = rank, IsGameOver = true };
             else
-                return GameState.Joined;
+                return new GameOverResponse() { State = GameState.Joined, IsGameOver = false };
         }
         #endregion
 

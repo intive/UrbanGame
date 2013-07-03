@@ -71,6 +71,7 @@ namespace UrbanGame.ViewModels
             if (activeGame == null)
                 return;
             activeGame.GameState = game.NewState;
+            activeGame.Rank = game.Rank;
 
             UserActiveGames.Remove(activeGame);
             UserInactiveGames.Add(activeGame);

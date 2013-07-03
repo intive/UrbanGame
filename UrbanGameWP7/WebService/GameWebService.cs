@@ -178,10 +178,12 @@ namespace WebService
         }
         #endregion
 
-        #region GetGameState
-        public async Task<GameState> GetGameState(int gid)
+        #region CheckGameOver
+        public async Task<GameOverResponse> CheckGameOver(int gid)
         {
-            return (await GetGameInfo(gid)).GameState;
+            var game = await GetGameInfo(gid);
+            bool gameOver = game.GameState == GameState.Won || game.GameState == GameState.Lost;
+            return new GameOverResponse() { State = game.GameState, Rank = game.Rank, IsGameOver = gameOver };
         }
         #endregion
 

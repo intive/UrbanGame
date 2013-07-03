@@ -5,12 +5,10 @@ using System.Text;
 
 namespace Common
 {
-    public class GameStateChangedEvent
+    public class GameOverResponse
     {
-        public int Id { get; set; }
-
-        public GameState NewState { get; set; }
-
+        public bool IsGameOver { get; set; }
+        public GameState State { get; set; }
         public int? Rank { get; set; }
     }
 }

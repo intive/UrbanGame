@@ -24,7 +24,7 @@ namespace Common
         /// </summary>
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <returns></returns>
-        Task<GameState> GetGameState(int gid);
+        Task<GameOverResponse> CheckGameOver(int gid);
 
         /// <summary>
         /// Returns completely filled in IGame
