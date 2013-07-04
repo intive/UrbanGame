@@ -47,7 +47,7 @@ public class ABCDTaskAnswerFragment extends SherlockFragment implements WebServe
 		
 		progressDialog = new ProgressDialog(activity);
 		task = getSelectedTask();
-		playerTaskSpecific = getCurrentPlayer();
+		playerTaskSpecific = getCurrentPlayerTaskSpecific();
 		answers = task.getAnswers();
 	}
 	
@@ -55,32 +55,32 @@ public class ABCDTaskAnswerFragment extends SherlockFragment implements WebServe
 		return getArguments().getParcelable(Task.TASK_KEY);
 	}
 	
-	private PlayerTaskSpecific getCurrentPlayer() {
+	private PlayerTaskSpecific getCurrentPlayerTaskSpecific() {
 		DatabaseInterface database = new Database(getActivity());
 		long taskID = task.getId();
 		String loggedPlayerID = database.getLoggedPlayerID();
 		
-		return getPlayerOrCreateIfNooneInDB(database, taskID, loggedPlayerID);
+		return getPlayerTaskSpecificOrCreateIfNooneInDB(database, taskID, loggedPlayerID);
 	}
 	
-	private PlayerTaskSpecific getPlayerOrCreateIfNooneInDB(DatabaseInterface database, long taskID,
+	private PlayerTaskSpecific getPlayerTaskSpecificOrCreateIfNooneInDB(DatabaseInterface database, long taskID,
 		String loggedPlayerID) {
-		PlayerTaskSpecific playerTaskSpecific = getPlayerFromDB(database, taskID, loggedPlayerID);
-		if (playerDoesNotExist(playerTaskSpecific)) {
-			playerTaskSpecific = createNewPlayer(taskID, loggedPlayerID);
+		PlayerTaskSpecific playerTaskSpecific = getPlayerTaskSpecificFromDB(database, taskID, loggedPlayerID);
+		if (doesPlayerTaskSpecificNotExist(playerTaskSpecific)) {
+			playerTaskSpecific = createNewPlayerTaskSpecific(taskID, loggedPlayerID);
 		}
 		return playerTaskSpecific;
 	}
 	
-	private PlayerTaskSpecific getPlayerFromDB(DatabaseInterface database, long taskID, String loggedPlayerID) {
+	private PlayerTaskSpecific getPlayerTaskSpecificFromDB(DatabaseInterface database, long taskID, String loggedPlayerID) {
 		return database.getPlayerTaskSpecific(taskID, loggedPlayerID);
 	}
 	
-	private boolean playerDoesNotExist(PlayerTaskSpecific playerTaskSpecific) {
+	private boolean doesPlayerTaskSpecificNotExist(PlayerTaskSpecific playerTaskSpecific) {
 		return playerTaskSpecific == null;
 	}
 	
-	private PlayerTaskSpecific createNewPlayer(long taskID, String loggedPlayerID) {
+	private PlayerTaskSpecific createNewPlayerTaskSpecific(long taskID, String loggedPlayerID) {
 		return new PlayerTaskSpecific(loggedPlayerID, taskID, 0, false, false, task.isHidden(), null,
 			PlayerTaskSpecific.ACTIVE, null);
 	}
@@ -146,16 +146,16 @@ public class ABCDTaskAnswerFragment extends SherlockFragment implements WebServe
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		updateSelectionsForPlayer();
+		updateSelectionsForPlayerTaskSpecific();
 		playerTaskSpecific.setSelectedAnswers(getSelections());
 	}
 	
-	private void updateSelectionsForPlayer() {
-		PlayerTaskSpecific updatePlayerTaskSpecific = getUpdatedPlayer();
-		updatePlayerInDB(updatePlayerTaskSpecific);
+	private void updateSelectionsForPlayerTaskSpecific() {
+		PlayerTaskSpecific updatePlayerTaskSpecific = getUpdatedPlayerTaskSpecific();
+		updatePlayerTaskSpecificInDB(updatePlayerTaskSpecific);
 	}
 	
-	private PlayerTaskSpecific getUpdatedPlayer() {
+	private PlayerTaskSpecific getUpdatedPlayerTaskSpecific() {
 		PlayerTaskSpecific updatePlayerTaskSpecific = new PlayerTaskSpecific();
 		updatePlayerTaskSpecific.setPlayerEmail(playerTaskSpecific.getPlayerEmail());
 		updatePlayerTaskSpecific.setTaskID(playerTaskSpecific.getTaskID());
@@ -172,7 +172,7 @@ public class ABCDTaskAnswerFragment extends SherlockFragment implements WebServe
 		return selections;
 	}
 	
-	private void updatePlayerInDB(PlayerTaskSpecific updatePlayerTaskSpecific) {
+	private void updatePlayerTaskSpecificInDB(PlayerTaskSpecific updatePlayerTaskSpecific) {
 		DatabaseInterface db = new Database(getActivity());
 		db.updatePlayerTaskSpecific(updatePlayerTaskSpecific);
 		db.closeDatabase();
@@ -216,16 +216,16 @@ public class ABCDTaskAnswerFragment extends SherlockFragment implements WebServe
 		// FIXME get response from message
 		WebResponse serverResponse = new WebResponse(QueryType.SendAnswersForABCDTask);
 		
-		addPointsForPlayer(serverResponse);
+		addPointsForPlayerTaskSpecific(serverResponse);
 		showAnswerDialog(serverResponse);
 		configureTask(serverResponse);
 	}
 	
-	private void addPointsForPlayer(WebResponse serverResponse) {
+	private void addPointsForPlayerTaskSpecific(WebResponse serverResponse) {
 		playerTaskSpecific.setPoints(serverResponse.points);
 		playerTaskSpecific.setIsFinishedByUser(true);
 		playerTaskSpecific.setSelectedAnswers(getSelections());
-		updatePlayerInDB(playerTaskSpecific);
+		updatePlayerTaskSpecificInDB(playerTaskSpecific);
 	}
 	
 	private void showAnswerDialog(WebResponse serverResponse) {
