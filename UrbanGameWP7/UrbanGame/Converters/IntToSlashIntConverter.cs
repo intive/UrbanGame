@@ -18,7 +18,10 @@ namespace UrbanGame.Converters
                 }
                 else
                 {
-                    return "/" + value;
+                    if ((string)parameter == "false")
+                        return value;
+                    else
+                        return "/" + value;
                 }
             }
             else

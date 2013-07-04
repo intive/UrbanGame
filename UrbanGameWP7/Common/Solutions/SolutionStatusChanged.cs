@@ -9,6 +9,7 @@ namespace Common
     {
         public int Id { get; set; }
         public int TaskId { get; set; }
+        public int GameId { get; set; }
         public SolutionStatus Status { get; set; }
         public int Points { get; set; }
     }

@@ -12,7 +12,8 @@ using System.Threading;
 
 namespace UrbanGame.ViewModels
 {
-    public class GameDetailsViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<SolutionStatusChanged>
+    public class GameDetailsViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<SolutionStatusChanged>,
+        IHandle<GameStateChangedEvent>, IHandle<TaskChangedEvent>
     {
         IAppbarManager _appbarManager;
         private string _activeSection;
@@ -29,6 +30,12 @@ namespace UrbanGame.ViewModels
             if (Game == null)
             {
                 RefreshGame();
+            }
+
+            if (Game.GameState != GameState.Joined)
+            {
+                BasicAppbar.Clear();
+                DescriptionAppbar.Clear();
             }
 
             ChangeAppbarButtons();
@@ -64,7 +71,7 @@ namespace UrbanGame.ViewModels
             {
                 using (var uow = _unitOfWorkLocator())
                 {
-                    var Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
+                    Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
 
                     if (!String.IsNullOrEmpty(Game.ListOfChanges))
                     {
@@ -77,14 +84,59 @@ namespace UrbanGame.ViewModels
         }
         #endregion
 
+        #region IHandle<GameStateChangedEvent>
+        public void Handle(GameStateChangedEvent game)
+        {
+            if (IsActive && game.Id == GameId)
+            {
+                using (var uow = _unitOfWorkLocator())
+                {
+                    Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
+
+                    if (!Game.GameOverDisplayed && (Game.GameState == GameState.Won || Game.GameState == GameState.Lost))
+                    {
+                        BasicAppbar.Clear();
+                        DescriptionAppbar.Clear();
+                        ChangeAppbarButtons();
+                        
+                        switch (Game.GameState)
+                        {
+                            case GameState.Won:
+                                VisualStateName = "YouWon";
+                                break;
+                            case GameState.Lost:
+                                VisualStateName = "YouLost";
+                                break;
+                        }
+
+                        Game.GameOverDisplayed = true;
+                        uow.Commit();
+                    }                   
+                }
+            }
+        }
+        #endregion
+
+        #region IHandle<TaskChangedEvent>
+        public void Handle(TaskChangedEvent task)
+        {
+            if (task.GameId == GameId)
+            {
+                RefreshActiveTasks();
+                RefreshAccomplishedTasks();
+                RefreshCancelledTasks();
+                RefreshInactiveTasks();
+            }
+        }
+        #endregion
+
         #region IHandle<SolutionStatusChanged>
         public void Handle(SolutionStatusChanged status)
         {
-            ITask task = ActiveTasks.FirstOrDefault(t => t.Id == status.TaskId);
-            if (task != null)
-            {
-                task.SolutionStatus = status.Status;
-                task.UserPoints = status.Points;
+            if (ActiveTasks.Any(t => t.Id == status.TaskId))
+            {               
+                RefreshActiveTasks();
+                RefreshAccomplishedTasks();
             }
         }
         #endregion
@@ -268,6 +320,49 @@ namespace UrbanGame.ViewModels
 
         #endregion
 
+        #region BonusTasks
+
+        private BindableCollection<ITask> _bonusTasks;
+
+        public BindableCollection<ITask> BonusTasks
+        {
+            get
+            {
+                return _bonusTasks;
+            }
+            set
+            {
+                if (_bonusTasks != value)
+                {
+                    _bonusTasks = value;
+                    NotifyOfPropertyChange(() => BonusTasks);
+                }
+            }
+        }
+        #endregion
+
+        #region VisualStateName
+
+        private string _visualStateName;
+
+        public string VisualStateName
+        {
+            get
+            {
+                return _visualStateName;
+            }
+            set
+            {
+                if (_visualStateName != value)
+                {
+                    _visualStateName = value;
+                    NotifyOfPropertyChange(() => VisualStateName);
+                }
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region lifecycle
@@ -279,27 +374,29 @@ namespace UrbanGame.ViewModels
 
         protected async override void OnActivate()
         {
-            base.OnActivate();
+            base.OnActivate();            
             await RefreshGame();
             await RefreshActiveTasks();
             await RefreshInactiveTasks();
             await RefreshAccomplishedTasks();
             await RefreshCancelledTasks();
             await RefreshHighScores();
-            await RefreshAlerts();
-
+            await RefreshAlerts();            
         }
 
         protected override void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
+            VisualStateName = "Normal";
             
             new Timer(new TimerCallback((obj) =>
                 {
+                    //Game changes
                     if (!String.IsNullOrEmpty(Game.ListOfChanges))
                         System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
                         {
-                            MessageBox.Show(Game.ListOfChanges);
+                            if (Game.GameState != GameState.Won && Game.GameState != GameState.Lost)
+                                MessageBox.Show(Game.ListOfChanges);
 
                             Game.ListOfChanges = null;
                             using (var uow = _unitOfWorkLocator())
@@ -308,12 +405,38 @@ namespace UrbanGame.ViewModels
                                 uow.Commit();
                             }
                         });
+
+                    //You won/You lost banner
+                    if (!Game.GameOverDisplayed && (Game.GameState == GameState.Won || Game.GameState == GameState.Lost))
+                    {
+                        switch (Game.GameState)
+                        {
+                            case GameState.Won:
+                                VisualStateName = "YouWon";
+                                break;
+                            case GameState.Lost:
+                                VisualStateName = "YouLost";
+                                break;
+                        }
+
+                        Game.GameOverDisplayed = true;
+                        using (var uow = _unitOfWorkLocator())
+                        {
+                            uow.GetRepository<IGame>().All().First(g => g.Id == GameId).GameOverDisplayed = true;
+                            uow.Commit();
+                        }
+                    }  
                 }), null, 700, System.Threading.Timeout.Infinite);
         }
 
         #endregion
 
         #region operations
+
+        public void ChangeToNormal()
+        {
+            VisualStateName = "Normal";
+        }
 
         public void ShowTask(ITask task)
         {
@@ -385,9 +508,7 @@ namespace UrbanGame.ViewModels
                     GameHighScoresTemp = new BindableCollection<IHighScore>(highScores.Where(h => h.Game.Id == GameId)
                                                                                     .OrderByDescending(h => h.Points)
                                                                                     .AsEnumerable());
-
-
-
+                    
                     GameHighScores = new BindableCollection<PositionedHighScore>();
                     for (int i = 0; i < GameHighScoresTemp.Count; i++)
                     {
@@ -406,11 +527,9 @@ namespace UrbanGame.ViewModels
                 {
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
-
-                    ActiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Active)
-                                                                         .Where(t => t.Game.Id == GameId)
-                                                                                    .OrderBy(t => t.EndDate)
-                                                                                    .AsEnumerable());
+                    ActiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Active && t.Game.Id == GameId)
+                                                                     .OrderBy(t => t.EndDate)
+                                                                     .AsEnumerable());
                 }
             });
         }
@@ -424,11 +543,9 @@ namespace UrbanGame.ViewModels
                 {
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
-
-                    InactiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Inactive)
-                                                                                                .Where(t => t.Game.Id == GameId)
-                                                                                                        .OrderBy(t => t.EndDate)
-                                                                                                        .AsEnumerable());
+                    InactiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Inactive && t.Game.Id == GameId)                                                                    
+                                                                       .OrderBy(t => t.EndDate)
+                                                                       .AsEnumerable());
                 }
             });
         }
@@ -443,10 +560,9 @@ namespace UrbanGame.ViewModels
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
 
-                    AccomplishedTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Accomplished)
-                                                                            .Where(t => t.Game.Id == GameId)
-                                                                                    .OrderBy(t => t.EndDate)
-                                                                                    .AsEnumerable());
+                    AccomplishedTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Accomplished && t.Game.Id == GameId)                                                                         
+                                                                           .OrderBy(t => t.EndDate)
+                                                                           .AsEnumerable());
                 }
             });
         }
@@ -461,10 +577,9 @@ namespace UrbanGame.ViewModels
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
 
-                    CancelledTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Cancelled)
-                                                                            .Where(t => t.Game.Id == GameId)
-                                                                                    .OrderBy(t => t.EndDate)
-                                                                                    .AsEnumerable());
+                    CancelledTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Cancelled && t.Game.Id == GameId)                                                                        
+                                                                        .OrderBy(t => t.EndDate)
+                                                                        .AsEnumerable());
                 }
             });
 

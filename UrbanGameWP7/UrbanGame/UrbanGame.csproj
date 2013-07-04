@@ -154,6 +154,7 @@
     <Compile Include="Tombstoning\TombstoningVariables.cs" />
     <Compile Include="Utilities\AppbarManager.cs" />
     <Compile Include="Utilities\GameAuthorizationService.cs" />
+    <Compile Include="Utilities\GPSLocation.cs" />
     <Compile Include="Utilities\LocalizationService.cs" />
     <Compile Include="Utilities\ToastData.cs" />
     <Compile Include="Utilities\ToastPromptService.cs" />

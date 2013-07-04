@@ -5,10 +5,12 @@ using System.Text;
 
 namespace Common
 {
-    public class TaskChangedEvent
+    public class GameStateChangedEvent
     {
         public int Id { get; set; }
 
-        public int GameId { get; set; }
+        public GameState NewState { get; set; }
+
+        public int? Rank { get; set; }
     }
 }
