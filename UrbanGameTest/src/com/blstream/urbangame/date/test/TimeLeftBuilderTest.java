@@ -12,6 +12,7 @@ public class TimeLeftBuilderTest extends AndroidTestCase {
 	private static final int OFFSET = 10;
 	private static final int HOURS_IN_DAY = 24;
 	private static final int TIME_LAPSE = 1;
+	private static final int DAYS_IN_WEEK = 7;
 	
 	private Calendar c;
 	private int currentYear;
@@ -77,12 +78,12 @@ public class TimeLeftBuilderTest extends AndroidTestCase {
 	// formatter:on
 	
 	public void testPastDayPastHour() {
-		assertEquals(-OFFSET, getLeftDays(pastDay, pastHour));
+		assertEquals((-OFFSET) % DAYS_IN_WEEK, getLeftDays(pastDay, pastHour));
 		assertEquals(-OFFSET, getLeftHours(pastDay, pastHour));
 	}
 	
 	public void testPastDayCurrentHour() {
-		assertEquals(-OFFSET, getLeftDays(pastDay, currentHour));
+		assertEquals((-OFFSET) % DAYS_IN_WEEK, getLeftDays(pastDay, currentHour));
 		assertEquals(0, getLeftHours(pastDay, currentHour));
 	}
 	
@@ -102,22 +103,22 @@ public class TimeLeftBuilderTest extends AndroidTestCase {
 	}
 	
 	public void testFutureDayCurrentHour() {
-		assertEquals(OFFSET - TIME_LAPSE, getLeftDays(futureDay, currentHour));
+		assertEquals((OFFSET - TIME_LAPSE) % DAYS_IN_WEEK, getLeftDays(futureDay, currentHour));
 		assertEquals(HOURS_IN_DAY - TIME_LAPSE, getLeftHours(futureDay, currentHour));
 	}
 	
 	public void testFutureDayFutureHour() {
-		assertEquals(OFFSET, getLeftDays(futureDay, futureHour));
+		assertEquals(OFFSET % DAYS_IN_WEEK, getLeftDays(futureDay, futureHour));
 		assertEquals(OFFSET - TIME_LAPSE, getLeftHours(futureDay, futureHour));
 	}
 	
 	public void testFutureDayPastHour() {
-		assertEquals(OFFSET - TIME_LAPSE, getLeftDays(futureDay, pastHour));
+		assertEquals((OFFSET - TIME_LAPSE) % DAYS_IN_WEEK, getLeftDays(futureDay, pastHour));
 		assertEquals(HOURS_IN_DAY - TIME_LAPSE - OFFSET, getLeftHours(futureDay, pastHour));
 	}
 	
 	public void testPastDayFutureHour() {
-		assertEquals(TIME_LAPSE - OFFSET, getLeftDays(pastDay, futureHour));
+		assertEquals((TIME_LAPSE - OFFSET) % DAYS_IN_WEEK, getLeftDays(pastDay, futureHour));
 		assertEquals(OFFSET - HOURS_IN_DAY, getLeftHours(pastDay, futureHour));
 	}
 	

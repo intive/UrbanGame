@@ -26,13 +26,13 @@ public class DemoData {
 	private final String PRIZE_INFO = "Winner will get a dwarf.";
 	private final String DESCRIPTION = "You embark on a jurney to search every corner of our beautiful town to find dwarves.";
 	@SuppressWarnings("deprecation")
-	private final Date START_DATE_1 = new Date(113, 4, 20);
+	private final Date START_DATE_1 = new Date(113, 5, 20);
 	@SuppressWarnings("deprecation")
-	private final Date START_DATE_2 = new Date(113, 5, 8);
+	private final Date START_DATE_2 = new Date(113, 6, 8);
 	@SuppressWarnings("deprecation")
-	private final Date END_DATE_1 = new Date(113, 5, 15);
+	private final Date END_DATE_1 = new Date(113, 6, 15);
 	@SuppressWarnings("deprecation")
-	private final Date END_DATE_2 = new Date(113, 5, 13);
+	private final Date END_DATE_2 = new Date(113, 6, 13);
 	private static final long FIRST_GAME_ID = 1000000L;
 	private static final long FIRST_TASK_ID = 1000000L;
 	private final String TASK_DESCRIPTION = "Yet another dwarf got lost...";
@@ -151,7 +151,7 @@ public class DemoData {
 			else {
 				changes = "";
 			}
-			status = random.nextInt(4);
+			status = Integer.valueOf((int) j % 4);
 			
 			if (j % 2 == 0) {
 				endDate = END_DATE_2;
@@ -178,7 +178,7 @@ public class DemoData {
 		listOfGamesNames.add("Dwarves hunting");
 		listOfGamesNames.add("Another dwarves adventure");
 		listOfGamesNames.add("Dwarves story");
-		listOfGamesNames.add("Yet another dwarves game");
+		listOfGamesNames.add("Yet another dwarves game that has very very very long name");
 		listOfGamesNames.add("Dwarves everywhere");
 		listOfGamesNames.add("Where the dwarves go?");
 		listOfGamesNames.add("Dwarves adventure");
