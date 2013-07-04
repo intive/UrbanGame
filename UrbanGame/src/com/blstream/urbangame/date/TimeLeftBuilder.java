@@ -107,17 +107,17 @@ public class TimeLeftBuilder {
 	
 	private void appendEnding() {
 		if (stringBuilder.length() == 0) {
-			stringBuilder.append(resources.getString(R.string.string_ended));
+			stringBuilder.append(resources.getString(R.string.label_ended));
 			CharSequence parsedEndDate = DateFormat.format(" MMM d, h:mm a", dateUtil.getEndDate());
 			stringBuilder.append(parsedEndDate);
 		}
 		else {
 			stringBuilder.append(SPACE);
 			if (timeToStart) {
-				stringBuilder.append(resources.getString(R.string.string_to_start));
+				stringBuilder.append(resources.getString(R.string.label_to_start));
 			}
 			else {
-				stringBuilder.append(resources.getString(R.string.string_to_end));
+				stringBuilder.append(resources.getString(R.string.label_to_end));
 			}
 		}
 	}

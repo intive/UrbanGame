@@ -91,9 +91,9 @@
     <string name="tab_task_answer">Answer</string>
 
     <!-- Time related strings -->
-    <string name="string_to_end">to end</string>
-    <string name="string_to_start">to start</string>
-    <string name="string_ended">Ended:</string>
+    <string name="label_to_end">to end</string>
+    <string name="label_to_start">to start</string>
+    <string name="label_ended">Ended:</string>
 
     <plurals name="numberOfYears">
         <item quantity="one">one year</item>
