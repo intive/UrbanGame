@@ -1,210 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_marginLeft="@dimen/margin_from_edge"
+    android:layout_marginRight="@dimen/margin_from_edge"
     android:orientation="vertical"
     tools:context=".GameDetailsActivity"
     tools:ignore="HardcodedText" >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingLeft="@dimen/view_margin"
-        android:paddingRight="@dimen/view_margin"
-        android:paddingTop="@dimen/view_margin" >
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_small"
+        android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/imageViewGameLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/view_margin"
+            android:layout_width="@dimen/dimesnionOfImageViewInGameDetails"
+            android:layout_height="@dimen/dimesnionOfImageViewInGameDetails"
             android:contentDescription="@string/contentDescription_gameLogo"
-            android:src="@drawable/ic_launcher_big" />
-
-        <TextView
-            android:id="@+id/textViewGameName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/imageViewGameLogo"
-            android:text="Krasnale i kluski"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <Button
-            android:id="@+id/buttonJoinLeaveGame"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="@string/button_join" />
-
-        <ImageView
-            android:id="@+id/imageViewOperatorLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textViewGameName"
-            android:layout_marginBottom="@dimen/view_margin"
-            android:layout_marginRight="@dimen/view_margin"
-            android:layout_marginTop="@dimen/view_margin"
-            android:layout_toRightOf="@+id/imageViewGameLogo"
-            android:contentDescription="@string/contentDescription_operatorLogo"
-            android:src="@drawable/mock_logo_operator" />
-
-        <TextView
-            android:id="@+id/textViewOperatorName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textViewGameName"
-            android:layout_toRightOf="@+id/imageViewOperatorLogo"
-            android:text="Operator" />
-    </RelativeLayout>
-
-    <ScrollView
-        android:id="@+id/sc"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4" >
+            android:src="@drawable/default_game_icon" />
 
         <LinearLayout
-            android:id="@+id/LinearLayout1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dimesnionOfImageViewInGameDetails"
+            android:layout_marginLeft="@dimen/margin_small"
             android:orientation="vertical" >
 
-            <include
-                android:id="@+id/detailsHeader"
-                layout="@layout/expandable_lists_header" />
-
-            <RelativeLayout
-                android:id="@+id/relativeLayoutWrapperDetails"
+            <TextView
+                android:id="@+id/textViewGameName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/view_margin" >
-
-                <TextView
-                    android:id="@+id/textViewWinners"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/view_margin"
-                    android:text="@string/label_winners" />
-
-                <TextView
-                    android:id="@+id/textViewWinningStrategy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/textViewWinners"
-                    android:layout_toRightOf="@+id/textViewWinners"
-                    android:text="5 players that have the highest number of points" />
-
-                <TextView
-                    android:id="@+id/textViewPlayers"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/textViewWinningStrategy"
-                    android:text="@string/label_players" />
-
-                <TextView
-                    android:id="@+id/textViewNumberOfCurrentPlayers"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/textViewPlayers"
-                    android:layout_alignLeft="@+id/textViewWinningStrategy"
-                    android:layout_toRightOf="@+id/textViewPlayers"
-                    android:text="1" />
-
-                <TextView
-                    android:id="@+id/textViewDivider"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/textViewNumberOfCurrentPlayers"
-                    android:layout_toRightOf="@+id/textViewNumberOfCurrentPlayers"
-                    android:text="/" />
-
-                <TextView
-                    android:id="@+id/textViewNumberOfTotalPlayers"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/textViewDivider"
-                    android:layout_alignBottom="@+id/textViewDivider"
-                    android:layout_toRightOf="@+id/textViewDivider"
-                    android:text="12" />
-
-                <TextView
-                    android:id="@+id/textViewStart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/textViewPlayers"
-                    android:text="@string/label_start" />
-
-                <TextView
-                    android:id="@+id/textViewStartTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/textViewStart"
-                    android:layout_alignLeft="@+id/textViewWinningStrategy"
-                    android:layout_toRightOf="@+id/textViewStart"
-                    android:text="Mon, Apr 1, 2013 9:00 AM" />
-
-                <TextView
-                    android:id="@+id/textViewEnd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/textViewStart"
-                    android:text="@string/label_end" />
-
-                <TextView
-                    android:id="@+id/textViewEndTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/textViewEnd"
-                    android:layout_alignLeft="@+id/textViewWinningStrategy"
-                    android:layout_toRightOf="@+id/textViewEnd"
-                    android:text="Tue, Apr 30, 2013 6:00 PM" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayoutWrapperDifficulty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/view_margin" >
-
-                <TextView
-                    android:id="@+id/textViewDifficulty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/view_margin"
-                    android:text="@string/label_difficulty" />
-
-                <RatingBar
-                    android:id="@+id/ratingBarDifficulty"
-                    style="@style/styleCustomRatingBar" />
-            </LinearLayout>
-
-            <include
-                android:id="@+id/PrizesHeader"
-                layout="@layout/expandable_lists_header" />
+                android:text="Krasnale i kluski"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_dark_grey" />
 
             <TextView
-                android:id="@+id/TextViewPrizes"
+                android:id="@+id/textViewOperatorName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/view_margin"
-                android:text="Nagroda pocieszenia - symboliczna nagroda nie przedstawiająca wartości materialnej, przyznawana w wyrazie uznania za wyróżniające się osiągnięcia tym konkurentom, którym nie udało się zdobyć nagrody głównej." />
+                android:text="Operator"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/text_grey" />
 
-            <include
-                android:id="@+id/descriptionHeader"
-                layout="@layout/expandable_lists_header" />
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/textViewGameDescription"
+            <Button
+                android:id="@+id/buttonJoinLeaveGame"
+                style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/view_margin"
-                android:text="Ostatnio jednak okazało się, że tak naprawdę krasnale wcale nie musiały przywędrować nad Odrę przed wieloma wiekami. Wedle najnowszych badań to sami mieszkańcy Wrocławia dawno temu zwrócili się do krasnoludków z prośbą o pomoc. Nie mogli bowiem uporać się ze złośliwym Chochlikiem Odrzańskim, który za punkt honoru postawił sobie zatrucie im życia. I dzień w dzień konsekwentnie realizował swój niecny plan: wabił gołębie nad zaparkowane samochody, chował okulary, a nawet pluł do zupy! Był mały, sprytny i szybki, więc bez trudu potrafił przechytrzyć nawet najbardziej zwinnego człowieka. Co innego – krasnala!" />
+                android:layout_gravity="right|bottom"
+                android:text="@string/button_join" />
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="divider"
+        android:src="?attr/header_separator_drawable" />
+
+    <TextView
+        android:id="@+id/textViewWinningStrategy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/hardware_gamepad"
+        android:text="score attack"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textViewPlayers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/social_cc_bcc"
+        android:text="45/100 players"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/device_access_time"
+        android:text="2 weeks 3 days to end"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textViewDifficulty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/difficulty"
+        android:text="easy"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <include
+        android:id="@+id/prizesHeader"
+        layout="@layout/expandable_lists_header" />
+
+    <TextView
+        android:id="@+id/textViewPrizes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nagroda pocieszenia - symboliczna nagroda nie przedstawiająca wartości materialnej, przyznawana w wyrazie uznania za wyróżniające się osiągnięcia tym konkurentom, którym nie udało się zdobyć nagrody głównej."
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <include
+        android:id="@+id/descriptionHeader"
+        layout="@layout/expandable_lists_header" />
+
+    <TextView
+        android:id="@+id/textViewGameDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ostatnio jednak okazało się, że tak naprawdę krasnale wcale nie musiały przywędrować nad Odrę przed wieloma wiekami. Wedle najnowszych badań to sami mieszkańcy Wrocławia dawno temu zwrócili się do krasnoludków z prośbą o pomoc. Nie mogli bowiem uporać się ze złośliwym Chochlikiem Odrzańskim, który za punkt honoru postawił sobie zatrucie im życia. I dzień w dzień konsekwentnie realizował swój niecny plan: wabił gołębie nad zaparkowane samochody, chował okulary, a nawet pluł do zupy! Był mały, sprytny i szybki, więc bez trudu potrafił przechytrzyć nawet najbardziej zwinnego człowieka. Co innego – krasnala!"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>
