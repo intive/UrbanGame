@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/imageViewGameLogo"
-        android:layout_width="@dimen/dimensionOfImageViewOnList"
-        android:layout_height="@dimen/dimensionOfImageViewOnList"
+        android:layout_width="@dimen/dimensionOfImageViewInListItem"
+        android:layout_height="@dimen/dimensionOfImageViewInListItem"
         android:layout_marginRight="@dimen/view_margin"
         android:contentDescription="@string/contentDescription_gameLogo"
         android:src="@drawable/ic_launcher_big" />

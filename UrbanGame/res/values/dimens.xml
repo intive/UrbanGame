@@ -11,6 +11,6 @@
     <dimen name="text_padding">8dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="dimesnionOfImageViewInGameDetails">128dp</dimen>
-    <dimen name="dimensionOfImageViewOnList">64dp</dimen>
+    <dimen name="dimensionOfImageViewInListItem">64dp</dimen>
 
 </resources>
