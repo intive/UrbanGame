@@ -91,5 +91,6 @@ public class AnswerDialog implements UrbanGameDialogOnClickListener {
 					break;
 			}
 		}
+		dialog.dismiss();
 	}
 }
