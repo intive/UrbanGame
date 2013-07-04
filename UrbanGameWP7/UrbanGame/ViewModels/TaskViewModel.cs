@@ -274,19 +274,40 @@ namespace UrbanGame.ViewModels
                 {
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
                     CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId) ?? _gameWebService.GetTaskDetails(GameId, TaskId);
-                    if (CurrentTask.SolutionStatus == SolutionStatus.NotSend)
+
+                    if (CurrentTask.State == TaskState.Cancelled)
                     {
-                        VisualStateName = "FirstSending";
+                        BasicAppbar.Clear();
+                        SetAppBarContent();
                     }
-                    else if (CurrentTask.IsRepeatable)
+
+                    if (CurrentTask.State == TaskState.Active)
                     {
-                        VisualStateName = "ReSending";
+                        if (CurrentTask.SolutionStatus == SolutionStatus.NotSend)
+                        {
+                            VisualStateName = "FirstSending";
+                        }
+                        else if (CurrentTask.IsRepeatable)
+                        {
+                            VisualStateName = "ReSending";
+                        }
+                        else
+                        {
+                            VisualStateName = "Sent";
+                        }
+                    }
+                    else if (CurrentTask.State == TaskState.Cancelled)
+                    {
+                        VisualStateName = "Cancelled";
+                    }
+                    else if (CurrentTask.State == TaskState.Inactive)
+                    {
+                        VisualStateName = "Inactive";
                     }
                     else
                     {
                         VisualStateName = "Sent";
                     }
-                    
                 }
             });
             await RefreshAnswear();

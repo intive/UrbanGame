@@ -484,4 +484,10 @@
   <data name="TaskChangedToast" xml:space="preserve">
     <value>Task details have changed. Tap to see differences.</value>
   </data>
+  <data name="TaskCancelled" xml:space="preserve">
+    <value>This task was cancelled.</value>
+  </data>
+  <data name="TaskInactive" xml:space="preserve">
+    <value>This task becomes active after complete another tasks.</value>
+  </data>
 </root>

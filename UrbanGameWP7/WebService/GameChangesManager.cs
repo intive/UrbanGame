@@ -314,7 +314,7 @@ namespace WebService
 
                         foreach (var solution in pendingSolutions)
                         {
-                            var task = _gameWebService.GetSolutionStatus(solution.Id);
+                            var task = _gameWebService.GetSolutionStatus(solution.Task.Id);
                             task.Wait();
                             SolutionStatusResponse response = task.Result;
 
