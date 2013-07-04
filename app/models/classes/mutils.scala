@@ -31,7 +31,7 @@ case class Token(id: Option[Int], opId: Int, token: String, series: String, crea
   expires: DateTime, rememberme: Boolean = false)
 
 case class UserDB(id: Option[Int], login: String, hash: String)
-case class UserGame(userId: Int, gameId: Int, joined: DateTime, left: Option[DateTime])
+case class UserGame(userId: Int, gameId: Int, joined: DateTime, left: Option[DateTime], points: Int)
 case class UserTask(userId: Int, gameId: Int, taskId: Int, status: String, points: Int, attempts: Int, time: Option[DateTime])
 case class ABCTaskOption(gid: Int, tid: Int, char: String, option: String, points: Int)
 case class GPSTask(gid: Int, tid: Int, pointId: Int, lat: Double, lon: Double, range: Int)

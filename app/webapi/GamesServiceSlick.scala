@@ -71,6 +71,11 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
   }
 
   override def getTaskStatic(gid: Int, tid: Int): TaskStatic = {
+    def getListOfABCAnswers(gid: Int, tid: Int)(implicit session: Session) = {
+      val q = for (t <- models.ABCTasks if t.gameId === gid && t.taskId === tid) yield(t.char, t.option)
+      q.elements map { ABCOption.tupled(_) } toList
+    }
+      
     db withSession { implicit session =>
       val q = for (
         t <- models.Tasks if t.gameId === gid && t.id === tid
@@ -80,7 +85,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
       )
 
       q.firstOption map { case (gid, tid, version, ttype, name, description, maxpoints, maxattempts) =>
-        val choices = if (isABCTask(ttype)) Some(getListOfAnswers(gid, tid)) else None
+        val choices = if (isABCTask(ttype)) Some(getListOfABCAnswers(gid, tid)) else None
         TaskStatic(gid, tid, version, ttype, name, description, choices, maxpoints, maxattempts)
       } getOrElse { throw taskNotFound }
     }
@@ -127,70 +132,69 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
   override def listUserGames(user: User): List[UserGameSummary] = {
     db withSession { implicit session =>
       val q = for (
-        (ug, g) <- UserGamesView(user.id)
-      ) yield (g.id, g.version, ug.joined, ug.left, sumPoints(user.id, g.id))
+        ug <- models.UserGames if ug.userId === user.id
+      ) yield (ug.gameId, ug.joined, ug.left, ug.points)
         
       q.elements map { UserGameSummary.tupled(_) } toList
     }
   }
 
   override def joinGame(user: User, gid: Int) {
-    def testGame(status: String, maxPlayers: Int, numOfPlayers: Int) {
-        if (status == "ended")
-          throw gameIsEnded
-        if (status != "online")
-          throw gameNotStarted
-        if (maxPlayers == numOfPlayers)
-          throw gameIsFull
-    }
+   val ugq = for (
+      ug <- models.UserGames if ug.userId === user.id && ug.gameId === gid
+    ) yield (ug.joined ~ ug.left)
 
-    def testUserTask(left: Option[DateTime]) {
-      if (left.isEmpty) 
-         throw alreadyInGame
-      val wait = 30 - (left.get to DateTime.now).millis / (60*1000)
-      if (wait > 0) 
-        throw userMustWait(wait)
-    }
-
-    db withSession { implicit session =>
+   def gameIsValid(fun: => Unit)(implicit session: Session) {
       val gameInfo = for (
         g <- models.Games if g.id === gid
       ) yield (g.status, g.maxPlayers, g.numberOfPlayers)
 
       gameInfo.firstOption map { case (status, maxPlayers, numOfPlayers) =>
-        testGame(status, maxPlayers, numOfPlayers)
-        val userJoinedInfo = for (
-          ug <- models.UserGames if ug.userId === user.id && ug.gameId === gid
-        ) yield (ug.joined ~ ug.left)
-
-        userJoinedInfo.firstOption match { 
-          case Some((joined, left)) =>
-            testUserTask(left)
-            userJoinedInfo update (DateTime.now, None)
-          case None =>
-            models.UserGames insert UserGame(user.id, gid, DateTime.now, None)
-        }
-
+        if (status == "ended") throw gameIsEnded
+        if (status != "online") throw gameNotStarted
+        if (maxPlayers == numOfPlayers) throw gameIsFull
+        fun
       } getOrElse (throw gameNotFound)
+    }
 
-      updateNumberOfPlayers(gid, +1)
+    def userGameIsValid(fun: (Boolean) => Unit)(implicit session: Session) {
+       ugq.firstOption map { case (joined, left) =>
+        if (left.isEmpty) throw alreadyInGame
+        val wait = 30 - (left.get to DateTime.now).millis / (60*1000)
+        if (wait > 0)  throw userMustWait(wait)
+        fun(false)
+      } getOrElse fun(true)
+    }
+
+    db withSession { implicit session =>
+      gameIsValid { userGameIsValid { noRow =>
+        val now = DateTime.now
+        if (noRow)
+          models.UserGames insert UserGame(user.id, gid, now, None, 0)
+        else
+          ugq update (now, None)
+        updateNumberOfPlayers(gid, +1)
+      } }
     }
   }
 
   override def leaveGame(user: User, gid: Int) {
-    db withSession { implicit session =>
-      val leftDate = for (
-        ug <- models.UserGames if ug.userId === user.id && ug.gameId === gid
-      ) yield ug.left
+    val ugq = for (
+      ug <- models.UserGames if ug.userId === user.id && ug.gameId === gid
+    ) yield ug.left
 
-      leftDate.firstOption map { left =>
-        if (left.isDefined) 
-          throw alreadyLeft
-
-        leftDate update Some(DateTime.now)
-        updateNumberOfPlayers(gid, -1)
-
+    def userGameIsValid(fun: => Unit)(implicit session: Session) {
+      ugq.firstOption map { left =>
+        if (left.isDefined) throw alreadyLeft
+        fun
       } getOrElse (throw notPartOfGame)
+    }
+
+    db withSession { implicit session =>
+      userGameIsValid { 
+        ugq update Some(DateTime.now)
+        updateNumberOfPlayers(gid, -1)
+      }
     }
   }
 
@@ -215,7 +219,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     db withSession { implicit session =>
       val q = for (
         ug <- models.UserGames if ug.userId === user.id && ug.gameId === gid
-      ) yield (sumPoints(user.id, ug.gameId), 0)
+      ) yield (ug.points, 0)
       
       q.firstOption map { UserGameStatus.tupled(_) } getOrElse (throw notPartOfGame)
     }
@@ -232,48 +236,59 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     }
   }
 
-  override def checkUserAnswer(user: User, gid: Int, tid: Int, ans: UserAnswer): UserTaskStatus =
-    db withSession { implicit session =>
-       val ugvq = for ((ug, g) <- UserGamesView(user.id) if ug.left.isNull) yield (g.status)
+  override def checkUserAnswer(user: User, gid: Int, tid: Int, ans: UserAnswer): UserTaskStatus = {
+    def userGameIsValid(fun: Int => UserTaskStatus)(implicit session: Session): UserTaskStatus = {
+       val ugvq = for ((ug, g) <- UserGamesView(user.id) if ug.left.isNull) yield (g.status, ug.points)
 
-       ugvq.firstOption map { status =>
-        if (status == "ended")
-          throw gameIsEnded
-        if (status != "online")
-          throw gameNotStarted
-
-        val tq = for (
-          t <- models.Tasks if t.gameId === gid && t.id === tid
-        ) yield (t.ttype, t.maxpoints, t.maxattempts, t.minToAccept, t.active, t.penalty)
-
-        tq.firstOption map { case (ttype, maxpoints, maxattempts, minToAccept, active, penalty) =>
-          if (!active)
-            throw taskNotActive
-
-          val utq = for (
-            ut <- models.UserTasks if ut.userId === user.id && ut.gameId === gid && ut.taskId === tid
-          ) yield (ut.status ~ ut.points ~ ut.attempts ~ ut.time)
-
-          val (lastPoints, attempts) = utq.firstOption map {case (status, points, attempts, time) => (points, attempts)} getOrElse (0,0)
-          if (attempts == maxattempts)
-            throw noMoreAttempts
-
-          val (userTaskStatus, userTaskPoints) = getStatusAndPoints(user, gid, tid, ans, ttype, maxpoints, minToAccept, attempts*penalty)
-
-          val now = Some(DateTime.now)
-
-          if (attempts == 0)
-            models.UserTasks insert UserTask(user.id, gid, tid, userTaskStatus, userTaskPoints, attempts+1, now)
-          else
-            utq update (userTaskStatus, userTaskPoints, attempts+1, now)
-
-          return UserTaskStatus(userTaskStatus, attempts+1, userTaskPoints, attempts+1 < maxattempts)
-
-        } getOrElse (throw taskNotFound)
+       ugvq.firstOption map { case (status, gamePoints) =>
+        if (status == "ended")  throw gameIsEnded
+        if (status != "online") throw gameNotStarted
+        fun(gamePoints)
       } getOrElse (throw notPartOfGame)
     }
 
-  private def getStatusAndPoints(user: User, gid: Int, tid: Int, ans: UserAnswer, ttype: String, maxpoints: Int, minToAccept: Int, penalty: Int)(implicit session: Session): (String, Int) = 
+    def taskIsValid(fun: (String, Int, Int, Int, Boolean, Int) => UserTaskStatus)(implicit session: Session): UserTaskStatus = {
+      val tq = for (
+        t <- models.Tasks if t.gameId === gid && t.id === tid
+      ) yield (t.ttype, t.maxpoints, t.maxattempts, t.minToAccept, t.active, t.penalty)
+
+      tq.firstOption map { row =>
+        if (!row._5) throw taskNotActive
+        fun.tupled (row)
+      } getOrElse (throw taskNotFound)
+    }
+
+    def userCanSendAnswer(maxattempts: Int)(fun: (Int, Int) => UserTaskStatus)(implicit session: Session): UserTaskStatus = {
+      val utq = for (
+        ut <- models.UserTasks if ut.userId === user.id && ut.gameId === gid && ut.taskId === tid
+      ) yield (ut.attempts, ut.points)
+
+      utq.firstOption map { case (attempts, prevPoints) =>
+        if (attempts == maxattempts) throw noMoreAttempts
+        fun(attempts, prevPoints) 
+      } getOrElse fun(0, 0)
+    }
+
+    def updateUserTaskStatus(status: String, points: Int, attempt: Int)(implicit session: Session) {
+      val someNow = Some(DateTime.now)
+      if (attempt == 1)
+        models.UserTasks insert UserTask(user.id, gid, tid, status, points, attempt, someNow)
+      else {
+        val utq = for (
+          ut <- models.UserTasks if ut.userId === user.id && ut.gameId === gid && ut.taskId === tid
+        ) yield (ut.status ~ ut.points ~ ut.attempts ~ ut.time)
+        utq update (status, points, attempt, someNow)
+      }
+    }
+
+    def updateUserGamePoints(points: Int, prev: Int, gamePoints: Int)(implicit session: Session) {
+      val ugq = for (
+        ug <- models.UserGames if ug.userId === user.id && ug.gameId === gid
+      ) yield (ug.points)
+      ugq update (gamePoints + points - prev)      
+    }
+
+   def getStatusAndPoints(ttype: String, maxpoints: Int, minToAccept: Int, penalty: Int)(implicit session: Session): (String, Int) = 
     if (isABCTask(ttype)) {
       val selected = ans.options getOrElse (throw expectedField("options"))
       val abcq = for (
@@ -293,16 +308,30 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
       val gpsq = for (
         gps <- models.GPSTasks if gps.gameId === gid && gps.taskId === tid
         if geodistance(gps.lat, gps.lon, userLat, userLon) <= gps.range
-      ) yield (gps.length)
+      ) yield (gps.exists)
 
-      if (gpsq.first > 0)
+      if (gpsq.first == true)
         ("accepted", maxpoints - penalty)
       else
         ("rejected", 0)
     }
     else
       throw unexpectedTaskType(ttype)
-    
+
+    db withSession { implicit session =>
+      userGameIsValid { gamePoints =>
+        taskIsValid { case (ttype, maxpoints, maxattempts, minToAccept, active, penalty) =>
+          userCanSendAnswer (maxattempts) { case (attempts, prevPoints) =>
+            val attempt = attempts + 1
+            val (status, points) = getStatusAndPoints(ttype, maxpoints, minToAccept, attempts*penalty)
+            updateUserTaskStatus(status, points, attempt)
+            updateUserGamePoints(points, prevPoints, gamePoints)
+            return UserTaskStatus(status, attempt, points, attempt < maxattempts)
+          }
+        }
+      }
+    }
+  }
   
   private def canShowTask(t: models.Tasks.type, user: User, lat: Double, lon: Double) =
     t.active === false || (for (g <- models.Games if g.id === t.gameId && (
@@ -317,22 +346,13 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     
   private def isGPSTask(ttype: String) = 
     ttype contains "GPS"
-    
-  private def getListOfAnswers(gid: Int, tid: Int)(implicit session: Session) = {
-    val q = for (t <- models.ABCTasks if t.gameId === gid && t.taskId === tid) yield(t.char, t.option)
-    q.elements map { ABCOption.tupled(_) } toList
-  }
-
-  private def sumPoints(uid: Int, gid: Column[Int]) = (
-    for(
-      (ut, t) <- models.UserTasks innerJoin models.Tasks on (_.gameId === _.gameId) 
-      if ut.userId === uid && ut.gameId === gid && t.active === true
-    ) yield (ut.points)
-  ).sum.getOrElse(0)
   
-  private val geodistanceFun = SimpleFunction[Int]("geodistance")
-  private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double) =
-    geodistanceFun(Seq(lat1, lon1, lat2, lon2))
+
+  //private val geodistanceFun = SimpleFunction[Int]("geodistance")
+  //private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double) =
+  //  geodistanceFun(Seq(lat1, lon1, lat2, lon2))
+  private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double): Column[Int] = 0
+    
   private val PublicGamesView = models.Games filter (g => g.status === "published" || g.status === "online")
   private val GamesView = PublicGamesView innerJoin models.Operators on (_.operatorId === _.id)
   private def GamesViewWithDistances(lat: Double, lon: Double) = 

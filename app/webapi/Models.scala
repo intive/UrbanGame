@@ -61,7 +61,7 @@ case class TaskDynamic(
     gid: Int, tid: Int, version: Int
 )
 case class UserGameSummary(
-  gid: Int, version: Int, started: DateTime, finished: Option[DateTime], points: Int
+  gid: Int, started: DateTime, finished: Option[DateTime], points: Int
 )
 case class UserGameStatus(points: Int, rank: Int)
 case class UserTaskSummary(

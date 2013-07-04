@@ -24,7 +24,8 @@ object UserGames extends Table[UserGame]("USERGAMES") {
   def gameId = column[Int]("gameId", O.NotNull)
   def joined = column[DateTime]("joined", O.NotNull, O.Default(DateTime.now))
   def left   = column[Option[DateTime]]("left")
-  def * = userId ~ gameId ~ joined ~ left <> (UserGame, UserGame.unapply _)
+  def points = column[Int]("points", O.NotNull, O.Default(0))
+  def * = userId ~ gameId ~ joined ~ left ~ points <> (UserGame, UserGame.unapply _)
   def pk = primaryKey("USERSGAMES_PK", (userId, gameId))
 
   def user = foreignKey("USERGAMES_USERS_FK", userId, Users)(_.id)
