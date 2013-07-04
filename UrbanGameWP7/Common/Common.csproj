@@ -72,7 +72,7 @@
     <Compile Include="AuthorizationService\LoginResult.cs" />
     <Compile Include="AuthorizationService\RegisterResult.cs" />
     <Compile Include="AuthorizationService\User.cs" />
-    <Compile Include="Location\GPSLocation.cs" />
+    <Compile Include="Games\GameStateChangedEvent.cs" />
     <Compile Include="Solutions\IABCDUserAnswer.cs" />
     <Compile Include="Solutions\SolutionStatusChanged.cs" />
     <Compile Include="Alerts\IAlert.cs" />
@@ -95,6 +95,7 @@
     <Compile Include="Games\IGame.cs" />
     <Compile Include="Games\IGameChangesManager.cs" />
     <Compile Include="WebService\CreateAccountResponse.cs" />
+    <Compile Include="WebService\GameOverResponse.cs" />
     <Compile Include="WebService\IGameWebService.cs" />
     <Compile Include="Solutions\IGPSSolution.cs" />
     <Compile Include="Solutions\IOpenQuestionSolution.cs" />

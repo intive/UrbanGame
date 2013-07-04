@@ -61,10 +61,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Color x:Key="SolidColorBrushGreen">#B3F549</Color>
+        <Color x:Key="SolidColorBrushGreen">#97cb16</Color>
         <Color x:Key="SolidColorBrushBlack">#000000</Color>
         <Color x:Key="SolidColorBrushGrey">#222222</Color>
-        <SolidColorBrush x:Key="FontColorGreen">#B3F549</SolidColorBrush>
+        <SolidColorBrush x:Key="FontColorGreen">#97cb16</SolidColorBrush>
         <SolidColorBrush x:Key="FontColorWhite">#FFFFFF</SolidColorBrush>
 
         <Style TargetType="TextBlock">

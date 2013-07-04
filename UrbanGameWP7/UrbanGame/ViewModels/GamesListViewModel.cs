@@ -14,7 +14,7 @@ using UrbanGame.Models;
 
 namespace UrbanGame.ViewModels
 {
-    public class GamesListViewModel : BaseViewModel, IHandle<GameChangedEvent>
+    public class GamesListViewModel : BaseViewModel, IHandle<GameChangedEvent>, IHandle<GameStateChangedEvent>
     {
         IAppbarManager _appbarManager;
         private string _activeSection;
@@ -61,6 +61,20 @@ namespace UrbanGame.ViewModels
                 game.ListOfChanges = "changed";
                 UpdateGame(UserActiveGames, game);
             });
+        }
+        #endregion
+
+        #region IHandle<GameStateChangedEvent>
+        public void Handle(GameStateChangedEvent game)
+        {
+            var activeGame = UserActiveGames.FirstOrDefault(g => g.Id == game.Id);
+            if (activeGame == null)
+                return;
+            activeGame.GameState = game.NewState;
+            activeGame.Rank = game.Rank;
+
+            UserActiveGames.Remove(activeGame);
+            UserInactiveGames.Add(activeGame);
         }
         #endregion
 

@@ -237,8 +237,8 @@
   <data name="Duration" xml:space="preserve">
     <value>czas trwania:</value>
   </data>
-  <data name="GameStateEnded" xml:space="preserve">
-    <value>zakończył</value>
+  <data name="GameStateLost" xml:space="preserve">
+    <value>przegrał</value>
   </data>
   <data name="GameStateInactive" xml:space="preserve">
     <value>nieaktywny</value>
@@ -248,9 +248,6 @@
   </data>
   <data name="GameStateNone" xml:space="preserve">
     <value />
-  </data>
-  <data name="GameStateWithdraw" xml:space="preserve">
-    <value>remis</value>
   </data>
   <data name="GameStateWon" xml:space="preserve">
     <value>wygrał</value>
@@ -455,5 +452,20 @@
   </data>
   <data name="ChooseAndJoin" xml:space="preserve">
     <value>Proszę wybierz jedną i dołacz.</value>
+  </data>
+  <data name="GameStateChangedToast" xml:space="preserve">
+    <value>Gra zakończona. Naciśnij, aby zobaczyć wynik.</value>
+  </data>
+  <data name="YouLost" xml:space="preserve">
+    <value>Przegrałeś!</value>
+  </data>
+  <data name="YouWon" xml:space="preserve">
+    <value>Wygrałeś!</value>
+  </data>
+  <data name="WeWillContact" xml:space="preserve">
+    <value>Skontaktujemy się z Tobą</value>
+  </data>
+  <data name="TaskChangedToast" xml:space="preserve">
+    <value>Szczegóły zadania zmieniły się. Naciśnij, aby zobaczyć różnice.</value>
   </data>
 </root>

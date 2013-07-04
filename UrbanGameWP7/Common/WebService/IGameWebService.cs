@@ -20,6 +20,13 @@ namespace Common
         bool SingUpToTheGame(int gid);
 
         /// <summary>
+        /// Returns state of game
+        /// </summary>
+        /// <param name="gid">Integer parameter - game's identifier</param>
+        /// <returns></returns>
+        Task<GameOverResponse> CheckGameOver(int gid);
+
+        /// <summary>
         /// Returns completely filled in IGame
         /// </summary>
         /// <param name="gid">Integer parameter - game's identifier</param>
@@ -30,7 +37,7 @@ namespace Common
         /// Method returns an array of game's tasks
         /// </summary>
         /// <returns>Array of ITask</returns>
-        ITask[] GetTasks(int gid);
+        Task<ITask[]> GetTasks(int gid);
 
         /// <summary>
         /// Returns task's details
@@ -90,30 +97,6 @@ namespace Common
         /// </summary>
         /// <returns></returns>
         Task<IGame[]> UserNearbyGames(GeoCoordinate coordinate);
-
-        /// <summary>
-        /// Method returns array of tasks in which are still active
-        /// </summary>
-        /// <returns></returns>
-        ITask[] ActiveTasks();
-
-        /// <summary>
-        /// Method returns array of tasks in which are inactive
-        /// </summary>
-        /// <returns></returns>
-        ITask[] InactiveTasks();
-
-        /// <summary>
-        /// Method returns array of tasks in which are accomplished
-        /// </summary>
-        /// <returns></returns>
-        ITask[] AccomplishedTasks();
-
-        /// <summary>
-        /// Method returns array of tasks in which are cancelled
-        /// </summary>
-        /// <returns></returns>
-        ITask[] CancelledTasks();
 
         /// <summary>
         /// Method returns array of alerts

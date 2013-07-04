@@ -16,19 +16,19 @@ namespace UrbanGame.Converters
                 TimeSpan time = (DateTime)value - DateTime.Now;
                 if (time.Days > 0)
                 {
-                    return string.Format("{0} d {1} h {2} m" + AppResources.ToEndLowCase, time.Days, time.Hours, time.Minutes);
+                    return string.Format("{0} d {1} h {2} m " + AppResources.ToEndLowCase, time.Days, time.Hours, time.Minutes);
                 }
                 else if (time.Hours > 0)
                 {
-                    return string.Format("{0} h {1} m" + AppResources.ToEndLowCase, time.Hours, time.Minutes);
+                    return string.Format("{0} h {1} m " + AppResources.ToEndLowCase, time.Hours, time.Minutes);
                 }
                 else if (time.Minutes > 0)
                 {
-                    return string.Format("{0} m" + AppResources.ToEndLowCase, time.Minutes);
+                    return string.Format("{0} m " + AppResources.ToEndLowCase, time.Minutes);
                 }
                 else
                 {
-                    return AppResources.BelowMinute;
+                    return AppResources.BelowMinute + " ";
                 }
             }
             else

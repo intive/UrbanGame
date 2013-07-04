@@ -16,9 +16,6 @@ namespace Common
 
         TaskType Type { get; set; }
 
-        /// <summary>
-        /// Field shows that taks is active, inactive, accomplished or cancelled
-        /// </summary>
         TaskState State { get; set; }
 
         string Description { get; set; }
@@ -44,5 +41,7 @@ namespace Common
         DateTime? EndDate { get; set; }
 
         int Version { get; set; }
+
+        string ListOfChanges { get; set; }
     }
 }
