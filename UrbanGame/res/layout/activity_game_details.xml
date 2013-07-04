@@ -19,14 +19,14 @@
 
         <ImageView
             android:id="@+id/imageViewGameLogo"
-            android:layout_width="@dimen/imageGameDetails"
-            android:layout_height="@dimen/imageGameDetails"
+            android:layout_width="@dimen/dimesnionOfImageViewInGameDetails"
+            android:layout_height="@dimen/dimesnionOfImageViewInGameDetails"
             android:contentDescription="@string/contentDescription_gameLogo"
             android:src="@drawable/default_game_icon" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/imageGameDetails"
+            android:layout_height="@dimen/dimesnionOfImageViewInGameDetails"
             android:layout_marginLeft="@dimen/margin_small"
             android:orientation="vertical" >
 
