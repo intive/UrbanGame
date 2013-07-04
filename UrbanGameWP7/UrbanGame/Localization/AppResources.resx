@@ -472,4 +472,7 @@
   <data name="ChooseAndJoin" xml:space="preserve">
     <value>Please, choose one and join in.</value>
   </data>
+  <data name="NoTasks" xml:space="preserve">
+    <value>There are not tasks at this point, try later or try to connect from different area of the city to receive hidden bonus tasks</value>
+  </data>
 </root>

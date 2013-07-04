@@ -190,6 +190,8 @@ namespace WebService
                 new GameMock(){Name = "The Quest for NEETs", GameType = GameType.Race, OperatorName = "Ron Jeremy", NumberOfPlayers = 23,Id = 5, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8),GameEnd = DateTime.Now.AddDays(2).AddHours(10), GameState = GameState.None}};
 
             string lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam mauris vel elit tincidunt ac bibendum tortor scelerisque. Mauris nisi augue, malesuada ac lobortis sed, rhoncus et mauris. Vivamus dictum turpis congue arcu euismod in pulvinar mi volutpat. Aliquam euismod pharetra velit eu sagittis. Proin et nisi nibh, ut egestas enim.";
+            string accident = "There might be a problem getting to center, bacause of bus crash. Furthermore the police imidiately came and now tries to figure out what realy happened.";
+
             int taskId = 1;
             int possibleAnswerId = 1;
             int alertId = 1;
@@ -215,12 +217,14 @@ namespace WebService
                 task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "DarkBlack"});
                 g.Tasks.Add(task2);
 
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "XTerminator", Points = 329, AchievedAt = DateTime.Now.AddDays(1).AddHours(13).AddMinutes(37) });
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "RunnungRabit", Points = 310, AchievedAt = DateTime.Now.AddDays(1).AddHours(3).AddMinutes(7) });
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "$ebastian", Points = 150, AchievedAt = DateTime.Now.AddHours(9).AddMinutes(27) });
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "xX_Warior_Xx", Points = 90, AchievedAt = DateTime.Now.AddHours(1).AddMinutes(1) });
 
-                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "XTerminator", Points = 329 });
-                g.Alerts.Add(new AlertMock() { Id = alertId++, Topic = "Information", Description = "There might be a problem getting to center, bacause of bus crash" });
-                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "RunnungRabit", Points = 310 });
-                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "$ebastian", Points = 150 });
-                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "xX_Warior_Xx", Points = 90 });
+                g.Alerts.Add(new AlertMock() { Id = alertId++, Topic = "Information", Description = accident, AlertAppear = new DateTime(2013, 6, 27, 12, 10, 0) });
+                g.Alerts.Add(new AlertMock() { Id = alertId++, Topic = "Information", Description = accident, AlertAppear = new DateTime(2013, 6, 27, 11, 10, 0) });
+                g.Alerts.Add(new AlertMock() { Id = alertId++, Topic = "Information", Description = accident, AlertAppear = new DateTime(2013, 7, 4, 12, 1, 0) });
             }
 
             return games;

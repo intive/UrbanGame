@@ -16,6 +16,8 @@ namespace Common
 
         string Description { get; set; }
 
+        DateTime AlertAppear { get; set; }
+
         IGame Game { get; set; }
     }
 }

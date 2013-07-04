@@ -247,6 +247,32 @@ namespace UrbanGame.ViewModels
                 newGame.Tasks.Add(task);
             }
 
+            foreach (var a in Game.Alerts)
+            {
+                GameAlert alert = new GameAlert()
+                {
+                    Id = a.Id,
+                    Description = a.Description,
+                    Topic = a.Topic,
+                    AlertAppear = a.AlertAppear,
+                    Game = (Game)newGame,
+                    GameId = newGame.Id
+                };
+            }
+
+            foreach (var hs in Game.HighScores)
+            {
+                GameHighScore highScore = new GameHighScore()
+                {
+                    Id = hs.Id,
+                    Points = hs.Points,
+                    UserLogin = hs.UserLogin,
+                    AchievedAt = hs.AchievedAt,
+                    Game = (Game)newGame,
+                    GameId = newGame.Id
+                };
+            }
+
             return newGame;
         }
 

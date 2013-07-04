@@ -155,5 +155,28 @@ namespace UrbanGame.Storage
         }
 
         #endregion
+
+        #region AchievedAt
+
+        private DateTime _achievedAt;
+
+        [Column]
+        public DateTime AchievedAt
+        {
+            get
+            {
+                return _achievedAt;
+            }
+            set
+            {
+                if (_achievedAt != value)
+                {
+                    NotifyPropertyChanging("AchievedAt");
+                    _achievedAt = value;
+                    NotifyPropertyChanged("AchievedAt");
+                }
+            }
+        }
+        #endregion
     }
 }

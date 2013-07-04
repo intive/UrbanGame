@@ -728,6 +728,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are not tasks at this point, try later or try to connect from different area of the city to receive hidden bonus tasks.
+        /// </summary>
+        public static string NoTasks {
+            get {
+                return ResourceManager.GetString("NoTasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are not logged in..
         /// </summary>
         public static string NotLogged {

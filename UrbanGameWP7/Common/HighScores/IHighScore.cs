@@ -16,6 +16,8 @@ namespace Common
 
         int Points { get; set; }
 
+        DateTime AchievedAt { get; set; }
+
         IGame Game { get; set; }
     }
 }

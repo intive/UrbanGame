@@ -102,6 +102,8 @@
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Converters\ABCDToVisibilityConverter.cs" />
+    <Compile Include="Converters\AlertTimeConverter.cs" />
+    <Compile Include="Converters\BindableCollectionCountToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateToVisibilityConverter.cs" />
     <Compile Include="Converters\DurationTimeConverter.cs" />
@@ -160,6 +162,7 @@
     <Compile Include="Utilities\PhoneTextBox.cs" />
     <Compile Include="Utilities\StateManager.cs" />
     <Compile Include="Utilities\ToastType.cs" />
+    <Compile Include="ViewModels\AlertViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsPreviewViewModel.cs" />
     <Compile Include="ViewModels\GameDetailsViewModel.cs" />
@@ -168,6 +171,9 @@
     <Compile Include="ViewModels\PasswordRecoveryViewModel.cs" />
     <Compile Include="ViewModels\ReportTaskViewModel.cs" />
     <Compile Include="ViewModels\TaskViewModel.cs" />
+    <Compile Include="Views\AlertView.xaml.cs">
+      <DependentUpon>AlertView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GameDetailsPreviewView.xaml.cs">
       <DependentUpon>GameDetailsPreviewView.xaml</DependentUpon>
     </Compile>
@@ -195,6 +201,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="Views\AlertView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GameDetailsPreviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

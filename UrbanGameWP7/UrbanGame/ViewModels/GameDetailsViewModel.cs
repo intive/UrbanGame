@@ -97,6 +97,50 @@ namespace UrbanGame.ViewModels
 
         #region bindable properties
 
+        #region NotAvailableTasks
+
+        private bool _notAvailableTasks;
+
+        public bool NotAvailableTasks
+        {
+            get
+            {
+                return _notAvailableTasks;
+            }
+            set
+            {
+                if (_notAvailableTasks != value)
+                {
+                    _notAvailableTasks = value;
+                    NotifyOfPropertyChange(() => NotAvailableTasks);
+                }
+            }
+        }
+
+        #endregion
+
+        #region NotFullPoints
+
+        private bool _notFullPoints;
+
+        public bool NotFullPoints
+        {
+            get
+            {
+                return _notFullPoints;
+            }
+            set
+            {
+                if (_notFullPoints != value)
+                {
+                    _notFullPoints = value;
+                    NotifyOfPropertyChange(() => NotFullPoints);
+                }
+            }
+        }
+
+        #endregion
+
         #region ShowMore
 
         private bool _showsMore = false;
@@ -320,6 +364,11 @@ namespace UrbanGame.ViewModels
             _navigationService.UriFor<TaskViewModel>().WithParam(t => t.TaskId, task.Id).WithParam(x => x.GameId, GameId).Navigate();
         }
 
+        public void ShowAlert(IAlert alert)
+        {
+            _navigationService.UriFor<AlertViewModel>().WithParam(a => a.AlertId, alert.Id).WithParam(x => x.GameId, GameId).Navigate();
+        }
+
         public void ChangeAppbarButtons(SelectionChangedEventArgs args)
         {
             _activeSection = ((FrameworkElement)args.AddedItems[0]).Name;
@@ -366,7 +415,9 @@ namespace UrbanGame.ViewModels
                 {
                     IQueryable<IAlert> alerts = uow.GetRepository<IAlert>().All();
 
-                    GameAlerts = new BindableCollection<IAlert>(alerts.Where(a => a.Game.Id == GameId).AsEnumerable());
+                    GameAlerts = new BindableCollection<IAlert>(alerts.Where(a => a.Game.Id == GameId)
+                                                                                .OrderByDescending(a => a.AlertAppear)
+                                                                                .AsEnumerable());
                 }
             });
         }
@@ -413,6 +464,11 @@ namespace UrbanGame.ViewModels
                                                                                     .AsEnumerable());
                 }
             });
+
+            if (ActiveTasks.Count == 0)
+            {
+                NotAvailableTasks = true;
+            }
         }
 
         public async Task RefreshInactiveTasks()
