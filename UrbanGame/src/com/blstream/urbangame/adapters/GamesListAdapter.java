@@ -170,6 +170,7 @@ public class GamesListAdapter extends BaseExpandableListAdapter {
 	
 	@Override
 	public int getChildrenCount(int groupPosition) {
+		if (data == null) return 0;
 		return data.size();
 	}
 	
