@@ -125,7 +125,7 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to acitve.
+        ///   Looks up a localized string similar to active.
         /// </summary>
         public static string Active {
             get {
@@ -238,6 +238,15 @@ namespace UrbanGame.Localization {
         public static string Completed {
             get {
                 return ResourceManager.GetString("Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have completed all tasks, but few tasks could be done better. Try to repeat them in order to gain more points..
+        /// </summary>
+        public static string CompletedTasks {
+            get {
+                return ResourceManager.GetString("CompletedTasks", resourceCulture);
             }
         }
         
@@ -422,11 +431,11 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ended.
+        ///   Looks up a localized string similar to Game is over. Tap to see your result..
         /// </summary>
-        public static string GameStateEnded {
+        public static string GameStateChangedToast {
             get {
-                return ResourceManager.GetString("GameStateEnded", resourceCulture);
+                return ResourceManager.GetString("GameStateChangedToast", resourceCulture);
             }
         }
         
@@ -449,20 +458,20 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to lost.
+        /// </summary>
+        public static string GameStateLost {
+            get {
+                return ResourceManager.GetString("GameStateLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string GameStateNone {
             get {
                 return ResourceManager.GetString("GameStateNone", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to withdraw.
-        /// </summary>
-        public static string GameStateWithdraw {
-            get {
-                return ResourceManager.GetString("GameStateWithdraw", resourceCulture);
             }
         }
         
@@ -728,7 +737,7 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are not tasks at this point, try later or try to connect from different area of the city to receive hidden bonus tasks.
+        ///   Looks up a localized string similar to There are not tasks at this point, try later or try to connect from different area of the city to receive hidden bonus tasks..
         /// </summary>
         public static string NoTasks {
             get {
@@ -1043,6 +1052,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Task details have changed. Tap to see differences..
+        /// </summary>
+        public static string TaskChangedToast {
+            get {
+                return ResourceManager.GetString("TaskChangedToast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to tasks.
         /// </summary>
         public static string Tasks {
@@ -1124,11 +1142,38 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We will contact with you.
+        /// </summary>
+        public static string WeWillContact {
+            get {
+                return ResourceManager.GetString("WeWillContact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to WRONG!.
         /// </summary>
         public static string Wrong {
             get {
                 return ResourceManager.GetString("Wrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You lost!.
+        /// </summary>
+        public static string YouLost {
+            get {
+                return ResourceManager.GetString("YouLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You won!.
+        /// </summary>
+        public static string YouWon {
+            get {
+                return ResourceManager.GetString("YouWon", resourceCulture);
             }
         }
     }

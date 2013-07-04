@@ -131,7 +131,7 @@
     <value>accomplished</value>
   </data>
   <data name="Active" xml:space="preserve">
-    <value>acitve</value>
+    <value>active</value>
   </data>
   <data name="Alerts" xml:space="preserve">
     <value>alerts</value>
@@ -172,8 +172,8 @@
   <data name="GameStart" xml:space="preserve">
     <value>start:</value>
   </data>
-  <data name="GameStateEnded" xml:space="preserve">
-    <value>ended</value>
+  <data name="GameStateLost" xml:space="preserve">
+    <value>lost</value>
   </data>
   <data name="GameStateInactive" xml:space="preserve">
     <value>inactive</value>
@@ -183,9 +183,6 @@
   </data>
   <data name="GameStateNone" xml:space="preserve">
     <value />
-  </data>
-  <data name="GameStateWithdraw" xml:space="preserve">
-    <value>withdraw</value>
   </data>
   <data name="GameStateWon" xml:space="preserve">
     <value>won</value>
@@ -472,7 +469,25 @@
   <data name="ChooseAndJoin" xml:space="preserve">
     <value>Please, choose one and join in.</value>
   </data>
+  <data name="GameStateChangedToast" xml:space="preserve">
+    <value>Game is over. Tap to see your result.</value>
+  </data>
+  <data name="YouLost" xml:space="preserve">
+    <value>You lost!</value>
+  </data>
+  <data name="YouWon" xml:space="preserve">
+    <value>You won!</value>
+  </data>
+  <data name="WeWillContact" xml:space="preserve">
+    <value>We will contact with you</value>
+  </data>
+  <data name="TaskChangedToast" xml:space="preserve">
+    <value>Task details have changed. Tap to see differences.</value>
+  </data>
   <data name="NoTasks" xml:space="preserve">
-    <value>There are not tasks at this point, try later or try to connect from different area of the city to receive hidden bonus tasks</value>
+    <value>There are not tasks at this point, try later or try to connect from different area of the city to receive hidden bonus tasks.</value>
+  </data>
+  <data name="CompletedTasks" xml:space="preserve">
+    <value>You have completed all tasks, but few tasks could be done better. Try to repeat them in order to gain more points.</value>
   </data>
 </root>

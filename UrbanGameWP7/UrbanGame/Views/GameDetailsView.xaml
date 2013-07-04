@@ -8,6 +8,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+    xmlns:utils="clr-namespace:UrbanGame.Utilities"
+    utils:StateManager.VisualStateProperty="{Binding VisualStateName}"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -17,6 +19,37 @@
 
     <!--LayoutRoot contains the root grid where all other page content is placed-->
     <Grid x:Name="LayoutRoot">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="BackupStates">
+                <VisualState x:Name="Normal">
+                    <Storyboard>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="YouWon">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Banner">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="YouWonText">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="ContactText">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="YouLost">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Banner">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="YouLostText">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <controls:Panorama>
             <controls:Panorama.Background>
                 <ImageBrush ImageSource="/Images/GameviewPanorama.png" />
@@ -178,7 +211,7 @@
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Orientation="Vertical">
                             <TextBlock Text="{Binding Path=AppResources.Active, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="5,0,0,0" Foreground="{StaticResource FontColorGreen}"/>
-                            <TextBlock Text="{Binding Path=AppResources.NoTasks, Source={StaticResource LocalizedStrings}}" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding NotAvailableTasks, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <TextBlock Text="{Binding Path=AppResources.NoTasks, Source={StaticResource LocalizedStrings}}" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding NoAvailableTasks, Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,0,0" TextWrapping="Wrap"/>
                             <ListBox ItemsSource="{Binding ActiveTasks}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -211,6 +244,7 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
+                            <TextBlock Grid.Row="1"  Text="{Binding Path=AppResources.CompletedTasks, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Margin="5,0,0,0" Visibility="{Binding AllTasksAccomplished, Converter={StaticResource BoolToVisibilityConverter}}"/>
                             <StackPanel Orientation="Horizontal" Grid.Row="1" Visibility="Collapsed">
                                 <TextBlock Text="{Binding Path=AppResources.BonusTask, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="0,0,20,0" Foreground="{StaticResource FontColorGreen}"/>
                                 <TextBlock Text="{Binding BonusTasks}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="5,10,0,0" Visibility="Collapsed" Foreground="{StaticResource FontColorGreen}"/>
@@ -354,6 +388,24 @@
                 </ListBox>
             </controls:PanoramaItem>
         </controls:Panorama>
+
+        <Grid x:Name="Banner" cal:Message.Attach="[Event Tap]=[Action ChangeToNormal()]" Visibility="Collapsed">
+            <Rectangle Width="480" Height="740" Opacity="0.5">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="{StaticResource SolidColorBrushBlack}"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Border x:Name="GreenRectangle" VerticalAlignment="Center" Height="Auto" Padding="20">
+                <Border.Background>
+                    <SolidColorBrush Color="{StaticResource SolidColorBrushGreen}"/>
+                </Border.Background>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="Auto">
+                    <TextBlock x:Name="YouWonText" Text="{Binding Path=AppResources.YouWon, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="30" TextWrapping="Wrap" Visibility="Collapsed" />
+                    <TextBlock x:Name="ContactText" Text="{Binding Path=AppResources.WeWillContact, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="30" TextWrapping="Wrap" Margin="0,10,0,0" Visibility="Collapsed" />
+                    <TextBlock x:Name="YouLostText" Text="{Binding Path=AppResources.YouLost, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="30" TextWrapping="Wrap" Visibility="Collapsed" />
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar BackgroundColor="{StaticResource SolidColorBrushGreen}">

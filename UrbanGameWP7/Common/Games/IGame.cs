@@ -40,14 +40,10 @@ namespace Common
 
         int NumberOfSlots { get; set; }
 
-        /// <summary>
-        /// Field shows that user won, joined, ended, withdraw, etc. the game
-        /// </summary>
         GameState GameState { get; set; }
 
-        /// <summary>
-        /// User's rank in that game
-        /// </summary>
+        bool GameOverDisplayed { get; set; }
+
         int? Rank { get; set; }
 
         double GameLatitude { get; set; }

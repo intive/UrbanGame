@@ -14,11 +14,9 @@ namespace UrbanGame.Converters
         {
             switch ((GameState)value)
             {
-                case GameState.None: return AppResources.GameStateNone;
                 case GameState.Joined: return AppResources.GameStateJoined;
                 case GameState.Won: return AppResources.GameStateWon;
-                case GameState.Ended: return AppResources.GameStateEnded;
-                case GameState.Withdraw: return AppResources.GameStateWithdraw;
+                case GameState.Lost: return AppResources.GameStateLost;
                 case GameState.Inactive: return AppResources.GameStateInactive;
                 default: return "";
             }

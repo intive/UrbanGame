@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Device.Location;
 
-namespace Common
+namespace UrbanGame
 {
     public class GPSLocation
     {
@@ -46,8 +46,9 @@ namespace Common
 
         private void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
         {
-            if (callback != null) callback(e.Position.Location);
             disposeWatcher();
+            if (callback != null) 
+                callback(e.Position.Location);            
         }
 
         public double CalculateDistance(GeoCoordinate currentPosition, double Latitude, double Longitude)

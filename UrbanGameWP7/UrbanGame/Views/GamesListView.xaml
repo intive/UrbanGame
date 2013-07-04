@@ -141,7 +141,7 @@
                         <ListBox Grid.Row="3" Margin="0,5,0,0" ItemsSource="{Binding UserInactiveGames}" Visibility="{Binding IsAuthorized,Converter={StaticResource BoolToVisibilityConverter}}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="5,0,5,0" Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowDetails($dataContext)]">
+                                    <Grid Margin="5,0,5,0" Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowFullDetails($dataContext)]">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition/>
@@ -178,9 +178,16 @@
                                                         <Setter Property="Foreground" Value="{StaticResource FontColorGreen}" />
                                                     </Style>
                                                 </StackPanel.Resources>
+                                                <TextBlock Text="{Binding Points, Converter={StaticResource IntToSlashIntConverter}, ConverterParameter=false}"/>
+                                                <TextBlock Text="{Binding MaxPoints, Converter={StaticResource IntToSlashIntConverter}}" Margin="-5,0,5,0"/>
+                                                <TextBlock Text="p." />
+                                                <TextBlock Text="|" />
+                                                <TextBlock Text="{Binding Path=AppResources.Rank, Source={StaticResource LocalizedStrings}}" />
+                                                <TextBlock Text="{Binding Rank, Converter={StaticResource RankConverter}}" />
+                                                <TextBlock Text="|" />
+                                                <TextBlock Text="{Binding GameState, Converter={StaticResource GameStateConverter}}"/>
                                                 <TextBlock Text="{Binding Path=AppResources.Rank, Source={StaticResource LocalizedStrings}}" Visibility="{Binding Rank, Converter={StaticResource ValueToVisibilityConverter}}"/>
-                                                <TextBlock Text="{Binding Rank, Converter={StaticResource RankConverter}}" Visibility="{Binding Rank, Converter={StaticResource ValueToVisibilityConverter}}"/>
-                                            </StackPanel>
+                                                <TextBlock Text="{Binding Rank, Converter={StaticResource RankConverter}}" Visibility="{Binding Rank, Converter={StaticResource ValueToVisibilityConverter}}"/>                                            </StackPanel>
                                         </Grid>
                                     </Grid>
                                 </DataTemplate>

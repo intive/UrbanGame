@@ -412,6 +412,27 @@ namespace WebService.DTOs
         }
         #endregion
 
+        #region GameOverDisplayed
+        private bool _gameOverDisplayed;
+
+        public bool GameOverDisplayed
+        {
+            get
+            {
+                return _gameOverDisplayed;
+            }
+            set
+            {
+                if (_gameOverDisplayed != value)
+                {
+                    NotifyPropertyChanging("GameOverDisplayed");
+                    _gameOverDisplayed = value;
+                    NotifyPropertyChanged("GameOverDisplayed");
+                }
+            }
+        }
+        #endregion
+
         #region Rank
 
         private int? _rank;

@@ -28,7 +28,7 @@ namespace UrbanGame.Converters
                 }
                 else
                 {
-                    return AppResources.BelowMinute;
+                    return AppResources.BelowMinute + " ";
                 }
             }
             else
