@@ -20,7 +20,7 @@ namespace UrbanGame.ViewModels
         IAppbarManager _appbarManager;
 
         public TaskViewModel(INavigationService navigationService, Func<IUnitOfWork> unitOfWorkLocator,
-                                    IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager, IGameAuthorizationService authorizationService)
+                             IGameWebService gameWebService, IEventAggregator gameEventAggregator, IAppbarManager appbarManager, IGameAuthorizationService authorizationService)
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator, authorizationService)
         {
             _appbarManager = appbarManager;
@@ -82,7 +82,7 @@ namespace UrbanGame.ViewModels
         #region IHandle<SolutionStatusChanged>
         public void Handle(SolutionStatusChanged message)
         {
-            if (message.TaskId == CurrentTask.Id)
+            if (CurrentTask != null && message.TaskId == CurrentTask.Id)
             {
                 CurrentTask.SolutionStatus = message.Status;
                 CurrentTask.UserPoints = message.Points;
@@ -327,14 +327,12 @@ namespace UrbanGame.ViewModels
         {
             //sending solution
             var result = _gameWebService.SubmitTaskSolution(GameId, CurrentTask.Id, Solution);
-            //todo: update points in Views (gameDetailsView & TaskView)
-            //todo: change WebService.SubmitTaskSolution to return gained points
 
             using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
             {
                 var sol = unitOfWork.GetRepository<IBaseSolution>().All().First(s => s.Id == solution.Id);                          
 
-                System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() => CurrentTask.UserPoints = result.ScoredPoints);
+                System.Windows.Deployment.Current.Dispatcher.InvokeAsync(() => CurrentTask.UserPoints = result.ScoredPoints).Wait();
 
                 switch(result.SubmitResult)
                 {
@@ -350,10 +348,21 @@ namespace UrbanGame.ViewModels
                         VisualStateName = "Delayed";
                         sol.Task.SolutionStatus = SolutionStatus.Pending;
                         break;
-                    default: 
+                    default:
                         VisualStateName = "Timeout";
                         break;
                 }
+
+                if (result.SubmitResult != SubmitResult.Timeout)
+                {
+                    sol.Task.UserPoints = result.ScoredPoints;
+                    if (sol.Task.SolutionStatus == SolutionStatus.Accepted || sol.Task.SolutionStatus == SolutionStatus.Rejected)
+                        if ((sol.Task.SolutionStatus == SolutionStatus.Accepted && sol.Task.MaxPoints == result.ScoredPoints) || !sol.Task.IsRepeatable)
+                            sol.Task.State = TaskState.Accomplished;
+                    unitOfWork.Commit();
+
+                    _eventAggregator.Publish(new TaskChangedEvent() { Id = TaskId, GameId = GameId });
+                }                    
             }
 
             RefreshTask();
@@ -366,21 +375,22 @@ namespace UrbanGame.ViewModels
             await Task.Factory.StartNew(() =>
             {
                 GPSLocation gps = new GPSLocation();
-                    gps.GetCurrentCoordinates(coords =>
+                gps.GetCurrentCoordinates(coords =>
+                {
+                    IBaseSolution solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
+                    //saving solution in database
+                    using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
                     {
-                        Solution = new TaskSolution() { Latitude = coords.Latitude, Longitude = coords.Longitude, TaskType = TaskType.GPS };
-                        //saving solution in database
-                        using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
-                        {
-                            GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
-                            Solution.Task = task;
-                            Solution.Task.SolutionStatus = SolutionStatus.Pending;
+                        GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
+                        solution.Task = task;
+                        solution.Task.SolutionStatus = SolutionStatus.NotSend;
 
-                            unitOfWork.GetRepository<IBaseSolution>().MarkForAdd(Solution);
-                            unitOfWork.Commit();
-                        }
-                        SubmitSolution(Solution);
-                    });
+                        unitOfWork.GetRepository<IBaseSolution>().MarkForAdd(solution);
+                        unitOfWork.Commit();
+                    }
+                    Solution = solution;
+                    SubmitSolution(solution);
+                });
             });
         }
 
@@ -388,8 +398,7 @@ namespace UrbanGame.ViewModels
         {
             VisualStateName = "Sending";
             await Task.Factory.StartNew(() =>
-            {
-                
+            {                
                 //saving solution in database
                 using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
                 {
@@ -398,7 +407,7 @@ namespace UrbanGame.ViewModels
                     solutionRepo.MarkForAdd(solution);
                     ITask task = unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
                     solution.Task = task;
-                    solution.Task.SolutionStatus = SolutionStatus.Pending;
+                    solution.Task.SolutionStatus = SolutionStatus.NotSend;
 
                     var answerRepo = unitOfWork.GetRepository<IABCDUserAnswer>();
                     foreach (var check in Answers)

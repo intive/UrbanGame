@@ -142,10 +142,9 @@ namespace WebService
             if (!_authorizationService.IsUserAuthenticated())
                 return;
 
+            _gameUpdaterTimer.Dispose();
             Task.Factory.StartNew(() =>
-                {
-                    _gameUpdaterTimer.Dispose();
-
+                {                    
                     try
                     {
                         using (var uow = _unitOfWorkLocator())
@@ -195,10 +194,9 @@ namespace WebService
             if (!_authorizationService.IsUserAuthenticated())
                 return;
 
+            _gameUpdaterTimer.Dispose();
             Task.Factory.StartNew(() =>
-            {
-                _gameUpdaterTimer.Dispose();
-
+            {               
                 try
                 {
                     using (var uow = _unitOfWorkLocator())
@@ -241,10 +239,9 @@ namespace WebService
             if (!_authorizationService.IsUserAuthenticated())
                 return;
 
+            _taskUpdaterTimer.Dispose();
             Task.Factory.StartNew(() =>
-            {
-                _taskUpdaterTimer.Dispose();
-
+            {               
                 try
                 {
                     using (var uow = _unitOfWorkLocator())
@@ -279,6 +276,13 @@ namespace WebService
 
                                     _gameEventAggregator.Publish(new TaskChangedEvent() { Id = oldTask.Id, GameId = game.Id });
                                 }
+                                else if (newTask.State != oldTask.State)
+                                {
+                                    oldTask.State = newTask.State;
+                                    uow.Commit();
+
+                                    _gameEventAggregator.Publish(new TaskChangedEvent() { Id = oldTask.Id, GameId = game.Id });
+                                }
                             }
                         }
                     }
@@ -299,10 +303,9 @@ namespace WebService
             if (!_authorizationService.IsUserAuthenticated())
                 return;
 
+            _solutionUpdaterTimer.Dispose();
             Task.Factory.StartNew(() =>
-            {
-                _solutionUpdaterTimer.Dispose();
-
+            {               
                 try
                 {
                     using (var uow = _unitOfWorkLocator())
@@ -317,6 +320,9 @@ namespace WebService
 
                             if (response.Status == SolutionStatus.Accepted || response.Status == SolutionStatus.Rejected)
                             {
+                                if ((response.Status == SolutionStatus.Accepted && response.Points == solution.Task.MaxPoints) || !solution.Task.IsRepeatable)
+                                    solution.Task.State = TaskState.Accomplished;
+
                                 solution.Task.SolutionStatus = response.Status;
                                 solution.Task.UserPoints = response.Points;                 
                                 uow.Commit();
@@ -326,7 +332,7 @@ namespace WebService
                                 if (_toastPromptService != null)
                                     _toastPromptService.ShowSolutionStatusChanged(solution.Task.Id, solution.Task.Game.Id, solution.Task.Name, message);
 
-                                _gameEventAggregator.Publish(new SolutionStatusChanged() { Status = response.Status, Points = response.Points, TaskId = solution.Task.Id });
+                                _gameEventAggregator.Publish(new SolutionStatusChanged() { Status = response.Status, Points = response.Points, TaskId = solution.Task.Id, GameId = solution.Task.Game.Id });
                             }
                         }                        
                     }

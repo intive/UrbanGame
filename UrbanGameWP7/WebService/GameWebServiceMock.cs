@@ -87,14 +87,14 @@ namespace WebService
         #region CheckGameOver
         public async Task<GameOverResponse> CheckGameOver(int gid)
         {
-            int r = new Random().Next(100);
+            /*int r = new Random().Next(100);
             int rank = new Random().Next(1, 100);
 
             if (r < 20)
                 return new GameOverResponse() { State = GameState.Won, Rank = rank, IsGameOver = true };
             if (r < 35)
                 return new GameOverResponse() { State = GameState.Lost, Rank = rank, IsGameOver = true };
-            else
+            else*/
                 return new GameOverResponse() { State = GameState.Joined, IsGameOver = false };
         }
         #endregion
@@ -150,18 +150,25 @@ namespace WebService
         public SolutionResultScore SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
             int r = new Random().Next(100);
+            var task = ListOfTasks.First(t => t.Id == tid);
 
             if (r < 20)
             {
+                if (!task.IsRepeatable)
+                    task.State = TaskState.Accomplished;
+                task.UserPoints = r;
                 return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = r };
             }
             else if (r < 60)
             {
+                if (!task.IsRepeatable || task.MaxPoints == r)
+                    task.State = TaskState.Accomplished;
+                task.UserPoints = r;
                 return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerCorrect, ScoredPoints = r };
             }
             else
             {
-                return new SolutionResultScore() { SubmitResult = SubmitResult.ScoreDelayed, ScoredPoints = r };
+                return new SolutionResultScore() { SubmitResult = SubmitResult.ScoreDelayed };
             }
         }
         #endregion
@@ -172,7 +179,7 @@ namespace WebService
         {
             SolutionStatusResponse result = new SolutionStatusResponse();
             result.Status = new Random().Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
-            result.Points = 5;
+            result.Points = new Random().Next(30);
             return result;
         }
 

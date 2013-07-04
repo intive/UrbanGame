@@ -135,9 +135,12 @@ namespace UrbanGame.ViewModels
         {
             ITask task = ActiveTasks.FirstOrDefault(t => t.Id == status.TaskId);
             if (task != null)
-            {
+            {               
                 task.SolutionStatus = status.Status;
                 task.UserPoints = status.Points;
+
+                RefreshActiveTasks();
+                RefreshAccomplishedTasks();
             }
         }
         #endregion
@@ -509,9 +512,7 @@ namespace UrbanGame.ViewModels
                     GameHighScoresTemp = new BindableCollection<IHighScore>(highScores.Where(h => h.Game.Id == GameId)
                                                                                     .OrderByDescending(h => h.Points)
                                                                                     .AsEnumerable());
-
-
-
+                    
                     GameHighScores = new BindableCollection<PositionedHighScore>();
                     for (int i = 0; i < GameHighScoresTemp.Count; i++)
                     {
@@ -530,11 +531,9 @@ namespace UrbanGame.ViewModels
                 {
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
-
-                    ActiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Active)
-                                                                         .Where(t => t.Game.Id == GameId)
-                                                                                    .OrderBy(t => t.EndDate)
-                                                                                    .AsEnumerable());
+                    ActiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Active && t.Game.Id == GameId)
+                                                                     .OrderBy(t => t.EndDate)
+                                                                     .AsEnumerable());
                 }
             });
         }
@@ -548,11 +547,9 @@ namespace UrbanGame.ViewModels
                 {
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
-
-                    InactiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Inactive)
-                                                                                                .Where(t => t.Game.Id == GameId)
-                                                                                                        .OrderBy(t => t.EndDate)
-                                                                                                        .AsEnumerable());
+                    InactiveTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Inactive && t.Game.Id == GameId)                                                                    
+                                                                       .OrderBy(t => t.EndDate)
+                                                                       .AsEnumerable());
                 }
             });
         }
@@ -567,10 +564,9 @@ namespace UrbanGame.ViewModels
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
 
-                    AccomplishedTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Accomplished)
-                                                                            .Where(t => t.Game.Id == GameId)
-                                                                                    .OrderBy(t => t.EndDate)
-                                                                                    .AsEnumerable());
+                    AccomplishedTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Accomplished && t.Game.Id == GameId)                                                                         
+                                                                           .OrderBy(t => t.EndDate)
+                                                                           .AsEnumerable());
                 }
             });
         }
@@ -585,10 +581,9 @@ namespace UrbanGame.ViewModels
                     IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
 
 
-                    CancelledTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Cancelled)
-                                                                            .Where(t => t.Game.Id == GameId)
-                                                                                    .OrderBy(t => t.EndDate)
-                                                                                    .AsEnumerable());
+                    CancelledTasks = new BindableCollection<ITask>(tasks.Where(t => t.State == TaskState.Cancelled && t.Game.Id == GameId)                                                                        
+                                                                        .OrderBy(t => t.EndDate)
+                                                                        .AsEnumerable());
                 }
             });
 
