@@ -142,7 +142,7 @@ namespace WebService
             if (!_authorizationService.IsUserAuthenticated())
                 return;
 
-            _gameUpdaterTimer.Dispose();
+            _gameUpdaterTimer.Change(Timeout.Infinite, Timeout.Infinite);
             Task.Factory.StartNew(() =>
                 {                    
                     try
@@ -180,7 +180,7 @@ namespace WebService
                     }
                     finally
                     {
-                        _gameUpdaterTimer = new Timer(new TimerCallback(CheckGameChanges), null, _gameUpdaterPeriod, _gameUpdaterPeriod);
+                        _gameUpdaterTimer.Change(_gameUpdaterPeriod, _gameUpdaterPeriod);
                     }                    
                 });
         }
@@ -194,7 +194,7 @@ namespace WebService
             if (!_authorizationService.IsUserAuthenticated())
                 return;
 
-            _gameUpdaterTimer.Dispose();
+            _gameStateUpdaterTimer.Change(Timeout.Infinite, Timeout.Infinite);
             Task.Factory.StartNew(() =>
             {               
                 try
@@ -225,7 +225,7 @@ namespace WebService
                 }
                 finally
                 {
-                    _gameStateUpdaterTimer = new Timer(new TimerCallback(CheckGameStateChanges), null, _gameStateUpdaterPeriod, _gameStateUpdaterPeriod);
+                    _gameStateUpdaterTimer.Change(_gameStateUpdaterPeriod, _gameStateUpdaterPeriod);
                 }
             });
         }
@@ -239,7 +239,7 @@ namespace WebService
             if (!_authorizationService.IsUserAuthenticated())
                 return;
 
-            _taskUpdaterTimer.Dispose();
+            _taskUpdaterTimer.Change(Timeout.Infinite, Timeout.Infinite);
             Task.Factory.StartNew(() =>
             {               
                 try
@@ -261,8 +261,8 @@ namespace WebService
 
                                 if (newTask.Version != oldTask.Version)
                                 {
-                                    IList<string> diff = UpdateObject(oldTask, newTask, new List<string>() { "Game", "ListOfChanges" });
-
+                                    IList<string> diff = UpdateObject(oldTask, newTask, new List<string>() { "Game", "ListOfChanges", "UserPoints" });
+                                   
                                     if (diff.Count == 0)
                                         return;
 
@@ -289,7 +289,7 @@ namespace WebService
                 }
                 finally
                 {
-                    _taskUpdaterTimer = new Timer(new TimerCallback(CheckTaskChanges), null, _taskUpdaterPeriod, _taskUpdaterPeriod);
+                    _taskUpdaterTimer.Change(_taskUpdaterPeriod, _taskUpdaterPeriod);
                 }
             });
         }
@@ -303,7 +303,7 @@ namespace WebService
             if (!_authorizationService.IsUserAuthenticated())
                 return;
 
-            _solutionUpdaterTimer.Dispose();
+            _solutionUpdaterTimer.Change(Timeout.Infinite, Timeout.Infinite);
             Task.Factory.StartNew(() =>
             {               
                 try
@@ -339,7 +339,7 @@ namespace WebService
                 }
                 finally
                 {
-                    _solutionUpdaterTimer = new Timer(new TimerCallback(CheckSolutionStatusChanged), null, _solutionUpdaterPeriod, _solutionUpdaterPeriod);
+                    _solutionUpdaterTimer.Change(_solutionUpdaterPeriod, _solutionUpdaterPeriod);
                 }
             });
         }

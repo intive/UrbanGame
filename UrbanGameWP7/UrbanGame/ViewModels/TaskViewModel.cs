@@ -353,16 +353,19 @@ namespace UrbanGame.ViewModels
                         break;
                 }
 
-                if (result.SubmitResult != SubmitResult.Timeout)
+                if (result.SubmitResult == SubmitResult.AnswerCorrect || result.SubmitResult == SubmitResult.AnswerIncorrect)
                 {
                     sol.Task.UserPoints = result.ScoredPoints;
-                    if (sol.Task.SolutionStatus == SolutionStatus.Accepted || sol.Task.SolutionStatus == SolutionStatus.Rejected)
-                        if ((sol.Task.SolutionStatus == SolutionStatus.Accepted && sol.Task.MaxPoints == result.ScoredPoints) || !sol.Task.IsRepeatable)
-                            sol.Task.State = TaskState.Accomplished;
+                    if ((sol.Task.SolutionStatus == SolutionStatus.Accepted && sol.Task.MaxPoints == result.ScoredPoints) || !sol.Task.IsRepeatable)
+                        sol.Task.State = TaskState.Accomplished;
                     unitOfWork.Commit();
 
                     _eventAggregator.Publish(new TaskChangedEvent() { Id = TaskId, GameId = GameId });
-                }                    
+                }
+                else if (result.SubmitResult == SubmitResult.ScoreDelayed)
+                {
+                    unitOfWork.Commit();
+                }
             }
 
             RefreshTask();
@@ -382,6 +385,13 @@ namespace UrbanGame.ViewModels
                     using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
                     {
                         GameTask task = (GameTask)unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
+
+                        //removing old solutions
+                        foreach (var s in task.Solutions)
+                        {
+                            unitOfWork.GetRepository<IBaseSolution>().MarkForDeletion(s);
+                        }
+                        
                         solution.Task = task;
                         solution.Task.SolutionStatus = SolutionStatus.NotSend;
 
@@ -406,6 +416,13 @@ namespace UrbanGame.ViewModels
                     IABCDSolution solution = solutionRepo.CreateInstance();
                     solutionRepo.MarkForAdd(solution);
                     ITask task = unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
+
+                    //removing old solutions
+                    foreach (var s in task.Solutions)
+                    {
+                        unitOfWork.GetRepository<IBaseSolution>().MarkForDeletion(s);
+                    }
+
                     solution.Task = task;
                     solution.Task.SolutionStatus = SolutionStatus.NotSend;
 

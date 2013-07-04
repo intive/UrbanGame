@@ -133,12 +133,8 @@ namespace UrbanGame.ViewModels
         #region IHandle<SolutionStatusChanged>
         public void Handle(SolutionStatusChanged status)
         {
-            ITask task = ActiveTasks.FirstOrDefault(t => t.Id == status.TaskId);
-            if (task != null)
+            if (ActiveTasks.Any(t => t.Id == status.TaskId))
             {               
-                task.SolutionStatus = status.Status;
-                task.UserPoints = status.Points;
-
                 RefreshActiveTasks();
                 RefreshAccomplishedTasks();
             }

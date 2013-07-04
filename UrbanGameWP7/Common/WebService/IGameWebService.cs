@@ -99,30 +99,6 @@ namespace Common
         Task<IGame[]> UserNearbyGames(GeoCoordinate coordinate);
 
         /// <summary>
-        /// Method returns array of tasks in which are still active
-        /// </summary>
-        /// <returns></returns>
-        ITask[] ActiveTasks();
-
-        /// <summary>
-        /// Method returns array of tasks in which are inactive
-        /// </summary>
-        /// <returns></returns>
-        ITask[] InactiveTasks();
-
-        /// <summary>
-        /// Method returns array of tasks in which are accomplished
-        /// </summary>
-        /// <returns></returns>
-        ITask[] AccomplishedTasks();
-
-        /// <summary>
-        /// Method returns array of tasks in which are cancelled
-        /// </summary>
-        /// <returns></returns>
-        ITask[] CancelledTasks();
-
-        /// <summary>
         /// Method returns array of alerts
         /// </summary>
         /// <returns></returns>
