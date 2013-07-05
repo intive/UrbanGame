@@ -46,7 +46,7 @@ public abstract class WebDownloader {
 			return downloadDataFromUri(requestUri);
 		}
 		catch (IOException e) {
-			Log.e(TAG, e.getMessage());
+			Log.e(TAG, e.getMessage() != null ? e.getMessage() : "null message");
 			Log.d(TAG, "Possible issues: host doesn't exist or no internet connection.");
 			return EMPTY_JSON;
 		}
@@ -194,7 +194,7 @@ class RegistrationWebDownloader extends WebDownloaderPOST {
 			jsonObject.put("password", password);
 		}
 		catch (JSONException e) {
-			Log.e("Register", e.getMessage());
+			Log.e("Register", e.getMessage() != null ? e.getMessage() : "null message");
 		}
 		this.setRequestData(jsonObject.toString());
 	}
