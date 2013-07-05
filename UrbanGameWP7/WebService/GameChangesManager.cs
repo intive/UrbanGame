@@ -141,6 +141,46 @@ namespace WebService
 
         #endregion
 
+        #region UpdateABCD
+
+        private bool UpdateABCD(IUnitOfWork uow, ITask oldTask, ITask newTask)
+        {
+            bool changes = false;
+
+            foreach (var newABCD in newTask.ABCDPossibleAnswers)
+            {
+                IABCDPossibleAnswer oldABCD = oldTask.ABCDPossibleAnswers.FirstOrDefault(abc => abc.CharId == newABCD.CharId);
+
+                if (oldABCD == null) //add new possible answer
+                {
+                    changes = true;
+                    var abcd = uow.GetRepository<IABCDPossibleAnswer>().CreateInstance();
+                    abcd.Answer = newABCD.Answer;
+                    abcd.CharId = newABCD.CharId;
+                    oldTask.ABCDPossibleAnswers.Add(abcd);
+                }
+                else if (oldABCD.Answer != newABCD.Answer) //update possible answer
+                {                   
+                    changes = true;
+                    oldABCD.Answer = newABCD.Answer;
+                }
+            }
+
+            //removing answers
+            foreach (var abcd in oldTask.ABCDPossibleAnswers.ToList())
+            {
+                if (!newTask.ABCDPossibleAnswers.Any(a => a.CharId == abcd.CharId))
+                {
+                    changes = true;
+                    uow.GetRepository<IABCDPossibleAnswer>().MarkForDeletion(abcd);
+                }
+            }
+
+            return changes;
+        }
+
+        #endregion
+
 
 
         #region GameChanges
@@ -174,7 +214,7 @@ namespace WebService
                                     IList<string> diff = UpdateObject(oldGame, newGame, skipFields);
 
                                     if (diff.Count == 0)
-                                        return;
+                                        continue;
 
                                     if (_toastPromptService != null)
                                         oldGame.ListOfChanges = _toastPromptService.GetDifferencesText(diff);
@@ -309,11 +349,18 @@ namespace WebService
                                 else
                                 {
                                     if (newTask.Version != oldTask.Version)
-                                    {
-                                        IList<string> diff = UpdateObject(oldTask, newTask, new List<string>() { "Game", "ListOfChanges", "UserPoints" });
+                                    {                     
+                                        IList<string> diff = UpdateObject(oldTask, newTask, new List<string>() { "Game", "ListOfChanges", "UserPoints", "SolutionStatus" });
+
+                                        //Check abcd possible answers
+                                        if (oldTask.Type == TaskType.ABCD)
+                                        {
+                                            if (UpdateABCD(uow, oldTask, newTask))
+                                                diff.Add("ABCDPossibleAnswers");
+                                        }
 
                                         if (diff.Count == 0)
-                                            return;
+                                            continue;
 
                                         if (_toastPromptService != null)
                                             oldTask.ListOfChanges = _toastPromptService.GetDifferencesText(diff);

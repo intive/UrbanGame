@@ -263,23 +263,19 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding CurrentTask.AdditionalText}" Grid.Row="0" Grid.ColumnSpan="2" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMedium}" />
+                            <TextBlock Text="{Binding CurrentTask.AdditionalText}" Grid.Row="0" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMedium}" />
                             <ListBox Name="ABCDListView" Grid.Row="1" ItemsSource="{Binding Answers}" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked,Mode=TwoWay}"/>
-                                            <TextBlock VerticalAlignment="Center" Grid.Column="1" Margin="5,0,0,0" Text="{Binding PossibleAnswer.Answer}" Foreground="{StaticResource FontColorWhite}"  FontSize="{StaticResource PhoneFontSizeMedium}"/>
+                                            <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding PossibleAnswer.Answer}" Foreground="{StaticResource FontColorWhite}"  FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
 
-                            <Button cal:Message.Attach="[Event Tap] = [Action SubmitABCD()]" Content="{Binding Path=AppResources.Submit, Source={StaticResource LocalizedStrings}}" Background="OliveDrab" BorderBrush="OliveDrab" Grid.Column="1" Grid.Row="2" x:Name="SubmitABCD"/>
+                            <Button cal:Message.Attach="[Event Tap] = [Action SubmitABCD()]" Content="{Binding Path=AppResources.Submit, Source={StaticResource LocalizedStrings}}" Background="OliveDrab" BorderBrush="OliveDrab" Grid.Row="2" Width="228" HorizontalAlignment="Right" x:Name="SubmitABCD"/>
                         </Grid>
                         <Grid x:Name="GPS" Grid.Row="1" Visibility="{Binding Path=CurrentTask.Type, Converter={StaticResource GPSToVisibilityConverter}}">
                             <Grid.RowDefinitions>

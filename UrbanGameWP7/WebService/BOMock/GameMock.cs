@@ -10,8 +10,6 @@ namespace WebService.BOMock
 {
     public class GameMock : BOBase, IGame
     {
-        const string imagesUrl = "http://urbangame.patronage.blstream.com/assets/images/";
-
         public GameMock()
         {
             _tasks = new EntityEnumerable<ITask, TaskMock>(new EntitySet<TaskMock>(OnTaskAdded, OnTaskRemoved));

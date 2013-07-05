@@ -20,7 +20,7 @@ namespace UrbanGame.Storage
             _highScoreRefs = new EntitySet<GameHighScore>(OnHighScoreAdded, OnHighScoreRemoved);
         }
 
-        const string imagesUrl = "http://urbangame.patronage.blstream.com/assets/images/";
+        const string imagesUrl = "http://urbangame.patronage.blstream.com/";
 
         #region Id
 

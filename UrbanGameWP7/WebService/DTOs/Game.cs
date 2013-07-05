@@ -11,7 +11,7 @@ namespace WebService.DTOs
 {
     public class Game : BOBase, IGame
     {
-        const string imagesUrl = "http://urbangame.patronage.blstream.com/assets/images/";
+        const string imagesUrl = "http://urbangame.patronage.blstream.com/";
 
         public Game()
         {

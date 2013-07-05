@@ -71,6 +71,9 @@ namespace UrbanGame.ViewModels
 
                     if (!String.IsNullOrEmpty(CurrentTask.ListOfChanges))
                     {
+                        if (CurrentTask.ListOfChanges.Contains("ABCDPossibleAnswers"))
+                            RefreshAnswers();
+
                         ListOfChanges = CurrentTask.ListOfChanges;
                         CurrentTask.ListOfChanges = null;
                         uow.Commit();
@@ -240,9 +243,10 @@ namespace UrbanGame.ViewModels
         protected async override void OnActivate()
         {
             base.OnActivate();
-            await RefreshGame();
-            await RefreshTask();
             VisualStateName = "Normal";
+            RefreshGame();
+            RefreshTask();
+            RefreshAnswers();
         }
 
         protected override void OnViewLoaded(object view)
@@ -252,7 +256,7 @@ namespace UrbanGame.ViewModels
             Task.Factory.StartNew(async () =>
                 {
                     if (CurrentTask == null)
-                        await RefreshTask();
+                        RefreshTask();
 
                     if (CurrentTask.IsNewTask)
                     {
@@ -281,100 +285,97 @@ namespace UrbanGame.ViewModels
 
         #region operations
 
-        public async Task RefreshGame()
+        public void RefreshGame()
         {
-            await Task.Factory.StartNew(async () =>
+            using (var uow = _unitOfWorkLocator())
             {
-                using (var uow = _unitOfWorkLocator())
-                {
-                    IQueryable<IGame> games = uow.GetRepository<IGame>().All();
-                    Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
-                }
-            });
+                IQueryable<IGame> games = uow.GetRepository<IGame>().All();
+                Game = games.FirstOrDefault(g => g.Id == GameId);
+            }
         }
 
-        public async Task RefreshTask()
+        public void RefreshTask()
         {
-            await Task.Factory.StartNew(() =>
+            using (var uow = _unitOfWorkLocator())
             {
-                using (var uow = _unitOfWorkLocator())
+                IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
+                CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId);
+
+                if (CurrentTask.State == TaskState.Cancelled)
                 {
-                    IQueryable<ITask> tasks = uow.GetRepository<ITask>().All();
-                    CurrentTask = tasks.FirstOrDefault(t => t.Id == TaskId) ?? _gameWebService.GetTaskDetails(GameId, TaskId);
+                    BasicAppbar.Clear();
+                    SetAppBarContent();
+                }                    
 
-                    if (CurrentTask.State == TaskState.Cancelled)
+                if (CurrentTask.State == TaskState.Active)
+                {
+                    if (Game.GameState != GameState.Joined)
                     {
-                        BasicAppbar.Clear();
-                        SetAppBarContent();
+                        VisualStateName = "Sent";
                     }
-
-                    if (CurrentTask.State == TaskState.Active)
+                    else if (CurrentTask.SolutionStatus == SolutionStatus.NotSend)
                     {
-                        if (CurrentTask.SolutionStatus == SolutionStatus.NotSend)
-                        {
-                            VisualStateName = "FirstSending";
-                        }
-                        else if (CurrentTask.IsRepeatable)
-                        {
-                            VisualStateName = "ReSending";
-                        }
-                        else
-                        {
-                            VisualStateName = "Sent";
-                        }
+                        VisualStateName = "FirstSending";
                     }
-                    else if (CurrentTask.State == TaskState.Cancelled)
+                    else if (CurrentTask.IsRepeatable)
                     {
-                        VisualStateName = "Cancelled";
-                    }
-                    else if (CurrentTask.State == TaskState.Inactive)
-                    {
-                        VisualStateName = "Inactive";
+                        VisualStateName = "ReSending";
                     }
                     else
                     {
                         VisualStateName = "Sent";
                     }
                 }
-            });
-            await RefreshAnswer();
+                else if (CurrentTask.State == TaskState.Cancelled)
+                {
+                    VisualStateName = "Cancelled";
+                }
+                else if (CurrentTask.State == TaskState.Inactive)
+                {
+                    VisualStateName = "Inactive";
+                }
+                else
+                {
+                    VisualStateName = "Sent";
+                }
+            }          
         }
 
         bool _refreshingAnswers = false;
-        public async Task RefreshAnswer()
+        public void RefreshAnswers()
         {
-            await Task.Factory.StartNew(() =>
-            {               
-                if (!_refreshingAnswers)
+            if (CurrentTask.Type != TaskType.ABCD)
+                return;
+               
+            if (!_refreshingAnswers)
+            {
+                _refreshingAnswers = true;
+                try
                 {
-                    _refreshingAnswers = true;
-                    try
+                    Answers = new BindableCollection<ABCDAnswer>();
+
+                    using (var uow = _unitOfWorkLocator())
                     {
-                        Answers = new BindableCollection<ABCDAnswer>();
+                        IQueryable<IABCDPossibleAnswer> possibleAnswers = uow.GetRepository<IABCDPossibleAnswer>().All().Where(a => a.Task.Id == CurrentTask.Id);
 
-                        using (var uow = _unitOfWorkLocator())
+                        foreach (IABCDPossibleAnswer possible in possibleAnswers.ToList())
                         {
-                            IQueryable<IABCDPossibleAnswer> possibleAnswers = uow.GetRepository<IABCDPossibleAnswer>().All().Where(a => a.Task.Id == CurrentTask.Id);
-
-                            foreach (IABCDPossibleAnswer possible in possibleAnswers.ToList())
+                            IABCDUserAnswer userAnswer = uow.GetRepository<IABCDUserAnswer>().All().Where(a => a.ABCDPossibleAnswer.Id == possible.Id).FirstOrDefault();
+                            bool isChecked = false;
+                            if (userAnswer != null && userAnswer.Answer == true)
                             {
-                                IABCDUserAnswer userAnswer = uow.GetRepository<IABCDUserAnswer>().All().Where(a => a.ABCDPossibleAnswer.Id == possible.Id).FirstOrDefault();
-                                bool isChecked = false;
-                                if (userAnswer != null && userAnswer.Answer == true)
-                                {
-                                    isChecked = true;
-                                }
-
-                                Answers.Add(new ABCDAnswer() { PossibleAnswer = possible, IsChecked = isChecked });
+                                isChecked = true;
                             }
+
+                            Answers.Add(new ABCDAnswer() { PossibleAnswer = possible, IsChecked = isChecked });
                         }
                     }
-                    finally
-                    {
-                        _refreshingAnswers = false;
-                    }
                 }
-            });
+                finally
+                {
+                    _refreshingAnswers = false;
+                }
+            }
         }
 
         public async Task Retry()
@@ -428,7 +429,7 @@ namespace UrbanGame.ViewModels
                 }
             }
 
-            await RefreshTask();
+            RefreshTask();
         }
 
         public async Task SubmitGPS()
@@ -478,14 +479,16 @@ namespace UrbanGame.ViewModels
                 //saving solution in database
                 using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
                 {
-                    var solutionRepo=unitOfWork.GetRepository<IABCDSolution>();
+                    var solutionRepo = unitOfWork.GetRepository<IABCDSolution>();
                     IABCDSolution solution = solutionRepo.CreateInstance();
-                    solutionRepo.MarkForAdd(solution);
                     ITask task = unitOfWork.GetRepository<ITask>().All().First(t => t.Id == CurrentTask.Id);
 
                     //removing old solutions
                     foreach (var s in task.Solutions)
                     {
+                        var userRepo = unitOfWork.GetRepository<IABCDUserAnswer>();
+                        foreach (var userAnswer in userRepo.All().Where(us => us.Solution.Id == s.Id))
+                            userRepo.MarkForDeletion(userAnswer);
                         unitOfWork.GetRepository<IBaseSolution>().MarkForDeletion(s);
                     }
 
@@ -495,19 +498,18 @@ namespace UrbanGame.ViewModels
                     var answerRepo = unitOfWork.GetRepository<IABCDUserAnswer>();
                     foreach (var check in Answers)
                     {
-                        IABCDUserAnswer answer =answerRepo.CreateInstance();
+                        IABCDUserAnswer answer = answerRepo.CreateInstance();
                         answer.Answer = check.IsChecked;
-                        answer.ABCDPossibleAnswer =unitOfWork.GetRepository<IABCDPossibleAnswer>().All().First(x=>x.Id== check.PossibleAnswer.Id);
-                        answerRepo.MarkForAdd(answer);
+                        answer.ABCDPossibleAnswer = unitOfWork.GetRepository<IABCDPossibleAnswer>().All().First(x=>x.Id == check.PossibleAnswer.Id);
                         solution.ABCDUserAnswers.Add(answer);
                     }
 
-                    unitOfWork.GetRepository<IBaseSolution>().MarkForAdd(solution);
+                    solutionRepo.MarkForAdd(solution);
                     unitOfWork.Commit();
                     Solution = solution;
                 }
                 
-                SubmitSolution(Solution);
+                await SubmitSolution(Solution);
             });
         }
 

@@ -175,8 +175,6 @@ namespace UrbanGame.ViewModels
                 {
                     Game = await _gameWebService.GetGameInfo(GameId);
                 }
-
-                SetAppBarContent();
             });
         }
 
