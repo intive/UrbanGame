@@ -166,16 +166,16 @@ public class WebServer implements WebHighLevelInterface {
 			webResponse.points = points;
 		}
 		
-		new WebRequest(context, this, QueryType.SendAnswersForABCDTask, task, answers);
+		new WebRequest(context, this, QueryType.SendAnswersForABCDTask, task, answers).execute();
 	}
 	
 	@Override
 	public void sendAnswerForLocationTask(Task task, Location location) {
-		new WebRequest(context, this, QueryType.SendAnswersForABCDTask, task, location);
+		new WebRequest(context, this, QueryType.SendAnswersForABCDTask, task, location).execute();
 	}
 	
 	@Override
 	public void getCorrectAnswerForGpsTask(Task task) {
-		new WebRequest(context, this, QueryType.GetCorrectAnswerForGpsTask, task);
+		new WebRequest(context, this, QueryType.GetCorrectAnswerForGpsTask, task).execute();
 	}
 }
