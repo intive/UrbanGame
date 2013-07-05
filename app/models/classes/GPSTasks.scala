@@ -22,12 +22,12 @@ import models.utils._
 object GPSTasks extends Table[GPSTask]("GPSTASKS") {
   def taskId = column[Int]("taskId", O.NotNull)
   def gameId = column[Int]("gameId", O.NotNull)
+  def pointId = column[Int]("pointId", O.NotNull)
   def lat   = column[Double]("lat", O.NotNull)
   def lon   = column[Double]("lon", O.NotNull)
-  def range = column[Double]("range", O.NotNull)
-  def points = column[Int]("points", O.NotNull)
-  def * = gameId ~ taskId ~ lat ~ lon ~ range ~ points <> (GPSTask, GPSTask.unapply _)
-  def pk = primaryKey("GPSTASKS_PK", (gameId, taskId))
+  def range = column[Int]("range", O.NotNull)
+  def * = gameId ~ taskId ~ pointId ~ lat ~ lon ~ range <> (GPSTask, GPSTask.unapply _)
+  def pk = primaryKey("GPSTASKS_PK", (gameId, taskId, pointId))
   def game = foreignKey("GPSTASKS_GAMES_FK", gameId, Games)(_.id)
   def task = foreignKey("GPSTASKS_TASKS_FK", (gameId, taskId), Tasks)(t => (t.gameId, t.id))
 }

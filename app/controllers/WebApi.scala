@@ -128,13 +128,13 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
 
   def userGameStatus(gid: Int) = ApiUserAction { implicit request => user =>
       val status = gamesService.getUserGameStatus(user, gid)
-      val links = Seq(selfLink, gameLink(gid))
+      val links = Seq(selfLink)
       ApiOk(HalJsonRes(links, body=Json.toJson(status)))
   }
   
   def userTaskStatus(gid: Int, tid: Int) = ApiUserAction { implicit request => user =>
       val status = gamesService.getUserTaskStatus(user, gid, tid)
-      val links = Seq(selfLink, gameLink(gid))
+      val links = Seq(selfLink)
       ApiOk(HalJsonRes(links, body=Json.toJson(status)))
   }
 
@@ -159,54 +159,73 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
 
   private def ApiAction(f: Request[AnyContent] => Result): Action[AnyContent] = 
     Action { implicit request =>
-      //if (request.accepts("application/hal+json")) // it doesn't work
-      if (true)
-        try { f (request) } catch {
-          case apiEx: ApiException => 
-            ApiErr(apiEx)
-          case ex: Exception => 
-            InternalServerError(ex.getMessage)
-        }
-      else
-        Status(406)("Client must accept 'application/hal+json' type")
+      try { f (request) } catch {
+        case apiEx: ApiException => 
+          ApiErr(apiEx)
+        case ex: Exception => 
+          ApiErr(unexpectedError(ex.getMessage))
+      }
     }
 
   private def withJsonArguments[A] (f: A => Result) (implicit request: Request[AnyContent], rds: Reads[A]) = {
     request.body.asJson map { json =>
-      json.validate (rds) map (f) recoverTotal {e => BadRequest(JsError.toFlatJson(e))}
+      json.validate (rds) map (f) recoverTotal {e => BadRequest(Json.obj("code" -> 400, "message" -> JsError.toFlatJson(e)))}
     } getOrElse {
-      BadRequest("Expected Json arguments")
+      ApiErr(jsonExpected)
     }
   }
 
-  def ApiOk(response: HalJsonRes) = {
+  private def ApiOk(response: HalJsonRes) = {
     Ok(Json.prettyPrint(Json.toJson(response))).as("application/json")
   }
 
   import play.api.i18n.Messages
-  def ApiErr(apiEx: ApiException)(implicit request: Request[Any]) = {
+  private def ApiErr(apiEx: ApiException)(implicit request: Request[Any]) = {
     val msg = Messages(apiEx.getMessage, apiEx.getParams: _*)
     val jsonMsg = Json.obj("code" -> apiEx.getCode, "message" -> msg)
     Status(apiEx.getCode)(Json.prettyPrint(jsonMsg)).as("application/json")
   }
 
-  case class RegisterArgs(login: String, password: String)
+  private case class RegisterArgs(login: String, password: String)
 
-  implicit val registerArgsReads = Json.reads[RegisterArgs]
-  implicit val userAnswerReads   = Json.reads[UserAnswer]
+  private implicit val registerArgsReads = Json.reads[RegisterArgs]
+  private implicit val userAnswerReads   = Json.reads[UserAnswer]
+  private implicit val ABCOptionWrites   = Json.writes[ABCOption]
+  private implicit val gameSummaryWrites = Json.writes[GameSummary]
+  private implicit val gameStaticWrites  = Json.writes[GameStatic]
+  private implicit val gameDynamicWrites = Json.writes[GameDynamic]
+  private implicit val gameStatusWrites  = Json.writes[UserGameStatus]
+  private implicit val taskDynamicWrites = Json.writes[TaskDynamic]
+  private implicit val userGameSummaryWrites = Json.writes[UserGameSummary]
+  private implicit val userTaskStatusWrites  = Json.writes[UserTaskStatus]
+  private implicit val taskSummaryWrites = (
+    (__ \ "gid").write[Int] ~
+    (__ \ "tid").write[Int] ~
+    (__ \ "version").write[Int] ~
+    (__ \ "name").write[String] ~
+    (__ \ "type").write[String]
+  )(unlift(TaskSummary.unapply))
+  private implicit val taskStaticWrites = (
+    (__ \ "gid").write[Int] ~
+    (__ \ "tid").write[Int] ~
+    (__ \ "version").write[Int] ~
+    (__ \ "type").write[String] ~
+    (__ \ "name").write[String] ~
+    (__ \ "description").write[String] ~
+    (__ \ "choices").write[Option[List[ABCOption]]] ~
+    (__ \ "maxpoints").write[Int] ~
+    (__ \ "maxattempts").write[Int]
+  )(unlift(TaskStatic.unapply))
+  import com.github.nscala_time.time.Imports._
+  private implicit val userTaskSummaryWrites = (
+    (__ \ "gid").write[Int] ~
+    (__ \ "tid").write[Int] ~
+    (__ \ "version").write[Int] ~
+    (__ \ "type").write[String] ~
+    (__ \ "deadline").write[DateTime]
+  )(unlift(UserTaskSummary.unapply))
 
-  implicit val ABCOptionWrites   = Json.writes[ABCOption]
-  implicit val gameSummaryWrites = Json.writes[GameSummary]
-  implicit val gameStaticWrites  = Json.writes[GameStatic]
-  implicit val gameDynamicWrites = Json.writes[GameDynamic]
-  implicit val gameStatusWrites  = Json.writes[UserGameStatus]
-  implicit val taskSummaryWrites = Json.writes[TaskSummary]
-  implicit val taskStaticWrites  = Json.writes[TaskStatic]
-  implicit val taskDynamicWrites = Json.writes[TaskDynamic]
-  implicit val taskStatusWrites  = Json.writes[UserTaskStatus]
-  implicit val userGameSummary   = Json.writes[UserGameSummary]
-
-  implicit val halJsonResWrites = new Writes[HalJsonRes] {
+  private implicit val halJsonResWrites = new Writes[HalJsonRes] {
     def writes(r: HalJsonRes): JsValue = {
       val linksObj = Json.obj(  "_links" -> 
         r.links.map {l => 
@@ -223,27 +242,30 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
     }
   }
 
-  val rootUrl = "/api"
-  val gamesUrl = rootUrl + "/games"
-  val loginUrl = rootUrl + "/login"
-  val registerUrl = rootUrl + "/register"
-  val userGamesUrl = rootUrl + "/my/games"
+  private val rootUrl = "/api"
+  private val gamesUrl = rootUrl + "/games"
+  private val loginUrl = rootUrl + "/login"
+  private val registerUrl = rootUrl + "/register"
+  private val userGamesUrl = rootUrl + "/my/games"
 
-  val latLonParam = "{?lat,lon}"
-  val rootLink = HalLink("root", rootUrl)
-  val gamesLink = HalLink("games", gamesUrl+latLonParam)
-  val loginLink = HalLink("login", loginUrl)
-  val registerLink = HalLink("register", registerUrl)
-  val userGamesLink = HalLink("userGames", userGamesUrl)
-  def selfLink(implicit r: Request[AnyContent]) = HalLink("self", r.path)
-  def gameLink(gid: Int) = HalLink("game", s"$gamesUrl/$gid")
-  def gameStaticLink(gid: Int) = HalLink("gameStatic", s"$gamesUrl/$gid/static")
-  def gameDynamicLink(gid: Int) = HalLink("gameDynamic", s"$gamesUrl/$gid/dynamic")
-  def tasksLink(gid: Int) = HalLink("tasks", s"$gamesUrl/$gid/tasks"+latLonParam)
-  def taskLink(gid: Int, tid: Int) = HalLink("task", s"$gamesUrl/$gid/tasks/$tid")
-  def taskStaticLink(gid: Int, tid: Int) = HalLink("taskStatic", s"$gamesUrl/$gid/tasks/$tid/static")
-  def taskDynamicLink(gid: Int, tid: Int) = HalLink("taskDynamic", s"$gamesUrl/$gid/tasks/$tid/dynamic")
-  def userGameStatusLink(gid: Int) = HalLink("userGameStatus", s"$userGamesUrl/$gid")
-  def userTaskStatusLink(gid: Int, tid: Int) = HalLink("userTaskStatus", s"$userGamesUrl/$gid/tasks/$tid")
+  private val latLonParam = "{?lat,lon}"
+  private val rootLink = HalLink("root", rootUrl)
+  private val gamesLink = HalLink("games", gamesUrl+latLonParam)
+  private val loginLink = HalLink("login", loginUrl)
+  private val registerLink = HalLink("register", registerUrl)
+  private val userGamesLink = HalLink("userGames", userGamesUrl)
+  private def selfLink(implicit r: Request[AnyContent]) = HalLink("self", r.path)
+  private def gameLink(gid: Int) = HalLink("game", s"$gamesUrl/$gid")
+  private def gameStaticLink(gid: Int) = HalLink("gameStatic", s"$gamesUrl/$gid/static")
+  private def gameDynamicLink(gid: Int) = HalLink("gameDynamic", s"$gamesUrl/$gid/dynamic")
+  private def tasksLink(gid: Int) = HalLink("tasks", s"$gamesUrl/$gid/tasks"+latLonParam)
+  private def taskLink(gid: Int, tid: Int) = HalLink("task", s"$gamesUrl/$gid/tasks/$tid")
+  private def taskStaticLink(gid: Int, tid: Int) = HalLink("taskStatic", s"$gamesUrl/$gid/tasks/$tid/static")
+  private def taskDynamicLink(gid: Int, tid: Int) = HalLink("taskDynamic", s"$gamesUrl/$gid/tasks/$tid/dynamic")
+  private def userGameStatusLink(gid: Int) = HalLink("userGameStatus", s"$userGamesUrl/$gid")
+  private def userTaskStatusLink(gid: Int, tid: Int) = HalLink("userTaskStatus", s"$userGamesUrl/$gid/tasks/$tid")
+
+  private val jsonExpected = new ApiException(400, "webapi.error.jsonExpected")
+  private def unexpectedError(msg: String) = new ApiException(500, "webapi.error.unexpectedError", Seq(msg))
 }
 
