@@ -34,7 +34,7 @@ object Global extends PlayControllerWiring {
       val msg = Messages("webapi.error.resourceNotExists")
       val jsonMsg = Json.obj("code" -> 404, "message" -> msg)
       print (request.path)
-      NotFound(Json.prettyPrint(jsonMsg)).as("application/json")
+      NotFound(Json.prettyPrint(jsonMsg)).as("application/json; charset=utf-8")
     }
     else {
       super.onHandlerNotFound(request)
@@ -43,7 +43,7 @@ object Global extends PlayControllerWiring {
   override def onBadRequest(request: RequestHeader, msg: String) =
     if (isWebApiRequest(request)) {
       val jsonMsg = Json.obj("code" -> 400, "message" -> msg)
-      BadRequest(Json.prettyPrint(jsonMsg)).as("application/json")
+      BadRequest(Json.prettyPrint(jsonMsg)).as("application/json; charset=utf-8")
     }
     else {
       super.onBadRequest(request, msg)

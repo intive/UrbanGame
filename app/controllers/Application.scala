@@ -202,12 +202,54 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
         }
       }
 
-      /*if (Tasks.findAll.isEmpty) {
-        val td = TasksDetails(None, 1, 1, "GPSTask", "Task1", """{"description":"desc of task 1"}""", """{"lat":0, "lon":0, "range":3}""", 100, 20, Some(DateTime.now + 2.days), None, None, None, false)
+      if (Tasks.findAll.isEmpty) {
+        val tasks = Seq(
+          TasksDetails(
+            Some(0), 1, 1, "GPS", "Zadanie 1", "Idź do ZOO", 10,
+            1, 1000000, None, None, None, None, true, 0
+          ),
+          TasksDetails(
+            Some(1), 1, 1, "GPS", "Zadanie 2", "Idź na stadion miejski", 10,
+            1, 1000000, None, None, None, None, true, 0
+          ),
+          TasksDetails(
+            Some(2), 1, 1, "ABC", "Zadanie 3", "Które zdanie jest prawdziwe?", 20,
+            1, 1000000, None, None, None, None, true, 0
+          ),
+          TasksDetails(
+            Some(3), 1, 1, "ABC", "Zadanie 4", "Odczytaj kody za szybą BLStreamowego auta", 40,
+            1, 1000000, None, None, None, None, true, 0
+          )
+        )
 
-        Tasks.createTask(td)
-        cnt3 = cnt3 + 1
-      }*/
+        val gps = Seq (
+          GPSTask(1, 0, 0, 51.14212, 16.94169, 1000),
+          GPSTask(1, 1, 0, 51.07153, 17.00637, 1000)
+        )
+
+        val abc = Seq (
+          ABCTaskOption(1, 2, "a", "1 + 1 = 2", 10),
+          ABCTaskOption(1, 2, "b", "1 + 1 = 10", 10),
+          ABCTaskOption(1, 2, "c", "1 + 1 = 3", 0),
+          ABCTaskOption(1, 2, "d", "1 + 1 = 14", -5),
+
+          ABCTaskOption(1, 3, "a", "690c6f2b", -10),
+          ABCTaskOption(1, 3, "b", "29f7c98d", -10),
+          ABCTaskOption(1, 3, "c", "76233bbb", -10),
+          ABCTaskOption(1, 3, "d", "891cc1ce",  20),
+          ABCTaskOption(1, 3, "e", "82e3028a",  10),
+          ABCTaskOption(1, 3, "f", "1c410a35",  10),
+          ABCTaskOption(1, 3, "g", "d2630a28",  -10),
+          ABCTaskOption(1, 3, "h", "64de15b3",  -10),
+          ABCTaskOption(1, 3, "i", "d3e7117a",  -10),
+          ABCTaskOption(1, 3, "j", "ac5d4b79",  -10)
+        )
+
+        models.Tasks.insertAll (tasks: _*)
+        models.GPSTasks.insertAll (gps: _*)
+        models.ABCTasks.insertAll (abc: _*)
+        cnt3 = tasks size
+      }
     }
 
     Ok("Inserted " + cnt1 + " game(s) and " + cnt2 + " operator(s) and " + cnt3 + " task(s)")
