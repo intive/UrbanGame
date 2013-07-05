@@ -166,7 +166,7 @@ object GamesCtrl extends Controller with CookieLang with AuthElement with AuthCo
     val user = loggedIn
     request.body.file("files[]").map { file =>
       val fname = file.filename
-      val filename = "users/" + user.id.get + "/logo/avatar" + fname.substring(fname.indexOf("."), fname.length)
+      val filename = "users/" + user.id.get + "/logo/tmp/avatar" + fname.substring(fname.lastIndexOf("."), fname.length)
       val pic = new java.io.File(Play.application.path + "/public/upload/" + filename)
       
       file.ref.moveTo(pic, true)

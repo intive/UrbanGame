@@ -118,9 +118,21 @@ object dal {
       import org.mindrot.jbcrypt.BCrypt
       val op = findOperatorById(oid)
       if(op != None) {
+        var newPath = opd.logo
+
+        if(opd.logo.contains("tmp")) {
+          val path = play.api.Play.application.path + "/public/upload/"
+          val filename = opd.logo.substring(opd.logo.lastIndexOf("tmp/")+4, opd.logo.length)
+          newPath = opd.logo.substring(0,opd.logo.lastIndexOf("tmp/")) + opd.logo.substring(opd.logo.lastIndexOf("tmp/")+4, opd.logo.length)
+          new java.io.File(path + "users/" + op.get.id.get +"/logo/" + filename).delete()
+          val f = new java.io.File(path + opd.logo).renameTo(new java.io.File(path + newPath))
+          new java.io.File(path + "users/" + op.get.id.get +"/logo/tmp").delete()
+
+        }
+
         val pass = if(opd.password != None) BCrypt.hashpw(opd.password.get, BCrypt.gensalt()) else op.get.password
         val o = op.get.copy(name = opd.name, description = Some(opd.description.getOrElse(op.get.description.getOrElse(""))), 
-          password = pass, logo = opd.logo, modified = DateTime.now)
+          password = pass, logo = newPath, modified = DateTime.now)
       
         db.withSession { implicit session =>
           Operators.update(o)
