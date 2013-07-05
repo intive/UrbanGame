@@ -9,7 +9,7 @@ case class GamesDetails(id: Option[Int], name: String, version: Int = 1, descrip
   operatorId: Int, created: DateTime, updated: DateTime = DateTime.now, startTime: DateTime = DateTime.now, 
   endTime: DateTime, started: Option[DateTime] = None, ended: Option[DateTime] = None, winning: String = "max_points", 
   nWins: Int = 1, difficulty: String = "easy", maxPlayers: Int = 1000000, awards: String, status: String, 
-  image: String = "games/gameicon.png", tasksNo: Int = 0, numberOfPlayers: Int = 0)
+  image: String = "upload/users/gameicon.png", tasksNo: Int = 0, numberOfPlayers: Int = 0)
 case class TasksDetails(id: Option[Int], gameId: Int, version: Int, 
   ttype: String, name: String, description: String,
   maxpoints: Int, minToAccept: Int, maxattempts: Int,
@@ -24,7 +24,7 @@ case class GamesList(id: Int, name: String, version: Int, location: String, star
 case class TasksList(id: Int, name: String, version: Int)
 
 case class Operator(id: Option[Int], email: String, password: String, name: String, 
-  logo: String = "users/logo.png", description: Option[String] = None, permission: Permission = NormalUser, 
+  logo: String = "upload/users/logo.png", description: Option[String] = None, permission: Permission = NormalUser, 
   created: DateTime = DateTime.now, modified: DateTime = DateTime.now, validated: Boolean = false, 
   token: Option[String] = None)
 case class Token(id: Option[Int], opId: Int, token: String, series: String, created: DateTime = DateTime.now, 

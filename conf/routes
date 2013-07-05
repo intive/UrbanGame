@@ -66,6 +66,7 @@ DELETE  /api/my/games/:gid          @controllers.WebApi.leaveGame(gid: Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /upload/*file               controllers.Upload.at(file)
 
 # Additional
 GET     /filldb                     controllers.Application.fillDatabase

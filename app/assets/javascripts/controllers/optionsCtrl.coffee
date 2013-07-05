@@ -22,7 +22,7 @@ app.controller 'optionsCtrl', ['$scope', '$http', 'User', ($scope, $http, User) 
         passwordOld: "",
         passwordNew: "",
         passwordConfirm: "",
-        logo: "users/logo.png"
+        logo: "upload/users/logo.png"
     }
 
     $scope.error = null
@@ -121,11 +121,15 @@ app.controller 'optionsCtrl', ['$scope', '$http', 'User', ($scope, $http, User) 
         $('#fileupload').fileupload({
             dataType: false,
             add: (e,data) ->
+                $scope.error = null
+                $scope.info = null
                 $('#progress-bar').css('width', '0%')
                 $('#progress').show()
                 data.submit()
                 .success((result, textStatus, jqXHR) -> 
                     $.each(result.files, (index, file) ->
+                        $scope.user.logo = "upload/users/logo.png"
+                        $scope.$apply()
                         $scope.user.logo = file.url
                         $scope.$apply()
                     )
@@ -139,6 +143,8 @@ app.controller 'optionsCtrl', ['$scope', '$http', 'User', ($scope, $http, User) 
             done: (e, data) ->
                 $('#progress').fadeOut()
             maxFileSize: 5000000, 
+            maxWidth: 300,
+            maxHeight: 300,
             maxNumberOfFiles: 1,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
         })

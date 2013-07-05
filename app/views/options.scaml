@@ -30,18 +30,20 @@
         .alert.alert-error(ng-show="error") {{error}}
         .alert.alert-info(ng-show="info") {{info}}
         %form(name="profile" autocomplete="off")
-            .span4
+            .span5
                 .pull-right.centered
                     .row.slight-padding-right
-                        %img(ng-src="/assets/upload/{{user.logo}}" ng-model="user.logo")
+                        %img(ng-src="/{{user.logo}}" ng-model="user.logo")
                     .row.slight-padding-right.slight-padding-top
                         %span.btn.btn-success-light.fileinput-button
                             = Messages("options.browse")(lan)
                             %i.icon-folder-open
                             %input#fileupload(type="file" name="files[]" data-url="/my/options/json/uploadAvatar" accept="image/*")
-                        #progress(style="width:20em; border: 1pt solid silver; display: none")
-                            #progress-bar(style="background: green; height: 1em; width:0%")
-            .span8
+                        #progress(style="width: 100%; border: 1pt solid silver; display: none")
+                            #progress-bar(style="background: green; height: 1em; width: 0%")
+                        .alert.alert-info.slight-margin-top
+                            Max file size: 300 x 300, 5MB
+            .span7
                 .control-group
                     %label.bold = Messages("options.name")
                     %span.edit(ng-hide="editorEnabled") 

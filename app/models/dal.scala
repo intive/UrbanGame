@@ -121,12 +121,12 @@ object dal {
         var newPath = opd.logo
 
         if(opd.logo.contains("tmp")) {
-          val path = play.api.Play.application.path + "/public/upload/"
+          val path = play.api.Play.application.path + "/public/"
           val filename = opd.logo.substring(opd.logo.lastIndexOf("tmp/")+4, opd.logo.length)
           newPath = opd.logo.substring(0,opd.logo.lastIndexOf("tmp/")) + opd.logo.substring(opd.logo.lastIndexOf("tmp/")+4, opd.logo.length)
-          new java.io.File(path + "users/" + op.get.id.get +"/logo/" + filename).delete()
+          new java.io.File(path + "upload/users/" + op.get.id.get +"/logo/" + filename).delete()
           val f = new java.io.File(path + opd.logo).renameTo(new java.io.File(path + newPath))
-          new java.io.File(path + "users/" + op.get.id.get +"/logo/tmp").delete()
+          new java.io.File(path + "upload/users/" + op.get.id.get +"/logo/tmp").delete()
 
         }
 
