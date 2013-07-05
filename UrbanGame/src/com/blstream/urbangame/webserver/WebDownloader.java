@@ -16,6 +16,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.net.Uri;
 import android.util.Log;
@@ -118,7 +120,9 @@ class WebDownloaderPOST extends WebDownloader {
 				http.setEntity(new StringEntity(EMPTY_JSON));
 			}
 		}
-		catch (UnsupportedEncodingException e) {}
+		catch (UnsupportedEncodingException e) {
+			Log.e(WebDownloaderPOST.class.getSimpleName(), e.getMessage());
+		}
 		return http;
 	}
 }
@@ -177,5 +181,21 @@ class WebDownloaderWithAuthorization extends WebDownloader {
 		String toEncode = userName + ":" + password;
 		
 		return new String(coder.encode(toEncode.getBytes()));
+	}
+}
+
+class RegistrationWebDownloader extends WebDownloaderPOST {
+	
+	public RegistrationWebDownloader(String email, String password) {
+		super();
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("login", email);
+			jsonObject.put("password", password);
+		}
+		catch (JSONException e) {
+			Log.e("Register", e.getMessage());
+		}
+		this.setRequestData(jsonObject.toString());
 	}
 }

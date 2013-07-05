@@ -2,14 +2,10 @@ package com.blstream.urbangame.webserver;
 
 import java.util.ArrayList;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.Task;
@@ -141,17 +137,8 @@ public class WebRequest extends AsyncTask<Void, Integer, WebResponse> {
 				webAPI = new WebAPI(context, webDownloader);
 				return webAPI.getLoginUri();
 			case RegisterPlayer:
-				this.webDownloader = new WebDownloaderPOST();
+				this.webDownloader = new RegistrationWebDownloader(email, password);
 				webAPI = new WebAPI(context, webDownloader);
-				JSONObject jsonObject = new JSONObject();
-				try {
-					jsonObject.put("login", email);
-					jsonObject.put("password", password);
-				}
-				catch (JSONException e) {
-					Log.e("Register", e.getMessage());
-				}
-				this.webDownloader.setRequestData(jsonObject.toString());
 				return webAPI.getRegisterUri();
 			case JoinCurrentPlayerToTheGame:
 				this.webDownloader = new WebDownloaderPOST();

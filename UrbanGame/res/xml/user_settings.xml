@@ -28,7 +28,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_server">
         <EditTextPreference 
-            android:defaultValue="@string/settings_server_default_server_name"
+            android:defaultValue="@string/settings_server_default_server_address"
             android:key="@string/key_server_name"
             android:title="@string/settings_server_address"/>
     </PreferenceCategory>

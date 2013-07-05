@@ -56,7 +56,14 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 		invalidDataAlertDialog = new UrbanGameDialog.DialogBuilder(activity)
 			.setTitle(R.string.dialog_data_invalid_tittle)
 			.setMessage(R.string.dialog_data_invalid_message)
-			.setPositiveButton(R.string.button_correct, null)
+			.setPositiveButton(R.string.button_correct,  new UrbanGameDialogOnClickListener() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			})
 			.create();
 	}
 	
@@ -64,7 +71,14 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 		userAlreadyExistsAlertDialog = new UrbanGameDialog.DialogBuilder(activity)
 			.setTitle(R.string.dialog_data_invalid_tittle)
 			.setMessage(R.string.dialog_user_already_exists)
-			.setPositiveButton(R.string.button_correct, null)
+			.setPositiveButton(R.string.button_correct,  new UrbanGameDialogOnClickListener() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			})
 			.create();
 	}
 	
@@ -107,6 +121,7 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			activity.setLoggedUserInDB(email);
+			dialog.dismiss();
 		}
 	};
 	

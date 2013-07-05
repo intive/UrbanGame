@@ -150,7 +150,7 @@
     <string name="settings_theme_summary">Sets application theme. Application should be restarted.</string>
     <string name="settings_theme_title">Theme</string>
     <string name="settings_server">Urban Game server</string>
-    <string name="settings_server_default_server_name">http://urbangame.patronage.blstream.com</string>
+    <string name="settings_server_default_server_address">http://urbangame.patronage.blstream.com</string>
     <string name="settings_server_address">Server address</string>
 
     <!-- Content descriptions -->
@@ -173,7 +173,7 @@
     <string name="button_login">Login</string>
     <string name="button_correct">Correct</string>
     <string name="dialog_register_title">Account registered</string>
-    <string name="dialog_register_message">Verification link has been sent your email address</string>
+    <string name="dialog_register_message">Verification link has been sent to your email address</string>
     <string name="dialog_data_invalid_tittle">Invalid data</string>
     <string name="dialog_data_invalid_message">Some of provided data is incorrect</string>
     <string name="dialog_user_already_exists">User with this email already exists</string>

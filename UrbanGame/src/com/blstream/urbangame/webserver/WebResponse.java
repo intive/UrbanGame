@@ -43,6 +43,7 @@ public class WebResponse {
 	
 	public boolean isValid() {
 		if (WebDownloader.EMPTY_JSON.equals(responseString)) return false;
+		//FIXME move to json parser when its ready
 		JSONObject jsonObject = null;
 		boolean valid = true;
 		try {
