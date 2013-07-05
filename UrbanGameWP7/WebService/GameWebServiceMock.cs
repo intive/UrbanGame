@@ -52,7 +52,7 @@ namespace WebService
                 g.Tasks.Add(task);
                 ListOfTasks.Add(task);
 
-                var task1 = new TaskMock() { Id = taskId++, Name = "Find Wally", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = true, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
+                var task1 = new TaskMock() { Id = taskId++, Name = "Find Wally", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = true, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
                 g.Tasks.Add(task1);
                 ListOfTasks.Add(task1);
 
@@ -63,6 +63,10 @@ namespace WebService
                 task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "DarkBlack" });
                 g.Tasks.Add(task2);
                 ListOfTasks.Add(task2);
+
+                var task3 = new TaskMock() { Id = taskId++, Name = "Find Wally 2", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
+                g.Tasks.Add(task3);
+                ListOfTasks.Add(task3);
 
                 g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "XTerminator", Points = 329 });
                 g.Alerts.Add(new AlertMock() { Id = alertId++, Topic = "Information", Description = "There might be a problem getting to center, bacause of bus crash" });
@@ -202,7 +206,7 @@ namespace WebService
                 if (!task.IsRepeatable)
                     task.State = TaskState.Accomplished;
                 task.UserPoints = r;
-                return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = r };
+                return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = 0 };
             }
             else if (r < 60)
             {
@@ -224,7 +228,7 @@ namespace WebService
         {
             SolutionStatusResponse result = new SolutionStatusResponse();
             result.Status = new Random().Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
-            result.Points = new Random().Next(30);
+            result.Points = result.Status == SolutionStatus.Rejected ? 0 : new Random().Next(30);
 
             var task = ListOfTasks.First(t => t.Id == taskId);
             if ((result.Status == SolutionStatus.Accepted && result.Points == task.MaxPoints) || !task.IsRepeatable)

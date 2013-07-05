@@ -224,6 +224,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to changed.
+        /// </summary>
+        public static string Changed {
+            get {
+                return ResourceManager.GetString("Changed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, choose one and join in..
         /// </summary>
         public static string ChooseAndJoin {
@@ -1034,11 +1043,29 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This task was cancelled..
+        /// </summary>
+        public static string TaskCancelled {
+            get {
+                return ResourceManager.GetString("TaskCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Task details have changed. Tap to see differences..
         /// </summary>
         public static string TaskChangedToast {
             get {
                 return ResourceManager.GetString("TaskChangedToast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This task becomes active after complete another tasks..
+        /// </summary>
+        public static string TaskInactive {
+            get {
+                return ResourceManager.GetString("TaskInactive", resourceCulture);
             }
         }
         

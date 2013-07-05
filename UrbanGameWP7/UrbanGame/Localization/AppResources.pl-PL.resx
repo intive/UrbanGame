@@ -468,4 +468,13 @@
   <data name="TaskChangedToast" xml:space="preserve">
     <value>Szczegóły zadania zmieniły się. Naciśnij, aby zobaczyć różnice.</value>
   </data>
+  <data name="TaskCancelled" xml:space="preserve">
+    <value>To zadanie zostało anulowane.</value>
+  </data>
+  <data name="TaskInactive" xml:space="preserve">
+    <value>To zadanie będzie aktywne po ukończeniu pozostałych.</value>
+  </data>
+  <data name="Changed" xml:space="preserve">
+    <value>zmieniono</value>
+  </data>
 </root>
