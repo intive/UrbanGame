@@ -477,4 +477,16 @@
   <data name="Changed" xml:space="preserve">
     <value>zmieniono</value>
   </data>
+  <data name="NoTasks" xml:space="preserve">
+    <value>Nie ma żadnych zadań w tym miejscu, spróbuj później lub spróbuj połączyć się z innej części miasta, żeby otrzymać ukryte bonusowe zadania.</value>
+  </data>
+  <data name="CompletedTasks" xml:space="preserve">
+    <value>Udało Ci się ukończyć wszyskie zadania, ale kilka z nich mogłoby być wykonanych lepiej. Spróbuj je powtórzyć, żeby uzyskać więcej punktów.</value>
+  </data>
+  <data name="EmptyMessage" xml:space="preserve">
+    <value>Wiadomość nie może być pusta!</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>spróbuj jeszcze raz</value>
+  </data>
 </root>

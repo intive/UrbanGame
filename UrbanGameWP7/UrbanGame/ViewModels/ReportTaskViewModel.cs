@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Common;
+using System.Windows;
 using Caliburn.Micro;
 
 namespace UrbanGame.ViewModels
@@ -49,9 +50,18 @@ namespace UrbanGame.ViewModels
 
         public void Report()
         {
-            // todo: report task in gameWebService
+            if (string.IsNullOrWhiteSpace(Message))
+            {
+                MessageBox.Show(Localization.AppResources.EmptyMessage, Localization.AppResources.Incorrect, MessageBoxButton.OK);
+            }
+            else
+            {
+                // todo: report task in gameWebService
 
-            //_gameWebService.Report(GameId, TaskId, Message);
+                //_gameWebService.Report(GameId, TaskId, Message);
+
+                _navigationService.GoBack();
+            }
         }
 
         #endregion
