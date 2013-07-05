@@ -43,8 +43,10 @@ public class WebAPI {
 	public Uri getAllGamesUri() {
 		Uri uri = null;
 		try {
-			//			uri = Uri.parse(base + getBaseAPI().links.games.href);
-			uri = Uri.parse(base + "/api/games?lat=0&lon=0");
+			SimpleUriTemplateParser uriTemplate = new SimpleUriTemplateParser(getBaseAPI().links.games.href);
+			uriTemplate.putParameter("lat", "0");
+			uriTemplate.putParameter("lon", "0");
+			uri = Uri.parse(base + uriTemplate.getUri());
 		}
 		catch (Exception e) {
 			uri = Uri.parse(base);
