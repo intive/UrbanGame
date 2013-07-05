@@ -111,7 +111,6 @@
     <Compile Include="Tests\GameDetailsViewModelTest.cs" />
     <Compile Include="Tests\GamesListViewModelTest.cs" />
     <Compile Include="Tests\UnitOfWorkMockTest.cs" />
-    <Compile Include="Tests\WebApiTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

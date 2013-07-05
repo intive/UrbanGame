@@ -46,7 +46,7 @@ namespace WebService
 
             foreach(var g in ListOfGames)
             {
-                var task1 = new TaskMock() { Id = taskId++, Name = "Find Wally", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = true, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
+                var task1 = new TaskMock() { Id = taskId++, Name = "Find Wally", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = true, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
                 g.Tasks.Add(task1);
                 ListOfTasks.Add(task1);
 
@@ -209,7 +209,8 @@ namespace WebService
             {
                 if (!task.IsRepeatable)
                     task.State = TaskState.Accomplished;
-                return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = r };
+
+                return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = 0 };
             }
             else if (r < 60)
             {
@@ -231,8 +232,7 @@ namespace WebService
             SolutionStatusResponse result = new SolutionStatusResponse();
             result.Status = new Random().Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
             result.Status = new Random().Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
-            result.Points = new Random().Next(30);
-
+            result.Points = result.Status == SolutionStatus.Rejected ? 0 : new Random().Next(30);
             var task = ListOfTasks.First(t => t.Id == taskId);
             if ((result.Status == SolutionStatus.Accepted && result.Points == task.MaxPoints) || !task.IsRepeatable)
                 task.State = TaskState.Accomplished;

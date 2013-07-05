@@ -484,10 +484,18 @@
   <data name="TaskChangedToast" xml:space="preserve">
     <value>Task details have changed. Tap to see differences.</value>
   </data>
+  <data name="TaskCancelled" xml:space="preserve">
+    <value>This task was cancelled.</value>
+  </data>
+  <data name="TaskInactive" xml:space="preserve">
+    <value>This task becomes active after complete another tasks.</value>
+  </data>
+  <data name="Changed" xml:space="preserve">
+    <value>changed</value>
+  </data>
   <data name="NoTasks" xml:space="preserve">
     <value>There are not tasks at this point, try later or try to connect from different area of the city to receive hidden bonus tasks.</value>
   </data>
   <data name="CompletedTasks" xml:space="preserve">
     <value>You have completed all tasks, but few tasks could be done better. Try to repeat them in order to gain more points.</value>
-  </data>
-</root>
+  </data></root>

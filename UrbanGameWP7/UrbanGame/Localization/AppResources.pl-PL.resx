@@ -468,10 +468,18 @@
   <data name="TaskChangedToast" xml:space="preserve">
     <value>Szczegóły zadania zmieniły się. Naciśnij, aby zobaczyć różnice.</value>
   </data>
+  <data name="TaskCancelled" xml:space="preserve">
+    <value>To zadanie zostało anulowane.</value>
+  </data>
+  <data name="TaskInactive" xml:space="preserve">
+    <value>To zadanie będzie aktywne po ukończeniu pozostałych.</value>
+  </data>
+  <data name="Changed" xml:space="preserve">
+    <value>zmieniono</value>
+  </data>
   <data name="NoTasks" xml:space="preserve">
     <value>Nie ma żadnych zadań w tym miejscu, spróbuj później lub spróbuj połączyć się z innej części miasta, żeby otrzymać ukryte bonusowe zadania.</value>
   </data>
   <data name="CompletedTasks" xml:space="preserve">
     <value>Udało Ci się ukończyć wszyskie zadania, ale kilka z nich mogłoby być wykonanych lepiej. Spróbuj je powtórzyć, żeby uzyskać więcej punktów.</value>
-  </data>
-</root>
+  </data></root>

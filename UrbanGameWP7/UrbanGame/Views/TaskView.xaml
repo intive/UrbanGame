@@ -110,11 +110,58 @@
             <VisualStateGroup x:Name="AnswersStates">
                 <VisualState x:Name="FirstSending"/>
                 <VisualState x:Name="ReSending"/>
+                <VisualState x:Name="Cancelled">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="AnswerContent">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>                        
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="DescriptionGrid">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GameImage">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="DescriptionText">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="RepeatImage">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CancelledText">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Inactive">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="AnswerContent">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="DescriptionGrid">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="GameImage">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="DescriptionText">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="RepeatImage">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="InactiveText">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
                 <VisualState x:Name="Sent">
                     <Storyboard>
-                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="IsEnabled" Storyboard.TargetName="SubmitABCD">
-                        <DiscreteObjectKeyFrame KeyTime="0" Value="False"/>
-                    </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="IsEnabled" Storyboard.TargetName="SubmitGPS">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="False"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="IsEnabled" Storyboard.TargetName="SubmitABCD">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="False"/>
+                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="IsEnabled" Storyboard.TargetName="ABCDListView">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="False"/>
                         </ObjectAnimationUsingKeyFrames>
@@ -162,56 +209,55 @@
             </controls:Pivot.Title>
             <!--Pivot item one-->
             <controls:PivotItem Header="{Binding Path=AppResources.Description, Source={StaticResource LocalizedStrings}}" Margin="12,10,12,0">
-                <ScrollViewer Margin="-10 0 -10 0">
+                <ScrollViewer Margin="-10 0 -10 0">                    
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Margin="14 0 0 0" Text="{Binding Path=CurrentTask.Name}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
-                            <Image Source="/Images/appbar.repeat.png" Visibility="{Binding CurrentTask.IsRepeatable, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            <Image x:Name="RepeatImage" Source="/Images/appbar.repeat.png" Visibility="{Binding CurrentTask.IsRepeatable, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,-10,0,0" />
                         </StackPanel>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Path=AppResources.PointsUpCase, Source={StaticResource LocalizedStrings}}" Grid.Column="0" Margin="20,0,0,0"/>
-                                <TextBlock Text="{Binding Path=AppResources.TimeLeft, Source={StaticResource LocalizedStrings}}" Grid.Column="1"/>
-                            </Grid>
-                            <Grid Grid.Row="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Margin="0 0 0 0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Grid x:Name="DescriptionGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <TextBlock Text="{Binding Path=AppResources.PointsUpCase, Source={StaticResource LocalizedStrings}}" Margin="20,0,0,0"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <TextBlock Text="{Binding Path=CurrentTask.UserPoints, Converter={StaticResource NullableToNumberConverter}}" FontSize="{StaticResource PhoneFontSizeLarge}"/>
                                     <TextBlock Text="/" FontSize="{StaticResource PhoneFontSizeLarge}"/>
                                     <TextBlock Text="{Binding Path=CurrentTask.MaxPoints}" FontSize="{StaticResource PhoneFontSizeLarge}"/>
                                 </StackPanel>
-                                <StackPanel Margin="0 0 0 0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding Path=CurrentTask.EndDate, Converter={StaticResource TimeToEndConverter}}" FontSize="{StaticResource PhoneFontSizeLarge}"/>
-                                </StackPanel>
-                            </Grid>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Grid.Row="0" Background="{Binding ListOfChanges, Converter={StaticResource ChangeToBackgroundConverter}, ConverterParameter=EndDate}">
+                                <TextBlock Text="{Binding Path=AppResources.TimeLeft, Source={StaticResource LocalizedStrings}}"/>
+                                <TextBlock HorizontalAlignment="Center" Text="{Binding Path=CurrentTask.EndDate, Converter={StaticResource TimeToEndConverter}}" FontSize="{StaticResource PhoneFontSizeLarge}"/>
+                            </StackPanel>
                         </Grid>
-                        <Image Height="270" HorizontalAlignment="Left" Source="{Binding Path=CurrentTask.Picture}" Margin="0 14 0 0"/>
-                        <TextBlock Margin="5 14 5 0" Text="{Binding Path=CurrentTask.Description}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMedium}"/>
+                        <Border Margin="0 14 0 0" Padding="0,5,0,5" Background="{Binding ListOfChanges, Converter={StaticResource ChangeToBackgroundConverter}, ConverterParameter=Picture}">
+                            <Image x:Name="GameImage" Height="270" HorizontalAlignment="Left" Source="{Binding Path=CurrentTask.Picture}"/>
+                        </Border>
+                        <Border Margin="0 14 0 0" Background="{Binding ListOfChanges, Converter={StaticResource ChangeToBackgroundConverter}, ConverterParameter=Description}">
+                            <TextBlock x:Name="DescriptionText" VerticalAlignment="Center" Margin="5 0 5 0" Text="{Binding Path=CurrentTask.Description}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMedium}"/>
+                        </Border>
+                        <TextBlock x:Name="CancelledText" Margin="15 14 5 0" Text="{Binding Path=AppResources.TaskCancelled, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Visibility="Collapsed" FontSize="{StaticResource PhoneFontSizeMedium}" />
+                        <TextBlock x:Name="InactiveText" Margin="15 14 5 0" Text="{Binding Path=AppResources.TaskInactive, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Visibility="Collapsed" FontSize="{StaticResource PhoneFontSizeMedium}" />
                     </StackPanel>
                 </ScrollViewer>
             </controls:PivotItem>
             
             <!--Pivot item two-->
             <controls:PivotItem Header="{Binding Path=AppResources.Answer, Source={StaticResource LocalizedStrings}}">
-                <ScrollViewer>
+                <ScrollViewer x:Name="AnswerContent">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Grid x:Name="ABCD" Visibility="{Binding Path=CurrentTask.Type, Converter={StaticResource ABCDToVisibilityConverter}}">
+                        <Grid x:Name="ABCD" Visibility="{Binding Path=CurrentTask.Type, Converter={StaticResource ABCDToVisibilityConverter}}"
+                                Background="{Binding ListOfChanges, Converter={StaticResource ChangeToBackgroundConverter}, ConverterParameter=ABCDPossibleAnswers|AdditionalText}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />

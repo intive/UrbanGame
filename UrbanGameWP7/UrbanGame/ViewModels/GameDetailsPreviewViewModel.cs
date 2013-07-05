@@ -192,11 +192,7 @@ namespace UrbanGame.ViewModels
                     else
                         game.GameState = GameState.Joined;
 
-
-
-
                     uow.Commit();
-
                 }
                 _navigationService.UriFor<GameDetailsViewModel>().WithParam(x => x.GameId, Game.Id).Navigate();
             }

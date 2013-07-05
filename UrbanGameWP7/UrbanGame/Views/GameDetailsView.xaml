@@ -210,17 +210,29 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Orientation="Vertical">
+
                             <TextBlock Text="{Binding Path=AppResources.Active, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="5,0,0,0" Foreground="{StaticResource FontColorGreen}"/>
                             <TextBlock Text="{Binding Path=AppResources.NoTasks, Source={StaticResource LocalizedStrings}}" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding NoAvailableTasks, Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,0,0" TextWrapping="Wrap"/>
                             <ListBox ItemsSource="{Binding ActiveTasks}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowTask($dataContext)]" Margin="0,5,0,0">
+                                        <Grid Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowTask($dataContext)]" Margin="0,10,0,0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <Image Source="{Binding Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                                            <Border Width="100" Height="100" Margin="0,0,5,0">
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="{StaticResource SolidColorBrushGreen}"/>
+                                                </Border.Background>
+                                                <Grid>
+                                                    <Image Source="{Binding Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                                                    <Border Background="#75000000" VerticalAlignment="Bottom" Width="100" Height="20" Margin="0,-40,0,0" Visibility="{Binding ListOfChanges, Converter={StaticResource GameChangedToVisibilityConverter}}">
+                                                        <TextBlock Foreground="{StaticResource FontColorWhite}" FontWeight="Light" Text="{Binding Path=AppResources.Changed, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="14" />
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                            
                                             <StackPanel Grid.Column="1" Orientation="Vertical">
                                                 <StackPanel.Resources>
                                                     <Style TargetType="TextBlock">
@@ -228,7 +240,7 @@
                                                         <Setter Property="Foreground" Value="{StaticResource FontColorGreen}" />
                                                     </Style>
                                                 </StackPanel.Resources>
-                                                <TextBlock Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
+                                                <TextBlock Margin="0,-10,0,0" Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding IsRepeatable, Converter={StaticResource IsRepeatableConverter}}" />
                                                     <TextBlock Text="|" />
@@ -255,13 +267,18 @@
                             <ListBox ItemsSource="{Binding InactiveTasks}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ItemStyle}" >
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowTask($dataContext)]" Margin="0,5,0,0">
+                                        <Grid Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowTask($dataContext)]" Margin="0,10,0,0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <Image Source="{Binding Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
+                                            <Border Width="100" Height="100" Margin="0,0,5,0">
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="{StaticResource SolidColorBrushGreen}"/>
+                                                </Border.Background>
+                                                <Image Source="{Binding Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" VerticalAlignment="Top"/>
+                                            </Border>
+                                            <TextBlock Margin="0,-10,0,0" Grid.Column="1" Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
@@ -283,13 +300,18 @@
                             <ListBox ItemsSource="{Binding AccomplishedTasks}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowTask($dataContext)]" Margin="0,5,0,0">
+                                        <Grid Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowTask($dataContext)]" Margin="0,10,0,0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <Image Source="{Binding Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                            <StackPanel Grid.Column="1" Orientation="Vertical">
+                                            <Border Width="100" Height="100" Margin="0,0,5,0">
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="{StaticResource SolidColorBrushGreen}"/>
+                                                </Border.Background>
+                                                <Image Source="{Binding Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" VerticalAlignment="Top"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0,-10,0,0">
                                                 <TextBlock Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding UserPoints}" Foreground="{StaticResource FontColorGreen}"/>
@@ -307,13 +329,18 @@
                             <ListBox ItemsSource="{Binding CancelledTasks}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowTask($dataContext)]" Margin="0,5,0,0">
+                                        <Grid Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowTask($dataContext)]" Margin="0,10,0,0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <Image Source="{Binding Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
+                                            <Border Width="100" Height="100" Margin="0,0,5,0">
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="{StaticResource SolidColorBrushGreen}"/>
+                                                </Border.Background>
+                                                <Image Source="{Binding Converter={StaticResource TypeToImageSourceConverter}}" Width="100" Height="100" VerticalAlignment="Top"/>
+                                            </Border>
+                                            <TextBlock Grid.Column="1" Margin="0,-10,0,0" Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
