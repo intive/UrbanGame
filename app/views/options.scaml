@@ -1,0 +1,77 @@
+-#
+    *Copyright 2013 BLStream, BLStream's Patronage Program Contributors
+    * 		 http://blstream.github.com/UrbanGame/
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    * 		 http://www.apache.org/licenses/LICENSE-2.0
+    * 
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+
+- attributes("scripts") = capture
+    %script(src={uri("/assets/javascripts/controllers/optionsCtrl.min.js")} type="text/javascript")
+    %script(src={uri("/assets/javascripts/controllers/directives.js")} type="text/javascript")
+    %script(src={uri("/assets/javascripts/lib/jQueryFileUpload/vendor/jquery.ui.widget.js")} type="text/javascript")
+    %script(src={uri("/assets/javascripts/lib/jQueryFileUpload/jquery.iframe-transport.js")} type="text/javascript")
+    %script(src={uri("/assets/javascripts/lib/jQueryFileUpload/jquery.fileupload.js")} type="text/javascript")
+
+-@ val lan: Lang
+
+.span12(ng-controller="optionsCtrl")
+    .row
+        %h4.upper = Messages("options.title1")(lan)
+        %p = Messages("options.desc1")(lan)
+    .row
+        .alert.alert-error(ng-show="error") {{error}}
+        .alert.alert-info(ng-show="info") {{info}}
+        %form(name="profile" autocomplete="off")
+            .span5
+                .pull-right.centered
+                    .row.slight-padding-right
+                        %img(ng-src="/{{user.logo}}" ng-model="user.logo")
+                    .row.slight-padding-right.slight-padding-top
+                        %span.btn.btn-success-light.fileinput-button
+                            = Messages("options.browse")(lan)
+                            %i.icon-folder-open
+                            %input#fileupload(type="file" name="files[]" data-url="/my/options/json/uploadAvatar" accept="image/*")
+                        #progress(style="width: 100%; border: 1pt solid silver; display: none")
+                            #progress-bar(style="background: green; height: 1em; width: 0%")
+                        .alert.alert-info.slight-margin-top
+                            Max file size: 300 x 300, 5MB
+            .span7
+                .control-group
+                    %label.bold = Messages("options.name")
+                    %span.edit(ng-hide="editorEnabled") 
+                        {{user.name}}
+                        %button.btn.btn-success-light.btn-mini(ng-click="edit()") = Messages("options.name.edit")(lan)
+                    %span.edit(ng-show="editorEnabled")
+                        %input.input-small(type="text" name="uname" ng-model="uname" style="vertical-align: middle")
+                        %button.btn.btn-success-light.btn-small(ng-click="ok()") = Messages("options.name.save")(lan)
+                        %button.btn.btn-small(ng-click="cancel()") = Messages("options.name.cancel")(lan)
+                .control-group
+                    %label.bold = Messages("options.email")
+                    %span {{user.email}}
+                .control-group
+                    %label.bold = Messages("options.about")
+                    .controls
+                        %textarea.input-xlarge(ng-model="user.about" name="uabout" rows="3")
+                .control-group
+                    %label.bold = Messages("options.password.change")
+                    .controls
+                        %input.input-large(type="password" name="uoldpass" ng-model="user.passwordOld" placeholder={Messages("password.old")(lan)} autocomplete="off")
+                    .controls
+                        %input.input-large(type="password" name="unewpass" ng-model="user.passwordNew" placeholder={Messages("password.new")(lan)} pattern=".{6,}" autocomplete="off")
+                    .controls
+                        %input.input-large(type="password" name="uconfpass" ng-model="user.passwordConfirm" placeholder={Messages("password.confirm")(lan)} pattern=".{6,}" autocomplete="off")
+                .control-group.pull-right
+                    %input.btn.btn-success-light(type="submit" value={Messages("options.profile.save")(lan)} ng-click="saveProfile()")
+    .row
+        %h4.upper = Messages("options.title2")(lan)
+        %p = Messages("options.desc2")(lan)
+    .row
+        

@@ -45,7 +45,7 @@
         %tbody
             %tr.cursor-pointer(ng-repeat="game in pagedItems[currentPage] | orderBy:sortOrder:reverse" ng-click="showDetails($index)")
                 %td
-                    %img(ng-src="/assets/images/{{game.image}}" title={Messages("mygames.logo")})/
+                    %img(ng-src="/{{game.image}}" title={Messages("mygames.logo")})/
                 %td
                     .row
                         %h4 {{game.name | uppercase}}
@@ -83,6 +83,18 @@
                     .row
                         = Messages("mygames.ver")(lan)
                         {{game.version | number: 1}}
+            %tr(ng-hide="!renderDetails[$index]")
+                %td(colspan="4")
+                    .span12
+                        .row
+                            .span4
+                                Menu
+                            .span8
+                                .span5
+                                    %h4.gametitle {{game.name | uppercase}}
+                                    Left content
+                                .span3
+                                    Right content
     %div.pagination.pull-right
         %ul
             %li(ng-class="{disabled: currentPage == 0 || pagedItems.length == 0}")
