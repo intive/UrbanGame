@@ -303,7 +303,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
         if (gpsq.first > 0)
           ("accepted", sp)
         else
-          ("rejected", sp)
+          ("rejected", 0)
       }
       else
         throw unexpectedTaskType(ttype)
