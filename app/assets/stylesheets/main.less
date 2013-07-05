@@ -872,7 +872,6 @@ google-map {
 }
 #addTaskMap {
     height: @tmapheight;
-    margin-right: 40px;
 }
 
 input::-webkit-outer-spin-button,
@@ -932,7 +931,9 @@ input::-webkit-inner-spin-button {
         display: block;
         padding: 0px;
     }
-    
+    #addMoreAnswers{
+        margin-left: 16px;
+    }
     label {
         font-weight: bold;
     }
@@ -940,7 +941,10 @@ input::-webkit-inner-spin-button {
         font-weight: normal;
     }
     .answers{
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    .ng-case{
+        overflow: hidden;
     }
     .answer {
         margin: 0px;
@@ -960,11 +964,10 @@ input::-webkit-inner-spin-button {
         margin: 5px;
     }
     .answer-headers {
-        font-size: 85%;
         font-weight: bold;
         padding: 14px;
         span:nth-child(2){
-            margin-left: 155px;
+            margin-left: 146px;
         }
     }
     .input-mini{
@@ -972,6 +975,9 @@ input::-webkit-inner-spin-button {
     }
     .input-large{
         width:190px;
+    }
+    .well{
+        padding: 4px;
     }
     button.dark{
         border: 1px solid transparent;
@@ -1031,7 +1037,9 @@ input::-webkit-inner-spin-button {
             margin: 5px;
         }
     }
-    
+    .acceptance-points{
+        margin-left: 15px;
+    }
     div.pull-right {
         margin-top: 94px;
     }

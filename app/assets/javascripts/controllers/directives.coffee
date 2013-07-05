@@ -31,29 +31,31 @@ app.directive 'minpoints', ->
     restrict: 'A',
     require: "ngModel",
     link: (scope, elm, attr, ctrl) ->
+        scope.minPointsValid = true
         elm.on 'keyup', ->
-            if !number_regexp.test(ctrl.$viewValue)
-                console.log "numreg"
-                scope.$parent.taskForm.tMinToAccept.$setValidity 'minpointswrong', false
+            if (ctrl.$viewValue == "")
+                ctrl.$setValidity "minpoints", true
             else
-                minpoints = Number(ctrl.$viewValue)
-                sum = 0
-                pointsCorrect = true
-                scope.task.answers.forEach (answer) ->
-                    if (pointsCorrect)
-                        if number_pn_regexp.test(answer.points)
-                            num = Number(answer.points)
-                            sum += num if num>0
-                        else
-                            console.log "points not crrect"
-                            pointsCorrect = false
-                if !pointsCorrect
-                    scope.$parent.taskForm.tMinToAccept.$setValidity 'minpointswrong', false
+                if !number_regexp.test(ctrl.$viewValue)
+                    scope.$apply ->
+                        ctrl.$setValidity "minpoints", false
                 else
-                    scope.$parent.taskForm.tMinToAccept.$setValidity 'minpointswrong', (sum>=minpoints)
-            scope.$apply
-            console.log ctrl.$error
-            console.log scope.$parent
+                    minpoints = Number(ctrl.$viewValue)
+                    sum = 0
+                    pointsCorrect = true
+                    scope.task.answers.forEach (answer) ->
+                        if (pointsCorrect)
+                            if number_pn_regexp.test(answer.points)
+                                num = Number(answer.points)
+                                sum += num if num>0
+                            else
+                                pointsCorrect = false
+                    if !pointsCorrect
+                        scope.$apply ->
+                            ctrl.$setValidity "minpoints", false
+                    else
+                        scope.$apply ->
+                            ctrl.$setValidity "minpoints", (sum>=minpoints)
                     
 app.directive 'points', ->
     restrict: 'A',
@@ -63,7 +65,26 @@ app.directive 'points', ->
                 this.value = this.value.replace(/[^0-9\-\+]/g, '')
                 scope.$apply(attr.ngModel + '=' + elm.val())
             if !number_pn_regexp.test(elm.val())
-                scope.$apply(attr.ngModel + '=' + 0)
+                scope.$apply(attr.ngModel + '=' + "0")
+                
+app.directive 'positivePoints', ->
+    restrict: 'A',
+    link: (scope, elm, attr, ctrl) ->
+        elm.on 'keyup', ->
+            if (this.value != this.value.replace(/[^0-9]/g, ''))
+                this.value = this.value.replace(/[^0-9]/g, '')
+                scope.$apply(attr.ngModel + '=' + elm.val())
+            if !number_pn_regexp.test(elm.val())
+                scope.$apply(attr.ngModel + '=' + "0")
+                
+app.directive 'attempts', ->
+    restrict: 'A',
+    require: "ngModel",
+    link: (scope, elm, attr, ctrl) ->
+        elm.on 'keyup', ->
+            scope.$apply ->
+                ctrl.$setValidity "attempts", ((number_regexp.test(ctrl.$viewValue) && Number(ctrl.$viewValue)>=2) || ctrl.$viewValue == "")
+            
             
 app.directive 'taskListMap', ->
     restrict: 'A',

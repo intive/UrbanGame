@@ -403,13 +403,18 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             name:"",
             description:"",
             locations: [],
-            maxattempts: null,
-            maxpoints: null,
-            penalty: null,
+            maxattempts: "",
+            maxpoints: "",
+            penalty: "",
             repeat: false,
             answers:[{symbol:"A", text:"", points: null},{symbol:"B", text:"", points: null},{symbol:"C", text:"", points: null},{symbol:"D", text:"", points: null}]
         }
         additionalCond = false
+        $scope.taskForm.$setValidity "locations", false
+        
+        
+    $scope.resetAttempts = ->
+        $scope.task.maxattempts = ""
         
     $scope.addAnswer = ->
         symbol = String.fromCharCode(65+$scope.task.answers.length)
@@ -422,11 +427,10 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         lat = Number($("#latitude").val())
         lng = Number($("#longitude").val())
         radius = Number($("#radius").val())
-        console.log lat+" "+lng+" "+radius
         if (!isNaN(lat) && !isNaN(lng) && !isNaN(radius))
-            console.log "wtf"
             $scope.task.locations.push({lat: lat, lng: lng, radius: radius})
             $scope.repaintLocations()
+            $scope.taskForm.$setValidity "locations", true
             
     $scope.removeLocations = ->
         options = document.getElementById("locationsList").options
@@ -436,6 +440,8 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 $scope.task.locations.splice(i,1)
             i--
         $scope.repaintLocations()
+        if $scope.task.locations.length == 0
+            $scope.taskForm.$setValidity "locations", false
         
         
    
@@ -460,7 +466,6 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             else
                 $scope.form.$setValidity "morewinnersthanplayers", true
     , true
-    console.log $scope
 ]
 
 
