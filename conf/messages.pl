@@ -117,3 +117,6 @@ webapi.error.unexpectedTaskType = Błąd bazy, nieoczekiwany typ zadania: {0}
 webapi.error.invalidUserOrPassword = Niepoprawny login lub hasło
 webapi.error.noAuthHeader = Brak nagłówka autoryzującego
 webapi.error.invalidAuthHeader = Niepoprawny format nagłówka autoryzującego
+webapi.error.resourceNotExists = Podany zasób nie istnieje
+webapi.error.jsonExpected = Oczekiwano JSONa
+webapi.error.unexpectedError = Nieoczekiwany błąd: {0}

@@ -209,12 +209,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     }
   }
 
-  def updateNumberOfPlayers(gid: Int, a: Int)(implicit session: Session) {
-    val q = for (g <- models.Games if g.id === gid) yield g.numberOfPlayers
-    val num = q.first
-    q update (num+a)
-  }
-  
+ 
   override def getUserGameStatus(user: User, gid: Int) = {
     db withSession { implicit session =>
       val q = for (
@@ -281,42 +276,44 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
       }
     }
 
+    def getStatusAndPoints(ttype: String, maxpoints: Int, minToAccept: Int, penalty: Int)(implicit session: Session): (String, Int) = {
+      if (isABCTask(ttype)) {
+        val selected = ans.options getOrElse (throw expectedField("options"))
+        val abcq = for (
+          abc <- models.ABCTasks if abc.gameId === gid && abc.taskId === tid
+        ) yield (abc.char, abc.points)
+
+        val s = abcq.elements map { case (char, points) => if (selected contains char) points else 0 } sum
+        val sp = s - penalty
+        if (sp >= minToAccept)
+          ("accepted", sp)
+        else
+          ("rejected", 0)
+      }
+      else if (isGPSTask(ttype)) {
+        val userLat = ans.lat getOrElse (throw expectedField("lat"))
+        val userLon = ans.lon getOrElse (throw expectedField("lon"))
+        val gpsq = for (
+          gps <- models.GPSTasks if gps.gameId === gid && gps.taskId === tid
+          if geodistance(gps.lat, gps.lon, userLat, userLon) <= gps.range
+        ) yield (gps.exists)
+
+        val sp = maxpoints - penalty
+        if (gpsq.first == true)
+          ("accepted", sp)
+        else
+          ("rejected", 0)
+      }
+      else
+        throw unexpectedTaskType(ttype)
+    }
+
     def updateUserGamePoints(points: Int, prev: Int, gamePoints: Int)(implicit session: Session) {
       val ugq = for (
         ug <- models.UserGames if ug.userId === user.id && ug.gameId === gid
       ) yield (ug.points)
       ugq update (gamePoints + points - prev)      
     }
-
-   def getStatusAndPoints(ttype: String, maxpoints: Int, minToAccept: Int, penalty: Int)(implicit session: Session): (String, Int) = 
-    if (isABCTask(ttype)) {
-      val selected = ans.options getOrElse (throw expectedField("options"))
-      val abcq = for (
-        abc <- models.ABCTasks if abc.gameId === gid && abc.taskId === tid
-      ) yield (abc.char, abc.points)
-      val s = abcq.elements map { case (char, points) => if (selected contains char) points else 0 } sum
-      val sp = s - penalty
-
-      if (sp >= minToAccept)
-        ("accepted", sp)
-      else
-        ("rejected", sp)
-    }
-    else if (isGPSTask(ttype)) {
-      val userLat = ans.lat getOrElse (throw expectedField("lat"))
-      val userLon = ans.lon getOrElse (throw expectedField("lon"))
-      val gpsq = for (
-        gps <- models.GPSTasks if gps.gameId === gid && gps.taskId === tid
-        if geodistance(gps.lat, gps.lon, userLat, userLon) <= gps.range
-      ) yield (gps.exists)
-
-      if (gpsq.first == true)
-        ("accepted", maxpoints - penalty)
-      else
-        ("rejected", 0)
-    }
-    else
-      throw unexpectedTaskType(ttype)
 
     db withSession { implicit session =>
       userGameIsValid { gamePoints =>
@@ -346,7 +343,12 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     
   private def isGPSTask(ttype: String) = 
     ttype contains "GPS"
-  
+
+  private def updateNumberOfPlayers(gid: Int, a: Int)(implicit session: Session) {
+    val q = for (g <- models.Games if g.id === gid) yield g.numberOfPlayers
+    val num = q.first
+    q update (num+a)
+  }
 
   //private val geodistanceFun = SimpleFunction[Int]("geodistance")
   //private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double) =

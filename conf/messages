@@ -231,3 +231,6 @@ webapi.error.unexpectedTaskType = Database error, unxpected task type: {0}
 webapi.error.invalidUserOrPassword = Invalid user or password
 webapi.error.noAuthHeader = No authentication header
 webapi.error.invalidAuthHeader = Invalid basic authentication header
+webapi.error.resourceNotExists = This resource doesn't exists
+webapi.error.jsonExpected = JSON expected
+webapi.error.unexpectedError = Unexpected error: {0}
