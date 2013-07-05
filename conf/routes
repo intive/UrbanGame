@@ -28,6 +28,10 @@ POST    /my/games/json              controllers.GamesCtrl.saveGame
 GET     /my/games/json/:gid         controllers.GamesCtrl.getGame(gid: Int)
 PUT     /my/games/json/:gid         controllers.GamesCtrl.updateGame(gid: Int)
 DELETE  /my/games/json/:gid         controllers.GamesCtrl.deleteGame(gid: Int)
+GET     /my/options/json/profile 	controllers.GamesCtrl.getProfile
+PUT     /my/options/json/profile 	controllers.GamesCtrl.updateProfile
+GET     /my/options/json/checkPassword/:pass controllers.GamesCtrl.matchPasswords(pass: String)
+POST    /my/options/json/uploadAvatar controllers.GamesCtrl.uploadAvatar
 
 # Authenticated
 GET     /my/options                 controllers.GamesCtrl.options

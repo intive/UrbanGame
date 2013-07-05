@@ -37,7 +37,7 @@
     %p.upper.h1.bold = Messages("main.register.title")(lan)
     %p = Messages("main.register.msg")(lan)
 .row(ng-controller="registrationCtrl")
-    %form.form-register.form-horizontal(action={routes.Application.register} method="post" name="registration" class="css-form" id="auth")
+    %form.form-register.form-horizontal(action={routes.Application.register} method="post" name="registration" class="css-form" id="auth" autocomplete="off")
         .control-group
             %label.control-label = Messages("register.name")(lan)
             .controls
@@ -49,7 +49,7 @@
             %label.control-label = Messages("email")(lan)
             .controls
                 %input(type="text" name="email" id="email" placeholder={Messages("email")(lan)}
-                    value={if(registrationForm.data.contains("email")) registrationForm.data("email")} ng-model="user.email" user-email required)
+                    value={if(registrationForm.data.contains("email")) registrationForm.data("email")} ng-model="user.email" user-email required autocomplete="off")
                 %span#processing
                 .help-block(ng-show="registration.email.$dirty && registration.email.$error.emailunique" ng-cloak) = Messages("error.email.exists")
                 .help-block(ng-show="registration.email.$dirty && registration.email.$error.required" ng-cloak) = Messages("error.email.required")
@@ -57,13 +57,13 @@
         .control-group
             %label.control-label = Messages("password")(lan)
             .controls
-                %input(type="password" name="password.main" id="password.main" placeholder={Messages("password")(lan)} ng-model="user.password" pattern=".{6,}" required)
+                %input(type="password" name="password.main" id="password.main" placeholder={Messages("password")(lan)} ng-model="user.password" pattern=".{6,}" required autocomplete="off")
                 .help-block(ng-show="registration['password.main'].$dirty && registration['password.main'].$error.required" ng-cloak) = Messages("error.password.required")
                 != showMsg("password.main")
         .control-group
             %label.control-label = Messages("password.confirm")(lan)
             .controls
-                %input(type="password" name="password.confirm" id="password.confirm" placeholder={Messages("password.confirm")(lan)} ng-model="user.passwordConfirm" pattern=".{6,}" required password-confirm="password.main")
+                %input(type="password" name="password.confirm" id="password.confirm" placeholder={Messages("password.confirm")(lan)} ng-model="user.passwordConfirm" pattern=".{6,}" required password-confirm="password.main" autocomplete="off")
                 .help-block(ng-show="registration['password.confirm'].$dirty && registration['password.confirm'].$error.required" ng-cloak) = Messages("error.password.required")
                 .help-block(ng-show="registration['password.confirm'].$dirty && registration['password.confirm'].$error.repeat" ng-cloak) = Messages("error.passwords.match")
                 != showMsg("password.confirm")

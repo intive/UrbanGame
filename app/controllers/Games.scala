@@ -45,7 +45,7 @@ object GamesCtrl extends Controller with CookieLang with AuthElement with AuthCo
 
   def options = StackAction(AuthorityKey -> NormalUser) { implicit request =>
     val user = loggedIn
-    Ok("Options")
+    Ok(Scalate("options").render('title -> "Urban Game - Options", 'user -> Some(user)))
   }
 
   def editGame(gid: Int) = authAndValidAction(NormalUser, gid) { user => implicit request =>
@@ -137,6 +137,58 @@ object GamesCtrl extends Controller with CookieLang with AuthElement with AuthCo
       else
         JsonBad("Access denied")
     }
+  }
+
+  def getProfile = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+    val user = loggedIn
+    findOperatorById(user.id.get) match {
+      case Some(x) => Ok(Json.toJson(x))
+      case None => BadRequest(Json.toJson(Map("error" -> "No user found")))
+    }
+    
+  }
+
+  def updateProfile = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+    val user = loggedIn
+    JsonData { res: OperatorPartData =>
+      matchResult(operatorUpdate(res, user.id.get))
+    }
+  }
+
+  def matchPasswords(pass: String) = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+    val user = loggedIn
+    import org.mindrot.jbcrypt.BCrypt
+    val hashPass = BCrypt.checkpw(pass, user.password)
+    Ok(Json.toJson(Map("val" -> hashPass.asInstanceOf[Boolean])))
+  }
+
+  def uploadAvatar = StackAction(parse.multipartFormData, AuthorityKey -> NormalUser) { implicit request =>
+    val user = loggedIn
+    request.body.file("files[]").map { file =>
+      val fname = file.filename
+      val filename = "users/" + user.id.get + "/logo/avatar" + fname.substring(fname.indexOf("."), fname.length)
+      val pic = new java.io.File(Play.application.path + "/public/upload/" + filename)
+      
+      file.ref.moveTo(pic, true)
+      
+      Ok(Json.toJson(
+        Json.obj(
+          "files" -> Json.arr(
+            Json.obj(
+              "name" -> filename,
+              "size" -> pic.length,
+              "url" -> filename,
+              "thumbnail_url" -> "",
+              "delete_url" -> "",
+              "delete_type" -> ""
+            )
+          )
+        )
+      ))
+    }.getOrElse {
+      BadRequest(Json.toJson(Map("error" -> "Missing file")))
+    }
+    
   }
 
   private def JsonData[A] (f: A => Result) (implicit request: Request[AnyContent], r: Reads[A]) = 
