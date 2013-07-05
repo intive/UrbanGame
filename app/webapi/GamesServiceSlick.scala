@@ -37,7 +37,8 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
         o.email, o.logo,
         g.maxPlayers, g.numberOfPlayers,
         g.awards,
-        d
+        d,
+        g.image
       )
 
       q.sortBy(_._12).elements map { GameSummary.tupled(_) } toList
@@ -133,7 +134,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     db withSession { implicit session =>
       val q = for (
         ug <- models.UserGames if ug.userId === user.id
-      ) yield (ug.gameId, ug.joined, ug.left, ug.points)
+      ) yield (ug.gameId, ug.joined, ug.left, ug.points, -1)
         
       q.elements map { UserGameSummary.tupled(_) } toList
     }
@@ -214,7 +215,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     db withSession { implicit session =>
       val q = for (
         ug <- models.UserGames if ug.userId === user.id && ug.gameId === gid
-      ) yield (ug.points, 0)
+      ) yield (ug.points, -1)
       
       q.firstOption map { UserGameStatus.tupled(_) } getOrElse (throw notPartOfGame)
     }
@@ -288,7 +289,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
         if (sp >= minToAccept)
           ("accepted", sp)
         else
-          ("rejected", 0)
+          ("rejected", sp)
       }
       else if (isGPSTask(ttype)) {
         val userLat = ans.lat getOrElse (throw expectedField("lat"))
@@ -302,7 +303,7 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
         if (gpsq.first == true)
           ("accepted", sp)
         else
-          ("rejected", 0)
+          ("rejected", sp)
       }
       else
         throw unexpectedTaskType(ttype)
@@ -350,10 +351,10 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
     q update (num+a)
   }
 
-  //private val geodistanceFun = SimpleFunction[Int]("geodistance")
-  //private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double) =
-  //  geodistanceFun(Seq(lat1, lon1, lat2, lon2))
-  private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double): Column[Int] = 0
+  private val geodistanceFun = SimpleFunction[Int]("geodistance")
+  private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double) =
+    geodistanceFun(Seq(lat1, lon1, lat2, lon2))
+  //private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double): Column[Int] = 0
     
   private val PublicGamesView = models.Games filter (g => g.status === "published" || g.status === "online")
   private val GamesView = PublicGamesView innerJoin models.Operators on (_.operatorId === _.id)
