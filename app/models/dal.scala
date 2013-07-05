@@ -35,6 +35,12 @@ object dal {
     implicit val gamesDetailsReads = Json.reads[GamesDetails]
     implicit val gamesDetailsWrites = Json.writes[GamesDetails]
     implicit val gamesReads = Json.reads[GamePartData]
+    implicit val operatorPartReads = Json.reads[OperatorPartData]
+    implicit object permissionFormat extends Format[Permission] {
+      def reads(json: JsValue): JsResult[Permission] = JsSuccess(Permission.valueOf((json \ "permission").as[String]))
+      def writes(per: Permission): JsValue = Json.obj("permission" -> JsString(per.toString))
+    }
+    implicit val operatorWrites = Json.writes[Operator]
 
     def Games(implicit session: Session) = new ImplicitSession with Games { override val implicitSession = session }
     def Operators(implicit session: Session) = new ImplicitSession with Operators { override val implicitSession = session }
@@ -102,11 +108,40 @@ object dal {
       Operators.create(op)
     }
 
-    def operatorUpdate(op: Operator): Try[Int] = db.withSession { implicit session =>
-      Operators.update(op)
+    def operatorUpdatePass(op: Operator): Try[Int] = {
+      db.withSession { implicit session =>
+        Operators.update(op)
+      }
     }
 
-    def findOperatorById(oid: Int): Option[Operator] =db.withSession { implicit session =>
+    def operatorUpdate(opd: OperatorPartData, oid: Int): Try[Int] = {
+      import org.mindrot.jbcrypt.BCrypt
+      val op = findOperatorById(oid)
+      if(op != None) {
+        var newPath = opd.logo
+
+        if(opd.logo.contains("tmp")) {
+          val path = play.api.Play.application.path + "/public/"
+          val filename = opd.logo.substring(opd.logo.lastIndexOf("tmp/")+4, opd.logo.length)
+          newPath = opd.logo.substring(0,opd.logo.lastIndexOf("tmp/")) + opd.logo.substring(opd.logo.lastIndexOf("tmp/")+4, opd.logo.length)
+          new java.io.File(path + "upload/users/" + op.get.id.get +"/logo/" + filename).delete()
+          val f = new java.io.File(path + opd.logo).renameTo(new java.io.File(path + newPath))
+          new java.io.File(path + "upload/users/" + op.get.id.get +"/logo/tmp").delete()
+
+        }
+
+        val pass = if(opd.password != None) BCrypt.hashpw(opd.password.get, BCrypt.gensalt()) else op.get.password
+        val o = op.get.copy(name = opd.name, description = Some(opd.description.getOrElse(op.get.description.getOrElse(""))), 
+          password = pass, logo = newPath, modified = DateTime.now)
+      
+        db.withSession { implicit session =>
+          Operators.update(o)
+        }
+      } else { Try(0) }
+
+    }
+
+    def findOperatorById(oid: Int): Option[Operator] = db.withSession { implicit session =>
       Operators.findById(oid)
     }
 
@@ -144,6 +179,7 @@ trait Bridges {
   case class GamePartData(name: String, version: Int, description: String, location: String, startTime: String, startDate: String, 
     endTime: String, endDate: String, winning: String, winningNum: Int, diff: String, playersNum: Int, awards: String, 
     status: String, tasksNo: Int)
+  case class OperatorPartData(name: String, description: Option[String], password: Option[String], logo: String)
 
   def game(gid: Int): Try[GamesDetails]
   def gameList(opId: Int): List[GamesList]
@@ -155,7 +191,8 @@ trait Bridges {
   def gameChangeStatus(id: Int, flag: String): Try[Int]
   def findOperatorId(gid: Int): Int
   def operatorSave(op: Operator): Try[Int]
-  def operatorUpdate(op: Operator): Try[Int]
+  def operatorUpdatePass(op: Operator): Try[Int]
+  def operatorUpdate(opd: OperatorPartData, oid: Int): Try[Int]
   def findOperatorById(oid: Int): Option[Operator]
   def findOperatorByEmail(email: String): Option[Operator]
   def auth(email: String, password: String): Option[Operator]
