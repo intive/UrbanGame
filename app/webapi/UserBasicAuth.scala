@@ -52,5 +52,5 @@ class UserBasicAuth(gamesService: GamesService) extends UserAuth {
     res getOrElse { throw new AuthException(preMsg+"invalidAuthHeader") }
   }
 
-  val preMsg = "webapi.error."
+  private val preMsg = "webapi.error."
 }
