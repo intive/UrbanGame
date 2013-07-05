@@ -103,7 +103,6 @@
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Converters\ABCDToVisibilityConverter.cs" />
     <Compile Include="Converters\AlertTimeConverter.cs" />
-    <Compile Include="Converters\BindableCollectionCountToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateToVisibilityConverter.cs" />
     <Compile Include="Converters\DurationTimeConverter.cs" />

@@ -20,11 +20,7 @@
     shell:SystemTray.IsVisible="True">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent" Margin="0,-8,0,8">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid x:Name="LayoutRoot">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="BackupStates">
                 <VisualState x:Name="Normal">
@@ -125,23 +121,29 @@
 
         <controls:Pivot>
             <controls:Pivot.Background>
-                <ImageBrush ImageSource="/Images/PivotPage.png" />
+                <ImageBrush ImageSource="/Images/PivotPage.png"/>
             </controls:Pivot.Background>
+            <controls:Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <ContentPresenter>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding}" FontSize="60" Margin="0,8,0,-10" Foreground="{StaticResource FontColorGreen}" />
+                        </StackPanel>
+                    </ContentPresenter>
+                </DataTemplate>
+            </controls:Pivot.HeaderTemplate>
             <controls:Pivot.Title>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Column="1" FontSize="60" Margin="-50,15,15,0" Foreground="{StaticResource FontColorWhite}" />
-                    <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Column="0" FontSize="60" Margin="0,15,15,0" Foreground="{StaticResource FontColorGreen}"/>
+                    <TextBlock Text="{Binding Path=AppResources.Games, Source={StaticResource LocalizedStrings}}" Grid.Column="1" FontSize="70" Margin="-50,-15,15,0" Foreground="{StaticResource FontColorWhite}"/>
+                    <TextBlock Text="{Binding Path=AppResources.Urban, Source={StaticResource LocalizedStrings}}" Grid.Column="0" FontSize="70" Margin="0,-15,15,0" Foreground="{StaticResource FontColorGreen}"/>
                 </Grid>
             </controls:Pivot.Title>
             <!--Login pivotItem -->
-            <controls:PivotItem>
-                <controls:PivotItem.Header>
-                    <TextBlock Text="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Foreground="{StaticResource FontColorGreen}"/>
-                </controls:PivotItem.Header>
+            <controls:PivotItem Header="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -152,13 +154,13 @@
                     </Grid.RowDefinitions>
                     <Grid.Resources>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Margin" Value="10,10,10,0"/>
+                            <Setter Property="Margin" Value="10,-5,10,0"/>
                         </Style>
                     </Grid.Resources>
                     <TextBlock Text="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="0"/>
-                    <utils:PhoneTextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1"/>
+                    <utils:PhoneTextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1" Margin="0,-5,0,0"/>
                     <TextBlock Text="{Binding Path=AppResources.Password, Source={StaticResource LocalizedStrings}}" Grid.Row="2"/>
-                    <PasswordBox x:Name="Password" Grid.Row="3" />
+                    <PasswordBox x:Name="Password" Grid.Row="3" Margin="0,-5,0,0"/>
                     <Button Content="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="4" Width="250" Height="75" HorizontalAlignment="Right" Background="{StaticResource FontColorGreen}" BorderBrush="Transparent">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
@@ -172,10 +174,8 @@
             </controls:PivotItem>
             
             <!--Registration pivotItem -->
-            <controls:PivotItem>
-                <controls:PivotItem.Header>
-                    <TextBlock Text="{Binding Path=AppResources.Join, Source={StaticResource LocalizedStrings}}" Foreground="{StaticResource FontColorGreen}"/>
-                </controls:PivotItem.Header>
+            <controls:PivotItem Header="{Binding Path=AppResources.Join, Source={StaticResource LocalizedStrings}}">
+                <ScrollViewer>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -190,17 +190,17 @@
                     </Grid.RowDefinitions>
                     <Grid.Resources>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Margin" Value="10,10,10,0"/>
+                            <Setter Property="Margin" Value="10,-5,10,0"/>
                         </Style>
                     </Grid.Resources>
                     <TextBlock Text="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="0"/>
-                    <utils:PhoneTextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1"/>
+                    <utils:PhoneTextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1" Margin="0,-5,0,0"/>
                     <TextBlock Text="{Binding Path=AppResources.Email, Source={StaticResource LocalizedStrings}}" Grid.Row="2"/>
-                    <utils:PhoneTextBox Text="{Binding Email, Mode=TwoWay}" Grid.Row="3" InputScope="EmailUserName"/>
+                    <utils:PhoneTextBox Text="{Binding Email, Mode=TwoWay}" Grid.Row="3" InputScope="EmailUserName" Margin="0,-5,0,0"/>
                     <TextBlock Text="{Binding Path=AppResources.Password, Source={StaticResource LocalizedStrings}}" Grid.Row="4"/>
-                    <PasswordBox x:Name="RPassword" Grid.Row="5" />
+                    <PasswordBox x:Name="RPassword" Grid.Row="5" Margin="0,-5,0,0"/>
                     <TextBlock Text="{Binding Path=AppResources.RepeatPassword, Source={StaticResource LocalizedStrings}}" Grid.Row="6"/>
-                    <PasswordBox x:Name="RConfirmationPassword" Grid.Row="7" />
+                    <PasswordBox x:Name="RConfirmationPassword" Grid.Row="7" Margin="0,-5,0,0"/>
                     <Button Content="{Binding Path=AppResources.Join, Source={StaticResource LocalizedStrings}}" Grid.Row="8" Width="250" Height="75" HorizontalAlignment="Right" Background="{StaticResource FontColorGreen}" BorderBrush="Transparent">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
@@ -212,6 +212,7 @@
                         </i:Interaction.Triggers>
                     </Button>
                 </Grid>
+                </ScrollViewer>
             </controls:PivotItem>
         </controls:Pivot>
 

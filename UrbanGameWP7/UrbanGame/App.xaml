@@ -37,7 +37,6 @@
         <conv:TypeToImageSourceConverter x:Key="TypeToImageSourceConverter" />
         <conv:NearbyGameStartConverter x:Key="NearbyGameStartConverter" />
         <conv:AlertTimeConverter x:Key="AlertTimeConverter" />
-        <conv:BindableCollectionCountToVisibilityConverter x:Key="BindableCollectionCountToVisibilityConverter" />
 
         <Style x:Key="ItemStyle" TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

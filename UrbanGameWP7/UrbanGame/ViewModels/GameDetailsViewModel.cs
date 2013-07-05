@@ -195,28 +195,6 @@ namespace UrbanGame.ViewModels
 
         #endregion
 
-        #region NotFullPoints
-
-        private bool _notFullPoints;
-
-        public bool NotFullPoints
-        {
-            get
-            {
-                return _notFullPoints;
-            }
-            set
-            {
-                if (_notFullPoints != value)
-                {
-                    _notFullPoints = value;
-                    NotifyOfPropertyChange(() => NotFullPoints);
-                }
-            }
-        }
-
-        #endregion
-
         #region ShowMore
 
         private bool _showsMore = false;
@@ -705,7 +683,6 @@ namespace UrbanGame.ViewModels
                                                                         .AsEnumerable());
                 }
             });
-
         }
 
         public async void Leave()

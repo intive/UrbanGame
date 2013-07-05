@@ -303,7 +303,7 @@
                             </ListBox>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Orientation="Vertical" Margin="5,0,5,0">
-                            <TextBlock Text="{Binding Path=AppResources.Cancelled, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}" Visibility="{Binding CancelledTasks, Converter={StaticResource BindableCollectionCountToVisibilityConverter}}"/>
+                            <TextBlock Text="{Binding Path=AppResources.Cancelled, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}" Visibility="{Binding CancelledTasks.Count, Converter={StaticResource ValueToVisibilityConverter}}"/>
                             <ListBox ItemsSource="{Binding CancelledTasks}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
