@@ -28,6 +28,10 @@ POST    /my/games/json              controllers.GamesCtrl.saveGame
 GET     /my/games/json/:gid         controllers.GamesCtrl.getGame(gid: Int)
 PUT     /my/games/json/:gid         controllers.GamesCtrl.updateGame(gid: Int)
 DELETE  /my/games/json/:gid         controllers.GamesCtrl.deleteGame(gid: Int)
+GET     /my/options/json/profile 	controllers.GamesCtrl.getProfile
+PUT     /my/options/json/profile 	controllers.GamesCtrl.updateProfile
+GET     /my/options/json/checkPassword/:pass controllers.GamesCtrl.matchPasswords(pass: String)
+POST    /my/options/json/uploadAvatar controllers.GamesCtrl.uploadAvatar
 
 # Authenticated
 GET     /my/options                 controllers.GamesCtrl.options
@@ -62,6 +66,7 @@ DELETE  /api/my/games/:gid          @controllers.WebApi.leaveGame(gid: Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /upload/*file               controllers.Upload.at(file)
 
 # Additional
 GET     /filldb                     controllers.Application.fillDatabase

@@ -6,6 +6,8 @@ name = Name
 email = E-mail
 password = Password
 password.confirm = Confirm password
+password.old = Old password
+password.new = New password
 
 captcha = Enter the code
 captcha.getaudio = Get an audio CAPTCHA
@@ -67,6 +69,8 @@ notify.confirm.badToken = Your token is not valid. Check your token and try agai
 notify.confirm.noUser = There is no such e-mail in our database. Please, check your confirmation link or contact us.
 notify.confirm.alreadyValidated = Your account does not need the validation.
 notify.confirm.dbIssue = Technical problem occured.  Your account could not be validated. Please, try later or contact us.
+
+notify.options.profile.saved = Your profile has been saved successfully.
 
 dateformat = "yy-dd-mm"
 dateformatlong = yyyy-dd-MM
@@ -162,6 +166,20 @@ status.finished = Finished
 
 archive.title = Games archive
 
+options.title1 = Edit user profile
+options.title2 = Edit default game client skin
+options.desc1 = Customize your profile
+options.desc2 = Make your game looks like developed by you
+options.name = Name:
+options.email = E-mail:
+options.about = About
+options.password.change = Change password
+options.profile.save = Save profile
+options.browse = Browse image
+options.name.edit = Change name
+options.name.save = Ok
+options.name.cancel = Cancel
+
 tasks.newtaskbtn = CREATE NEW TASK
 tasks.headername = Task details
 tasks.headertype = Type
@@ -227,6 +245,11 @@ js.aftereffects.delete = When you do this, your game will disappear.
 js.no = No
 js.yes = Yes, {0} this game
 js.gpstask.marker = Reach it to complete task.
+js.errors.options.profile.load = Loading data failed.
+js.errors.options.profile.save = Saving profile failed.
+js.errors.options.profile.passwords.match = Some of given passwords do not match.
+js.errors.options.profile.passwords.match.undefined = Could not check if passwords match. Please try again later.
+js.errors.options.profile.file.upload = Could not upload an image. Please try again later.
 
 webapi.error.gameNotFound = Game not found
 webapi.error.taskNotFound = Task not found
@@ -238,10 +261,13 @@ webapi.error.alreadyJoined = You are already joined
 webapi.error.isFull = Game is full
 webapi.error.alreadyLeft = You are already left this game
 webapi.error.mustWait = User must wait {0} minutes
-webapi.error.taskCancelled = This task is cancelled
+webapi.error.taskActive = This task is not active
 webapi.error.noMoreAttempts = Attempts limit reached
-webapi.error.expectedField = Expected field "{0}"
-webapi.error.unexpectedTaskType = Unxpected task type "{0}"
+webapi.error.expectedField = Expected field: {0}
+webapi.error.unexpectedTaskType = Database error, unxpected task type: {0}
 webapi.error.invalidUserOrPassword = Invalid user or password
 webapi.error.noAuthHeader = No authentication header
 webapi.error.invalidAuthHeader = Invalid basic authentication header
+webapi.error.resourceNotExists = This resource doesn't exists
+webapi.error.jsonExpected = JSON expected
+webapi.error.unexpectedError = Unexpected error: {0}

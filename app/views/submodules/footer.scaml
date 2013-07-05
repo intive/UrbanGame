@@ -14,6 +14,7 @@
     * limitations under the License.
 
 -@ val lan: Lang
+-@ var user: Option[Operator]
 
 #footer(ng-controller="menuCtrl")
     .span3.offset1
@@ -51,3 +52,6 @@
                 %a(href="/help") = Messages("menu.help")(lan)
             %li(ng-class="{active: location == '/faq'}")
                 %a(href="/faq") = Messages("menu.faq")(lan)
+            - if(user != None)
+                %li(ng-class="{active: location == '/my/games'}")
+                    %a(href="/my/games") = Messages("menu.mygames")(lan)

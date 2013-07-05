@@ -161,7 +161,7 @@ app.directive 'userEmail', ->
                     ).
                     error((data, status) ->
                         ctrl.$setValidity "emailunique", true
-                        scope.error = Messages("js.errors.email") + data
+                        scope.error = Messages("js.errors.email")
                     )
             $("#processing").removeClass("img-processing")
             value

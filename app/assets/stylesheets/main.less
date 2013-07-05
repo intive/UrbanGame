@@ -321,6 +321,18 @@ div.rating > i:hover {
     #footmenu {
         margin-bottom: @slightpadding;
         margin-top: @hfooter * 0.7;
+
+        li a {
+            color: @gray;
+        }
+
+        li a:hover {
+            color: @greeny;
+        }
+
+        li.active a {
+            color: @blacky;
+        }
     }
 }
 
@@ -347,7 +359,7 @@ div.rating > i:hover {
     }
 
     .loghead {
-        background-color: #fff;
+        background-color: @whitey;
     }
 
     .myheader {
@@ -360,7 +372,7 @@ div.rating > i:hover {
         }
     
         .big-image {
-            background-color: #fff;
+            background-color: @whitey;
             width: 100%
         }
 
@@ -395,6 +407,14 @@ div.rating > i:hover {
                     text-shadow: none;
                 }
 
+                .nav>li:last-child>a, .nav>li:last-child>a:hover, .nav>li:last-child>a:focus {
+                    background-color: @darkgray;
+                }
+
+                .nav-tabs>li:last-child>a, .nav-tabs>li:last-child>a:hover, .nav-tabs>li:last-child>a:focus {
+                    background-color: @darkgray;
+                }
+
                 .nav>li>a, .nav>li>a:hover, .nav>li>a:focus {
                     color: @whitey;
                     text-decoration: none;
@@ -411,14 +431,6 @@ div.rating > i:hover {
                     border-bottom-color: transparent;
                 }
 
-                .nav>li:last-child>a, .nav>li:last-child>a:hover, .nav>li:last-child>a:focus {
-                    background-color: @darkgray;
-                }
-
-                .nav-tabs>li:last-child>a, .nav-tabs>li:last-child>a:hover, .nav-tabs>li:last-child>a:focus {
-                    background-color: @darkgray;
-                }
-
                 .nav>.active>a, .nav>.active>a:hover, .nav>.active>a:focus {
                     color: @darkgreeny;
                     text-decoration: none;
@@ -430,7 +442,7 @@ div.rating > i:hover {
 
                 .nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
                     color: @darkgreeny;
-                    background-color: @whitey;
+                    background-color: @whitey !important;
                     border: 1px solid #ddd;
                     border-bottom-color: transparent;
                     cursor: auto;
@@ -1138,4 +1150,42 @@ input[class*="ng-invalid-"]:focus {
 
 span#processing {
     position: absolute;
+}
+
+form[name="profile"] {
+    label {
+        display: inline;
+    }
+
+    button.btn.btn-success-light.btn-small {
+        display: inline-block;
+    }
+
+    .edit {
+        input {
+            margin: 0 1px 1px 5px;
+        }
+
+        button.btn-mini {
+            margin-left: 10px;
+        }
+    }
+
+    .fileinput-button {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .fileinput-button input {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        opacity: 0;
+        filter: alpha(opacity=0);
+        transform: translate(-300px, 0) scale(4);
+        font-size: 23px;
+        direction: ltr;
+        cursor: pointer;
+    }
 }
