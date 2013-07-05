@@ -2,6 +2,7 @@ package com.blstream.urbangame.webserver;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Message;
@@ -47,10 +48,12 @@ import com.blstream.urbangame.web.WebHighLevelInterface;
 // formatter:on
 // TODO add required query types and corresponding methods
 public class WebServer implements WebHighLevelInterface {
-	private ServerResponseHandler handler;
+	private final ServerResponseHandler handler;
+	private final Context context;
 	
-	public WebServer(ServerResponseHandler handler) {
+	public WebServer(Context context, ServerResponseHandler handler) {
 		this.handler = handler;
+		this.context = context;
 	}
 	
 	// formatter:off
@@ -62,7 +65,7 @@ public class WebServer implements WebHighLevelInterface {
 	// formatter:on
 	
 	public void getAllGames() {
-		new WebRequest(this, QueryType.DownloadGamesList).execute();
+		new WebRequest(context, this, QueryType.DownloadGamesList).execute();
 	}
 	
 	/// and so on...
@@ -94,42 +97,42 @@ public class WebServer implements WebHighLevelInterface {
 	
 	@Override
 	public void downloadGamesList() {
-		new WebRequest(this, QueryType.DownloadGamesList).execute();
+		new WebRequest(context, this, QueryType.DownloadGamesList).execute();
 	}
 	
 	@Override
 	public void downloadUsersGames() {
-		new WebRequest(this, QueryType.DownloadUsersGames).execute();
+		new WebRequest(context, this, QueryType.DownloadUsersGames).execute();
 	}
 	
 	@Override
 	public void downloadGameDetails(Long selectedGameID) {
-		new WebRequest(this, QueryType.DownloadGameDetails, selectedGameID).execute();
+		new WebRequest(context, this, QueryType.DownloadGameDetails, selectedGameID).execute();
 	}
 	
 	@Override
 	public void joinCurrentPlayerToTheGame(Long selectedGameID) {
-		new WebRequest(this, QueryType.JoinCurrentPlayerToTheGame, selectedGameID).execute();
+		new WebRequest(context, this, QueryType.JoinCurrentPlayerToTheGame, selectedGameID).execute();
 	}
 	
 	@Override
 	public void leaveCurrentPlayerFromTheGame(Long selectedGameID) {
-		new WebRequest(this, QueryType.LeaveCurrentPlayerFromTheGame, selectedGameID).execute();
+		new WebRequest(context, this, QueryType.LeaveCurrentPlayerFromTheGame, selectedGameID).execute();
 	}
 	
 	@Override
 	public void loginUser(String email, String password) {
-		new WebRequest(this, QueryType.LoginUser, email, password).execute();
+		new WebRequest(context, this, QueryType.LoginUser, email, password).execute();
 	}
 	
 	@Override
 	public void registerPlayer(String email, String displayName, String password) {
-		new WebRequest(this, QueryType.RegisterPlayer, email, password, displayName).execute();
+		new WebRequest(context, this, QueryType.RegisterPlayer, email, password, displayName).execute();
 	}
 	
 	@Override
 	public void downloadTasksForGame(long gameID) {
-		new WebRequest(this, QueryType.DownloadTasksForGame, gameID).execute();
+		new WebRequest(context, this, QueryType.DownloadTasksForGame, gameID).execute();
 	}
 	
 	@Override
@@ -163,16 +166,16 @@ public class WebServer implements WebHighLevelInterface {
 			webResponse.points = points;
 		}
 		
-		new WebRequest(this, QueryType.SendAnswersForABCDTask, task, answers).execute();
+		new WebRequest(context, this, QueryType.SendAnswersForABCDTask, task, answers).execute();
 	}
 	
 	@Override
 	public void sendAnswerForLocationTask(Task task, Location location) {
-		new WebRequest(this, QueryType.SendAnswersForABCDTask, task, location).execute();
+		new WebRequest(context, this, QueryType.SendAnswersForABCDTask, task, location).execute();
 	}
 	
 	@Override
 	public void getCorrectAnswerForGpsTask(Task task) {
-		new WebRequest(this, QueryType.GetCorrectAnswerForGpsTask, task).execute();
+		new WebRequest(context, this, QueryType.GetCorrectAnswerForGpsTask, task).execute();
 	}
 }

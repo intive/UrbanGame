@@ -7,8 +7,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 
+import com.blstream.urbangame.R;
 import com.blstream.urbangame.webserver.json.API;
 import com.google.gson.Gson;
 
@@ -19,22 +23,30 @@ import com.google.gson.Gson;
  */
 //FIXME implementation needed
 public class WebAPI {
-	private final static String base = "http://urbangame.patronage.blstream.com/api";
 	private final static ExecutorService executor = Executors.newCachedThreadPool();
+	private String base = "http://urbangame.patronage.blstream.com";
+	private static final String API_STRING = "/api";
 	
-	private Gson gson;
+	private final Gson gson;
 	private API baseAPI;
-	private WebDownloader webDownloader;
+	private final WebDownloader webDownloader;
 	
-	public WebAPI(WebDownloader webDownloader) {
+	public WebAPI(Context context, WebDownloader webDownloader) {
 		this.gson = new Gson();
 		this.webDownloader = webDownloader;
+		
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+		base = sharedPrefs.getString(context.getString(R.string.key_server_name),
+			context.getString(R.string.settings_server_default_server_address));
 	}
 	
 	public Uri getAllGamesUri() {
 		Uri uri = null;
 		try {
-			uri = Uri.parse(base + getBaseAPI().links.games.href);
+			SimpleUriTemplateParser uriTemplate = new SimpleUriTemplateParser(getBaseAPI().links.games.href);
+			uriTemplate.putParameter("lat", "0");
+			uriTemplate.putParameter("lon", "0");
+			uri = Uri.parse(base + uriTemplate.getUri());
 		}
 		catch (Exception e) {
 			uri = Uri.parse(base);
@@ -44,9 +56,31 @@ public class WebAPI {
 	
 	private API getBaseAPI() {
 		if (baseAPI == null) {
-			baseAPI = getJsonClassFromUrl(base, API.class);
+			baseAPI = getJsonClassFromUrl(base + API_STRING, API.class);
 		}
 		return baseAPI;
+	}
+	
+	public Uri getLoginUri() {
+		Uri uri = null;
+		try {
+			uri = Uri.parse(base + getBaseAPI().links.login.href);
+		}
+		catch (Exception e) {
+			uri = Uri.parse(base);
+		}
+		return uri;
+	}
+	
+	public Uri getRegisterUri() {
+		Uri uri = null;
+		try {
+			uri = Uri.parse(base + getBaseAPI().links.register.href);
+		}
+		catch (Exception e) {
+			uri = Uri.parse(base);
+		}
+		return uri;
 	}
 	
 	private <T> T getJsonClassFromUrl(String url, Class<T> cls) {
@@ -67,8 +101,8 @@ public class WebAPI {
 	 * @param <T> class to return
 	 */
 	private final class GsonFetcher<T> implements Callable<T> {
-		private String url;
-		private Class<T> cls;
+		private final String url;
+		private final Class<T> cls;
 		
 		public GsonFetcher(String url, Class<T> cls) {
 			this.url = url;

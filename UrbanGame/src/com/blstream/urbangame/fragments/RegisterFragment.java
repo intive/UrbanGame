@@ -13,10 +13,12 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.blstream.urbangame.LoginRegisterActivity;
 import com.blstream.urbangame.R;
+import com.blstream.urbangame.database.entity.Player;
 import com.blstream.urbangame.dialogs.UrbanGameDialog;
 import com.blstream.urbangame.dialogs.UrbanGameDialog.UrbanGameDialogOnClickListener;
 import com.blstream.urbangame.session.RegistrationManager;
 import com.blstream.urbangame.session.SessionManager;
+import com.blstream.urbangame.webserver.WebResponse;
 import com.blstream.urbangame.webserver.WebServerNotificationListener;
 
 public class RegisterFragment extends SherlockFragment implements OnClickListener, WebServerNotificationListener {
@@ -24,6 +26,7 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 	
 	private LoginRegisterView loginRegisterView;
 	private UrbanGameDialog.DialogBuilder invalidDataAlertDialog;
+	private UrbanGameDialog.DialogBuilder userAlreadyExistsAlertDialog;
 	private UrbanGameDialog.DialogBuilder registerCompleteAlertDialog;
 	private LoginRegisterActivity activity;
 	
@@ -37,6 +40,7 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 		this.activity = (LoginRegisterActivity) activity;
 		createInvalidDataAlertDialog();
 		createRegisterCompleteAlertDialog();
+		createUserAlreadyExistsAlertDialog();
 	}
 	
 	// formatter:off
@@ -52,7 +56,29 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 		invalidDataAlertDialog = new UrbanGameDialog.DialogBuilder(activity)
 			.setTitle(R.string.dialog_data_invalid_tittle)
 			.setMessage(R.string.dialog_data_invalid_message)
-			.setPositiveButton(R.string.button_correct, null)
+			.setPositiveButton(R.string.button_correct,  new UrbanGameDialogOnClickListener() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			})
+			.create();
+	}
+	
+	private void createUserAlreadyExistsAlertDialog() {
+		userAlreadyExistsAlertDialog = new UrbanGameDialog.DialogBuilder(activity)
+			.setTitle(R.string.dialog_data_invalid_tittle)
+			.setMessage(R.string.dialog_user_already_exists)
+			.setPositiveButton(R.string.button_correct,  new UrbanGameDialogOnClickListener() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			})
 			.create();
 	}
 	
@@ -95,14 +121,22 @@ public class RegisterFragment extends SherlockFragment implements OnClickListene
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			activity.setLoggedUserInDB(email);
+			dialog.dismiss();
 		}
 	};
 	
 	@Override
 	public void onWebServerResponse(Message message) {
 		Log.d(SessionManager.TAG, NAME + " onWebServerResponse()");
-		// TODO check registration status
-		showRegistrationCompleteAlertDialog();
+		WebResponse webResponse = (WebResponse) message.obj;
+		if (webResponse.isValid()) {
+			Player player = new Player(email, password, displayName, (String) null);
+			(new RegistrationManager(activity, this)).storeUserInDB(player);
+			showRegistrationCompleteAlertDialog();
+		}
+		else {
+			userAlreadyExistsAlertDialog.show();
+		}
 	}
 	
 	private void showRegistrationCompleteAlertDialog() {
