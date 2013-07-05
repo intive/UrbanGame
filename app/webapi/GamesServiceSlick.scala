@@ -296,11 +296,11 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
         val userLon = ans.lon getOrElse (throw expectedField("lon"))
         val gpsq = for (
           gps <- models.GPSTasks if gps.gameId === gid && gps.taskId === tid
-          if geodistance(gps.lat, gps.lon, userLat, userLon) <= gps.range
-        ) yield (gps.exists)
+          if geodistance(gps.lat, gps.lon, userLat, userLon) < gps.range
+        ) yield gps.length
 
         val sp = maxpoints - penalty
-        if (gpsq.first == true)
+        if (gpsq.first > 0)
           ("accepted", sp)
         else
           ("rejected", sp)
@@ -354,7 +354,6 @@ class GamesServiceSlick(db: play.api.db.slick.DB) extends GamesService {
   private val geodistanceFun = SimpleFunction[Int]("geodistance")
   private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double) =
     geodistanceFun(Seq(lat1, lon1, lat2, lon2))
-  //private def geodistance(lat1: Column[Option[Double]], lon1: Column[Option[Double]], lat2: Double, lon2: Double): Column[Int] = 0
     
   private val PublicGamesView = models.Games filter (g => g.status === "published" || g.status === "online")
   private val GamesView = PublicGamesView innerJoin models.Operators on (_.operatorId === _.id)
