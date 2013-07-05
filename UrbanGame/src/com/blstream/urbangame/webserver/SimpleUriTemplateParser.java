@@ -4,16 +4,16 @@ import java.util.HashMap;
 
 public class SimpleUriTemplateParser {
 	
-	private final StringBuilder builder;
+	private final String base;
+	private StringBuilder builder;
 	private String[] params = null;
 	private HashMap<String, String> parameters;
 	
 	public SimpleUriTemplateParser(String uri) {
-		builder = new StringBuilder();
-		String[] temp = uri.split("{");
-		builder.append(temp[0]);
+		String[] temp = uri.split("\\Q{\\E");
+		base = temp[0];
 		if (temp.length > 1) {
-			params = temp[1].substring(1, temp[1].length() - 2).split(",");
+			params = temp[1].substring(1, temp[1].length() - 1).split(",");
 			parameters = new HashMap<String, String>(params.length);
 			for (String element : params) {
 				parameters.put(element, "");
@@ -34,7 +34,9 @@ public class SimpleUriTemplateParser {
 	}
 	
 	public String getUri() {
+		builder = new StringBuilder(base);
 		if (params != null) {
+			
 			builder.append("?");
 			for (String element : params) {
 				builder.append(element);
