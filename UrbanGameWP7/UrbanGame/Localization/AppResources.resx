@@ -490,4 +490,7 @@
   <data name="TaskInactive" xml:space="preserve">
     <value>This task becomes active after complete another tasks.</value>
   </data>
+  <data name="Changed" xml:space="preserve">
+    <value>changed</value>
+  </data>
 </root>

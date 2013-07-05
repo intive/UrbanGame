@@ -122,6 +122,14 @@ namespace WebService
                         if (((oldValue == null || newValue == null) && oldValue != newValue) ||
                               (oldValue != null && newValue != null && !oldValue.Equals(newValue)))
                         {
+                            if (oldProperty.PropertyType == typeof(DateTime) &&
+                                ((DateTime)oldValue - (DateTime)newValue).TotalSeconds <= 1)
+                                continue;
+                            if (oldValue != null && newValue != null && 
+                                oldProperty.PropertyType == typeof(DateTime?) &&
+                                ((DateTime?)oldValue - (DateTime?)newValue).Value.TotalSeconds <= 1)
+                                continue;
+
                             oldProperty.SetValue(oldObject, newProperty.GetValue(newObject, null), null);
                             differences.Add(oldProperty.Name);
                         }
@@ -253,7 +261,7 @@ namespace WebService
                             //there cannot be await, because it causes InvalidOperationExceptions by uow.Commit()
                             var t = _gameWebService.GetTasks(game.Id);
                             t.Wait();
-                            ITask[] listOfTasks = t.Result;
+                            ITask[] listOfTasks = t.Result.Where(tt => tt.State == TaskState.Active).ToArray();
 
                             foreach (var newTask in listOfTasks)
                             {

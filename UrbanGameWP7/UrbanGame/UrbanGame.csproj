@@ -103,6 +103,7 @@
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Converters\ABCDToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\ChangeToBackgroundConverter.cs" />
     <Compile Include="Converters\DateToVisibilityConverter.cs" />
     <Compile Include="Converters\DurationTimeConverter.cs" />
     <Compile Include="Converters\GameChangedToVisibilityConverter.cs" />

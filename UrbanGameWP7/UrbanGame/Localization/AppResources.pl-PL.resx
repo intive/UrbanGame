@@ -474,4 +474,7 @@
   <data name="TaskInactive" xml:space="preserve">
     <value>To zadanie będzie aktywne po ukończeniu pozostałych.</value>
   </data>
+  <data name="Changed" xml:space="preserve">
+    <value>zmieniono</value>
+  </data>
 </root>
