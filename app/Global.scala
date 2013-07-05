@@ -24,4 +24,31 @@ object Global extends PlayControllerWiring {
   override lazy val module = 
     if (Play.isTest) TestApiModule
     else MainApiModule
+
+  import play.api.i18n.Messages
+  import play.api.libs.json.Json
+  import play.api.mvc.Results._
+
+  override def onHandlerNotFound(request: RequestHeader) =
+    if (isWebApiRequest(request)) {
+      val msg = Messages("webapi.error.resourceNotExists")
+      val jsonMsg = Json.obj("code" -> 404, "message" -> msg)
+      print (request.path)
+      NotFound(Json.prettyPrint(jsonMsg)).as("application/json")
+    }
+    else {
+      super.onHandlerNotFound(request)
+    }
+    
+  override def onBadRequest(request: RequestHeader, msg: String) =
+    if (isWebApiRequest(request)) {
+      val jsonMsg = Json.obj("code" -> 400, "message" -> msg)
+      BadRequest(Json.prettyPrint(jsonMsg)).as("application/json")
+    }
+    else {
+      super.onBadRequest(request, msg)
+    }
+
+  def isWebApiRequest(request: RequestHeader) =
+    request.path startsWith ("/api/")
 }

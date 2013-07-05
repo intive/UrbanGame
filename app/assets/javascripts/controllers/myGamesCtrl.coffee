@@ -27,6 +27,7 @@ app.controller 'myGamesCtrl', ['$scope', '$location', 'Games', 'Utilities', '$fi
     $scope.currentPage = 0
     $scope.isArchive = false
     $scope.error = null
+    $scope.renderDetails = []
 
     resource = {
         "querygames": ->
@@ -35,6 +36,8 @@ app.controller 'myGamesCtrl', ['$scope', '$location', 'Games', 'Utilities', '$fi
                 (data) ->
                     $scope.games = data
                     $scope.search()
+                    for i in [1..$scope.games.length]
+                        $scope.renderDetails[i] = false
                 (error) ->
                     $scope.error = Messages("js.errors.gameslist")
             )
@@ -88,7 +91,10 @@ app.controller 'myGamesCtrl', ['$scope', '$location', 'Games', 'Utilities', '$fi
     # ------------------- GAME OPTIONS ACTIONS
     $scope.showDetails = (idx) ->
         games = $scope.pagedItems[$scope.currentPage][idx]
-        window.location.pathname = "/my/games/" + games.id if games.status == 'online' || games.status == 'finished'
+        (
+            $scope.renderDetails[idx] = true
+            #window.location.pathname = "/my/games/" + games.id 
+        ) if games.status == 'online' || games.status == 'finished'
         window.location.pathname = "/my/games/" + games.id + "/edit" if (games.status == 'published' || games.status == 'project')
 
     $scope.delete = (idx) ->

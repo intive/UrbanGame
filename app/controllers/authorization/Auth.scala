@@ -91,8 +91,8 @@ trait EmailConfirmation {
     mail.setSubject(subject)
     mail.addRecipient(email)
     mail.addFrom(from)
-    mail.sendHtml(msg)
-    //Console.printf(msg)
+    //mail.sendHtml(msg)
+    Console.printf(msg)
   }
 
   def sendNewPassword(email: String, pass: String, request: RequestHeader) = {
@@ -112,8 +112,8 @@ trait EmailConfirmation {
     mail.setSubject(subject)
     mail.addRecipient(email)
     mail.addFrom(from)
-    mail.sendHtml(msg)
-    //Console.printf(msg)
+    //mail.sendHtml(msg)
+    Console.printf(msg)
   }
 
 }

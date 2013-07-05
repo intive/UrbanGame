@@ -147,7 +147,7 @@ object Application extends Controller with CookieLang with OptionalAuthElement w
           case Some(op) => {
             val password = UUID.randomUUID.toString.substring(0,8)
             val opc = op.copy(password = org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt()))
-            operatorUpdate(opc) match {
+            operatorUpdatePass(opc) match {
               case Success(a) => {
                 sendNewPassword(opc.email, password, request)
                 Messages("notify.password.recover.send")(Lang(lan))

@@ -33,6 +33,7 @@ class WebApiSpec extends Specification {
     DB("urbangameApi") withSession { implicit session =>
       val uq = sql"""SELECT "id" FROM USERS WHERE "login" = 'new_user'""".as[Int] 
       uq.firstOption map { uid =>
+        sqlu"""DELETE FROM USERTASKS WHERE "userId" = $uid""".execute
         sqlu"""DELETE FROM USERGAMES WHERE "userId" = $uid""".execute
         sqlu"""DELETE FROM USERS WHERE "id" = $uid""".execute
       }
@@ -57,7 +58,7 @@ class WebApiSpec extends Specification {
 	
     "send list of games in Json format" in {
       running(FakeApplication()) {
-        val games = route(FakeRequest(GET, "/api/games?lat=0&lon=0&r=1")).get
+        val games = route(FakeRequest(GET, "/api/games?lat=0&lon=0")).get
         
         status(games) must equalTo(OK)
         contentType(games) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
@@ -146,12 +147,75 @@ class WebApiSpec extends Specification {
       }
     }
 
-    "list user games" in {
+    "properly list user games" in {
       running(FakeApplication()) {
         val list = route(FakeRequest(GET, "/api/my/games").withHeaders(newUser)).get
 
         status(list) must equalTo(OK)
         contentType(list) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
+      }
+    }
+
+    "properly list tasks" in {
+      running(FakeApplication()) {
+        val list = route(FakeRequest(GET, "/api/games/1/tasks?lat=1&lon=1").withHeaders(newUser)).get
+        status(list) must equalTo(OK)
+        contentType(list) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
+      }
+    }
+    
+    "display task static information" in {
+      running(FakeApplication()) {
+        val list = route(FakeRequest(GET, "/api/games/1/tasks/1/static").withHeaders(newUser)).get
+
+        status(list) must equalTo(OK)
+        contentType(list) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
+      }
+    }
+ 
+    "response and reject user solution for ABC task" in {
+      running(FakeApplication()) {
+        val json = Json.obj("options" -> List("c"))
+        val resp = route(FakeRequest(POST, "/api/games/1/tasks/1").withHeaders(newUser).withJsonBody(json)).get
+
+        status(resp) must equalTo(OK)
+        contentType(resp) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
+        val respJson = Json.parse(contentAsString(resp))
+        ((respJson \\ "status")(0)).as[String] must equalTo("rejected")
+      }
+    }
+ 
+    "response and accept user solution for ABC task" in {
+      running(FakeApplication()) {
+        val json = Json.obj("options" -> List("a", "b"))
+        val resp = route(FakeRequest(POST, "/api/games/1/tasks/1").withHeaders(newUser).withJsonBody(json)).get
+
+        status(resp) must equalTo(OK)
+        contentType(resp) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
+        val respJson = Json.parse(contentAsString(resp))
+        ((respJson \\ "status")(0)).as[String] must equalTo("accepted")
+      }
+    }
+ 
+    "send BAD REQUEST when user sent answer too many times" in {
+      running(FakeApplication()) {
+        val json = Json.obj("options" -> List("a", "b"))
+        val resp = route(FakeRequest(POST, "/api/games/1/tasks/1").withHeaders(newUser).withJsonBody(json)).get
+
+        status(resp) must equalTo(BAD_REQUEST)
+        contentType(resp) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
+      }
+    }
+ 
+    "response and accept user solution for GPS task" in {
+      running(FakeApplication()) {
+        val json = Json.obj("lat" -> 1, "lon" -> 1)
+        val resp = route(FakeRequest(POST, "/api/games/1/tasks/2").withHeaders(newUser).withJsonBody(json)).get
+
+        status(resp) must equalTo(OK)
+        contentType(resp) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
+        val respJson = Json.parse(contentAsString(resp))
+        ((respJson \\ "status")(0)).as[String] must equalTo("accepted")
       }
     }
 
