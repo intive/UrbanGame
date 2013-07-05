@@ -498,4 +498,11 @@
   </data>
   <data name="CompletedTasks" xml:space="preserve">
     <value>You have completed all tasks, but few tasks could be done better. Try to repeat them in order to gain more points.</value>
-  </data></root>
+  </data>
+  <data name="EmptyMessage" xml:space="preserve">
+    <value>Message can't be empty!</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>try again</value>
+  </data>
+</root>

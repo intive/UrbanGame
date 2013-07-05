@@ -58,7 +58,7 @@ namespace WebService
                 g.Tasks.Add(task2);
                 ListOfTasks.Add(task2);
 
-                var task3 = new TaskMock() { Id = taskId++, Name = "Meet Frank", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.Pending, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(3).AddHours(7), Version = 1 };
+                var task3 = new TaskMock() { Id = taskId++, Name = "Meet Frank", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(3).AddHours(7), Version = 1 };
                 ListOfTasks.Add(task3);
                 g.Tasks.Add(task3);
 

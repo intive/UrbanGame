@@ -15,7 +15,10 @@
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
 
-    <Grid x:Name="LayoutRoot" Background="Transparent" Margin="0,8,0,-8">
+    <Grid x:Name="LayoutRoot" Margin="0,8,0,-8">
+        <Grid.Background>
+            <ImageBrush ImageSource="/Images/PivotPage.png" />
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -26,7 +29,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <utils:PhoneTextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <utils:PhoneTextBox Text="{Binding Message, Mode=TwoWay}"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap"/>
         <Button Grid.Row="1" Content="Submit" Grid.Column="1" BorderBrush="{StaticResource FontColorGreen}" Background="{StaticResource FontColorGreen}" cal:Message.Attach="[Event Tap]=[Action Report()]" />
     </Grid>
 

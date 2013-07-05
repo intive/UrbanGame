@@ -387,7 +387,14 @@ namespace UrbanGame.ViewModels
                 switch(result.SubmitResult)
                 {
                     case SubmitResult.AnswerCorrect:
-                        VisualStateName = "Correct";
+                        if(result.ScoredPoints < sol.Task.MaxPoints/2)
+                        {
+                            VisualStateName = "NotSoGreat";
+                        }
+                        else
+                        {
+                            VisualStateName = "Correct";
+                        }
                         sol.Task.SolutionStatus = SolutionStatus.Accepted;
                         break;
                     case SubmitResult.AnswerIncorrect:

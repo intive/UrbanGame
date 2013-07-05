@@ -154,13 +154,13 @@
                     </Grid.RowDefinitions>
                     <Grid.Resources>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Margin" Value="10,-5,10,0"/>
+                            <Setter Property="Margin" Value="10,-5,10,-5"/>
                         </Style>
                     </Grid.Resources>
                     <TextBlock Text="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="0"/>
-                    <utils:PhoneTextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1" Margin="0,-5,0,0"/>
+                    <utils:PhoneTextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1"/>
                     <TextBlock Text="{Binding Path=AppResources.Password, Source={StaticResource LocalizedStrings}}" Grid.Row="2"/>
-                    <PasswordBox x:Name="Password" Grid.Row="3" Margin="0,-5,0,0"/>
+                    <PasswordBox x:Name="Password" Grid.Row="3"/>
                     <Button Content="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="4" Width="250" Height="75" HorizontalAlignment="Right" Background="{StaticResource FontColorGreen}" BorderBrush="Transparent">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
@@ -190,17 +190,17 @@
                     </Grid.RowDefinitions>
                     <Grid.Resources>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Margin" Value="10,-5,10,0"/>
+                            <Setter Property="Margin" Value="10,-5,10,-5"/>
                         </Style>
                     </Grid.Resources>
                     <TextBlock Text="{Binding Path=AppResources.LoginLabel, Source={StaticResource LocalizedStrings}}" Grid.Row="0"/>
-                    <utils:PhoneTextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1" Margin="0,-5,0,0"/>
+                    <utils:PhoneTextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1"/>
                     <TextBlock Text="{Binding Path=AppResources.Email, Source={StaticResource LocalizedStrings}}" Grid.Row="2"/>
-                    <utils:PhoneTextBox Text="{Binding Email, Mode=TwoWay}" Grid.Row="3" InputScope="EmailUserName" Margin="0,-5,0,0"/>
+                    <utils:PhoneTextBox Text="{Binding Email, Mode=TwoWay}" Grid.Row="3" InputScope="EmailUserName"/>
                     <TextBlock Text="{Binding Path=AppResources.Password, Source={StaticResource LocalizedStrings}}" Grid.Row="4"/>
-                    <PasswordBox x:Name="RPassword" Grid.Row="5" Margin="0,-5,0,0"/>
+                    <PasswordBox x:Name="RPassword" Grid.Row="5"/>
                     <TextBlock Text="{Binding Path=AppResources.RepeatPassword, Source={StaticResource LocalizedStrings}}" Grid.Row="6"/>
-                    <PasswordBox x:Name="RConfirmationPassword" Grid.Row="7" Margin="0,-5,0,0"/>
+                    <PasswordBox x:Name="RConfirmationPassword" Grid.Row="7"/>
                     <Button Content="{Binding Path=AppResources.Join, Source={StaticResource LocalizedStrings}}" Grid.Row="8" Width="250" Height="75" HorizontalAlignment="Right" Background="{StaticResource FontColorGreen}" BorderBrush="Transparent" Margin="0,-10,0,0">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">

@@ -80,6 +80,9 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="NotSoGreatText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="TryAgainText">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
                 <VisualState x:Name="Wrong">
@@ -89,6 +92,9 @@
                         </ObjectAnimationUsingKeyFrames>
 
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="WrongText">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="TryAgainText">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
@@ -315,6 +321,7 @@
                     <TextBlock x:Name="NotSoGreatText" Text="{Binding Path=AppResources.NotSoGreat, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Visibility="Collapsed" TextWrapping="Wrap"/>
                     <TextBlock x:Name="WrongText" Text="{Binding Path=AppResources.Wrong, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TaskAnswer}" Visibility="Collapsed" TextWrapping="Wrap"/>
                     <TextBlock x:Name="Points" Text="{Binding CurrentTask.UserPoints}" Style="{StaticResource UserPoints}"/>
+                    <TextBlock x:Name="TryAgainText" Text="{Binding Path=AppResources.TryAgain, Source={StaticResource LocalizedStrings}}" Style="{StaticResource UserPoints}" Visibility="Collapsed"/>
                 </StackPanel>
             </Border>
         </Grid>
