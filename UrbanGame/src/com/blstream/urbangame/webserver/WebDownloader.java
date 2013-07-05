@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
@@ -14,6 +15,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.StringEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.net.Uri;
 import android.util.Log;
@@ -31,6 +35,7 @@ public abstract class WebDownloader {
 	private final static String CONTENT_TYPE_HEADER_KEY = "Content-Type";
 	private final static String JSON_CONTENT = "text/json";
 	private final HttpClient httpClient;
+	protected String requestData = null;
 	
 	public WebDownloader() {
 		httpClient = HttpClientFactory.getHttpClient();
@@ -41,7 +46,7 @@ public abstract class WebDownloader {
 			return downloadDataFromUri(requestUri);
 		}
 		catch (IOException e) {
-			Log.e(TAG, e.getMessage());
+			Log.e(TAG, e.getMessage() != null ? e.getMessage() : "null message");
 			Log.d(TAG, "Possible issues: host doesn't exist or no internet connection.");
 			return EMPTY_JSON;
 		}
@@ -84,6 +89,10 @@ public abstract class WebDownloader {
 		reader.close();
 		return sb.toString();
 	}
+	
+	public void setRequestData(String requestData) {
+		this.requestData = requestData;
+	}
 }
 
 /**
@@ -102,7 +111,19 @@ class WebDownloaderGET extends WebDownloader {
 class WebDownloaderPOST extends WebDownloader {
 	@Override
 	public HttpUriRequest getHttpRequestMethod(String requestUri) {
-		return new HttpPost(requestUri);
+		HttpPost http = new HttpPost(requestUri);
+		try {
+			if (requestData != null) {
+				http.setEntity(new StringEntity(requestData));
+			}
+			else {
+				http.setEntity(new StringEntity(EMPTY_JSON));
+			}
+		}
+		catch (UnsupportedEncodingException e) {
+			Log.e(WebDownloaderPOST.class.getSimpleName(), e.getMessage());
+		}
+		return http;
 	}
 }
 
@@ -124,7 +145,8 @@ class WebDownloaderDELETE extends WebDownloader {
 /**
  * This is a decorator class that adds authorization header to request.
  * 
- * Use: WebDownloader X = new WebDownloaderWithAuthentication(new WebDownloaderGET(), userName, password); in place of WebDownloaderGET object
+ * Use: WebDownloader X = new WebDownloaderWithAuthentication(new
+ * WebDownloaderGET(), userName, password); in place of WebDownloaderGET object
  * 
  * you can pass one of { WebDownloaderGET, WebDownloaderPOST, WebDownloaderPUT,
  * WebDownloaderDELETE }
@@ -138,11 +160,13 @@ class WebDownloaderWithAuthorization extends WebDownloader {
 	private static final String BASIC_PRE = "Basic";
 	
 	private final WebDownloader webDownloader;
-	private String userName;
-	private String password;
+	private final String userName;
+	private final String password;
 	
 	public WebDownloaderWithAuthorization(WebDownloader webDownloader, String username, String password) {
 		this.webDownloader = webDownloader;
+		this.userName = username;
+		this.password = password;
 	}
 	
 	@Override
@@ -157,5 +181,21 @@ class WebDownloaderWithAuthorization extends WebDownloader {
 		String toEncode = userName + ":" + password;
 		
 		return new String(coder.encode(toEncode.getBytes()));
+	}
+}
+
+class RegistrationWebDownloader extends WebDownloaderPOST {
+	
+	public RegistrationWebDownloader(String email, String password) {
+		super();
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("login", email);
+			jsonObject.put("password", password);
+		}
+		catch (JSONException e) {
+			Log.e("Register", e.getMessage() != null ? e.getMessage() : "null message");
+		}
+		this.setRequestData(jsonObject.toString());
 	}
 }

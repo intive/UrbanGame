@@ -23,12 +23,12 @@ import com.blstream.urbangame.webserver.WebServer;
  */
 public class WebHighLevel implements WebHighLevelInterface {
 	private final static String TAG = WebHighLevel.class.getSimpleName();
-	private WebServer webServer;
-	private Context context;
-	private InternetAlertDialog internetAlertDialog;
+	private final WebServer webServer;
+	private final Context context;
+	private final InternetAlertDialog internetAlertDialog;
 	
 	public WebHighLevel(ServerResponseHandler handler, Context context) {
-		this.webServer = new WebServer(handler);
+		this.webServer = new WebServer(context, handler);
 		this.context = context;
 		this.internetAlertDialog = new InternetAlertDialog(context);
 	}
