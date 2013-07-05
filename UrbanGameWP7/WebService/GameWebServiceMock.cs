@@ -102,27 +102,17 @@ namespace WebService
         #endregion
         #endregion
 
-        #region ChangeGame
-        /// <summary>
-        /// Shows how GameChanged works
-        /// </summary>
-        /// <param name="gid"></param>
-        public void ChangeGame(int gid)
+        #region JoinGame
+        public async Task<bool> JoinGame(int gid)
         {
-            foreach (IGame g in ListOfGames)
-            {
-                if (g.Id == gid)
-                {
-                    g.NumberOfCompletedTasks = 1;
-                }
-            }
+            return true;
         }
         #endregion
 
-        #region SingUpToTheGame
-        public bool SingUpToTheGame(int gid)
+        #region LeaveGame
+        public async Task<bool> LeaveGame(int gid)
         {
-            throw new NotImplementedException();
+            return true;
         }
         #endregion
 
@@ -145,13 +135,6 @@ namespace WebService
                 return new GameOverResponse() { State = GameState.Lost, Rank = rank, IsGameOver = true };
             else*/
                 return new GameOverResponse() { State = GameState.Joined, IsGameOver = false };
-        }
-        #endregion
-
-        #region GetGameProgress
-        public int GetGameProgress(int gid)
-        {
-            return 0;
         }
         #endregion
 
@@ -188,15 +171,8 @@ namespace WebService
         }
         #endregion
 
-        #region GetTaskProgress
-        public int GetTaskProgress(int gid, int tid)
-        {
-            return GetTaskDetails(gid, tid).UserPoints ?? 0;
-        }
-        #endregion        
-
         #region SubmitTaskSolution
-        public SolutionResultScore SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
+        public async Task<SolutionResultScore> SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
             int r = new Random().Next(100);
             var task = ListOfTasks.First(t => t.Id == tid);

@@ -261,52 +261,6 @@ namespace UrbanGame.Storage
         }
         #endregion
 
-        #region NumberOfTasks
-
-        private int _numberOfTasks;
-
-        [Column]
-        public int NumberOfTasks
-        {
-            get
-            {
-                return _numberOfTasks;
-            }
-            set
-            {
-                if (_numberOfTasks != value)
-                {
-                    NotifyPropertyChanging("NumberOfTasks");
-                    _numberOfTasks = value;
-                    NotifyPropertyChanged("NumberOfTasks");
-                }
-            }
-        }
-        #endregion
-
-        #region NumberOfCompletedTasks
-
-        private int _numberOfCompletedTasks;
-
-        [Column]
-        public int NumberOfCompletedTasks
-        {
-            get
-            {
-                return _numberOfCompletedTasks;
-            }
-            set
-            {
-                if (_numberOfCompletedTasks != value)
-                {
-                    NotifyPropertyChanging("NumberOfCompletedTasks");
-                    _numberOfCompletedTasks = value;
-                    NotifyPropertyChanged("NumberOfCompletedTasks");
-                }
-            }
-        }
-        #endregion
-
         #region NumberOfPlayers
 
         private int _numberOfPlayers;

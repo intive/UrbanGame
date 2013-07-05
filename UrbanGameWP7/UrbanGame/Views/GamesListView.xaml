@@ -108,7 +108,8 @@
                                                     <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,0,10,0"/>
                                                     <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}" />
                                                 </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                                <TextBlock Text=" " Grid.Row="2" />
+                                                <StackPanel Orientation="Horizontal" Grid.Row="3">
                                                     <StackPanel.Resources>
                                                         <Style TargetType="TextBlock">
                                                             <Setter Property="Margin" Value="0,0,5,5" />
@@ -156,8 +157,8 @@
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="*"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="{Binding Name}" Grid.Row="0" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                             <StackPanel Grid.Row="1" Orientation="Horizontal">
@@ -169,7 +170,8 @@
                                                 <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,0,10,0"/>
                                                 <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                             </StackPanel>
-                                            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                            <TextBlock Text=" " Grid.Row="2" />
+                                            <StackPanel Orientation="Horizontal" Grid.Row="3">
                                                 <StackPanel.Resources>
                                                     <Style TargetType="TextBlock">
                                                         <Setter Property="Margin" Value="0,0,5,5" />

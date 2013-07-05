@@ -386,6 +386,24 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error while joining the game..
+        /// </summary>
+        public static string ErrorJoiningGame {
+            get {
+                return ResourceManager.GetString("ErrorJoiningGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error while leaving the game..
+        /// </summary>
+        public static string ErrorLeavingGame {
+            get {
+                return ResourceManager.GetString("ErrorLeavingGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to forgot password.
         /// </summary>
         public static string ForgotPassword {
@@ -976,6 +994,15 @@ namespace UrbanGame.Localization {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select one or more answers..
+        /// </summary>
+        public static string SelectAnswers {
+            get {
+                return ResourceManager.GetString("SelectAnswers", resourceCulture);
             }
         }
         

@@ -98,7 +98,8 @@ namespace UrbanGameTests.Tests
             Func<IUnitOfWork> uow = new Func<IUnitOfWork>(() => unitOfWork);
             IGameWebService webService = new GameWebServiceMock();
             IEventAggregator eventAgg = new EventAggregator();
-            IGameAuthorizationService authorizationService = new GameAuthorizationService(uow, webService);
+            ICredentialsService credentials = new CredentialsService();
+            IGameAuthorizationService authorizationService = new GameAuthorizationService(uow, webService, credentials);
 
             //removing current records
             foreach (ITask g in unitOfWork.GetRepository<ITask>().All().ToList())

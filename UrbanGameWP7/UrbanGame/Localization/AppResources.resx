@@ -493,4 +493,13 @@
   <data name="Changed" xml:space="preserve">
     <value>changed</value>
   </data>
+  <data name="ErrorJoiningGame" xml:space="preserve">
+    <value>Error while joining the game.</value>
+  </data>
+  <data name="ErrorLeavingGame" xml:space="preserve">
+    <value>Error while leaving the game.</value>
+  </data>
+  <data name="SelectAnswers" xml:space="preserve">
+    <value>Select one or more answers.</value>
+  </data>
 </root>

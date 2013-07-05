@@ -22,11 +22,13 @@ namespace UrbanGame.Utilities
         protected string fileName = "data-file.xml";
         IGameWebService _gameWebService;
         Func<IUnitOfWork> _unitOfWorkLocator;
+        ICredentialsService _credentialsService;
 
-        public GameAuthorizationService(Func<IUnitOfWork> unitOfWorkLocator, IGameWebService gameWebService)
+        public GameAuthorizationService(Func<IUnitOfWork> unitOfWorkLocator, IGameWebService gameWebService, ICredentialsService credentialsService)
         {
             _gameWebService = gameWebService;
             _unitOfWorkLocator = unitOfWorkLocator;
+            _credentialsService = credentialsService;
         }
 
         public async Task LoadUserData()
@@ -56,9 +58,9 @@ namespace UrbanGame.Utilities
             });
         }
 
-        public LoginResult LogIn(string login, string password)
+        public async Task<LoginResult> LogIn(string login, string password)
         {
-            AuthorizeState authState = _gameWebService.Authorize(login, password).Result;
+            AuthorizeState authState = await _gameWebService.Authorize(login, password);
 
             using (var store = IsolatedStorageFile.GetUserStoreForApplication())
             {
@@ -159,6 +161,7 @@ namespace UrbanGame.Utilities
                 if (_authenticatedUser != value)
                 {
                     NotifyPropertyChanging("AuthenticatedUser");
+                    _credentialsService.AuthenticatedUser = value;
                     _authenticatedUser = value;
                     NotifyPropertyChanged("AuthenticatedUser");
                 }
@@ -167,17 +170,17 @@ namespace UrbanGame.Utilities
 
         public bool IsUserAuthenticated()
         {
-            return AuthenticatedUser == null ? false : true;
+            return AuthenticatedUser != null;
         }
 
-        public RegisterResult Register(User userData)
-        {
-            AuthenticatedUser = userData;
-            CreateAccountResponse accuontResponse = _gameWebService.CreateAccount(userData.Login, userData.Email, userData.Password).Result;
+        public async Task<RegisterResult> Register(User userData)
+        {            
+            CreateAccountResponse accountResponse = await _gameWebService.CreateAccount(userData.Login, userData.Email, userData.Password);
 
-            switch (accuontResponse)
+            switch (accountResponse)
             {
                 case CreateAccountResponse.Success:
+                    AuthenticatedUser = userData;
                     using (IUnitOfWork uow = _unitOfWorkLocator())
                     {
                         uow.DeleteDatabase();

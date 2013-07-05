@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using UrbanGame.Storage;
 using System.Threading.Tasks;
 using UrbanGame.Utilities;
+using UrbanGame.Localization;
 
 namespace UrbanGame.ViewModels
 {
@@ -179,22 +180,30 @@ namespace UrbanGame.ViewModels
             });
         }
 
-        public void JoinIn()
+        public async void JoinIn()
         {
             if (MessageBox.Show("join in", "join in", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                using (IUnitOfWork uow = _unitOfWorkLocator())
+                var result = await _gameWebService.JoinGame(Game.Id);
+                if (result)
                 {
-                    IGame game = uow.GetRepository<IGame>().All().FirstOrDefault(x => x.Id == Game.Id);
+                    using (IUnitOfWork uow = _unitOfWorkLocator())
+                    {
+                        IGame game = uow.GetRepository<IGame>().All().FirstOrDefault(x => x.Id == Game.Id);
 
-                    if (game == null)
-                        uow.GetRepository<IGame>().MarkForAdd(CreateInstance(GameState.Joined, uow));
-                    else
-                        game.GameState = GameState.Joined;
+                        if (game == null)
+                            uow.GetRepository<IGame>().MarkForAdd(CreateInstance(GameState.Joined, uow));
+                        else
+                            game.GameState = GameState.Joined;
 
-                    uow.Commit();
+                        uow.Commit();
+                    }
+                    _navigationService.UriFor<GameDetailsViewModel>().WithParam(x => x.GameId, Game.Id).Navigate();
                 }
-                _navigationService.UriFor<GameDetailsViewModel>().WithParam(x => x.GameId, Game.Id).Navigate();
+                else
+                {
+                    MessageBox.Show(AppResources.ErrorJoiningGame);
+                }
             }
         }
 

@@ -146,7 +146,7 @@ namespace UrbanGame.ViewModels
             {
                 VisualStateName = "LoggingIn";
 
-                var result = _authorizationService.LogIn(Login, Password);
+                var result = await _authorizationService.LogIn(Login, Password);
 
                 switch (result)
                 {
@@ -186,7 +186,7 @@ namespace UrbanGame.ViewModels
             else
             {
                 VisualStateName = "CreatingAccount";
-                var result = _authorizationService.Register(new User { Login = Login, Password = Password, Email = Email });
+                var result = await _authorizationService.Register(new User { Login = Login, Password = Password, Email = Email });
 
                 switch (result)
                 {

@@ -19,7 +19,6 @@ namespace WebService.DTOs
             _alerts = new EntityEnumerable<IAlert, AlertMock>(new EntitySet<AlertMock>(OnAlertAdded, OnAlertRemoved));
             _highScores = new EntityEnumerable<IHighScore, HighScoreMock>(new EntitySet<HighScoreMock>(OnHighScoreAdded, OnHighScoreRemoved));
         }
-        //points, maxpoints, numberOfCompletedTasks, numberOfPlayers, (gameLat, gameLon - ale tego ponoc ma nie byc), rank, 
         #region Id
 
         private int _id;
@@ -252,50 +251,6 @@ namespace WebService.DTOs
                     NotifyPropertyChanging("MaxPoints");
                     _maxPoints = value;
                     NotifyPropertyChanged("MaxPoints");
-                }
-            }
-        }
-        #endregion
-
-        #region NumberOfTasks
-
-        private int _numberOfTasks;
-
-        public int NumberOfTasks
-        {
-            get
-            {
-                return _numberOfTasks;
-            }
-            set
-            {
-                if (_numberOfTasks != value)
-                {
-                    NotifyPropertyChanging("NumberOfTasks");
-                    _numberOfTasks = value;
-                    NotifyPropertyChanged("NumberOfTasks");
-                }
-            }
-        }
-        #endregion
-
-        #region NumberOfCompletedTasks
-
-        private int _numberOfCompletedTasks;
-
-        public int NumberOfCompletedTasks
-        {
-            get
-            {
-                return _numberOfCompletedTasks;
-            }
-            set
-            {
-                if (_numberOfCompletedTasks != value)
-                {
-                    NotifyPropertyChanging("NumberOfCompletedTasks");
-                    _numberOfCompletedTasks = value;
-                    NotifyPropertyChanged("NumberOfCompletedTasks");
                 }
             }
         }

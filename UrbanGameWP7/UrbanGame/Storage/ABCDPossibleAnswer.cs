@@ -39,6 +39,29 @@ namespace UrbanGame.Storage
         }
         #endregion
 
+        #region CharId
+
+        private char _charId;
+
+        [Column]
+        public char CharId
+        {
+            get
+            {
+                return _charId;
+            }
+            set
+            {
+                if (_charId != value)
+                {
+                    NotifyPropertyChanging("CharId");
+                    _charId = value;
+                    NotifyPropertyChanged("CharId");
+                }
+            }
+        }
+        #endregion
+
         #region TaskId
 
         private int? _taskId;

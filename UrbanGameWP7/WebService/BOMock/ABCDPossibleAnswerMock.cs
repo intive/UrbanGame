@@ -36,6 +36,28 @@ namespace WebService.BOMock
         }
         #endregion
 
+        #region CharId
+
+        private char _charId;
+
+        public char CharId
+        {
+            get
+            {
+                return _charId;
+            }
+            set
+            {
+                if (_charId != value)
+                {
+                    NotifyPropertyChanging("CharId");
+                    _charId = value;
+                    NotifyPropertyChanged("CharId");
+                }
+            }
+        }
+        #endregion
+
         #region IABCDPossibleAnswer.Task
 
         private ITask _task;

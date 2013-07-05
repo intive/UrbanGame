@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Threading;
 using UrbanGame.Models;
+using UrbanGame.Localization;
 
 namespace UrbanGame.ViewModels
 {
@@ -367,16 +368,16 @@ namespace UrbanGame.ViewModels
             });
         }
 
-        public void Retry()
+        public async Task Retry()
         {
             VisualStateName = "Sending";
-            SubmitSolution(Solution);
+            await SubmitSolution(Solution);
         }
 
-        private void SubmitSolution(IBaseSolution solution)
+        private async Task SubmitSolution(IBaseSolution solution)
         {
             //sending solution
-            var result = _gameWebService.SubmitTaskSolution(GameId, CurrentTask.Id, Solution);
+            var result = await _gameWebService.SubmitTaskSolution(GameId, CurrentTask.Id, Solution);
 
             using (IUnitOfWork unitOfWork = _unitOfWorkLocator())
             {
@@ -418,10 +419,10 @@ namespace UrbanGame.ViewModels
                 }
             }
 
-            RefreshTask();
+            await RefreshTask();
         }
 
-        public async void SubmitGPS()
+        public async Task SubmitGPS()
         {
             VisualStateName = "Sending";
 
@@ -449,15 +450,21 @@ namespace UrbanGame.ViewModels
                         unitOfWork.Commit();
                     }
                     Solution = solution;
-                    SubmitSolution(solution);
+                    SubmitSolution(solution).Wait();
                 });
             });
         }
 
         public async void SubmitABCD()
         {
+            if (Answers.Count(a => a.IsChecked) == 0)
+            {
+                MessageBox.Show(AppResources.SelectAnswers);
+                return;
+            }
+
             VisualStateName = "Sending";
-            await Task.Factory.StartNew(() =>
+            await Task.Factory.StartNew(async () =>
             {                
                 //saving solution in database
                 using (IUnitOfWork unitOfWork = _unitOfWorkLocator())

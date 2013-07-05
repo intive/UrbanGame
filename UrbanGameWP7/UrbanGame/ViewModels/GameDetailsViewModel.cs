@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using UrbanGame.Storage;
 using System.Threading.Tasks;
 using System.Threading;
+using UrbanGame.Localization;
 
 namespace UrbanGame.ViewModels
 {
@@ -476,6 +477,7 @@ namespace UrbanGame.ViewModels
             using (var uow = _unitOfWorkLocator())
             {
                 IQueryable<IGame> games = uow.GetRepository<IGame>().All();
+                //todo: points, numberOfPlayers
                 Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
             }
         }
@@ -589,16 +591,23 @@ namespace UrbanGame.ViewModels
         {
             if (MessageBox.Show("leave", "leave", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                using (IUnitOfWork uow = _unitOfWorkLocator())
+                var result = await _gameWebService.LeaveGame(Game.Id);
+                if (result)
                 {
-
-                    IGame game = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
-                    game.GameState = GameState.Inactive;
-                    game.ListOfChanges = null;
-                    uow.Commit();
+                    using (IUnitOfWork uow = _unitOfWorkLocator())
+                    {
+                        IGame game = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
+                        game.GameState = GameState.Inactive;
+                        game.ListOfChanges = null;
+                        uow.Commit();
+                    }
+                    await RefreshGame();
+                    _navigationService.GoBack();
                 }
-                await RefreshGame();
-                _navigationService.GoBack();
+                else
+                {
+                    MessageBox.Show(AppResources.ErrorLeavingGame);
+                }
             }
         }
 

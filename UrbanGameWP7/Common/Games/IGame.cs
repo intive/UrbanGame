@@ -32,10 +32,6 @@ namespace Common
 
         int MaxPoints { get; set; }
 
-        int NumberOfTasks { get; set; }
-
-        int NumberOfCompletedTasks { get; set; }
-
         int NumberOfPlayers { get; set; }
 
         int NumberOfSlots { get; set; }
