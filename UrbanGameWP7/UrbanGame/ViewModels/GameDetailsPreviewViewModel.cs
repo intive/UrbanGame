@@ -247,7 +247,7 @@ namespace UrbanGame.ViewModels
                     Version = t.Version
                 };
                 foreach (var a in t.ABCDPossibleAnswers)
-                    task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { Answer = a.Answer, Id = a.Id, Task = task, TaskId = task.Id });
+                    task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { Answer = a.Answer, CharId = a.CharId, Task = task, TaskId = task.Id });
 
                 newGame.Tasks.Add(task);
             }

@@ -30,7 +30,7 @@ namespace UrbanGame
             container.PerRequest<TaskViewModel>();
             container.Singleton<ILocalizationService, LocalizationService>();
             container.PerRequest<IUnitOfWork, UnitOfWork>();       
-            container.Singleton<IGameWebService, GameWebService>();
+            container.Singleton<IGameWebService, GameWebServiceMock>();
             container.Singleton<IGameChangesManager, GameChangesManager>();
             container.PerRequest<IAppbarManager, AppbarManager>();
             container.PerRequest<IToastPromptService, ToastPromptService>();

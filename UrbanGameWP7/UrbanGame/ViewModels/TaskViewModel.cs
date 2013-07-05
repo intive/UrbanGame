@@ -254,6 +254,15 @@ namespace UrbanGame.ViewModels
                     if (CurrentTask == null)
                         await RefreshTask();
 
+                    if (CurrentTask.IsNewTask)
+                    {
+                        using (var uow = _unitOfWorkLocator())
+                        {
+                            uow.GetRepository<ITask>().All().First(t => t.Id == TaskId).IsNewTask = false;
+                            uow.Commit();
+                        }
+                    }
+
                     if (!String.IsNullOrEmpty(CurrentTask.ListOfChanges))
                     {
                         ListOfChanges = CurrentTask.ListOfChanges;

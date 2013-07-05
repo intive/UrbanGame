@@ -502,4 +502,7 @@
   <data name="SelectAnswers" xml:space="preserve">
     <value>Select one or more answers.</value>
   </data>
+  <data name="NewTaskToast" xml:space="preserve">
+    <value>New task is available. Tap to see it.</value>
+  </data>
 </root>

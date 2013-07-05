@@ -123,11 +123,11 @@ namespace WebService
                               (oldValue != null && newValue != null && !oldValue.Equals(newValue)))
                         {
                             if (oldProperty.PropertyType == typeof(DateTime) &&
-                                ((DateTime)oldValue - (DateTime)newValue).TotalSeconds <= 1)
+                                ((DateTime)oldValue - (DateTime)newValue).Duration().TotalSeconds <= 1)
                                 continue;
                             if (oldValue != null && newValue != null && 
                                 oldProperty.PropertyType == typeof(DateTime?) &&
-                                ((DateTime?)oldValue - (DateTime?)newValue).Value.TotalSeconds <= 1)
+                                ((DateTime?)oldValue - (DateTime?)newValue).Value.Duration().TotalSeconds <= 1)
                                 continue;
 
                             oldProperty.SetValue(oldObject, newProperty.GetValue(newObject, null), null);
@@ -168,7 +168,10 @@ namespace WebService
 
                                 if (newGame.Version != oldGame.Version)
                                 {
-                                    IList<string> diff = UpdateObject(oldGame, newGame, new List<string>() { "GameState", "ListOfChanges", "GameOverDisplayed" });
+                                    var skipFields = new List<string>() { "GameState", "ListOfChanges", 
+                                                                          "GameOverDisplayed", "NumberOfPlayers", 
+                                                                          "NumberOfSlots", "Points" };
+                                    IList<string> diff = UpdateObject(oldGame, newGame, skipFields);
 
                                     if (diff.Count == 0)
                                         return;
@@ -260,39 +263,90 @@ namespace WebService
                         {
                             //there cannot be await, because it causes InvalidOperationExceptions by uow.Commit()
                             var t = _gameWebService.GetTasks(game.Id);
-                            t.Wait();
+                            t.Wait();                            
                             ITask[] listOfTasks = t.Result.Where(tt => tt.State == TaskState.Active).ToArray();
 
+                            string newTasks = String.Empty;
                             foreach (var newTask in listOfTasks)
                             {
-                                var oldTask = uow.GetRepository<ITask>().All().First(gt => gt.Id == newTask.Id);
+                                var oldTask = uow.GetRepository<ITask>().All().FirstOrDefault(gt => gt.Id == newTask.Id);
 
-                                if (newTask.Version != oldTask.Version)
+                                if (oldTask == null)
                                 {
-                                    IList<string> diff = UpdateObject(oldTask, newTask, new List<string>() { "Game", "ListOfChanges", "UserPoints" });
-                                   
-                                    if (diff.Count == 0)
-                                        return;
+                                    ITask toAdd = uow.GetRepository<ITask>().CreateInstance();
+                                    toAdd.AdditionalText = newTask.AdditionalText;
+                                    toAdd.Description = newTask.Description;
+                                    toAdd.EndDate = newTask.EndDate;
+                                    toAdd.Game = game;
+                                    toAdd.Id = newTask.Id;
+                                    toAdd.IsRepeatable = newTask.IsRepeatable;
+                                    toAdd.MaxPoints = newTask.MaxPoints;
+                                    toAdd.Name = newTask.Name;
+                                    toAdd.Picture = newTask.Picture;
+                                    toAdd.SolutionStatus = SolutionStatus.NotSend;
+                                    toAdd.State = newTask.State;
+                                    toAdd.Type = newTask.Type;
+                                    toAdd.UserPoints = newTask.UserPoints;
+                                    toAdd.Version = newTask.Version;
+                                    toAdd.IsNewTask = true;
 
-                                    if (_toastPromptService != null)
-                                        oldTask.ListOfChanges = _toastPromptService.GetDifferencesText(diff);
+                                    foreach (var newABCD in newTask.ABCDPossibleAnswers)
+                                    {
+                                        IABCDPossibleAnswer toAddABCD = uow.GetRepository<IABCDPossibleAnswer>().CreateInstance();
+                                        toAddABCD.Answer = newABCD.Answer;
+                                        toAddABCD.CharId = newABCD.CharId;
+                                        toAddABCD.Task = toAdd;
+                                    }
 
+                                    uow.GetRepository<ITask>().MarkForAdd(toAdd);
                                     uow.Commit();
 
+                                    newTasks += ", newTask:" + toAdd.Id.ToString();
+
                                     if (_toastPromptService != null)
-                                        _toastPromptService.ShowTaskChanged(game.Id, oldTask.Id, oldTask.Name, _localizationService.GetText("TaskChangedToast"));
-
-                                    _gameEventAggregator.Publish(new TaskChangedEvent() { Id = oldTask.Id, GameId = game.Id });
+                                        _toastPromptService.ShowTaskChanged(game.Id, toAdd.Id, toAdd.Name, _localizationService.GetText("NewTaskToast"));
                                 }
-                                else if (newTask.State != oldTask.State)
+                                else
                                 {
-                                    oldTask.State = newTask.State;
-                                    uow.Commit();
+                                    if (newTask.Version != oldTask.Version)
+                                    {
+                                        IList<string> diff = UpdateObject(oldTask, newTask, new List<string>() { "Game", "ListOfChanges", "UserPoints" });
 
-                                    _gameEventAggregator.Publish(new TaskChangedEvent() { Id = oldTask.Id, GameId = game.Id });
+                                        if (diff.Count == 0)
+                                            return;
+
+                                        if (_toastPromptService != null)
+                                            oldTask.ListOfChanges = _toastPromptService.GetDifferencesText(diff);
+
+                                        uow.Commit();
+
+                                        if (_toastPromptService != null)
+                                            _toastPromptService.ShowTaskChanged(game.Id, oldTask.Id, oldTask.Name, _localizationService.GetText("TaskChangedToast"));
+
+                                        _gameEventAggregator.Publish(new TaskChangedEvent() { Id = oldTask.Id, GameId = game.Id });
+                                    }
+                                    else if (newTask.State != oldTask.State)
+                                    {
+                                        oldTask.State = newTask.State;
+                                        uow.Commit();
+
+                                        _gameEventAggregator.Publish(new TaskChangedEvent() { Id = oldTask.Id, GameId = game.Id });
+                                    }
                                 }
+                            } //foreach tasks
+
+                            if (newTasks != String.Empty)
+                            {
+                                if (game.ListOfChanges == null)
+                                    game.ListOfChanges = newTasks.Substring(2);
+                                else
+                                    game.ListOfChanges += newTasks.Substring(2);
+
+                                uow.Commit();                                
+
+                                _gameEventAggregator.Publish(new GameChangedEvent() { Id = game.Id, NewTasks = true });
                             }
-                        }
+                        } //foreach games
                     }
                 }
                 finally

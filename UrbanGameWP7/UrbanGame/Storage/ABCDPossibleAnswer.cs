@@ -20,7 +20,7 @@ namespace UrbanGame.Storage
 
         private int _id;
 
-        [Column(IsPrimaryKey = true)]
+        [Column(IsPrimaryKey = true, IsDbGenerated=true, AutoSync=AutoSync.OnInsert)]
         public int Id
         {
             get

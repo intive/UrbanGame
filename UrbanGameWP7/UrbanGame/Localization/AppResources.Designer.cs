@@ -737,6 +737,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New task is available. Tap to see it..
+        /// </summary>
+        public static string NewTaskToast {
+            get {
+                return ResourceManager.GetString("NewTaskToast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next instructions has been sent to provided e-mail address.
         /// </summary>
         public static string NextInstructions {

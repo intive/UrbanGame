@@ -37,6 +37,7 @@
         <conv:TypeToImageSourceConverter x:Key="TypeToImageSourceConverter" />
         <conv:NearbyGameStartConverter x:Key="NearbyGameStartConverter" />
         <conv:ChangeToBackgroundConverter x:Key="ChangeToBackgroundConverter" />
+        <conv:NewTaskToBackgroundConverter x:Key="NewTaskToBackgroundConverter" />
 
         <Style x:Key="ItemStyle" TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

@@ -393,5 +393,27 @@ namespace WebService.BOMock
             }
         }
         #endregion
+
+        #region IsNewTask
+
+        private bool _isNewTask;
+
+        public bool IsNewTask
+        {
+            get
+            {
+                return _isNewTask;
+            }
+            set
+            {
+                if (_isNewTask != value)
+                {
+                    NotifyPropertyChanging("IsNewTask");
+                    _isNewTask = value;
+                    NotifyPropertyChanged("IsNewTask");
+                }
+            }
+        }
+        #endregion
     }
 }
