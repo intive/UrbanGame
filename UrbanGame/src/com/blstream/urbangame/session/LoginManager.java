@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.blstream.urbangame.database.entity.Player;
-import com.blstream.urbangame.webserver.WebServerNotificationListener;
+import com.blstream.urbangame.web.server.WebServerNotificationListener;
 
 // formatter:off
 /**

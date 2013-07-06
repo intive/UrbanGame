@@ -18,8 +18,8 @@ import com.blstream.urbangame.dialogs.UrbanGameDialog;
 import com.blstream.urbangame.dialogs.UrbanGameDialog.UrbanGameDialogOnClickListener;
 import com.blstream.urbangame.session.RegistrationManager;
 import com.blstream.urbangame.session.SessionManager;
-import com.blstream.urbangame.webserver.WebResponse;
-import com.blstream.urbangame.webserver.WebServerNotificationListener;
+import com.blstream.urbangame.web.server.WebResponse;
+import com.blstream.urbangame.web.server.WebServerNotificationListener;
 
 public class RegisterFragment extends SherlockFragment implements OnClickListener, WebServerNotificationListener {
 	private static final String NAME = RegisterFragment.class.getSimpleName();

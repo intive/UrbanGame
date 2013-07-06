@@ -1,11 +1,11 @@
-package com.blstream.urbangame.webserver;
+package com.blstream.urbangame.web.server;
 
 import java.util.ArrayList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.blstream.urbangame.webserver.WebServer.QueryType;
+import com.blstream.urbangame.web.server.WebServer.QueryType;
 
 /**
  * WebResponse is an auxiliary class which contains information about response

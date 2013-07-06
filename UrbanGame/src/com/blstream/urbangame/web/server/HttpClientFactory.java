@@ -1,4 +1,4 @@
-package com.blstream.urbangame.webserver;
+package com.blstream.urbangame.web.server;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.params.ConnManagerParams;

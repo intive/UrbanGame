@@ -28,10 +28,10 @@ import com.blstream.urbangame.dialogs.AnswerDialog.DialogType;
 import com.blstream.urbangame.helpers.Pair;
 import com.blstream.urbangame.web.WebHighLevel;
 import com.blstream.urbangame.web.WebHighLevelInterface;
-import com.blstream.urbangame.webserver.ServerResponseHandler;
-import com.blstream.urbangame.webserver.WebResponse;
-import com.blstream.urbangame.webserver.WebServer.QueryType;
-import com.blstream.urbangame.webserver.WebServerNotificationListener;
+import com.blstream.urbangame.web.server.ServerResponseHandler;
+import com.blstream.urbangame.web.server.WebResponse;
+import com.blstream.urbangame.web.server.WebServerNotificationListener;
+import com.blstream.urbangame.web.server.WebServer.QueryType;
 
 public class ABCDTaskAnswerFragment extends SherlockFragment implements WebServerNotificationListener, OnClickListener {
 	private AnswersAdapter adapter;

@@ -1,4 +1,4 @@
-package com.blstream.urbangame.webserver;
+package com.blstream.urbangame.web.server;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 
 import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.Task;
-import com.blstream.urbangame.webserver.WebServer.QueryType;
+import com.blstream.urbangame.web.server.WebServer.QueryType;
 
 /**
  * This class represents simple asynchronous background HTTP request for
