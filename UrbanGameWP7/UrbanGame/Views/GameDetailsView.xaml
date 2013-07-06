@@ -212,7 +212,9 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Orientation="Vertical">
-                            <TextBlock Foreground="{StaticResource FontColorGreen}" Text="{Binding Path=AppResources.Active, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+
+                            <TextBlock Text="{Binding Path=AppResources.Active, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="5,0,0,0" Foreground="{StaticResource FontColorGreen}"/>
+                            <TextBlock Text="{Binding Path=AppResources.NoTasks, Source={StaticResource LocalizedStrings}}" Foreground="{StaticResource FontColorWhite}" Visibility="{Binding NoAvailableTasks, Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,0,0" TextWrapping="Wrap"/>
                             <ListBox ItemsSource="{Binding ActiveTasks}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -256,13 +258,14 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
+                            <TextBlock Grid.Row="1"  Text="{Binding Path=AppResources.CompletedTasks, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Margin="5,0,0,0" Visibility="{Binding AllTasksAccomplished, Converter={StaticResource BoolToVisibilityConverter}}"/>
                             <StackPanel Orientation="Horizontal" Grid.Row="1" Visibility="Collapsed">
-                                <TextBlock Foreground="{StaticResource FontColorGreen}" Text="{Binding Path=AppResources.BonusTask, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="0,0,20,0"/>
-                                <TextBlock Text="{Binding BonusTasks}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="5,10,0,0" Visibility="Collapsed"/>
+                                <TextBlock Text="{Binding Path=AppResources.BonusTask, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="0,0,20,0" Foreground="{StaticResource FontColorGreen}"/>
+                                <TextBlock Text="{Binding BonusTasks}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="5,10,0,0" Visibility="Collapsed" Foreground="{StaticResource FontColorGreen}"/>
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Grid.Row="2" Orientation="Vertical">
-                            <TextBlock Foreground="{StaticResource FontColorGreen}" Text="{Binding Path=AppResources.Inactive, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="0,0,0,5" />
+                            <TextBlock Text="{Binding Path=AppResources.Inactive, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="5,0,0,5" Foreground="{StaticResource FontColorGreen}"/>
                             <ListBox ItemsSource="{Binding InactiveTasks}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ItemStyle}" >
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -295,7 +298,7 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Orientation="Vertical">
-                            <TextBlock  Foreground="{StaticResource FontColorGreen}" Text="{Binding Path=AppResources.Accomplished, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}"/>
+                            <TextBlock Text="{Binding Path=AppResources.Accomplished, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}"/>
                             <ListBox ItemsSource="{Binding AccomplishedTasks}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -323,8 +326,8 @@
                                 </ListBox.ItemTemplate>
                             </ListBox>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,5,0">
-                            <TextBlock Foreground="{StaticResource FontColorGreen}" Text="{Binding Path=AppResources.Cancelled, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}"/>
+                        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="5,0,5,0">
+                            <TextBlock Text="{Binding Path=AppResources.Cancelled, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorGreen}" Visibility="{Binding CancelledTasks.Count, Converter={StaticResource ValueToVisibilityConverter}}"/>
                             <ListBox ItemsSource="{Binding CancelledTasks}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ItemStyle}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -353,16 +356,23 @@
                 <ListBox ItemsSource="{Binding GameAlerts}" ItemContainerStyle="{StaticResource ItemStyle}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Vertical" Margin="0,5,0,0">
-                                <StackPanel.Resources>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Margin" Value="5,0,0,5" />
-                                    </Style>
-                                </StackPanel.Resources>
-                                <TextBlock Text="Operator" Foreground="{StaticResource FontColorWhite}" FontSize="{StaticResource PhoneFontSizeLarge}" />
-                                <TextBlock Text="{Binding Topic}" FontSize="{StaticResource PhoneFontSizeLarge}"/>
-                                <TextBlock Text="{Binding Description}" Foreground="{StaticResource FontColorWhite}"/>
-                            </StackPanel>
+                            <Grid cal:Message.Attach="[Event Tap]=[Action ShowAlert($dataContext)]" Margin="5,0,0,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="{Binding Path=AppResources.Operator, Source={StaticResource LocalizedStrings}}" Foreground="{StaticResource FontColorGreen}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Topic}" Grid.Column="0"/>
+                                    <TextBlock Text="{Binding AlertAppear, Converter={StaticResource AlertTimeConverter}}" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                                </Grid>
+                                <TextBlock Grid.Row="2" Height="52"  Text="{Binding Description}" Foreground="{StaticResource FontColorWhite}" TextWrapping="Wrap"/>
+                            </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -381,22 +391,24 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
-                                    <Polygon Grid.Row="0" Points="0,0 80,0 80,50 0,80">
+                                    <Polygon Grid.Row="0" Points="5,0 85,0 85,50 5,80">
                                         <Polygon.Fill>
                                             <SolidColorBrush Color="{StaticResource SolidColorBrushGreen}" />
                                         </Polygon.Fill>
                                     </Polygon>
-                                    <TextBlock Grid.Column="0" Text="{Binding Position}" Foreground="{StaticResource FontColorWhite}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="5,0,0,0"/>
+                                    <TextBlock Grid.Column="0" Text="{Binding Position}" Foreground="{StaticResource FontColorWhite}" FontSize="{StaticResource PhoneFontSizeLarge}" Margin="10,0,0,0"/>
                                 </Grid>
-                                <Grid Grid.Column="1" Margin="5,0,0,0">
+                                <Grid Grid.Column="1" Margin="5,-10,0,0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <TextBlock Grid.Row="0" Text="{Binding Entity.UserLogin}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                     <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Entity.AchievedAt, Converter={StaticResource GameStartConverter}}" />
+                                        <TextBlock Text="," Margin="0,0,5,0"/>
                                         <TextBlock Text="{Binding Entity.Points}" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource FontColorWhite}" Margin="0,0,5,0"/>
-                                        <TextBlock Text="{Binding AppResouces.Points}" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource FontColorWhite}"/>
+                                        <TextBlock Text="{Binding Path=AppResources.Points, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource FontColorWhite}"/>
                                     </StackPanel>
                                 </Grid>
                             </Grid>

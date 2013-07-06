@@ -24,6 +24,8 @@ namespace UrbanGame.ViewModels
             : base(navigationService, unitOfWorkLocator, gameWebService, gameEventAggregator, authorizationService)
         {
             _appbarManager = appbarManager;
+            BonusTasks = new BindableCollection<ITask>();
+            InactiveTasks = new BindableCollection<ITask>();
         }
 
         protected override void OnViewReady(object view)
@@ -155,6 +157,50 @@ namespace UrbanGame.ViewModels
         #endregion
 
         #region bindable properties
+
+        #region NoAvailableTasks
+
+        private bool _noAvailableTasks;
+
+        public bool NoAvailableTasks
+        {
+            get
+            {
+                return _noAvailableTasks;
+            }
+            set
+            {
+                if (_noAvailableTasks != value)
+                {
+                    _noAvailableTasks = value;
+                    NotifyOfPropertyChange(() => NoAvailableTasks);
+                }
+            }
+        }
+
+        #endregion
+
+        #region AllTasksAccomplished
+
+        private bool _allTasksAccomplished;
+
+        public bool AllTasksAccomplished
+        {
+            get
+            {
+                return _allTasksAccomplished;
+            }
+            set
+            {
+                if (_allTasksAccomplished != value)
+                {
+                    _allTasksAccomplished = value;
+                    NotifyOfPropertyChange(() => AllTasksAccomplished);
+                }
+            }
+        }
+
+        #endregion
 
         #region ShowMore
 
@@ -473,6 +519,11 @@ namespace UrbanGame.ViewModels
             _navigationService.UriFor<TaskViewModel>().WithParam(t => t.TaskId, task.Id).WithParam(x => x.GameId, GameId).Navigate();
         }
 
+        public void ShowAlert(IAlert alert)
+        {
+            _navigationService.UriFor<AlertViewModel>().WithParam(a => a.AlertId, alert.Id).WithParam(x => x.GameId, GameId).Navigate();
+        }
+
         public void ChangeAppbarButtons(SelectionChangedEventArgs args)
         {
             _activeSection = ((FrameworkElement)args.AddedItems[0]).Name;
@@ -520,7 +571,9 @@ namespace UrbanGame.ViewModels
                 {
                     IQueryable<IAlert> alerts = uow.GetRepository<IAlert>().All();
 
-                    GameAlerts = new BindableCollection<IAlert>(alerts.Where(a => a.Game.Id == GameId).AsEnumerable());
+                    GameAlerts = new BindableCollection<IAlert>(alerts.Where(a => a.Game.Id == GameId)
+                                                                                .OrderByDescending(a => a.AlertAppear)
+                                                                                .AsEnumerable());
                 }
             });
         }
@@ -563,6 +616,54 @@ namespace UrbanGame.ViewModels
                                                                      .AsEnumerable());
                 }
             });
+
+            if (ActiveTasks.Count == 0)
+            {
+                NoAvailableTasks = true;
+            }
+            else
+            {
+                NoAvailableTasks = false;
+            }
+
+            if (BonusTasks.Count == 0 && InactiveTasks.Count == 0)
+            {
+                bool hasMaxPoints = true;
+                bool areAllRepeatable = true;
+                bool wereAllSend = true;
+
+                foreach (var task in ActiveTasks)
+                {
+                    if (task.SolutionStatus == SolutionStatus.NotSend || task.SolutionStatus == SolutionStatus.Pending)
+                    {
+                        wereAllSend = false;
+                        break;
+                    }
+
+                    if (!task.IsRepeatable)
+                    {
+                        areAllRepeatable = false;
+                        break;
+                    }
+
+                    if (task.MaxPoints > task.UserPoints)
+                    {
+                        hasMaxPoints = false;
+                    }
+                }
+                if (!hasMaxPoints && areAllRepeatable && wereAllSend)
+                {
+                    AllTasksAccomplished = true;
+                }
+                else
+                {
+                    AllTasksAccomplished = false;
+                }
+            }
+            else
+            {
+                AllTasksAccomplished = false;
+            }
         }
 
         public async Task RefreshInactiveTasks()
@@ -613,7 +714,6 @@ namespace UrbanGame.ViewModels
                                                                         .AsEnumerable());
                 }
             });
-
         }
 
         public async void Leave()

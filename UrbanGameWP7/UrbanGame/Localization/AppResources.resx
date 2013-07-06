@@ -505,4 +505,16 @@
   <data name="NewTaskToast" xml:space="preserve">
     <value>New task is available. Tap to see it.</value>
   </data>
+  <data name="NoTasks" xml:space="preserve">
+    <value>There are not tasks at this point, try later or try to connect from different area of the city to receive hidden bonus tasks.</value>
+  </data>
+  <data name="CompletedTasks" xml:space="preserve">
+    <value>You have completed all tasks, but few tasks could be done better. Try to repeat them in order to gain more points.</value>
+  </data>
+  <data name="EmptyMessage" xml:space="preserve">
+    <value>Message can't be empty!</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>try again</value>
+  </data>
 </root>

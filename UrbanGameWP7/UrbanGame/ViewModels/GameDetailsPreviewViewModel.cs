@@ -237,6 +237,38 @@ namespace UrbanGame.ViewModels
                 newGame.Version = Game.Version;
                 newGame.Prizes = Game.Prizes;
 
+                #region Alerts & HighScores
+
+                foreach (var a in Game.Alerts)
+                {
+                    GameAlert alert = new GameAlert()
+                    {
+                        Id = a.Id,
+                        Description = a.Description,
+                        Topic = a.Topic,
+                        AlertAppear = a.AlertAppear,
+                        Game = newGame,
+                        GameId = newGame.Id
+                    };
+                }
+
+                foreach (var hs in Game.HighScores)
+                {
+                    GameHighScore highScore = new GameHighScore()
+                    {
+                        Id = hs.Id,
+                        Points = hs.Points,
+                        UserLogin = hs.UserLogin,
+                        AchievedAt = hs.AchievedAt,
+                        Game = newGame,
+                        GameId = newGame.Id
+                    };
+                }
+
+                #endregion
+
+                #region adding tasks
+
                 var tasks = await _gameWebService.GetTasks(newGame.Id);
 
                 foreach (var t in tasks)
@@ -283,6 +315,8 @@ namespace UrbanGame.ViewModels
                     uow.GetRepository<ITask>().MarkForAdd(task);
                     uow.Commit();
                 }
+
+                #endregion
             }
         }
 

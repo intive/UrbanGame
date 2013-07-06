@@ -29,19 +29,23 @@ namespace WebService
             ListOfTasks.Clear();
             ListOfGames.Clear();
 
+            string description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010.";
+
             ListOfGames.AddRange(new IGame[] {
-                new Game(){Name = "Hydromystery", GameType = GameType.ScoreAttack, OperatorName = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 1, GameLogo = "/Images/gameicon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), Difficulty = GameDifficulty.Easy, Description = "Le 10 septembre 2008, quelques jours après avoir fêté son vingtième anniversaire, Lewandowski débute sa carrière internationale avec la Pologne face à Saint-Marin, lors des éliminatoires de la coupe du monde 2010.", Localization = "Wroclaw"},
-                new Game(){Name = "North & South", GameType = GameType.Race, OperatorName = "Infogrames", NumberOfPlayers = 23, Id = 2, GameLogo = "/Images/gameicon.png", GameStart = new DateTime(2013, 5, 8, 12, 12,0), GameEnd = DateTime.Now.AddDays(3).AddHours(12)},
-                new Game(){Name = "Ultimate Quest", GameType = GameType.ScoreAttack, OperatorName = "JCVD", NumberOfPlayers = 23,Id = 3, GameLogo = "/Images/gameicon.png", GameStart = DateTime.Now.AddDays(1).AddHours(12), GameEnd = DateTime.Now.AddDays(10).AddHours(2)},
-                new Game(){Name = "Galaxy Quest", GameType = GameType.Race, OperatorName = "NSEA", NumberOfPlayers = 23,Id = 4, GameLogo = "/Images/gameicon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameEnd = DateTime.Now.AddDays(3).AddHours(7).AddMinutes(18).AddSeconds(43)},
-                new Game(){Name = "The Quest for NEETs", GameType = GameType.Race, OperatorName = "Ron Jeremy", NumberOfPlayers = 23,Id = 5, GameLogo = "/Images/gameicon.png", GameStart = new DateTime(2013,5,9,21,5,8),GameEnd = DateTime.Now.AddDays(2).AddHours(10)}});
+                new Game(){Name = "Hydromystery", GameType = GameType.ScoreAttack, OperatorName = "Cafeteria", NumberOfPlayers = 23, NumberOfSlots = 48, Id = 1, GameLogo = "/Images/gameicon.png", GameStart = new DateTime(2013, 4, 8, 12, 12,0) ,GameEnd = DateTime.Now.AddDays(2).AddHours(10), Difficulty = GameDifficulty.Easy, Description = description, Localization = "Wroclaw"},
+                new Game(){Name = "North & South", GameType = GameType.Race, OperatorName = "Infogrames", NumberOfPlayers = 23, Id = 2, GameLogo = "/Images/gameicon.png", GameStart = new DateTime(2013, 5, 8, 12, 12,0), GameEnd = DateTime.Now.AddDays(3).AddHours(12), Description = description},
+                new Game(){Name = "Ultimate Quest", GameType = GameType.ScoreAttack, OperatorName = "JCVD", NumberOfPlayers = 23,Id = 3, GameLogo = "/Images/gameicon.png", GameStart = DateTime.Now.AddDays(1).AddHours(12), GameEnd = DateTime.Now.AddDays(10).AddHours(2), Description = description},
+                new Game(){Name = "Galaxy Quest", GameType = GameType.Race, OperatorName = "NSEA", NumberOfPlayers = 23,Id = 4, GameLogo = "/Images/gameicon.png", GameStart = new DateTime(2013,4,10,8,12,0), GameEnd = DateTime.Now.AddDays(3).AddHours(7).AddMinutes(18).AddSeconds(43), Description = description},
+                new Game(){Name = "The Quest for NEETs", GameType = GameType.Race, OperatorName = "Ron Jeremy", NumberOfPlayers = 23,Id = 5, GameLogo = "/Images/gameicon.png", GameStart = new DateTime(2013,5,9,21,5,8),GameEnd = DateTime.Now.AddDays(2).AddHours(10), Description = description}});
 
             string lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam mauris vel elit tincidunt ac bibendum tortor scelerisque. Mauris nisi augue, malesuada ac lobortis sed, rhoncus et mauris. Vivamus dictum turpis congue arcu euismod in pulvinar mi volutpat. Aliquam euismod pharetra velit eu sagittis. Proin et nisi nibh, ut egestas enim.";
+            string accident = "There might be a problem getting to center, bacause of bus crash. Furthermore the police imidiately came and now tries to figure out what realy happened.";
+
             int taskId = 1;
             int alertId = 1;
             int highScoreId = 1;
 
-            foreach (var g in ListOfGames)
+            foreach(var g in ListOfGames)
             {
                 var task = new GameTask() { Id = taskId++, Name = "IQ Test!", AdditionalText = "What is red with dots?", Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
                 task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { CharId = 'a', Answer = "Zebra" });
@@ -60,6 +64,10 @@ namespace WebService
                 task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { CharId = 'b', Answer = "Red" });
                 task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { CharId = 'c', Answer = "Blue" });
                 task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { CharId = 'd', Answer = "DarkBlack" });
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { CharId = 'e', Answer = "Lime" });
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { CharId = 'f', Answer = "Pink" });
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { CharId = 'g', Answer = "Brown" });
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { CharId = 'h', Answer = "Yellow" });
                 g.Tasks.Add(task2);
                 ListOfTasks.Add(task2);
 
@@ -67,11 +75,14 @@ namespace WebService
                 g.Tasks.Add(task3);
                 ListOfTasks.Add(task3);
 
-                g.HighScores.Add(new HighScore() { Id = highScoreId++, UserLogin = "XTerminator", Points = 329 });
-                g.Alerts.Add(new Alert() { Id = alertId++, Topic = "Information", Description = "There might be a problem getting to center, bacause of bus crash" });
-                g.HighScores.Add(new HighScore() { Id = highScoreId++, UserLogin = "RunnungRabit", Points = 310 });
-                g.HighScores.Add(new HighScore() { Id = highScoreId++, UserLogin = "$ebastian", Points = 150 });
-                g.HighScores.Add(new HighScore() { Id = highScoreId++, UserLogin = "xX_Warior_Xx", Points = 90 });
+                g.HighScores.Add(new HighScore() { Id = highScoreId++, UserLogin = "XTerminator", Points = 329, AchievedAt = DateTime.Now.AddDays(1).AddHours(13).AddMinutes(37) });
+                g.HighScores.Add(new HighScore() { Id = highScoreId++, UserLogin = "RunnungRabit", Points = 310, AchievedAt = DateTime.Now.AddDays(1).AddHours(3).AddMinutes(7) });
+                g.HighScores.Add(new HighScore() { Id = highScoreId++, UserLogin = "$ebastian", Points = 150, AchievedAt = DateTime.Now.AddHours(9).AddMinutes(27) });
+                g.HighScores.Add(new HighScore() { Id = highScoreId++, UserLogin = "xX_Warior_Xx", Points = 90, AchievedAt = DateTime.Now.AddHours(1).AddMinutes(1) });
+
+                g.Alerts.Add(new Alert() { Id = alertId++, Topic = "Information", Description = accident, AlertAppear = new DateTime(2013, 6, 27, 12, 10, 0) });
+                g.Alerts.Add(new Alert() { Id = alertId++, Topic = "Information", Description = accident, AlertAppear = new DateTime(2013, 6, 27, 11, 10, 0) });
+                g.Alerts.Add(new Alert() { Id = alertId++, Topic = "Information", Description = accident, AlertAppear = new DateTime(2013, 7, 4, 12, 1, 0) });
             }
 
         }
@@ -222,7 +233,7 @@ namespace WebService
 
         #region UserNearbyGames
         public async Task<IGame[]> UserNearbyGames(GeoCoordinate coordinate)
-        {
+        {        
             return ListOfGames.ToArray();
         }
         #endregion
