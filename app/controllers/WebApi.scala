@@ -176,14 +176,14 @@ class WebApi(auth: UserAuth, gamesService: GamesService) extends Controller {
   }
 
   private def ApiOk(response: HalJsonRes) = {
-    Ok(Json.prettyPrint(Json.toJson(response))).as("application/json")
+    Ok(Json.prettyPrint(Json.toJson(response))).as("application/json; charset=utf-8")
   }
 
   import play.api.i18n.Messages
   private def ApiErr(apiEx: ApiException)(implicit request: Request[Any]) = {
     val msg = Messages(apiEx.getMessage, apiEx.getParams: _*)
     val jsonMsg = Json.obj("code" -> apiEx.getCode, "message" -> msg)
-    Status(apiEx.getCode)(Json.prettyPrint(jsonMsg)).as("application/json")
+    Status(apiEx.getCode)(Json.prettyPrint(jsonMsg)).as("application/json; charset=utf-8")
   }
 
   private case class RegisterArgs(login: String, password: String)
