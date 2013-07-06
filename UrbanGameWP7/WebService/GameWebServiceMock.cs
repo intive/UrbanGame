@@ -145,28 +145,17 @@ namespace WebService
         #endregion
 
         #region GetTaskDetails
-        public ITask GetTaskDetails(int gid, int tid)
+        public async Task<ITask> GetTaskDetails(int gid, int tid)
         {
-            return new TaskMock()
-            {
-                Id = gid,
-                Name = "Where is he",
-                IsRepeatable = true,
-                Description = "Lorem ipsum dolor sit amet, consecteturadipiscing elit. Aliquam sit amet elementum nulla. Aliquam sed labortis libero. In id orci ac turpis adipiscing lictus. Liquam sed lobortis libero. In id orci ac turpis adipiscing luctus.",
-                Picture = "/ApplicationIcon.png",
-                UserPoints = 0,
-                MaxPoints = 12,
-                EndDate = DateTime.Now.AddHours(21).AddDays(4),
-                Type = TaskType.GPS
-            };
+            return ListOfTasks.FirstOrDefault(t => t.Id == tid);
         }
         #endregion
 
         #region GetTaskDetails generic
-        public TTaskType GetTaskDetails<TTaskType>(int gid, int tid) 
+        public async Task<TTaskType> GetTaskDetails<TTaskType>(int gid, int tid) 
             where TTaskType : ITask
         {
-            return (TTaskType)GetTaskDetails(gid, tid);
+            return (TTaskType)await GetTaskDetails(gid, tid);
         }
         #endregion
 

@@ -31,7 +31,11 @@ namespace WebService
         #region WebAPI
 
         const string APIurl = "http://urbangame.patronage.blstream.com/api/";
-        JsonConverter[] _jsonConverters = new JsonConverter[] { new JsonGameTypeConverter(), new JsonEnumConverter(), new JsonDateTimeConverter() };
+        JsonConverter[] _jsonConverters = new JsonConverter[] 
+        { 
+            new JsonGameTypeConverter(), new JsonEnumConverter(), 
+            new JsonDateTimeConverter(), new JsonTaskTypeConverter() 
+        };
 
         private async Task<WebApiResponse> GetResponse(WebRequest request)
         {
@@ -180,33 +184,22 @@ namespace WebService
         #region GetTasks
         public async Task<ITask[]> GetTasks(int gid)
         {
-            return ListOfTasks.Where(task => task.Game == null ? false : task.Game.Id == gid).ToArray();
+            return (await GetViaApi<ListOfTasks>("games/{0}/tasks?lat=1&lon=1", gid)).Tasks.ToArray();
         }
         #endregion
 
         #region GetTaskDetails
-        public ITask GetTaskDetails(int gid, int tid)
+        public async Task<ITask> GetTaskDetails(int gid, int tid)
         {
-            return new TaskMock()
-            {
-                Id = gid,
-                Name = "Where is he",
-                IsRepeatable = true,
-                Description = "Lorem ipsum dolor sit amet, consecteturadipiscing elit. Aliquam sit amet elementum nulla. Aliquam sed labortis libero. In id orci ac turpis adipiscing lictus. Liquam sed lobortis libero. In id orci ac turpis adipiscing luctus.",
-                Picture = "/ApplicationIcon.png",
-                UserPoints = 0,
-                MaxPoints = 12,
-                EndDate = DateTime.Now.AddHours(21).AddDays(4),
-                Type = TaskType.GPS
-            };
+            return await GetViaApi<GameTask>("games/{0}/tasks/{1}/static", gid, tid);
         }
         #endregion
 
         #region GetTaskDetails generic
-        public TTaskType GetTaskDetails<TTaskType>(int gid, int tid) 
+        public async Task<TTaskType> GetTaskDetails<TTaskType>(int gid, int tid) 
             where TTaskType : ITask
         {
-            return (TTaskType)GetTaskDetails(gid, tid);
+            return (TTaskType)await GetTaskDetails(gid, tid);
         }
         #endregion
 

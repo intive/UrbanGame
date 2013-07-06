@@ -52,7 +52,7 @@ namespace Common
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <returns>Task's details</returns>
-        ITask GetTaskDetails(int gid, int tid);
+        Task<ITask> GetTaskDetails(int gid, int tid);
 
         /// <summary>
         /// Returns task's details (generic version)
@@ -60,7 +60,7 @@ namespace Common
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <returns>Task's details</returns>
-        TTaskType GetTaskDetails<TTaskType>(int gid, int tid) where TTaskType : ITask;
+        Task<TTaskType> GetTaskDetails<TTaskType>(int gid, int tid) where TTaskType : ITask;
 
         /// <summary>
         /// Sends solution to the web server

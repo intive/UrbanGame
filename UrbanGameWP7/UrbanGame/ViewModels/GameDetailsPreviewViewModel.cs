@@ -182,75 +182,103 @@ namespace UrbanGame.ViewModels
         {
             if (MessageBox.Show("join in", "join in", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                var result = await _gameWebService.JoinGame(Game.Id);
+                bool result = false;
+                try
+                {
+                    await SaveGameToDB();
+                    result = await _gameWebService.JoinGame(Game.Id);
+                }
+                catch
+                {                    
+                }
+
+
                 if (result)
                 {
-                    using (IUnitOfWork uow = _unitOfWorkLocator())
-                    {
-                        IGame game = uow.GetRepository<IGame>().All().FirstOrDefault(x => x.Id == Game.Id);
-
-                        if (game == null)
-                            uow.GetRepository<IGame>().MarkForAdd(CreateInstance(GameState.Joined, uow));
-                        else
-                            game.GameState = GameState.Joined;
-
-                        uow.Commit();
-                    }
                     _navigationService.UriFor<GameDetailsViewModel>().WithParam(x => x.GameId, Game.Id).Navigate();
                 }
                 else
                 {
+                    //remove game - reversing changes
+                    using (var uow = _unitOfWorkLocator())
+                    {
+                        var game = uow.GetRepository<IGame>().All().FirstOrDefault(g => g.Id == GameId);
+                        if (game != null)
+                        {
+                            uow.GetRepository<IGame>().MarkForDeletion(game);
+                            uow.Commit();
+                        }
+                    }
+
                     MessageBox.Show(AppResources.ErrorJoiningGame);
                 }
             }
         }
 
-        public IGame CreateInstance(GameState state, IUnitOfWork uow)
+        public async Task SaveGameToDB()
         {
-            var newGame = uow.GetRepository<IGame>().CreateInstance();
-            newGame.Id = GameId;
-            newGame.Name = Game.Name;
-            newGame.OperatorName = Game.OperatorName;
-            newGame.GameLogo = Game.GameLogo;
-            newGame.Localization = Game.Localization;
-            newGame.GameStart = Game.GameStart;
-            newGame.GameEnd = Game.GameEnd;
-            newGame.GameState = state;
-            newGame.NumberOfPlayers = Game.NumberOfPlayers;
-            newGame.NumberOfSlots = Game.NumberOfSlots;
-            newGame.GameType = Game.GameType;
-            newGame.Description = Game.Description;
-            newGame.Difficulty = Game.Difficulty;
-            newGame.Version = Game.Version;
-            newGame.Prizes = Game.Prizes;
-
-            foreach (var t in Game.Tasks)
+            using (IUnitOfWork uow = _unitOfWorkLocator())
             {
-                GameTask task = new GameTask()
+                var newGame = new Game();
+                newGame.Id = GameId;
+                newGame.Name = Game.Name;
+                newGame.OperatorName = Game.OperatorName;
+                newGame.GameLogo = Game.GameLogo;
+                newGame.Localization = Game.Localization;
+                newGame.GameStart = Game.GameStart;
+                newGame.GameEnd = Game.GameEnd;
+                newGame.GameState = GameState.Joined;
+                newGame.NumberOfPlayers = Game.NumberOfPlayers;
+                newGame.NumberOfSlots = Game.NumberOfSlots;
+                newGame.GameType = Game.GameType;
+                newGame.Description = Game.Description;
+                newGame.Difficulty = Game.Difficulty;
+                newGame.Version = Game.Version;
+                newGame.Prizes = Game.Prizes;
+
+                var tasks = await _gameWebService.GetTasks(newGame.Id);
+
+                foreach (var t in tasks)
                 {
-                    AdditionalText = t.AdditionalText,
-                    Description = t.Description,
-                    EndDate = t.EndDate,
-                    Game = (Game)newGame,
-                    GameId = newGame.Id,
-                    Id = t.Id,
-                    IsRepeatable = t.IsRepeatable,
-                    MaxPoints = t.MaxPoints,
-                    Name = t.Name,
-                    Picture = t.Picture,
-                    SolutionStatus = t.SolutionStatus,
-                    State = t.State,
-                    Type = t.Type,
-                    UserPoints = t.UserPoints,
-                    Version = t.Version
-                };
-                foreach (var a in t.ABCDPossibleAnswers)
-                    task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { Answer = a.Answer, CharId = a.CharId, Task = task, TaskId = task.Id });
+                    var taskDTO = await _gameWebService.GetTaskDetails(newGame.Id, t.Id);
+                    var task = new GameTask()
+                    {
+                        AdditionalText = taskDTO.AdditionalText,
+                        Description = taskDTO.Description,
+                        EndDate = DateTime.Now.AddDays(2),//taskDTO.EndDate,
+                        Game = newGame,
+                        GameId = newGame.Id,
+                        Id = taskDTO.Id,
+                        IsNewTask = false,
+                        IsRepeatable = taskDTO.IsRepeatable,
+                        MaxPoints = taskDTO.MaxPoints,
+                        Name = taskDTO.Name,
+                        Picture = taskDTO.Picture,
+                        SolutionStatus = SolutionStatus.NotSend,
+                        State = taskDTO.State,
+                        Type = taskDTO.Type,
+                        UserPoints = taskDTO.UserPoints,
+                        Version = taskDTO.Version
+                    };
 
-                newGame.Tasks.Add(task);
+                    if (task.Type == TaskType.ABCD)
+                    {
+                        foreach (var answerDTO in taskDTO.ABCDPossibleAnswers)
+                        {
+                            var answer = new ABCDPossibleAnswer()
+                            {
+                                Answer = answerDTO.Answer,
+                                CharId = answerDTO.CharId,
+                                Task = task,
+                            };
+                            task.ABCDPossibleAnswers.Add(answer);
+                        }
+                    }
+
+                    uow.GetRepository<ITask>().MarkForAdd(task);
+                    uow.Commit();
+                }
             }
-
-            return newGame;
         }
 
         #endregion

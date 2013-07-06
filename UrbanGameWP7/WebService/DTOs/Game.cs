@@ -5,19 +5,18 @@ using System.Text;
 using Common;
 using System.Data.Linq;
 using Newtonsoft.Json;
-using WebService.BOMock;
 
 namespace WebService.DTOs
 {
-    public class Game : BOBase, IGame
+    public class Game : DTOBase, IGame
     {
         const string imagesUrl = "http://urbangame.patronage.blstream.com/";
 
         public Game()
         {
-            _tasks = new EntityEnumerable<ITask, TaskMock>(new EntitySet<TaskMock>(OnTaskAdded, OnTaskRemoved));
-            _alerts = new EntityEnumerable<IAlert, AlertMock>(new EntitySet<AlertMock>(OnAlertAdded, OnAlertRemoved));
-            _highScores = new EntityEnumerable<IHighScore, HighScoreMock>(new EntitySet<HighScoreMock>(OnHighScoreAdded, OnHighScoreRemoved));
+            _tasks = new EntityEnumerable<ITask, GameTask>(new EntitySet<GameTask>(OnTaskAdded, OnTaskRemoved));
+            _alerts = new EntityEnumerable<IAlert, Alert>(new EntitySet<Alert>(OnAlertAdded, OnAlertRemoved));
+            _highScores = new EntityEnumerable<IHighScore, HighScore>(new EntitySet<HighScore>(OnHighScoreAdded, OnHighScoreRemoved));
         }
         #region Id
 
@@ -489,12 +488,12 @@ namespace WebService.DTOs
             }
         }
 
-        private void OnTaskAdded(TaskMock task)
+        private void OnTaskAdded(GameTask task)
         {
             task.Game = this;
         }
 
-        private void OnTaskRemoved(TaskMock task)
+        private void OnTaskRemoved(GameTask task)
         {
             task.Game = null;
         }
@@ -512,12 +511,12 @@ namespace WebService.DTOs
             }
         }
 
-        private void OnAlertAdded(AlertMock alert)
+        private void OnAlertAdded(Alert alert)
         {
             alert.Game = this;
         }
 
-        private void OnAlertRemoved(AlertMock alert)
+        private void OnAlertRemoved(Alert alert)
         {
             alert.Game = null;
         }
@@ -535,12 +534,12 @@ namespace WebService.DTOs
             }
         }
 
-        private void OnHighScoreAdded(HighScoreMock highScore)
+        private void OnHighScoreAdded(HighScore highScore)
         {
             highScore.Game = this;
         }
 
-        private void OnHighScoreRemoved(HighScoreMock highScore)
+        private void OnHighScoreRemoved(HighScore highScore)
         {
             highScore.Game = null;
         }

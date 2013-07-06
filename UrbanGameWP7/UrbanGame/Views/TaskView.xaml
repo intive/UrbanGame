@@ -249,49 +249,46 @@
             
             <!--Pivot item two-->
             <controls:PivotItem Header="{Binding Path=AppResources.Answer, Source={StaticResource LocalizedStrings}}">
-                <ScrollViewer x:Name="AnswerContent">
-                    <Grid>
+                <Grid x:Name="AnswerContent">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="{Binding CurrentTask.Type, Converter={StaticResource TaskTypeToRowHeight}}"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="ABCD" Visibility="{Binding Path=CurrentTask.Type, Converter={StaticResource ABCDToVisibilityConverter}}"
+                            Background="{Binding ListOfChanges, Converter={StaticResource ChangeToBackgroundConverter}, ConverterParameter=ABCDPossibleAnswers|AdditionalText}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding CurrentTask.AdditionalText}" Grid.Row="0" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMedium}" />
+                            
+                        <ListBox Name="ABCDListView" Grid.Row="1" ItemsSource="{Binding Answers}" ItemContainerStyle="{StaticResource ItemStyle}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked,Mode=TwoWay}"/>
+                                        <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding PossibleAnswer.Answer}" Foreground="{StaticResource FontColorWhite}"  FontSize="{StaticResource PhoneFontSizeMedium}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <Button cal:Message.Attach="[Event Tap] = [Action SubmitABCD()]" Content="{Binding Path=AppResources.Submit, Source={StaticResource LocalizedStrings}}" Background="OliveDrab" BorderBrush="OliveDrab" Grid.Row="2" Width="228" HorizontalAlignment="Right" x:Name="SubmitABCD"/>
+                    </Grid>
+                    <Grid x:Name="GPS" Grid.Row="1" Visibility="{Binding Path=CurrentTask.Type, Converter={StaticResource GPSToVisibilityConverter}}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Grid x:Name="ABCD" Visibility="{Binding Path=CurrentTask.Type, Converter={StaticResource ABCDToVisibilityConverter}}"
-                                Background="{Binding ListOfChanges, Converter={StaticResource ChangeToBackgroundConverter}, ConverterParameter=ABCDPossibleAnswers|AdditionalText}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding CurrentTask.AdditionalText}" Grid.Row="0" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeMedium}" />
-                            <ListBox Name="ABCDListView" Grid.Row="1" ItemsSource="{Binding Answers}" ItemContainerStyle="{StaticResource ItemStyle}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked,Mode=TwoWay}"/>
-                                            <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding PossibleAnswer.Answer}" Foreground="{StaticResource FontColorWhite}"  FontSize="{StaticResource PhoneFontSizeMedium}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-
-                            <Button cal:Message.Attach="[Event Tap] = [Action SubmitABCD()]" Content="{Binding Path=AppResources.Submit, Source={StaticResource LocalizedStrings}}" Background="OliveDrab" BorderBrush="OliveDrab" Grid.Row="2" Width="228" HorizontalAlignment="Right" x:Name="SubmitABCD"/>
-                        </Grid>
-                        <Grid x:Name="GPS" Grid.Row="1" Visibility="{Binding Path=CurrentTask.Type, Converter={StaticResource GPSToVisibilityConverter}}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock TextWrapping="Wrap" Text="{Binding Path=AppResources.AnswerGPS, Source={StaticResource LocalizedStrings}}" Grid.ColumnSpan="2" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="15 0 0 0"/>
-                            <Button cal:Message.Attach="[Event Tap] = [Action SubmitGPS()]" Content="{Binding Path=AppResources.Submit, Source={StaticResource LocalizedStrings}}" Background="OliveDrab" BorderBrush="OliveDrab" Grid.Column="1" Grid.Row="1" x:Name="SubmitGPS"/>
-                        </Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Path=AppResources.AnswerGPS, Source={StaticResource LocalizedStrings}}" Grid.ColumnSpan="2" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="15 0 0 0"/>
+                        <Button cal:Message.Attach="[Event Tap] = [Action SubmitGPS()]" Content="{Binding Path=AppResources.Submit, Source={StaticResource LocalizedStrings}}" Background="OliveDrab" BorderBrush="OliveDrab" Grid.Column="1" Grid.Row="1" x:Name="SubmitGPS"/>
                     </Grid>
-                </ScrollViewer>
+                </Grid>
             </controls:PivotItem>
         </controls:Pivot>
 
