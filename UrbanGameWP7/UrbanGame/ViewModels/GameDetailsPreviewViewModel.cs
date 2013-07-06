@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using UrbanGame.Storage;
 using System.Threading.Tasks;
 using UrbanGame.Utilities;
+using UrbanGame.Localization;
 
 namespace UrbanGame.ViewModels
 {
@@ -174,102 +175,149 @@ namespace UrbanGame.ViewModels
                 {
                     Game = await _gameWebService.GetGameInfo(GameId);
                 }
-
-                SetAppBarContent();
             });
         }
 
-        public void JoinIn()
+        public async void JoinIn()
         {
+            //todo : disable joining when game hasn't started yet
             if (MessageBox.Show("join in", "join in", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                using (IUnitOfWork uow = _unitOfWorkLocator())
+                bool result = false;
+                try
                 {
-                    IGame game = uow.GetRepository<IGame>().All().FirstOrDefault(x => x.Id == Game.Id);
-
-                    if (game == null)
-                        uow.GetRepository<IGame>().MarkForAdd(CreateInstance(GameState.Joined, uow));
-                    else
-                        game.GameState = GameState.Joined;
-
-                    uow.Commit();
+                    await SaveGameToDB();
+                    result = await _gameWebService.JoinGame(Game.Id);
                 }
-                _navigationService.UriFor<GameDetailsViewModel>().WithParam(x => x.GameId, Game.Id).Navigate();
+                catch
+                {                    
+                }
+
+
+                if (result)
+                {
+                    _navigationService.UriFor<GameDetailsViewModel>().WithParam(x => x.GameId, Game.Id).Navigate();
+                }
+                else
+                {
+                    //remove game - reversing changes
+                    using (var uow = _unitOfWorkLocator())
+                    {
+                        var game = uow.GetRepository<IGame>().All().FirstOrDefault(g => g.Id == GameId);
+                        if (game != null)
+                        {
+                            uow.GetRepository<IGame>().MarkForDeletion(game);
+                            uow.Commit();
+                        }
+                    }
+
+                    MessageBox.Show(AppResources.ErrorJoiningGame);
+                }
             }
         }
 
-        public IGame CreateInstance(GameState state, IUnitOfWork uow)
+        public async Task SaveGameToDB()
         {
-            var newGame = uow.GetRepository<IGame>().CreateInstance();
-            newGame.Id = GameId;
-            newGame.Name = Game.Name;
-            newGame.OperatorName = Game.OperatorName;
-            newGame.GameLogo = Game.GameLogo;
-            newGame.Localization = Game.Localization;
-            newGame.GameStart = Game.GameStart;
-            newGame.GameEnd = Game.GameEnd;
-            newGame.GameState = state;
-            newGame.NumberOfPlayers = Game.NumberOfPlayers;
-            newGame.NumberOfSlots = Game.NumberOfSlots;
-            newGame.GameType = Game.GameType;
-            newGame.Description = Game.Description;
-            newGame.Difficulty = Game.Difficulty;
-            newGame.Version = Game.Version;
-            newGame.Prizes = Game.Prizes;
-
-            foreach (var t in Game.Tasks)
+            using (IUnitOfWork uow = _unitOfWorkLocator())
             {
-                GameTask task = new GameTask()
+                var newGame = new Game();
+                newGame.Id = GameId;
+                newGame.Name = Game.Name;
+                newGame.OperatorName = Game.OperatorName;
+                newGame.GameLogo = Game.GameLogo;
+                newGame.Localization = Game.Localization;
+                newGame.GameStart = Game.GameStart;
+                newGame.GameEnd = Game.GameEnd;
+                newGame.GameState = GameState.Joined;
+                newGame.NumberOfPlayers = Game.NumberOfPlayers;
+                newGame.NumberOfSlots = Game.NumberOfSlots;
+                newGame.GameType = Game.GameType;
+                newGame.Description = Game.Description;
+                newGame.Difficulty = Game.Difficulty;
+                newGame.Version = Game.Version;
+                newGame.Prizes = Game.Prizes;
+
+                #region Alerts & HighScores
+
+                foreach (var a in Game.Alerts)
                 {
-                    AdditionalText = t.AdditionalText,
-                    Description = t.Description,
-                    EndDate = t.EndDate,
-                    Game = (Game)newGame,
-                    GameId = newGame.Id,
-                    Id = t.Id,
-                    IsRepeatable = t.IsRepeatable,
-                    MaxPoints = t.MaxPoints,
-                    Name = t.Name,
-                    Picture = t.Picture,
-                    SolutionStatus = t.SolutionStatus,
-                    State = t.State,
-                    Type = t.Type,
-                    UserPoints = t.UserPoints,
-                    Version = t.Version
-                };
-                foreach (var a in t.ABCDPossibleAnswers)
-                    task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswer() { Answer = a.Answer, Id = a.Id, Task = task, TaskId = task.Id });
+                    GameAlert alert = new GameAlert()
+                    {
+                        Id = a.Id,
+                        Description = a.Description,
+                        Topic = a.Topic,
+                        AlertAppear = a.AlertAppear,
+                        Game = newGame,
+                        GameId = newGame.Id
+                    };
+                }
 
-                newGame.Tasks.Add(task);
-            }
-
-            foreach (var a in Game.Alerts)
-            {
-                GameAlert alert = new GameAlert()
+                foreach (var hs in Game.HighScores)
                 {
-                    Id = a.Id,
-                    Description = a.Description,
-                    Topic = a.Topic,
-                    AlertAppear = a.AlertAppear,
-                    Game = (Game)newGame,
-                    GameId = newGame.Id
-                };
-            }
+                    GameHighScore highScore = new GameHighScore()
+                    {
+                        Id = hs.Id,
+                        Points = hs.Points,
+                        UserLogin = hs.UserLogin,
+                        AchievedAt = hs.AchievedAt,
+                        Game = newGame,
+                        GameId = newGame.Id
+                    };
+                }
 
-            foreach (var hs in Game.HighScores)
-            {
-                GameHighScore highScore = new GameHighScore()
+                #endregion
+
+                #region adding tasks
+
+                var tasks = await _gameWebService.GetTasks(newGame.Id);
+
+                foreach (var t in tasks)
                 {
-                    Id = hs.Id,
-                    Points = hs.Points,
-                    UserLogin = hs.UserLogin,
-                    AchievedAt = hs.AchievedAt,
-                    Game = (Game)newGame,
-                    GameId = newGame.Id
-                };
-            }
+                    //todo: replace endDate when will be available in API
+                    //todo: add [JsonProperty(Name="something")] to GameTask.cs (WebService) when picture will be available in API
+                    //todo: add jsonProperty to GameTask.cs (WebService) when IsRepeatable will be available in API (now it's something strange - maxattemps - which we doesn't handle)
+                    //todo: consider what we gonna do with protected access to details preview of a game - maybe it should be changed in API
+                    var taskDTO = await _gameWebService.GetTaskDetails(newGame.Id, t.Id);
+                    var task = new GameTask()
+                    {
+                        AdditionalText = taskDTO.AdditionalText,
+                        Description = taskDTO.Description,
+                        EndDate = DateTime.Now.AddDays(2),//taskDTO.EndDate,
+                        Game = newGame,
+                        GameId = newGame.Id,
+                        Id = taskDTO.Id,
+                        IsNewTask = false,
+                        IsRepeatable = taskDTO.IsRepeatable,
+                        MaxPoints = taskDTO.MaxPoints,
+                        Name = taskDTO.Name,
+                        Picture = taskDTO.Picture,
+                        SolutionStatus = SolutionStatus.NotSend,
+                        State = taskDTO.State,
+                        Type = taskDTO.Type,
+                        UserPoints = taskDTO.UserPoints,
+                        Version = taskDTO.Version
+                    };
 
-            return newGame;
+                    if (task.Type == TaskType.ABCD)
+                    {
+                        foreach (var answerDTO in taskDTO.ABCDPossibleAnswers)
+                        {
+                            var answer = new ABCDPossibleAnswer()
+                            {
+                                Answer = answerDTO.Answer,
+                                CharId = answerDTO.CharId,
+                                Task = task,
+                            };
+                            task.ABCDPossibleAnswers.Add(answer);
+                        }
+                    }
+
+                    uow.GetRepository<ITask>().MarkForAdd(task);
+                    uow.Commit();
+                }
+
+                #endregion
+            }
         }
 
         #endregion

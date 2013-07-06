@@ -32,7 +32,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;MOCK</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -105,6 +105,8 @@
     <Compile Include="Converters\AlertTimeConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\ChangeToBackgroundConverter.cs" />
+    <Compile Include="Converters\TaskTypeToRowHeight.cs" />
+    <Compile Include="Converters\NewTaskToBackgroundConverter.cs" />
     <Compile Include="Converters\DateToVisibilityConverter.cs" />
     <Compile Include="Converters\DurationTimeConverter.cs" />
     <Compile Include="Converters\GameChangedToVisibilityConverter.cs" />
@@ -155,6 +157,7 @@
     <Compile Include="Tombstoning\TombstoningContainer.cs" />
     <Compile Include="Tombstoning\TombstoningVariables.cs" />
     <Compile Include="Utilities\AppbarManager.cs" />
+    <Compile Include="Utilities\CredentialsService.cs" />
     <Compile Include="Utilities\GameAuthorizationService.cs" />
     <Compile Include="Utilities\GPSLocation.cs" />
     <Compile Include="Utilities\LocalizationService.cs" />
@@ -252,6 +255,7 @@
     <Content Include="Images\appbar.repeat.png" />
     <Content Include="Images\appbarRefresh.png" />
     <Content Include="Images\appbarSearch.png" />
+    <Content Include="Images\gameicon.png" />
     <Content Include="Images\GameviewPanorama.png" />
     <Content Include="Images\MainPanorama.png" />
     <Content Include="Images\PivotPage.png">

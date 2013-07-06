@@ -84,7 +84,14 @@
                                                 <Setter Property="Margin" Value="0,0,5,5" />
                                             </Style>
                                         </Grid.Resources>
-                                        <Image Source="{Binding GameLogoFullUrl}" Grid.Column="0" Width="110" Height="110" Margin="5,0,10,0" VerticalAlignment="Top"/>
+                                        
+                                        <Grid>
+                                            <Image Source="{Binding GameLogoFullUrl}" Grid.Column="0" Width="110" Height="110" Margin="5,0,10,0" VerticalAlignment="Top"/>
+                                            <Border Background="#75000000" Width="110" Height="22" Margin="5,83,10,0" Visibility="{Binding ListOfChanges, Converter={StaticResource GameChangedToVisibilityConverter}}">
+                                                <TextBlock Foreground="{StaticResource FontColorWhite}" FontWeight="Light" Text="{Binding Path=AppResources.Changed, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="15" />
+                                            </Border>
+                                        </Grid>
+                                        
                                         <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0,-10,0,0">
                                             <Grid>
                                                 <Grid.RowDefinitions>
@@ -94,10 +101,7 @@
                                                     <RowDefinition Height="*"/>
                                                 </Grid.RowDefinitions>
 
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
-                                                    <Ellipse Fill="White" Width="10" Height="10" Visibility="{Binding ListOfChanges, Converter={StaticResource GameChangedToVisibilityConverter}}" />
-                                                </StackPanel>
+                                                <TextBlock Text="{Binding Name}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
 
                                                 <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,-10,0,0">
                                                     <StackPanel.Resources>
@@ -109,7 +113,7 @@
                                                     <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}" />
                                                 </StackPanel>
                                                 <TextBlock Text=" " Grid.Row="2" />
-                                                <StackPanel Orientation="Horizontal" Grid.Row="3">
+                                                <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="0,-4,0,0">
                                                     <StackPanel.Resources>
                                                         <Style TargetType="TextBlock">
                                                             <Setter Property="Margin" Value="0,0,5,5" />
@@ -156,8 +160,8 @@
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="*"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="{Binding Name}" Grid.Row="0" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
                                             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,-10,0,0">
@@ -169,8 +173,8 @@
                                                 <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,0,10,0"/>
                                                 <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
                                             </StackPanel>
-                                            <TextBlock Text=" " Grid.Row="2"/>
-                                            <StackPanel Orientation="Horizontal" Grid.Row="3">
+                                            <TextBlock Text=" " Grid.Row="2" />
+                                            <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="0,-15,0,0">
                                                 <StackPanel.Resources>
                                                     <Style TargetType="TextBlock">
                                                         <Setter Property="Margin" Value="0,0,5,5" />
@@ -187,7 +191,8 @@
                                                 <TextBlock Text="|" />
                                                 <TextBlock Text="{Binding GameState, Converter={StaticResource GameStateConverter}}"/>
                                                 <TextBlock Text="{Binding Path=AppResources.Rank, Source={StaticResource LocalizedStrings}}" Visibility="{Binding Rank, Converter={StaticResource ValueToVisibilityConverter}}"/>
-                                                <TextBlock Text="{Binding Rank, Converter={StaticResource RankConverter}}" Visibility="{Binding Rank, Converter={StaticResource ValueToVisibilityConverter}}"/>                                            </StackPanel>
+                                                <TextBlock Text="{Binding Rank, Converter={StaticResource RankConverter}}" Visibility="{Binding Rank, Converter={StaticResource ValueToVisibilityConverter}}"/>                                            
+                                            </StackPanel>
                                         </Grid>
                                     </Grid>
                                 </DataTemplate>

@@ -480,5 +480,28 @@ namespace UrbanGame.Storage
             }
         }
         #endregion
+
+        #region IsNewTask
+
+        private bool _isNewTask;
+
+        [Column]
+        public bool IsNewTask
+        {
+            get
+            {
+                return _isNewTask;
+            }
+            set
+            {
+                if (_isNewTask != value)
+                {
+                    NotifyPropertyChanging("IsNewTask");
+                    _isNewTask = value;
+                    NotifyPropertyChanged("IsNewTask");
+                }
+            }
+        }
+        #endregion
     }
 }

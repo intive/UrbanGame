@@ -29,7 +29,7 @@ namespace UrbanGame.Utilities
         {
             string str = String.Concat(diff.Select(d => d + ", "));
 
-            return "Changes: " + str.Substring(0, str.Length - 2);
+            return str.Substring(0, str.Length - 2);
         }
 
         protected void ShowToast(ToastData toast)

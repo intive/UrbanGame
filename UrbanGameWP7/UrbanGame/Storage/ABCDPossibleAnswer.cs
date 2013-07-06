@@ -20,7 +20,7 @@ namespace UrbanGame.Storage
 
         private int _id;
 
-        [Column(IsPrimaryKey = true)]
+        [Column(IsPrimaryKey = true, IsDbGenerated=true, AutoSync=AutoSync.OnInsert)]
         public int Id
         {
             get
@@ -34,6 +34,29 @@ namespace UrbanGame.Storage
                     NotifyPropertyChanging("Id");
                     _id = value;
                     NotifyPropertyChanged("Id");
+                }
+            }
+        }
+        #endregion
+
+        #region CharId
+
+        private char _charId;
+
+        [Column]
+        public char CharId
+        {
+            get
+            {
+                return _charId;
+            }
+            set
+            {
+                if (_charId != value)
+                {
+                    NotifyPropertyChanging("CharId");
+                    _charId = value;
+                    NotifyPropertyChanged("CharId");
                 }
             }
         }

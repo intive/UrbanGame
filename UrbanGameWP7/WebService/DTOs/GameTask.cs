@@ -4,24 +4,26 @@ using System.Linq;
 using System.Text;
 using Common;
 using System.Data.Linq;
+using Newtonsoft.Json;
 
-namespace WebService.BOMock
+namespace WebService.DTOs
 {
-    public class TaskMock : BOBase,  ITask
+    public class GameTask : DTOBase, ITask
     {
-        public TaskMock()
+        public GameTask()
         {
-            EntitySet<ABCDPossibleAnswerMock> es = new EntitySet<ABCDPossibleAnswerMock>(OnAnswerAdded, OnAnswerRemoved);
-            _abcdPossibleAnswers =  new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswerMock>(es);
+            EntitySet<ABCDPossibleAnswer> es = new EntitySet<ABCDPossibleAnswer>(OnAnswerAdded, OnAnswerRemoved);
+            _abcdPossibleAnswers = new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswer>(es);
 
-            EntitySet<TaskSolutionMock> es2 = new EntitySet<TaskSolutionMock>(OnSolutionAdded, OnSolutionRemoved);
-            _solutions = new EntityEnumerable<IBaseSolution, TaskSolutionMock>(es2);
+            EntitySet<TaskSolution> es2 = new EntitySet<TaskSolution>(OnSolutionAdded, OnSolutionRemoved);
+            _solutions = new EntityEnumerable<IBaseSolution, TaskSolution>(es2);
         }
 
         #region Id
 
         private int _id;
 
+        [JsonProperty(PropertyName = "tid")]
         public int Id
         {
             get
@@ -172,6 +174,11 @@ namespace WebService.BOMock
         }
         #endregion
 
+        #region ABCDChoices - for json parser
+        [JsonProperty("choices")]
+        public List<ABCDPossibleAnswer> ABCDChoices { get; set; }
+        #endregion
+
         #region ITask.ABCDPossibleAnswers
 
         private IEntityEnumerable<IABCDPossibleAnswer> _abcdPossibleAnswers;
@@ -180,16 +187,28 @@ namespace WebService.BOMock
         {
             get
             {
-                return _abcdPossibleAnswers;
+                if (ABCDChoices != null)
+                {
+                    var es = new EntitySet<ABCDPossibleAnswer>(OnAnswerAdded, OnAnswerRemoved);
+
+                    foreach (var answ in ABCDChoices)
+                        es.Add(answ);
+
+                    return new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswer>(es);
+                }
+                else
+                {
+                    return _abcdPossibleAnswers;
+                }
             }
         }
 
-        private void OnAnswerAdded(ABCDPossibleAnswerMock answer)
+        private void OnAnswerAdded(ABCDPossibleAnswer answer)
         {
             answer.Task = this;
         }
 
-        private void OnAnswerRemoved(ABCDPossibleAnswerMock answer)
+        private void OnAnswerRemoved(ABCDPossibleAnswer answer)
         {
             answer.Task = null;
         }
@@ -207,12 +226,12 @@ namespace WebService.BOMock
             }
         }
 
-        private void OnSolutionAdded(TaskSolutionMock solution)
+        private void OnSolutionAdded(TaskSolution solution)
         {
             solution.Task = this;
         }
 
-        private void OnSolutionRemoved(TaskSolutionMock solution)
+        private void OnSolutionRemoved(TaskSolution solution)
         {
             solution.Task = null;
         }
@@ -393,5 +412,27 @@ namespace WebService.BOMock
             }
         }
         #endregion
+
+        #region IsNewTask
+
+        private bool _isNewTask;
+
+        public bool IsNewTask
+        {
+            get
+            {
+                return _isNewTask;
+            }
+            set
+            {
+                if (_isNewTask != value)
+                {
+                    NotifyPropertyChanging("IsNewTask");
+                    _isNewTask = value;
+                    NotifyPropertyChanged("IsNewTask");
+                }
+            }
+        }
+        #endregion        
     }
 }

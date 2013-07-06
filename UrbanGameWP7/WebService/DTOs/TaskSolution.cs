@@ -5,15 +5,15 @@ using System.Data.Linq;
 using System.Linq;
 using System.Text;
 
-namespace WebService.BOMock
+namespace WebService.DTOs
 {
-    public class TaskSolutionMock : BOBase, 
+    public class TaskSolution : DTOBase, 
         IGPSSolution, IPhotoSolution, IOpenQuestionSolution, IABCDSolution, IQRCodeSolution
     {
-        public TaskSolutionMock() : base()
+        public TaskSolution() : base()
         {
-            EntitySet<ABCDUserAnswerMock> es = new EntitySet<ABCDUserAnswerMock>(OnABCDUserAnswerAdded, OnABCDUserAnswerRemoved);
-            _abcdUserAnswers = new EntityEnumerable<IABCDUserAnswer, ABCDUserAnswerMock>(es);
+            EntitySet<ABCDUserAnswer> es = new EntitySet<ABCDUserAnswer>(OnABCDUserAnswerAdded, OnABCDUserAnswerRemoved);
+            _abcdUserAnswers = new EntityEnumerable<IABCDUserAnswer, ABCDUserAnswer>(es);
         }
 
         #region Id
@@ -160,12 +160,12 @@ namespace WebService.BOMock
             }
         }
 
-        private void OnABCDUserAnswerAdded(ABCDUserAnswerMock answer)
+        private void OnABCDUserAnswerAdded(ABCDUserAnswer answer)
         {
             answer.Solution = this;
         }
 
-        private void OnABCDUserAnswerRemoved(ABCDUserAnswerMock answer)
+        private void OnABCDUserAnswerRemoved(ABCDUserAnswer answer)
         {
             answer.Solution = null;
         }

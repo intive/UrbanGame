@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using UrbanGame.Storage;
 using System.Threading.Tasks;
 using System.Threading;
+using UrbanGame.Localization;
 
 namespace UrbanGame.ViewModels
 {
@@ -71,17 +72,23 @@ namespace UrbanGame.ViewModels
         {
             if (IsActive && game.Id == GameId)
             {
-                using (var uow = _unitOfWorkLocator())
+                Task.Factory.StartNew(async () =>
                 {
-                    Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
+                    if (game.NewTasks)
+                        await RefreshActiveTasks();
 
-                    if (!String.IsNullOrEmpty(Game.ListOfChanges))
+                    using (var uow = _unitOfWorkLocator())
                     {
-                        MessageBox.Show(Game.ListOfChanges);
-                        Game.ListOfChanges = null;
-                        uow.Commit();
+                        Game = uow.GetRepository<IGame>().All().First(g => g.Id == game.Id);
+
+                        if (!String.IsNullOrEmpty(Game.ListOfChanges))
+                        {
+                            ListOfChanges = Game.ListOfChanges;
+                            Game.ListOfChanges = null;
+                            uow.Commit();
+                        }
                     }
-                }
+                });
             }
         }
         #endregion
@@ -409,6 +416,27 @@ namespace UrbanGame.ViewModels
 
         #endregion
 
+        #region ListOfChanges
+
+        private string _listOfChanges;
+
+        public string ListOfChanges
+        {
+            get
+            {
+                return _listOfChanges;
+            }
+            set
+            {
+                if (_listOfChanges != value)
+                {
+                    _listOfChanges = value;
+                    NotifyOfPropertyChange(() => ListOfChanges);
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
         #region lifecycle
@@ -435,22 +463,22 @@ namespace UrbanGame.ViewModels
             base.OnViewLoaded(view);
             VisualStateName = "Normal";
             
-            new Timer(new TimerCallback((obj) =>
+            Task.Factory.StartNew(() =>
                 {
                     //Game changes
                     if (!String.IsNullOrEmpty(Game.ListOfChanges))
-                        System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
-                        {
-                            if (Game.GameState != GameState.Won && Game.GameState != GameState.Lost)
-                                MessageBox.Show(Game.ListOfChanges);
+                    {
+                        if (Game.GameState != GameState.Won && Game.GameState != GameState.Lost)
+                            ListOfChanges = Game.ListOfChanges;
 
-                            Game.ListOfChanges = null;
-                            using (var uow = _unitOfWorkLocator())
-                            {
-                                uow.GetRepository<IGame>().All().First(g => g.Id == GameId).ListOfChanges = null;
-                                uow.Commit();
-                            }
-                        });
+                        Game.ListOfChanges = null;
+                        using (var uow = _unitOfWorkLocator())
+                        {
+                            var dbGame = uow.GetRepository<IGame>().All().First(g => g.Id == GameId);
+                            dbGame.ListOfChanges = null;
+                            uow.Commit();
+                        }
+                    }
 
                     //You won/You lost banner
                     if (!Game.GameOverDisplayed && (Game.GameState == GameState.Won || Game.GameState == GameState.Lost))
@@ -472,7 +500,7 @@ namespace UrbanGame.ViewModels
                             uow.Commit();
                         }
                     }  
-                }), null, 700, System.Threading.Timeout.Infinite);
+                });
         }
 
         #endregion
@@ -527,6 +555,7 @@ namespace UrbanGame.ViewModels
             using (var uow = _unitOfWorkLocator())
             {
                 IQueryable<IGame> games = uow.GetRepository<IGame>().All();
+                //todo: points, numberOfPlayers
                 Game = games.FirstOrDefault(g => g.Id == GameId) ?? await _gameWebService.GetGameInfo(GameId);
             }
         }
@@ -689,16 +718,23 @@ namespace UrbanGame.ViewModels
         {
             if (MessageBox.Show("leave", "leave", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                using (IUnitOfWork uow = _unitOfWorkLocator())
+                var result = await _gameWebService.LeaveGame(Game.Id);
+                if (result)
                 {
-
-                    IGame game = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
-                    game.GameState = GameState.Inactive;
-                    game.ListOfChanges = null;
-                    uow.Commit();
+                    using (IUnitOfWork uow = _unitOfWorkLocator())
+                    {
+                        IGame game = uow.GetRepository<IGame>().All().First(x => x.Id == Game.Id);
+                        game.GameState = GameState.Inactive;
+                        game.ListOfChanges = null;
+                        uow.Commit();
+                    }
+                    await RefreshGame();
+                    _navigationService.GoBack();
                 }
-                await RefreshGame();
-                _navigationService.GoBack();
+                else
+                {
+                    MessageBox.Show(AppResources.ErrorLeavingGame);
+                }
             }
         }
 

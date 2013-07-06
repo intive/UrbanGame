@@ -26,7 +26,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;MOCK</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -80,23 +80,24 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BOMock\ABCDPossibleAnswerMock.cs" />
-    <Compile Include="BOMock\ABCDUserAnswerMock.cs" />
-    <Compile Include="BOMock\AlertMock.cs" />
-    <Compile Include="BOMock\BOBase.cs" />
-    <Compile Include="BOMock\GameMock.cs" />
+    <Compile Include="DTOs\ABCDPossibleAnswer.cs" />
+    <Compile Include="DTOs\ABCDUserAnswer.cs" />
+    <Compile Include="DTOs\Alert.cs" />
+    <Compile Include="DTOs\DTOBase.cs" />
+    <Compile Include="DTOs\HighScore.cs" />
+    <Compile Include="DTOs\ListOfTasks.cs" />
     <Compile Include="DTOs\Game.cs" />
     <Compile Include="DTOs\ListOfGames.cs" />
-    <Compile Include="BOMock\HighScoreMock.cs" />
-    <Compile Include="BOMock\TaskSolutionMock.cs" />
+    <Compile Include="DTOs\GameTask.cs" />
+    <Compile Include="DTOs\TaskSolution.cs" />
     <Compile Include="GameWebService.cs" />
     <Compile Include="GameChangesManager.cs" />
     <Compile Include="GameWebServiceMock.cs" />
+    <Compile Include="JsonConverters\JsonTaskTypeConverter.cs" />
     <Compile Include="JsonConverters\JsonDateTimeConverter.cs" />
     <Compile Include="JsonConverters\JsonEnumConverter.cs" />
     <Compile Include="JsonConverters\JsonGameTypeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BOMock\TaskMock.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
@@ -106,9 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />

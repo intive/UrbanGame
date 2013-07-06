@@ -17,7 +17,14 @@ namespace Common
         /// </summary>
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <returns>a bool</returns>
-        bool SingUpToTheGame(int gid);
+        Task<bool> JoinGame(int gid);
+
+        /// <summary>
+        /// Method responses for leaving the game
+        /// </summary>
+        /// <param name="gid">Integer parameter - game's identifier</param>
+        /// <returns>a bool</returns>
+        Task<bool> LeaveGame(int gid);
 
         /// <summary>
         /// Returns state of game
@@ -45,7 +52,7 @@ namespace Common
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <returns>Task's details</returns>
-        ITask GetTaskDetails(int gid, int tid);
+        Task<ITask> GetTaskDetails(int gid, int tid);
 
         /// <summary>
         /// Returns task's details (generic version)
@@ -53,22 +60,7 @@ namespace Common
         /// <param name="gid">Integer parameter - game's identifier</param>
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <returns>Task's details</returns>
-        TTaskType GetTaskDetails<TTaskType>(int gid, int tid) where TTaskType : ITask;
-
-        /// <summary>
-        /// Returns user game progress
-        /// </summary>
-        /// <param name="gid">Integer parameter - game's identifier</param>
-        /// <returns>game progress</returns>
-        int GetGameProgress(int gid);
-
-        /// <summary>
-        /// Returns user task progress
-        /// </summary>
-        /// <param name="gid">Integer parameter - game's identifier</param>
-        /// <param name="tid">Integer parameter - task's identifier</param>
-        /// <returns>task progress</returns>
-        int GetTaskProgress(int gid, int tid);
+        Task<TTaskType> GetTaskDetails<TTaskType>(int gid, int tid) where TTaskType : ITask;
 
         /// <summary>
         /// Sends solution to the web server
@@ -77,7 +69,7 @@ namespace Common
         /// <param name="tid">Integer parameter - task's identifier</param>
         /// <param name="solution">Solution of task</param>
         /// <returns>a bool</returns>
-        SolutionResultScore SubmitTaskSolution(int gid, int tid, IBaseSolution solution);
+        Task<SolutionResultScore> SubmitTaskSolution(int gid, int tid, IBaseSolution solution);
 
         /// <summary>
         /// Method responses for user authorization

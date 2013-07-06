@@ -4,10 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
 
-namespace WebService.BOMock
+namespace WebService.DTOs
 {
 
-    public class BOBase : INotifyPropertyChanged, INotifyPropertyChanging
+    public class DTOBase : INotifyPropertyChanged, INotifyPropertyChanging
     {
         #region INotifyPropertyChanged Members
 

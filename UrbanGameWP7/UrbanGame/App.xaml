@@ -38,6 +38,8 @@
         <conv:NearbyGameStartConverter x:Key="NearbyGameStartConverter" />
         <conv:AlertTimeConverter x:Key="AlertTimeConverter" />
         <conv:ChangeToBackgroundConverter x:Key="ChangeToBackgroundConverter" />
+        <conv:NewTaskToBackgroundConverter x:Key="NewTaskToBackgroundConverter" />
+        <conv:TaskTypeToRowHeight x:Key="TaskTypeToRowHeight" />
 
         <Style x:Key="ItemStyle" TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

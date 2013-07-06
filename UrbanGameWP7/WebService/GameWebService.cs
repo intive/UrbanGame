@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Device.Location;
 using System.Linq;
 using System.Text;
-using WebService.BOMock;
 using System.IO;
 using System.Windows;
 using System.Net;
@@ -18,28 +17,26 @@ namespace WebService
 {
     public class GameWebService : IGameWebService
     {
-        #region GameWebService
+        ICredentialsService _credentialsService;
 
-        /// <summary>
-        /// Simple constructor
-        /// </summary>
-        public GameWebService()
+        public GameWebService(ICredentialsService credentialsService)
         {
+            _credentialsService = credentialsService;
+
             ListOfGames = new List<IGame>();
             ListOfTasks = new List<ITask>();
         }
 
-        #endregion
-
         #region WebAPI
 
         const string APIurl = "http://urbangame.patronage.blstream.com/api/";
-        JsonConverter[] _jsonConverters = new JsonConverter[] { new JsonGameTypeConverter(), new JsonEnumConverter(), new JsonDateTimeConverter() };
+        JsonConverter[] _jsonConverters = new JsonConverter[] 
+        { 
+            new JsonGameTypeConverter(), new JsonEnumConverter(), 
+            new JsonDateTimeConverter(), new JsonTaskTypeConverter() 
+        };
 
-        private static string _username = "maxikq";
-        private static string _password = "pass";
-
-        private static async Task<WebApiResponse> GetResponse(WebRequest request)
+        private async Task<WebApiResponse> GetResponse(WebRequest request)
         {
             WebApiResponse result = new WebApiResponse() { Success = true, Status = HttpStatusCode.OK };
 
@@ -77,19 +74,30 @@ namespace WebService
             return result;
         }
 
-        public static async Task<WebApiResponse> GetJson(string relativeUrl)
+        public async Task<WebApiResponse> GetJson(string relativeUrl)
         {           
             WebRequest request = HttpWebRequest.Create(APIurl + relativeUrl);
-            request.Credentials = new NetworkCredential() { UserName = _username, Password = _password };
+
+            if (_credentialsService.IsUserAuthenticated)
+                request.Credentials = new NetworkCredential() 
+                {
+                    UserName = _credentialsService.AuthenticatedUser.Login,
+                    Password = _credentialsService.AuthenticatedUser.Password
+                };
             return await GetResponse(request);
         }
 
-        public static async Task<WebApiResponse> PostJson(string relativeUrl, string postData)
+        public async Task<WebApiResponse> PostJson(string relativeUrl, string postData, string method = "POST")
         {            
             WebRequest request = HttpWebRequest.Create(APIurl + relativeUrl);
-            request.Method = "POST";
+            request.Method = method;
             request.ContentType = "application/json";
-            request.Credentials = new NetworkCredential() { UserName = _username, Password = _password };            
+            if (_credentialsService.IsUserAuthenticated)
+                request.Credentials = new NetworkCredential()
+                {
+                    UserName = _credentialsService.AuthenticatedUser.Login,
+                    Password = _credentialsService.AuthenticatedUser.Password
+                };           
 
             Task<Stream> requestTask = request.GetRequestStreamAsync();
             await requestTask.ContinueWith((taskParam) =>
@@ -140,27 +148,19 @@ namespace WebService
         #endregion
         #endregion
 
-        #region ChangeGame
-        /// <summary>
-        /// Shows how GameChanged works
-        /// </summary>
-        /// <param name="gid"></param>
-        public void ChangeGame(int gid)
+        #region JoinGame
+        public async Task<bool> JoinGame(int gid)
         {
-            foreach (IGame g in ListOfGames)
-            {
-                if (g.Id == gid)
-                {
-                    g.NumberOfCompletedTasks = 1;
-                }
-            }
+            WebApiResponse result = await PostJson("games/" + gid.ToString(), "{}");
+            return result.Success;
         }
         #endregion
 
-        #region SingUpToTheGame
-        public bool SingUpToTheGame(int gid)
+        #region LeaveGame
+        public async Task<bool> LeaveGame(int gid)
         {
-            throw new NotImplementedException();
+            WebApiResponse result = await PostJson("my/games/" + gid.ToString(), "{}", "DELETE");
+            return result.Success;
         }
         #endregion
 
@@ -180,64 +180,89 @@ namespace WebService
         }
         #endregion
 
-        #region GetGameProgress
-        public int GetGameProgress(int gid)
-        {
-            return 0;
-        }
-        #endregion
-
         #region GetTasks
         public async Task<ITask[]> GetTasks(int gid)
         {
-            return ListOfTasks.Where(task => task.Game == null ? false : task.Game.Id == gid).ToArray();
+            //todo: consider sending lat & lot
+            return (await GetViaApi<ListOfTasks>("games/{0}/tasks?lat=1&lon=1", gid)).Tasks.ToArray();
         }
         #endregion
 
         #region GetTaskDetails
-        public ITask GetTaskDetails(int gid, int tid)
-        {
-            return new TaskMock()
-            {
-                Id = gid,
-                Name = "Where is he",
-                IsRepeatable = true,
-                Description = "Lorem ipsum dolor sit amet, consecteturadipiscing elit. Aliquam sit amet elementum nulla. Aliquam sed labortis libero. In id orci ac turpis adipiscing lictus. Liquam sed lobortis libero. In id orci ac turpis adipiscing luctus.",
-                Picture = "/ApplicationIcon.png",
-                UserPoints = 0,
-                MaxPoints = 12,
-                EndDate = DateTime.Now.AddHours(21).AddDays(4),
-                Type = TaskType.GPS
-            };
+        public async Task<ITask> GetTaskDetails(int gid, int tid)
+        {           
+            return await GetViaApi<GameTask>("games/{0}/tasks/{1}/static", gid, tid);
         }
         #endregion
 
         #region GetTaskDetails generic
-        public TTaskType GetTaskDetails<TTaskType>(int gid, int tid) 
+        public async Task<TTaskType> GetTaskDetails<TTaskType>(int gid, int tid) 
             where TTaskType : ITask
         {
-            return (TTaskType)GetTaskDetails(gid, tid);
+            return (TTaskType)await GetTaskDetails(gid, tid);
         }
         #endregion
 
-        #region GetTaskProgress
-        public int GetTaskProgress(int gid, int tid)
-        {
-            return GetTaskDetails(gid, tid).UserPoints ?? 0;
-        }
-        #endregion        
-
         #region SubmitTaskSolution
-        public SolutionResultScore SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
+        private async Task<SolutionResultScore> SubmitGPSSolution(int gid, int tid, IGPSSolution solution)
         {
-            int r = new Random().Next(100);
+            string postData = "{\"lat\":"  + solution.Latitude.ToString().Replace(',', '.') +
+                              ", \"lon\":" + solution.Longitude.ToString().Replace(',', '.') + "}";
+            var result = await PostJson(String.Format("games/{0}/tasks/{1}", gid, tid), postData);
 
-            if (r < 20)
-                return new SolutionResultScore(){ SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = r  };
-            else if (r < 60)
-                return new SolutionResultScore(){ SubmitResult = SubmitResult.AnswerCorrect, ScoredPoints = r  };
+            if (!result.Success)
+                return new SolutionResultScore() { SubmitResult = SubmitResult.Timeout };
             else
-                return new SolutionResultScore() { SubmitResult = SubmitResult.ScoreDelayed, ScoredPoints = r };
+            {
+                //todo: parse response or check result in another place
+                int r = new Random().Next(100);
+
+                if (r < 20)
+                    return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = r };
+                else if (r < 60)
+                    return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerCorrect, ScoredPoints = r };
+                else
+                    return new SolutionResultScore() { SubmitResult = SubmitResult.ScoreDelayed, ScoredPoints = r };
+            }
+        }
+
+        private async Task<SolutionResultScore> SubmitABCDSolution(int gid, int tid, IABCDSolution solution)
+        {
+            string choices = "";
+            foreach (var answer in solution.ABCDUserAnswers)
+                if (answer.Answer)
+                    choices += ", \"" + answer.ABCDPossibleAnswer.CharId + "\"";
+
+            if (choices.Substring(2).Trim().Length == 0)
+                throw new InvalidOperationException("No answer has been selected.");
+
+            string postData = "{\"options\":[" + choices.Substring(2) + "]}";
+            var result = await PostJson(String.Format("games/{0}/tasks/{1}", gid, tid), postData);
+
+            if (!result.Success)
+                return new SolutionResultScore() { SubmitResult = SubmitResult.Timeout };
+            else
+            {
+                //todo: parse response or check result in another place
+                int r = new Random().Next(100);
+
+                if (r < 20)
+                    return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = r };
+                else if (r < 60)
+                    return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerCorrect, ScoredPoints = r };
+                else
+                    return new SolutionResultScore() { SubmitResult = SubmitResult.ScoreDelayed, ScoredPoints = r };
+            }
+        }
+
+        public async Task<SolutionResultScore> SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
+        {
+            if (solution is IGPSSolution)
+                return await SubmitGPSSolution(gid, tid, (IGPSSolution)solution);
+            else if (solution is IABCDSolution)
+                return await SubmitABCDSolution(gid, tid, (IABCDSolution)solution);
+
+            throw new ArgumentOutOfRangeException("Unrecognized solution's type.", (Exception)null);
         }
         #endregion
 
@@ -280,24 +305,32 @@ namespace WebService
         #region Authorize
         public async Task<AuthorizeState> Authorize(string username, string password)
         {
-            _username = username;
-            _password = password;
-
-            WebApiResponse result = await GetJson("login");
-
-            if (!result.Success)
+            _credentialsService.AuthenticatedUser = new User() { Login = username, Password = password };
+            try
             {
-                switch (result.Status)
+                WebApiResponse result = await GetJson("login");
+
+                if (!result.Success)
                 {
-                    case HttpStatusCode.Unauthorized:
-                        return AuthorizeState.WrongPassword;
-                    default:
-                        return AuthorizeState.Unknown;
+                    _credentialsService.AuthenticatedUser = null;
+
+                    switch (result.Status)
+                    {
+                        case HttpStatusCode.Unauthorized:
+                            return AuthorizeState.WrongPassword;
+                        default:
+                            return AuthorizeState.Unknown;
+                    }
+                }
+                else
+                {
+                    return AuthorizeState.Success;
                 }
             }
-            else
+            catch
             {
-                return AuthorizeState.Success;
+                _credentialsService.AuthenticatedUser = null;
+                throw;
             }
         }
         #endregion
@@ -320,8 +353,8 @@ namespace WebService
         public IAlert[] Alerts()
         {
             return new IAlert[] {
-                new AlertMock(){Id = 1, Topic = "Unreal alert title", Description = "Sth happened at route 27"},
-                new AlertMock(){Id = 2, Topic = "Unreal alert title", Description = "Sth happened at route 27"}};
+                new Alert(){Id = 1, Topic = "Unreal alert title", Description = "Sth happened at route 27"},
+                new Alert(){Id = 2, Topic = "Unreal alert title", Description = "Sth happened at route 27"}};
         }
         #endregion
 
@@ -329,9 +362,9 @@ namespace WebService
         public IHighScore[] HighScores()
         {
             return new IHighScore[]{
-                new HighScoreMock(){Id = 1, UserLogin = "Korona", Points =199},
-                new HighScoreMock(){Id = 1, UserLogin = "Amanda99", Points =99},
-                new HighScoreMock(){Id = 2, UserLogin = "LoganXxX", Points =299}};
+                new HighScore(){Id = 1, UserLogin = "Korona", Points =199},
+                new HighScore(){Id = 1, UserLogin = "Amanda99", Points =99},
+                new HighScore(){Id = 2, UserLogin = "LoganXxX", Points =299}};
         }
         #endregion
     }
