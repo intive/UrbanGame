@@ -101,5 +101,27 @@ namespace WebService.BOMock
         }
 
         #endregion
+
+        #region AchievedAt
+
+        private DateTime _achievedAt;
+
+        public DateTime AchievedAt
+        {
+            get
+            {
+                return _achievedAt;
+            }
+            set
+            {
+                if (_achievedAt != value)
+                {
+                    NotifyPropertyChanging("AchievedAt");
+                    _achievedAt = value;
+                    NotifyPropertyChanged("AchievedAt");
+                }
+            }
+        }
+        #endregion
     }
 }

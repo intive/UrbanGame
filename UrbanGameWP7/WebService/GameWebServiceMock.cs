@@ -37,45 +37,49 @@ namespace WebService
                 new GameMock(){Name = "The Quest for NEETs", GameType = GameType.Race, OperatorName = "Ron Jeremy", NumberOfPlayers = 23,Id = 5, GameLogo = "/ApplicationIcon.png", GameStart = new DateTime(2013,5,9,21,5,8),GameEnd = DateTime.Now.AddDays(2).AddHours(10)}});
 
             string lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam mauris vel elit tincidunt ac bibendum tortor scelerisque. Mauris nisi augue, malesuada ac lobortis sed, rhoncus et mauris. Vivamus dictum turpis congue arcu euismod in pulvinar mi volutpat. Aliquam euismod pharetra velit eu sagittis. Proin et nisi nibh, ut egestas enim.";
+            string accident = "There might be a problem getting to center, bacause of bus crash. Furthermore the police imidiately came and now tries to figure out what realy happened.";
+
             int taskId = 1;
             int possibleAnswerId = 1;
             int alertId = 1;
             int highScoreId = 1;
 
-            foreach (var g in ListOfGames)
+            foreach(var g in ListOfGames)
             {
-                var task = new TaskMock() { Id = taskId++, Name = "IQ Test!", AdditionalText = "What is red with dots?", Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
-                task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Zebra" });
-                task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Dragon" });
-                task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Leaf" });
-                task.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Ladybug" });
-                g.Tasks.Add(task);
-                ListOfTasks.Add(task);
-
                 var task1 = new TaskMock() { Id = taskId++, Name = "Find Wally", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = true, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
                 g.Tasks.Add(task1);
                 ListOfTasks.Add(task1);
 
-                var task2 = new TaskMock() { Id = taskId++, Name = "Brain Storm!", AdditionalText = "What color is a red car?", Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = true, UserPoints = null, MaxPoints = 30, EndDate = DateTime.Now.AddDays(1).AddHours(15), Version = 1 };
-                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Green" });
-                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Red" });
-                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Blue" });
-                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "DarkBlack" });
+                var task2 = new TaskMock() { Id = taskId++, Name = "IQ Test!", AdditionalText = "What is red with dots?",  Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Zebra" });
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Dragon" });
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Leaf" });
+                task2.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Ladybug" });
                 g.Tasks.Add(task2);
                 ListOfTasks.Add(task2);
 
-                var task3 = new TaskMock() { Id = taskId++, Name = "Find Wally 2", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(1), Version = 1 };
-                g.Tasks.Add(task3);
+                var task3 = new TaskMock() { Id = taskId++, Name = "Meet Frank", Type = TaskType.GPS, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = false, UserPoints = null, MaxPoints = 20, EndDate = DateTime.Now.AddDays(3).AddHours(7), Version = 1 };
                 ListOfTasks.Add(task3);
+                g.Tasks.Add(task3);
 
-                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "XTerminator", Points = 329 });
-                g.Alerts.Add(new AlertMock() { Id = alertId++, Topic = "Information", Description = "There might be a problem getting to center, bacause of bus crash" });
-                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "RunnungRabit", Points = 310 });
-                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "$ebastian", Points = 150 });
-                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "xX_Warior_Xx", Points = 90 });
+                var task4 = new TaskMock() { Id = taskId++, Name = "Brain Storm!", AdditionalText = "What color is a red car?", Type = TaskType.ABCD, Description = lorem, Picture = "/ApplicationIcon.png", SolutionStatus = SolutionStatus.NotSend, IsRepeatable = true, UserPoints = null, MaxPoints = 30, EndDate = DateTime.Now.AddDays(1).AddHours(15), Version = 1 };
+                task4.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Green" });
+                task4.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Red"});
+                task4.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "Blue"});
+                task4.ABCDPossibleAnswers.Add(new ABCDPossibleAnswerMock() { Id = possibleAnswerId++, Answer = "DarkBlack"});
+                g.Tasks.Add(task4);
+                ListOfTasks.Add(task4);
+
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "XTerminator", Points = 329, AchievedAt = DateTime.Now.AddDays(1).AddHours(13).AddMinutes(37) });
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "RunnungRabit", Points = 310, AchievedAt = DateTime.Now.AddDays(1).AddHours(3).AddMinutes(7) });
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "$ebastian", Points = 150, AchievedAt = DateTime.Now.AddHours(9).AddMinutes(27) });
+                g.HighScores.Add(new HighScoreMock() { Id = highScoreId++, UserLogin = "xX_Warior_Xx", Points = 90, AchievedAt = DateTime.Now.AddHours(1).AddMinutes(1) });
+
+                g.Alerts.Add(new AlertMock() { Id = alertId++, Topic = "Information", Description = accident, AlertAppear = new DateTime(2013, 6, 27, 12, 10, 0) });
+                g.Alerts.Add(new AlertMock() { Id = alertId++, Topic = "Information", Description = accident, AlertAppear = new DateTime(2013, 6, 27, 11, 10, 0) });
+                g.Alerts.Add(new AlertMock() { Id = alertId++, Topic = "Information", Description = accident, AlertAppear = new DateTime(2013, 7, 4, 12, 1, 0) });
             }
-
-        }
+        }
         #endregion
 
         #region Containers
@@ -205,14 +209,13 @@ namespace WebService
             {
                 if (!task.IsRepeatable)
                     task.State = TaskState.Accomplished;
-                task.UserPoints = r;
+
                 return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = 0 };
             }
             else if (r < 60)
             {
                 if (!task.IsRepeatable || task.MaxPoints == r)
                     task.State = TaskState.Accomplished;
-                task.UserPoints = r;
                 return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerCorrect, ScoredPoints = r };
             }
             else
@@ -228,13 +231,12 @@ namespace WebService
         {
             SolutionStatusResponse result = new SolutionStatusResponse();
             result.Status = new Random().Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
+            result.Status = new Random().Next(10) >= 5 ? SolutionStatus.Accepted : SolutionStatus.Rejected;
             result.Points = result.Status == SolutionStatus.Rejected ? 0 : new Random().Next(30);
-
             var task = ListOfTasks.First(t => t.Id == taskId);
             if ((result.Status == SolutionStatus.Accepted && result.Points == task.MaxPoints) || !task.IsRepeatable)
                 task.State = TaskState.Accomplished;
             task.UserPoints = result.Points;
-
             return result;
         }
 
@@ -258,7 +260,7 @@ namespace WebService
 
         #region UserNearbyGames
         public async Task<IGame[]> UserNearbyGames(GeoCoordinate coordinate)
-        {
+        {        
             return ListOfGames.ToArray();
         }
         #endregion

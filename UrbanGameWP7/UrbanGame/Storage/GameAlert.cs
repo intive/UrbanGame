@@ -155,5 +155,28 @@ namespace UrbanGame.Storage
         }
 
         #endregion
+
+        #region AlertAppear
+
+        private DateTime _alertAppear;
+
+        [Column]
+        public DateTime AlertAppear
+        {
+            get
+            {
+                return _alertAppear;
+            }
+            set
+            {
+                if (_alertAppear != value)
+                {
+                    NotifyPropertyChanging("AlertAppear");
+                    _alertAppear = value;
+                    NotifyPropertyChanged("AlertAppear");
+                }
+            }
+        }
+        #endregion
     }
 }

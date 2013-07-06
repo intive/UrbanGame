@@ -65,6 +65,7 @@ namespace UrbanGameTests.Tests
             {
                 Id = 1,
                 Topic = "Operator",
+                AlertAppear = DateTime.Now,
                 Description = "There were more than one possible answears before, now only 1 is correct"
             };
 
@@ -72,6 +73,7 @@ namespace UrbanGameTests.Tests
             {
                 Id = 1,
                 UserLogin = "LoganXxX",
+                AchievedAt = DateTime.Now.AddDays(1).AddHours(2),
                 Points = 130                
             };
 
