@@ -20,6 +20,7 @@
     
 -@ val lan: Lang
 -@ val app: Application
+-@ var user: Option[Operator]
 
 .row.span12(ng-controller="myGamesCtrl")
     %h3.section-title
@@ -42,8 +43,8 @@
                     %a(href="" ng-click="sortBy('status')")
                         = Messages("mygames.status")(lan)
                 %th = Messages("general.options")(lan)
-        %tbody
-            %tr.cursor-pointer(ng-repeat="game in pagedItems[currentPage] | orderBy:sortOrder:reverse" ng-click="showDetails($index)")
+        %tbody(ng-repeat="game in pagedItems[currentPage] | orderBy:sortOrder:reverse")
+            %tr.cursor-pointer(ng-click="showDetails($index)")
                 %td
                     %img(ng-src="/{{game.image}}" title={Messages("mygames.logo")})/
                 %td
@@ -76,25 +77,88 @@
                             {{mtimeLeft[$index]}}
                 %td
                     .row
-                        %button.btn.btn-small.btn-flat-dark.upper(type="button" ng-click="showDetails($index); $event.stopPropagation();" title={Messages("mygames.details")(lan)})
+                        %button.btn.btn-small.btn-flat-dark.btn-edit.upper(type="button" ng-click="showDetails($index); $event.stopPropagation();" title={Messages("mygames.details")(lan)} ng-class="{disabled: game.status == 'finished'}")
                             %i.icon-pencil
-                        %button.btn.btn-small.btn-flat-light.upper(ng-show="game.status == 'project' || game.status == 'online'" type="button" ng-class="{disabled: game.status == 'online'}" ng-click="delete($index); $event.stopPropagation();" title={Messages("mygames.delete")(lan)}) = Messages("mygames.delete")(lan)
-                        %button.btn.btn-small.btn-flat-light.upper(ng-show="game.status == 'published'" type="button" ng-click="cancel($index); $event.stopPropagation();" title={Messages("mygames.cancel")(lan)}) = Messages("mygames.cancel")(lan)
+                            %span.hidden = Messages("mygames.edit")(lan)
+                        %button.btn.btn-small.btn-flat-dark.btn-delete.upper(ng-show="game.status == 'project' || game.status == 'online' || game.status == 'finished'" type="button" ng-class="{disabled: game.status == 'online' || game.status == 'finished'}" ng-click="delete($index); $event.stopPropagation();" title={Messages("mygames.delete")(lan)})
+                            %i.icon-trash
+                            %span.hidden = Messages("mygames.delete")(lan)
+                        %button.btn.btn-small.btn-flat-dark.btn-cancel.upper(ng-show="game.status == 'published'" type="button" ng-click="cancel($index); $event.stopPropagation();" title={Messages("mygames.cancel")(lan)})
+                            %i.icon-ban-circle
+                            %span.hidden = Messages("mygames.cancel")(lan)
                     .row
                         = Messages("mygames.ver")(lan)
                         {{game.version | number: 1}}
-            %tr(ng-hide="!renderDetails[$index]")
+            %tr#gameInfo(ng-hide="!renderDetails[$index]")
                 %td(colspan="4")
                     .span12
                         .row
-                            .span4
-                                Menu
-                            .span8
-                                .span5
-                                    %h4.gametitle {{game.name | uppercase}}
-                                    Left content
-                                .span3
-                                    Right content
+                            .span3.slight-padding-left.slight-padding-right
+                                %ul.nav.nav-pills.nav-stacked
+                                    %li(ng-repeat="mit in menu" ng-class="{active: mit.no == selection.no}")
+                                        %a(ng-click="goTo($index)" ng-show="mit.no != 5")
+                                            {{mit.title}}
+                                            %i(ng-class="mit.icon")
+                                        %a(ng-click="goTo($index)" ng-show="mit.no == 5")
+                                            %i(ng-class="mit.icon")
+                                            {{mit.title}}
+                            .span9
+                                .gameDetails{"ng-switch on" => "selection.no"}
+                                    %div(ng-switch-when="0" style="text-align: left")
+                                        %form(name="gameinfo" autocomplete="off")
+                                            .row
+                                                %h3.pull-left.edit(ng-hide="editorEnabled['name']") {{curgame.name | uppercase}} 
+                                                %div.edit(ng-show="editorEnabled['name']")
+                                                    %input.input-xlarge(type="text" name="ganame" ng-model="ganame" style="vertical-align: middle")
+                                                    %button.btn.btn-success-light.btn-small(ng-click="okName()") = Messages("ok")(lan)
+                                                    %button.btn.btn-small(ng-click="cancelName()") = Messages("cancel")(lan)
+                                                %i.icon-pencil.pull-right(ng-hide="editorEnabled['name']" style="line-height: 50px;" tooltip={Messages("mygames.tteditname")(lan)} tooltip-animation="true" tooltip-placement="right" ng-click="editName()")
+                                            .row
+                                                %span.bold = Messages("mygames.createdby")(lan)
+                                                = user.get.name
+                                            .row
+                                                %span.bold = Messages("mygames.location")(lan)
+                                                {{curgame.location}}
+                                            .row
+                                                %span.bold = Messages("mygames.gametype")(lan)
+                                                {{curgame.winning}}
+                                            .row
+                                                %span.bold = Messages("mygames.gametime")(lan)
+                                                {{curgame.startTime | date: 'dd MMM yyyy HH:mm'}} GMT{{curgame.startTime | date: 'Z'}}-
+                                                {{curgame.endTime | date: 'dd MMM yyyy HH:mm'}} GMT{{curgame.endTime | date: 'Z'}}
+                                                %i.icon-pencil.pull-right(tooltip={Messages("mygames.ttedittime")(lan)} tooltip-animation="true" tooltip-placement="right" ng-click="editTime()")
+                                            .row
+                                                %span.bold = Messages("mygames.tasksnumber")(lan)
+                                                {{curgame.tasksNo}}
+                                            .row
+                                                %span.bold = Messages("mygames.maxplayers")(lan)
+                                                {{curgame.playersNum}}
+                                            .row
+                                                %span.bold = Messages("mygames.difficulty")(lan)
+                                                %span.btn-group.rating(id="btnsDiff" data-toggle="buttons-checkbox" disabled)
+                                                    %i.icon-circle(ng-class="{active: curgame.diff == 'hard'}" ng-click="")
+                                                    %i.icon-circle(ng-class="{active: curgame.diff == 'medium' || curgame.diff == 'hard'}" ng-click="")
+                                                    %i.icon-circle(ng-class="{active: curgame.diff == 'easy' || curgame.diff == 'medium' || curgame.diff == 'hard'}" ng-click="")
+                                            .row.bold 
+                                                = Messages("mygames.description")(lan)
+                                                %i.icon-pencil.pull-right(tooltip={Messages("mygames.tteditdesc")(lan)} tooltip-animation="true" tooltip-placement="right" ng-click="editDesc()")
+                                            .row 
+                                                {{curgame.description}}
+                                            .row.bold 
+                                                = Messages("mygames.rewards")(lan)
+                                                %i.icon-pencil.pull-right(tooltip={Messages("mygames.tteditrewards")(lan)} tooltip-animation="true" tooltip-placement="right" ng-click="editRewards()")
+                                            .row 
+                                                {{curgame.awards}}
+                                            .row.pull-right
+                                                %input.btn.btn-success-light(type="submit" value={Messages("save.changes")(lan)} ng-click="saveGame()" disabled)
+                                    %div(ng-switch-when="1")
+                                        Players
+                                    %div(ng-switch-when="2")
+                                        Tasks
+                                    %div(ng-switch-when="3")
+                                        Game skin
+                                    %div(ng-switch-when="4")
+                                        Messages
     %div.pagination.pull-right
         %ul
             %li(ng-class="{disabled: currentPage == 0 || pagedItems.length == 0}")

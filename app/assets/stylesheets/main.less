@@ -233,6 +233,7 @@ div.rating > i:hover {
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     border-radius: 0px;
+
 }
 
 .btn-flat-light:hover, .btn-flat-light:focus, .btn-flat-light:active, .btn-flat-light.active, .btn-flat-light.disabled, .btn-flat-light[disabled] {
@@ -668,12 +669,14 @@ div.rating > i:hover {
         margin-left: 30px;
     }
 }
+
 .lightbox{
     textarea {
         height: @tareaheight;
         resize: none;
     }
 }
+
 input.search-query {
     border-radius: 15px 0 0 15px;
     padding: 4px 14px;
@@ -728,13 +731,12 @@ table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist the
                 margin: 2px 0;
             }
         }
+    }
 
-        td:last-child {
-
-            button {
-                width: 55px;
-                height: 45px;
-            }
+    tbody tr:not([id="gameInfo"]) td:last-child {
+        button {
+            width: 55px;
+            height: 45px;
         }
     }
 }
@@ -754,6 +756,7 @@ table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist the
 #tasklist tbody tr td:nth-child(2), #tasklist tbody tr td:nth-child(3) {
     color: @greeny;
 }
+
 #tasklist tbody tr td:last-child {
     padding: 3px;
     width: 114px;
@@ -800,6 +803,105 @@ table#gamelist, table#tasklist, #tasklist thead tr th:last-child , #gamelist the
     span& {
         color: @publishedtext;
         font-weight: bold;
+    }
+}
+
+#gameInfo {
+    .nav-pills.nav-stacked>li {
+        margin: 5px 0;
+    }
+
+    .nav-tabs>li>a, .nav-pills>li>a {
+        padding-right: 0;
+        padding-left: 0;
+        margin-right: 0;
+        line-height: 14px;
+    }
+
+    .nav-pills.nav-stacked>li>a {
+        background-color: @darkgray;
+        color: @whitey;
+    }
+
+    .nav-pills.nav-stacked>li>a:hover {
+        color: @greeny;
+    }
+
+    .nav-pills>li>a {
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
+    }
+
+    .nav-pills.nav-stacked>li.active {
+        border-top: 1px solid @lightgray;
+        border-bottom: 1px solid @lightgray;
+        border-left: 1px solid @lightgray;
+    }
+
+    .nav-pills.nav-stacked>li.active>a, li.active>a>[class^="icon-"] {
+        background-color: @whitey;
+        color: @greeny;
+    }
+
+    a>[class^="icon-"] {
+        color: @whitey;
+        margin-right: 10px;
+        line-height: 1.1em;
+    }
+
+    a:hover>[class^="icon-"] {
+        color: @greeny;
+    }
+
+    a>[class^="icon-"]:not([class^="icon-arrow-left"]) {
+        float: right;
+        margin-right: 20px;
+        margin-left: -25px;
+    }
+
+    a>[class^="icon-arrow-left"] {
+        float: left;
+        margin-left: 15px;
+        margin-right: -5px;
+    }
+
+    .gameDetails {
+        text-align: left;
+
+        div.row {
+            margin: 0 !important;
+            padding: 1px;
+
+            [class^="icon-"] {
+                margin-right: 220px;
+            }
+
+            .rating {
+                unicode-bidi: bidi-override;
+                direction: rtl;
+                text-align: center;
+                margin-top: 5px;
+
+                .icon-circle {
+                    color: @darkgray;
+                    font-size: 15px;
+                    margin: 0 7px;
+                    vertical-align: top;
+                }
+
+                .icon-circle:hover, .icon-circle.active, .icon-circle:hover~.icon-circle:before {
+                    color: @greeny;
+                }
+            }
+
+            .edit {
+                input {
+                    margin-bottom: 0;
+                }
+            }
+
+        }
     }
 }
 

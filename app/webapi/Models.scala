@@ -27,7 +27,8 @@ case class GameSummary(
     operatorName: String, operatorLogo: String,
     maxPlayers: Int, numberOfPlayers: Int,
     awards: String,
-    distance: Option[Int]
+    distance: Option[Int],
+    image: String
 )
 case class GameStatic(
     gid: Int, version: Int, name: String, description: String,
@@ -61,7 +62,7 @@ case class TaskDynamic(
     gid: Int, tid: Int, version: Int
 )
 case class UserGameSummary(
-  gid: Int, started: DateTime, finished: Option[DateTime], points: Int
+  gid: Int, started: DateTime, finished: Option[DateTime], points: Int, rank: Int
 )
 case class UserGameStatus(points: Int, rank: Int)
 case class UserTaskSummary(

@@ -175,8 +175,8 @@ class WebApiSpec extends Specification {
  
     "response and reject user solution for ABC task" in {
       running(FakeApplication()) {
-        val json = Json.obj("options" -> List("c"))
-        val resp = route(FakeRequest(POST, "/api/games/1/tasks/1").withHeaders(newUser).withJsonBody(json)).get
+        val json = Json.obj("options" -> List("c", "d"))
+        val resp = route(FakeRequest(POST, "/api/games/1/tasks/2").withHeaders(newUser).withJsonBody(json)).get
 
         status(resp) must equalTo(OK)
         contentType(resp) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
@@ -188,7 +188,7 @@ class WebApiSpec extends Specification {
     "response and accept user solution for ABC task" in {
       running(FakeApplication()) {
         val json = Json.obj("options" -> List("a", "b"))
-        val resp = route(FakeRequest(POST, "/api/games/1/tasks/1").withHeaders(newUser).withJsonBody(json)).get
+        val resp = route(FakeRequest(POST, "/api/games/1/tasks/2").withHeaders(newUser).withJsonBody(json)).get
 
         status(resp) must equalTo(OK)
         contentType(resp) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
@@ -200,7 +200,7 @@ class WebApiSpec extends Specification {
     "send BAD REQUEST when user sent answer too many times" in {
       running(FakeApplication()) {
         val json = Json.obj("options" -> List("a", "b"))
-        val resp = route(FakeRequest(POST, "/api/games/1/tasks/1").withHeaders(newUser).withJsonBody(json)).get
+        val resp = route(FakeRequest(POST, "/api/games/1/tasks/0").withHeaders(newUser).withJsonBody(json)).get
 
         status(resp) must equalTo(BAD_REQUEST)
         contentType(resp) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))
@@ -209,8 +209,8 @@ class WebApiSpec extends Specification {
  
     "response and accept user solution for GPS task" in {
       running(FakeApplication()) {
-        val json = Json.obj("lat" -> 1, "lon" -> 1)
-        val resp = route(FakeRequest(POST, "/api/games/1/tasks/2").withHeaders(newUser).withJsonBody(json)).get
+        val json = Json.obj("lat" -> 51.14212, "lon" -> 16.94169)
+        val resp = route(FakeRequest(POST, "/api/games/1/tasks/0").withHeaders(newUser).withJsonBody(json)).get
 
         status(resp) must equalTo(OK)
         contentType(resp) must beOneOf (Some("text/json"), Some("application/json"), Some("application/hal+json"))

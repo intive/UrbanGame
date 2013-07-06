@@ -55,7 +55,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
     $scope.task = null
     
     $scope.skin = {
-        image: "games/gameicon.png"
+        image: "upload/users/gameicon.png"
     }
 
     $scope.error = null
@@ -101,7 +101,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 (data) ->
                     if data.status == 'published' || data.status == 'project'
                         loadModelData(data)
-                        $scope.previousname=data.name
+                        $scope.previousname = data.name
                         $scope.error = null
                         $scope.editable = true
                     else

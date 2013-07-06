@@ -17,10 +17,8 @@
 
 .row-fluid
     %div(id="formDiv")
-        %h4
-            %span.step = Messages("newgame.step3")(lan) 
-            = Messages("newgame.step3title")(lan)
-        %em = Messages("newgame.step3subtitle")(lan)
+        %h3 = Messages("newgame.step3title")(lan)
+        %p = Messages("newgame.step3subtitle")(lan)
         .alert.alert-error(ng-show="error != null") {{error}}
     .span12.slight-padding-top
         
