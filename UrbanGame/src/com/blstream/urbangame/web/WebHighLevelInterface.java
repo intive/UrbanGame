@@ -6,7 +6,7 @@ import android.location.Location;
 
 import com.blstream.urbangame.database.entity.ABCDTask;
 import com.blstream.urbangame.database.entity.Task;
-import com.blstream.urbangame.webserver.WebServer;
+import com.blstream.urbangame.web.server.WebServer;
 
 /**
  * WebHighLevelInterface is interface provided for user to perform specific

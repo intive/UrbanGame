@@ -19,9 +19,9 @@ import com.blstream.urbangame.session.LoginManager;
 import com.blstream.urbangame.session.SessionManager;
 import com.blstream.urbangame.web.WebHighLevel;
 import com.blstream.urbangame.web.WebHighLevelInterface;
-import com.blstream.urbangame.webserver.ServerResponseHandler;
-import com.blstream.urbangame.webserver.WebResponse;
-import com.blstream.urbangame.webserver.WebServerNotificationListener;
+import com.blstream.urbangame.web.server.ServerResponseHandler;
+import com.blstream.urbangame.web.server.WebResponse;
+import com.blstream.urbangame.web.server.WebServerNotificationListener;
 
 public class LoginFragment extends SherlockFragment implements OnClickListener, WebServerNotificationListener {
 	private static final String NAME = LoginFragment.class.getSimpleName();

@@ -16,7 +16,7 @@ import com.blstream.urbangame.database.entity.LocationTask;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.database.entity.UrbanGame;
 import com.blstream.urbangame.database.entity.UrbanGameShortInfo;
-import com.blstream.urbangame.webserver.WebServer.QueryType;
+import com.blstream.urbangame.web.server.WebServer.QueryType;
 import com.google.gson.Gson;
 
 /* MockWebServer class is simulating web server behavior. Try to not use this

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.blstream.urbangame.database.entity.Player;
-import com.blstream.urbangame.webserver.WebServerNotificationListener;
+import com.blstream.urbangame.web.server.WebServerNotificationListener;
 
 public class RegistrationManager extends SessionManager {
 	private static final String NAME = RegistrationManager.class.getSimpleName();

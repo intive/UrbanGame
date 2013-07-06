@@ -14,8 +14,8 @@ import com.blstream.urbangame.fragments.GameTasksFragment;
 import com.blstream.urbangame.fragments.TabManager;
 import com.blstream.urbangame.web.WebHighLevel;
 import com.blstream.urbangame.web.WebHighLevelInterface;
-import com.blstream.urbangame.webserver.ServerResponseHandler;
-import com.blstream.urbangame.webserver.WebServerNotificationListener;
+import com.blstream.urbangame.web.server.ServerResponseHandler;
+import com.blstream.urbangame.web.server.WebServerNotificationListener;
 
 public class ActiveGameActivity extends AbstractMenuActivity implements WebServerNotificationListener {
 	

@@ -10,8 +10,8 @@ import com.blstream.urbangame.database.DatabaseInterface;
 import com.blstream.urbangame.database.entity.Player;
 import com.blstream.urbangame.web.WebHighLevel;
 import com.blstream.urbangame.web.WebHighLevelInterface;
-import com.blstream.urbangame.webserver.ServerResponseHandler;
-import com.blstream.urbangame.webserver.WebServerNotificationListener;
+import com.blstream.urbangame.web.server.ServerResponseHandler;
+import com.blstream.urbangame.web.server.WebServerNotificationListener;
 
 //formatter:off
 /**

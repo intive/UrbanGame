@@ -14,8 +14,8 @@ import com.blstream.urbangame.database.entity.PlayerGameSpecific;
 import com.blstream.urbangame.database.entity.Task;
 import com.blstream.urbangame.dialogs.InternetAlertDialog;
 import com.blstream.urbangame.example.DemoData;
-import com.blstream.urbangame.webserver.ServerResponseHandler;
-import com.blstream.urbangame.webserver.WebServer;
+import com.blstream.urbangame.web.server.ServerResponseHandler;
+import com.blstream.urbangame.web.server.WebServer;
 
 /**
  * For now it's mock-y but as time will go by, every method will be implemented
