@@ -51,8 +51,8 @@
                         %button.btn.btn-success-light.btn-mini(ng-click="edit()") = Messages("options.name.edit")(lan)
                     %span.edit(ng-show="editorEnabled")
                         %input.input-small(type="text" name="uname" ng-model="uname" style="vertical-align: middle")
-                        %button.btn.btn-success-light.btn-small(ng-click="ok()") = Messages("options.name.save")(lan)
-                        %button.btn.btn-small(ng-click="cancel()") = Messages("options.name.cancel")(lan)
+                        %button.btn.btn-success-light.btn-small(ng-click="ok()") = Messages("ok")(lan)
+                        %button.btn.btn-small(ng-click="cancel()") = Messages("cancel")(lan)
                 .control-group
                     %label.bold = Messages("options.email")
                     %span {{user.email}}

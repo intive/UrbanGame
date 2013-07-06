@@ -17,9 +17,8 @@
 -@ val tt: String = Messages("tasks.rewardtooltip")(lan)
 .row-fluid
     %div(id="tasksDiv")
-        %h3
-            %span.step = Messages("newgame.step2title")(lan)
-        %em = Messages("newgame.step2subtitle")(lan)
+        %h3 = Messages("newgame.step2title")(lan)
+        %p = Messages("newgame.step2subtitle")(lan)
         .alert.alert-error(ng-show="error != null") {{error}}
         {{mapOpts.markers}}
     .span12.slight-padding-top
