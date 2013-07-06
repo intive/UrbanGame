@@ -57,7 +57,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         answers:[{symbol:"A", text:"", points: null, correct: true},{symbol:"B", text:"", points: null, correct: true},{symbol:"C", text:"", points: null, correct: true},{symbol:"D", text:"", points: null, correct: true}]
     }
     $scope.skin = {
-        image: "games/gameicon.png"
+        image: "upload/users/gameicon.png"
     }
 
     $scope.error = null
@@ -103,7 +103,7 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 (data) ->
                     if data.status == 'published' || data.status == 'project'
                         loadModelData(data)
-                        $scope.previousname=data.name
+                        $scope.previousname = data.name
                         $scope.error = null
                         $scope.editable = true
                     else

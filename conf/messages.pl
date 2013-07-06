@@ -34,12 +34,15 @@ menu.contact = Kontakt
 menu.help = Pomoc
 menu.faq = FAQ
 
-newgame.step1title = Informacje o grze
-newgame.step2title = Zadania
-newgame.step3title = Skórki
-newgame.step4title = Podsumowanie
+newgame.step1title = Uzupełnij dane podstawowe
+newgame.step2title = Utwórz listę zadań
+newgame.step3title = Dostosuj skórkę dla klientów mobilnych
+newgame.step4title = Publikuj grę
+newgame.step1subtitle = Spraw, aby Twoja gra była widoczna dla innych. Uzupełnij dane identyfikujące Twoją grę.
+newgame.step2subtitle = Stwórz i zarządzaj zadaniami.
+newgame.step3subtitle = Spraw, aby Twoja gra wyglądała jak opracowana przez Ciebie. Wyboerz logo, kolory i więcej.
+newgame.step4subtitle = Zweryfikuj wszystkie dane i jeśli wszystko się zgadza, opublikuj tą grę.
 
-newgame.step1subtitle = Make your game easy to find. Complete the identity data of your game.
 newgame.gamenamelabel = Nazwa gry
 newgame.gamedesclabel = Opis
 newgame.gameawardslabel = Nagrody

@@ -14,56 +14,52 @@
     * limitations under the License.
 
 -@ val lan: Lang
+-@ var user: Option[Operator]
 
 .row-fluid
     %div(id="formDiv")
-        %h4
-            %span.step = Messages("newgame.step4")(lan) 
-            = Messages("newgame.step4title")(lan)
-        %em = Messages("newgame.step4subtitle")(lan)
+        %h3 = Messages("newgame.step4title")(lan)
+        %p = Messages("newgame.step4subtitle")(lan)
         .alert.alert-error(ng-show="error != null") {{error}}
     .span12.slight-padding-top
-        .span6.pull-left.slight-padding-right
+        .span3.pull-left.slight-padding-right
             .slight-padding-top
-                .row.sum
-                    .span4
-                        %img(ng-src="/assets/images/{{skin.image}}")/
-                    .span8
-                        %h4 {{game.name | uppercase}}
-                .row.sum
-                    %p.bold = Messages("newgame.gamedesclabel")(lan)
-                    %p {{game.description}}
-                .row.sum
-                    %p.bold = Messages("newgame.gameawardslabel")(lan)
-                    %p {{game.awards}}
-        .span6.pull-right.slight-padding-left
+                %img(ng-src="/{{skin.image}}")/
+        .span9.pull-right.slight-padding-left
             .slight-padding-top
                 .row
-                    %p.bold = Messages("newgame.gametypelabel")(lan)
-                    %p {{getWinStrMsg()}}
+                    %h4 {{game.name | uppercase}}
                 .row
-                    %p.bold = Messages("newgame.gamelocationlabel")(lan)
-                    %p {{game.location}}
+                    %span.bold = Messages("mygames.createdby")(lan)
+                    = user.get.name
                 .row
-                    %p.bold = Messages("newgame.gamestarttdlabel")(lan)
-                    %p 
-                        {{game.startDate | date: dateFormat}}
-                        {{game.startTime}} 
-                        {{timezone}} 
+                    %span.bold = Messages("newgame.gamelocationlabel")(lan)
+                    {{game.location}}
                 .row
-                    %p.bold = Messages("newgame.gameendtdlabel")(lan)
-                    %p 
-                        {{game.endDate | date: dateFormat}}
-                        {{game.endTime}} 
-                        {{timezone}} 
+                    %span.bold = Messages("newgame.gametypelabel")(lan)
+                    {{getWinStrMsg()}}
                 .row
-                    %p.bold = Messages("newgame.gamedifflabel")(lan)
-                    %p {{game.diff}}
+                    %span.bold = Messages("newgame.gamestarttdlabel")(lan)
+                    {{game.startDate | date: dateFormat}}
+                    {{game.startTime}} 
+                    {{timezone}} -
+                    {{game.endDate | date: dateFormat}}
+                    {{game.endTime}} 
+                    {{timezone}} 
                 .row
-                    %p 
-                        %span.bold = Messages("newgame.gametasksnolabel")(lan)
-                        {{game.tasksNo}}
+                    %span.bold = Messages("newgame.gamedifflabel")(lan)
+                    %span.btn-group.rating(id="btnsDiff" data-toggle="buttons-checkbox")
+                        -# Reversed because of CSS for 'rating' class
+                        %i.icon-circle(ng-class="{active: game.diff == 'hard'}" ng-click="")
+                        %i.icon-circle(ng-class="{active: game.diff == 'medium' || game.diff == 'hard'}" ng-click="")
+                        %i.icon-circle(ng-class="{active: game.diff == 'easy' || game.diff == 'medium' || game.diff == 'hard'}" ng-click="")
                 .row
-                    %p 
-                        %span.bold = Messages("newgame.gamedurationlabel")(lan)
-                        {{gameduration()}}
+                    %span.bold = Messages("newgame.gametasksnolabel")(lan)
+                    {{game.tasksNo}}
+                .row
+                    %span.bold = Messages("newgame.gamedurationlabel")(lan)
+                    {{gameduration()}}
+                .row.sum.bold = Messages("newgame.gamedesclabel")(lan)
+                .row {{game.description}}
+                .row.sum.bold = Messages("newgame.gameawardslabel")(lan)
+                .row {{game.awards}}
