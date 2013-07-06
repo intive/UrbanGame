@@ -22,12 +22,12 @@ public class BitmapDownloader extends AsyncTask<String, Void, Bitmap> {
 	public BitmapDownloader(long id, ImageView imageView) {
 		this.id = id;
 		this.imageView = imageView;
-		this.placeholder = gerResources().getDrawable(android.R.drawable.gallery_thumb);
+		this.placeholder = getResources().getDrawable(android.R.drawable.gallery_thumb);
 		
 		setImageId(id);
 	}
 	
-	private Resources gerResources() {
+	private Resources getResources() {
 		return imageView.getContext().getResources();
 	}
 	
