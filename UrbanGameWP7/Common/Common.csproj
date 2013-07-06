@@ -73,6 +73,7 @@
     <Compile Include="AuthorizationService\RegisterResult.cs" />
     <Compile Include="AuthorizationService\User.cs" />
     <Compile Include="Games\GameStateChangedEvent.cs" />
+    <Compile Include="WebService\ICredentialsService.cs" />
     <Compile Include="Solutions\IABCDUserAnswer.cs" />
     <Compile Include="Solutions\SolutionStatusChanged.cs" />
     <Compile Include="Alerts\IAlert.cs" />

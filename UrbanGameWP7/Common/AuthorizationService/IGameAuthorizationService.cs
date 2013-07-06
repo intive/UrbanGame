@@ -18,9 +18,9 @@ namespace Common
         /// Checks if user is registered and logs in
         /// </summary>
         /// <param name="email">Provided email</param>
-        /// <param name="pasword">Provided password</param>
+        /// <param name="password">Provided password</param>
         /// <returns></returns>
-        LoginResult LogIn(string email, string pasword);
+        Task<LoginResult> LogIn(string email, string password);
 
         /// <summary>
         /// Clears saved credentials
@@ -43,7 +43,7 @@ namespace Common
         /// </summary>
         /// <param name="userData">Provided user data</param>
         /// <returns>Webservice response</returns>
-        RegisterResult Register(User userData);
+        Task<RegisterResult> Register(User userData);
     }
 }
     

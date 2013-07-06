@@ -8,5 +8,7 @@ namespace Common
     public class GameChangedEvent
     {
         public int Id { get; set; }
+
+        public bool NewTasks { get; set; }
     }
 }

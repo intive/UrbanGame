@@ -9,6 +9,8 @@ namespace Common
     {
         int Id { get; set; }
 
+        char CharId { get; set; }
+
         string Answer { get; set; }
 
         ITask Task { get; set; }

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using Common;
 
-namespace WebService.BOMock
+namespace WebService.DTOs
 {
-    public class AlertMock :BOBase, IAlert
+    public class HighScore : DTOBase, IHighScore
     {
-        public AlertMock()
+        public HighScore()
         {
         }
 
@@ -34,7 +34,7 @@ namespace WebService.BOMock
         }
         #endregion
 
-        #region IAlert.Game
+        #region IHighScore.Game
 
         private IGame _game;
 
@@ -56,69 +56,69 @@ namespace WebService.BOMock
         }
         #endregion
 
-        #region Topic
+        #region UserLogin
 
-        private string _topic;
+        private string _userLogin;
 
-        public string Topic
+        public string UserLogin
         {
             get
             {
-                return _topic;
+                return _userLogin;
             }
             set
             {
-                if (_topic != value)
+                if (_userLogin != value)
                 {
-                    NotifyPropertyChanging("Topic");
-                    _topic = value;
-                    NotifyPropertyChanged("Topic");
+                    NotifyPropertyChanging("UserLogin");
+                    _userLogin = value;
+                    NotifyPropertyChanged("UserLogin");
                 }
             }
         }
 
         #endregion
 
-        #region Description
+        #region Points
 
-        private string _description;
+        private int _points;
 
-        public string Description
+        public int Points
         {
             get
             {
-                return _description;
+                return _points;
             }
             set
             {
-                if (_description != value)
+                if (_points != value)
                 {
-                    NotifyPropertyChanging("Description");
-                    _description = value;
-                    NotifyPropertyChanged("Description");
+                    NotifyPropertyChanging("Points");
+                    _points = value;
+                    NotifyPropertyChanged("Points");
                 }
             }
         }
 
         #endregion
 
-        #region AlertAppear
+        #region AchievedAt
 
-        private DateTime _alertAppear;
+        private DateTime _achievedAt;
 
-        public DateTime AlertAppear
+        public DateTime AchievedAt
         {
             get
             {
-                return _alertAppear;
+                return _achievedAt;
             }
             set
             {
-                if (_alertAppear != value)
+                if (_achievedAt != value)
                 {
-                    NotifyPropertyChanging("AlertAppear");
-                    _alertAppear = value;
-                    NotifyPropertyChanged("AlertAppear");
+                    NotifyPropertyChanging("AchievedAt");
+                    _achievedAt = value;
+                    NotifyPropertyChanged("AchievedAt");
                 }
             }
         }

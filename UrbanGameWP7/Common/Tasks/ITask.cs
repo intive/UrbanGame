@@ -43,5 +43,7 @@ namespace Common
         int Version { get; set; }
 
         string ListOfChanges { get; set; }
+
+        bool IsNewTask { get; set; }
     }
 }

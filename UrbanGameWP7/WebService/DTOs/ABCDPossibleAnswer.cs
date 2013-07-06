@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.Linq;
+using Newtonsoft.Json;
 
-namespace WebService.BOMock
+namespace WebService.DTOs
 {
-    public class ABCDPossibleAnswerMock : BOBase, IABCDPossibleAnswer
+    public class ABCDPossibleAnswer : DTOBase, IABCDPossibleAnswer
     {
-        public ABCDPossibleAnswerMock()
+        public ABCDPossibleAnswer()
         {
-            _abcdUserAnswers = new EntityEnumerable<IABCDUserAnswer, ABCDUserAnswerMock>(new EntitySet<ABCDUserAnswerMock>(OnABCDUserAnswerAdded, OnABCDUserAnswerRemoved));
+            _abcdUserAnswers = new EntityEnumerable<IABCDUserAnswer, ABCDUserAnswer>(new EntitySet<ABCDUserAnswer>(OnABCDUserAnswerAdded, OnABCDUserAnswerRemoved));
         }
 
         #region Id
@@ -31,6 +32,29 @@ namespace WebService.BOMock
                     NotifyPropertyChanging("Id");
                     _id = value;
                     NotifyPropertyChanged("Id");
+                }
+            }
+        }
+        #endregion
+
+        #region CharId
+
+        private char _charId;
+
+        [JsonProperty("option")]
+        public char CharId
+        {
+            get
+            {
+                return _charId;
+            }
+            set
+            {
+                if (_charId != value)
+                {
+                    NotifyPropertyChanging("CharId");
+                    _charId = value;
+                    NotifyPropertyChanged("CharId");
                 }
             }
         }
@@ -70,12 +94,12 @@ namespace WebService.BOMock
             }
         }
 
-        private void OnABCDUserAnswerAdded(ABCDUserAnswerMock abcdUserAnswer)
+        private void OnABCDUserAnswerAdded(ABCDUserAnswer abcdUserAnswer)
         {
             abcdUserAnswer.ABCDPossibleAnswer = this;
         }
 
-        private void OnABCDUserAnswerRemoved(ABCDUserAnswerMock abcdUserAnswer)
+        private void OnABCDUserAnswerRemoved(ABCDUserAnswer abcdUserAnswer)
         {
             abcdUserAnswer.ABCDPossibleAnswer = null;
         }

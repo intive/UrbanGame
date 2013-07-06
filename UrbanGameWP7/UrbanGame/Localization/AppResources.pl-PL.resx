@@ -477,6 +477,18 @@
   <data name="Changed" xml:space="preserve">
     <value>zmieniono</value>
   </data>
+  <data name="ErrorJoiningGame" xml:space="preserve">
+    <value>Błąd podczas dołączania do gry.</value>
+  </data>
+  <data name="ErrorLeavingGame" xml:space="preserve">
+    <value>Błąd podczas opuszczania gry.</value>
+  </data>
+  <data name="SelectAnswers" xml:space="preserve">
+    <value>Zaznacz jedną lub więcej odpowiedzi.</value>
+  </data>
+  <data name="NewTaskToast" xml:space="preserve">
+    <value>Nowe zadanie dostępne. Naciśnij, aby je zobaczyć.</value>
+  </data>
   <data name="NoTasks" xml:space="preserve">
     <value>Nie ma żadnych zadań w tym miejscu, spróbuj później lub spróbuj połączyć się z innej części miasta, żeby otrzymać ukryte bonusowe zadania.</value>
   </data>

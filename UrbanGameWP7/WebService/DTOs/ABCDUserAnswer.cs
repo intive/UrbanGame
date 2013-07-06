@@ -5,9 +5,9 @@ using System.Data.Linq;
 using System.Linq;
 using System.Text;
 
-namespace WebService.BOMock
+namespace WebService.DTOs
 {
-    public class ABCDUserAnswerMock : BOBase, IABCDUserAnswer
+    public class ABCDUserAnswer : DTOBase, IABCDUserAnswer
     {
         #region Id
 

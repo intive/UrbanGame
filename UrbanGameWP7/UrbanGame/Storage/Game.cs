@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Common;
 using System.Data.Linq;
+using WebService;
 
 namespace UrbanGame.Storage
 {
@@ -18,7 +19,7 @@ namespace UrbanGame.Storage
             _highScoreRefs = new EntitySet<GameHighScore>(OnHighScoreAdded, OnHighScoreRemoved);
         }
 
-        const string imagesUrl = "http://urbangame.patronage.blstream.com/assets/images/";
+        const string imagesUrl = "http://urbangame.patronage.blstream.com/";
 
         #region Id
 
@@ -118,7 +119,11 @@ namespace UrbanGame.Storage
         {
             get
             {
-                return imagesUrl + GameLogo;
+                #if MOCK
+                    return GameLogo;
+                #else
+                    return imagesUrl + GameLogo;
+                #endif
             }
         }
         #endregion
@@ -256,52 +261,6 @@ namespace UrbanGame.Storage
                     NotifyPropertyChanging("MaxPoints");
                     _maxPoints = value;
                     NotifyPropertyChanged("MaxPoints");
-                }
-            }
-        }
-        #endregion
-
-        #region NumberOfTasks
-
-        private int _numberOfTasks;
-
-        [Column]
-        public int NumberOfTasks
-        {
-            get
-            {
-                return _numberOfTasks;
-            }
-            set
-            {
-                if (_numberOfTasks != value)
-                {
-                    NotifyPropertyChanging("NumberOfTasks");
-                    _numberOfTasks = value;
-                    NotifyPropertyChanged("NumberOfTasks");
-                }
-            }
-        }
-        #endregion
-
-        #region NumberOfCompletedTasks
-
-        private int _numberOfCompletedTasks;
-
-        [Column]
-        public int NumberOfCompletedTasks
-        {
-            get
-            {
-                return _numberOfCompletedTasks;
-            }
-            set
-            {
-                if (_numberOfCompletedTasks != value)
-                {
-                    NotifyPropertyChanging("NumberOfCompletedTasks");
-                    _numberOfCompletedTasks = value;
-                    NotifyPropertyChanged("NumberOfCompletedTasks");
                 }
             }
         }
