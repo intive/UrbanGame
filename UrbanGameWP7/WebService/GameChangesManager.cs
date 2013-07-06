@@ -40,6 +40,7 @@ namespace WebService
                                   Func<IUnitOfWork> unitOfWorkLocator, ILocalizationService localizationService,
                                   IToastPromptService toastPromptService, IGameAuthorizationService authorizationService)
         {
+            //todo: /api/games/dynamic/1 - dynamic data should be updating somehow if neccessary
             _gameWebService = gameWebService;
             _gameEventAggregator = gameEventAggregator;
             _unitOfWorkLocator = unitOfWorkLocator;

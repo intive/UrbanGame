@@ -11,7 +11,10 @@ namespace WebService.DTOs
     public class GameTask : DTOBase, ITask
     {
         public GameTask()
-        {            
+        {
+            EntitySet<ABCDPossibleAnswer> es = new EntitySet<ABCDPossibleAnswer>(OnAnswerAdded, OnAnswerRemoved);
+            _abcdPossibleAnswers = new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswer>(es);
+
             EntitySet<TaskSolution> es2 = new EntitySet<TaskSolution>(OnSolutionAdded, OnSolutionRemoved);
             _solutions = new EntityEnumerable<IBaseSolution, TaskSolution>(es2);
         }
@@ -184,12 +187,19 @@ namespace WebService.DTOs
         {
             get
             {
-                var es = new EntitySet<ABCDPossibleAnswer>(OnAnswerAdded, OnAnswerRemoved);
                 if (ABCDChoices != null)
+                {
+                    var es = new EntitySet<ABCDPossibleAnswer>(OnAnswerAdded, OnAnswerRemoved);
+
                     foreach (var answ in ABCDChoices)
                         es.Add(answ);
 
-                return new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswer>(es);
+                    return new EntityEnumerable<IABCDPossibleAnswer, ABCDPossibleAnswer>(es);
+                }
+                else
+                {
+                    return _abcdPossibleAnswers;
+                }
             }
         }
 

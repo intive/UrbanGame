@@ -180,6 +180,7 @@ namespace UrbanGame.ViewModels
 
         public async void JoinIn()
         {
+            //todo : disable joining when game hasn't started yet
             if (MessageBox.Show("join in", "join in", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 bool result = false;
@@ -240,6 +241,10 @@ namespace UrbanGame.ViewModels
 
                 foreach (var t in tasks)
                 {
+                    //todo: replace endDate when will be available in API
+                    //todo: add [JsonProperty(Name="something")] to GameTask.cs (WebService) when picture will be available in API
+                    //todo: add jsonProperty to GameTask.cs (WebService) when IsRepeatable will be available in API (now it's something strange - maxattemps - which we doesn't handle)
+                    //todo: consider what we gonna do with protected access to details preview of a game - maybe it should be changed in API
                     var taskDTO = await _gameWebService.GetTaskDetails(newGame.Id, t.Id);
                     var task = new GameTask()
                     {

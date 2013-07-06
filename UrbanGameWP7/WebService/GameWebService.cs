@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Device.Location;
 using System.Linq;
 using System.Text;
-using WebService.BOMock;
 using System.IO;
 using System.Windows;
 using System.Net;
@@ -184,13 +183,14 @@ namespace WebService
         #region GetTasks
         public async Task<ITask[]> GetTasks(int gid)
         {
+            //todo: consider sending lat & lot
             return (await GetViaApi<ListOfTasks>("games/{0}/tasks?lat=1&lon=1", gid)).Tasks.ToArray();
         }
         #endregion
 
         #region GetTaskDetails
         public async Task<ITask> GetTaskDetails(int gid, int tid)
-        {
+        {           
             return await GetViaApi<GameTask>("games/{0}/tasks/{1}/static", gid, tid);
         }
         #endregion
@@ -353,8 +353,8 @@ namespace WebService
         public IAlert[] Alerts()
         {
             return new IAlert[] {
-                new AlertMock(){Id = 1, Topic = "Unreal alert title", Description = "Sth happened at route 27"},
-                new AlertMock(){Id = 2, Topic = "Unreal alert title", Description = "Sth happened at route 27"}};
+                new Alert(){Id = 1, Topic = "Unreal alert title", Description = "Sth happened at route 27"},
+                new Alert(){Id = 2, Topic = "Unreal alert title", Description = "Sth happened at route 27"}};
         }
         #endregion
 
@@ -362,9 +362,9 @@ namespace WebService
         public IHighScore[] HighScores()
         {
             return new IHighScore[]{
-                new HighScoreMock(){Id = 1, UserLogin = "Korona", Points =199},
-                new HighScoreMock(){Id = 1, UserLogin = "Amanda99", Points =99},
-                new HighScoreMock(){Id = 2, UserLogin = "LoganXxX", Points =299}};
+                new HighScore(){Id = 1, UserLogin = "Korona", Points =199},
+                new HighScore(){Id = 1, UserLogin = "Amanda99", Points =99},
+                new HighScore(){Id = 2, UserLogin = "LoganXxX", Points =299}};
         }
         #endregion
     }
