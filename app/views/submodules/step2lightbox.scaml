@@ -106,7 +106,7 @@
                             .alert.alert-error.span11(ng-show="!radiusIsNumber" ng-cloak) = Messages("tasks.radiusnotnumber")
                             .control-group.latlnglist
                                 .control
-                                    %select(multiple="multiple" id="locationsList")
+                                    %select(multiple="multiple" id="locationsList" name="locations")
                                         %option(ng-repeat="location in task.locations")
                                             = "Lat: {{location.lat | number:3}}, Lng: {{location.lng | number:4}}, Rad: {{location.radius}}m"
                                 .control
@@ -138,7 +138,7 @@
                 .green-strip
                 .controls-group
                     .control
-                        %button.btn-green(type="button" id="addTaskButton" ng-disabled="taskForm.$invalid")
+                        %button.btn-green(type="button" id="addTaskButton" ng-disabled="(taskForm.$invalid || (task.type == 'GPS' && task.locations.length == 0))")
                             = Messages("tasks.addtaskbtn")(lan)
                     .control
                         %button.dark(type="button" ng-click="resetDefaultTaskTemplate()" data-dismiss="lightbox")

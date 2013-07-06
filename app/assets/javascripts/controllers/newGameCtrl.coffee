@@ -410,7 +410,6 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
             answers:[{symbol:"A", text:"", points: null},{symbol:"B", text:"", points: null},{symbol:"C", text:"", points: null},{symbol:"D", text:"", points: null}]
         }
         additionalCond = false
-        $scope.taskForm.$setValidity "locations", false
         
         
     $scope.resetAttempts = ->
@@ -430,7 +429,6 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
         if (!isNaN(lat) && !isNaN(lng) && !isNaN(radius))
             $scope.task.locations.push({lat: lat, lng: lng, radius: radius})
             $scope.repaintLocations()
-            $scope.taskForm.$setValidity "locations", true
             
     $scope.removeLocations = ->
         options = document.getElementById("locationsList").options
@@ -440,8 +438,6 @@ newGameCtrl = app.controller 'newGameCtrl', ['$scope', '$location', '$route', '$
                 $scope.task.locations.splice(i,1)
             i--
         $scope.repaintLocations()
-        if $scope.task.locations.length == 0
-            $scope.taskForm.$setValidity "locations", false
         
         
    
