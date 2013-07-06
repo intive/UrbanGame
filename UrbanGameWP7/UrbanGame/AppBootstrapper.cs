@@ -30,13 +30,18 @@ namespace UrbanGame
             container.PerRequest<AlertViewModel>();
             container.PerRequest<TaskViewModel>();
             container.Singleton<ILocalizationService, LocalizationService>();
-            container.PerRequest<IUnitOfWork, UnitOfWork>();       
-            container.Singleton<IGameWebService, GameWebServiceMock>();
+            container.PerRequest<IUnitOfWork, UnitOfWork>();      
             container.Singleton<IGameChangesManager, GameChangesManager>();
             container.PerRequest<IAppbarManager, AppbarManager>();
             container.PerRequest<IToastPromptService, ToastPromptService>();
             container.Singleton<IGameAuthorizationService, GameAuthorizationService>();
             container.Singleton<ICredentialsService, CredentialsService>();
+
+            #if MOCK 
+                container.Singleton<IGameWebService, GameWebServiceMock>();
+            #else
+                container.Singleton<IGameWebService, GameWebService>();
+            #endif
 
             container.Handler<UrbanGameDataContext>((sc) =>
             {

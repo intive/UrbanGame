@@ -5,7 +5,6 @@ using System.Text;
 using Common;
 using System.Data.Linq;
 using Newtonsoft.Json;
-using Caliburn.Micro;
 
 namespace WebService.DTOs
 {
@@ -138,10 +137,11 @@ namespace WebService.DTOs
         {
             get
             {
-                if (IoC.Get<IGameWebService>().GetType() == typeof(GameWebServiceMock))
+                #if MOCK
                     return GameLogo;
-                else
+                #else
                     return imagesUrl + GameLogo;
+                #endif
             }
         }
         #endregion

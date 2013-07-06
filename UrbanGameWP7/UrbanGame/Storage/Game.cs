@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using Common;
 using System.Data.Linq;
-using Caliburn.Micro;
 using WebService;
 
 namespace UrbanGame.Storage
@@ -120,10 +119,11 @@ namespace UrbanGame.Storage
         {
             get
             {
-                if (IoC.Get<IGameWebService>().GetType() == typeof(GameWebServiceMock))
+                #if MOCK
                     return GameLogo;
-                else
+                #else
                     return imagesUrl + GameLogo;
+                #endif
             }
         }
         #endregion

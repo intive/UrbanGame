@@ -468,6 +468,7 @@ namespace UrbanGame.ViewModels
                     }
                     Solution = solution;
                     SubmitSolution(solution).Wait();
+                    //TODO: investigate why do we need to use .Wait() here - it freezes if await is here
                 });
             });
         }
