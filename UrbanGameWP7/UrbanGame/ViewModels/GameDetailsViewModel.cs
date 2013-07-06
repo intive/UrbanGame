@@ -483,8 +483,6 @@ namespace UrbanGame.ViewModels
                     //You won/You lost banner
                     if (!Game.GameOverDisplayed && (Game.GameState == GameState.Won || Game.GameState == GameState.Lost))
                     {
-                        Thread.Sleep(700);
-
                         switch (Game.GameState)
                         {
                             case GameState.Won:
