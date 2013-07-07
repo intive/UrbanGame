@@ -1,0 +1,104 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="UrbanGame.Views.SearchGameView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding Path=AppResources.SearchGame, Source={StaticResource LocalizedStrings}}" Grid.Row="0" Margin="20,0,0,0" Foreground="{StaticResource FontColorGreen}" FontWeight="Bold" FontSize="25"/>
+        <toolkit:AutoCompleteBox Margin="10,-10,10,0" 
+                                     Name="autoCompleteBox1" 
+                                     VerticalAlignment="Top"
+                                     FilterMode="Contains"
+                                     ValueMemberBinding="{Binding Name}"
+                                     Text="Enter"
+                                     ItemsSource="{Binding AllNearestGames}"
+                                     Grid.Row="1"
+                                     cal:Message.Attach="[Event TextChanged]=[Action TextChanged($source)]; [Event MouseEnter]=[Action MouseEntered($source)]">
+            <toolkit:AutoCompleteBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"></TextBlock>
+                </DataTemplate>
+            </toolkit:AutoCompleteBox.ItemTemplate>
+        </toolkit:AutoCompleteBox>
+        <TextBlock Text="{Binding Path=AppResources.GamesLowCase, Source={StaticResource LocalizedStrings}}" Grid.Row="2" Margin="20,-20,0,25" Foreground="{StaticResource FontColorGreen}" FontSize="60"/>
+        
+        <ScrollViewer Grid.Row="3">
+        <ListBox ItemsSource="{Binding NearestGames}" VerticalAlignment="Top" ItemContainerStyle="{StaticResource ItemStyle}" Margin="20,0,0,0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="5,0,5,5" Background="Transparent" cal:Message.Attach="[Event Tap]=[Action ShowDetails($eventArgs)]">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Margin" Value="0,0,5,5" />
+                                <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
+                            </Style>
+                        </Grid.Resources>
+                        <Image Source="{Binding GameLogoFullUrl}" Grid.Column="0" Width="110" Height="110" Margin="0,0,10,0" VerticalAlignment="Top"/>
+                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                            <Grid Background="Transparent">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding Name}" Grid.Row="0" Margin="0,-10,0,0" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource FontColorWhite}"/>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,-7,0,0">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{StaticResource FontColorWhite}" />
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <TextBlock Text="{Binding Path=AppResources.ByOperator, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMedium}" Margin="0,0,10,0"/>
+                                    <TextBlock Text="{Binding OperatorName}" FontSize="{StaticResource PhoneFontSizeMedium}"/>
+                                </StackPanel>
+                                <TextBlock Text=" " Grid.Row="2"/>
+                                <StackPanel Grid.Row="3" Orientation="Horizontal">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Margin" Value="0,0,5,5" />
+                                            <Setter Property="FontSize" Value="17" />
+                                            <Setter Property="Foreground" Value="{StaticResource FontColorGreen}" />
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <TextBlock Text="{Binding Path=AppResources.Players, Source={StaticResource LocalizedStrings}}" />
+                                    <TextBlock Text="{Binding NumberOfPlayers}" Grid.Column="1" />
+                                    <TextBlock Text="{Binding NumberOfSlots, Converter={StaticResource IntToSlashIntConverter}}" Margin="-5,0,5,0" Visibility="{Binding NumberOfSlots, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                                    <TextBlock Text="|" />
+                                    <TextBlock Text="{Binding Path=AppResources.Start, Source={StaticResource LocalizedStrings}}" Visibility="{Binding GameStart, Converter={StaticResource DateToVisibilityConverter}}"/>
+                                    <TextBlock Text="{Binding GameStart, Converter={StaticResource NearbyGameStartConverter}}" Visibility="{Binding GameStart, Converter={StaticResource DateToVisibilityConverter}}" />
+                                    <TextBlock Text="{Binding GameEnd, Converter={StaticResource GameEndConverter}}" Visibility="{Binding GameStart, Converter={StaticResource OpositeDateToVisibilityConverter}}" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        </ScrollViewer>
+    </Grid>
+
+</phone:PhoneApplicationPage>

@@ -400,7 +400,14 @@ namespace UrbanGame.ViewModels
                     case SubmitResult.AnswerCorrect:
                         if(result.ScoredPoints < sol.Task.MaxPoints/2)
                         {
-                            VisualStateName = "NotSoGreat";
+                            if (sol.Task.IsRepeatable)
+                            {
+                                VisualStateName = "NotSoGreatRepeatable";
+                            }
+                            else
+                            {
+                                VisualStateName = "NotSoGreatNotRepeatable";
+                            }
                         }
                         else
                         {
@@ -409,7 +416,14 @@ namespace UrbanGame.ViewModels
                         sol.Task.SolutionStatus = SolutionStatus.Accepted;
                         break;
                     case SubmitResult.AnswerIncorrect:
-                        VisualStateName = "Wrong";
+                        if (sol.Task.IsRepeatable)
+                        {
+                            VisualStateName = "WrongRepeatable";
+                        }
+                        else
+                        {
+                            VisualStateName = "WrongNotRepeatable";
+                        }
                         sol.Task.SolutionStatus = SolutionStatus.Rejected;
                         break;
                     case SubmitResult.ScoreDelayed:

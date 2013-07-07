@@ -517,4 +517,13 @@
   <data name="TryAgain" xml:space="preserve">
     <value>try again</value>
   </data>
+  <data name="Enter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="GamesLowCase" xml:space="preserve">
+    <value>games</value>
+  </data>
+  <data name="SearchGame" xml:space="preserve">
+    <value>SEARCH GAME</value>
+  </data>
 </root>
