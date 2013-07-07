@@ -50,18 +50,12 @@ namespace UrbanGame.ViewModels
 
         public void Report()
         {
-            if (string.IsNullOrWhiteSpace(Message))
-            {
-                MessageBox.Show(Localization.AppResources.EmptyMessage, Localization.AppResources.Incorrect, MessageBoxButton.OK);
-            }
-            else
-            {
-                // todo: report task in gameWebService
 
-                //_gameWebService.Report(GameId, TaskId, Message);
+            // todo: report task in gameWebService
 
-                _navigationService.GoBack();
-            }
+            //_gameWebService.Report(GameId, TaskId, Message);
+
+            _navigationService.GoBack();
         }
 
         #endregion

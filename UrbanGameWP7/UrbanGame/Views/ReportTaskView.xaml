@@ -30,7 +30,7 @@
         </Grid.ColumnDefinitions>
 
         <utils:PhoneTextBox Text="{Binding Message, Mode=TwoWay}"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap"/>
-        <Button Grid.Row="1" Content="Submit" Grid.Column="1" BorderBrush="{StaticResource FontColorGreen}" Background="{StaticResource FontColorGreen}" cal:Message.Attach="[Event Tap]=[Action Report()]" />
+        <Button Grid.Row="1" Content="Submit" Grid.Column="1" BorderBrush="{StaticResource FontColorGreen}" Background="{StaticResource FontColorGreen}" cal:Message.Attach="[Event Tap]=[Action Report()]" IsEnabled="{Binding Message, Converter={StaticResource StringToBoolConverter}}"/>
     </Grid>
 
 </phone:PhoneApplicationPage>
