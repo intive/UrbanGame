@@ -16,7 +16,7 @@
 -@ val lan: Lang
 
 #taskLightbox.lightbox.hide.fade(tabindex="-1" role="dialog" aria-hidden="true" )
-    %button.close(type="button" data-dismiss="lightbox" aria-hidden="true") &times;
+    %button.close(type="button" data-dismiss="lightbox" ng-click="resetDefaultTaskTemplate()" aria-hidden="true") &times;
     .lightbox-content
         %form.form-vertical(name="taskForm" class="css-form" novalidate )
             .container-fluid
@@ -29,48 +29,100 @@
                         .control-group.medium-margin-top
                             %label(for="tType")
                                 = Messages("tasks.type")(lan)
-                            %select(name="tType" id="tType" tooltip={Messages("tasks.tttasktype")(lan)} tooltip-animation="true" tooltip-placement="right")
+                            %select(name="tType" id="tType" ng-model="task.type" )
                                 %option(value="ABC") =Messages("tasks.type1")(lan)
                                 %option(value="GPS") =Messages("tasks.type2")(lan)
                         .control-group 
                             %label(for="tName")
                                 = Messages("tasks.name")(lan)
                             .control
-                                %input.input-xlarge(type="text" maxlength="100" id="tName" required name="tName" ng-model="task.name" tooltip={Messages("tasks.tttaskname")(lan)} tooltip-animation="true" tooltip-placement="right")
+                                %input.input-xlarge(type="text" maxlength="100" id="tName" required name="tName" ng-model="task.name" )
                         .control-group
                             %label(for="tDesc")
                                 = Messages("tasks.desc")(lan)
                             .control
-                                %textarea.input-xlarge(name="tDesc" id="tDesc" required maxlength="1000" ng-model="task.description" tooltip={Messages("tasks.tttaskdesc")(lan)} tooltip-animation="true" tooltip-placement="right")
+                                %textarea.input-xlarge(name="tDesc" id="tDesc" required maxlength="1000" ng-model="task.description" )
                         .control-group
                             .control
-                                %input.pull-left(type="checkbox" ng-model="task.image" name="tImage" id="tImage" tooltip={Messages("tasks.tttaskimage")(lan)} tooltip-animation="true" tooltip-placement="right")
+                                %input.pull-left(type="checkbox" ng-model="task.image"  disabled name="tImage" id="tImage" )
                             %label.checkbox.slight-padding-left(for="tImage")
                                 = Messages("tasks.image")(lan)       
                             %div.slight-margin-top
-                                %input(type="file")
-                .span6.pull-right
+                                %input(ng-show="task.image"type="file")
+                .span6.pull-right()
                     .control-group
                         .control
-                            %input.pull-left(type="checkbox" ng-model="task.repeat" name="tRepeat" id="tRepeat" tooltip={Messages("tasks.tttaskrepeat")(lan)} tooltip-animation="true" tooltip-placement="right")
+                            %input.pull-left(type="checkbox" ng-click="resetAttempts()" ng-model="task.repeat" name="tRepeat" id="tRepeat" )
                         %label.slight-padding-left.checkbox(for="tRepeat")
                             = Messages("tasks.repeat")(lan)
-                    .answers
-                        %div.answer-headers
-                            %span = Messages("tasks.answers")(lan)
-                            %span = Messages("tasks.correct")(lan)
-                            %span = Messages("tasks.points")(lan)
-                        .control-group.controls-row.answer.row(ng-repeat="answer in task.answers")
-                            %span
-                                %label(for="{{answer.symbol}}")
-                                    {{answer.symbol}}
-                                %input.input-medium(type="text" ng-model="answer.text" id="{{answer.symbol}}" )
-                                %input(type="checkbox" ng-model="answer.correct")
-                                %input.input-mini(type="text" ng-model="answer.points" id="{{answer.points}}" )
-                                %button.dark(type="button" ng-show="$index==task.answers.length-1 && $index > 1" ng-click="removeAnswer($index)")
-                                    = Messages("tasks.removeAnswer")(lan)
-                        %button.btn-green(id="addMoreAnswers" type="button" ng-disabled="task.answers.length>=10" ng-click="addAnswer()")
-                            = Messages("tasks.addmoreanswers")(lan)
+                    .control-group(ui-if="task.repeat")
+                        %label(for="tAttempts")
+                            = Messages("tasks.maxattempts")(lan)
+                        .control
+                            %input.input-medium(type="text" ng-model="task.maxattempts" attempts placeholder="no-limit" name="tAttempts" id="tAttempts" )
+                        .alert.alert-error.span11(ng-show="taskForm.tAttempts.$error.attempts" ng-cloak) = Messages("tasks.errorattempts")
+                    .ng-switch(ng-switch="task.type")
+                        .ng-case.well(ng-switch-when="ABC")
+                            .answers
+                                %div.answer-headers
+                                    %span = Messages("tasks.answers")(lan)
+                                    %span = Messages("tasks.points")(lan)
+                                .control-group.controls-row.answer.row(ng-repeat="answer in task.answers")
+                                    %span
+                                        %label(for="{{answer.symbol}}")
+                                            {{answer.symbol}}
+                                        %input.input-large(type="text" required  ng-model="answer.text" id="{{answer.symbol}}" )
+                                        %input.input-mini(type="text" required ng-model="answer.points" points id="{{answer.points}}" )
+                                        %button.dark(type="button" ng-show="$index==task.answers.length-1 && $index > 1" ng-click="removeAnswer($index)")
+                                            = Messages("tasks.removeAnswer")(lan)
+                                %button.btn-green(id="addMoreAnswers" type="button" ng-disabled="task.answers.length>=10" ng-click="addAnswer()")
+                                    = Messages("tasks.addmoreanswers")(lan)
+                            .control-group.acceptance-points
+                                %label(for="tMinToAccept")
+                                    = Messages("tasks.mintoaccept")(lan)
+                                .control
+                                    %input.input-medium(required type="text" ng-model="task.minToAccept" minpoints name="tMinToAccept" id="tMinToAccept" )
+                            .alert.alert-error.span11(ng-show="taskForm.tMinToAccept.$error.minpoints" ng-cloak) = Messages("tasks.errorminpoints")
+                        .ng-case.well(ng-switch-when="GPS")
+                            %h5
+                                = Messages("tasks.gpspointslist")(lan)
+                            %div(id="addTaskMap" task-gps-map )
+                            .control-group.latlng
+                                .control
+                                    %label(for="latitude")
+                                        = Messages("tasks.latitude")(lan)
+                                    %input(type="text" name="latitude" id="latitude")
+                                .control
+                                    %label(for="longitude")
+                                        = Messages("tasks.longitude")(lan)
+                                    %input(type="text" name="longitude" id="longitude")
+                                .control
+                                    %label(for="radius")
+                                        = Messages("tasks.radius")(lan)
+                                    %input(type="text" name="radius" radius value="100" id="radius")
+                                .control
+                                    %button.btn-green(id="addLocation" ng-click="addLocation()" type="button")
+                                        = Messages("tasks.addlocation")(lan)
+                            .alert.alert-error.span11(ng-show="!radiusIsNumber" ng-cloak) = Messages("tasks.radiusnotnumber")
+                            .control-group.latlnglist
+                                .control
+                                    %select(multiple="multiple" id="locationsList" name="locations")
+                                        %option(ng-repeat="location in task.locations")
+                                            = "Lat: {{location.lat | number:3}}, Lng: {{location.lng | number:4}}, Rad: {{location.radius}}m"
+                                .control
+                                    %button.dark(id="removeLocation" ng-show="task.locations.length>0" ng-click="removeLocations()" type="button")
+                                        = Messages("tasks.removelocation")(lan)
+                            .container-fluid.penalty
+                                .control-group.pull-left.span5
+                                    %label(for="tMaxPoints")
+                                        = Messages("tasks.maxpoints")(lan)
+                                    .control
+                                        %input.input-mini(required type="text" ng-model="task.maxpoints" positive-points name="tMaxPoints" id="tMaxPoints" )
+                                .control-group.pull-left.span7
+                                    %label(for="tPenaltyPoints")
+                                        = Messages("tasks.penaltypoints")(lan)
+                                    .control
+                                        %input.input-mini(required type="text" ng-model="task.penalty" points name="tPenaltyPoints" id="tPenaltyPoints" )
             .additional(ng-show="additionalCond")
                 .container-fluid
                     %p ADDITIONAL CONDITIONS
@@ -86,9 +138,9 @@
                 .green-strip
                 .controls-group
                     .control
-                        %button.btn-green(type="button")
+                        %button.btn-green(type="button" id="addTaskButton" ng-disabled="(taskForm.$invalid || (task.type == 'GPS' && task.locations.length == 0))")
                             = Messages("tasks.addtaskbtn")(lan)
                     .control
-                        %button.dark(type="button" data-dismiss="lightbox")
+                        %button.dark(type="button" ng-click="resetDefaultTaskTemplate()" data-dismiss="lightbox")
                             = Messages("tasks.cancel")(lan)
                     

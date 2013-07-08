@@ -19,6 +19,7 @@
 @tareaheight: 110px;
 @hfooter: 130px;
 @mapheight: 300px;
+@tmapheight: 250px;
 @mapwidth: 350px;
 
 /* margins, paddings */
@@ -973,7 +974,7 @@ google-map {
     height: @mapheight;
 }
 
-#gpsMap {
+#gpsMap,  {
     height: @mapheight;
     /* width: @mapwidth; */
     top:0;
@@ -982,6 +983,9 @@ google-map {
     right:0;
     margin: 0;
     padding: 0;
+}
+#addTaskMap {
+    height: @tmapheight;
 }
 
 input::-webkit-outer-spin-button,
@@ -1012,18 +1016,23 @@ input::-webkit-inner-spin-button {
     }
     
 }
-#addMoreAnswers:disabled {
+#addMoreAnswers:disabled, #addTaskButton:disabled {
     background-color: #989898;
     color: #C4C4C4;
+    &:hover {
+        cursor: default;
+        border-color: #989898;
+    }
 }
 
 /* Lightbox (tasks) */
 #taskLightbox {
+    line-height: 20px;
     left: 20% !important;
     top: 10px !important;
     width: 60% !important;
     height:95%;
-    min-width: 600px;
+    min-width: 800px;
     text-align: left;
     overflow-y: auto;
     overflow-x: hidden;
@@ -1036,12 +1045,23 @@ input::-webkit-inner-spin-button {
         display: block;
         padding: 0px;
     }
-    
+    #addMoreAnswers{
+        margin-left: 16px;
+    }
     label {
         font-weight: bold;
     }
     label.checkbox {
         font-weight: normal;
+    }
+    .answers{
+        margin-bottom: 20px;
+    }
+    .ng-case{
+        overflow: hidden;
+        .control-group{
+            margin-bottom: 0px;
+        }
     }
     .answer {
         margin: 0px;
@@ -1060,22 +1080,21 @@ input::-webkit-inner-spin-button {
     input[type="checkbox"]{
         margin: 5px;
     }
-    .answer input[type="checkbox"]{
-        margin: 5px 18px 9px;
-    }
     .answer-headers {
-        font-size: 85%;
         font-weight: bold;
         padding: 14px;
         span:nth-child(2){
-            margin-left: 115px;
-        }
-        span:nth-child(3){
-            margin-left: 6px;
+            margin-left: 146px;
         }
     }
     .input-mini{
         width: 48px;
+    }
+    .input-large{
+        width:190px;
+    }
+    .well{
+        padding: 4px;
     }
     button.dark{
         border: 1px solid transparent;
@@ -1092,7 +1111,9 @@ input::-webkit-inner-spin-button {
         &:hover{
             border-color: #AAAAAA
         }
-    
+    }
+    select option{
+        font-size: 0.85em;
     }
     a>span {
         line-height: 15px;
@@ -1133,9 +1154,49 @@ input::-webkit-inner-spin-button {
             margin: 5px;
         }
     }
-    
+    .acceptance-points{
+        margin-left: 15px;
+    }
     div.pull-right {
-        margin-top: 102px;
+        margin-top: 94px;
+    }
+    .latlng button, .latlnglist  button{
+            height: 30px;
+            line-height: 0;
+            margin: 24px 0 0;
+            width: 62px;
+        }
+    .latlng{
+        .control {
+            display: inline-block;
+            float: left;
+            margin: 7px;
+            input {
+                width: 65px;
+            }
+            
+        }
+    }
+    .control-group{
+        overflow: hidden;
+    }
+    .penalty input{
+        width: 65px;
+    }
+    .latlnglist {
+        .control {
+            display: inline-block;
+            float: left;
+            margin: 7px;
+            button{
+                margin: 0px;
+            }
+        }
+        select{
+           width: 264px;
+           
+        }
+    
     }
 }
 
