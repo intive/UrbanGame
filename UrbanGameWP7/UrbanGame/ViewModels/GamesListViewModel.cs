@@ -353,8 +353,7 @@ namespace UrbanGame.ViewModels
                 {
                     var loadedGames = uow.GetRepository<IGame>().All().Select(x => x.Id);
                     NearestGames = new BindableCollection<IGame>(allNearestGames.Where(x => !loadedGames.Contains(x.Id)));
-                }
-                    
+                }   
             }
             finally
             {
@@ -375,7 +374,7 @@ namespace UrbanGame.ViewModels
 
         public void Search()
         {
-
+            _navigationService.UriFor<SearchGameViewModel>().Navigate();
         }
 
         public async void LogoutOrLogin()

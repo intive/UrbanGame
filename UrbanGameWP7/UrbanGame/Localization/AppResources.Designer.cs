@@ -404,6 +404,15 @@ namespace UrbanGame.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter.
+        /// </summary>
+        public static string Enter {
+            get {
+                return ResourceManager.GetString("Enter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error while joining the game..
         /// </summary>
         public static string ErrorJoiningGame {
@@ -454,6 +463,15 @@ namespace UrbanGame.Localization {
         public static string Games {
             get {
                 return ResourceManager.GetString("Games", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to games.
+        /// </summary>
+        public static string GamesLowCase {
+            get {
+                return ResourceManager.GetString("GamesLowCase", resourceCulture);
             }
         }
         
@@ -1030,6 +1048,15 @@ namespace UrbanGame.Localization {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SEARCH GAME.
+        /// </summary>
+        public static string SearchGame {
+            get {
+                return ResourceManager.GetString("SearchGame", resourceCulture);
             }
         }
         
