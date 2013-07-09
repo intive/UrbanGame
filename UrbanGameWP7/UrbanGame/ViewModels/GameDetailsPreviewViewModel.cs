@@ -236,7 +236,7 @@ namespace UrbanGame.ViewModels
                 newGame.Difficulty = Game.Difficulty;
                 newGame.Version = Game.Version;
                 newGame.Prizes = Game.Prizes;
-
+                uow.GetRepository<IGame>().MarkForAdd(newGame);
                 #region Alerts & HighScores
 
                 foreach (var a in Game.Alerts)
@@ -313,10 +313,11 @@ namespace UrbanGame.ViewModels
                     }
 
                     uow.GetRepository<ITask>().MarkForAdd(task);
-                    uow.Commit();
+
                 }
 
                 #endregion
+                uow.Commit();
             }
         }
 

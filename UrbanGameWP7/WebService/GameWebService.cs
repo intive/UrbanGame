@@ -184,7 +184,12 @@ namespace WebService
         public async Task<ITask[]> GetTasks(int gid)
         {
             //todo: consider sending lat & lot
-            return (await GetViaApi<ListOfTasks>("games/{0}/tasks?lat=1&lon=1", gid)).Tasks.ToArray();
+            var tasks = (await GetViaApi<ListOfTasks>("games/{0}/tasks?lat=1&lon=1", gid)).Tasks;
+            if (tasks == null)
+            {
+                return new ITask[0];
+            }
+            return tasks.ToArray() ;
         }
         #endregion
 
