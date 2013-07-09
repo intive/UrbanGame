@@ -214,15 +214,7 @@ namespace WebService
                 return new SolutionResultScore() { SubmitResult = SubmitResult.Timeout };
             else
             {
-                //todo: parse response or check result in another place
-                int r = new Random().Next(100);
-
-                if (r < 20)
-                    return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = r };
-                else if (r < 60)
-                    return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerCorrect, ScoredPoints = r };
-                else
-                    return new SolutionResultScore() { SubmitResult = SubmitResult.ScoreDelayed, ScoredPoints = r };
+                return ParseSolutionResult(result.Json);
             }
         }
 
@@ -243,23 +235,31 @@ namespace WebService
                 return new SolutionResultScore() { SubmitResult = SubmitResult.Timeout };
             else
             {
-                //todo: parse response or check result in another place
-                int r = new Random().Next(100);
-
-                if (r < 20)
-                    return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerIncorrect, ScoredPoints = r };
-                else if (r < 60)
-                    return new SolutionResultScore() { SubmitResult = SubmitResult.AnswerCorrect, ScoredPoints = r };
-                else
-                    return new SolutionResultScore() { SubmitResult = SubmitResult.ScoreDelayed, ScoredPoints = r };
+                return ParseSolutionResult(result.Json);
             }
+        }
+
+        private SolutionResultScore ParseSolutionResult(string json)
+        {
+            SolutionResultScore result = new SolutionResultScore();
+            var resultsDetails=JsonConvert.DeserializeObject<SolutionScore>(json);
+            if (resultsDetails.Score[0].status == "accepted")
+            {
+                result.SubmitResult = SubmitResult.AnswerCorrect;
+            }
+            else
+            {
+                result.SubmitResult = SubmitResult.AnswerIncorrect;
+            }
+            result.ScoredPoints = resultsDetails.Score[0].points;
+            return result;
         }
 
         public async Task<SolutionResultScore> SubmitTaskSolution(int gid, int tid, IBaseSolution solution)
         {
-            if (solution is IGPSSolution)
+            if (solution.TaskType==TaskType.GPS)
                 return await SubmitGPSSolution(gid, tid, (IGPSSolution)solution);
-            else if (solution is IABCDSolution)
+            else if (solution.TaskType==TaskType.ABCD)
                 return await SubmitABCDSolution(gid, tid, (IABCDSolution)solution);
 
             throw new ArgumentOutOfRangeException("Unrecognized solution's type.", (Exception)null);
