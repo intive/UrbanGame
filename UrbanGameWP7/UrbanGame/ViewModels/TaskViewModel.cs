@@ -475,6 +475,7 @@ namespace UrbanGame.ViewModels
                         }
                         
                         solution.Task = task;
+                        solution.TaskType = TaskType.GPS;
                         solution.Task.SolutionStatus = SolutionStatus.NotSend;
 
                         unitOfWork.GetRepository<IBaseSolution>().MarkForAdd(solution);
@@ -516,6 +517,7 @@ namespace UrbanGame.ViewModels
 
                     solution.Task = task;
                     solution.Task.SolutionStatus = SolutionStatus.NotSend;
+                    solution.TaskType = TaskType.ABCD;
 
                     var answerRepo = unitOfWork.GetRepository<IABCDUserAnswer>();
                     foreach (var check in Answers)
